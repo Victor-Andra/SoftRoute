@@ -1456,6 +1456,24 @@ router.post('/atendimento/add', fncGeral.IsAuthenticated,(req,res) =>{//adiciona
     }
 })
 
+router.post('/atendimento/addExtra', fncGeral.IsAuthenticated, (req, res) => {
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    const nvlAcesso = [
+        "62421801a12aa557219a0fb9",
+        "62421857a12aa557219a0fc1",
+        "624218f5a12aa557219a0fd0",
+        "677704b1a358ba19d0c8eb51",
+        "677704a8a358ba19d0c8eb27"
+    ];
+
+    if (nvlAcesso.includes(potinho.lvlUsu)) {
+        fncAtend.cadastraAtendExtra(req, res); // <<<--- Garanta que esta função existe
+    } else {
+        console.log("Acesso NEGADO!");
+        res.render("ferramentas/usuario/login", { nivel: "x" });
+    }
+});
+
 router.get('/atendimento/deleteMany/:id', fncGeral.IsAuthenticated,(req,res) =>{//deleta atend
     let potinho = Object.assign(new PoteBiscoito, req.cookies);
     if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0" || potinho.lvlUsu == "677704b1a358ba19d0c8eb51" || potinho.lvlUsu == "677704a8a358ba19d0c8eb27") {
@@ -1588,7 +1606,29 @@ router.get('/atendimento/atendadm/cad', fncGeral.IsAuthenticated,(req,res) =>{//
     fncAtendAdm.carregaAtendAdm(req,res);
 })
 
-router.post('/atendimento/atendadm/add', fncGeral.IsAuthenticated,(req,res) =>{//adiciona atend
+router.get('/atendimento/atendadmextra/cad/:id', fncGeral.IsAuthenticated,(req,res) =>{//direciona o cadstro de Atend, com Ufs e Convênios.
+    fncAtendAdm.carregaAtendAdmExtra(req,res);
+})
+
+router.post('/atendimento/atendadm/addExtra', fncGeral.IsAuthenticated, (req, res) => {
+    let potinho = Object.assign(new PoteBiscoito, req.cookies);
+    const nvlAcesso = [
+        "62421801a12aa557219a0fb9",
+        "62421857a12aa557219a0fc1",
+        "624218f5a12aa557219a0fd0",
+        "677704b1a358ba19d0c8eb51",
+        "677704a8a358ba19d0c8eb27"
+    ];
+
+    if (nvlAcesso.includes(potinho.lvlUsu)) {
+        fncAtend.cadastraAtendExtra(req, res); // <<<--- Garanta que esta função existe
+    } else {
+        console.log("Acesso NEGADO!");
+        res.render("ferramentas/usuario/login", { nivel: "x" });
+    }
+});
+
+router.post('/atendimento/atendadm/addExtra', fncGeral.IsAuthenticated,(req,res) =>{//adiciona atend
     //let potinho = Object.assign(new PoteBiscoito, req.cookies);
     //if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0" || potinho.lvlUsu == "677704b1a358ba19d0c8eb51" || potinho.lvlUsu == "677704a8a358ba19d0c8eb27") {
         switch (req.body.atendCategoria) {

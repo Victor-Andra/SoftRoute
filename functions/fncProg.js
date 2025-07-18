@@ -645,50 +645,49 @@ module.exports = {
         const dataAtual = new Date();
         
         // Busca o beneficiário selecionado
-        Bene.findOne({ _id: req.params.id, bene_status: "Ativo", bene_aba: "Sim" })
-            .then((bene) => {
-                if (!bene) {
-                    return res.status(404).json({ error: "Beneficiário não encontrado!" });
+        Bene.findOne({ _id: req.params.id, bene_status: "Ativo", bene_aba: "Sim" }).then((bene) => {
+            if (!bene) {
+                return res.status(404).json({ error: "Beneficiário não encontrado!" });
+            }
+
+            // Cálculo de idade e datas relacionadas
+            const datanasc = new Date(bene.bene_datanasc);
+            bene.datanasc = formatarData(datanasc);
+            bene.idade = calcularIdade(datanasc);
+            
+                // Funções auxiliares
+                function calcularIdade(dataNascimento) {
+                    const hoje = new Date();
+                    let idadeAnos = hoje.getFullYear() - dataNascimento.getFullYear();
+                    const aniversarioEsteAno = new Date(
+                        hoje.getFullYear(),
+                        dataNascimento.getMonth(),
+                        dataNascimento.getDate()
+                    );
+
+                    if (hoje < aniversarioEsteAno) {
+                        idadeAnos -= 1;
+                    }
+
+                    const idadeMeses = (hoje.getMonth() - dataNascimento.getMonth() + 12) % 12;
+
+                    return `${idadeAnos} anos e ${idadeMeses} meses`;
                 }
-    
-                // Cálculo de idade e datas relacionadas
-                const datanasc = new Date(bene.bene_datanasc);
-                bene.datanasc = formatarData(datanasc);
-                bene.idade = calcularIdade(datanasc);
-               
-                    // Funções auxiliares
-                    function calcularIdade(dataNascimento) {
-                        const hoje = new Date();
-                        let idadeAnos = hoje.getFullYear() - dataNascimento.getFullYear();
-                        const aniversarioEsteAno = new Date(
-                            hoje.getFullYear(),
-                            dataNascimento.getMonth(),
-                            dataNascimento.getDate()
-                        );
 
-                        if (hoje < aniversarioEsteAno) {
-                            idadeAnos -= 1;
-                        }
+                function formatarData(data) {
+                    const dia = String(data.getUTCDate()).padStart(2, '0');
+                    const mes = String(data.getUTCMonth() + 1).padStart(2, '0');
+                    const ano = data.getUTCFullYear();
+                    return `${ano}-${mes}-${dia}`;
+                }
 
-                        const idadeMeses = (hoje.getMonth() - dataNascimento.getMonth() + 12) % 12;
-
-                        return `${idadeAnos} anos e ${idadeMeses} meses`;
-                    }
-
-                    function formatarData(data) {
-                        const dia = String(data.getUTCDate()).padStart(2, '0');
-                        const mes = String(data.getUTCMonth() + 1).padStart(2, '0');
-                        const ano = data.getUTCFullYear();
-                        return `${ano}-${mes}-${dia}`;
-                    }
-
-                    function ordenarPorNome(campo) {
-                        return (a, b) => {
-                            const nomeA = a[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                            const nomeB = b[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                            return nomeA.localeCompare(nomeB);
-                        };
-                    }
+                function ordenarPorNome(campo) {
+                    return (a, b) => {
+                        const nomeA = a[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                        const nomeB = b[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+                        return nomeA.localeCompare(nomeB);
+                    };
+                }
                 // Busca as tabelas dependentes
                 Prog.find({ prog_beneid: bene._id , prog_status: { $ne: "Adquirido" }}).then((prog) => {
                     

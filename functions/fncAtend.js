@@ -225,6 +225,58 @@ module.exports = {
             res.render('admin/branco');
         }
     },
+    cadastraAtendExtra(req,res){
+        let retorno;
+        let retornoCre;
+        let retornoDeb;
+        let retornoTab;
+        let cadastro = atendClass.atendAdicionar(req,res);//variavel para armazenar a função que armazena o async - Ok
+        let cadastroCre = creditClass.creditAdicionar(req,res);//variavel para armazenar a função que armazena o async
+        let cadastroDeb = debitClass.debitAdicionar(req,res);
+        let cadastroTab = tabilClass.tabilAdicionar(req,res);
+        
+        cadastro.then((res)=>{//console.log(res)
+            console.log("retorno = true")
+            retorno = true;
+        }).catch((err) => {console.log(err)
+            console.log("retorno = err")
+            retorno = err;
+        }).finally(() => {
+            cadastroCre.then((res)=>{//console.log(res)
+                console.log("retornoCre = true")
+                retornoCre = true;
+            }).catch((err) => {console.log(err)
+                console.log("retornoCre = err")
+                retornoCre = err;
+            }).finally(() => {
+                cadastroDeb.then((res)=>{//console.log(res)
+                    console.log("retornoDeb = true")
+                    retornoDeb = true;
+                }).catch((err) => {console.log(err)
+                    console.log("retornoDeb = err")
+                    retornoDeb = err;
+                }).finally(() => {
+                    cadastroTab.then((res)=>{//console.log(res)
+                        console.log("retornoTab = true")
+                        retornoTab = true;
+                    }).catch((err) => {console.log(err)
+                        console.log("retornoTab = err")
+                        retornoTab = err;
+                    }).finally(() => {
+                        //console.log(retorno)
+                        //console.log(retornoCre)
+                        //console.log(retornoDeb)
+                        //console.log(retornoTab)
+                    })
+                })
+            })
+        })
+        if (retorno && retornoCre && retornoDeb && retornoTab){
+            fncAtendAdm.carregaAtendAdm(req,res);//atendcad
+        } else {
+            res.render('admin/branco');
+        }
+    },
     deletaAtend(req, res){
         Atend.findOne({_id: req.params.id}).then((a)=>{
             Credit.find({credit_atendnum: a.atend_num}).then((cre)=>{

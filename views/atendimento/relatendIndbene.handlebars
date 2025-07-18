@@ -2,6 +2,54 @@
 <html lang="pt-br">
 	<head>
 		<title>Atendimentos por Beneficiário</title>
+		<style>
+			/* Estilos para tela */
+			@media screen {
+				.print-footer {
+					display: none;
+				}
+			}
+
+			/* Estilos para impressão */
+			@media print {
+				.noprint {
+					display: none !important;
+				}
+
+				.print-footer {
+					display: block;
+					position: fixed;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 5px 0;
+					background: white;
+					z-index: 9999;
+				}
+
+				body {
+					margin-bottom: 30mm; /* Espaço para rodapé fixo */
+				}
+
+				@page {
+					margin: 1cm;
+					@bottom-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 12px;
+					}
+				}
+			}
+
+			/* Estilos específicos para impressão em modo paisagem */
+			@media print and (orientation: landscape) {
+				/* Apenas garantimos que o noprint continue funcionando */
+				.noprint {
+					display: none !important;
+				}
+			}
+		</style>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -176,12 +224,32 @@
 
 
 		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
-
+		<div id="rodape" style="text-align: center; margin-top: 20px;"></div>
+		<script>
+			// Exemplo: Mostrar a primeira página
+            //mostrarPagina(1, 7);
+            function mostrarPagina(paginaAtual, totalPaginas) {
+                  const rodape = document.getElementById("rodape");
+                  if (rodape) {
+                        rodape.innerHTML = `Página ${paginaAtual} de ${totalPaginas}`;
+                  }
+            }
+      </script>
+	   <div class="row"><!-- Área reservada para Assinaturas -->
+			<div class="col-xs-12">
+				<div style="margin-top: 32px;"></div>
+				<div class="row">
+					<div class="col-xs-4 col-sm-4 text-center">
+						
+					</div>
+					<div class="col-xs-4 col-sm-4"></div>
+					<div class="col-xs-4 col-sm-4 text-center">
+						<div class="hr"></div>
+						<label>Assinatura da Clínica</label>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.Área reservada para Assinaturas -->
+	  <div class="print-footer" id="printFooter"></div>
 	</body>
 </html>

@@ -1,6 +1,54 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
+		<style>
+			/* Estilos para tela */
+			@media screen {
+				.print-footer {
+					display: none;
+				}
+			}
+
+			/* Estilos para impressão */
+			@media print {
+				.noprint {
+					display: none !important;
+				}
+
+				.print-footer {
+					display: block;
+					position: fixed;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 5px 0;
+					background: white;
+					z-index: 9999;
+				}
+
+				body {
+					margin-bottom: 30mm; /* Espaço para rodapé fixo */
+				}
+
+				@page {
+					margin: 1cm;
+					@bottom-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 12px;
+					}
+				}
+			}
+
+			/* Estilos específicos para impressão em modo paisagem */
+			@media print and (orientation: landscape) {
+				/* Apenas garantimos que o noprint continue funcionando */
+				.noprint {
+					display: none !important;
+				}
+			}
+		</style>
 		<title>Atendimentos por Beneficiário</title>
 		<script type="text/javascript">
 		function carregaBody(){
@@ -192,23 +240,7 @@
 												{{/each}}
 												</table>
 											</div>
-											<div>
-												<table class="table table-striped table-bordered">
-													<thead>
-														<tr>
-															<th>Data:</th>
-															<th>Assinatura:</th>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-														<input id="dataRel" name="dataRel" class="hidden" value="{{data.atual}}"/>
-															<td><input style="box-shadow: 0 0 0 0;border: 0 none;outline: 0;" readonly="true" id="dataAtualRel" name="dataAtualRel" type="text"/></td>
-															<td style="width: 600px;"> </td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
+										
 										</div>
 									</div>
 									</div>
@@ -230,5 +262,34 @@
 		<div class="hidden">
 			<input name="beneId" value="{{_id}}" />
 		</div>
+		<div id="rodape" style="text-align: center; margin-top: 20px;"></div>
+		<script>
+			// Exemplo: Mostrar a primeira página
+            //mostrarPagina(1, 7);
+            function mostrarPagina(paginaAtual, totalPaginas) {
+                  const rodape = document.getElementById("rodape");
+                  if (rodape) {
+                        rodape.innerHTML = `Página ${paginaAtual} de ${totalPaginas}`;
+                  }
+            }
+      </script>
+	  	<div>
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>Data:</th>
+						<th>Assinatura:</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+					<input id="dataRel" name="dataRel" class="hidden" value="{{data.atual}}"/>
+						<td><input style="box-shadow: 0 0 0 0;border: 0 none;outline: 0;" readonly="true" id="dataAtualRel" name="dataAtualRel" type="text"/></td>
+						<td style="width: 600px;"> </td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		 <div class="print-footer" id="printFooter"></div>
 	</body>
 </html>

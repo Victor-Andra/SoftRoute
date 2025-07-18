@@ -3,16 +3,52 @@
 	<head>
 		<title>Relatório de Consolidado por Beneficiário</title>
 		<style>
-			@media print and (orientation: landscape) {
-				.noprint {
+			/* Estilos para tela */
+			@media screen {
+				.print-footer {
 					display: none;
 				}
 			}
+
+			/* Estilos para impressão */
 			@media print {
-               .noprint {
-                  display: none;
-               }
-            }
+				.noprint {
+					display: none !important;
+				}
+
+				.print-footer {
+					display: block;
+					position: fixed;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 5px 0;
+					background: white;
+					z-index: 9999;
+				}
+
+				body {
+					margin-bottom: 30mm; /* Espaço para rodapé fixo */
+				}
+
+				@page {
+					margin: 1cm;
+					@bottom-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 12px;
+					}
+				}
+			}
+
+			/* Estilos específicos para impressão em modo paisagem */
+			@media print and (orientation: landscape) {
+				/* Apenas garantimos que o noprint continue funcionando */
+				.noprint {
+					display: none !important;
+				}
+			}
 		</style>
 		<script type="text/javascript">
 			function atualizaDataIni(){
@@ -47,7 +83,7 @@
 							<li class="active">Consolidado por Beneficiário</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					<form role="form" action="/menu/atendimento/relatendvalconss" method="POST">
+					<form role="form" class="noprint" action="/menu/atendimento/relatendvalconss" method="POST">
 						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center;" style="text-align: center;">
 							<ul class="breadcrumb" >
 								<label>Período de:</label>
@@ -171,21 +207,7 @@
 													</footer>
 												</table>
 											</div>
-											<div class="row"><!-- Área reservada para Assinaturas -->
-												<div class="space space-32"></div>
-												<div class="col-xs-4 col-sm-4">
-													<div class=""></div>
-													<label></label>
-												</div>
-												<div class="col-xs-4 col-sm-4">
-													<div class=""></div>
-													<label></label>
-												</div>
-												<div class="col-xs-4 col-sm-4">
-													<div class="hr"></div>
-													<label>Assinatura da Clínica</label>
-												</div>
-											</div><!-- /.Área reservada para Assinaturas -->
+											
 										</div>
 									</div>
 								</div>
@@ -195,5 +217,20 @@
 				</div><!-- /.row -->
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container --><!-- basic scripts -->
+	   <div class="row"><!-- Área reservada para Assinaturas -->
+			<div class="col-xs-12">
+				<div style="margin-top: 32px;"></div>
+				<div class="row">
+					<div class="col-xs-4 col-sm-4 text-center">
+					</div>
+					<div class="col-xs-4 col-sm-4"></div>
+					<div class="col-xs-4 col-sm-4 text-center">
+						<div class="hr"></div>
+						<label>Assinatura da Clínica</label>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.Área reservada para Assinaturas -->
+	  <div class="print-footer" id="printFooter"></div>
 	</body>
 </html>

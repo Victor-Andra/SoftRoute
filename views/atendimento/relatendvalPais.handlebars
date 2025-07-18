@@ -3,16 +3,52 @@
 	<head>
 		<title>Relatório de Atendimentos e Valores</title>
 		<style>
-			@media print and (orientation: landscape) {
-				.noprint {
+			/* Estilos para tela */
+			@media screen {
+				.print-footer {
 					display: none;
 				}
 			}
+
+			/* Estilos para impressão */
 			@media print {
-               .noprint {
-                  display: none;
-               }
-            }
+				.noprint {
+					display: none !important;
+				}
+
+				.print-footer {
+					display: block;
+					position: fixed;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 5px 0;
+					background: white;
+					z-index: 9999;
+				}
+
+				body {
+					margin-bottom: 30mm; /* Espaço para rodapé fixo */
+				}
+
+				@page {
+					margin: 1cm;
+					@bottom-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 12px;
+					}
+				}
+			}
+
+			/* Estilos específicos para impressão em modo paisagem */
+			@media print and (orientation: landscape) {
+				/* Apenas garantimos que o noprint continue funcionando */
+				.noprint {
+					display: none !important;
+				}
+			}
 		</style>
 		<script type="text/javascript">
 			function atualizaDataIni(){
@@ -217,21 +253,7 @@
 													</footer>
 												</table>
 											</div>
-											<div class="row"><!-- Área reservada para Assinaturas -->
-												<div class="space space-32"></div>
-												<div class="col-xs-4 col-sm-4">
-													<div class=""></div>
-													<label>Assinatura do Responsável</label>
-												</div>
-												<div class="col-xs-4 col-sm-4">
-													<div class=""></div>
-													<label></label>
-												</div>
-												<div class="col-xs-4 col-sm-4">
-													<div class="hr"></div>
-													<label>Assinatura da Clínica</label>
-												</div>
-											</div><!-- /.Área reservada para Assinaturas -->
+											
 										</div>
 									</div>
 								</div>
@@ -251,6 +273,21 @@
 
 
 		<!-- basic scripts -->
-
+	<div class="row"><!-- Área reservada para Assinaturas -->
+		<div class="space"></div>
+		<div class="col-xs-4 col-sm-4">
+			<div class=""></div>
+			<label>Assinatura do Responsável</label>
+		</div>
+		<div class="col-xs-4 col-sm-4">
+			<div class=""></div>
+			<label></label>
+		</div>
+		<div class="col-xs-4 col-sm-4">
+			<div class="hr"></div>
+			<label>Assinatura da Clínica</label>
+		</div>
+	</div><!-- /.Área reservada para Assinaturas -->
+	<div class="print-footer" id="printFooter"></div>
 	</body>
 </html>

@@ -4,42 +4,6 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>Lista de Planos de Tratamentos</title>
-		<style>
-#dynamic-table {
-    table-layout: fixed;
-    width: 100%;
-}
-
-/* Coluna 1 */
-#dynamic-table th:nth-child(1),
-#dynamic-table td:nth-child(1) {
-    width: 100px !important;
-}
-
-/* Coluna 2 */
-#dynamic-table th:nth-child(2),
-#dynamic-table td:nth-child(2) {
-    width: 120px !important;
-}
-
-/* Coluna 3 */
-#dynamic-table th:nth-child(3),
-#dynamic-table td:nth-child(3) {
-    width: 250px !important;
-}
-
-/* Coluna 4 */
-#dynamic-table th:nth-child(4),
-#dynamic-table td:nth-child(4) {
-    width: 180px !important;
-}
-
-/* Coluna 5 */
-#dynamic-table th:nth-child(5),
-#dynamic-table td:nth-child(5) {
-    width: 200px !important;
-}
-</style>
 		<script type="text/javascript">
 			function ocultaEditar(){
 				let biscoito = procuraBiscoito("lvlUsu");
@@ -140,19 +104,12 @@
 					console.log("NOT Ok")
 				}
 			}
-
-			function formataData(){
-				let dt = document.getElementById('dataFil').value;
-				let dia = dt.substring(8,10);
-				let mes = dt.substring(5,7);
-				let ano = dt.substring(0,4);
-				let fulldate=(ano+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-				document.getElementById('dataFinal').value = fulldate;
-				console.log("dataFinal:"+document.getElementById('dataFinal').value);
-			}
 		</script>
 	</head>
+
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+
+
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -322,88 +279,80 @@
 								<!-- PAGE CONTENT BEGINS -->
 								<div class="row">
 									<div class="col-xs-12">
+										<div class="clearfix" >
+											<div class="pull-right tableTools-container">
+											</div>
+										</div>
+										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+										</div>
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											<thead style="font-size: 11px;">
-												<tr>
-													<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="3" >Plano Tratamento</th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >Padrão</th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="4" >Ocupacional</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" >Obs</th>
-												</tr>
 												<tr role="row">
-													
-													<th style="width: 80px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo Plano:</th>
-													<th style="width: 100px;" class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Plano:</th>
-													<th style="width: 200px;" class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário:</th>
-													<th style="width: 200px;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta:</th>
-													<th style="width: 150px; overflow-wrap: break-word; white-space: normal;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
+													<th class="center">
+														<label class="pos-rel">
+															<input type="checkbox" class="ace" />
+															<span class="lbl"></span>
+														</label>
+													</th>
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo Plano:</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Plano:</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário:</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta:</th>
+
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta IS:</th>
-													<th style="width: 150px; overflow-wrap: break-word; white-space: normal;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta AVD:</th>
-													<th style="width: 150px; overflow-wrap: break-word; white-space: normal;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
-													<th style="width: 100px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro:</th>
-													<th style="width: 100px;" class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data edição:</th>
-													<th style="width: 80px;">Ação</th>
+													
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro:</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data edição:</th>
+													<th style="width: 100px;">Ação</th>
 												</tr>
 											</thead>
 											<tbody style="font-size: 11px;">
 												{{#each trats}}
-													
+													{{#ifEqual this.trat_planotipo 'Padrão'}}
 														<tr role="row" class="odd">
-															
-															<td  ><span class="label label-sm label-warning arrowed">{{trat_planotipo}}</span></td>
-															<td  >{{tratdata}}</td>
-															<td>
+															<td class="center">
+																<label class="pos-rel">
+																	<input type="checkbox" class="ace" />
+																	<span class="lbl"></span>
+																</label>
+															</td>
+															<td><span class="label label-sm label-warning arrowed">{{trat_planotipo}}</span></td>
+															<td>{{tratdata}}</td>
 															{{#each ../benes}}
 																{{#ifEqual this._id ../trat_beneid}}
-																	{{bene_nome}}
+																	<td>{{bene_nome}}</td>
 																{{/ifEqual}}
 															{{/each}}
-															</td>
-															<td>
+
+															{{#if trat_terapeutaidpad}}
 																{{#each ../usuarios}}
 																	{{#ifEqual this._id ../trat_terapeutaidpad}}
-																		{{usuario_nome}}
+																		<td>{{usuario_nome}}
 																	{{/ifEqual}}
 																{{/each}}
-															</td>
-															<td>
-																{{trat_especialidadepad}}
-															</td>
+															- {{trat_especialidadepad}}</td>
+															{{else}}
+																<td>&nbsp;-</td>
+															{{/if}}
+
 															
-															<td>
-																{{#each ../usuarios}}
-																	{{#ifEqual this._id ../trat_terapeutaidis}}
-																		{{usuario_nome}}
-																	{{/ifEqual}}
-																{{/each}}
-															</td>
-															<td>
-																{{trat_especialidadeis}}
-															</td>
-															<td>
-																{{#each ../usuarios}}
-																	{{#ifEqual this._id ../trat_terapeutaidavd}}
-																		{{usuario_nome}}
-																	{{/ifEqual}}
-																{{/each}}
-															</td>
-															<td>
-																{{trat_especialidadeavd}}
-															</td>
+															<td>&nbsp;</td>
+															<td>&nbsp;</td>
 															
-															<td >{{datacad}}</td>
-															<td >
+															
+															<td>{{datacad}}</td>
+
 															{{#if dataedi}}
 																{{#ifEqual this.dataedi "NaN-NaN-NaN"}}
-																	&nbsp;
+																	<td>&nbsp;</td>
 																	{{else}}
-																		{{dataedi}}
+																	<td>{{dataedi}}</td>
 																{{/ifEqual}}
 															{{else}}
-																&nbsp;
+																<td>&nbsp;</td>
 															{{/if}}
-															</td>
+
 															<td>
 																<div class="action-buttons">
 																	<div class="action-buttons">
@@ -423,7 +372,93 @@
 																
 															</td>
 														</tr>
-													
+													{{else}}
+														<tr role="row" class="odd">
+															<td class="center">
+																<label class="pos-rel">
+																	<input type="checkbox" class="ace" />
+																	<span class="lbl"></span>
+																</label>
+															</td>
+															<td><span class="label label-sm label-danger arrowed-in">{{trat_planotipo}}</span></td>
+															<td>{{tratdata}}</td>
+															{{#each ../benes}}
+																{{#ifEqual this._id ../trat_beneid}}
+																	<td>{{bene_nome}}</td>
+																{{/ifEqual}}
+															{{/each}}
+															
+															<td>&nbsp;</td>
+															
+															
+															{{#ifEqual trat_terapeutaidis '766f69643132333435366964'}}
+															<td>-</td>
+															{{else}}
+																{{#if trat_terapeutaidis}}
+																	{{#each ../usuarios}}
+																		{{#ifEqual this._id ../trat_terapeutaidis}}
+																			<td>{{usuario_nome}}
+																		{{/ifEqual}}
+																	{{/each}}
+																- {{trat_especialidadeis}}</td>
+																{{else}}
+																	<td>&nbsp;-</td>
+																{{/if}}
+															{{/ifEqual}}
+															
+
+
+															{{#ifEqual trat_terapeutaidavd '766f69643132333435366964'}}
+															<td>-</td>
+															{{else}}
+																{{#if trat_terapeutaidavd}}
+																	{{#each ../usuarios}}
+																		{{#ifEqual this._id ../trat_terapeutaidavd}}
+																			<td>{{usuario_nome}}
+																		{{/ifEqual}}
+																	{{/each}}
+																- {{trat_especialidadeavd}}</td>
+																{{else}}
+																	<td>&nbsp;-</td>
+																{{/if}}
+															{{/ifEqual}}
+															
+															<td>{{datacad}}</td>
+
+
+															{{#if dataedi}}
+																{{#ifEqual this.dataedi "NaN-NaN-NaN"}}
+																	<td>&nbsp;</td>
+																	{{else}}
+																	<td>{{dataedi}}</td>
+																{{/ifEqual}}
+															{{else}}
+																<td>&nbsp;</td>
+															{{/if}}
+
+
+															
+															<td>
+																<div class="action-buttons">
+																	<div class="action-buttons">
+																	
+																	<a class="green" href="/menu/area/plano/edi/{{_id}}">
+																		<i class="ace-icon fa fa-search bigger-130"></i>
+																	</a>
+																	
+																	<a class="pink" href="/menu/area/plano/imp/{{_id}}">
+																		<i class="ace-icon fa fa-file-pdf-o bigger-130"></i>
+																	</a>
+																	
+																	<!-- 
+																	<a class="red" name="acaoDel" id="acaoDel" href="javascript:void(0);" onclick="javascript:confirmeDeletar('{{_id}}');">
+																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																	</a>
+																	 -->
+																</div>
+															</td>
+														</tr>
+													{{/ifEqual}}
 												{{/each}}
 											</tbody>
 										</table>
@@ -451,9 +486,9 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [ null, null, null,null, null, null, null, null, null, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, { "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [ 100, 200, 300],
+			"lengthMenu": [ 50, 100, 200],
 			"lengthChange": true,
 			"autoWidth": false,
 			"paging": true,

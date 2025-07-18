@@ -33,65 +33,26 @@ module.exports = {
         let flash = new Resposta();
         let perfilAtual = req.cookies['lvlUsu'];
         //console.log('listando plano de tratamento')
-        Trat.find().then((trat) =>{
-
-            trat.forEach((b)=>{
-                let datacad = new Date(b.trat_datacad)
-                let mes = (datacad.getMonth()+1).toString();
-                let dia = (datacad.getUTCDate()).toString();
-                if (mes.length == 1){
-                    mes = "0"+mes;
-                }
-                if (dia.length == 1){
-                    dia = "0"+dia;
-                }
-                let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.datacad=fulldate;
-                
-                datacad = new Date(b.trat_tratdata)
-                mes = (datacad.getMonth()+1).toString();
-                dia = (datacad.getUTCDate()).toString();
-                if (mes.length == 1){
-                    mes = "0"+mes;
-                }
-                if (dia.length == 1){
-                    dia = "0"+dia;
-                }
-                fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.tratdata=fulldate;
-
-                datacad = new Date(b.trat_dataedi)
-                mes = (datacad.getMonth()+1).toString();
-                dia = (datacad.getUTCDate()).toString();
-                if (mes.length == 1){
-                    mes = "0"+mes;
-                }
-                if (dia.length == 1){
-                    dia = "0"+dia;
-                }
-                fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.dataedi=fulldate;
-            })
-            //console.log("trat:");
-            //console.log(trat);
-            //console.log("Listagem Realizada das Trateses!")
-            Bene.find().then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                //console.log("Listagem Realizada bene!")
-                Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-                    Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{
-                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                        if(resposta.sucesso == ""){
-                            console.log(' objeto vazio');
-                            flash.texto = ""
-                            flash.sucesso = ""
-                        } else {
-                            console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
-                            flash.texto = resposta.texto
-                            flash.sucesso = resposta.sucesso
-                        }
-                        res.render('area/plano/tratLis', {trats: trat, terapeutas: terapeuta, usuarios: usuario, benes: bene, perfilAtual, flash})
-        })})})}).catch((err) =>{
+        //console.log("trat:");
+        //console.log(trat);
+        //console.log("Listagem Realizada das Trateses!")
+        Bene.find().then((bene)=>{
+            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+            //console.log("Listagem Realizada bene!")
+            Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
+                Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{
+                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    if(resposta.sucesso == ""){
+                        console.log(' objeto vazio');
+                        flash.texto = ""
+                        flash.sucesso = ""
+                    } else {
+                        console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
+                        flash.texto = resposta.texto
+                        flash.sucesso = resposta.sucesso
+                    }
+                    res.render('area/plano/tratLis', {terapeutas: terapeuta, usuarios: usuario, benes: bene, perfilAtual, flash})
+        })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
@@ -163,19 +124,25 @@ module.exports = {
                 ano = data.substring(0,4);
                 mes = data.substring(5,7);
                 dia = data.substring(8,10);
+                console.log("data: "+data)
+                console.log("ano: "+ano)
+                console.log("mes: "+mes)
+                console.log("dia: "+dia)
 
                 seg = new Date();
                 seg.setFullYear(ano);
-                seg.setUTCMonth(mes);
+                seg.setUTCMonth(parseInt(mes)-1);
                 seg.setDate(dia);
                 seg.setHours(0, 0, 0, 0);
 
+                console.log("seg: "+seg)
                 sex = new Date();
                 sex.setFullYear(ano);
-                sex.setUTCMonth(mes);
+                sex.setUTCMonth(parseInt(mes)-1);
                 sex.setDate(dia);
                 sex.setHours(23, 59, 59, 0);
 
+                console.log("sex: "+sex)
                 switch (seg.getUTCDay()){
                     case 0://DOM
                         seg.setUTCDate(seg.getUTCDate() + 1);
@@ -210,6 +177,8 @@ module.exports = {
                 }
                 dataIni = seg.toISOString();
                 dataFim = sex.toISOString();
+                console.log("dataIni: "+dataIni)
+                console.log("dataFim: "+dataFim)
 
                 break;
             case "Dia":
@@ -220,13 +189,13 @@ module.exports = {
 
                 dataIni = new Date();
                 dataIni.setFullYear(ano);
-                dataIni.setUTCMonth(mes);
+                dataIni.setUTCMonth(parseInt(mes)-1);
                 dataIni.setDate(dia);
                 dataIni.setHours(0, 0, 0, 0);
 
                 dataFim = new Date();
                 dataFim.setFullYear(ano);
-                dataFim.setUTCMonth(mes);
+                dataFim.setUTCMonth(parseInt(mes)-1);
                 dataFim.setDate(dia);
                 dataFim.setHours(23,59,59,0);
 

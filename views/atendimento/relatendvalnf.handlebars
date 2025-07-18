@@ -3,16 +3,52 @@
 	<head>
 		<title>Relatório de Consolidado por Beneficiário</title>
 		<style>
-			@media print and (orientation: landscape) {
-				.noprint {
+			/* Estilos para tela */
+			@media screen {
+				.print-footer {
 					display: none;
 				}
 			}
+
+			/* Estilos para impressão */
 			@media print {
-               .noprint {
-                  display: none;
-               }
-            }
+				.noprint {
+					display: none !important;
+				}
+
+				.print-footer {
+					display: block;
+					position: fixed;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 5px 0;
+					background: white;
+					z-index: 9999;
+				}
+
+				body {
+					margin-bottom: 30mm; /* Espaço para rodapé fixo */
+				}
+
+				@page {
+					margin: 1cm;
+					@bottom-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 12px;
+					}
+				}
+			}
+
+			/* Estilos específicos para impressão em modo paisagem */
+			@media print and (orientation: landscape) {
+				/* Apenas garantimos que o noprint continue funcionando */
+				.noprint {
+					display: none !important;
+				}
+			}
 		</style>
 		<script type="text/javascript">
 			function atualizaDataIni(){
@@ -206,73 +242,61 @@
 														</div>
 													</div>
 											</div><!-- /.row -->
-											<div class="col-xs-12">
-												<div class="row">
-													<label>REFERENTE AO TRATAMENTO MULTIDISCIPLINAR DO BENEFICIÁRIO:</label>
-													<label> {{bene_nome}}</label>
-												</div>
-												<div class="row">
-													<label>DATA DE REFERÊNCIA DOS ATENDIMENTOS: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}</label>
-												</div>
-												<div class="row">
-													<label>SESSÕES REALIZADAS NAS DATAS DE REFERÊNCIA.</label>
-												</div>											
-												
-												{{#each rels}}
+											<div class="page"><!-- /page -->
+												<div class="col-xs-12">
 													<div class="row">
-														{{#each ../terapias}}
-															{{#ifEqual this._id ../nomecid}}
-																{{terapia_nomecid}} : 
-															{{/ifEqual}}
-														{{/each}}
-														{{sessoes}} SESSÃO(ÕES) * 
-														R$ {{valor}} CADA = 		
-														R$ {{total}}
-													</div>				
-												{{/each}}
-	
-												<footer>
-													<div class="row">
-														<b>VALOR TOTAL DAS SESSÕES: </b>
-														<b>{{total.total}}</b>
-													</div>
-												<label>INFORMAÇÕES FINANCEIRAS</label>	
-													<div class="row">
-														<b>BRADESCO </b>
-													</div>					
-													<div class="row">
-														<b>AGÊNCIA: 3453 </b>
+														<label>REFERENTE AO TRATAMENTO MULTIDISCIPLINAR DO BENEFICIÁRIO:</label>
+														<label> {{bene_nome}}</label>
 													</div>
 													<div class="row">
-														<b>CONTA CORRENTE: 50.715-6 </b>
-													</div>					
-													<div class="row">
-														<b>ROUTE CENTRO DE TERAPIA E APOIO INFANTIL LTDA </b>
+														<label>DATA DE REFERÊNCIA DOS ATENDIMENTOS: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}</label>
 													</div>
 													<div class="row">
-														<b>CNPJ: 33.346.423/0001-17 </b>
-													</div>
-													<div class="row">
-														<b>CONTATO: DÉBORA CLARO +55 (81) 9 9299 9989 </b>
-													</div>														
-												</footer>
-												</table>
-											</div>
-											<div class="row"><!-- Área reservada para Assinaturas -->
-												<div class="space space-32"></div>
-												<div class="col-xs-4 col-sm-4">
-													<div class=""></div>
-													<label></label>
+														<label>SESSÕES REALIZADAS NAS DATAS DE REFERÊNCIA.</label>
+													</div>											
+													
+													{{#each rels}}
+														<div class="row">
+															{{#each ../terapias}}
+																{{#ifEqual this._id ../nomecid}}
+																	{{terapia_nomecid}} : 
+																{{/ifEqual}}
+															{{/each}}
+															{{sessoes}} SESSÃO(ÕES) * 
+															R$ {{valor}} CADA = 		
+															R$ {{total}}
+														</div>				
+													{{/each}}
+		
+													<footer>
+														<div class="row">
+															<b>VALOR TOTAL DAS SESSÕES: </b>
+															<b>{{total.total}}</b>
+														</div>
+													<label>INFORMAÇÕES FINANCEIRAS</label>	
+														<div class="row">
+															<b>BRADESCO </b>
+														</div>					
+														<div class="row">
+															<b>AGÊNCIA: 3453 </b>
+														</div>
+														<div class="row">
+															<b>CONTA CORRENTE: 50.715-6 </b>
+														</div>					
+														<div class="row">
+															<b>ROUTE CENTRO DE TERAPIA E APOIO INFANTIL LTDA </b>
+														</div>
+														<div class="row">
+															<b>CNPJ: 33.346.423/0001-17 </b>
+														</div>
+														<div class="row">
+															<b>CONTATO: DÉBORA CLARO +55 (81) 9 9299 9989 </b>
+														</div>														
+													</footer>
+													</table>
 												</div>
-												<div class="col-xs-4 col-sm-4">
-													<div class=""></div>
-													<label></label>
-												</div>
-												<div class="col-xs-4 col-sm-4">
-													<div class="hr"></div>
-													<label>Assinatura da Clínica</label>
-												</div>
-											</div><!-- /.Área reservada para Assinaturas -->
+											</div><!-- /.page -->
+											
 										</div>
 									</div>
 								</div>
@@ -282,5 +306,32 @@
 				</div><!-- /.row -->
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container --><!-- basic scripts -->
+		<div id="rodape" style="text-align: center; margin-top: 20px;"></div>
+		<script>
+			// Exemplo: Mostrar a primeira página
+            //mostrarPagina(1, 7);
+            function mostrarPagina(paginaAtual, totalPaginas) {
+                  const rodape = document.getElementById("rodape");
+                  if (rodape) {
+                        rodape.innerHTML = `Página ${paginaAtual} de ${totalPaginas}`;
+                  }
+            }
+      </script>
+	  <div class="row"><!-- Área reservada para Assinaturas -->
+			<div class="col-xs-12">
+				<div style="margin-top: 32px;"></div>
+				<div class="row">
+					<div class="col-xs-4 col-sm-4 text-center">
+						
+					</div>
+					<div class="col-xs-4 col-sm-4"></div>
+					<div class="col-xs-4 col-sm-4 text-center">
+						<div class="hr"></div>
+						<label>Assinatura da Clínica</label>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.Área reservada para Assinaturas -->
+	  <div class="print-footer" id="printFooter"></div>
 	</body>
 </html>

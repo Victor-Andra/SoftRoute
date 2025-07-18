@@ -229,74 +229,80 @@ module.exports = {ExtraModel,ExtraSchema,
                 return resultado;
             
     },
-    extraAdicionar: async (req,res) => {
-        //Validar se a Extraese existe
-        console.log("extramodel");
-        let dataAtual = new Date();
-        let lvlUsu = req.cookies['lvlUsu'];
-        let idUsu;
-        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
-        arrayIds.forEach((id)=>{
-            if(id == lvlUsu){
-                idUsu = id;
-            }
-        })
-        const newExtra = new ExtraModel({
-            //campos exclusivos extra
-            extra_tipo : req.body.extraTipo,
-            extra_auditado : req.body.extraAuditado,
-            extra_auditadoObs : req.body.extraAuditadoObs,
-            extra_exportado : req.body.extraExportado,
-            extra_dtaExportado : req.body.extraDtaExportado,
-            extra_horaExportado : req.body.extraHoraExportado,
-            extra_usuidExportou : req.body.extraUsuidExportou,
-            extra_extraStatus : req.body.extraExtraStatus,
-            extra_extraStatusPg : req.body.extraExtraStatusPg,
-           //campos agendamento
-            extra_data : req.body.extraData,
-            extra_hora : req.body.extraHora,
-            extra_data_semana : req.body.extraDatasemana,
-            extra_data_dia : req.body.extraDatadia,
-            extra_beneid : req.body.extraBeneid,
-            extra_convid : req.body.extraConvid,
-            extra_salaid : req.body.extraSalaid,
-            extra_terapiaid : req.body.extraTerapiaid,
-            extra_usuid : req.body.extraUsuid,
-            extra_mergeterapeutaid : req.body.extraMergeterapeutaid,
-            extra_mergeterapiaid : req.body.extraMergeterapiaid,
-            extra_migrado : req.body.extraMigrado,
-            extra_datacad : req.body.extraDatacad,
-            extra_dataedi : req.body.extraDataedi,
-            extra_categoria : req.body.extraCategoria,
-            extra_org : req.body.extraOrg,
-            extra_obs : req.body.extraObs,
-            extra_aux : req.body.extraAux, 
-            extra_temp : req.body.extraTemp, 
-            extra_tempId : req.body.extraTempId,
-            extra_tempmotivo : req.body.extraTempmotivo,
-            extra_extra : req.body.extraExtra,
-            extra_cobrarextra : req.body.extraCobrarextra,
-            extra_evolucao : req.body.extraEvolucao,
-            extra_copia : req.body.extraCopia,
-            extra_selo : req.body.extraSelo,
-            extra_dataSelo : req.body.extraDataSelo,
-            extra_atrazo : req.body.extraAtrazo,
-            extra_rel : req.body.extraRel,
-            extra_turnoFalta : req.body.extraTurnoFalta,
-            extra_faltaId : req.body.extraFaltaId,
-            extra_falta : req.body.extraFalta,
-            extra_usuedi : req.body.extraUsuedi, //Usuário adm que alterou
-            extra_log : req.body.extraLog, //Log das alterações
-            extra_usucad : req.body.extraUsucad
-        });
-        console.log("newExtra save");
-        await newExtra.save().then(()=>{
+    extraAdicionar: async (req, res) => {
+        try {
+            let dataAtual = new Date();
+            let usuarioAtual = req.cookies['idUsu'];
+            let lvlUsu = req.cookies['lvlUsu'];
+            let idUsu;
+
+            let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];
+            arrayIds.forEach((id) => {
+                if (id === lvlUsu) {
+                    idUsu = id;
+                }
+            });
+
+            // Gera a hora atual para o campo extra_horaExportado
+            const agora = new Date();
+            const horaAtual = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+            const newExtra = new ExtraModel({
+                //campos exclusivos extra
+                extra_tipo : req.body.extraTipo,
+                extra_auditado : false,//Boleano false como padrão
+                extra_auditadoObs : req.body.extraAuditadoObs,
+                extra_exportado : req.body.extraExportado,
+                extra_dtaExportado : dataAtual,//Data definida automaticamente
+                extra_horaExportado : horaAtual,//Hora definida automaticamente
+                extra_usuidExportou : usuarioAtual,//Id do usuário definida automaticamente
+                extra_extraStatus : "Aguardando",
+                extra_extraStatusPg : req.body.extraExtraStatusPg,
+            //campos agendamento
+                extra_data : req.body.extraData,
+                extra_hora : req.body.extraHora,
+                extra_data_semana : req.body.extraDatasemana,
+                extra_data_dia : req.body.extraDatadia,
+                extra_beneid : req.body.extraBeneid,
+                extra_convid : req.body.extraConvid,
+                extra_salaid : req.body.extraSalaid,
+                extra_terapiaid : req.body.extraTerapiaid,
+                extra_usuid : req.body.extraUsuid,
+                extra_mergeterapeutaid : req.body.extraMergeterapeutaid,
+                extra_mergeterapiaid : req.body.extraMergeterapiaid,
+                extra_migrado : req.body.extraMigrado,
+                extra_datacad : req.body.extraDatacad,
+                extra_dataedi : req.body.extraDataedi,
+                extra_categoria : req.body.extraCategoria,
+                extra_org : req.body.extraOrg,
+                extra_obs : req.body.extraObs,
+                extra_aux : req.body.extraAux, 
+                extra_temp : req.body.extraTemp, 
+                extra_tempId : req.body.extraTempId,
+                extra_tempmotivo : req.body.extraTempmotivo,
+                extra_extra : req.body.extraExtra,
+                extra_cobrarextra : req.body.extraCobrarextra,
+                extra_evolucao : req.body.extraEvolucao,
+                extra_copia : req.body.extraCopia,
+                extra_selo : req.body.extraSelo,
+                extra_dataSelo : req.body.extraDataSelo,
+                extra_atrazo : req.body.extraAtrazo,
+                extra_rel : req.body.extraRel,
+                extra_turnoFalta : req.body.extraTurnoFalta,
+                extra_faltaId : req.body.extraFaltaId,
+                extra_falta : req.body.extraFalta,
+                extra_usuedi : req.body.extraUsuedi,
+                extra_log : req.body.extraLog,
+                extra_usucad : req.body.extraUsucad
+            });
+
+            await newExtra.save();
             console.log("Cadastro realizado!");
-            return true;
-        }).catch((err) => {
-            console.log(err)
-            return err;
-        });
+            return res.status(200).json({ success: true });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ error: err.message });
+        }
     },
 
     montaExtra(req,res){

@@ -207,12 +207,17 @@
 
 
 		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
+		<div id="rodape" style="text-align: center; margin-top: 20px;"></div>
+		<script>
+			// Exemplo: Mostrar a primeira página
+            //mostrarPagina(1, 7);
+            function mostrarPagina(paginaAtual, totalPaginas) {
+                  const rodape = document.getElementById("rodape");
+                  if (rodape) {
+                        rodape.innerHTML = `Página ${paginaAtual} de ${totalPaginas}`;
+                  }
+            }
+      </script>
 
 	</body>
 </html>

@@ -69,6 +69,127 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
+    carregaAtendAdmExtra: (req, res) => {
+        let lvlUsu = req.cookies['lvlUsu'];
+        let atend = {
+            atend_num: 0, // valor inicial, NÃO PODE SER 0 AO ENVIAR PRA TELA
+            atend_extraid: req.params.id // <<<--- Atribuição do ID recebido pela URL
+        };
+
+        // Busca o último atendimento para incrementar o número
+        Atend.find().sort({ atend_num: -1 }).limit(1).then((atendimento) => {
+                if (atendimento.length > 0) {
+                    atend.atend_num = atendimento[0].atend_num + 1;
+                }
+
+                console.log("Listagem Realizada de NextNum");
+
+                Bene.find({ "bene_status": "Ativo" })
+                    .then((bene) => {
+                        bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : -1);
+
+                        console.log("Listagem Realizada de Beneficiários!");
+
+                        Conv.find({ "conv_status": "Ativo" })
+                            .then((conv) => {
+                                conv.sort((a, b) => (a.conv_nome > b.conv_nome) ? 1 : -1);
+
+                                console.log("Listagem Realizada de Convenios");
+
+                                Convcre.find()
+                                    .then((convcre) => {
+                                        Convdeb.find()
+                                            .then((convdeb) => {
+                                                Usuario.find({
+                                                    "usuario_status": "Ativo",
+                                                    $or: [
+                                                        { "usuario_funcaoid": "6241030bfbcc51f47c720a0b" },
+                                                        { "usuario_perfilid": { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                                                    ]
+                                                })
+                                                .then((usuario) => {
+                                                    usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : -1);
+
+                                                    console.log("Listagem Realizada de Usuário");
+
+                                                    Terapia.find({ "terapia_status": "Ativo" })
+                                                        .then((terapia) => {
+                                                            terapia.sort((a, b) => (a.terapia_nome > b.terapia_nome) ? 1 : -1);
+
+                                                            console.log("Listagem Realizada de Terapias");
+
+                                                            Sala.find()
+                                                                .then((sala) => {
+                                                                    sala.sort((a, b) => (a.sala_nome > b.sala_nome) ? 1 : -1);
+
+                                                                    Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
+                                                                        .then((horaage) => {
+                                                                            res.render('atendimento/atendadm/atendAdmCadExtra', {
+                                                                                atend,
+                                                                                benes: bene,
+                                                                                convs: conv,
+                                                                                usuarios: usuario,
+                                                                                terapias: terapia,
+                                                                                convcres: convcre,
+                                                                                convdebs: convdeb,
+                                                                                salas: sala,
+                                                                                horaages: horaage,
+                                                                                lvlUsu
+                                                                            });
+                                                                        });
+                                                                });
+                                                        });
+                                                });
+                                            });
+                                    });
+                            });
+                    });
+            })
+            .catch((err) => {
+                console.log(err);
+                req.flash("error_message", "Houve um erro ao realizar as listas!");
+                res.redirect('/admin/erro');
+            });
+    },
+    cadastraAtendExtra: async (req, res) => {//Nova função para cadastrar o atendimento pertencente ao Extra vinculado o ID do Extra ao atendimento possibilitando sua gestão
+        try {
+            const {
+                atendExtraid,
+                atendBeneid,
+                atendConvid,
+                atendTerapiaid,
+                atendTerapeutaid,
+                // outros campos do formulário que você precisa
+            } = req.body;
+
+            // Aqui você pega o usuário logado, se necessário
+            const usuarioAtual = req.cookies.idUsu;
+
+            // Cria uma nova instância do modelo Atend
+            const novoAtendimento = new AtendModel({
+                atend_num: req.body.atendNum, // ou o nome correto do campo
+                atend_extraid: atendExtraid, // <<<--- Campo que veio do botão plus
+                atend_beneid: atendBeneid,
+                atend_convid: atendConvid,
+                atend_terapiaid: atendTerapiaid,
+                atend_terapeutaid: atendTerapeutaid,
+                // outros campos do formulário...
+                atend_usucad: usuarioAtual,
+                atend_datacad: new Date(),
+            });
+
+            // Salva no banco
+            await novoAtendimento.save();
+
+            console.log("Atendimento cadastrado com sucesso!");
+            req.flash("success_message", "Atendimento salvo com sucesso!");
+            res.redirect("/menu/atendimento/extra/ctrlextra"); // ou outra rota de sucesso
+        } catch (err) {
+            console.error("Erro ao cadastrar atendimento:", err);
+            req.flash("error_message", "Erro ao salvar o atendimento.");
+            res.redirect("/admin/erro");
+        }
+    },
     carregaAtendAdmEdi(req,res){
         let atend;
         let nextNumEdi;

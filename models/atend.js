@@ -30,6 +30,7 @@ const AtendSchema = mongoose.Schema({
     atend_agenda_f_id_orig :{ type: ObjectId, required: false },
     atend_agenda_s_id_orig :{ type: ObjectId, required: false },
     atend_numnf :{ type: String, required: false },
+    atend_extraid:{ type: ObjectId, required: false },//Armazena o extraid para gestão, Wagner Cintra, 14/04/2025 
     atend_datacad :{ type: Date, required: false },
     atend_usuidedi :{ type: ObjectId, required: false }, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
     atend_dataedi :{ type: Date, required: false }
@@ -62,6 +63,7 @@ class Atend{
         atend_obs,
         atend_num,
         atend_numnf,
+        atend_extraid,//Armazena o extraid para gestão, Wagner Cintra, 14/04/2025 
         atend_rel,
         atend_datacad,
         atend_usuidedi, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
@@ -92,6 +94,7 @@ class Atend{
         this.atend_obs = atend_obs,
         this.atend_num = atend_num,
         this.atend_numnf = atend_numnf,
+        this.atend_extraid = atend_extraid,//Armazena o extraid para gestão, Wagner Cintra, 14/04/2025 
         this.atend_rel = atend_rel,
         this.atend_datacad = atend_datacad,
         this.atend_usuidedi = atend_usuidedi, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
@@ -173,6 +176,7 @@ module.exports = {AtendModel,AtendSchema,
             atend_obs : req.body.atendObs,
             atend_num : req.body.nextNum,
             atend_numnf : req.body.atendNumnf,
+            atend_extraid : req.body.atendExtraid,
             atend_datacad : dataAtual.toISOString()
             
         });
@@ -222,7 +226,6 @@ module.exports = {AtendModel,AtendSchema,
             return err;
         });
     }
-    
     ,atendUpdateCampos: async (req,res) => {
         let resultado;
         let busca;
