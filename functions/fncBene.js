@@ -15,6 +15,8 @@ const escolaClass = require("../models/escola")
 const fncGeral = require("./fncGeral")
 const respostaClass = require("../models/resposta")
 
+
+
 //Tabelas Extrangeiras
 const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
@@ -414,7 +416,8 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
+   
+  
     relaniverBene(req, res) {
         let monthsChildren = {};
     

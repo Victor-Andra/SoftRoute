@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pt-br"><head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta charset="utf-8">
+		<title>Lista de beneficiários</title>
+		 <style>
+        /*Tooltip personalizado */
+            .custom-tooltip {
+                position: relative;
+                display: inline-block;
+                cursor: pointer;
+            }
+
+            .tooltip-text {
+                visibility: hidden;
+                width: max-content;
+                background-color: #f3dfdf;
+                color: red;
+                font-size: 8px;
+                text-align: left;
+                border-radius: 4px;
+                padding: 8px 12px;
+                position: absolute;
+                z-index: 9999;
+                bottom: 125%; /* Acima do ícone */
+                left: 50%;
+                transform: translateX(-50%);
+                opacity: 0.9;
+                white-space: normal;
+                min-width: 150px;
+                max-width: 300px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: opacity 0.3s;
+            }
+
+            .tooltip-text::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #f3dfdf transparent transparent transparent;
+            }
+
+            /* Mostra o tooltip quando o mouse passa sobre o link */
+            .custom-tooltip:hover .tooltip-text {
+                visibility: visible;
+            }
+    </style>
+	
+		<script type="text/javascript">
+			// Nova função para pegar a data atual no formato dd/mm/yyyy
+			function getDataAtualFormatada() {
+				let data = new Date();
+				let dia = String(data.getDate()).padStart(2, '0');
+				let mes = String(data.getMonth() + 1).padStart(2, '0'); // Janeiro é 0!
+				let ano = data.getFullYear();
+				return `${dia}/${mes}/${ano}`;
+			}
+
+			// Função para converter data brasileira para objeto Date
+			function parseDataBr(dataStr) {
+				let [dia, mes, ano] = dataStr.split('/');
+				return new Date(ano, mes - 1, dia);
+			}
+
+			// Sua função ajustaData modificada para aceitar o valor formatado em dd/mm/yyyy
+			function ajustaData(){
+				let fullDatas = document.getElementsByName("fullData");
+				fullDatas.forEach((elementox)=>{
+					let id = "atenddata"+elementox.id;
+					let dat = new Date(elementox.value);
+
+					// Trata possíveis datas inválidas
+					if (isNaN(dat.getTime())) {
+						dat = parseDataBr(elementox.value); // tenta parsear se for formato BR
+					}
+
+					let mes = (dat.getMonth()+1).toString().padStart(2, '0');
+					let dia = dat.getDate().toString().padStart(2, '0');
+
+					let fulldate = `${dia}/${mes}/${dat.getFullYear()}`;
+				});
+			}
+
+			// Função para obter o início e fim da semana (domingo a sábado)
+			function getInicioFimSemana(data) {
+				const dataRef = new Date(data);
+				const diaSemana = dataRef.getDay(); // 0 = domingo, 1 = segunda, etc.
+				
+				// Calcular início da semana (domingo)
+				const inicio = new Date(dataRef);
+				inicio.setDate(dataRef.getDate() - diaSemana); // Volta para o domingo da semana
+				
+				// Calcular fim da semana (sábado)
+				const fim = new Date(inicio);
+				fim.setDate(inicio.getDate() + 6); // Adiciona 6 dias para chegar no sábado
+				
+				return { inicio, fim };
+			}
+
+			// Função para formatar data para dd/mm/yyyy
+			function formatDateToBR(date) {
+				return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+			}
+
+			function formataData(){
+				// Como não temos tipoData no HTML, vamos direto atualizar a data final e o período
+				let dataInput = document.getElementById('dataFil').value;
+				
+				if (!dataInput) return;
+				
+				let dat = new Date(dataInput);
+				let mes = String(dat.getUTCMonth() + 1).padStart(2, '0'); // UTC
+				let dia = String(dat.getUTCDate()).padStart(2, '0');
+				let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
+				document.getElementById('dataFinal').value = fulldate;
+				
+				// Sempre atualiza o período da semana quando a data muda
+				atualizaPeriodoSemana();
+			}
+
+			function trocaFilpessoa() {
+				var tipo = document.getElementById("atendTipoPessoa").value;
+				var tdBene = document.getElementById("tdBeneDivFil");
+				var tdTera = document.getElementById("tdTeraFil");
+
+				// Oculta todos inicialmente
+				tdBene.style.display = "none";
+				tdTera.style.display = "none";
+
+				if (tipo === "Beneficiario") {
+					tdBene.style.display = "table-cell";
+				} else if (tipo === "Terapeuta") {
+					tdTera.style.display = "table-cell";
+				}
+				// Se for "Geral", mantém tudo oculto
+			}
+
+			// Função para atualizar o período da semana quando a data mudar
+			function atualizaPeriodoSemana() {
+				let dataInput = document.getElementById('dataFil').value;
+				
+				if (dataInput) {
+					let dat = new Date(dataInput);
+					const { inicio, fim } = getInicioFimSemana(dat);
+					const datainiSemana = formatDateToBR(inicio);
+					const datafimSemana = formatDateToBR(fim);
+					document.getElementById('periodoSemana').value = `${datainiSemana} até ${datafimSemana}`;
+				}
+			}
+
+			function trocaFiltroData(){
+				// Função vazia ou remova se não estiver usando
+			}
+
+			// Função carregaBody para chamar a atualização inicial
+			function carregaBody(){
+				// Preenche o campo #dataFil com a data atual no formato dd/mm/yyyy
+				const dataAtual = getDataAtualFormatada();
+				document.getElementById("dataFil").value = dataAtual.split('/').reverse().join('-'); // formato yyyy-mm-dd para input date
+				document.getElementById("dataFinal").value = dataAtual; // ou qualquer outro uso que você precise
+				
+				// Atualiza o período da semana inicial
+				atualizaPeriodoSemana();
+				
+				if (document.getElementById("carregaFiltro") && document.getElementById("carregaFiltro").value == "true"){
+					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
+					if(document.getElementById("tipoData").value == "Ano/Mes"){
+						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
+						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
+					} else if (document.getElementById("tipoData").value == "Semana" || document.getElementById("tipoData").value == "Dia"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					}
+
+					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
+					if (document.getElementById("atendTipoPessoa").value == "Geral"){
+						// nada por enquanto
+					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
+						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value;
+					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
+						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
+					}
+				}
+				
+				// Adicione esta linha no final para atualizar a exibição dos campos
+				trocaFilpessoa();
+			}
+		</script>
+	</head>
+
+	<body onload="javascript:controlaNave(); carregaBody();" class="no-skin">
+<form class="form-horizontal" role="form" action="/menu/beneficiario/plansubsfixoFill" method="POST">
+    <div class="breadcrumbs" id="pesquisaAge">
+        <div class="col-xs-12">
+            <div class="row">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <!-- Espaçador -->
+                        <td>&nbsp;</td>
+
+                        <!-- Campo Data -->
+                        <td style="width: 80px;">
+                            <label for="dataFil">Data:</label>
+                        </td>
+                        <td style="width: 100px;">
+                            <!-- Este campo envia 'dataFil' (formato yyyy-mm-dd) -->
+                            <input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="formataData(); atualizaPeriodoSemana();">
+                            <!-- Este campo envia 'dataFinal' (formato yyyy-mm-ddThh:mm:ss.SSSZ) -->
+                            <input class="hidden" id="dataFinal" name="dataFinal">
+                        </td>
+
+                        <!-- Espaçador -->
+                        <td>&nbsp;</td>
+
+                        <!-- Campo Semana -->
+                        <td style="width: 150px;">
+                            <label for="periodoSemana">Semana selecionada:</label>
+                        </td>
+                        <td style="width: 220px;">
+                            <!-- Este campo NÃO é enviado no formulário, é apenas para exibição -->
+                            <input class="form-control form-control-sm" id="periodoSemana" readonly value="--/-- até --/--">
+                        </td>
+
+                        <!-- Espaçador -->
+                        <td>&nbsp;</td>
+
+                        <!-- Campo Tipo Filtro -->
+                        <td style="width: 80px;">
+                            <label for="atendTipoPessoa">Tipo Filtro:&nbsp;</label>
+                        </td>
+                        <td style="width: 10px;">
+                            <!-- Este campo envia 'atendTipoPessoa' (Geral, Beneficiario, Terapeuta) -->
+                            <select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." onchange="trocaFilpessoa()">
+                                <option value="Geral">Geral</option>
+                                <option value="Beneficiario">Beneficiário</option>
+                                <option value="Terapeuta">Terapeuta</option>
+                            </select>
+                        </td>
+
+                        <!-- Espaçador -->
+                        <td>&nbsp;</td>
+
+                        <!-- Campo Beneficiário (condicional) -->
+                        <td id="tdBeneDivFil" style="display: none;">
+                            <label for="agendaBeneid" id="beneFilDiv">Beneficiário:&nbsp;</label>
+                            <!-- Este campo envia 'agendaBeneid' (ObjectId do beneficiário) -->
+                            <select id="agendaBeneid" name="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="formataData();">
+                                {{#each benes}}
+                                <option value="{{_id}}">{{bene_apelido}}</option>
+                                {{/each}}
+                            </select>
+                        </td>
+
+                        <!-- Espaçador -->
+                        <td>&nbsp;</td>
+
+                        <!-- Campo Terapeuta (condicional) -->
+                        <td id="tdTeraFil" style="display: none;">
+                            <label for="agendaUsuid" id="teraFilDiv">Terapeuta:&nbsp;</label>
+                            <!-- Este campo envia 'agendaUsuid' (ObjectId do terapeuta) -->
+                            <select id="agendaUsuid" name="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." onchange="formataData();">
+                                {{#each terapeutas}}
+                                <option value="{{_id}}">{{usuario_nome}}</option>
+                                {{/each}}
+                            </select>
+                        </td>
+
+                        <!-- Espaçador -->
+                        <td>&nbsp;</td>
+
+                        <!-- Botão de Envio -->
+                        <td>
+                            <button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info">
+                                <i class="ace-icon fa fa-search-plus"></i>
+                            </button>
+                        </td>
+
+                         <!-- Espaçador -->
+                         <td>&nbsp;</td>
+                    </tr>
+                </table>
+
+                <!-- Campo Hidden Fixo -->
+                <!-- Este campo sempre envia 'soFixo=true' -->
+                <input type="hidden" id="soFixo" name="soFixo" value="true">
+
+            </div>
+        </div>
+    </div><!-- /.breadcrumb -->
+</form>
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Planilha de Substituto Fixos</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					{{#each error}}
+						<div class="alert alert-danger">{{texto}}{{error}}</div>
+					{{else}}
+					{{/each}}
+					<div class="page-content"><!-- .page-content -->
+						<div class="row"><!--.row -->
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="clearfix" >
+											<div class="pull-right tableTools-container">
+											</div>
+										</div>
+										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+											<thead>
+												<tr role="row">
+													<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="2" >Beneficiário</th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >Clínica</th>
+													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" >Escola</th>
+													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="5" >Terapia</th>
+												</tr>
+												<tr role="row">
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Convênio</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Beneficiário</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapeuta Atende</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapeuta Fixo</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapeuta Atende</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapeuta Fixo</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1">Laudo</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1">Frequência</th>
+													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia Substituta</th>
+													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1">Atendimento</th>
+													<th tabindex="10">Ação</th>
+												</tr>
+											</thead>
+											
+											<tbody>
+												{{#each agendas}} <!-- Itera por cada beneficiário -->
+													<tr role="row" class="odd">
+														
+														<!-- Coluna 1: Convênio -->
+														<td>
+															<!-- 1. Pega o beneficiário usando agenda_beneid no mapaBenes -->
+															{{#with (lookup ../mapaBenes this.agenda_beneid)}}
+																<!-- 2. Pega o convênio do beneficiário usando bene_convid no mapaConvs -->
+																{{#with (lookup ../../mapaConvs this.bene_convid)}}
+																	{{this.conv_nome}}
+																{{else}}
+																	<!-- Convênio não encontrado -->
+																	{{#if this.bene_convid}}ID Conv: {{this.bene_convid}}{{/if}}
+																{{/with}}
+															{{else}}
+																<!-- Beneficiário não encontrado -->
+																{{#if this.agenda_beneid}}ID Bene: {{this.agenda_beneid}}{{/if}}
+															{{/with}}
+														</td>
+														<!-- Coluna 2: Nome do Beneficiário -->
+														<td>
+															{{#with (lookup ../mapaBenes this.agenda_beneid)}}
+																{{this.bene_nome}} <!-- Ou this.bene_apelido, dependendo do campo que você prefere -->
+															{{else}}
+																<!-- Beneficiário não encontrado -->
+																{{#if this.agenda_beneid}}ID Bene: {{this.agenda_beneid}}{{/if}}
+															{{/with}}
+														</td>
+														<!-- Colunas 3-6: Clínica e Escola (exemplo simplificado) -->
+														<!-- Você precisa da lógica para determinar o terapeuta com base nas agendas -->
+														<!-- Esta é uma simplificação, você precisa correlacionar com agendas/horaages -->
+														<td>
+															{{#ifEqual agenda_salaid "64653fedfef321e0b32d2b5f"}}
+																-
+																{{else}}
+																	{{#ifEqual agenda_salaid "6368fe35c2cdb92ac6d914be"}}
+																		-
+																		{{else}}
+																			{{#with (lookup ../mapaUsuarios this.agenda_usuid)}}
+																				{{this.usuario_nome}}
+																			{{else}}
+																				<!-- Terapeuta não encontrado -->
+																				{{#if this.agenda_usuid}}ID Terapeuta: {{this.agenda_usuid}}{{/if}}
+																			{{/with}}
+																	{{/ifEqual}}
+															{{/ifEqual}}
+														</td>
+														<td>
+															{{#ifEqual agenda_salaid "64653fedfef321e0b32d2b5f"}}
+																-
+																{{else}}
+																	{{#ifEqual agenda_salaid "6368fe35c2cdb92ac6d914be"}}
+																		-
+																		{{else}}
+																				{{#with (lookup ../mapaUsuarios this.agenda_mergeterapeutaid)}}
+																					{{this.usuario_nome}}
+																				{{else}}
+																					<!-- Terapeuta não encontrado -->
+																					{{#if this.agenda_mergeterapeutaid}}ID Terapeuta: {{this.agenda_mergeterapeutaid}}{{/if}}
+																				{{/with}}
+																	{{/ifEqual}}
+															{{/ifEqual}}
+															
+														</td>
+														<td>
+															{{#ifEqual agenda_salaid "64653fedfef321e0b32d2b5f"}}
+																	{{#with (lookup ../mapaUsuarios this.agenda_usuid)}}
+																		{{this.usuario_nome}}
+																	{{else}}
+																		<!-- Terapeuta não encontrado -->
+																		{{#if this.agenda_usuid}}ID Terapeuta: {{this.agenda_usuid}}{{/if}}
+																	{{/with}}
+																{{else}}
+																	{{#ifEqual agenda_salaid "6368fe35c2cdb92ac6d914be"}}
+																		{{#with (lookup ../mapaUsuarios this.agenda_usuid)}}
+																				{{this.usuario_nome}}
+																			{{else}}
+																				<!-- Terapeuta não encontrado -->
+																				{{#if this.agenda_usuid}}ID Terapeuta: {{this.agenda_usuid}}{{/if}}
+																			{{/with}}
+																		{{else}}
+																		-
+																	{{/ifEqual}}
+															{{/ifEqual}}
+														</td>
+														<td>
+															{{#ifEqual agenda_salaid "64653fedfef321e0b32d2b5f"}}
+																	{{#with (lookup ../mapaUsuarios this.agenda_mergeterapeutaid)}}
+																		{{this.usuario_nome}}
+																	{{else}}
+																		<!-- Terapeuta não encontrado -->
+																		{{#if this.agenda_mergeterapeutaid}}ID Terapeuta: {{this.agenda_mergeterapeutaid}}{{/if}}
+																	{{/with}}
+																{{else}}
+																	{{#ifEqual agenda_salaid "6368fe35c2cdb92ac6d914be"}}
+																			{{#with (lookup ../mapaUsuarios this.agenda_mergeterapeutaid)}}
+																				{{this.usuario_nome}}
+																			{{else}}
+																				<!-- Terapeuta não encontrado -->
+																				{{#if this.agenda_mergeterapeutaid}}ID Terapeuta: {{this.agenda_mergeterapeutaid}}{{/if}}
+																			{{/with}}
+																		{{else}}
+																		-
+																	{{/ifEqual}}
+															{{/ifEqual}}
+															
+														</td>
+														
+														<!-- Coluna X: Laudo (Terapia) -->
+														<td>
+															{{#with (lookup ../mapaTerapias this.agenda_terapiaid)}}
+																{{this.terapia_nome}}
+															{{else}}
+																{{#if this.agenda_terapiaid}}ID Terapia: {{this.agenda_terapiaid}}{{/if}}
+															{{/with}}
+														</td>
+
+														<!-- Terapeuta Substituto Fixo -->
+														<td>
+															{{#with (lookup ../mapaUsuarios this.agenda_mergeterapeutaid)}}
+																{{this.usuario_nome}}
+															{{else}}
+																{{#if this.agenda_mergeterapeutaid}}{{this.agenda_mergeterapeutaid}}{{/if}}
+															{{/with}}
+														</td>
+
+														<!-- Coluna X: Terapia Substituída (Merge Terapia) -->
+														<td>
+															{{#with (lookup ../mapaTerapias this.agenda_mergeterapiaid)}}
+																{{this.terapia_nome}}
+															{{else}}
+																{{#if this.agenda_mergeterapiaid}}ID Terapia Subst.: {{this.agenda_mergeterapiaid}}{{/if}}
+															{{/with}}
+														</td>
+
+														<!-- Terapeuta (Atende) -->
+														<td>
+															{{#with (lookup ../mapaUsuarios this.agenda_usuid)}}
+																{{this.usuario_nome}}
+															{{else}}
+																{{#if this.agenda_usuid}}{{this.agenda_usuid}}{{/if}}
+															{{/with}}
+														</td>
+														<td>
+															<!-- Ações -->
+															<div class="action-buttons">
+																<a class="blue" href="/menu/beneficiario/edi/{{_id}}">
+																	<i class="ace-icon fa fa-pencil bigger-130"></i>
+																</a>
+															</div>
+														</td>
+													</tr>
+												{{/each}}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content-inner -->
+			</div><!-- /.main-content -->
+
+		
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container ace-save-state -->
+
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		
+		<!-- page specific plugin scripts -->
+		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+		
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$("#dynamic-table").DataTable({
+			"language": { "url": "/js/lang/datatable-pt-br.json" },
+			"aaSorting": [],
+			"aoColumns": [ null, null, null, null, null, null, null, null, null,null, { "bSortable": false }],
+			"responsive": true,
+			"lengthMenu": [200, 500, 1000, 3000],
+			"lengthChange": true,
+			"autoWidth": true,
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			
+			select: {
+						style: 'multi'
+					}
+			});
+		});
+		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+		</script>
+	
+
+	</body>
+
+</html>

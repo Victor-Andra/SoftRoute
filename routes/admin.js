@@ -1967,6 +1967,14 @@ router.post('/financeiro/despesa/atualizar', fncGeral.IsAuthenticated, (req,res)
     router.get('/beneficiario/relaniverbene', fncGeral.IsAuthenticated, (req,res) =>{//lista todas benes
         fncBene.relaniverBene(req, res);        
     })
+    //Planilha de Beneficiarios com Substituição Fixa 
+    router.get('/beneficiario/plansubsfixo', fncGeral.IsAuthenticated, (req,res) =>{//lista todas benes
+        fncAgenda.plansubsfixo(req, res);        
+    })
+
+    router.post('/beneficiario/plansubsfixoFill', fncGeral.IsAuthenticated, (req,res) =>{//lista todas benes
+        fncAgenda.listaPlansubsfixo(req, res);        
+    })
 
 //Evolucao
     router.get('/beneficiario/evolucao/lis', fncGeral.IsAuthenticated, (req,res) =>{

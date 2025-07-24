@@ -20,7 +20,7 @@ const debitClass = require("../models/debit")
 const salaClass = require("../models/sala")
 const horaageClass = require("../models/horaAge")
 const agendaClass = require("../models/agenda")
-
+const anoClass = require("../models/ano")
 
 
 //Tabelas Extrangeiras
@@ -36,7 +36,7 @@ const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
 const Sala = mongoose.model("tb_sala")
 const Horaage = mongoose.model("tb_horaage")
-
+const Ano = mongoose.model("tb_ano")
 //Funções auxiliares
 
 const fncCredit = require("../functions/fncCredit")
@@ -196,13 +196,14 @@ module.exports = {FiltroEvoatend,
             })
             agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
             Terapia.find().then((terapia)=>{
+                Ano.find().then((ano)=>{
                 console.log("Listagem Realizada de terapias")
                 Bene.find().then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                     bene.forEach((b)=>{b.bene_nome = b.bene_nome.replace(".","")});
                     Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-                            res.render("area/evol/evoatendLis", {agendas: idsAgendasEx, terapias: terapia,usuarios: usuario, benes: bene, flash})
-        })})})}).catch((err) =>{
+                            res.render("area/evol/evoatendLis", {agendas: idsAgendasEx, anos: ano, terapias: terapia,usuarios: usuario, benes: bene, flash})
+        })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
@@ -379,13 +380,14 @@ module.exports = {FiltroEvoatend,
 
                 agendaFinal.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
                 Terapia.find().then((terapia)=>{
+                     Ano.find().then((ano)=>{
                     console.log("Listagem Realizada de terapias")
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         bene.forEach((b)=>{b.bene_nome = b.bene_nome.replace(".","")});
                         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-                            res.render("area/evol/evoatendLis", {agendas: agendaFinal, terapias: terapia,usuarios: usuario, benes: bene, flash})
-        })})})})}).catch((err) =>{
+                            res.render("area/evol/evoatendLis", {agendas: agendaFinal, anos: ano, terapias: terapia,usuarios: usuario, benes: bene, flash})
+        })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
@@ -631,12 +633,13 @@ module.exports = {FiltroEvoatend,
                 //agendaFinal.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")
+                     Ano.find().then((ano)=>{
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         bene.forEach((b)=>{b.bene_nome = b.bene_nome.replace(".","")});
                         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-                            res.render("area/evol/evoatendLis", {agendas: agendaFinal, terapias: terapia,usuarios: usuario, benes: bene, flash, filtros})
-        })})})})}).catch((err) =>{
+                            res.render("area/evol/evoatendLis", {agendas: agendaFinal, anos: ano, terapias: terapia,usuarios: usuario, benes: bene, flash, filtros})
+        })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
@@ -905,12 +908,13 @@ module.exports = {FiltroEvoatend,
                 agendaFinal.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")
+                     Ano.find().then((ano)=>{
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         bene.forEach((b)=>{b.bene_nome = b.bene_nome.replace(".","")});
                         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-                            res.render("area/evol/evoatendLis", {agendas: agendaFinal, terapias: terapia,usuarios: usuario, benes: bene, flash, filtros})
-        })})})})})}).catch((err) =>{
+                            res.render("area/evol/evoatendLis", {agendas: agendaFinal, anos: ano, terapias: terapia,usuarios: usuario, benes: bene, flash, filtros})
+        })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
@@ -1166,13 +1170,14 @@ module.exports = {FiltroEvoatend,
                 */
                 agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
                 Terapia.find().then((terapia)=>{
+                     Ano.find().then((ano)=>{
                     console.log("Listagem Realizada de terapias")
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         bene.forEach((b)=>{b.bene_nome = b.bene_nome.replace(".","")});
                         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-                                res.render("area/evol/evoatendLis", {agendas: agenda, terapias: terapia,usuarios: usuario, benes: bene, flash, filtros})
-        })})})})}).catch((err) =>{
+                                res.render("area/evol/evoatendLis", {agendas: agenda, anos: ano, terapias: terapia,usuarios: usuario, benes: bene, flash, filtros})
+        })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
@@ -1184,11 +1189,12 @@ module.exports = {FiltroEvoatend,
                 console.log("Listagem Realizada de terapias")
                 Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     console.log("Listagem Realizada de Usuário")
+                     Ano.find().then((ano)=>{
                         Bene.find().sort({bene_nome: 1}).then((bene)=>{
                             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                             console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/evoatendCad", {terapias: terapia, usuarios: usuario, benes: bene})
-        })})}).catch((err) =>{
+                                res.render("area/evoatendCad", {terapias: terapia, anos: ano, usuarios: usuario, benes: bene})
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
             res.redirect('admin/erro')
@@ -1240,16 +1246,17 @@ module.exports = {FiltroEvoatend,
             }
         })
     },
-    listaEvoatendaberto(req, res, resposta) {
+    listaEvoatendabertoOld(req, res, resposta) {
         let flash = new Resposta();
     
         if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
             flash.texto = resposta.texto;
             flash.sucesso = resposta.sucesso;
         }
-    
+        
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario) => {
             if (usuario) {
+                
                 usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0)); // Ordena o bene por nome
     
                 Bene.find({ bene_status: "Ativo" }).sort({ bene_nome: 1 }).then((bene) => {
@@ -1275,6 +1282,74 @@ module.exports = {FiltroEvoatend,
         }).catch((err) => {
             console.log(err);
             req.flash("error_message", "Houve um erro ao listar!");
+            res.redirect('admin/erro');
+        });
+    },
+    listaEvoatendaberto(req, res, resposta) {
+        let flash = new Resposta();
+
+        if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
+            flash.texto = resposta.texto;
+            flash.sucesso = resposta.sucesso;
+        }
+
+        Usuario.find({
+            "usuario_status": "Ativo",
+            $or: [
+                { "usuario_funcaoid": "6241030bfbcc51f47c720a0b" },
+                { "usuario_perfilid": { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+            ]
+        }).then((usuario) => {
+            if (usuario) {
+
+                usuario.sort((a, b) => 
+                    (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "") > 
+                    b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) ? 1 : 
+                    (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "") > 
+                    a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) ? -1 : 0);
+
+                Bene.find({ bene_status: "Ativo" }).sort({ bene_nome: 1 }).then((bene) => {
+                    if (bene) {
+
+                        bene.sort((a, b) => 
+                            (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "") > 
+                            b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) ? 1 : 
+                            (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "") > 
+                            a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) ? -1 : 0);
+
+                        // 🔥 Nova consulta adicionada: Ano.find()
+                        Ano.find().then((anos) => {
+                            // Renderiza a view com os dados de usuario, bene e anos
+                            res.render('area/evol/evoatendabertoLis', { 
+                                terapeutas: usuario, 
+                                benes: bene, 
+                                anos: anos, // <-- Dados da tabela Ano
+                                flash 
+                            });
+                        }).catch((err) => {
+                            console.log("Erro ao buscar anos:", err);
+                            req.flash("error_message", "Houve um erro ao listar os anos!");
+                            res.redirect('admin/erro');
+                        });
+
+                    } else {
+                        console.log("Bene is undefined");
+                        req.flash("error_message", "Houve um erro ao listar!");
+                        res.redirect('admin/erro');
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                    req.flash("error_message", "Houve um erro ao listar os beneficiários!");
+                    res.redirect('admin/erro');
+                });
+            } else {
+                console.log("Usuario is undefined");
+                req.flash("error_message", "Houve um erro ao listar!");
+                res.redirect('admin/erro');
+            }
+        }).catch((err) => {
+            console.log(err);
+            req.flash("error_message", "Houve um erro ao listar os usuários!");
             res.redirect('admin/erro');
         });
     },
@@ -1478,6 +1553,7 @@ module.exports = {FiltroEvoatend,
                     }
                 }
             })
+             Ano.find().then((ano)=>{
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
@@ -1488,8 +1564,8 @@ module.exports = {FiltroEvoatend,
                             Terapia.find().then((terapia)=>{
                                 Conv.find().then((conv)=>{
                                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                    res.render('area/evol/evoatendabertoLis', {agendas: idsAgendasEx, benes: bene, terapeutas: usuario, salas: sala, terapias: terapia, convs: conv, flash})
-        })})})})})})}).catch((err) =>{
+                                    res.render('area/evol/evoatendabertoLis', {agendas: idsAgendasEx, anos: ano, benes: bene, terapeutas: usuario, salas: sala, terapias: terapia, convs: conv, flash})
+        })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
@@ -1502,15 +1578,15 @@ module.exports = {FiltroEvoatend,
             flash.texto = resposta.texto;
             flash.sucesso = resposta.sucesso;
         }
-    
+        Ano.find().then((ano)=>{
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario) => {
             usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0)); // Ordena o bene por nome
     
             Bene.find({ bene_status: "Ativo" }).then((bene) => {
                 bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0)); // Ordena o bene por nome
-    
-                res.render('area/evol/evoatendfechadoLis', { terapeutas: usuario, benes: bene, flash });
-            }).catch((err) => {
+                     Ano.find().then((ano)=>{
+                res.render('area/evol/evoatendfechadoLis', { terapeutas: usuario, anos: ano, benes: bene, flash, anos: ano});
+            })})}).catch((err) => {
                 console.log(err);
                 req.flash("error_message", "Houve um erro ao listar!");
                 res.redirect('admin/erro');
@@ -1731,6 +1807,7 @@ module.exports = {FiltroEvoatend,
                 }
             })
             agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
+             Ano.find().then((ano)=>{
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
@@ -1741,8 +1818,8 @@ module.exports = {FiltroEvoatend,
                             Terapia.find().then((terapia)=>{
                                 Conv.find().then((conv)=>{
                                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                    res.render('area/evol/evoatendfechadoLis', {agendas: idsAgendasEx,terapeutas: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, filtroTela, flash})
-        })})})})})})}).catch((err) =>{
+                                    res.render('area/evol/evoatendfechadoLis', {anos: ano, agendas: idsAgendasEx,terapeutas: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, filtroTela, flash})
+        })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
@@ -1759,10 +1836,11 @@ module.exports = {FiltroEvoatend,
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario) => {
             usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0)); // Ordena o bene por nome
             console.log("tamanho"+usuario.length)
+             Ano.find().then((ano)=>{
             Bene.find({ bene_status: "Ativo" }).then((bene) => {
                 bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0)); // Ordena o bene por nome
-                res.render('area/evol/evoatendgeralLis', { terapeutas: usuario, benes: bene, flash });
-            })}).catch((err) => {
+                res.render('area/evol/evoatendgeralLis', { terapeutas: usuario, anos: ano, benes: bene, flash });
+            })})}).catch((err) => {
             console.log(err);
             req.flash("error_message", "Houve um erro ao listar!");
             res.redirect('admin/erro');
@@ -1995,7 +2073,7 @@ module.exports = {FiltroEvoatend,
             res.redirect('admin/erro')
         })
     },
-    listaEvoatendranking(req, res, resposta) {
+    listaEvoatendrankingOld(req, res, resposta) {
         let flash = new Resposta();
     
         if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
@@ -2018,6 +2096,72 @@ module.exports = {FiltroEvoatend,
         }).catch((err) => {
             console.log(err);
             req.flash("error_message", "Houve um erro ao listar!");
+            res.redirect('admin/erro');
+        });
+    },
+    listaEvoatendranking(req, res, resposta) {
+        let flash = new Resposta();
+
+        if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
+            flash.texto = resposta.texto;
+            flash.sucesso = resposta.sucesso;
+        }
+
+        Usuario.find({
+            "usuario_status": "Ativo",
+            $or: [
+                { "usuario_funcaoid": "6241030bfbcc51f47c720a0b" },
+                { "usuario_perfilid": { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+            ]
+        }).then((usuario) => {
+            if (usuario && usuario.length > 0) {
+                usuario.sort((a, b) => 
+                    (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "") > 
+                    b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) ? 1 : 
+                    (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "") > 
+                    a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) ? -1 : 0);
+
+                Bene.find({ bene_status: "Ativo" }).then((bene) => {
+                    if (bene && bene.length > 0) {
+                        bene.sort((a, b) => 
+                            (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "") > 
+                            b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) ? 1 : 
+                            (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "") > 
+                            a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) ? -1 : 0);
+
+                        // 🔥 Nova consulta adicionada: Ano.find()
+                        Ano.find().then((anos) => {
+                            res.render('area/evol/evoatendrankingLis', {
+                                terapeutas: usuario,
+                                benes: bene,
+                                anos: anos, // <-- Dados da tabela/modelo Ano
+                                flash
+                            });
+                        }).catch((err) => {
+                            console.log("Erro ao buscar anos:", err);
+                            req.flash("error_message", "Houve um erro ao carregar os anos!");
+                            res.redirect('admin/erro');
+                        });
+
+                    } else {
+                        console.log("Bene is undefined or empty");
+                        req.flash("error_message", "Nenhum beneficiário encontrado!");
+                        res.redirect('admin/erro');
+                    }
+                }).catch((err) => {
+                    console.log("Erro ao buscar beneficiários:", err);
+                    req.flash("error_message", "Houve um erro ao listar os beneficiários!");
+                    res.redirect('admin/erro');
+                });
+
+            } else {
+                console.log("Usuario is undefined or empty");
+                req.flash("error_message", "Nenhum usuário encontrado!");
+                res.redirect('admin/erro');
+            }
+        }).catch((err) => {
+            console.log("Erro ao buscar usuários:", err);
+            req.flash("error_message", "Houve um erro ao listar os usuários!");
             res.redirect('admin/erro');
         });
     },

@@ -85,6 +85,15 @@ module.exports = {
 
     },
 
+   carregaTerapia(req, res) {
+        try {
+            res.render("ferramentas/terapia/terapiaCad");
+        } catch (err) {
+            console.error(err);
+            res.render("admin/erro");
+        }
+    },
+
     cadastraTerapia(req,res){
         let cadastro = terapiaClass.terapiaAdicionar(req,res);//variavel para armazenar a função que armazena o async
         

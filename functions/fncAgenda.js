@@ -13838,6 +13838,1143 @@ module.exports = {
         }
         
     },
+    listaPlansubsfixoVictor(req, res) {
+        let aux = 1;
+        let is = false;
+        let dtFill;
+        let nomeBene;
+        let nomeSup;
+        let nomeConv;
+        let segunda;
+        let terca;
+        let quarta;
+        let quinta;
+        let sexta;
+        let beneConvid;
+        let seg = new Date();
+        let sex = new Date();
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        switch (seg.getUTCDay()){
+            case 0://DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1://SEG
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2://TER
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3://QUA
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4://QUI
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                break;
+            case 5://SEX
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6://SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        let diaSemana = seg;
+        let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+        {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        
+        segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
+        terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+
+        Bene.findOne().then((b) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
+            agenda.forEach((e)=>{
+                let dat = new Date(e.agenda_data);
+                e.agenda_data_dia = this.getDataFMT(dat);
+                let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                let min = ""+dat.getMinutes();
+                if (hora.length == 1){hora = "0" + hora + "";}
+                if (min.length == 1){min = "0" + min + "";}
+                e.agenda_hora = hora+":"+min;
+                e.agenda_aux = aux;
+                aux++;
+
+                switch (dat.getUTCDay()){
+                    case 0:
+                        e.agenda_data_semana = "dom"
+                        break;
+                    case 1:
+                        e.agenda_data_semana = "seg"
+                        break;
+                    case 2:
+                        e.agenda_data_semana = "ter"
+                        break;
+                    case 3:
+                        e.agenda_data_semana = "qua"
+                        break;
+                    case 4:
+                        e.agenda_data_semana = "qui"
+                        break;
+                    case 5:
+                        e.agenda_data_semana = "sex"
+                        break;
+                    case 6:
+                        e.agenda_data_semana = "sab"
+                        break;
+                    default:
+                        
+                        //console.log("erro");
+                        break;
+                }
+            })
+            //console.log(agenda)
+            Bene.find().then((benef)=>{
+                benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+            Bene.find({_id: b._id}).then((bene)=>{
+                bene.forEach(e => {
+                    nomeBene = e.bene_apelido
+                    nomeSup = e.bene_supervisor
+                    beneConvid = e.bene_convid
+                });
+                //console.log("Listagem Realizada de Beneficiários!")
+                Conv.find({_id: beneConvid}).then((conv)=>{
+                    conv.forEach(e => {
+                        nomeConv = e.conv_nome
+                    });
+                    //console.log("Listagem Realizada de Convenios")
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
+                        //console.log("Listagem Realizada de Usuário")
+                        Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                            //console.log("Listagem Realizada de Terapia")
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                                //console.log("Listagem Realizada de Horario")
+                                let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
+                                let segASex = ["seg","ter","qua","qui","sex"];
+
+                                segASex.forEach((diaDaSemana)=>{
+                                    haddia = agenda.some(a => a.agenda_data_semana === diaDaSemana);
+                                    //console.log("Tem "+z+"?"+haddia)
+                                    this.temDia(haddia,horaage,agenda,semana,diaDaSemana);
+                                })
+
+                                agenda.sort(function(a, b) {
+                                    let h1 = a.agenda_hora.substring(0,2);
+                                    let m1 = a.agenda_hora.substring(3,5);
+                                    let h2 = b.agenda_hora.substring(0,2);
+                                    let m2 = b.agenda_hora.substring(3,5);
+                                    if(h1 == h2){
+                                        if(m1 < m2) {
+                                            return -1;
+                                        } else {
+                                            return true;
+                                        }
+                                    } else {
+                                        if(h1 < h2) {
+                                            return -1;
+                                        } else {
+                                            return true;
+                                        }
+                                    }
+                                });
+                                Sala.find().then((sala)=>{
+                                    //console.log("Listagem Realizada de Terapia")
+                                    let benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
+                                    //console.log("benenomeconv:"+benenomeconv)
+                                    res.render("beneficiario/plansubsfixo", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
+        })})})})})})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
+    listaPlansubsfixoOld(req, res) {
+    console.log("Iniciando listaPlansubsfixo com dados do formulário:", req.body); // <--- Log para ver os dados recebidos
+
+    // --- 1. Extrair e Validar Dados do Filtro ---
+    let dataFiltroStr = req.body.dataFil; // Espera formato 'YYYY-MM-DD'
+    let tipoFiltro = req.body.atendTipoPessoa; // 'Geral', 'Beneficiario', 'Terapeuta'
+    let idBeneFiltro = req.body.agendaBeneid; // ObjectId como string, se tipoFiltro for 'Beneficiario'
+    let idTeraFiltro = req.body.agendaUsuid;   // ObjectId como string, se tipoFiltro for 'Terapeuta'
+    // soFixo é sempre true, então não precisa verificar
+
+    if (!dataFiltroStr) {
+        console.error("Data de filtro não fornecida.");
+        req.flash("error_message", "Data de filtro é obrigatória!");
+        return res.redirect('admin/erro'); // Ou uma página de erro apropriada
+        // Alternativa: usar data atual se não for fornecida
+        // dataFiltroStr = new Date().toISOString().split('T')[0];
+    }
+
+    let dataFiltro;
+    try {
+        // Cria um objeto Date a partir da string YYYY-MM-DD
+        dataFiltro = new Date(dataFiltroStr);
+        // Verifica se a data é válida
+        if (isNaN(dataFiltro.getTime())) {
+             throw new Error("Data inválida");
+        }
+        // Normaliza para o início do dia local (opcional, depende da sua lógica de data/hora)
+        dataFiltro.setHours(0, 0, 0, 0);
+    } catch (err) {
+        console.error("Erro ao processar data do filtro:", dataFiltroStr, err);
+        req.flash("error_message", "Data de filtro inválida!");
+        return res.redirect('admin/erro');
+    }
+
+
+    // --- 2. Calcular Período da Semana com Base na Data do Filtro ---
+    // Assumindo que semana vai de Domingo a Sábado
+    let diaSemana = dataFiltro.getDay(); // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
+    let inicioSemana = new Date(dataFiltro);
+    inicioSemana.setDate(dataFiltro.getDate() - diaSemana); // Volta para o Domingo
+    inicioSemana.setHours(0, 0, 0, 0); // Início do dia
+
+    let fimSemana = new Date(inicioSemana);
+    fimSemana.setDate(inicioSemana.getDate() + 6); // Vai para o Sábado
+    fimSemana.setHours(23, 59, 59, 999); // Fim do dia
+
+    let agoraISO = inicioSemana.toISOString();
+    let depoisISO = fimSemana.toISOString();
+
+    console.log(`Filtro: Data=${dataFiltroStr}, Tipo=${tipoFiltro}`);
+    console.log(`Período da Semana Calculado: ${agoraISO} até ${depoisISO}`);
+
+    // --- 3. Determinar o ID do Beneficiário para a Busca de Agenda ---
+    let idBeneParaAgenda = null;
+    if (tipoFiltro === "Beneficiario" && idBeneFiltro) {
+        idBeneParaAgenda = idBeneFiltro; // Usar o beneficiário selecionado
+    } else if (tipoFiltro === "Terapeuta" && idTeraFiltro) {
+        // Se o filtro for por terapeuta, você pode querer buscar agendas para *todos* os beneficiários
+        // ou talvez tenha outra lógica. Por enquanto, deixaremos idBeneParaAgenda como null
+        // e filtraremos por terapeuta na query de Agenda, se aplicável.
+        // OU, você pode ter uma lógica para encontrar beneficiários associados ao terapeuta.
+        // Vamos assumir que você quer *todos* os beneficiários para um terapeuta específico.
+        // Nesse caso, não filtramos por agenda_beneid, ou filtramos depois.
+        // Para simplificar, vamos manter a lógica de pegar um bene inicial.
+        // MAS, o ideal seria adaptar a lógica aqui.
+        // Por enquanto, vamos manter a busca inicial, mas adaptar a query de agenda.
+    }
+    // Se tipoFiltro for "Geral", idBeneParaAgenda permanece null.
+
+    // --- 4. Iniciar Buscas Assíncronas ---
+    // Vamos usar Promise.all para buscar dados que não dependem uns dos outros
+    // e encadear os que dependem.
+
+    // Buscar listas gerais primeiro (elas não dependem de filtros específicos de agenda)
+    const promessasListas = [
+        Bene.find().lean(), // benes para o dropdown
+        Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).lean(), // terapeutas para o dropdown
+        Terapia.find().lean(), // terapias
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).lean(), // horários
+        Sala.find().lean(), // salas
+        Conv.find().lean() // convênios (se necessário em outra parte)
+    ];
+
+    Promise.all(promessasListas)
+        .then(([benefTodos, terapeutasTodos, terapias, horaages, salas, convsTodos]) => {
+            console.log("Listas gerais carregadas.");
+
+            // Ordenar listas
+            benefTodos.sort((a,b) => {
+                const nomeA = (a.bene_nome || "").toString().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const nomeB = (b.bene_nome || "").toString().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                return nomeA.localeCompare(nomeB);
+            });
+
+            terapeutasTodos.sort((a,b) => {
+                const nomeA = (a.usuario_nome || "").toString().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const nomeB = (b.usuario_nome || "").toString().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                return nomeA.localeCompare(nomeB);
+            });
+
+            terapias.sort((a, b) => {
+                 const nomeA = (a.terapia_nome || "").toString().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                 const nomeB = (b.terapia_nome || "").toString().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                 return nomeA.localeCompare(nomeB);
+            });
+
+            // --- 5. Determinar o Beneficiário Principal (para detalhes do cabeçalho) ---
+            let promessaBenePrincipal;
+            if (tipoFiltro === "Beneficiario" && idBeneFiltro) {
+                promessaBenePrincipal = Bene.findById(idBeneFiltro).lean();
+            } else {
+                // Se não for filtro por beneficiário, pega o primeiro da lista ou um padrão
+                // Ou talvez não precise mostrar detalhes de um bene específico se for Geral/Terapeuta
+                // Vamos pegar o primeiro para manter compatibilidade com o código original
+                promessaBenePrincipal = Promise.resolve(benefTodos.length > 0 ? benefTodos[0] : null);
+                // Alternativa: Promise.resolve(null); // Se não houver bene principal
+            }
+
+            return promessaBenePrincipal.then(benePrincipal => {
+                if (!benePrincipal) {
+                     console.warn("Nenhum beneficiário principal encontrado.");
+                     // Decidir como proceder. Pode ser um erro ou renderizar com dados mínimos.
+                     // Vamos continuar por enquanto.
+                }
+
+                let nomeBenePrincipal = benePrincipal ? benePrincipal.bene_apelido : "N/A";
+                let nomeSupPrincipal = benePrincipal ? benePrincipal.bene_supervisor : "N/A";
+                let idConvPrincipal = benePrincipal ? benePrincipal.bene_convid : null;
+
+                // --- 6. Buscar Convênio do Beneficiário Principal ---
+                let promessaConvPrincipal = Promise.resolve(null);
+                if (idConvPrincipal) {
+                    // Encontra o convênio na lista já carregada
+                    const convPrincipal = convsTodos.find(c => c._id.toString() === idConvPrincipal.toString());
+                    if (convPrincipal) {
+                         promessaConvPrincipal = Promise.resolve(convPrincipal);
+                    } else {
+                        // Se não estiver na lista, busca no banco
+                        console.warn("Convênio do beneficiário principal não encontrado na lista geral, buscando individualmente.");
+                        promessaConvPrincipal = Conv.findById(idConvPrincipal).lean();
+                    }
+                }
+
+                return promessaConvPrincipal.then(convPrincipal => {
+                    let nomeConvPrincipal = convPrincipal ? convPrincipal.conv_nome : "N/A";
+
+                    // --- 7. Buscar Agendas ---
+                    let queryAgenda = {
+                        agenda_data: { $gte: agoraISO, $lte: depoisISO },
+                        agenda_temp: false
+                        // agenda_beneid será adicionado condicionalmente
+                    };
+
+                    if (tipoFiltro === "Beneficiario" && idBeneFiltro) {
+                        queryAgenda.agenda_beneid = idBeneFiltro;
+                    }
+                    // Se tipoFiltro === "Terapeuta", você pode querer filtrar por agenda_usuid
+                    // Isso depende da estrutura do seu modelo Agenda.
+                    // Exemplo (se seu modelo Agenda tiver agenda_usuid):
+                    // else if (tipoFiltro === "Terapeuta" && idTeraFiltro) {
+                    //     queryAgenda.agenda_usuid = idTeraFiltro;
+                    // }
+                    // Se for "Geral", não adiciona filtro de bene ou tera, buscando todas.
+
+                    console.log("Buscando agendas com query:", queryAgenda);
+                    return Agenda.find(queryAgenda).lean().then(agendas => {
+                        console.log("Agendas encontradas:", agendas.length);
+
+                        // --- 8. Processar Agendas ---
+                        let aux = 1;
+                        agendas.forEach((e) => {
+                             // ... (seu código de formatação de agenda - mantém como está) ...
+                             // Certifique-se de usar 'e' em vez de 'agenda'
+                             let dat = new Date(e.agenda_data);
+                             e.agenda_data_dia = this.getDataFMT(dat);
+                             let hora = ""+dat.getUTCHours();
+                             let min = ""+dat.getMinutes();
+                             if (hora.length == 1){hora = "0" + hora + "";}
+                             if (min.length == 1){min = "0" + min + "";}
+                             e.agenda_hora = hora+":"+min;
+                             e.agenda_aux = aux;
+                             aux++;
+
+                             switch (dat.getUTCDay()){
+                                 case 0: e.agenda_data_semana = "dom"; break;
+                                 case 1: e.agenda_data_semana = "seg"; break;
+                                 case 2: e.agenda_data_semana = "ter"; break;
+                                 case 3: e.agenda_data_semana = "qua"; break;
+                                 case 4: e.agenda_data_semana = "qui"; break;
+                                 case 5: e.agenda_data_semana = "sex"; break;
+                                 case 6: e.agenda_data_semana = "sab"; break;
+                                 default: e.agenda_data_semana = "desconhecido"; break;
+                             }
+                        });
+
+                        // Ordenar agendas (mantém sua lógica)
+                        agendas.sort(function(a, b) {
+                            // ... (sua lógica de ordenação - mantém como está) ...
+                             let h1 = a.agenda_hora.substring(0,2);
+                             let m1 = a.agenda_hora.substring(3,5);
+                             let h2 = b.agenda_hora.substring(0,2);
+                             let m2 = b.agenda_hora.substring(3,5);
+                             if(h1 == h2){
+                                 return m1.localeCompare(m2);
+                             } else {
+                                 return h1.localeCompare(h2);
+                             }
+                        });
+
+                        // --- 9. Preparar Dados para a View ---
+                        let semanaParaView = [
+                             {dia: "dom", data: this.getData(inicioSemana)},
+                             {dia: "seg", data: this.getData(new Date(inicioSemana.setDate(inicioSemana.getDate()+1)))},
+                             {dia: "ter", data: this.getData(new Date(inicioSemana.setDate(inicioSemana.getDate()+1)))},
+                             {dia: "qua", data: this.getData(new Date(inicioSemana.setDate(inicioSemana.getDate()+1)))},
+                             {dia: "qui", data: this.getData(new Date(inicioSemana.setDate(inicioSemana.getDate()+1)))},
+                             {dia: "sex", data: this.getData(new Date(inicioSemana.setDate(inicioSemana.getDate()+1)))},
+                             {dia: "sab", data: this.getData(new Date(inicioSemana.setDate(inicioSemana.getDate()+1)))}
+                        ];
+                        // Resetar inicioSemana para calcular datas individuais
+                        let inicioSemanaAux = new Date(inicioSemana);
+                        inicioSemanaAux.setDate(inicioSemana.getDate() - 6); // Volta para domingo
+
+                        let segunda = this.getDataDiaMes(new Date(inicioSemanaAux.setDate(inicioSemanaAux.getDate()+1)));
+                        let terca = this.getDataDiaMes(new Date(inicioSemanaAux.setDate(inicioSemanaAux.getDate()+1)));
+                        let quarta = this.getDataDiaMes(new Date(inicioSemanaAux.setDate(inicioSemanaAux.getDate()+1)));
+                        let quinta = this.getDataDiaMes(new Date(inicioSemanaAux.setDate(inicioSemanaAux.getDate()+1)));
+                        let sexta = this.getDataDiaMes(new Date(inicioSemanaAux.setDate(inicioSemanaAux.getDate()+1)));
+
+                        let dtFill = {dia: this.getDiaSemana(dataFiltro)};
+
+                        let benenomeconv = `${nomeBenePrincipal} / ${nomeConvPrincipal} (${nomeSupPrincipal})`;
+
+                        // --- 10. Renderizar View ---
+                        console.log("Preparando para renderizar view com dados processados.");
+                        res.render("beneficiario/plansubsfixo", {
+                             salas: salas,
+                             horaages: horaages,
+                             agendas: agendas,
+                             benes: benefTodos, // Passa a lista completa para o dropdown
+                             convs: convsTodos, // Passa a lista completa
+                             terapeutas: terapeutasTodos, // Passa a lista completa para o dropdown
+                             terapias: terapias,
+                             semanas: semanaParaView,
+                             dtFill: dtFill,
+                             benenomeconv: benenomeconv,
+                             segunda: segunda, terca: terca, quarta: quarta, quinta: quinta, sexta: sexta
+                        });
+                        console.log("View renderizada com sucesso.");
+
+                    }); // Fim Agenda.find
+                }); // Fim promessaConvPrincipal.then
+            }); // Fim promessaBenePrincipal.then
+        }) // Fim Promise.all.then
+        .catch((err) => {
+            console.error("Erro ao carregar dados para plansubsfixo:", err);
+            req.flash("error_message", "Houve um erro ao carregar os dados!");
+            // res.redirect('admin/erro'); // Descomente se quiser redirecionar
+            // Ou envie uma resposta de erro mais específica
+            res.status(500).send("Erro interno do servidor ao carregar a página.");
+        });
+    },
+    listaPlansubsfixoold2(req, res) {
+        console.log("=== Iniciando listaPlansubsfixo ===");
+        console.log("Dados recebidos no req.body:", req.body);
+
+        // --- 1. Extrair Dados do Filtro do Formulário ---
+        // Assume que o campo hidden soFixo sempre envia "true"
+        const dataFilStr = req.body.dataFil;       // Formato esperado: 'YYYY-MM-DD'
+        const tipoFiltro = req.body.atendTipoPessoa; // 'Geral', 'Beneficiario', 'Terapeuta'
+        const idBeneFiltro = req.body.agendaBeneid; // String do ObjectId, se tipoFiltro for 'Beneficiario'
+        const idTeraFiltro = req.body.agendaUsuid;  // String do ObjectId, se tipoFiltro for 'Terapeuta'
+
+        // --- 2. Validar e Processar Data ---
+        if (!dataFilStr) {
+            console.error("Erro: dataFil não foi fornecida pelo formulário.");
+            return res.status(400).send("Data de filtro é obrigatória.");
+        }
+
+        let dataFiltro;
+        try {
+            dataFiltro = new Date(dataFilStr);
+            if (isNaN(dataFiltro.getTime())) {
+                throw new Error("Data inválida");
+            }
+            dataFiltro.setHours(0, 0, 0, 0); // Normaliza para o início do dia
+        } catch (err) {
+            console.error("Erro ao processar dataFil:", dataFilStr, err);
+            return res.status(400).send("Data de filtro inválida.");
+        }
+
+        // --- 3. Calcular Período da Semana (Domingo a Sábado) ---
+        const diaSemana = dataFiltro.getDay(); // 0 = Domingo
+        const inicioSemana = new Date(dataFiltro);
+        inicioSemana.setDate(dataFiltro.getDate() - diaSemana);
+        inicioSemana.setHours(0, 0, 0, 0);
+
+        const fimSemana = new Date(inicioSemana);
+        fimSemana.setDate(inicioSemana.getDate() + 6);
+        fimSemana.setHours(23, 59, 59, 999);
+
+        console.log(`Data do Filtro: ${dataFiltro.toISOString().split('T')[0]}`);
+        console.log(`Período da Semana: ${inicioSemana.toISOString()} até ${fimSemana.toISOString()}`);
+
+        // --- 4. Construir Filtro para a Agenda ---
+        let filtroAgenda = {
+            agenda_data: { $gte: inicioSemana, $lte: fimSemana },
+            agenda_categoria: "SubstitutoFixo", // Filtro fixo conforme solicitado
+            agenda_temp: false // Assumindo que você não quer agendas temporárias
+        };
+
+        // Aplicar filtro condicional por Beneficiário ou Terapeuta
+        if (tipoFiltro === "Beneficiario" && mongoose.Types.ObjectId.isValid(idBeneFiltro)) {
+            filtroAgenda.agenda_beneid = new mongoose.Types.ObjectId(idBeneFiltro);
+            console.log("Filtro aplicado: agenda_beneid =", idBeneFiltro);
+        } else if (tipoFiltro === "Terapeuta" && mongoose.Types.ObjectId.isValid(idTeraFiltro)) {
+            // Filtra se o terapeuta estiver em agenda_usuid OU agenda_mergeterapeutaid
+            filtroAgenda.$or = [
+                { agenda_usuid: new mongoose.Types.ObjectId(idTeraFiltro) },
+                { agenda_mergeterapeutaid: new mongoose.Types.ObjectId(idTeraFiltro) }
+            ];
+            console.log("Filtro aplicado: agenda_usuid OU agenda_mergeterapeutaid =", idTeraFiltro);
+        } else {
+            console.log("Nenhum filtro adicional de Bene ou Tera aplicado (Geral ou ID inválido).");
+            // Se for 'Geral' ou IDs inválidos, não adiciona mais filtros
+        }
+
+        console.log("Query final para Agenda.find:", JSON.stringify(filtroAgenda, null, 2));
+
+        // --- 5. Buscar Dados Necessários em Paralelo ---
+        Promise.allSettled([
+            // a) Buscar agendas filtradas
+            Agenda.find(filtroAgenda).lean(), 
+            
+            // b) Buscar listas para dropdowns e associações
+            Bene.find().select('_id bene_nome bene_apelido bene_convid').lean(), // Seleciona campos relevantes
+            Usuario.find().select('_id usuario_nome').lean(),
+            Terapia.find().select('_id terapia_nome').lean(),
+            Sala.find().select('_id sala_nome').lean(),
+            Conv.find().select('_id conv_nome').lean()
+        ])
+        .then(([resultadoAgendas, resultadoBenes, resultadoUsuarios, resultadoTerapias, resultadoSalas, resultadoConvs]) => {
+            
+            if (resultadoAgendas.status === 'rejected') {
+                throw new Error(`Falha ao buscar agendas: ${resultadoAgendas.reason}`);
+            }
+            const agendasFiltradas = resultadoAgendas.value;
+            console.log(`Agendas encontradas: ${agendasFiltradas.length}`);
+
+            // Converter arrays em mapas para acesso rápido por ID
+            const mapaBenes = {};
+            (resultadoBenes.status === 'fulfilled' ? resultadoBenes.value : []).forEach(b => mapaBenes[b._id.toString()] = b);
+
+            const mapaUsuarios = {};
+            (resultadoUsuarios.status === 'fulfilled' ? resultadoUsuarios.value : []).forEach(u => mapaUsuarios[u._id.toString()] = u);
+
+            const mapaTerapias = {};
+            (resultadoTerapias.status === 'fulfilled' ? resultadoTerapias.value : []).forEach(t => mapaTerapias[t._id.toString()] = t);
+
+            const mapaSalas = {};
+            (resultadoSalas.status === 'fulfilled' ? resultadoSalas.value : []).forEach(s => mapaSalas[s._id.toString()] = s);
+
+            const mapaConvs = {};
+            (resultadoConvs.status === 'fulfilled' ? resultadoConvs.value : []).forEach(c => mapaConvs[c._id.toString()] = c);
+
+            // --- 6. Preparar dados para a view ---
+            // Vamos apenas passar as agendas filtradas e os mapas para a view
+            // A view fará as associações.
+
+            // Preparar dados para exibição do período
+            const semanaParaView = [];
+            for (let i = 0; i < 7; i++) {
+                const dataDia = new Date(inicioSemana);
+                dataDia.setDate(inicioSemana.getDate() + i);
+                const diasSemana = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+                semanaParaView.push({
+                    dia: diasSemana[i],
+                    data: `${String(dataDia.getDate()).padStart(2, '0')}/${String(dataDia.getMonth() + 1).padStart(2, '0')}`
+                });
+            }
+
+            // --- 7. Renderizar View ---
+            console.log("=== Renderizando view ===");
+            res.render("beneficiario/plansubsfixo", {
+                // Dados principais
+                agendas: agendasFiltradas, // Array de objetos agenda brutos
+                // Mapas para associação na view
+                mapaBenes: mapaBenes,
+                mapaUsuarios: mapaUsuarios,
+                mapaTerapias: mapaTerapias,
+                mapaSalas: mapaSalas,
+                mapaConvs: mapaConvs,
+                // Dados auxiliares
+                semanas: semanaParaView,
+                // Dados do filtro para exibição/reuso (opcional)
+                filtroAplicado: {
+                    dataFil: dataFilStr,
+                    tipo: tipoFiltro,
+                    beneId: idBeneFiltro,
+                    teraId: idTeraFiltro
+                }
+                // Removemos benes, terapeutas, etc. do envio principal pois estão nos mapas
+                // Se precisar das listas completas para dropdowns, pode adicioná-las de volta.
+            });
+
+        })
+        .catch((err) => {
+            console.error("Erro crítico em listaPlansubsfixo:", err);
+            req.flash("error_message", "Houve um erro ao carregar os dados da agenda.");
+            res.redirect('/admin/erro'); // Ou outra página de erro apropriada
+        });
+    },
+    // Função para processar o formulário de filtro (POST /menu/beneficiario/plansubsfixoFill)
+    listaPlansubsfixo(req, res) {
+        console.log("=== Iniciando listaPlansubsfixo (processar filtro) ===");
+        console.log("Dados recebidos no req.body:", req.body);
+
+        // --- 1. Extrair Dados do Filtro do Formulário ---
+        const dataFilStr = req.body.dataFil;           // Formato esperado: 'YYYY-MM-DD'
+        const tipoFiltro = req.body.atendTipoPessoa;   // 'Geral', 'Beneficiario', 'Terapeuta'
+        const idBeneFiltro = req.body.agendaBeneid;    // String do ObjectId, se tipoFiltro for 'Beneficiario'
+        const idTeraFiltro = req.body.agendaUsuid;     // String do ObjectId, se tipoFiltro for 'Terapeuta'
+        const soFixo = req.body.soFixo;                // Esperado: "true"
+
+        // --- 2. Validar Dados Obrigatórios ---
+        if (!dataFilStr) {
+            console.error("Erro: dataFil não foi fornecida pelo formulário.");
+            req.flash("error_message", "Data de filtro é obrigatória.");
+            return res.redirect('back'); // Ou uma rota específica
+        }
+
+        if (soFixo !== "true") {
+            console.warn("Aviso: Filtro 'soFixo' não é 'true'. O comportamento pode ser inesperado. Usando 'true' implicitamente.");
+            // Ou você pode retornar um erro se isso for estritamente obrigatório.
+        }
+
+        // --- 3. Validar e Processar Data ---
+        let dataFiltro;
+        try {
+            dataFiltro = new Date(dataFilStr);
+            if (isNaN(dataFiltro.getTime())) {
+                throw new Error("Data inválida");
+            }
+            dataFiltro.setHours(0, 0, 0, 0); // Normaliza para o início do dia
+        } catch (err) {
+            console.error("Erro ao processar dataFil:", dataFilStr, err);
+            req.flash("error_message", "Data de filtro inválida.");
+            return res.redirect('back');
+        }
+
+        // --- 4. Calcular Período da Semana (Domingo a Sábado) ---
+        const diaSemana = dataFiltro.getDay(); // 0 = Domingo
+        const inicioSemana = new Date(dataFiltro);
+        inicioSemana.setDate(dataFiltro.getDate() - diaSemana);
+        inicioSemana.setHours(0, 0, 0, 0);
+
+        const fimSemana = new Date(inicioSemana);
+        fimSemana.setDate(inicioSemana.getDate() + 6);
+        fimSemana.setHours(23, 59, 59, 999);
+
+        console.log(`Data do Filtro: ${dataFiltro.toISOString().split('T')[0]}`);
+        console.log(`Período da Semana: ${inicioSemana.toISOString()} até ${fimSemana.toISOString()}`);
+
+        // --- 5. Construir Filtro para a Agenda ---
+        // Filtros base fixos
+        let filtroAgenda = {
+            agenda_data: { $gte: inicioSemana, $lte: fimSemana },
+            agenda_categoria: "SubstitutoFixo",
+            agenda_temp: false
+        };
+
+        // Aplicar filtro condicional por Beneficiário ou Terapeuta
+        if (tipoFiltro === "Beneficiario" && mongoose.Types.ObjectId.isValid(idBeneFiltro)) {
+            filtroAgenda.agenda_beneid = new mongoose.Types.ObjectId(idBeneFiltro);
+            console.log("Filtro aplicado: agenda_beneid =", idBeneFiltro);
+        } else if (tipoFiltro === "Terapeuta" && mongoose.Types.ObjectId.isValid(idTeraFiltro)) {
+            // Filtra se o terapeuta estiver em agenda_usuid OU agenda_mergeterapeutaid
+            filtroAgenda.$or = [
+                { agenda_usuid: new mongoose.Types.ObjectId(idTeraFiltro) },
+                { agenda_mergeterapeutaid: new mongoose.Types.ObjectId(idTeraFiltro) }
+            ];
+            console.log("Filtro aplicado: agenda_usuid OU agenda_mergeterapeutaid =", idTeraFiltro);
+        } else {
+            console.log(`Nenhum filtro adicional de Bene ou Tera aplicado. Tipo: ${tipoFiltro}, ID Bene válido: ${mongoose.Types.ObjectId.isValid(idBeneFiltro)}, ID Tera válido: ${mongoose.Types.ObjectId.isValid(idTeraFiltro)}`);
+            // Se for 'Geral' ou IDs inválidos, continua com os filtros base
+        }
+
+        console.log("Query final para Agenda.find:", JSON.stringify(filtroAgenda, null, 2));
+
+        // --- 6. Buscar Dados Necessários em Paralelo ---
+        Promise.allSettled([
+            // a) Buscar agendas filtradas
+            Agenda.find(filtroAgenda).lean(),
+            
+            // b) Buscar listas para dropdowns, associações e exibição geral
+            Bene.find().select('_id bene_nome bene_apelido bene_convid').lean(),
+            Usuario.find({ usuario_funcaoid: "6241030bfbcc51f47c720a0b" }).select('_id usuario_nome').lean(), // Terapeutas
+            Terapia.find().select('_id terapia_nome').lean(),
+            Sala.find().select('_id sala_nome').lean(),
+            Conv.find().select('_id conv_nome').lean()
+            // Adicione outras coleções se forem necessárias na view (ex: Horaage)
+        ])
+        .then(([resultadoAgendas, resultadoBenes, resultadoTerapeutas, resultadoTerapias, resultadoSalas, resultadoConvs]) => {
+            
+            // --- 7. Processar Resultados das Promises ---
+            
+            // --- Agendas Filtradas ---
+            if (resultadoAgendas.status === 'rejected') {
+                throw new Error(`Falha ao buscar agendas: ${resultadoAgendas.reason}`);
+            }
+            const agendasFiltradas = resultadoAgendas.value;
+            console.log(`Agendas encontradas após filtro: ${agendasFiltradas.length}`);
+
+            // --- Função Auxiliar para Processar Listas ---
+            const processarLista = (resultadoPromise, nomeLista) => {
+                if (resultadoPromise.status === 'fulfilled') {
+                    console.log(`${nomeLista} carregados: ${resultadoPromise.value.length} itens`);
+                    return resultadoPromise.value;
+                } else {
+                    console.error(`Falha ao carregar ${nomeLista}:`, resultadoPromise.reason);
+                    return []; // Retorna array vazio em caso de erro
+                }
+            };
+
+            // --- Processar todas as listas ---
+            const listaBenes = processarLista(resultadoBenes, 'Beneficiários');
+            const listaTerapeutas = processarLista(resultadoTerapeutas, 'Terapeutas');
+            const listaTerapias = processarLista(resultadoTerapias, 'Terapias');
+            const listaSalas = processarLista(resultadoSalas, 'Salas');
+            const listaConvs = processarLista(resultadoConvs, 'Convênios');
+
+            // --- 8. Criar Mapas para Associações Rápidas na View ---
+            const criarMapa = (lista, chave = '_id') => {
+                const mapa = {};
+                lista.forEach(item => {
+                    if (item && item[chave]) {
+                        // Usar toString() é crucial para comparação com strings de ID vindas do req.body
+                        mapa[item[chave].toString()] = item; 
+                    }
+                });
+                return mapa;
+            };
+
+            const mapaBenes = criarMapa(listaBenes);
+            const mapaUsuarios = criarMapa(listaTerapeutas); // Usuarios são Terapeutas aqui
+            const mapaTerapias = criarMapa(listaTerapias);
+            const mapaSalas = criarMapa(listaSalas);
+            const mapaConvs = criarMapa(listaConvs);
+
+            // --- 9. Preparar Dados Auxiliares para a View ---
+            
+            // Preparar dados para exibição do período da semana
+            const semanaParaView = [];
+            const diasSemanaPtBr = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+            for (let i = 0; i < 7; i++) {
+                const dataDia = new Date(inicioSemana);
+                dataDia.setDate(inicioSemana.getDate() + i);
+                semanaParaView.push({
+                    dia: diasSemanaPtBr[i],
+                    data: `${String(dataDia.getDate()).padStart(2, '0')}/${String(dataDia.getMonth() + 1).padStart(2, '0')}`
+                });
+            }
+
+            // Preparar datas individuais para o cabeçalho (Seg a Sex)
+            const datasIndividuais = [];
+            for (let i = 1; i <= 5; i++) { // Começa de 1 (Segunda) até 5 (Sexta)
+                const data = new Date(inicioSemana);
+                data.setDate(inicioSemana.getDate() + i);
+                datasIndividuais.push(`${String(data.getDate()).padStart(2, '0')}/${String(data.getMonth() + 1).padStart(2, '0')}`);
+            }
+            const [segunda, terca, quarta, quinta, sexta] = datasIndividuais;
+
+            // Determinar o nome do beneficiário/convênio para o cabeçalho, se aplicável
+            let benenomeconv = "Filtro Aplicado";
+            if (tipoFiltro === "Beneficiario" && idBeneFiltro && mapaBenes[idBeneFiltro]) {
+                const beneSelecionado = mapaBenes[idBeneFiltro];
+                const convDoBene = beneSelecionado.bene_convid ? mapaConvs[beneSelecionado.bene_convid.toString()] : null;
+                const nomeConv = convDoBene ? convDoBene.conv_nome : 'Convênio não encontrado';
+                benenomeconv = `${beneSelecionado.bene_apelido || beneSelecionado.bene_nome} / ${nomeConv}`;
+            } else if (tipoFiltro === "Terapeuta" && idTeraFiltro && mapaUsuarios[idTeraFiltro]) {
+                const teraSelecionado = mapaUsuarios[idTeraFiltro];
+                benenomeconv = `Filtro por Terapeuta: ${teraSelecionado.usuario_nome}`;
+            }
+
+            const dtFill = { dia: diasSemanaPtBr[dataFiltro.getDay()] };
+
+            // --- 10. Renderizar View ---
+            console.log("=== Renderizando view plansubsfixo (com filtros) ===");
+            res.render("beneficiario/plansubsfixo", {
+                // --- Dados Principais ---
+                agendas: agendasFiltradas, // Array de objetos agenda filtrados
+
+                // --- Mapas para Associação Rápida na View (usados pelas linhas da tabela) ---
+                mapaBenes: mapaBenes,
+                mapaUsuarios: mapaUsuarios, // Usuarios são Terapeutas
+                mapaTerapias: mapaTerapias,
+                mapaSalas: mapaSalas,
+                mapaConvs: mapaConvs,
+
+                // --- Listas COMPLETAS para os Dropdowns no Formulário - CRUCIAL ---
+                benes: listaBenes,        // Para o dropdown de beneficiários
+                terapeutas: listaTerapeutas, // Para o dropdown de terapeutas
+                convs: listaConvs,
+                terapias: listaTerapias,
+                salas: listaSalas,
+                // horaages: [], // Adicione se necessário
+
+                // --- Dados Auxiliares para Exibição ---
+                semanas: semanaParaView,
+                dtFill: dtFill,
+                benenomeconv: benenomeconv,
+                segunda: segunda, terca: terca, quarta: quarta, quinta: quinta, sexta: sexta,
+
+                // --- Dados do Filtro Aplicado (para manter estado ou debug) ---
+                filtroAplicado: {
+                    dataFil: dataFilStr,
+                    tipo: tipoFiltro,
+                    beneId: idBeneFiltro,
+                    teraId: idTeraFiltro
+                    // soFixo: soFixo // Se quiser passar
+                },
+                
+                // Indicar que não é o carregamento inicial (opcional)
+                carregamentoInicial: false 
+            });
+
+        })
+        .catch((err) => {
+            console.error("Erro crítico em listaPlansubsfixo (POST):", err);
+            req.flash("error_message", "Houve um erro ao aplicar o filtro.");
+            // Em vez de redirect('/admin/erro'), considere voltar ou recarregar a página inicial
+            // res.redirect('back'); 
+            // Ou redirecionar para a página inicial da funcionalidade
+            res.redirect('/menu/beneficiario/plansubsfixo'); // Redireciona para o GET
+        });
+    },
+    plansubsfixoVictor(req, res) {
+        let aux = 1;
+        let is = false;
+        let dtFill;
+        let nomeBene;
+        let nomeSup;
+        let nomeConv;
+        let segunda;
+        let terca;
+        let quarta;
+        let quinta;
+        let sexta;
+        let beneConvid;
+        let seg = new Date();
+        let sex = new Date();
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        switch (seg.getUTCDay()){
+            case 0://DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1://SEG
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2://TER
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3://QUA
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4://QUI
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                break;
+            case 5://SEX
+                dtFill = {dia: this.getDiaSemana(seg)};
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6://SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                dtFill = {dia: "seg"};
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        let diaSemana = seg;
+        let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+        {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        
+        segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
+        terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+        sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+
+        Bene.findOne().then((b) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
+            //console.log("Listagem Realizada de agendamentos!")
+            //console.log(agenda)
+            agenda.forEach((e)=>{
+                let dat = new Date(e.agenda_data);
+                e.agenda_data_dia = this.getDataFMT(dat);
+                let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
+                let min = ""+dat.getMinutes();
+                if (hora.length == 1){hora = "0" + hora + "";}
+                if (min.length == 1){min = "0" + min + "";}
+                e.agenda_hora = hora+":"+min;
+                e.agenda_aux = aux;
+                aux++;
+
+                switch (dat.getUTCDay()){
+                    case 0:
+                        e.agenda_data_semana = "dom"
+                        break;
+                    case 1:
+                        e.agenda_data_semana = "seg"
+                        break;
+                    case 2:
+                        e.agenda_data_semana = "ter"
+                        break;
+                    case 3:
+                        e.agenda_data_semana = "qua"
+                        break;
+                    case 4:
+                        e.agenda_data_semana = "qui"
+                        break;
+                    case 5:
+                        e.agenda_data_semana = "sex"
+                        break;
+                    case 6:
+                        e.agenda_data_semana = "sab"
+                        break;
+                    default:
+                        
+                        //console.log("erro");
+                        break;
+                }
+            })
+            //console.log(agenda)
+            Bene.find().then((benef)=>{
+                benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+            Bene.find({_id: b._id}).then((bene)=>{
+                bene.forEach(e => {
+                    nomeBene = e.bene_apelido
+                    nomeSup = e.bene_supervisor
+                    beneConvid = e.bene_convid
+                });
+                //console.log("Listagem Realizada de Beneficiários!")
+                Conv.find({_id: beneConvid}).then((conv)=>{
+                    conv.forEach(e => {
+                        nomeConv = e.conv_nome
+                    });
+                    //console.log("Listagem Realizada de Convenios")
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
+                        //console.log("Listagem Realizada de Usuário")
+                        Terapia.find().then((terapia)=>{
+                            terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                            //console.log("Listagem Realizada de Terapia")
+                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                                //console.log("Listagem Realizada de Horario")
+                                let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
+                                let segASex = ["seg","ter","qua","qui","sex"];
+
+                                segASex.forEach((diaDaSemana)=>{
+                                    haddia = agenda.some(a => a.agenda_data_semana === diaDaSemana);
+                                    //console.log("Tem "+z+"?"+haddia)
+                                    this.temDia(haddia,horaage,agenda,semana,diaDaSemana);
+                                })
+
+                                agenda.sort(function(a, b) {
+                                    let h1 = a.agenda_hora.substring(0,2);
+                                    let m1 = a.agenda_hora.substring(3,5);
+                                    let h2 = b.agenda_hora.substring(0,2);
+                                    let m2 = b.agenda_hora.substring(3,5);
+                                    if(h1 == h2){
+                                        if(m1 < m2) {
+                                            return -1;
+                                        } else {
+                                            return true;
+                                        }
+                                    } else {
+                                        if(h1 < h2) {
+                                            return -1;
+                                        } else {
+                                            return true;
+                                        }
+                                    }
+                                });
+                                Sala.find().then((sala)=>{
+                                    //console.log("Listagem Realizada de Terapia")
+                                    let benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
+                                    //console.log("benenomeconv:"+benenomeconv)
+                                    res.render("beneficiario/plansubsfixo", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
+        })})})})})})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
+    // Função para carregar a página inicial (GET /menu/beneficiario/plansubsfixo)
+    plansubsfixo(req, res) {
+        console.log("=== Iniciando plansubsfixo (carregar página inicial) ===");
+
+        // --- 1. Calcular Período da Semana Atual (Domingo a Sábado) ---
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+        const diaSemanaHoje = hoje.getDay(); // 0 = Domingo
+        const inicioSemanaAtual = new Date(hoje);
+        inicioSemanaAtual.setDate(hoje.getDate() - diaSemanaHoje); // Volta para o Domingo
+        inicioSemanaAtual.setHours(0, 0, 0, 0);
+
+        const fimSemanaAtual = new Date(inicioSemanaAtual);
+        fimSemanaAtual.setDate(inicioSemanaAtual.getDate() + 6); // Vai para o Sábado
+        fimSemanaAtual.setHours(23, 59, 59, 999);
+
+        console.log(`Período da Semana Atual: ${inicioSemanaAtual.toISOString()} até ${fimSemanaAtual.toISOString()}`);
+
+        // --- 2. Preparar dados para exibição do período na view ---
+        const semanaParaView = [];
+        const diasSemana = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+        for (let i = 0; i < 7; i++) {
+            const dataDia = new Date(inicioSemanaAtual);
+            dataDia.setDate(inicioSemanaAtual.getDate() + i);
+            semanaParaView.push({
+                dia: diasSemana[i],
+                data: `${String(dataDia.getDate()).padStart(2, '0')}/${String(dataDia.getMonth() + 1).padStart(2, '0')}`
+            });
+        }
+
+        // --- 3. Buscar Listas Necessárias para Dropdowns e Dados Iniciais ---
+        // Usamos Promise.allSettled para garantir que mesmo se uma falhe, tentamos continuar
+        Promise.allSettled([
+            // a) Buscar agendas da semana ATUAL para o beneficiário padrão (opcional, pode ser vazio inicialmente)
+            // Para simplificar e evitar depender de um Bene.findOne(), podemos buscar todas ou passar array vazio.
+            // Vamos passar um array vazio inicialmente, pois o filtro real acontece no POST.
+            Promise.resolve([]), // Placeholder para agendas iniciais
+
+            // b) Buscar listas para dropdowns e associações
+            Bene.find().select('_id bene_nome bene_apelido bene_convid').lean(),
+            Usuario.find({ usuario_funcaoid: "6241030bfbcc51f47c720a0b" }).select('_id usuario_nome').lean(), // Terapeutas
+            Terapia.find().select('_id terapia_nome').lean(),
+            Sala.find().select('_id sala_nome').lean(),
+            Conv.find().select('_id conv_nome').lean()
+        ])
+        .then(([resultadoAgendasIniciais, resultadoBenes, resultadoTerapeutas, resultadoTerapias, resultadoSalas, resultadoConvs]) => {
+            
+            // --- 4. Processar Resultados ---
+            let agendasIniciais = [];
+            if (resultadoAgendasIniciais.status === 'fulfilled') {
+                agendasIniciais = resultadoAgendasIniciais.value;
+                console.log(`Agendas iniciais carregadas: ${agendasIniciais.length} itens`);
+            } else {
+                console.warn("Falha ao carregar agendas iniciais (continuando):", resultadoAgendasIniciais.reason);
+                agendasIniciais = []; // Fallback para array vazio
+            }
+
+            // Função auxiliar para processar resultados de listas
+            const processarResultadoLista = (resultado, nomeLista) => {
+                if (resultado.status === 'fulfilled') {
+                    console.log(`${nomeLista} carregados: ${resultado.value.length} itens`);
+                    return resultado.value;
+                } else {
+                    console.error(`Falha ao carregar ${nomeLista}:`, resultado.reason);
+                    return []; // Fallback para array vazio
+                }
+            };
+
+            const listaBenes = processarResultadoLista(resultadoBenes, 'Beneficiários');
+            const listaTerapeutas = processarResultadoLista(resultadoTerapeutas, 'Terapeutas');
+            const listaTerapias = processarResultadoLista(resultadoTerapias, 'Terapias');
+            const listaSalas = processarResultadoLista(resultadoSalas, 'Salas');
+            const listaConvs = processarResultadoLista(resultadoConvs, 'Convênios');
+
+            // --- 5. Criar Mapas para Associações na View (opcional para a página inicial, mas bom ter) ---
+            const criarMapa = (lista, chave = '_id') => {
+                const mapa = {};
+                lista.forEach(item => {
+                    if (item && item[chave]) {
+                        mapa[item[chave].toString()] = item;
+                    }
+                });
+                return mapa;
+            };
+
+            const mapaBenes = criarMapa(listaBenes);
+            const mapaTerapeutas = criarMapa(listaTerapeutas);
+            const mapaTerapias = criarMapa(listaTerapias);
+            const mapaSalas = criarMapa(listaSalas);
+            const mapaConvs = criarMapa(listaConvs);
+
+            // --- 6. Dados Auxiliares Iniciais (valores padrão ou vazios) ---
+            // Como não temos um beneficiário específico inicialmente, podemos usar valores padrão
+            // ou deixar campos vazios na view. Aqui, vamos deixar alguns dados genéricos.
+            const dtFill = { dia: diasSemana[inicioSemanaAtual.getDay()] }; // Dia da semana de hoje
+            const benenomeconv = "Selecione um filtro"; // Mensagem padrão
+            // Datas individuais da semana
+            const datasIndividuais = [];
+            for (let i = 0; i < 5; i++) { // Seg a Sex
+                const data = new Date(inicioSemanaAtual);
+                data.setDate(inicioSemanaAtual.getDate() + 1 + i); // +1 para pular domingo
+                datasIndividuais.push(`${String(data.getDate()).padStart(2, '0')}/${String(data.getMonth() + 1).padStart(2, '0')}`);
+            }
+            const [segunda, terca, quarta, quinta, sexta] = datasIndividuais;
+
+            // --- 7. Renderizar View ---
+            console.log("=== Renderizando view plansubsfixo (inicial) ===");
+            res.render("beneficiario/plansubsfixo", {
+                // Dados principais
+                agendas: agendasIniciais, // Array de agendas (pode estar vazio inicialmente)
+
+                // Mapas para associação na view (se usados na tabela inicial)
+                mapaBenes: mapaBenes,
+                mapaUsuarios: mapaTerapeutas, // Usuários são terapeutas aqui
+                mapaTerapias: mapaTerapias,
+                mapaSalas: mapaSalas,
+                mapaConvs: mapaConvs,
+
+                // Listas COMPLETAS para os dropdowns no formulário - CRUCIAL
+                benes: listaBenes,
+                terapeutas: listaTerapeutas,
+                convs: listaConvs,
+                terapias: listaTerapias,
+                salas: listaSalas,
+                // horaages: [] // Se necessário
+
+                // Dados auxiliares para o cabeçalho/rodapé da view
+                semanas: semanaParaView,
+                dtFill: dtFill,
+                benenomeconv: benenomeconv,
+                segunda: segunda, terca: terca, quarta: quarta, quinta: quinta, sexta: sexta,
+
+                // Indicar que é o carregamento inicial (opcional, para lógica na view)
+                carregamentoInicial: true
+            });
+
+        })
+        .catch((err) => {
+            console.error("Erro crítico em plansubsfixo (GET):", err);
+            req.flash("error_message", "Houve um erro ao carregar a página inicial.");
+            // Redireciona para uma página de erro genérica ou a página inicial do menu
+            res.redirect('/'); // Ou '/admin/erro'
+        });
+    },
+   
     /*
     deletaAgendaAtend(req, res){
         let deletar = Atend.find({atend_num: {$gte: 2}}).then((a)=>{

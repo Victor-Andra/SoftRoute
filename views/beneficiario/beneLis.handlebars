@@ -110,7 +110,8 @@
 															<th style="width: 50px;"><a title="Foto cadastrada?"><i class="orange ace-icon fa fa-upload bigger-130"></i></a></th>
 															
 															<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Status</th>
-															<th>Datas Status</th>
+															<th>Datas Inicio</th>
+															<th>Datas Fim</th>
 															<th>Ação</th>
 														</tr>
 													</thead>
@@ -164,9 +165,10 @@
 																	{{else}}
 																		<span class="badge badge-success">{{bene_dtaini}}</span>
 																	{{/isNull}}
-																	{{#isNull bene_dtaini}}
+																</td>
+																<td>	
+																	{{#isNull bene_dtafim}}
 																	{{else}}
-																		<br>
 																		<span class="badge badge-danger">{{bene_dtafim}}</span>
 																	{{/isNull}}
 																	
@@ -250,7 +252,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, null,{ "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, null, null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [200, 500],
 			"lengthChange": true,
