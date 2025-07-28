@@ -46,12 +46,23 @@
 				}
 			}
 			function atualizaTerapeutaId(){
-				console.log("X");
-				console.log(document.getElementById("extraTerapeutaid").value);
-				let ati = document.getElementById("extraTerapeutaid").value;
-				console.log("C");
-				console.log(document.getElementById("tabilTerapeutaId").value);
-				document.getElementById("tabilTerapeutaId").value = ati;
+				console.log("Função chamada");
+				
+				// Pega o valor selecionado no campo atendTerapeutaid
+				let terapeutaId = document.getElementById("atendTerapeutaid").value;
+				console.log("Terapeuta ID selecionado:", terapeutaId);
+				
+				// Atribui o mesmo valor para tabilTerapeutaId
+				if(document.getElementById("tabilTerapeutaId")) {
+					document.getElementById("tabilTerapeutaId").value = terapeutaId;
+					console.log("tabilTerapeutaId atualizado:", terapeutaId);
+				}
+				
+				// Se você também quer atualizar atendUsuid com o mesmo valor:
+				if(document.getElementById("atendUsuid")) {
+					document.getElementById("atendUsuid").value = terapeutaId;
+					console.log("atendUsuid atualizado:", terapeutaId);
+				}
 			}
 			function atualizaMergeTerapeutaId(){
 				console.log(document.getElementById("extraMergeTerapeutaid").value);
@@ -135,6 +146,7 @@
 											<div class="widget-body">
 												<div class="widget-main">
 													<div class="row">
+														<input id="atendUsuid" name="atendUsuid" hidden value="" />
 														<div class="col=xs-12">
 															<div class="col-sm-2">
 																<label>Origem atendimento</label>
@@ -214,7 +226,7 @@
 																	Campos fundamentais para a inserção correta dentro dos atendimentos. Se escolher errado o tipo, se não informar que foi auditado ou se não salvar antes de exportar causará erro no fechamento do beneficiário e do terapeuta.<br>
 															</div>
 														</div>
-													</div>	
+													</div>
 													
 												</div>
 											</div>

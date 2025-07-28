@@ -110,7 +110,7 @@
 					{{else}}
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
-						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/atendimento/extra/lisF" method="POST">
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/atendimento/extra/ctrlextraF" method="POST">
 							<div class="col-xs-12" class="row">
 								<div class="col-sm-2">
 									<div class="row">
@@ -234,123 +234,219 @@
 											</thead>
 											<tbody>
 												{{#each extras}}
-													<tr>
-														<td style="width: 90px; white-space: nowrap;">{{extraDatafor}}</td> <!-- Data formatada -->
-														<td>{{extra_hora}}</td>
-														<td><b><span class="badge badge-info">{{bene_nome}}</span></b><br>
+												<tr>
+													<td style="width: 90px; white-space: nowrap;">{{extraDatafor}}</td>
+													<td>{{extra_hora}}</td>
+													<td><b><span class="badge badge-info">{{bene_nome}}</span></b><br>
 														{{extra_obs}}
-														</td> <!-- Nome do beneficiário -->
-														<td>{{conv_nome}}</td> <!-- Nome do convênio -->
-														<td>{{terapia_nome}}</td> <!-- Nome da terapia -->
-														<td>{{extraTeraputa}}</td> <!-- Nome do terapeuta -->
-														<td>
-															<span class="badge badge-success">Sim</span>
-														</td>
-														<td>
-															<span class="badge badge-warning">Aguardando</span>
-																<!-- Tooltip com dados -->
-																<a class="purple custom-tooltip" name="acaoCrud" id="acaoCrud">
-																	<i class="ace-icon fa fa-eye bigger-130"></i>
-																	<span class="tooltip-text">
-
-																		<strong>Última Edição:</strong>
-																		<p><b>{{dataedi}}</b></p>
-																		<p>{{usuario_nome_edi}}</p>
-
-																		<strong>Cadastrado em:</strong>
-																		<p><b>{{datacad}}</b></p>
-																		<p>{{usuario_nome_cad}}</p>
-
-																	</span>
-																</a>
-																
-														</td>
-														<td>
-															<div class="widget-box collapsed">
-																<div class="widget-header">
-																	<h6 class="widget-title">
-																		<a href="#" data-action="reload">
-																			<i class="ace-icon green fa fa-archive bigger-130"></i>
-																		</a>
-																		Container dos Atendimentos gerados para Esse Extra!
-																	</h6>
-																	<span class="widget-toolbar">
-																		<a href="#" data-action="collapse">
-																			<i class="orange ace-icon fa fa-chevron-up bigger-130"></i>
-																		</a>
-																	</span>
-																	<span class="widget-toolbar">
-																		<a name="acaoViz" id="acaoViz">
-																			{{#if countAtendimentos}}
-																				<a class="green custom-tooltip" name="acaoCrud" id="acaoCrud">
-																					<i class="ace-icon fa fa-check bigger-130"></i>
-																					<span class="tooltip-text">
-																						<p>Qt de antendomentos para esse extra</p>
-																					</span>
-																				</a>
-																			{{else}}
-																				<a class="red custom-tooltip" name="acaoCrud" id="acaoCrud">
-																					<i class="ace-icon fa fa-ban bigger-130"></i>
-																					<span class="tooltip-text">
-																						<p>Ainda não foram cadastrados atendimentos para esse Extra.</p>
-																					</span>
-																				</a>
-																			{{/if}}
-																		</a>
-																	</span>
-																	<span class="widget-toolbar">
-																		<a class="blue custom-tooltip" name="acaoCrud" id="acaoCrud" href="/menu/atendimento/atendadmextra/cad/{{_id}}">
-																			<i class="ace-icon fa fa-plus bigger-130"></i>
-																		</a>
-																			
-																			<span class="tooltip-text">
-																				<p>Adicionar novo atendimento para esse Extra</p>
-																			</span>
-																		</a>
-																	</span>
-																	<span class="widget-toolbar">
-																		Qt. atendimentos:&nbsp;&nbsp;
-																		<span class="badge badge-info">{{countProgs}}</span>
-																	</span>
-																</div>
-
-																<div class="widget-body">
-																	<div class="widget-main">
-																		<div class="row">
-																			<div class="col-sm-12">
-																				<table id="dynamic-table-atendimento" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-																					<thead style="font-size: 11px;">
-																						<tr>
-																							<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="5" style="width: 100px;" >Atendimento</th>
-																							<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="6" style="width: 100px;" ><span class="label label-sm label-success" style="font-size: 14px;" >Original</span></th>
-																							
-																						</tr>
-																						<tr role="row">
-																							
-																							<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >Data</th>
-																							<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 50px;" >Hora</th>
-																							<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																							<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-																							<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Categoria</th>
-																							<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evento</th>
-																							<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																							<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-																							<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
-																							<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
-																							<th class="" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;">Ação</th>
-																						</tr>
-																					</thead>
-																					<tbody style="font-size: 11px;">
-																					</tbody>
-																				</table>
-																			</div>
+													</td>
+													<td>{{conv_nome}}</td>
+													<td>{{terapia_nome}}</td>
+													<td>{{extraTeraputa}}</td>
+													<td>
+														<span class="badge badge-success">Sim</span>
+													</td>
+													<td style="text-align: center;">
+														<span class="badge badge-warning">Aguardando</span>
+														<a class="green" name="acaoEdi" id="acaoEdi"
+															href="/menu/atendimento/extra/edi/{{_id}}">
+															<i class="ace-icon fa fa-pencil bigger-130"></i>
+														</a>
+														<!-- Deletar desativado onclick="javascript:confirmeDeletar('{{_id}}');" -->
+														<a class="red" name="acaoDel" id="acaoDel" >
+															<i class="ace-icon fa fa-trash-o bigger-130"></i>
+														</a>
+														<!-- Tooltip com dados -->
+														<a class="purple custom-tooltip" name="acaoCrud" id="acaoCrud">
+															<i class="ace-icon fa fa-eye bigger-130"></i>
+															<span class="tooltip-text">
+																<strong>Última Edição:</strong>
+																<p><b>{{extraDataedifor}}</b></p> <!-- Corrigido para usar o campo formatado -->
+																<p>{{extrausuedinome}}</p> <!-- Corrigido -->
+																<strong>Cadastrado em:</strong>
+																<p><b>{{extraDatacadfor}}</b></p> <!-- Corrigido para usar o campo formatado -->
+																<p>{{extraUsucadnome}}</p> <!-- Corrigido -->
+															</span>
+														</a>
+													</td>
+													<td>
+														<div class="widget-box collapsed">
+															<div class="widget-header">
+																<h6 class="widget-title">
+																	<a href="#" data-action="reload">
+																		<i class="ace-icon green fa fa-archive bigger-130"></i>
+																	</a>
+																	Container dos Atendimentos gerados para Esse Extra!
+																</h6>
+																<span class="widget-toolbar">
+																	<a href="#" data-action="collapse">
+																		<i class="orange ace-icon fa fa-chevron-up bigger-130"></i>
+																	</a>
+																</span>
+																<span class="widget-toolbar">
+																	<a name="acaoViz" id="acaoViz">
+																		{{#if countAtends}} <!-- Usando a contagem calculada -->
+																			<a class="green custom-tooltip" name="acaoCrud" id="acaoCrud">
+																				<i class="ace-icon fa fa-check bigger-130"></i>
+																				<span class="tooltip-text">
+																					<p>Qt de atendimentos para esse extra: {{countAtends}}</p> <!-- Mostrando a contagem -->
+																				</span>
+																			</a>
+																		{{else}}
+																			<a class="red custom-tooltip" name="acaoCrud" id="acaoCrud">
+																				<i class="ace-icon fa fa-ban bigger-130"></i>
+																				<span class="tooltip-text">
+																					<p>Ainda não foram cadastrados atendimentos para esse Extra.</p>
+																				</span>
+																			</a>
+																		{{/if}}
+																	</a>
+																</span>
+																<span class="widget-toolbar">
+																	<a class="blue custom-tooltip" name="acaoCrud" id="acaoCrud"
+																		href="/menu/atendimento/atendadmextra/cad/{{_id}}">
+																		<i class="ace-icon fa fa-plus bigger-130"></i>
+																		<span class="tooltip-text">
+																			<p>Adicionar novo atendimento para esse Extra</p>
+																		</span>
+																	</a>
+																</span>
+																<span class="widget-toolbar">
+																	Qt. atendimentos:&nbsp;&nbsp;
+																	<span class="badge badge-info">{{countAtends}}</span> <!-- Mostrando a contagem -->
+																</span>
+															</div>
+															<div class="widget-body">
+																<div class="widget-main">
+																	<div class="row">
+																		<div class="col-sm-12">
+																			<table id="dynamic-table-atendimento-{{_id}}" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+																				<!-- ID único para a tabela -->
+																				<thead style="font-size: 11px;">
+																					<!-- Cabeçalho Agrupado (Opcional, pode ser removido se não quiser o agrupamento) -->
+																					<tr>
+																						<!-- Ajustado colspan para 9 colunas -->
+																						<th tabindex="1" aria-controls="dynamic-table-{{_id}}" rowspan="1" colspan="4" style="width: 100px;">Atendimento</th>
+																						<th tabindex="2" aria-controls="dynamic-table-{{_id}}" rowspan="1" colspan="5" style="width: 100px;">
+																							<span class="label label-sm label-success" style="font-size: 14px;">Original</span>
+																						</th>
+																					</tr>
+																					<tr role="row">
+																						<!-- Cabeçalhos Individuais -->
+																						<th class="sorting" tabindex="1" aria-controls="dynamic-table-{{_id}}" rowspan="1" colspan="1" style="width: 100px;">Data</th>
+																						<th tabindex="2" aria-controls="dynamic-table-{{_id}}" rowspan="1" colspan="1" style="width: 50px;">Hora</th>
+																						<th class="sorting" tabindex="3" aria-controls="dynamic-table-{{_id}}" rowspan="1" colspan="1">Beneficiário</th>
+																						<th class="sorting" tabindex="4" aria-controls="dynamic-table-{{_id}}" rowspan="1" colspan="1">Convênio</th>
+																						<!-- Removido: Categoria, Evento -->
+																						<th class="sorting" tabindex="5" aria-controls="dynamic-table-{{_id}}" rowspan="1" colspan="1">Terapia</th>
+																						<th class="sorting" tabindex="6" aria-controls="dynamic-table-{{_id}}" rowspan="1" colspan="1">Terapeuta</th>
+																						<th class="sorting" tabindex="7" aria-controls="dynamic-table-{{_id}}" rowspan="1" colspan="1">Cred</th>
+																						<th class="sorting" tabindex="8" aria-controls="dynamic-table-{{_id}}" rowspan="1" colspan="1">Deb</th>
+																						<th class="" tabindex="9" aria-controls="dynamic-table-{{_id}}" rowspan="1" colspan="1" style="width: 100px;">Ação</th>
+																						<!-- Total: 9 colunas -->
+																					</tr>
+																				</thead>
+																				<tbody style="font-size: 11px;">
+																					<!-- Loop para atendimentos associados a ESTE extra -->
+																					{{#each ../atends}} <!-- ../ para acessar 'atends' do contexto principal -->
+																						{{#ifEqual this.atend_extraid ../_id}} <!-- Comparando com o _id do extra atual -->
+																							<tr role="row" class="odd">
+																								<!-- Data -->
+																								<td>
+																									<b><span class="badge badge-info">{{atendDataFor}}</span></b>
+																								</td>
+																								<!-- Hora -->
+																								<td>
+																									{{atend_atendhora}}
+																								</td>
+																								<!-- Beneficiário -->
+																								<td>
+																									{{#each ../../benes}} <!-- ../../ para acessar 'benes' do contexto principal -->
+																										{{#ifEqual this._id ../atend_beneid}} <!-- ../ para acessar 'atend_beneid' do atendimento -->
+																											{{bene_nome}}
+																										{{/ifEqual}}
+																									{{/each}}
+																								</td>
+																								<!-- Convênio -->
+																								<td>
+																									{{#each ../../convs}} <!-- ../../ para acessar 'convs' -->
+																										{{#ifEqual this._id ../atend_convid}} <!-- ../ para acessar 'atend_convid' -->
+																											{{conv_nome}}
+																										{{/ifEqual}}
+																									{{/each}}
+																								</td>
+																								<!-- Terapia -->
+																								<td>
+																									{{#each ../../terapias}} <!-- ../../ para acessar 'terapias' -->
+																										{{#ifEqual this._id ../atend_terapiaid}} <!-- ../ para acessar 'atend_terapiaid' -->
+																											{{terapia_nome}}
+																										{{/ifEqual}}
+																									{{/each}}
+																								</td>
+																								<!-- Terapeuta -->
+																								<td>
+																									{{#each ../../usuarios}} <!-- ../../ para acessar 'usuarios' -->
+																										{{#ifEqual this._id ../atend_terapeutaid}} <!-- ../ para acessar 'atend_terapeutaid' -->
+																											{{usuario_nome}} <!-- Certifique-se que o campo é 'usuario_nome' -->
+																										{{/ifEqual}}
+																									{{/each}}
+																								</td>
+																								<!-- Valor Crédito -->
+																								<td>
+																									{{#ifEqual this.atend_valorcre "0,00"}}
+																										<span class="label label-sm label-warning arrowed">{{atend_valorcre}}</span>
+																									{{else}}
+																										{{atend_valorcre}}
+																									{{/ifEqual}}
+																								</td>
+																								<!-- Valor Débito -->
+																								<td>
+																									{{#ifEqual this.atend_valordeb "0,00"}}
+																										<span class="label label-sm label-warning arrowed">{{atend_valordeb}}</span>
+																									{{else}}
+																										{{atend_valordeb}}
+																									{{/ifEqual}}
+																								</td>
+																								<!-- Ações -->
+																								<td>
+																									<div class="action-buttons">
+																										<a class="green" name="acaoEdi" id="acaoEdi"
+																											href="/menu/atendimento/atendadm/edi/{{_id}}">
+																											<i class="ace-icon fa fa-pencil bigger-130"></i>
+																										</a>
+																										<a class="red" name="acaoDel" id="acaoDel"
+																											onclick="javascript:confirmeDeletar('{{_id}}');">
+																											<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																										</a>
+																										<a class="orange custom-tooltip"
+																											name="acaoVerquemalterou" id="acaoVerquemalterou">
+																											<i class="ace-icon fa fa-eye bigger-130"></i>
+																											<span class="tooltip-text">
+																												{{#each ../../../usuarios}} <!-- ../../../ para acessar 'usuarios' -->
+																													{{#ifEqual this._id ../../atend_usuidedi}} <!-- ../../ para acessar 'atend_usuidedi' -->
+																														{{usuario_nome}} <!-- Certifique-se que o campo é 'usuario_nome' -->
+																													{{/ifEqual}}
+																												{{/each}}
+																											</span>
+																										</a>
+																									</div>
+																									<div class="hidden-md hidden-lg">
+																										<input class="hidden" id="atendCategoria{{_id}}"
+																											value="{{atend_categoria}}" />
+																									</div>
+																								</td>
+																							</tr>
+																						{{/ifEqual}} <!-- Fim do ifEqual para atend_extraid -->
+																					{{/each}} <!-- Fim do loop de atends -->
+																				</tbody>
+																			</table>
 																		</div>
 																	</div>
 																</div>
 															</div>
-														</td>
-														
-													</tr>
+														</div>
+													</td>
+												</tr>
 												{{/each}}
 											</tbody>
 										</table>

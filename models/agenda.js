@@ -11,7 +11,7 @@ const AgendaSchema = mongoose.Schema({
     agenda_convid :{ type: ObjectId, required: false },
     agenda_salaid :{ type: ObjectId, required: false },
     agenda_terapiaid :{ type: ObjectId, required: false },
-    agenda_usuid :{ type: ObjectId, required: false }, //Id do terapeuta
+    agenda_usuid :{ type: ObjectId, required: false }, //Id do terapeuta padrão mas no antendimento foi alterado para atend_terapeutaid
     agenda_mergeterapeutaid :{type: ObjectId, required: false }, 
     agenda_mergeterapiaid :{type: ObjectId, required: false }, 
     agenda_migrado :{ type: Boolean, required: false }, //Status se o agendamento gerou agendamento

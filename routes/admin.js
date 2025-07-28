@@ -539,383 +539,195 @@ router.post('/ferramentas/usuario/definirSenha', (req,res)=>{
     fncUsuario.definirSenha(req, res);
 })
 
-router.post('/login', passport.authenticate('local', { failureRedirect: '/menu/login', failureMessage: true }), function (req, res) {
-    let lvl;
-    let idUsu;
-    let perfilId;
-    let ativo;
+
+router.post('/login', passport.authenticate('local', {
+    failureRedirect: '/menu/login',
+    failureMessage: true
+}), async function (req, res) {
+    let lvl, idUsu, perfilId, ativo;
     let aux = 1;
-    let agendaTempArr = [];
-    let idsAgendasEx = [];
-    let agendaTempIds = [];
     let agendaFinal = [];
 
-    // Consultar o usuário no banco de dados
-    Bene.find({ bene_status: "Ativo" }).then((benesGeral) => {
-    Usuario.findOne({ usuario_email: req.body.email, usuario_senha: req.body.senha }).then((usu) => {
+    const hoje = new Date();
+    const diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
+    const mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
+
+    // Calcular domingo (início da semana)
+    const domingo = new Date(hoje);
+    domingo.setDate(hoje.getDate() - hoje.getDay()); // 0 = domingo
+
+    // Construir dias da semana: domingo a sábado
+    const semanaDias = Array.from({ length: 7 }).map((_, i) => {
+        const d = new Date(domingo);
+        d.setDate(domingo.getDate() + i);
+        return {
+            dia: String(d.getUTCDate()).padStart(2, '0'),
+            mes: String(d.getUTCMonth() + 1).padStart(2, '0')
+        };
+    });
+
+    // Função auxiliar: filtrar aniversariantes da semana
+    function filtrarAniversariantes(lista, tipo, campoNomeOriginal) {
+        return lista
+            .map(p => {
+                const dataNasc = new Date(p[`${tipo}_datanasc`]);
+                const dia = String(dataNasc.getUTCDate()).padStart(2, '0');
+                const mes = String(dataNasc.getUTCMonth() + 1).padStart(2, '0');
+                return {
+                    dtnasc: dataNasc,
+                    diaNascimento: dia,
+                    mesNascimento: mes,
+                    hoje: dia === diaAtual && mes === mesAtual,
+                    ...(tipo === 'usuario' ? { usuario_nome: p.usuario_nome } : { bene_nome: p.bene_nome })
+                };
+            })
+            .filter(p =>
+                semanaDias.some(s =>
+                    s.dia === p.diaNascimento && s.mes === p.mesNascimento
+                )
+            )
+            .sort((a, b) => {
+                if (a.mesNascimento !== b.mesNascimento) return a.mesNascimento - b.mesNascimento;
+                return a.diaNascimento - b.diaNascimento;
+            });
+    }
+
+    try {
+        const benesGeral = await Bene.find({ bene_status: "Ativo" });
+        const usu = await Usuario.findOne({ usuario_email: req.body.email, usuario_senha: req.body.senha });
+
+        if (!usu || usu.usuario_status !== "Ativo") {
+            req.flash("error_message", "Usuário ou senha inválidos ou inativo.");
+            return res.redirect('/menu/login');
+        }
+
         perfilId = usu.usuario_perfilid;
         idUsu = usu._id;
-        ativo = usu.usuario_status;
 
-        if (ativo == "Ativo") {
-            // Definir cookies com base no perfil do usuário
-            if (perfilId == "62421801a12aa557219a0fb9" || perfilId == "62421857a12aa557219a0fc1" || perfilId == "624218f5a12aa557219a0fd0") {
-                res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (18000000)) });
-                res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (18000000)) });
-            } else {
-                res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + (2 * 3600000)) });
-                res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + (2 * 3600000)) });
-            }
+        const tempoCookie = ["62421801a12aa557219a0fb9", "62421857a12aa557219a0fc1", "624218f5a12aa557219a0fd0"].includes(perfilId)
+            ? (5 * 60 * 60 * 1000)
+            : (2 * 60 * 60 * 1000);
 
-            const hoje = new Date();
-            const anoAtual = hoje.getUTCFullYear();
-            const mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
-            const diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
+        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + tempoCookie) });
+        res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + tempoCookie) });
 
-            // Calcula o intervalo da semana corrente
-            const inicioSemana = new Date(hoje);
-            inicioSemana.setDate(hoje.getDate() - hoje.getDay() + 1); // Segunda-feira
-            const fimSemana = new Date(hoje);
-            fimSemana.setDate(hoje.getDate() + (7 - hoje.getDay())); // Domingo
+        const [usuarios, benes] = await Promise.all([
+            Usuario.find({ usuario_status: "Ativo" }),
+            Bene.find({ bene_status: "Ativo" })
+        ]);
 
-            // Função para verificar se uma data está dentro da semana corrente
-            const isDentroDaSemana = (diaNascimento, mesNascimento) => {
-                const dataNascimento = new Date(anoAtual, mesNascimento - 1, diaNascimento);
-                return dataNascimento >= inicioSemana && dataNascimento <= fimSemana;
-            };
+        const aniversariantesDaSemanaUsuario = filtrarAniversariantes(usuarios, "usuario", "nome");
+        const aniversariantesDaSemanaBene = filtrarAniversariantes(benes, "bene", "nome");
 
-            // Consulta para aniversariantes do dia na tabela Usuario
-            Usuario.find({ usuario_status: "Ativo" }).then((usuarios) => {
-                const aniversariantesDaSemanaUsuario = usuarios
-                    .map(usuario => {
-                        const datanasc = new Date(usuario.usuario_datanasc);
-                        const diaNascimento = String(datanasc.getUTCDate()).padStart(2, '0');
-                        const mesNascimento = String(datanasc.getUTCMonth() + 1).padStart(2, '0');
-                        return {
-                            dtnasc: datanasc,
-                            usuario_nome: usuario.usuario_nome,
-                            diaNascimento: diaNascimento,
-                            mesNascimento: mesNascimento,
-                            origem: "Usuario",
-                            hoje: diaNascimento === diaAtual && mesNascimento === mesAtual // Indica se é hoje
-                        };
-                    })
-                    .filter(usuario => isDentroDaSemana(usuario.diaNascimento, usuario.mesNascimento));
+        // Agendas semanais
+        const inicioSemana = new Date(domingo);
+        const fimSemana = new Date(domingo);
+        fimSemana.setDate(domingo.getDate() + 6);
 
-                // Ordenar os aniversariantes da semana (tabela Usuario)
-                aniversariantesDaSemanaUsuario.sort((a, b) => {
-                    if (a.mesNascimento !== b.mesNascimento) {
-                        return a.mesNascimento - b.mesNascimento; // Ordena por mês
-                    }
-                    return a.diaNascimento - b.diaNascimento; // Ordena por dia dentro do mesmo mês
-                });
+        const agendasSemanais = await Agenda.find({
+            agenda_data: { $gte: inicioSemana, $lte: fimSemana },
+            agenda_usuid: idUsu
+        });
 
-                // Consulta para aniversariantes do dia na tabela Bene
-                return Bene.find({ bene_status: "Ativo" }).then((benes) => {
-                    const aniversariantesDaSemanaBene = benes
-                        .map(bene => {
-                            const datanasc = new Date(bene.bene_datanasc);
-                            const diaNascimento = String(datanasc.getUTCDate()).padStart(2, '0');
-                            const mesNascimento = String(datanasc.getUTCMonth() + 1).padStart(2, '0');
-                            return {
-                                dtnasc: datanasc,
-                                bene_nome: bene.bene_nome,
-                                diaNascimento: diaNascimento,
-                                mesNascimento: mesNascimento,
-                                origem: "Bene",
-                                hoje: diaNascimento === diaAtual && mesNascimento === mesAtual // Indica se é hoje
-                            };
-                        })
-                        .filter(bene => isDentroDaSemana(bene.diaNascimento, bene.mesNascimento));
+        const [salas, terapias, benesFull] = await Promise.all([
+            Sala.find(),
+            Terapia.find(),
+            Bene.find()
+        ]);
 
-                    // Ordenar os aniversariantes da semana (tabela Bene)
-                    aniversariantesDaSemanaBene.sort((a, b) => {
-                        if (a.mesNascimento !== b.mesNascimento) {
-                            return a.mesNascimento - b.mesNascimento; // Ordena por mês
-                        }
-                        return a.diaNascimento - b.diaNascimento; // Ordena por dia dentro do mesmo mês
-                    });
+        const evolucaoFaltante = agendasSemanais
+            .filter(a => !a.agenda_selo)
+            .map(a => {
+                const dat = new Date(a.agenda_data);
+                const hora = String(dat.getUTCHours()).padStart(2, '0');
+                const minuto = String(dat.getUTCMinutes()).padStart(2, '0');
+                const sala = salas.find(s => String(s._id) === String(a.agenda_salaid));
+                const bene = benesFull.find(b => String(b._id) === String(a.agenda_beneid));
+                const terapia = terapias.find(t => String(t._id) === String(a.agenda_terapiaid));
 
-                    // Lógica para listar agendamentos do dia
-                    const inicioDia = new Date();
-                    inicioDia.setHours(0, 0, 0, 0); // Início do dia (00:00:00)
-                    const fimDia = new Date();
-                    fimDia.setHours(23, 59, 59, 999); // Fim do dia (23:59:59)
+                return {
+                    _id: a._id,
+                    agenda_data: fncGeral.getDataFMTOption(dat, "/"),
+                    agenda_hora: `${hora}:${minuto}`,
+                    agenda_data_dia: fncGeral.getDataFMT(dat),
+                    agenda_aux: aux++,
+                    agenda_data_semana: ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()],
+                    sala_nome: sala?.sala_nome || "Sala não encontrada",
+                    bene_apelido: bene?.bene_apelido || "Beneficiário não encontrado",
+                    terapia_nomecid: terapia?.terapia_nomecid || "Terapia não encontrada",
+                    dia_hora_ordenação: `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${hora}${minuto}`
+                };
+            }).sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
 
-                    //console.log("Consultando agendamentos do dia para o terapeuta:", idUsu);
-                    //console.log("Intervalo de datas:", { inicioDia, fimDia });
+        // Agendas do dia (com filtro)
+        const inicioDia = new Date();
+        inicioDia.setHours(0, 0, 0, 0);
+        const fimDia = new Date();
+        fimDia.setHours(23, 59, 59, 999);
 
-                    return Agenda.find({
-                        agenda_data: { $gte: inicioSemana, $lte: fimSemana },
-                        
-                        agenda_usuid: idUsu
-                        
-                    }).then((agendasSemanais) => {
-                        // Carregar as tabelas sala, terapia e bene
-                        return Promise.all([
-                            Sala.find(),
-                            Terapia.find(),
-                            Bene.find()
-                        ]).then(([salas, terapias, benes]) => {
-                            // Filtrar agendamentos semanais que estão sem agenda_selo ou com agenda_selo = false
-                            const evolucaoFaltante = agendasSemanais
-                                .filter(agendamento => !agendamento.agenda_selo || agendamento.agenda_selo === false)
-                                .map(agendamento => {
-                                    const dat = new Date(agendamento.agenda_data);
+        let agendas = await Agenda.find({
+            agenda_data: { $gte: inicioDia, $lte: fimDia },
+            agenda_usuid: idUsu,
+            agenda_temp: false
+        });
 
-                                    // Formatar data (aaaa/mm/dd)
-                                    const ano = dat.getUTCFullYear();
-                                    const mes = String(dat.getUTCMonth() + 1).padStart(2, '0');
-                                    const dia = String(dat.getUTCDate()).padStart(2, '0');
-                                    const agenda_data = `${ano}/${mes}/${dia}`;
+        agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
 
-                                    // Formatar hora (hh:mm)
-                                    const hora = String(dat.getUTCHours()).padStart(2, '0');
-                                    const minuto = String(dat.getUTCMinutes()).padStart(2, '0');
-                                    const agenda_hora = `${hora}:${minuto}`;
+        agendas.forEach(a => {
+            const dat = new Date(a.agenda_data);
+            a.agenda_data_dia = fncGeral.getDataFMT(dat);
+            a.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getUTCMinutes()).padStart(2, '0')}`;
+            a.agenda_aux = aux++;
+            a.dia_hora_ordenação = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${String(dat.getUTCHours()).padStart(2, '0')}${String(dat.getUTCMinutes()).padStart(2, '0')}`;
+            a.agenda_data_semana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()];
+        });
 
-                                    // Encontrar o nome da sala correspondente
-                                    const salaCorrespondente = salas.find(sala => sala._id.toString() === agendamento.agenda_salaid?.toString());
-                                    const salaNome = salaCorrespondente ? salaCorrespondente.sala_nome : "Sala não encontrada";
+        agendaFinal = agendas;
 
-                                    // Encontrar o apelido do beneficiário correspondente
-                                    const beneCorrespondente = benes.find(bene => bene._id.toString() === agendamento.agenda_beneid?.toString());
-                                    const beneApelido = beneCorrespondente ? beneCorrespondente.bene_apelido : "Beneficiário não encontrado";
+        const [terapias2, benes2, usuarios2] = await Promise.all([
+            Terapia.find(),
+            Bene.find(),
+            Usuario.find({
+                usuario_status: "Ativo",
+                $or: [
+                    { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                    { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                ]
+            })
+        ]);
 
-                                    // Encontrar o nome da terapia correspondente
-                                    const terapiaCorrespondente = terapias.find(terapia => terapia._id.toString() === agendamento.agenda_terapiaid?.toString());
-                                    const terapia_nomecid = terapiaCorrespondente ? terapiaCorrespondente.terapia_nomecid : "Terapia não encontrada";
-
-                                    return {
-                                        _id: agendamento._id,
-                                        agenda_data: fncGeral.getDataFMTOption(dat,"/"), // Formato: aaaa/mm/dd
-                                        agenda_hora: agenda_hora, // Formato: HH:MM
-                                        agenda_data_dia: fncGeral.getDataFMT(dat),
-                                        agenda_aux: aux++,
-                                        agenda_data_semana: ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()],
-                                        sala_nome: salaNome,
-                                        bene_apelido: beneApelido,
-                                        terapia_nomecid: terapia_nomecid,
-                                        // Criar um campo combinado para ordenação (formato: YYYYMMDDHHmm)
-                                        dia_hora_ordenação: `${ano}${mes}${dia}${hora}${minuto}`
-                                    };
-                                })
-                                .sort((a, b) => {
-                                    // Ordenar pelo campo combinado (primeiro por hora, depois por data)
-                                    return a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação);
-                                });
-
-                            //console.log("Evolução faltante ordenada:", evolucaoFaltante);
-
-                            // Agendamentos diários (lógica original)
-                            Agenda.find({
-                                agenda_data: { $gte: inicioDia, $lte: fimDia },
-                                agenda_usuid: idUsu,
-                                agenda_temp: false 
-                            }).then((agendas) => {
-                                //console.log("Agendamentos do dia encontrados:", agendas);
-
-                                // Garantir que todos os agendamentos tenham o campo agenda_selo
-                                agendas.forEach((agendamento) => {
-                                    if (!agendamento.agenda_selo) {
-                                        agendamento.agenda_selo = false; // Criar o campo e definir como false
-                                    }
-                                    //console.log(`Agendamento ID ${agendamento._id}: agenda_selo = ${agendamento.agenda_selo}`);
-                                });
-
-                                agendas = agendas.filter(a => ("" + a.atend_categoria) !== "Feriado");
-
-                                agendas.forEach((e) => {
-                                    let dat = new Date(e.agenda_data);
-                                    e.agenda_data_dia = fncGeral.getDataFMT(dat);
-                                    e.dia_hora_ordenação = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${String(dat.getUTCHours()).padStart(2, '0')}${String(dat.getUTCMinutes()).padStart(2, '0')}`;
-                                    let hora = "" + dat.getUTCHours(); // UTC é necessário senão a hora fica desconfigurada
-                                    let min = "" + dat.getMinutes();
-                                    if (hora.length == 1) { hora = "0" + hora + ""; }
-                                    if (min.length == 1) { min = "0" + min + ""; }
-                                    e.agenda_hora = hora + ":" + min;
-                                    e.agenda_aux = aux;
-                                    aux++;
-                                    switch (dat.getUTCDay()) {
-                                        case 0:
-                                            e.agenda_data_semana = "dom";
-                                            break;
-                                        case 1:
-                                            e.agenda_data_semana = "seg";
-                                            break;
-                                        case 2:
-                                            e.agenda_data_semana = "ter";
-                                            break;
-                                        case 3:
-                                            e.agenda_data_semana = "qua";
-                                            break;
-                                        case 4:
-                                            e.agenda_data_semana = "qui";
-                                            break;
-                                        case 5:
-                                            e.agenda_data_semana = "sex";
-                                            break;
-                                        case 6:
-                                            e.agenda_data_semana = "sab";
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                });
-
-                                agendas.forEach((as) => {
-                                    if (("" + as.agenda_temp + "") == "true") {
-                                        agendaTempArr.push(as.agenda_tempId);
-                                    }
-                                });
-
-                                agendas.forEach((a) => {
-                                    manter = "true";
-                                    agendaTempArr.forEach((atr) => {
-                                        if (("" + atr + "") == ("" + a._id + "")) {
-                                            manter = "false";
-                                        }
-                                    });
-                                    if (manter == "true") {
-                                        idsAgendasEx.push(a);
-                                    }
-                                });
-
-                                Agenda.find({ agenda_tempId: {$in: agendaTempIds} }).then((agendaS)=>{
-                                    
-                                    agendaS.forEach((e)=>{
-                                        let dat = new Date(e.agenda_data);
-                                        e.agenda_data_dia = fncGeral.getDataFMT(dat);
-                                        let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
-                                        let min = ""+dat.getMinutes();
-                                        if (hora.length == 1){hora = "0" + hora + "";}
-                                        if (min.length == 1){min = "0" + min + "";}
-                                        e.agenda_hora = hora+":"+min;
-                                        //console.log("aux:"+aux)
-                                        switch (dat.getUTCDay()){
-                                            case 0:
-                                                e.agenda_data_semana = "dom"
-                                                break;
-                                            case 1:
-                                                e.agenda_data_semana = "seg"
-                                                break;
-                                            case 2:
-                                                e.agenda_data_semana = "ter"
-                                                break;
-                                            case 3:
-                                                e.agenda_data_semana = "qua"
-                                                break;
-                                            case 4:
-                                                e.agenda_data_semana = "qui"
-                                                break;
-                                            case 5:
-                                                e.agenda_data_semana = "sex"
-                                                break;
-                                            case 6:
-                                                e.agenda_data_semana = "sab"
-                                                break;
-                                            default:
-                                                console.log("erro");
-                                                break;
-                                        }
-                                    })
-                    
-                                    agendas.forEach((a)=>{
-                                        let ok = "true";
-                                        agendaS.forEach((s)=>{
-                                            if (("-"+s.agenda_tempId+"-") == ("-"+a._id+"-")) {
-                                                ok = "false";
-                                            }
-                                        })
-                                        if (ok == "true"){
-                                            agendaFinal.push(a);
-                                        }
-                                    })
-                    
-                                    agendaS.forEach((s)=>{
-                                        if (!(s.agenda_categoria == "Falta Justificada")){
-                                            if (!(s.agenda_categoria == "Feriado")){
-                                                if ((""+s.agenda_usuid+"") == (""+idTerapeuta+"")){
-                                                    agendaFinal.push(s);
-                                                }
-                                            }
-                                        }
-                                    });
-                    
-                                    agendaFinal.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
-
-                                // Ordenar os agendamentos por horário (formato 24h) usando dia_hora_ordenação
-                                agendaFinal.sort((a, b) => {
-                                    return a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação);
-                                });
-
-                                agendaFinal.forEach((af)=>{
-                                    af.agenda_data = fncGeral.getDataFMTOption(af.agenda_data, "/");
-                                })
-
-                                //console.log("Agendamentos ordenados por horário:", idsAgendasEx);
-
-                                Sala.find().then((sala) => {
-                                    sala.sort((a, b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0)); // Ordena a sala por nome
-
-                                    // Carrega as terapias, beneficiários e terapeutas para complementar os dados
-                                    return Promise.all([
-                                        Terapia.find(),
-                                        Bene.find(),
-                                        Usuario.find({
-                                            usuario_status: "Ativo",
-                                            $or: [
-                                                { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                                                { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                                            ]
-                                        })
-                                    ]).then(([terapias, benes, usuarios]) => {
-                                        let flash = new Resposta();
-                                        if (usu.usuario_palavrachave == "undefined" || usu.usuario_palavrachave == undefined) {
-                                            flash.sucesso = "almost";
-                                            flash.texto = "Você ainda não cadastrou sua Palavra Chave.";
-                                        } else if (usu.usuario_senha == "123456789") {
-                                            flash.sucesso = "almost";
-                                            flash.texto = "Você ainda não alterou sua senha temporária.";
-                                        } else {
-                                            flash.sucesso = "true";
-                                            flash.texto = "Logado com sucesso!";
-                                        }
-
-                                        res.render("branco", {
-                                            flash,
-                                            aniversariantesDaSemanaUsuario: aniversariantesDaSemanaUsuario,
-                                            aniversariantesDaSemanaBene: aniversariantesDaSemanaBene,
-                                            agendas: agendaFinal, // Todos os agendamentos do dia, ordenados por horário
-                                            evolucaoFaltante: agendaFinal, // Lista de agendamentos semanais sem selo
-                                            terapias: terapias,
-                                            agendasSemanaiss: agendaFinal, // Passando os agendamentos formatados para a view
-                                            benes: benesGeral,
-                                            salas: sala,
-                                            usuarios: usuarios
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });});
-                
-            }).catch((err) => {
-                console.error("Erro ao listar aniversariantes ou agendamentos:", err);
-                req.flash("error_message", "Houve um erro ao listar os aniversariantes ou agendamentos.");
-                res.redirect('/menu/admin/erro');
-            });
+        const flash = new Resposta();
+        if (!usu.usuario_palavrachave || usu.usuario_palavrachave === "undefined") {
+            flash.sucesso = "almost";
+            flash.texto = "Você ainda não cadastrou sua Palavra Chave.";
+        } else if (usu.usuario_senha === "123456789") {
+            flash.sucesso = "almost";
+            flash.texto = "Você ainda não alterou sua senha temporária.";
         } else {
-            let lvl = "x";
-            res.render("ferramentas/usuario/login", { nivel: lvl });
+            flash.sucesso = "true";
+            flash.texto = "Logado com sucesso!";
         }
-    }).catch((err) => {
-        console.error("Erro ao autenticar usuário:", err);
-        req.flash("error_message", "Houve um erro ao autenticar o usuário.");
+
+        res.render("branco", {
+            flash,
+            aniversariantesDaSemanaUsuario,
+            aniversariantesDaSemanaBene,
+            agendas: agendaFinal,
+            evolucaoFaltante,
+            terapias: terapias2,
+            agendasSemanaiss: agendaFinal,
+            benes: benesGeral,
+            salas,
+            usuarios: usuarios2
+        });
+
+    } catch (err) {
+        console.error("Erro no login:", err);
+        req.flash("error_message", "Erro ao autenticar o usuário.");
         res.redirect('/menu/login');
-    });});
+    }
 });
+
 
 router.get('/menuT', (req,res)=>{
     let lvl = 3;

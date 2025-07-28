@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <title>Edição de Extra</title> <!-- Título atualizado -->
+        <script type="text/javascript">
+            // --- Scripts podem precisar de ajustes se os IDs dos elementos mudarem ---
+            // Por enquanto, mantendo os mesmos nomes de funções, mas os IDs internos devem mudar
+            function selectConv(){
+                // Assume que o select do beneficiário agora é 'extraBeneid'
+                var beneId = document.getElementById("extraBeneid").value;
+                console.log("Bene ID selecionado:", beneId);
+                if (beneId && beneId !== "766f69643132333435366964") { // void123456id
+                     // Assume que há inputs hidden com id="{{_id}}" dentro de um loop de benes que guardam o convênio
+                     var convId = document.getElementById(beneId)?.value;
+                     if (convId) {
+                          document.getElementById("extraConvid").value = convId;
+                          document.getElementById("tabilConvid").value = convId; // Se ainda usar
+                          console.log("Convênio selecionado:", convId);
+                     } else {
+                          console.log("Convênio não encontrado para o beneficiário.");
+                     }
+                } else {
+                     document.getElementById("extraConvid").value = "766f69643132333435366964"; // void123456id
+                     document.getElementById("tabilConvid").value = "766f69643132333435366964"; // Se ainda usar
+                     console.log("Nenhum beneficiário selecionado.");
+                }
+            }
+
+            // --- Outras funções precisam ser revistas ---
+            // Esta função originalmente carregava valores de convênio/terapia para atendimento.
+            // Para 'Extra', a lógica de valores pode ser diferente.
+            // Vou manter a estrutura, mas os nomes dos elementos precisam mudar.
+            function carregaValores(){
+                // Exemplo: Se 'Extra' também tiver terapia/valor, ajuste os IDs
+                // let teraId = document.getElementById("extraTerapiaid").value;
+                // document.getElementById("creditTerapiaid").value = teraId; // Ou campo específico de extra
+                // ...
+                // Lógica simplificada ou removida se não aplicável
+                console.log("Função carregaValores chamada - verificar lógica para 'Extra'");
+            }
+
+            // Similar para outras funções - os IDs precisam ser ajustados
+            function controlaCategoria(){
+                // Lógica para categoria de 'Extra' - verificar se é a mesma
+                let origem = document.getElementById("extraOrg").value;
+                // ... ajustar IDs e lógica conforme necessário para 'Extra'
+                console.log("Função controlaCategoria chamada para Extra, origem:", origem);
+            }
+
+            // Esta função é crucial - precisa carregar os dados do 'Extra' para edição
+            function carregaBody(){
+                console.log("START - Carregando dados do Extra para edição");
+                // --- Campos principais do Extra ---
+                // Data (assumindo que extra_data existe e está no formato correto)
+                if (document.getElementById("extraDataEdi").value) {
+                     document.getElementById("extradata").value = formataData(document.getElementById("extraDataEdi").value);
+                }
+                // Hora
+                if (document.getElementById("extraHoraEdi").value) {
+                     document.getElementById("extraHora").value = document.getElementById("extraHoraEdi").value;
+                }
+                // Origem
+                if (document.getElementById("extraOrgEdi").value) {
+                     document.getElementById("extraOrg").value = document.getElementById("extraOrgEdi").value;
+                }
+                // Categoria (se aplicável)
+                if (document.getElementById("extraCategoriaEdi")) {
+                     document.getElementById("extraCategoria").value = document.getElementById("extraCategoriaEdi").value;
+                }
+                // Beneficiário
+                if (document.getElementById("extraBeneidEdi").value) {
+                     document.getElementById("extraBeneid").value = document.getElementById("extraBeneidEdi").value;
+                     selectConv(); // Atualiza o convênio após selecionar o bene
+                }
+                // Convênio
+                if (document.getElementById("extraConvidEdi").value) {
+                     document.getElementById("extraConvid").value = document.getElementById("extraConvidEdi").value;
+                }
+                // Terapeuta
+                if (document.getElementById("extraTerapeutaidEdi").value) {
+                     document.getElementById("extraTerapeutaid").value = document.getElementById("extraTerapeutaidEdi").value;
+                }
+                // Terapia
+                if (document.getElementById("extraTerapiaidEdi").value) {
+                     document.getElementById("extraTerapiaid").value = document.getElementById("extraTerapiaidEdi").value;
+                }
+                // Sala
+                if (document.getElementById("extraSalaidEdi").value) {
+                     document.getElementById("extraSalaid").value = document.getElementById("extraSalaidEdi").value;
+                }
+                // Observação
+                if (document.getElementById("extraObsEdi").value) {
+                     document.getElementById("extraObs").value = document.getElementById("extraObsEdi").value;
+                }
+                // --- Campos potencialmente específicos de 'Extra' ---
+                // Adicione aqui a lógica para carregar outros campos de 'Extra'
+                // Exemplo (ajuste conforme seu schema):
+                // if (document.getElementById("extraStatusEdi").value) {
+                //     document.getElementById("extraStatus").value = document.getElementById("extraStatusEdi").value;
+                // }
+
+                // --- Lógica para campos fixos (se aplicável a Extra) ---
+                // if (document.getElementById("extraFixoEdi") && document.getElementById("extraFixoEdi").value == "true") {
+                //     document.getElementById("extraFixoCheck").checked = true;
+                //     // Carregar outros campos fixos...
+                // } else {
+                //     document.getElementById("extraFixoCheck").checked = false;
+                //     // Esconder div se aplicável
+                // }
+
+                console.log("FINISH - Dados do Extra carregados");
+            }
+
+            // --- Funções auxiliares ---
+            function toggleDivSubFixo(){
+                // Ajustar se 'Extra' tiver funcionalidade semelhante
+                if (document.getElementById("extraFixoCheck") && document.getElementById("extraFixoCheck").checked == true) {
+                    // document.getElementById("divSubFixo").style.display = "";
+                    document.getElementById("extraFixo").value = "true";
+                } else {
+                    // document.getElementById("divSubFixo").style.display = "none";
+                    document.getElementById("extraFixo").value = "false";
+                }
+            }
+
+            function atualizaData(){
+                // Atualiza o campo de data/hora combinada do Extra
+                var dataInput = document.getElementById("extradata").value;
+                var horaInput = document.getElementById("extraHora").value;
+                if (dataInput && horaInput) {
+                     var dataStr = dataInput + "T" + horaInput + ":00.000Z";
+                     console.log("Data/Hora combinada:", dataStr);
+                     var dataObj = new Date(dataStr);
+                     if (!isNaN(dataObj.getTime())) {
+                          document.getElementById("extraAtenddata").value = dataObj.toISOString(); // Ou outro formato esperado
+                     } else {
+                          console.error("Data/Hora inválida:", dataStr);
+                     }
+                } else {
+                     console.log("Data ou Hora não preenchidas para combinar.");
+                }
+            }
+
+            function formataData(dateStr) { // yyyy-MM-dd
+                if (!dateStr) return '';
+                var d = new Date(dateStr);
+                if (isNaN(d.getTime())) {
+                     console.error("Data inválida para formatação:", dateStr);
+                     return '';
+                }
+                // Ajuste de timezone pode ser necessário dependendo de como a data é armazenada
+                // if (d.getTimezoneOffset() == 180){ // Exemplo para UTC-3
+                //     d.setHours(d.getHours() + 3);
+                // }
+                console.log("Formatando data:", d);
+                let month = '' + (d.getMonth() + 1);
+                let day = '' + d.getDate();
+                let year = d.getFullYear();
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+                return [year, month, day].join('-');
+            }
+
+            // Funções que podem não ser aplicáveis ou precisam ser refeitas
+            // function atualizaDataEdi(){ ... } // Substituída por lógica direta em carregaBody
+            // function carregaValoresMerge(){ ... } // Verificar se 'Extra' tem merge
+            // function carregaValoresFixo(){ ... } // Verificar se 'Extra' tem fixo
+            // function atualizaTerapeutaId(){ ... } // Verificar se necessário
+            // function atualizaMergeTerapeutaId(){ ... } // Verificar se necessário
+            // function ajustaOption(){ ... } // Verificar se necessário
+
+        </script>
+    </head>
+    <body class="no-skin" onload="javascript:carregaBody();/*controlaNave();*/"> <!-- controlaNave não definido -->
+        <div class="main-container ace-save-state" id="main-container">
+            <div class="main-content">
+                <div class="main-content-inner">
+                    <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                        <ul class="breadcrumb">
+                            <li>
+                                <i class="ace-icon fa fa-home home-icon"></i>
+                                <a href="#">Home</a>
+                            </li>
+                            <li class="active">Extra - Edição</li> <!-- Caminho atualizado -->
+                        </ul><!-- /.breadcrumb -->
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <!-- PAGE CONTENT BEGINS -->
+                            <!-- Formulário para atualizar Extra -->
+                            <form class="form-horizontal" role="form" action="/menu/atendimento/extra/atualizar" method="POST"> <!-- Action atualizada -->
+                                <!-- Campo oculto para o ID do Extra -->
+                                <input type="hidden" id="extraId" name="extraId" value="{{extra._id}}" />
+                                <!-- Campo oculto para data/hora combinada -->
+                                <input type="hidden" id="extraAtenddata" name="extraAtenddata" value="{{extra.extra_data}}" /> <!-- Ajustar conforme campo real -->
+
+                                <div class="col-sm-12"><!-- Widget Dados Básicos -->
+                                    <div class="widget-box">
+                                        <div class="widget-header">
+                                            <h4 class="widget-title">Dados do Extra</h4> <!-- Título atualizado -->
+                                            <span class="widget-toolbar">
+                                                <a href="#" data-action="reload">
+                                                    <i class="ace-icon fa fa-refresh"></i>
+                                                </a>
+                                                <a href="#" data-action="collapse">
+                                                    <i class="ace-icon fa fa-chevron-up"></i>
+                                                </a>
+                                            </span>
+                                        </div>
+                                        <div class="widget-body">
+                                            <div class="widget-main">
+                                                <!-- Usuário (pode ser o usuário logado ou outro campo) -->
+                                                <label > Usuário </label>
+                                                <div class="form-group">
+                                                    <div class="col-sm-6">
+                                                        <input type="text" id="extraUsuid" name="extraUsuid" class="form-control" readonly="true" value="{{usuarioAtual}}" />
+                                                        <!-- Ou mostrar o nome do usuário logado -->
+                                                        <!-- <input type="text" id="extraUsuid" name="extraUsuid" class="form-control" readonly="true" value="Usuário Atual ({{usuarioAtual}})" /> -->
+                                                    </div>
+                                                </div>
+
+                                                <!-- Data do Extra -->
+                                                <label for="extradata">Data do Extra</label>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <div class="input-group">
+                                                            <input name="extradata" id="extradata" type="date" onchange="javascript:atualizaData()" required />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Hora do Extra -->
+                                                <label for="extraHora">Hora do Extra</label>
+                                                <div class="row">
+                                                    <div class="col-sm-8">
+                                                         <input name="extraHora" id="extraHora" type="text" />
+                                                       
+                                                    </div>
+                                                </div>
+
+                                                <!-- Origem do Extra -->
+                                                <label>Origem do Extra</label>
+                                                <div class="form-group">
+                                                        <div class="col-sm-9">
+                                                            <select id="extraOrg" name="extraOrg" class="chosen-select" data-placeholder="Escolha a origem..." onchange="javascript:controlaCategoria()">
+                                                                <option value="Administrativo">Administrativo</option>
+                                                                <option value="Padrão">Padrão</option>
+                                                                <!-- Adicione outras opções se necessário -->
+                                                            </select>
+                                                        </div>
+                                                </div>
+
+                                                <!-- Categoria do Extra (se aplicável) -->
+                                                <label > Categoria </label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="extraCategoria" id="extraCategoria" placeholder="Padrão" class="form-control" readonly="true" value="{{atend_categoria}}"/>
+													</div>
+												</div>
+
+                                                <!-- Associação de Convênio ao Beneficiário (lógica oculta) -->
+                                                <div class="hidden">
+                                                    {{#each benes}}
+                                                        {{#each ../convs}}
+                                                            {{#ifEqual ../bene_convid _id}}
+                                                                <input value="{{../bene_convid}}" id="{{../_id}}" name="refBeneConv" />
+                                                            {{/ifEqual}}
+                                                        {{/each}}
+                                                    {{/each}}
+                                                    <input value="766f69643132333435366964" id="defaultConv" name="refBeneConv" /> <!-- void123456id -->
+                                                </div>
+
+                                                <label> Beneficiário</label>
+												<div class="hidden">
+													{{#each benes}}
+														{{#each ../convs}}
+															{{#ifEqual ../bene_convid _id}}
+																<input value="{{../bene_convid}}" id="{{../_id}}" name="refBeneConv" />
+															{{/ifEqual}}
+														{{/each}}
+													{{/each}}
+												</div>
+												<div class="form-group">
+													<div class="col-sm-9">
+															<select name="extraBeneid" id="extraBeneid" class="chosen-select" data-placeholder="Escolha..." value="{{extra_beneid}}" onchange="javascript:selectConv()">
+																	<option value="{{extra_beneid}}">{{bene_nome}}</option>
+																	{{#each benes}}
+																		<option value="{{_id}}">{{bene_nome}}</option>
+																	{{/each}}
+															</select>
+													</div>
+												</div>
+
+                                                <label> Convênio</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="extraConvid"  id="extraConvid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaConvId()">
+															{{#each benes}}
+																{{#each ../convs}}
+																	{{#ifEqual ../bene_convid _id}}
+																		<option value="{{../bene_convid}}">{{conv_nome}}</option>
+																	{{/ifEqual}}
+																{{/each}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label>Sala</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select id="extraSalaid" name="extraSalaid" class="chosen-select" data-placeholder="Escolha...">
+																{{#each salas}}
+																	<option value="{{_id}}">{{sala_nome}}</option>
+																{{/each}}
+														</select>
+													</div>
+												</div>
+
+                                                <!-- Seleção do Terapeuta -->
+                                               <label> Terapeuta</label>
+												<div class="form-group">
+														<div class="col-sm-4">
+															<select name="extraTerapeutaid" id="extraTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="{{extra_usuid}}">{{usuario_nome}}</option>
+																	{{#each usuarios}}
+																	<option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+															</select>
+														</div>
+												</div>
+
+												
+												<label> Terapia</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select name="extraTerapiaid" id="extraTerapiaid" class="chosen-select" data-placeholder="Escolha..." >
+																<option value="{{extra_terapiaid}}">{{terapia_nome}}</option>
+																{{#each terapias}}
+																<option value="{{_id}}">{{terapia_nome}}</option>
+																{{/each}}
+														</select>
+													</div>
+												</div>
+
+                                                <!-- Observações -->
+                                                <label> Observações</label>
+                                                <div class="form-group">
+                                                    <div class="col-sm-12">
+                                                        <textarea type="text" id="extraObs" name="extraObs" placeholder="Observações sobre este extra..." class="form-control" rows="3">{{extra.extra_obs}}</textarea>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Campos Ocultos para Edição (Dados Originais) -->
+                                                <div id="divCarrega" name="divCarrega" class="hidden">
+                                                    <!-- Campos de data/hora -->
+                                                    <input id="extraDataEdi" name="extraDataEdi" value="{{extra.extra_data}}" />
+                                                    <input id="extraHoraEdi" name="extraHoraEdi" value="{{extra.extra_hora}}" />
+
+                                                    <!-- Campos de relacionamento -->
+                                                    <input id="extraOrgEdi" name="extraOrgEdi" value="{{extra.extra_org}}" />
+                                                    {{#if extra.extra_categoria}}<input id="extraCategoriaEdi" name="extraCategoriaEdi" value="{{extra.extra_categoria}}" />{{/if}}
+                                                    <input id="extraBeneidEdi" name="extraBeneidEdi" value="{{extra.extra_beneid}}" />
+                                                    <input id="extraConvidEdi" name="extraConvidEdi" value="{{extra.extra_convid}}" />
+                                                    <input id="extraTerapeutaidEdi" name="extraTerapeutaidEdi" value="{{extra.extra_terapeutaid}}" />
+                                                    <input id="extraTerapiaidEdi" name="extraTerapiaidEdi" value="{{extra.extra_terapiaid}}" />
+                                                    <input id="extraSalaidEdi" name="extraSalaidEdi" value="{{extra.extra_salaid}}" />
+                                                    <input id="extraObsEdi" name="extraObsEdi" value="{{extra.extra_obs}}" />
+
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="space-4"></div>
+                                <div class="space-4"></div>
+                                <div class="form-actions">
+                                    <div class="col-xs-12" style="text-align: center;" >
+                                        <button class="btn btn-info" name="acao" type="submit">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            Atualizar Extra <!-- Texto do botão atualizado -->
+                                        </button>
+                                        &nbsp; &nbsp; &nbsp;
+                                        <a class="btn btn-warning" href="/menu/atendimento/extra/lis"> <!-- Link de voltar atualizado -->
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            Voltar para a Lista
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div>
+            </div><!-- /.main-content -->
+        </div><!-- /.main-container -->
+
+        <!-- basic scripts -->
+        <!-- Script do editor de texto -->
+    </body>
+</html>

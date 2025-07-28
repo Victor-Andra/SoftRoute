@@ -53,10 +53,24 @@
 				console.log(document.getElementById("tabilTerapeutaId").value);
 				document.getElementById("tabilTerapeutaId").value = ati;
 			}
-			function atualizaMergeTerapeutaId(){
-				console.log(document.getElementById("atendMergeTerapeutaid").value);
-				console.log("X");
-				let amti = document.getElementById("atendMergeTerapeutaid").value;
+			function atualizaTerapeutaId(){
+				console.log("Função chamada");
+				
+				// Pega o valor selecionado no campo atendTerapeutaid
+				let terapeutaId = document.getElementById("atendTerapeutaid").value;
+				console.log("Terapeuta ID selecionado:", terapeutaId);
+				
+				// Atribui o mesmo valor para tabilTerapeutaId
+				if(document.getElementById("tabilTerapeutaId")) {
+					document.getElementById("tabilTerapeutaId").value = terapeutaId;
+					console.log("tabilTerapeutaId atualizado:", terapeutaId);
+				}
+				
+				// Se você também quer atualizar atendUsuid com o mesmo valor:
+				if(document.getElementById("atendUsuid")) {
+					document.getElementById("atendUsuid").value = terapeutaId;
+					console.log("atendUsuid atualizado:", terapeutaId);
+				}
 			}
 			function controlaCategoria(){
 				let origem = document.getElementById("atendOrg").value;
@@ -147,6 +161,7 @@
 														São Indexados com o Extra a ele relacionado.
 														Podendo ter ou não mais de um atendimento para o Extra.
 												</div>
+												<input id="atendUsuid" name="atendUsuid" value="" />
 
 														<label for="id-date-picker-1">Data atendimento</label>
 														<div class="row">
