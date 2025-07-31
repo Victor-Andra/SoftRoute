@@ -48,6 +48,68 @@
             .custom-tooltip:hover .tooltip-text {
                 visibility: visible;
             }
+			/* Estilos para tela */
+			@media screen {
+				.print-footer {
+					display: none;
+				}
+			}
+
+			/* Estilos para impressão */
+			@media print {
+				.noprint {
+					display: none !important;
+				}
+
+				.print-footer {
+					display: block;
+					position: fixed;
+					bottom: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 5px 0;
+					background: white;
+					z-index: 9999;
+				}
+
+				body {
+					margin-bottom: 40mm; /* Espaço para rodapé fixo */
+				}
+
+				@page {
+					margin: 1cm;
+					@bottom-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 11px;
+					}
+				}
+			}
+
+			/* Estilos específicos para impressão em modo paisagem */
+			@media print and (orientation: landscape) {
+				/* Apenas garantimos que o noprint continue funcionando */
+				.noprint {
+					display: none !important;
+				}
+			}
+			/* Estilo específico para a tabela */
+			table.tableSubsfixo {
+				width: 100%; /* Define a largura da tabela (opcional) */
+				/*table-layout: fixed; /* Garante que as colunas tenham larguras fixas */
+    			border-collapse: collapse; /* Remove espaçamentos entre bordas */
+			}
+
+			/* Estilo para todas as células da tabela (td e th) */
+			table.tableSubsfixo td,
+			table.tableSubsfixo th {
+				word-wrap: break-word; /* Quebra palavras longas para caber na célula */
+				word-break: break-all; /* Quebra palavras mesmo que não tenham espaços */
+				white-space: normal; /* Permite que o texto ocupe várias linhas */
+				padding: 8px; /* Espaçamento interno das células (opcional) */
+				
+			}
     </style>
 	
 		<script type="text/javascript">
@@ -317,13 +379,14 @@
 											<div class="pull-right tableTools-container">
 											</div>
 										</div>
-										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+										<table id="tableSubsfixo" class="table table-striped table-bordered table-hover dataTable no-footer tableSubsfixo" role="grid" aria-describedby="dynamic-table_info">
 											<thead>
 												<tr role="row">
 													<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="2" >Beneficiário</th>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >Clínica</th>
 													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="2" >Escola</th>
-													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="5" >Terapia</th>
+													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="4" >Terapia</th>
+													<th></th>
 												</tr>
 												<tr role="row">
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Convênio</th>
@@ -334,9 +397,9 @@
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapeuta Fixo</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1">Laudo</th>
 													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1">Frequência</th>
-													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia Substituta</th>
+													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia Realizada</th>
 													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1">Atendimento</th>
-													<th tabindex="10">Ação</th>
+													<th style="width: 105px;">&nbsp;</th>
 												</tr>
 											</thead>
 											
@@ -451,10 +514,10 @@
 														
 														<!-- Coluna X: Laudo (Terapia) -->
 														<td>
-															{{#with (lookup ../mapaTerapias this.agenda_terapiaid)}}
+															{{#with (lookup ../mapaTerapias this.agenda_mergeterapiaid)}}
 																{{this.terapia_nome}}
 															{{else}}
-																{{#if this.agenda_terapiaid}}ID Terapia: {{this.agenda_terapiaid}}{{/if}}
+																{{#if this.agenda_mergeterapiaid}}ID Terapia Subst.: {{this.agenda_mergeterapiaid}}{{/if}}
 															{{/with}}
 														</td>
 
@@ -469,12 +532,13 @@
 
 														<!-- Coluna X: Terapia Substituída (Merge Terapia) -->
 														<td>
-															{{#with (lookup ../mapaTerapias this.agenda_mergeterapiaid)}}
+															{{#with (lookup ../mapaTerapias this.agenda_terapiaid)}}
 																{{this.terapia_nome}}
 															{{else}}
-																{{#if this.agenda_mergeterapiaid}}ID Terapia Subst.: {{this.agenda_mergeterapiaid}}{{/if}}
+																{{#if this.agenda_terapiaid}}ID Terapia: {{this.agenda_terapiaid}}{{/if}}
 															{{/with}}
 														</td>
+														
 
 														<!-- Terapeuta (Atende) -->
 														<td>
@@ -484,14 +548,7 @@
 																{{#if this.agenda_usuid}}{{this.agenda_usuid}}{{/if}}
 															{{/with}}
 														</td>
-														<td>
-															<!-- Ações -->
-															<div class="action-buttons">
-																<a class="blue" href="/menu/beneficiario/edi/{{_id}}">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-															</div>
-														</td>
+														<td style="width: 1px;">&nbsp;</td>
 													</tr>
 												{{/each}}
 											</tbody>
@@ -521,7 +578,7 @@
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
 		$(document).ready(function() {
-			$("#dynamic-table").DataTable({
+			$("#tableSubsfixo").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
 			"aoColumns": [ null, null, null, null, null, null, null, null, null,null, { "bSortable": false }],

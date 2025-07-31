@@ -3,50 +3,7 @@
     <head>
         <title>Edição de Extra</title> <!-- Título atualizado -->
         <script type="text/javascript">
-            // --- Scripts podem precisar de ajustes se os IDs dos elementos mudarem ---
-            // Por enquanto, mantendo os mesmos nomes de funções, mas os IDs internos devem mudar
-            function selectConv(){
-                // Assume que o select do beneficiário agora é 'extraBeneid'
-                var beneId = document.getElementById("extraBeneid").value;
-                console.log("Bene ID selecionado:", beneId);
-                if (beneId && beneId !== "766f69643132333435366964") { // void123456id
-                     // Assume que há inputs hidden com id="{{_id}}" dentro de um loop de benes que guardam o convênio
-                     var convId = document.getElementById(beneId)?.value;
-                     if (convId) {
-                          document.getElementById("extraConvid").value = convId;
-                          document.getElementById("tabilConvid").value = convId; // Se ainda usar
-                          console.log("Convênio selecionado:", convId);
-                     } else {
-                          console.log("Convênio não encontrado para o beneficiário.");
-                     }
-                } else {
-                     document.getElementById("extraConvid").value = "766f69643132333435366964"; // void123456id
-                     document.getElementById("tabilConvid").value = "766f69643132333435366964"; // Se ainda usar
-                     console.log("Nenhum beneficiário selecionado.");
-                }
-            }
-
-            // --- Outras funções precisam ser revistas ---
-            // Esta função originalmente carregava valores de convênio/terapia para atendimento.
-            // Para 'Extra', a lógica de valores pode ser diferente.
-            // Vou manter a estrutura, mas os nomes dos elementos precisam mudar.
-            function carregaValores(){
-                // Exemplo: Se 'Extra' também tiver terapia/valor, ajuste os IDs
-                // let teraId = document.getElementById("extraTerapiaid").value;
-                // document.getElementById("creditTerapiaid").value = teraId; // Ou campo específico de extra
-                // ...
-                // Lógica simplificada ou removida se não aplicável
-                console.log("Função carregaValores chamada - verificar lógica para 'Extra'");
-            }
-
-            // Similar para outras funções - os IDs precisam ser ajustados
-            function controlaCategoria(){
-                // Lógica para categoria de 'Extra' - verificar se é a mesma
-                let origem = document.getElementById("extraOrg").value;
-                // ... ajustar IDs e lógica conforme necessário para 'Extra'
-                console.log("Função controlaCategoria chamada para Extra, origem:", origem);
-            }
-
+            
             // Esta função é crucial - precisa carregar os dados do 'Extra' para edição
             function carregaBody(){
                 console.log("START - Carregando dados do Extra para edição");
@@ -70,7 +27,7 @@
                 // Beneficiário
                 if (document.getElementById("extraBeneidEdi").value) {
                      document.getElementById("extraBeneid").value = document.getElementById("extraBeneidEdi").value;
-                     selectConv(); // Atualiza o convênio após selecionar o bene
+                    
                 }
                 // Convênio
                 if (document.getElementById("extraConvidEdi").value) {
@@ -92,37 +49,44 @@
                 if (document.getElementById("extraObsEdi").value) {
                      document.getElementById("extraObs").value = document.getElementById("extraObsEdi").value;
                 }
-                // --- Campos potencialmente específicos de 'Extra' ---
-                // Adicione aqui a lógica para carregar outros campos de 'Extra'
-                // Exemplo (ajuste conforme seu schema):
-                // if (document.getElementById("extraStatusEdi").value) {
-                //     document.getElementById("extraStatus").value = document.getElementById("extraStatusEdi").value;
-                // }
+               
+               
+                if (document.getElementById("extraDatacadEdi").value) {
+                    document.getElementById("extraDatacad").value = formataData(document.getElementById("extraDatacadEdi").value);
+                }
 
-                // --- Lógica para campos fixos (se aplicável a Extra) ---
-                // if (document.getElementById("extraFixoEdi") && document.getElementById("extraFixoEdi").value == "true") {
-                //     document.getElementById("extraFixoCheck").checked = true;
-                //     // Carregar outros campos fixos...
-                // } else {
-                //     document.getElementById("extraFixoCheck").checked = false;
-                //     // Esconder div se aplicável
-                // }
+                if (document.getElementById("extraDataediEdi").value) {
+                    document.getElementById("extraDataEdi").value = formataData(document.getElementById("extraDataediEdi").value);
+                }
+
+                if (document.getElementById("extraDtaExportadoEdi").value) {
+                    document.getElementById("extraDtaExportado").value = formataData(document.getElementById("extraDtaExportadoEdi").value);
+                }
+
+                  if (document.getElementById("extraHoraExportadoEdi").value) {
+                    document.getElementById("extraHoraExportado").value = document.getElementById("extraHoraExportadoEdi").value;
+                 }
+                  if (document.getElementById("extraUsuidExportouEdi").value) {
+                    document.getElementById("extraUsuidExportou").value = document.getElementById("extraUsuidExportouEdi").value;
+                 }
+                  if (document.getElementById("extraExtraStatusEdi").value) {
+                    document.getElementById("extraExtraStatus").value = document.getElementById("extraExtraStatusEdi").value;
+                 }
+                  if (document.getElementById("extraExtraStatusPgEdi").value) {
+                    document.getElementById("extraExtraStatusPg").value = document.getElementById("extraExtraStatusPgEdi").value;
+                 }
+                  if (document.getElementById("extraAuditadoEdi").value) {
+                    document.getElementById("extraAuditado").value = document.getElementById("extraAuditadoEdi").value;
+                 }
+                  if (document.getElementById("extraAuditadoObsEdi").value) {
+                    document.getElementById("extraAuditadoObs").value = document.getElementById("extraAuditadoObsEdi").value;
+                 }
+              
 
                 console.log("FINISH - Dados do Extra carregados");
             }
 
-            // --- Funções auxiliares ---
-            function toggleDivSubFixo(){
-                // Ajustar se 'Extra' tiver funcionalidade semelhante
-                if (document.getElementById("extraFixoCheck") && document.getElementById("extraFixoCheck").checked == true) {
-                    // document.getElementById("divSubFixo").style.display = "";
-                    document.getElementById("extraFixo").value = "true";
-                } else {
-                    // document.getElementById("divSubFixo").style.display = "none";
-                    document.getElementById("extraFixo").value = "false";
-                }
-            }
-
+         
             function atualizaData(){
                 // Atualiza o campo de data/hora combinada do Extra
                 var dataInput = document.getElementById("extradata").value;
@@ -161,17 +125,10 @@
                 return [year, month, day].join('-');
             }
 
-            // Funções que podem não ser aplicáveis ou precisam ser refeitas
-            // function atualizaDataEdi(){ ... } // Substituída por lógica direta em carregaBody
-            // function carregaValoresMerge(){ ... } // Verificar se 'Extra' tem merge
-            // function carregaValoresFixo(){ ... } // Verificar se 'Extra' tem fixo
-            // function atualizaTerapeutaId(){ ... } // Verificar se necessário
-            // function atualizaMergeTerapeutaId(){ ... } // Verificar se necessário
-            // function ajustaOption(){ ... } // Verificar se necessário
 
         </script>
     </head>
-    <body class="no-skin" onload="javascript:carregaBody();/*controlaNave();*/"> <!-- controlaNave não definido -->
+    <body class="no-skin" onload="javascript:carregaBody();controlaNave();"> <!-- controlaNave não definido -->
         <div class="main-container ace-save-state" id="main-container">
             <div class="main-content">
                 <div class="main-content-inner">
@@ -190,18 +147,133 @@
                             <!-- Formulário para atualizar Extra -->
                             <form class="form-horizontal" role="form" action="/menu/atendimento/extra/atualizar" method="POST"> <!-- Action atualizada -->
                                 <!-- Campo oculto para o ID do Extra -->
-                                <input type="hidden" id="extraId" name="extraId" value="{{extra._id}}" />
+                                <input  id="extraId" name="extraId" value="{{extra._id}}" />
+                                <input  id="_id" name="_id" value="{{extra._id}}" />
                                 <!-- Campo oculto para data/hora combinada -->
                                 <input type="hidden" id="extraAtenddata" name="extraAtenddata" value="{{extra.extra_data}}" /> <!-- Ajustar conforme campo real -->
-
+                                <div class="col-sm-12"><!-- Widget Dados Básicos -->
+                                    <div class="widget-box">
+                                        <div class="widget-header">
+                                            <h4 class="widget-title">Supervisão Extra</h4> <!-- Título atualizado -->
+                                            <span class="widget-toolbar">
+                                                
+                                                <a href="#" data-action="collapse">
+                                                    <i class="ace-icon fa fa-chevron-up"></i>
+                                                </a>
+                                            </span>
+                                        </div>
+                                        <div class="widget-body">
+                                            <div class="widget-main">
+                                                <label > Quem criou o extra na agenda? </label>
+                                                <div class="form-group">
+                                                    <div class="col-sm-6">
+                                                        
+                                                        <select name="extraUsucad" id="extraUsucad" class="chosen-select" data-placeholder="Escolha..." >
+																	{{#each usuarios}}
+																	    <option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+															</select>
+                                                    </div>
+                                                </div>
+                                                <label for="extradata">Data cadastro</label>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <div class="input-group">
+                                                            <input name="extraDatacad" id="extraDatacad" type="date" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <label > Quem alterou o extra na agenda? </label>
+                                                <div class="form-group">
+                                                    <div class="col-sm-6">
+                                                        
+                                                        <select name="extraUsu" id="extraUsu" class="chosen-select" data-placeholder="Escolha..." >
+																	{{#each usuarios}}
+																	    <option value="{{_id}}">{{usuario_nome}}</option>
+																	{{/each}}
+															</select>
+                                                    </div>
+                                                </div>
+                                                <label for="extradata">Data Edição</label>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <div class="input-group">
+                                                            <input name="extraData" id="extraData" type="date" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <label > Quem Exportou o Extra para Controle? </label>
+                                                <div class="form-group">
+                                                    <div class="col-sm-6">
+                                                        
+                                                        <select name="extraUsuidExportou" id="extraUsuidExportou" class="chosen-select" data-placeholder="Escolha..."  value="{{extra.extra_usuidExportou}}">
+                                                            {{#each usuarios}}
+                                                                <option value="{{_id}}">{{usuario_nome}}</option>
+                                                            {{/each}}
+														</select>
+                                                    </div>
+                                                </div>
+                                                <label >Data Exportação</label>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <div class="input-group">
+                                                            <input name="extraDtaExportado" id="extraDtaExportado" type="date" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <label >Hora Exportação</label>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <div class="input-group">
+                                                            <input name="extraHoraExportado" id="extraHoraExportado" type="time"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <label for="extrasAuditado">Auditado</label>
+                                                <div class="form-group">
+                                                    <div class="col-sm-6">
+                                                        <select name="extraAuditado" id="extraAuditado" class="chosen-select" data-placeholder="Escolha..." >
+                                                                <option value="false">Não</option>
+                                                                <option value="true">Sim</option>
+															</select>
+                                                    </div>
+                                                </div>
+                                                <label for="extrastatus">Status</label>
+                                                <div class="form-group">
+                                                    <div class="col-sm-6">
+                                                        <select name="extraExtraStatus" id="extraExtraStatus" class="chosen-select" data-placeholder="Escolha..." >
+                                                                <option value="Aguardando">Aguardando</option>
+                                                                <option value="Gerado">Gerado</option>
+                                                                <option value="Em Cobrança">Em Cobrança</option>
+															</select>
+                                                    </div>
+                                                </div>
+                                                 <label for="extrastatus">Quitado</label>
+                                                <div class="form-group">
+                                                    <div class="col-sm-6">
+                                                        <select name="extraExtraStatusPg" id="extraExtraStatusPg" class="chosen-select" data-placeholder="Escolha..." >
+                                                                <option value="false">Não</option>
+                                                                <option value="true">Sim</option>
+															</select>
+                                                    </div>
+                                                </div>
+                                                <!-- Observações -->
+                                                <label> Observações da Supervisão do Extra</label>
+                                                <div class="form-group">
+                                                    <div class="col-sm-12">
+                                                        <textarea type="text" id="extraAuditadoObs" name="extraAuditadoObs" placeholder="Observações sobre este extra..." class="form-control" rows="3">{{extra.extra_auditadoObs}}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-sm-12"><!-- Widget Dados Básicos -->
                                     <div class="widget-box">
                                         <div class="widget-header">
                                             <h4 class="widget-title">Dados do Extra</h4> <!-- Título atualizado -->
                                             <span class="widget-toolbar">
-                                                <a href="#" data-action="reload">
-                                                    <i class="ace-icon fa fa-refresh"></i>
-                                                </a>
+                                                
                                                 <a href="#" data-action="collapse">
                                                     <i class="ace-icon fa fa-chevron-up"></i>
                                                 </a>
@@ -210,14 +282,8 @@
                                         <div class="widget-body">
                                             <div class="widget-main">
                                                 <!-- Usuário (pode ser o usuário logado ou outro campo) -->
-                                                <label > Usuário </label>
-                                                <div class="form-group">
-                                                    <div class="col-sm-6">
-                                                        <input type="text" id="extraUsuid" name="extraUsuid" class="form-control" readonly="true" value="{{usuarioAtual}}" />
-                                                        <!-- Ou mostrar o nome do usuário logado -->
-                                                        <!-- <input type="text" id="extraUsuid" name="extraUsuid" class="form-control" readonly="true" value="Usuário Atual ({{usuarioAtual}})" /> -->
-                                                    </div>
-                                                </div>
+                                                <input  type="text" id="extraUsuid" name="extraUsuid" class="form-control hidden" readonly="true" value="{{usuarioAtual}}" />
+                                               
 
                                                 <!-- Data do Extra -->
                                                 <label for="extradata">Data do Extra</label>
@@ -242,7 +308,7 @@
                                                 <label>Origem do Extra</label>
                                                 <div class="form-group">
                                                         <div class="col-sm-9">
-                                                            <select id="extraOrg" name="extraOrg" class="chosen-select" data-placeholder="Escolha a origem..." onchange="javascript:controlaCategoria()">
+                                                            <select id="extraOrg" name="extraOrg" class="chosen-select" data-placeholder="Escolha a origem...">
                                                                 <option value="Administrativo">Administrativo</option>
                                                                 <option value="Padrão">Padrão</option>
                                                                 <!-- Adicione outras opções se necessário -->
@@ -282,8 +348,8 @@
 												</div>
 												<div class="form-group">
 													<div class="col-sm-9">
-															<select name="extraBeneid" id="extraBeneid" class="chosen-select" data-placeholder="Escolha..." value="{{extra_beneid}}" onchange="javascript:selectConv()">
-																	<option value="{{extra_beneid}}">{{bene_nome}}</option>
+															<select name="extraBeneid" id="extraBeneid" class="chosen-select" data-placeholder="Escolha..." value="{{extra_beneid}}" >
+																	
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
 																	{{/each}}
@@ -294,7 +360,7 @@
                                                 <label> Convênio</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="extraConvid"  id="extraConvid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaConvId()">
+														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="extraConvid"  id="extraConvid" class="chosen-select" data-placeholder="Escolha..." >
 															{{#each benes}}
 																{{#each ../convs}}
 																	{{#ifEqual ../bene_convid _id}}
@@ -321,8 +387,8 @@
 												<div class="form-group">
 														<div class="col-sm-4">
 															<select name="extraTerapeutaid" id="extraTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
-																	<option value="{{extra_usuid}}">{{usuario_nome}}</option>
-																	{{#each usuarios}}
+																	
+																	{{#each terapeutas}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
 															</select>
@@ -334,7 +400,7 @@
 												<div class="form-group">
 													<div class="col-sm-4">
 														<select name="extraTerapiaid" id="extraTerapiaid" class="chosen-select" data-placeholder="Escolha..." >
-																<option value="{{extra_terapiaid}}">{{terapia_nome}}</option>
+																
 																{{#each terapias}}
 																<option value="{{_id}}">{{terapia_nome}}</option>
 																{{/each}}
@@ -351,7 +417,7 @@
                                                 </div>
 
                                                 <!-- Campos Ocultos para Edição (Dados Originais) -->
-                                                <div id="divCarrega" name="divCarrega" class="hidden">
+                                                <div id="divCarrega" name="divCarrega" class="">
                                                     <!-- Campos de data/hora -->
                                                     <input id="extraDataEdi" name="extraDataEdi" value="{{extra.extra_data}}" />
                                                     <input id="extraHoraEdi" name="extraHoraEdi" value="{{extra.extra_hora}}" />
@@ -365,8 +431,16 @@
                                                     <input id="extraTerapiaidEdi" name="extraTerapiaidEdi" value="{{extra.extra_terapiaid}}" />
                                                     <input id="extraSalaidEdi" name="extraSalaidEdi" value="{{extra.extra_salaid}}" />
                                                     <input id="extraObsEdi" name="extraObsEdi" value="{{extra.extra_obs}}" />
-
-                                                    
+                                                    <!-- Campos de Gestão-->
+                                                    <input id="extraDatacadEdi" name="extraDatacadEdi" value="{{extra.extra_datacad}}" />
+                                                    <input id="extraDataediEdi" name="extraDataediEdi" value="{{extra.extra_dataedi}}" />
+                                                    <input id="extraDtaExportadoEdi" name="extraDtaExportadoEdi" value="{{extra.extra_dtaExportado}}" />
+                                                    <input id="extraHoraExportadoEdi" name="extraHoraExportadoEdi" value="{{extra.extra_horaExportado}}" />
+                                                    <input id="extraUsuidExportouEdi" name="extraUsuidExportouEdi" value="{{extra.extra_usuidExportou}}" />
+                                                    <input id="extraExtraStatusEdi" name="extraExtraStatusEdi" value="{{extra.extra_extraStatus}}" />
+                                                    <input id="extraExtraStatusPgEdi" name="extraExtraStatusPgEdi" value="{{extra.extra_extraStatusPg}}" />
+                                                    <input id="extraAuditadoEdi" name="extraAuditadoEdi" value="{{extra.extra_auditado}}" />
+                                                    <input id="extraAuditadoObsEdi" name="extraAuditadoObsEdi" value="{{extra.extra_auditadoObs}}" />
                                                 </div>
                                             </div>
                                         </div>

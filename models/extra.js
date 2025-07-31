@@ -47,7 +47,7 @@ const ExtraSchema = mongoose.Schema({
     extra_dtaExportado: { type: String, required: false }, // Data da cópia
     extra_horaExportado: { type: String, required: false }, // Hora da cópia
     extra_usuidExportou: { type: ObjectId, required: false }, // Quem copiou (usuário atual)
-    extra_extraStatus: { type: String, required: false, default: "Aguardando" }, // ("Aguardando", "Convertido", "Baixado")
+    extra_extraStatus: { type: String, required: false, default: "Aguardando" }, // ("Aguardando", "Gerado", "Em cobrança")
     extra_extraStatusPg: { type: Boolean, required: false }
 });
 
@@ -163,59 +163,24 @@ module.exports = {ExtraModel,ExtraSchema,
                 idUsu = id;
             }
         })
-        let extraId = new ObjectId(req.body.id);
-        //Pega data atual
-        console.log("req.body.id:"+req.body.id)
-        console.log("extraId:"+extraId)
+        let extraId = new ObjectId(req.body.extraId);
+       
         //Realiza Atualização
-        await ExtraModel.findByIdAndUpdate(new ObjectId(req.body.id), 
+        await ExtraModel.findByIdAndUpdate(new ObjectId(req.body.extraId), 
             {$set: {
                //campos exclusivos extra
-                extra_tipo : req.body.extraTipo,
+              
                 extra_auditado : req.body.extraAuditado,
                 extra_auditadoObs : req.body.extraAuditadoObs,
-                extra_exportado : req.body.extraExportado,
-                extra_dtaExportado : req.body.extraDtaExportado,
-                extra_horaExportado : req.body.extraHoraExportado,
-                extra_usuidExportou : req.body.extraUsuidExportou,
+                
                 extra_extraStatus : req.body.extraExtraStatus,
                 extra_extraStatusPg : req.body.extraExtraStatusPg,
                 //campos agendamento
-                extra_data : req.body.extraData,
-                extra_hora : req.body.extraHora,
-                extra_data_semana : req.body.extraDatasemana,
-                extra_data_dia : req.body.extraDatadia,
-                extra_beneid : req.body.extraBeneid,
-                extra_convid : req.body.extraConvid,
-                extra_salaid : req.body.extraSalaid,
-                extra_terapiaid : req.body.extraTerapiaid,
-                extra_usuid : req.body.extraUsuid,
-                extra_mergeterapeutaid : req.body.extraMergeterapeutaid,
-                extra_mergeterapiaid : req.body.extraMergeterapiaid,
-                extra_migrado : req.body.extraMigrado,
-                extra_datacad : req.body.extraDatacad,
-                extra_dataedi : req.body.extraDataedi,
-                extra_categoria : req.body.extraCategoria,
-                extra_org : req.body.extraOrg,
-                extra_obs : req.body.extraObs,
-                extra_aux : req.body.extraAux, 
-                extra_temp : req.body.extraTemp, 
-                extra_tempId : req.body.extraTempId,
-                extra_tempmotivo : req.body.extraTempmotivo,
-                extra_extra : req.body.extraExtra,
-                extra_cobrarextra : req.body.extraCobrarextra,
-                extra_evolucao : req.body.extraEvolucao,
-                extra_copia : req.body.extraCopia,
-                extra_selo : req.body.extraSelo,
-                extra_dataSelo : req.body.extraDataSelo,
-                extra_atrazo : req.body.extraAtrazo,
-                extra_rel : req.body.extraRel,
-                extra_turnoFalta : req.body.extraTurnoFalta,
-                extra_faltaId : req.body.extraFaltaId,
-                extra_falta : req.body.extraFalta,
-                extra_usuedi : req.body.extraUsuedi, //Usuário adm que alterou
-                extra_log : req.body.extraLog, //Log das alterações
-                extra_usucad : req.body.extraUsucad
+                
+                extra_dataedi : dataAtual,
+                
+                extra_usuedi : idUsu, //Usuário adm que alterou
+                extra_log : req.body.extraLog //Log das alterações
                 
                 }}
                 ).then((res) =>{

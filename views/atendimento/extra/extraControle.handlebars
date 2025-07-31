@@ -244,10 +244,23 @@
 													<td>{{terapia_nome}}</td>
 													<td>{{extraTeraputa}}</td>
 													<td>
-														<span class="badge badge-success">Sim</span>
+														{{#ifEqual extra_auditado true}}
+															<span class="badge badge-success">Sim</span>
+														{{else}}
+															<span class="badge badge-danger">Não</span>
+														{{/ifEqual}}
 													</td>
 													<td style="text-align: center;">
-														<span class="badge badge-warning">Aguardando</span>
+														{{#ifEqual extra_extraStatus "Aguardando"}}
+															<span class="badge badge-warning">{{extra_extraStatus}}</span>
+															{{else}}
+																{{#ifEqual extra_extraStatus "Gerado"}}
+																	<span class="badge badge-danger">{{extra_extraStatus}}</span>
+																	{{else}}
+																	<span class="badge badge-success">{{extra_extraStatus}}</span>
+																{{/ifEqual}}
+														{{/ifEqual}}
+														<br>
 														<a class="green" name="acaoEdi" id="acaoEdi"
 															href="/menu/atendimento/extra/edi/{{_id}}">
 															<i class="ace-icon fa fa-pencil bigger-130"></i>
