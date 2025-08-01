@@ -150,7 +150,7 @@ module.exports = {
                         Sala.find()
                         .then((salas) => {
                             salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome));
-
+                            Ano.find().then((ano)=>{
                             Terapia.find()
                             .then((terapias) => {
                                 Conv.find()
@@ -164,7 +164,9 @@ module.exports = {
                                         salas: salas,
                                         terapias: terapias,
                                         convs: convs,
+                                        anos: ano,
                                         flash
+                                        });
                                     });
                                 });
                             });
@@ -321,6 +323,7 @@ module.exports = {
                                         salas: salas,
                                         terapias: terapias,
                                         convs: convs,
+                                        anos: ano,
                                         flash,
                                         // Adicione estas variáveis para exibir que tipo de pesquisa foi realizado:
                                         filtroTipo: tipoData,
@@ -431,13 +434,13 @@ module.exports = {
             agenda_cobrarextra: true
         })
         .then((agendas) => {
-            console.log(`Encontrados ${agendas.length} 'extras' (agendas).`);
+            //console.log(`Encontrados ${agendas.length} 'extras' (agendas).`);
             // --- Nova Parte: Carregar Atendimentos ---
             // Após carregar os 'extras' (agendas), carregamos os atendimentos
             // que estão relacionados a esses extras.
             // Precisamos dos IDs dos extras para filtrar os atendimentos.
             const extraIds = agendas.map(extra => extra._id);
-            console.log("IDs dos extras encontrados:", extraIds);
+            //console.log("IDs dos extras encontrados:", extraIds);
 
             // Carregar atendimentos relacionados aos extras encontrados
             // Verifica se há extras para evitar uma consulta desnecessária ao banco
@@ -458,7 +461,7 @@ module.exports = {
                 a.extra_data_dia = fncGeral.getDataFMT(data); // Formata data como string legível
                 // --- Adicionando log para contar atendimentos por extra ---
                 // Esta parte é apenas para log. O cálculo real será feito após carregar os atends.
-                // console.log(`Extra ID ${a._id} agendado para ${a.extra_data_dia} às ${a.extra_hora}`);
+                // //console.log(`Extra ID ${a._id} agendado para ${a.extra_data_dia} às ${a.extra_hora}`);
                 // -----------------------------------------
             });
 
@@ -488,13 +491,13 @@ module.exports = {
                                     .then((ano) => {
                                         // --- Nova Parte: Esperar os atendimentos e então renderizar ---
                                         atendimentosPromise.then((atendimentos) => {
-                                            console.log(`Encontrados ${atendimentos.length} atendimentos relacionados aos extras.`);
+                                            //console.log(`Encontrados ${atendimentos.length} atendimentos relacionados aos extras.`);
                                             
                                             // --- Adicionando log para contar atendimentos por extra ---
                                             // Isso ajudará a verificar se os atendimentos estão sendo vinculados corretamente.
                                             extraIds.forEach(extraId => {
                                                 const count = atendimentos.filter(a => a.atend_extraid && a.atend_extraid.toString() === extraId.toString()).length;
-                                                console.log(`Extra ID ${extraId}: ${count} atendimento(s) vinculado(s)`);
+                                                //console.log(`Extra ID ${extraId}: ${count} atendimento(s) vinculado(s)`);
                                             });
                                             // -----------------------------------------
 
@@ -509,6 +512,7 @@ module.exports = {
                                                 salas: salas,
                                                 terapias: terapias,
                                                 convs: convs,
+                                                anos: ano,
                                                 atends: atendimentos, // <--- Passando os atendimentos filtrados para a view
                                                 flash,
                                                 // Adicione estas variáveis para exibir que tipo de pesquisa foi realizado:
@@ -529,6 +533,7 @@ module.exports = {
                                                 salas: salas,
                                                 terapias: terapias,
                                                 convs: convs,
+                                                anos: ano,
                                                 atends: [], // Passa array vazio em caso de erro
                                                 flash: new Resposta("Erro ao carregar atendimentos", false),
                                                 filtroTipo: tipoData,
@@ -567,7 +572,18 @@ module.exports = {
                                         Conv.find().then((conv)=>{
                                             Atend.find().then((atend)=>{
                                             conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                        res.render('atendimento/extra/extraLisctrl', {extras: extra, atends: atend, anos: ano, benes: bene, usuarios: usuario, horaages: horaage, salas: sala, terapias: terapia, convs: conv, flash})
+                                                res.render('atendimento/extra/extraLisctrl', {
+                                                    extras: extra, 
+                                                    atends: atend, 
+                                                    anos: ano, 
+                                                    benes: bene, 
+                                                    usuarios: usuario, 
+                                                    horaages: horaage, 
+                                                    salas: sala, 
+                                                    terapias: terapia, 
+                                                    convs: conv, 
+                                                    flash 
+                                                })
         })})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -751,168 +767,168 @@ module.exports = {
     },
 
   controleExtra(req, res, resposta) {
-    const flash = new Resposta();
+        const flash = new Resposta();
 
-    try {
-        console.log("🔧 Iniciando controle de extras - Buscando dados...");
+        try {
+            console.log("🔧 Iniciando controle de extras - Buscando dados...");
 
-        const hoje = new Date();
-        const mesAtual = hoje.getMonth();      // 0 a 11
-        const anoAtual = hoje.getFullYear();
+            const hoje = new Date();
+            const mesAtual = hoje.getMonth();      // 0 a 11
+            const anoAtual = hoje.getFullYear();
 
-        // --- Promises para buscar todos os dados necessários ---
-        Promise.all([
-            Extra.find(),
-            Bene.find(),
-            Usuario.find({
-                usuario_status: "Ativo",
-                $or: [
-                    { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                    { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                ]
-            }),
-            Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }),
-            Sala.find(),
-            Terapia.find(),
-            Conv.find(),
-            Ano.find(),
-            Atend.find() // Todos os atendimentos
-        ])
-        .then(([extras, benes, usuarios, horaages, salas, terapias, convs, anos, atends]) => {
-            console.log(`✅ Dados carregados: ${extras.length} extras, ${atends.length} atendimentos`);
+            // --- Promises para buscar todos os dados necessários ---
+            Promise.all([
+                Extra.find(),
+                Bene.find(),
+                Usuario.find({
+                    usuario_status: "Ativo",
+                    $or: [
+                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                    ]
+                }),
+                Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }),
+                Sala.find(),
+                Terapia.find(),
+                Conv.find(),
+                Ano.find(),
+                Atend.find() // Todos os atendimentos
+            ])
+            .then(([extras, benes, usuarios, horaages, salas, terapias, convs, anos, atends]) => {
+                console.log(`✅ Dados carregados: ${extras.length} extras, ${atends.length} atendimentos`);
 
-            // --- Converter todos os documentos Mongoose para objetos simples com _id como string ---
-            const extrasObj = extras.map(doc => {
-                const obj = doc.toObject();
-                obj._id = obj._id.toString();
-                if (obj.extra_beneid) obj.extra_beneid = obj.extra_beneid.toString();
-                if (obj.extra_convid) obj.extra_convid = obj.extra_convid.toString();
-                if (obj.extra_terapiaid) obj.extra_terapiaid = obj.extra_terapiaid.toString();
-                // ✅ Corrigido: campos de usuário
-                if (obj.extra_usuid) obj.extra_usuid = obj.extra_usuid.toString();       // Terapeuta do extra
-                if (obj.extra_usucad) obj.extra_usucad = obj.extra_usucad.toString();   // Quem cadastrou
-                if (obj.extra_usuedi) obj.extra_usuedi = obj.extra_usuedi.toString();   // Quem editou
-                return obj;
-            });
+                // --- Converter todos os documentos Mongoose para objetos simples com _id como string ---
+                const extrasObj = extras.map(doc => {
+                    const obj = doc.toObject();
+                    obj._id = obj._id.toString();
+                    if (obj.extra_beneid) obj.extra_beneid = obj.extra_beneid.toString();
+                    if (obj.extra_convid) obj.extra_convid = obj.extra_convid.toString();
+                    if (obj.extra_terapiaid) obj.extra_terapiaid = obj.extra_terapiaid.toString();
+                    // ✅ Corrigido: campos de usuário
+                    if (obj.extra_usuid) obj.extra_usuid = obj.extra_usuid.toString();       // Terapeuta do extra
+                    if (obj.extra_usucad) obj.extra_usucad = obj.extra_usucad.toString();   // Quem cadastrou
+                    if (obj.extra_usuedi) obj.extra_usuedi = obj.extra_usuedi.toString();   // Quem editou
+                    return obj;
+                });
 
-            const usuariosObj = usuarios.map(doc => {
-                const obj = doc.toObject();
-                obj._id = obj._id.toString();
-                return obj;
-            });
+                const usuariosObj = usuarios.map(doc => {
+                    const obj = doc.toObject();
+                    obj._id = obj._id.toString();
+                    return obj;
+                });
 
-            const benesObj = benes.map(doc => ({ ...doc.toObject(), _id: doc._id.toString() }));
-            const convsObj = convs.map(doc => ({ ...doc.toObject(), _id: doc._id.toString() }));
-            const terapiasObj = terapias.map(doc => ({ ...doc.toObject(), _id: doc._id.toString() }));
+                const benesObj = benes.map(doc => ({ ...doc.toObject(), _id: doc._id.toString() }));
+                const convsObj = convs.map(doc => ({ ...doc.toObject(), _id: doc._id.toString() }));
+                const terapiasObj = terapias.map(doc => ({ ...doc.toObject(), _id: doc._id.toString() }));
 
-            // --- Filtrar extras do mês atual ---
-            const extrasFiltrados = extrasObj.filter(extra => {
-                if (!extra.extra_data) return false;
-                const data = new Date(extra.extra_data);
-                return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
-            });
+                // --- Filtrar extras do mês atual ---
+                const extrasFiltrados = extrasObj.filter(extra => {
+                    if (!extra.extra_data) return false;
+                    const data = new Date(extra.extra_data);
+                    return data.getMonth() === mesAtual && data.getFullYear() === anoAtual;
+                });
 
-            console.log(`📅 ${extrasFiltrados.length} extras encontrados no mês ${mesAtual + 1}/${anoAtual}`);
+                console.log(`📅 ${extrasFiltrados.length} extras encontrados no mês ${mesAtual + 1}/${anoAtual}`);
 
-            // --- Criar mapa de atendimentos por extra_id para busca rápida ---
-            const atendsObj = atends.map(doc => {
-                const obj = doc.toObject();
-                obj._id = obj._id.toString();
-                if (obj.atend_extraid) obj.atend_extraid = obj.atend_extraid.toString();
-                if (obj.atend_beneid) obj.atend_beneid = obj.atend_beneid.toString();
-                if (obj.atend_convid) obj.atend_convid = obj.atend_convid.toString();
-                if (obj.atend_terapiaid) obj.atend_terapiaid = obj.atend_terapiaid.toString();
-                if (obj.atend_terapeutaid) obj.atend_terapeutaid = obj.atend_terapeutaid.toString();
-                if (obj.atend_usuidedi) obj.atend_usuidedi = obj.atend_usuidedi.toString();
-                // Formata a data do atendimento
-                obj.atendDataFor = obj.atend_atenddata
-                    ? new Date(obj.atend_atenddata).toISOString().slice(0, 10)
-                    : "";
-                return obj;
-            });
+                // --- Criar mapa de atendimentos por extra_id para busca rápida ---
+                const atendsObj = atends.map(doc => {
+                    const obj = doc.toObject();
+                    obj._id = obj._id.toString();
+                    if (obj.atend_extraid) obj.atend_extraid = obj.atend_extraid.toString();
+                    if (obj.atend_beneid) obj.atend_beneid = obj.atend_beneid.toString();
+                    if (obj.atend_convid) obj.atend_convid = obj.atend_convid.toString();
+                    if (obj.atend_terapiaid) obj.atend_terapiaid = obj.atend_terapiaid.toString();
+                    if (obj.atend_terapeutaid) obj.atend_terapeutaid = obj.atend_terapeutaid.toString();
+                    if (obj.atend_usuidedi) obj.atend_usuidedi = obj.atend_usuidedi.toString();
+                    // Formata a data do atendimento
+                    obj.atendDataFor = obj.atend_atenddata
+                        ? new Date(obj.atend_atenddata).toISOString().slice(0, 10)
+                        : "";
+                    return obj;
+                });
 
-            const atendsPorExtraId = new Map();
-            atendsObj.forEach(atend => {
-                const extraId = atend.atend_extraid;
-                if (extraId) {
-                    if (!atendsPorExtraId.has(extraId)) {
-                        atendsPorExtraId.set(extraId, []);
+                const atendsPorExtraId = new Map();
+                atendsObj.forEach(atend => {
+                    const extraId = atend.atend_extraid;
+                    if (extraId) {
+                        if (!atendsPorExtraId.has(extraId)) {
+                            atendsPorExtraId.set(extraId, []);
+                        }
+                        atendsPorExtraId.get(extraId).push(atend);
                     }
-                    atendsPorExtraId.get(extraId).push(atend);
-                }
-            });
+                });
 
-            // --- Função auxiliar para formatar data ---
-            const formatarData = (data) => {
-                return data ? new Date(data).toISOString().slice(0, 10) : "";
-            };
-
-            // --- Mapear extras com dados populados ---
-            const extrasPopulados = extrasFiltrados.map(extra => {
-                // Buscar entidades relacionadas usando IDs como string
-                const bene = benesObj.find(b => b._id === extra.extra_beneid);
-                const conv = convsObj.find(c => c._id === extra.extra_convid);
-                const terapia = terapiasObj.find(t => t._id === extra.extra_terapiaid);
-
-                // ✅ Corrigido: uso dos campos corretos
-                const terapeuta = usuariosObj.find(u => u._id === extra.extra_usuid);         // Terapeuta vinculado ao extra
-                const usuarioCad = usuariosObj.find(u => u._id === extra.extra_usucad);     // Quem cadastrou
-                const usuarioEdi = usuariosObj.find(u => u._id === extra.extra_usuedi);     // Quem editou
-                const usuario = usuariosObj.find(u => u._id === extra.extra_usuid);         // Mesmo que terapeuta
-
-                // Contar atendimentos associados
-                const atendsDoExtra = atendsPorExtraId.get(extra._id) || [];
-                const countAtends = atendsDoExtra.length;
-
-                return {
-                    ...extra,
-                    // Datas formatadas
-                    extraDatafor: formatarData(extra.extra_data),
-                    extraDatacadfor: formatarData(extra.extra_datacad),
-                    extraDataedifor: formatarData(extra.extra_dataedi),
-                    // Nomes populados
-                    extraTeraputa: terapeuta?.usuario_nome || "N/A",        // Terapeuta do extra
-                    extraUsunome: usuario?.usuario_nome || "N/A",           // Quem gerou (mesmo que terapeuta)
-                    extraUsucadnome: usuarioCad?.usuario_nome || "N/A",     // Quem cadastrou
-                    extrausuedinome: usuarioEdi?.usuario_nome || "N/A",     // Quem editou
-                    bene_nome: bene?.bene_nome || "N/A",
-                    conv_nome: conv?.conv_nome || "N/A",
-                    terapia_nome: terapia?.terapia_nome || "N/A",
-                    // Quantidade de atendimentos
-                    countAtends
+                // --- Função auxiliar para formatar data ---
+                const formatarData = (data) => {
+                    return data ? new Date(data).toISOString().slice(0, 10) : "";
                 };
+
+                // --- Mapear extras com dados populados ---
+                const extrasPopulados = extrasFiltrados.map(extra => {
+                    // Buscar entidades relacionadas usando IDs como string
+                    const bene = benesObj.find(b => b._id === extra.extra_beneid);
+                    const conv = convsObj.find(c => c._id === extra.extra_convid);
+                    const terapia = terapiasObj.find(t => t._id === extra.extra_terapiaid);
+
+                    // ✅ Corrigido: uso dos campos corretos
+                    const terapeuta = usuariosObj.find(u => u._id === extra.extra_usuid);         // Terapeuta vinculado ao extra
+                    const usuarioCad = usuariosObj.find(u => u._id === extra.extra_usucad);     // Quem cadastrou
+                    const usuarioEdi = usuariosObj.find(u => u._id === extra.extra_usuedi);     // Quem editou
+                    const usuario = usuariosObj.find(u => u._id === extra.extra_usuid);         // Mesmo que terapeuta
+
+                    // Contar atendimentos associados
+                    const atendsDoExtra = atendsPorExtraId.get(extra._id) || [];
+                    const countAtends = atendsDoExtra.length;
+
+                    return {
+                        ...extra,
+                        // Datas formatadas
+                        extraDatafor: formatarData(extra.extra_data),
+                        extraDatacadfor: formatarData(extra.extra_datacad),
+                        extraDataedifor: formatarData(extra.extra_dataedi),
+                        // Nomes populados
+                        extraTeraputa: terapeuta?.usuario_nome || "N/A",        // Terapeuta do extra
+                        extraUsunome: usuario?.usuario_nome || "N/A",           // Quem gerou (mesmo que terapeuta)
+                        extraUsucadnome: usuarioCad?.usuario_nome || "N/A",     // Quem cadastrou
+                        extrausuedinome: usuarioEdi?.usuario_nome || "N/A",     // Quem editou
+                        bene_nome: bene?.bene_nome || "N/A",
+                        conv_nome: conv?.conv_nome || "N/A",
+                        terapia_nome: terapia?.terapia_nome || "N/A",
+                        // Quantidade de atendimentos
+                        countAtends
+                    };
+                });
+
+                console.log(`✅ ${extrasPopulados.length} extras populados com sucesso.`);
+
+                // --- Renderizar a view ---
+                res.render('atendimento/extra/extraControle', {
+                    extras: extrasPopulados,
+                    benes: benesObj,
+                    usuarios: usuariosObj,
+                    horaages,
+                    salas,
+                    terapias: terapiasObj,
+                    convs: convsObj,
+                    anos,
+                    atends: Array.from(atendsPorExtraId.values()).flat(),
+                    flash
+                });
+
+            })
+            .catch(err => {
+                console.error("❌ Erro ao carregar dados:", err);
+                console.error(err.stack);
+                req.flash("error_message", "Erro ao carregar os dados. Tente novamente.");
+                res.redirect('/admin/erro');
             });
 
-            console.log(`✅ ${extrasPopulados.length} extras populados com sucesso.`);
-
-            // --- Renderizar a view ---
-            res.render('atendimento/extra/extraControle', {
-                extras: extrasPopulados,
-                benes: benesObj,
-                usuarios: usuariosObj,
-                horaages,
-                salas,
-                terapias: terapiasObj,
-                convs: convsObj,
-                anos,
-                atends: Array.from(atendsPorExtraId.values()).flat(),
-                flash
-            });
-
-        })
-        .catch(err => {
-            console.error("❌ Erro ao carregar dados:", err);
-            console.error(err.stack);
-            req.flash("error_message", "Erro ao carregar os dados. Tente novamente.");
+        } catch (error) {
+            console.error("❌ Erro inesperado no controleExtra:", error);
+            req.flash("error_message", "Erro interno.");
             res.redirect('/admin/erro');
-        });
-
-    } catch (error) {
-        console.error("❌ Erro inesperado no controleExtra:", error);
-        req.flash("error_message", "Erro interno.");
-        res.redirect('/admin/erro');
-    }
-},
+        }
+    },
     controleExtraFil(req, res, resposta){ //Extras exportados para o controle dos extras, aguardando auditoria e exporta para os atendimentos(filtrado)
         let flash = new Resposta();
         Extra.find().then((extra) =>{
@@ -1079,20 +1095,19 @@ module.exports = {
             }
         })
     },
-  
-  
     /**
      * Função que copia agendamentos extras com base nos filtros do formulário
      */
-   extraCopiarOld: async (req, res) => {
+   extraCopiarOLD: async (req, res) => {
     try {
-        const { tipoData, anoAtend, mesAtend, dataFil } = req.body;
-
+        const {  anoAtendcopia, mesAtendcopia, dataFil } = req.body;
+        console.log("ano:", anoAtendcopia );
+        console.log("Mês:", mesAtendcopia );
         let dataIni, dataFim;
 
         if (tipoData === "Ano/Mes") {
-            const ano = parseInt(anoAtend);
-            const mes = parseInt(mesAtend);
+            const ano = parseInt(anoAtendcopia);
+            const mes = parseInt(mesAtendcopia);
 
             const primeiroDia = new Date(Date.UTC(ano, mes, 1));
             const ultimoDia = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999));
@@ -1246,45 +1261,57 @@ module.exports = {
 },
 extraCopiar: async (req, res) => {
     try {
-        // 🗓️ Sempre usar o mês e ano atual
-        const hoje = new Date();
-        const ano = hoje.getUTCFullYear();
-        const mes = hoje.getUTCMonth(); // zero-based (janeiro = 0)
+        const { anoAtend, mesAtend } = req.body;
 
-        // 🧮 Define o primeiro e último dia do mês atual (em UTC)
+        // 🔎 Validação dos dados recebidos
+        if (!anoAtend || !mesAtend || isNaN(anoAtend) || isNaN(mesAtend)) {
+            console.log("❌ Dados inválidos recebidos:", { anoAtendcopia, mesAtendcopia });
+            req.flash("error_message", "Ano ou mês inválido.");
+            return res.redirect('/atendimento/extra/lisF');
+        }
+
+        const ano = parseInt(anoAtend);
+        const mes = parseInt(mesAtend); // 0 = Janeiro, ..., 11 = Dezembro
+
+        console.log(`🔍 [extraCopiar] Recebido: ano=${ano}, mês=${mes}`);
+
+        // 📅 Cria o intervalo de datas em UTC
         const dataIni = new Date(Date.UTC(ano, mes, 1, 0, 0, 0, 0)).toISOString();
         const dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
 
-        // 🔍 LOGS PARA VERIFICAÇÃO
-        console.log("🔍 [extraCopiar] Filtro automático do mês atual:");
-        console.log("➡️ Data Inicial:", dataIni);
-        console.log("➡️ Data Final:", dataFim);
+        console.log(`📅 Filtro aplicado: ${dataIni} até ${dataFim}`);
 
-        // 🎯 Buscar agendamentos extras do mês atual
+        // 🎯 Busca os agendamentos extras no mês
         const agendas = await Agenda.find({
             agenda_data: { $gte: dataIni, $lte: dataFim },
             agenda_extra: true,
             agenda_cobrarextra: true
         });
 
-        console.log(`✅ [extraCopiar] Agendamentos encontrados: ${agendas.length}`);
+        console.log(`✅ Encontrados ${agendas.length} agendamentos para copiar.`);
 
-        if (!agendas.length) {
-            return res.status(404).json({ sucesso: false, texto: 'Nenhum agendamento encontrado para o mês atual.' });
+        if (agendas.length === 0) {
+            req.flash("info_message", "Nenhum agendamento encontrado para exportar no período selecionado.");
+            return res.redirect('/atendimento/extra/lisF');
         }
 
-        const usuarioId = req.user._id; // ⚠️ Ajuste conforme sistema de autenticação
+        // 🧑‍💼 ID do usuário logado
+        const usuarioId = req.user._id;
         const agora = new Date();
+        const dataExportacao = agora.toISOString().split('T')[0];
+        const horaExportacao = `${agora.getUTCHours().toString().padStart(2, '0')}:${agora.getUTCMinutes().toString().padStart(2, '0')}`;
 
-        // 🧱 Mapeamento para criação dos registros Extra
+        // 🧱 Prepara os novos registros Extra
+         // Mapeia e cria objetos Extra
         const extrasParaInserir = agendas.map(a => {
             const dataAgenda = new Date(a.agenda_data);
             const hora = dataAgenda.getUTCHours().toString().padStart(2, '0');
             const minuto = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+
             const extra_copiado = `${dataAgenda.toISOString().split('T')[0]}_${hora}:${minuto}_${a.agenda_beneid}`;
 
-            return new Extra({
-                extra_data: a.agenda_data,
+            return new ExtraModel({
+                extra_data: a.agenda_data, // ✅ correto
                 extra_hora: `${hora}:${minuto}`,
                 extra_data_semana: a.agenda_data_semana,
                 extra_data_dia: fncGeral.getDataFMT(dataAgenda),
@@ -1320,7 +1347,7 @@ extraCopiar: async (req, res) => {
                 extra_log: a.agenda_log,
                 extra_usucad: a.agenda_usucad,
 
-                // Campos próprios do Extra
+                // Campos exclusivos para Extra
                 extra_tipo: "Padrão",
                 extra_auditado: false,
                 extra_auditadoObs: "",
@@ -1333,34 +1360,40 @@ extraCopiar: async (req, res) => {
             });
         });
 
-        // 💾 Inserção com tratamento de duplicidade
-        const resultados = [];
+        // 🔒 Evita duplicatas: verifica no banco quais já foram copiados
+        const existentes = await ExtraModel.find({
+            extra_copiado: { $in: extrasParaInserir.map(e => e.extra_copiado) }
+        }).select('extra_copiado');
 
-        for (const extra of extrasParaInserir) {
-            try {
-                await extra.save();
-                resultados.push({ sucesso: true, extraId: extra._id });
-            } catch (err) {
-                if (err.code === 11000) {
-                    console.warn(`⚠️ Duplicado ignorado: ${extra.extra_copiado}`);
-                    resultados.push({ sucesso: false, erro: `Duplicado: ${extra.extra_copiado}` });
-                } else {
-                    console.error("❌ Erro ao salvar:", err);
-                    resultados.push({ sucesso: false, erro: "Erro ao salvar" });
-                }
-            }
+        const jaExistem = new Set(existentes.map(e => e.extra_copiado));
+        const novosExtras = extrasParaInserir.filter(e => !jaExistem.has(e.extra_copiado));
+
+        console.log(`🟡 ${jaExistem.size} registros já foram copiados anteriormente.`);
+        console.log(`🟢 ${novosExtras.length} novos registros serão inseridos.`);
+
+        if (novosExtras.length === 0) {
+            req.flash("info_message", "Todos os agendamentos já foram exportados para Extra neste mês.");
+            return res.redirect('/atendimento/extra/lisF');
         }
 
-        req.flash("success_message", "Cópias realizadas com sucesso!");
-        res.redirect('/atendimento/extra/lisctrl');
+        // 💾 Insere todos os novos registros
+        await ExtraModel.insertMany(novosExtras);
+
+        console.log(`✅ ${novosExtras.length} novos registros inseridos em tb_extra.`);
+
+       return res.json({
+            sucesso: true,
+            mensagem: `Exportação concluída! ${novosExtras.length} novos registros criados.`,
+            redirectUrl: '/atendimento/extra/lisF'
+        });     
 
     } catch (error) {
-        console.error("❌ Erro em extraCopiar:", error);
-        req.flash("error_message", "Houve um erro ao copiar os registros.");
-        res.redirect('/admin/erro');
+       return res.status(500).json({
+            sucesso: false,
+            mensagem: 'Erro ao copiar registros.'
+        });
     }
 },
-
     atualizaExtra(req,res){
         let resultado
         let flash = new Resposta()

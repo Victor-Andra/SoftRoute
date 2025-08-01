@@ -43,7 +43,7 @@ const ExtraSchema = mongoose.Schema({
     extra_tipo: { type: String, required: false },
     extra_auditado: { type: Boolean, required: false },
     extra_auditadoObs: { type: String, required: false },
-    extra_copiado: { type: String, required: true, unique: true }, // Campo único: extra_data + extra_hora + extra_beneid
+    extra_copiado: { type: String, required: true }, // Campo único: extra_data + extra_hora + extra_beneid
     extra_dtaExportado: { type: String, required: false }, // Data da cópia
     extra_horaExportado: { type: String, required: false }, // Hora da cópia
     extra_usuidExportou: { type: ObjectId, required: false }, // Quem copiou (usuário atual)

@@ -46,7 +46,14 @@
 				font-size: 10px;
 			}
 		</style>
-		
+		<script>
+function atualizaCampos() {
+    document.getElementById('anoAtend').value = document.getElementById('anoSelect').value;
+    document.getElementById('mesAtend').value = document.getElementById('mesSelect').value;
+}
+// Inicializa
+atualizaCampos();
+</script>
 		<script type="text/javascript">
 
 			function ajustaData(){
@@ -206,55 +213,90 @@
 										</thead>
 										<tbody>
 											<tr>
-											<td>
-												<div class="input-group">
-													<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
-														<option selected value="Ano/Mes">Ano/Mês</option>
-														<option value="Semana">Semana</option>
-														
-													</select>
-												</div>
-											</td>
-											<td>
-												<div id="divAnoAtend">
-													<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
-														{{#each anos}}
-															<option value="{{ano_nome}}">{{ano_nome}}</option>
-														{{/each}}
-													</select>
-												</div>
-											</td>
-											<td>
-												<div id="divMesAtend">
-													<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
-														<option value="0">Janeiro</option>
-														<option value="1">Fevereiro</option>
-														<option value="2">Março</option>
-														<option value="3">Abril</option>
-														<option value="4">Maio</option>
-														<option value="5">Junho</option>
-														<option value="6">Julho</option>
-														<option value="7">Agosto</option>
-														<option value="8">Setembro</option>
-														<option value="9">Outubro</option>
-														<option value="10">Novembro</option>
-														<option value="11">Dezembro</option>
-													</select>
-												</div>
-											</td>
-											
-											<td>
-												<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info">
-												<i class="ace-icon fa fa-search-plus"></i>
-												Pesquisar
-												</button>
-											</td>
-											<td>
-												
-											</td>
+												<td>
+													<div class="input-group">
+														<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+															<option selected value="Ano/Mes">Ano/Mês</option>
+															<option value="Semana">Semana</option>
+															
+														</select>
+													</div>
+												</td>
+												<td>
+													<div id="divAnoAtend">
+														<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
+															{{#each anos}}
+																<option value="{{ano_nome}}">{{ano_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
+												</td>
+												<td>
+													<div id="divMesAtend">
+														<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+															<option value="0">Janeiro</option>
+															<option value="1">Fevereiro</option>
+															<option value="2">Março</option>
+															<option value="3">Abril</option>
+															<option value="4">Maio</option>
+															<option value="5">Junho</option>
+															<option value="6">Julho</option>
+															<option value="7">Agosto</option>
+															<option value="8">Setembro</option>
+															<option value="9">Outubro</option>
+															<option value="10">Novembro</option>
+															<option value="11">Dezembro</option>
+														</select>
+													</div>
+												</td>
+												<td>
+													<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info">
+													<i class="ace-icon fa fa-search-plus"></i>
+													Pesquisar
+													</button>
+												</td>
+												<td>
+													
+												</td>
 											</tr>
 										</tbody>
 									</table>
+									<form action="/extra/extraCopia" method="POST">
+										<!-- Campos ocultos preenchidos pelo JS -->
+										<input type="text" name="anoAtend" id="anoAtend" value="2025">
+										<input type="text" name="mesAtend" id="mesAtend" value="6">
+
+										<!-- Selects visuais -->
+										<select id="anoSelect" class="chosen-select" onchange="atualizaCampos()">
+											{{#each anos}}
+												<option value="{{ano_nome}}">{{ano_nome}}</option>
+											{{/each}}
+										</select>
+
+										<select id="mesSelect" class="chosen-select" onchange="atualizaCampos()">
+											<option value="0">Janeiro</option>
+											<option value="1">Fevereiro</option>
+											<option value="2">Março</option>
+											<option value="3">Abril</option>
+											<option value="4">Maio</option>
+											<option value="5">Junho</option>
+											<option value="6">Julho</option>
+											<option value="7">Agosto</option>
+											<option value="8">Setembro</option>
+											<option value="9">Outubro</option>
+											<option value="10">Novembro</option>
+											<option value="11">Dezembro</option>
+										</select>
+
+										<button 
+											type="submit"
+											class="btn btn-xs btn-danger"
+											style="margin-left: 25px;"
+											onclick="return confirm('Exportar agendamentos extras?')">
+											<i class="ace-icon fa fa-cogs"></i>
+											Exportar Agendamentos para Extra
+										</button>
+									</form>
 								</div>
 							</div>
 						</form>

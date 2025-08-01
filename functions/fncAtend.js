@@ -1347,7 +1347,7 @@ module.exports = {
                                     sala.forEach((s)=>{
                                         if ((""+atend.atend_salaid+"") == (""+s._id+"")){
                                             if ((""+s.sala_nome+"").includes("Escola")){
-                                                rab.sala = "Escola";
+                                                rab.sala = "Escola ou Domicílio";
                                             } else {
                                                 rab.sala = "Clínica";
                                             }
