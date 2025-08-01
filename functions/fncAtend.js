@@ -1360,6 +1360,29 @@ module.exports = {
                                 rel.push(rab);
                                 rab = new RelAtendBene();
                             });
+                            rel.sort(function(a, b) {
+                                let d1 = new Date(fncGeral.getDataRevert(a.dt));
+                                let d2 = new Date(fncGeral.getDataRevert(b.dt));
+                                d1.setHours(d1.getHours() + 3);
+                                d2.setHours(d2.getHours() + 3);
+                                if (porHoras == "sim"){
+                                    let h1 = a.horaFim;
+                                    let h2 = b.horaFim;
+                                    d1.setHours(parseInt(h1.substring(0,2)));
+                                    d2.setHours(parseInt(h2.substring(0,2)));
+                                    d1.setMinutes(parseInt(h1.substring(3,5)));
+                                    d2.setMinutes(parseInt(h2.substring(3,5)));
+                                }
+                                if(d1 == d2){
+                                    return true;
+                                } else {
+                                    if(d1 < d2){
+                                        return -1;
+                                    } else {
+                                        return true;
+                                    }
+                                }
+                            });
                             res.render("atendimento/relatendvalBeneassin", {benes: bene, anos: ano, terapeutas: terapeuta, salas:sala, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome, porHoras, porSala})
                         })
                         })
