@@ -12,6 +12,7 @@ const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 const escolaClass = require("../models/escola")
+const anoClass = require("../models/ano")
 
 //Tabela Plano de Bordoamento 
 const Bordo = mongoose.model("tb_bordo")
@@ -22,6 +23,7 @@ const Conv = mongoose.model("tb_conv")
 const Usuario = mongoose.model("tb_usuario")
 const Terapia = mongoose.model("tb_terapia")
 const Escola = mongoose.model("tb_escola")
+const Ano = mongoose.model("tb_ano")
 
 //Funções auxiliares
 const respostaClass = require("../models/resposta")
@@ -53,6 +55,7 @@ module.exports = {
         console.log('listando Diários de Bordo')
         Bene.find({bene_status: "Ativo", bene_nome: { $not: /\./ }}).then((bene) => {
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+            Ano.find().then((ano) =>{
             Escola.find().then((escola) =>{
                 escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena a escola por nome
                 Usuario.findOne({"_id":usuarioAtual}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
@@ -68,8 +71,8 @@ module.exports = {
                             flash.texto = resposta.texto;
                             flash.sucesso = resposta.sucesso;
                         }
-                        res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, benes: bene, usuario, perfilAtual,flash})
-        })})})}).catch((err) =>{
+                        res.render('area/bordo/bordoLis', {escolas: escola, anos: ano, bordos: bordo, terapeutas: terapeuta, benes: bene, usuario, perfilAtual,flash})
+        })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")
             res.redirect('admin/erro')
@@ -238,6 +241,7 @@ module.exports = {
             bordo.forEach((c)=>{
                 c.bordo_ativ = fncGeral.getDataRevert(fncGeral.getData(c.bordo_dataativ))
             })
+            Ano.find().then((ano) =>{
             Bene.find().then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Escola.find().then((escola) =>{
@@ -247,8 +251,8 @@ module.exports = {
                         Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeutasina)=>{//Usuário c/ filtro de função = Terapeutas
                             terapeutasina.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                             console.log("Listagem Realizada Usuário!")
-                            res.render('area/bordo/bordoLis', {escolas: escola, bordos: bordo, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene, usuarioAtual, isAgendaTerapeuta})
-        })})})})}).catch((err) =>{
+                            res.render('area/bordo/bordoLis', {escolas: escola, anos: ano, bordos: bordo, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene, usuarioAtual, isAgendaTerapeuta})
+        })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")
             res.redirect('admin/erro')

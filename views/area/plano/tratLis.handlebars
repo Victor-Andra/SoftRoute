@@ -4,42 +4,96 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>Lista de Planos de Tratamentos</title>
-		<style>
-#dynamic-table {
-    table-layout: fixed;
-    width: 100%;
-}
+	<style>
+		#dynamic-table {
+			table-layout: fixed;
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 11px;
+		}
 
-/* Coluna 1 */
-#dynamic-table th:nth-child(1),
-#dynamic-table td:nth-child(1) {
-    width: 100px !important;
-}
+		/* === COLUNAS DE DATA - AINDA MAIS ESTREITAS === */
+		#dynamic-table th:nth-child(2), /* Data Plano */
+		#dynamic-table td:nth-child(2) {
+			width: 70px !important;
+			text-align: center;
+			white-space: normal;
+			word-wrap: break-word;
+		}
 
-/* Coluna 2 */
-#dynamic-table th:nth-child(2),
-#dynamic-table td:nth-child(2) {
-    width: 120px !important;
-}
+		#dynamic-table th:nth-child(10), /* Data cadastro */
+		#dynamic-table td:nth-child(10),
+		#dynamic-table th:nth-child(11), /* Data edição */
+		#dynamic-table td:nth-child(11) {
+			width: 70px !important;
+			text-align: center;
+			white-space: normal;
+			word-wrap: break-word;
+		}
 
-/* Coluna 3 */
-#dynamic-table th:nth-child(3),
-#dynamic-table td:nth-child(3) {
-    width: 250px !important;
-}
+		/* === COLUNA AÇÃO === */
+		#dynamic-table th:nth-child(12),
+		#dynamic-table td:nth-child(12) {
+			width: 80px !important;
+			text-align: center;
+			padding: 4px;
+		}
 
-/* Coluna 4 */
-#dynamic-table th:nth-child(4),
-#dynamic-table td:nth-child(4) {
-    width: 180px !important;
-}
+		/* === BENEFICIÁRIO - MAIOR ESPAÇO === */
+		#dynamic-table th:nth-child(3),
+		#dynamic-table td:nth-child(3) {
+			width: 180px !important;
+			word-wrap: break-word;
+			white-space: normal;
+			overflow: hidden;
+		}
 
-/* Coluna 5 */
-#dynamic-table th:nth-child(5),
-#dynamic-table td:nth-child(5) {
-    width: 200px !important;
-}
-</style>
+		/* === TERAPEUTAS (Padrão, IS, AVD) === */
+		#dynamic-table th:nth-child(4),
+		#dynamic-table td:nth-child(4),
+		#dynamic-table th:nth-child(6),
+		#dynamic-table td:nth-child(6),
+		#dynamic-table th:nth-child(8),
+		#dynamic-table td:nth-child(8) {
+			width: 120px !important;
+			word-wrap: break-word;
+			white-space: normal;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		/* === TERAPIAS (Padrão, IS, AVD) - QUEBRA FORÇADA MESMO SEM ESPAÇOS === */
+		#dynamic-table th:nth-child(5),
+		#dynamic-table td:nth-child(5),
+		#dynamic-table th:nth-child(7),
+		#dynamic-table td:nth-child(7),
+		#dynamic-table th:nth-child(9),
+		#dynamic-table td:nth-child(9) {
+			width: 130px !important;
+			word-break: break-all;        /* Quebra mesmo sem espaços */
+			white-space: normal;          /* Permite múltiplas linhas */
+			overflow: hidden;
+			text-overflow: ellipsis;
+			line-height: 1.3;
+			padding: 5px 4px;
+		}
+
+		/* === TIPO DE PLANO === */
+		#dynamic-table th:nth-child(1),
+		#dynamic-table td:nth-child(1) {
+			width: 90px !important;
+			text-align: center;
+		}
+
+		/* === AJUSTE GERAL DAS CÉLULAS === */
+		#dynamic-table td, 
+		#dynamic-table th {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			padding: 5px 4px;
+			line-height: 1.3;
+		}
+		</style>
 		<script type="text/javascript">
 			function ocultaEditar(){
 				let biscoito = procuraBiscoito("lvlUsu");
@@ -112,25 +166,6 @@
 				}
 			}
 
-			function ajustaData(){
-				let fullDatas = document.getElementsByName("fullData");
-				fullDatas.forEach((elementox)=>{
-					let id = "atenddata"+elementox.id;
-					let dat = new Date(elementox.value);
-					let mes = (dat.getMonth()+1).toString();
-					let dia = (dat.getUTCDate()).toString();
-
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-
-					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
-				})
-			}
-			
 			function ocultaDelete(){
 				let perfilAtual = document.getElementById("perfilAtual").value;
 				if (perfilAtual == '62421801a12aa557219a0fb9'){
@@ -141,7 +176,7 @@
 				}
 			}
 
-			function formataData(){
+			function formataDataold(){
 				let dt = document.getElementById('dataFil').value;
 				let dia = dt.substring(8,10);
 				let mes = dt.substring(5,7);
@@ -149,6 +184,14 @@
 				let fulldate=(ano+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
 				document.getElementById('dataFinal').value = fulldate;
 				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+			}
+			function formataData(){//Melhorada se  haver campo com resultado vazio 05/08/2025 11:00
+				let dtInput = document.getElementById('dataFil');
+				let dt = dtInput.value;
+				if (!dt) return;
+				let [ano, mes, dia] = dt.split("-");
+				let fulldate = `${ano}-${mes}-${dia} 00:00:00.000Z`;
+				document.getElementById('dataFinal').value = fulldate;
 			}
 		</script>
 	</head>
@@ -166,7 +209,7 @@
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<div id="divCarrega" class="hidden">
-						<input id="perfilAtual" name="perfilAtual" value="{{perfilAtual}}" />
+						<input type="hidden" id="perfilAtual" name="perfilAtual" value="{{perfilAtual}}" />
 					</div>
 					{{#compareString flash.sucesso "true"}}
 						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
@@ -332,18 +375,18 @@
 												</tr>
 												<tr role="row">
 													
-													<th style="width: 80px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo Plano:</th>
-													<th style="width: 100px;" class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Plano:</th>
-													<th style="width: 200px;" class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário:</th>
-													<th style="width: 200px;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta:</th>
-													<th style="width: 150px; overflow-wrap: break-word; white-space: normal;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo Plano:</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Plano:</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário:</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta:</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta IS:</th>
-													<th style="width: 150px; overflow-wrap: break-word; white-space: normal;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta AVD:</th>
-													<th style="width: 150px; overflow-wrap: break-word; white-space: normal;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
-													<th style="width: 100px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro:</th>
-													<th style="width: 100px;" class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data edição:</th>
-													<th style="width: 80px;">Ação</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro:</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data edição:</th>
+													<th >Ação</th>
 												</tr>
 											</thead>
 											<tbody style="font-size: 11px;">
@@ -351,8 +394,14 @@
 													
 														<tr role="row" class="odd">
 															
-															<td  ><span class="label label-sm label-warning arrowed">{{trat_planotipo}}</span></td>
-															<td  >{{tratdata}}</td>
+															<td>
+																{{#ifEqual this.trat_planotipo "Padrão"}}
+																	<span class="label label-sm label-warning arrowed">{{trat_planotipo}}</span>
+																{{else}}
+																	<span class="label label-sm label-danger arrowed">{{trat_planotipo}}</span>
+																{{/ifEqual}}
+															</td>
+															<td>{{tratdata}}</td>
 															<td>
 															{{#each ../benes}}
 																{{#ifEqual this._id ../trat_beneid}}
@@ -405,22 +454,14 @@
 															{{/if}}
 															</td>
 															<td>
-																<div class="action-buttons">
-																	<div class="action-buttons">
-																	
-																	<a class="green" href="/menu/area/plano/edi/{{_id}}">
+																<div class="action-buttons" style="display: flex; justify-content: center; gap: 8px;">
+																	<a class="green" href="/menu/area/plano/edi/{{_id}}" title="Editar">
 																		<i class="ace-icon fa fa-search bigger-130"></i>
 																	</a>
-																	<a class="pink" href="/menu/area/plano/imp/{{_id}}">
+																	<a class="pink" href="/menu/area/plano/imp/{{_id}}" title="Imprimir">
 																		<i class="ace-icon fa fa-file-pdf-o bigger-130"></i>
 																	</a>
-																	<!-- 
-																	<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
-																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																	</a>
-																	-->
 																</div>
-																
 															</td>
 														</tr>
 													

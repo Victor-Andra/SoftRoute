@@ -27,118 +27,10 @@
 			}
 		</style>
 		
-		<script type="text/javascript">
-
-			function ajustaData(){
-				let fullDatas = document.getElementsByName("fullData");
-				fullDatas.forEach((elementox)=>{
-					let id = "atenddata"+elementox.id;
-					let dat = new Date(elementox.value);
-					let mes = (dat.getMonth()+1).toString();
-					let dia = (dat.getUTCDate()).toString();
-
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-
-					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
-				})
-			}
-			function formataData(){
-				let tipo = document.getElementById("tipoData").value;
-				console.log("tipoData:"+tipoData);
-				if(tipo == "Ano/Mes"){
-					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
-					let mes = (dat.getUTCMonth()+1).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
-				} else if (tipo == "Semana"){
-					let dat = new Date(document.getElementById('dataFil').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
-				} else if (tipo == "Dia"){
-					let dat = new Date(document.getElementById('dataFil').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
-				}
-			}
-			function trocaFiltroData(){
-				let fill = document.getElementById("tipoData").value;
-				if(fill == "Ano/Mes"){
-					document.getElementById("divAnoAtend").hidden = false;
-					document.getElementById("divMesAtend").hidden = false;
-					document.getElementById("divDataFil").hidden = true;
-				} else if (fill == "Semana"){
-					document.getElementById("divAnoAtend").hidden = true;
-					document.getElementById("divMesAtend").hidden = true;
-					document.getElementById("divDataFil").hidden = false;
-				} else {
-					document.getElementById("divAnoAtend").hidden = true;
-					document.getElementById("divMesAtend").hidden = true;
-					document.getElementById("divDataFil").hidden = false;
-				}
-			}
-			
-			function carregaBody(){
-				trocaFiltroData();
-				formataData();
-				if (document.getElementById("carregaFiltro").value == "true"){
-					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
-					if(document.getElementById("tipoData").value == "Ano/Mes"){
-						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
-						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
-					} else if (document.getElementById("tipoData").value == "Semana"){
-						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
-					} else if (document.getElementById("tipoData").value == "Dia"){
-						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
-					}
-
-					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
-					if (document.getElementById("atendTipoPessoa").value == "Geral"){
-
-					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
-						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value
-					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
-						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
-					}
-
-				}
-			}
-			
-		</script>
-		
+	
 	</head>
 
-	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+	<body onload="javascript:controlaNave();" class="no-skin">
 		
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
@@ -149,7 +41,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Route</a>
 							</li>
-							<li class="active">Lista de Extras Previstos nos Agendamentos </li>
+							<li class="active">Lista de Extras Previstos nos Agendamentos</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#each error}}
@@ -163,10 +55,9 @@
 									<div class="row">
 										<div class="input-group">
 											<label>Tipo Filtro:&nbsp;</label>
-											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" >
 												<option selected value="Ano/Mes">Ano/Mês</option>
-												<option value="Semana">Semana</option>
-												<option value="Dia">Dia</option>
+												
 											</select>
 										</div>
 									</div>
@@ -176,7 +67,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label for="id-date-picker-1">Ano:&nbsp;</label>
-											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:formataData();">
+											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." >
 												{{#each anos}}
 													<option value="{{ano_nome}}">{{ano_nome}}</option>
 												{{/each}}
@@ -188,7 +79,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label for="id-date-picker-1">Mês:&nbsp;</label>
-											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" >
 												<option value="0">Janeiro</option>
 												<option value="1">Fevereiro</option>
 												<option value="2">Março</option>
@@ -205,13 +96,7 @@
 										</div>
 									</div>
 								</div>
-								<div id="divDataFil" class="col-xs-12 col-sm-2">
-									<div class="input-group">
-										<label>Data:&nbsp;</label>
-										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-										<input class="hidden" id="dataFinal" name="dataFinal" />
-									</div>
-								</div>
+								
 								
 								<div class="row">
 									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">

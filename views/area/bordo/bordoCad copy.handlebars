@@ -22,151 +22,6 @@
 				document.getElementById("usuarioAtual").value = document.getElementById(document.getElementById("bordoTerapeutaid").value).value;
 			}
 		</script>
-<script>
-function validarFormulario(event) {
-    event.preventDefault(); // Impede o envio imediato
-
-    let erros = [];
-    let avisos = [];
-
-    // === 1. Validar Beneficiário ===
-    const beneId = document.getElementById('bordoBeneid').value;
-    if (!beneId || beneId === '766f69643132333435366964') {
-        erros.push("O campo <strong>Beneficiário</strong> não pode ser nulo.");
-    }
-
-    // === 2. Validar Local do Atendimento ===
-    const atendem = document.getElementById('bordoAtendem').value;
-    if (!atendem || atendem === '766f69643132333435366964') {
-        erros.push("O campo <strong>Atendimento realizado em</strong> deve ser preenchido.");
-    } else if (atendem === 'Externo') {
-        const ondefoi = document.getElementById('bordoOndefoi').value;
-        if (!ondefoi || ondefoi.trim() === '' || ondefoi === '-') {
-            erros.push("Como o atendimento foi <strong>Externo</strong>, você deve informar onde foi realizado no campo <strong>Onde foi feito</strong>.");
-        }
-    }
-
-    // === 3. Validar Nome da Escola (obrigatório se atendimento for em escola) ===
-	const escolaNome = document.getElementById('bordoEscolanome').value;
-	if (atendem === 'Escola') {
-		if (!escolaNome || escolaNome === '-' || escolaNome.trim() === '') {
-			erros.push("Como o atendimento foi em <strong>Escola</strong>, você deve selecionar o nome da escola no campo <strong>Escola</strong>.");
-		}
-	} else {
-		if (escolaNome && escolaNome !== '-' && escolaNome.trim() !== '') {
-			avisos.push("O campo <strong>Nome da Escola</strong> só deve ser preenchido se o atendimento for em <strong>Escola</strong>. Ele será ignorado.");
-		}
-	}
-
-    // === 4. Validar Data da Atividade (aviso se mês/ano divergirem da data atual) ===
-    const dataAtiv = document.getElementById('bordoDataativ').value;
-    if (dataAtiv) {
-        const dataAtivDate = new Date(dataAtiv);
-        const hoje = new Date();
-        const mesAtiv = dataAtivDate.getMonth();
-        const anoAtiv = dataAtivDate.getFullYear();
-        const mesHoje = hoje.getMonth();
-        const anoHoje = hoje.getFullYear();
-
-        if (anoAtiv !== anoHoje || mesAtiv !== mesHoje) {
-            avisos.push(`A data do atendimento (<strong>${dataAtiv}</strong>) é de um mês/ano diferente do atual. Confirme se está correta.`);
-        }
-    } else {
-        erros.push("O campo <strong>Data da Atividade</strong> é obrigatório.");
-    }
-
-    // === 5. Validar Frequência ===
-    const frequencia = document.getElementById('bordoFrequencia').value;
-    if (!frequencia || frequencia === '-' || frequencia === '766f69643132333435366964') {
-        erros.push("O campo <strong>Frequência</strong> deve ser preenchido.");
-    }
-
-    // === 6. Exibir alertas ===
-    limparAlertas(); // Remove alertas anteriores
-
-    if (erros.length > 0) {
-        exibirAlerta('danger', 'Você não pode salvar porque!', erros);
-        window.scrollTo(0, 0);
-        return false;
-    }
-
-    if (avisos.length > 0) {
-        exibirAlerta('warning', 'Você pode salvar, mas atenção aos motivos:', avisos, true);
-        window.scrollTo(0, 0);
-    } else {
-        document.getElementById('formDiarioBordo').submit();
-    }
-}
-
-// Função para exibir o alerta logo após o primeiro .widget-main
-function exibirAlerta(tipo, titulo, mensagens, comBotoes = false) {
-    const container = document.createElement('div');
-    container.id = 'alertContainer';
-    container.className = `alert alert-${tipo}`;
-    container.style.margin = '10px 0 15px 0';
-    container.style.display = 'block';
-
-    let html = `
-        <button type="button" class="close" data-dismiss="alert" onclick="this.parentElement.remove();">
-            <i class="ace-icon fa fa-times"></i>
-        </button>
-        <strong>${titulo}</strong><br>
-    `;
-
-    mensagens.forEach(msg => {
-        html += `${msg}<br>`;
-    });
-
-    if (comBotoes) {
-        html += `
-            <br>
-            <button type="button" id="btnConfirmarSalvar" class="btn btn-sm btn-success">
-                <i class="ace-icon fa fa-check"></i> Salvar Mesmo Assim
-            </button>
-            <button type="button" id="btnCancelarSalvar" class="btn btn-sm btn-light" style="margin-left: 10px;">
-                <i class="ace-icon fa fa-undo"></i> Voltar para Editar
-            </button>
-        `;
-    }
-
-    container.innerHTML = html;
-
-    // Insere o alerta logo após o primeiro .widget-main
-    const widgetMain = document.querySelector('.widget-main');
-    if (widgetMain) {
-        widgetMain.parentNode.insertBefore(container, widgetMain.nextSibling);
-    } else {
-        document.body.insertBefore(container, document.body.firstChild);
-    }
-
-    // Adiciona eventos aos botões (se houver)
-    if (comBotoes) {
-        document.getElementById('btnConfirmarSalvar').onclick = function () {
-            document.getElementById('formDiarioBordo').removeEventListener('submit', validarFormulario);
-            document.getElementById('formDiarioBordo').submit();
-        };
-        document.getElementById('btnCancelarSalvar').onclick = function () {
-            document.getElementById('alertContainer').remove();
-        };
-    }
-}
-
-// Função para remover alertas anteriores
-function limparAlertas() {
-    const antigo = document.getElementById('alertContainer');
-    if (antigo) antigo.remove();
-}
-
-// Adiciona o evento de validação ao formulário
-document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('formDiarioBordo');
-    if (form) {
-        form.addEventListener('submit', validarFormulario);
-    } else {
-        console.warn('Formulário com ID "formDiarioBordo" não encontrado.');
-    }
-});
-</script>
 	</head>
 
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
@@ -191,11 +46,10 @@ document.addEventListener('DOMContentLoaded', function () {
 						{{/each}}
 						<input id="bordoTerapeutaid" name="bordoTerapeutaid" readonly="true" value="{{usuarioAtual}}" />
 					</div>
-				
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form id="formDiarioBordo" class="form-horizontal" role="form"  action="/menu/area/bordo/add" method="POST">
+							<form class="form-horizontal" role="form"  action="/menu/area/bordo/add" method="POST">
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box" id="cabecalho" name="cabecalho">
 										<div class="widget-header">

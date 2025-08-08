@@ -4,6 +4,42 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>Lista de Planos de Tratamentos</title>
+		<style>
+#dynamic-table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+/* Coluna 1 */
+#dynamic-table th:nth-child(1),
+#dynamic-table td:nth-child(1) {
+    width: 100px !important;
+}
+
+/* Coluna 2 */
+#dynamic-table th:nth-child(2),
+#dynamic-table td:nth-child(2) {
+    width: 120px !important;
+}
+
+/* Coluna 3 */
+#dynamic-table th:nth-child(3),
+#dynamic-table td:nth-child(3) {
+    width: 250px !important;
+}
+
+/* Coluna 4 */
+#dynamic-table th:nth-child(4),
+#dynamic-table td:nth-child(4) {
+    width: 180px !important;
+}
+
+/* Coluna 5 */
+#dynamic-table th:nth-child(5),
+#dynamic-table td:nth-child(5) {
+    width: 200px !important;
+}
+</style>
 		<script type="text/javascript">
 			function ocultaEditar(){
 				let biscoito = procuraBiscoito("lvlUsu");
@@ -27,54 +63,7 @@
 					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
 				})
 			}
-			function formataData(){
-				let tipo = document.getElementById("tipoData").value;
-				console.log("tipoData:"+tipoData);
-				if(fill == "Ano"){
-					document.getElementById("divAnoBordo").hidden = false;
-					document.getElementById("divMesBordo").hidden = false;
-					document.getElementById("divDataFil").hidden = true;
-				} else if(tipo == "Ano/Mes"){
-					let dat = new Date(document.getElementById('anoBordo').value+"-"+document.getElementById('mesBordo').value+"-01 00:00:00.000Z");
-					let mes = (dat.getUTCMonth()+1).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
-				} else if (tipo == "Semana"){
-					let dat = new Date(document.getElementById('dataFil').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
-				} else if (tipo == "Dia"){
-					let dat = new Date(document.getElementById('dataFil').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
-				}
-			}
+			
 			function trocaFiltroData(){
 				let fill = document.getElementById("tipoData").value;
 				if(fill == "Ano"){
@@ -111,27 +100,8 @@
 			function carregaBody(){
 				trocaFiltroData();
 				trocaFilpessoa();
-				formataData();
-				if (document.getElementById("carregaFiltro").value == "true"){
-					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
-					if(document.getElementById("tipoData").value == "Ano/Mes"){
-						document.getElementById("anoBordo").value = document.getElementById("anoBordoFil").value;
-						document.getElementById("mesBordo").value = document.getElementById("mesBordoFil").value;
-					} else if (document.getElementById("tipoData").value == "Semana"){
-						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
-					} else if (document.getElementById("tipoData").value == "Dia"){
-						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
-					}
-
-					document.getElementById("tratTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
-					if (document.getElementById("tratTipoPessoa").value == "Geral"){
-
-					} else if (document.getElementById("tratTipoPessoa").value == "Beneficiario"){
-						document.getElementById("tratBeneficiario").value = document.getElementById("tratBeneficiarioFil").value
-					} else if (document.getElementById("tratTipoPessoa").value == "Terapeuta"){
-						document.getElementById("tratTerapeuta").value = document.getElementById("tratTerapeutaFil").value;
-					}
-				}
+				
+				
 				this.ocultaDelete();
 			}
 
@@ -142,74 +112,6 @@
 				}
 			}
 
-			function ajustaData(){
-				let fullDatas = document.getElementsByName("fullData");
-				fullDatas.forEach((elementox)=>{
-					let id = "atenddata"+elementox.id;
-					let dat = new Date(elementox.value);
-					let mes = (dat.getMonth()+1).toString();
-					let dia = (dat.getUTCDate()).toString();
-
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-
-					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
-				})
-			}
-			function formataData(){
-				let tipo = document.getElementById("tipoData").value;
-				console.log("tipoData:"+tipo);
-				if(tipo == "Ano/Mes"){
-					if (document.getElementById('anoAtend').value && document.getElementById('mesAtend').value){
-						let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
-						let mes = (dat.getUTCMonth()+1).toString();
-						let dia = (dat.getUTCDate()).toString();
-						if (mes.length == 1){
-							mes = "0"+mes;
-						}
-						if (dia.length == 1){
-							dia = "0"+dia;
-						}
-						let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-						document.getElementById('dataFinal').value = fulldate;
-						console.log("dataFinal:"+document.getElementById('dataFinal').value);
-					}
-				} else if (tipo == "Semana"){
-					if (document.getElementById('dataFil').value){
-						let dat = new Date(document.getElementById('dataFil').value);
-						let mes = (dat.getUTCMonth()).toString();
-						let dia = (dat.getUTCDate()).toString();
-						if (mes.length == 1){
-							mes = "0"+mes;
-						}
-						if (dia.length == 1){
-							dia = "0"+dia;
-						}
-						let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-						document.getElementById('dataFinal').value = fulldate;
-						console.log("dataFinal:"+document.getElementById('dataFinal').value);
-					}
-				} else if (tipo == "Dia"){
-					if (document.getElementById('dataFil').value){
-						let dat = new Date(document.getElementById('dataFil').value);
-						let mes = (dat.getUTCMonth()).toString();
-						let dia = (dat.getUTCDate()).toString();
-						if (mes.length == 1){
-							mes = "0"+mes;
-						}
-						if (dia.length == 1){
-							dia = "0"+dia;
-						}
-						let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-						document.getElementById('dataFinal').value = fulldate;
-						console.log("dataFinal:"+document.getElementById('dataFinal').value);
-					}
-				}
-			}
 			function ocultaDelete(){
 				let perfilAtual = document.getElementById("perfilAtual").value;
 				if (perfilAtual == '62421801a12aa557219a0fb9'){
@@ -219,12 +121,27 @@
 					console.log("NOT Ok")
 				}
 			}
+
+			function formataDataold(){
+				let dt = document.getElementById('dataFil').value;
+				let dia = dt.substring(8,10);
+				let mes = dt.substring(5,7);
+				let ano = dt.substring(0,4);
+				let fulldate=(ano+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+				document.getElementById('dataFinal').value = fulldate;
+				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+			}
+			function formataData(){//Melhorada se  haver campo com resultado vazio 05/08/2025 11:00
+				let dtInput = document.getElementById('dataFil');
+				let dt = dtInput.value;
+				if (!dt) return;
+				let [ano, mes, dia] = dt.split("-");
+				let fulldate = `${ano}-${mes}-${dia} 00:00:00.000Z`;
+				document.getElementById('dataFinal').value = fulldate;
+			}
 		</script>
 	</head>
-
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
-
-
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -238,7 +155,7 @@
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<div id="divCarrega" class="hidden">
-						<input id="perfilAtual" name="perfilAtual" value="{{perfilAtual}}" />
+						<input type="hidden" id="perfilAtual" name="perfilAtual" value="{{perfilAtual}}" />
 					</div>
 					{{#compareString flash.sucesso "true"}}
 						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
@@ -272,14 +189,14 @@
 					{{/compareString}}
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/plano/lisF" method="POST">
-							<div class="col-xs-12" class="row">
+							<div class="col-xs-12">
 								<div class="col-sm-2">
 									<div class="row">
 										<div class="input-group">
 											<label>Filtro por:&nbsp;</label>
-											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:trocaFiltroData()">
 												<option value="Ano">Ano</option>
-												<option value="Ano/Mes">Ano/Mês</option>
+												<option value="Ano/Mes" selected>Ano/Mês</option>
 												<option value="Semana">Semana</option>
 												<option value="Dia">Dia</option>
 											</select>
@@ -349,7 +266,7 @@
 											<select name="tratTipoPessoa" id="tratTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
 												<option value="Geral">Geral</option>
 												<option value="Beneficiario">Beneficiário</option>
-												O sistema não quer que funcione <option value="Terapeuta">Terapeuta</option>
+												<option value="Terapeuta">Terapeuta</option>
 											</select>
 										</div>
 									</div>
@@ -394,80 +311,94 @@
 								<!-- PAGE CONTENT BEGINS -->
 								<div class="row">
 									<div class="col-xs-12">
-										<div class="clearfix" >
-											<div class="pull-right tableTools-container">
-											</div>
-										</div>
-										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
-										</div>
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											<thead style="font-size: 11px;">
+												<tr>
+													<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="3" >Plano Tratamento</th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >Padrão</th>
+													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="4" >Ocupacional</th>
+													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" >Obs</th>
+												</tr>
 												<tr role="row">
-													<th class="center">
-														<label class="pos-rel">
-															<input type="checkbox" class="ace" />
-															<span class="lbl"></span>
-														</label>
-													</th>
-													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo Plano:</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Plano:</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário:</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta:</th>
-
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta IS:</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta AVD:</th>
 													
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro:</th>
-													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data edição:</th>
-													<th style="width: 100px;">Ação</th>
+													<th style="width: 120px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo Plano:</th>
+													<th style="width: 100px;" class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Plano:</th>
+													<th style="width: 200px;" class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário:</th>
+													<th style="width: 200px;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta:</th>
+													<th style="width: 150px; overflow-wrap: break-word; white-space: normal;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta IS:</th>
+													<th style="width: 150px; overflow-wrap: break-word; white-space: normal;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta AVD:</th>
+													<th style="width: 150px; overflow-wrap: break-word; white-space: normal;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
+													<th style="width: 100px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro:</th>
+													<th style="width: 100px;" class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data edição:</th>
+													<th style="width: 80px;">Ação</th>
 												</tr>
 											</thead>
 											<tbody style="font-size: 11px;">
 												{{#each trats}}
-													{{#ifEqual this.trat_planotipo 'Padrão'}}
+													
 														<tr role="row" class="odd">
-															<td class="center">
-																<label class="pos-rel">
-																	<input type="checkbox" class="ace" />
-																	<span class="lbl"></span>
-																</label>
+															
+															<td>
+																{{#ifEqual this.trat_planotipo "Padrão"}}
+																	<span class="label label-sm label-warning arrowed">{{trat_planotipo}}</span>
+																{{else}}
+																	<span class="label label-sm label-danger arrowed">{{trat_planotipo}}</span>
+																{{/ifEqual}}
 															</td>
-															<td><span class="label label-sm label-warning arrowed">{{trat_planotipo}}</span></td>
 															<td>{{tratdata}}</td>
+															<td>
 															{{#each ../benes}}
 																{{#ifEqual this._id ../trat_beneid}}
-																	<td>{{bene_nome}}</td>
+																	{{bene_nome}}
 																{{/ifEqual}}
 															{{/each}}
-
-															{{#if trat_terapeutaidpad}}
+															</td>
+															<td>
 																{{#each ../usuarios}}
 																	{{#ifEqual this._id ../trat_terapeutaidpad}}
-																		<td>{{usuario_nome}}
+																		{{usuario_nome}}
 																	{{/ifEqual}}
 																{{/each}}
-															- {{trat_especialidadepad}}</td>
-															{{else}}
-																<td>&nbsp;-</td>
-															{{/if}}
-
+															</td>
+															<td>
+																{{trat_especialidadepad}}
+															</td>
 															
-															<td>&nbsp;</td>
-															<td>&nbsp;</td>
+															<td>
+																{{#each ../usuarios}}
+																	{{#ifEqual this._id ../trat_terapeutaidis}}
+																		{{usuario_nome}}
+																	{{/ifEqual}}
+																{{/each}}
+															</td>
+															<td>
+																{{trat_especialidadeis}}
+															</td>
+															<td>
+																{{#each ../usuarios}}
+																	{{#ifEqual this._id ../trat_terapeutaidavd}}
+																		{{usuario_nome}}
+																	{{/ifEqual}}
+																{{/each}}
+															</td>
+															<td>
+																{{trat_especialidadeavd}}
+															</td>
 															
-															
-															<td>{{datacad}}</td>
-
+															<td >{{datacad}}</td>
+															<td >
 															{{#if dataedi}}
 																{{#ifEqual this.dataedi "NaN-NaN-NaN"}}
-																	<td>&nbsp;</td>
+																	&nbsp;
 																	{{else}}
-																	<td>{{dataedi}}</td>
+																		{{dataedi}}
 																{{/ifEqual}}
 															{{else}}
-																<td>&nbsp;</td>
+																&nbsp;
 															{{/if}}
-
+															</td>
 															<td>
 																<div class="action-buttons">
 																	<div class="action-buttons">
@@ -487,93 +418,7 @@
 																
 															</td>
 														</tr>
-													{{else}}
-														<tr role="row" class="odd">
-															<td class="center">
-																<label class="pos-rel">
-																	<input type="checkbox" class="ace" />
-																	<span class="lbl"></span>
-																</label>
-															</td>
-															<td><span class="label label-sm label-danger arrowed-in">{{trat_planotipo}}</span></td>
-															<td>{{tratdata}}</td>
-															{{#each ../benes}}
-																{{#ifEqual this._id ../trat_beneid}}
-																	<td>{{bene_nome}}</td>
-																{{/ifEqual}}
-															{{/each}}
-															
-															<td>&nbsp;</td>
-															
-															
-															{{#ifEqual trat_terapeutaidis '766f69643132333435366964'}}
-															<td>-</td>
-															{{else}}
-																{{#if trat_terapeutaidis}}
-																	{{#each ../usuarios}}
-																		{{#ifEqual this._id ../trat_terapeutaidis}}
-																			<td>{{usuario_nome}}
-																		{{/ifEqual}}
-																	{{/each}}
-																- {{trat_especialidadeis}}</td>
-																{{else}}
-																	<td>&nbsp;-</td>
-																{{/if}}
-															{{/ifEqual}}
-															
-
-
-															{{#ifEqual trat_terapeutaidavd '766f69643132333435366964'}}
-															<td>-</td>
-															{{else}}
-																{{#if trat_terapeutaidavd}}
-																	{{#each ../usuarios}}
-																		{{#ifEqual this._id ../trat_terapeutaidavd}}
-																			<td>{{usuario_nome}}
-																		{{/ifEqual}}
-																	{{/each}}
-																- {{trat_especialidadeavd}}</td>
-																{{else}}
-																	<td>&nbsp;-</td>
-																{{/if}}
-															{{/ifEqual}}
-															
-															<td>{{datacad}}</td>
-
-
-															{{#if dataedi}}
-																{{#ifEqual this.dataedi "NaN-NaN-NaN"}}
-																	<td>&nbsp;</td>
-																	{{else}}
-																	<td>{{dataedi}}</td>
-																{{/ifEqual}}
-															{{else}}
-																<td>&nbsp;</td>
-															{{/if}}
-
-
-															
-															<td>
-																<div class="action-buttons">
-																	<div class="action-buttons">
-																	
-																	<a class="green" href="/menu/area/plano/edi/{{_id}}">
-																		<i class="ace-icon fa fa-search bigger-130"></i>
-																	</a>
-																	
-																	<a class="pink" href="/menu/area/plano/imp/{{_id}}">
-																		<i class="ace-icon fa fa-file-pdf-o bigger-130"></i>
-																	</a>
-																	
-																	<!-- 
-																	<a class="red" name="acaoDel" id="acaoDel" href="" onclick="javascript:confirmeDeletar('{{_id}}');">
-																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																	</a>
-																	 -->
-																</div>
-															</td>
-														</tr>
-													{{/ifEqual}}
+													
 												{{/each}}
 											</tbody>
 										</table>
@@ -601,9 +446,9 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, { "bSortable": false }],
+			"aoColumns": [ null, null, null,null, null, null, null, null, null, null, null, { "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [ 50, 100, 200],
+			"lengthMenu": [ 100, 200, 300],
 			"lengthChange": true,
 			"autoWidth": false,
 			"paging": true,

@@ -74,61 +74,18 @@
 			#dynamic-table td {
 				font-size: 10px;
 			}
+			.btn-purple {
+				color: #fff;
+				background-color: #9D8AC7;
+				border-color: #9D8AC7;
+			}
+			.btn-purple:hover {
+				background-color: #8A77B9;
+				border-color: #8A77B9;
+			}
 		</style>
 		
-		<script>
-			function aplicarCoresPrazo() {
-					// Seleciona todas as linhas da tabela que têm os dados
-					const linhas = document.querySelectorAll("tbody tr");
-
-					// Data atual
-					const hoje = new Date();
-					hoje.setHours(0, 0, 0, 0); // padronizar para comparar apenas datas
-
-					// Itera por cada linha
-					linhas.forEach(linha => {
-						// Encontra a célula com o prazo (assumindo que é a 6ª <td>)
-						const celulaPrazo = linha.querySelector("td:nth-child(6)");
-
-						if (!celulaPrazo) return;
-
-						// Obtém o texto da data
-						const dataTexto = celulaPrazo.textContent.trim();
-						if (!dataTexto) return;
-
-						// Converte texto para objeto Date
-						const [dia, mes, ano] = dataTexto.split("/").map(Number);
-						const dataPrazo = new Date(ano, mes - 1, dia); // Mês começa do 0 no JS
-						dataPrazo.setHours(0, 0, 0, 0);
-
-						// Calcula diferença em dias
-						const diffMs = dataPrazo - hoje;
-						const diffDias = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-						const diffMeses = (dataPrazo.getFullYear() - hoje.getFullYear()) * 12 + (dataPrazo.getMonth() - hoje.getMonth());
-
-						let classeBadge = "success"; // padrão: verde
-
-						if (diffMs <= 0) {
-							classeBadge = "purple";
-						} else if (diffDias < 30) {
-							classeBadge = "danger"; // vermelho
-						} else if (diffMeses < 2) {
-							classeBadge = "warning"; // amarelo
-						} else {
-							classeBadge = "success"; // verde
-						}
-
-						// Cria o span com a classe badge correspondente
-						const span = document.createElement("span");
-						span.className = `badge badge-${classeBadge}`;
-						span.textContent = dataTexto;
-
-						// Substitui o conteúdo da célula
-						celulaPrazo.innerHTML = "";
-						celulaPrazo.appendChild(span);
-					});
-				}
-			</script>
+		
 		
 	</head>
 
@@ -171,7 +128,8 @@
 												Por padrão todos os beneficiários Inativos forão ocultados!<br>
 												para exibí-los marque a caixa abaixo e clique no botão pesquisar.
 											</p>
-											<table id="tabela-customizada">
+											
+											<table id="tabela-customizada" style="border: 1px solid #ccc; display: inline-block; width:100%">
 												<thead>
 													<tr>
 														<th><span class="badge badge-danger">Exibir Inativos?</span></th>
@@ -188,6 +146,36 @@
 																<i class="ace-icon fa fa-search-plus"></i>
 																Pesquisar
 															</button>
+														</th>
+														<th>
+															<!-- Botões de Filtro por Status com Contador -->
+												<div class="row" style="margin: 15px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+													<div class="col-xs-12">
+														<label style="font-weight: bold; margin-right: 10px;">Filtrar por status:</label>
+
+														<a href="/menu/area/laudo/lis" class="btn btn-xs btn-white btn-bold">
+															<i class="ace-icon fa fa-list"></i> Todos <span id="contador-todos" class="badge badge-grey" style="margin-left: 5px;">0</span>
+														</a>
+
+														<button type="button" class="btn btn-xs btn-purple btn-bold" onclick="filtrarPorStatus('Expirado')">
+															<i class="ace-icon fa fa-clock-o"></i> Expirado <span id="contador-expirado" class="badge badge-white" style="margin-left: 5px;">0</span>
+														</button>
+
+														<button type="button" class="btn btn-xs btn-danger btn-bold" onclick="filtrarPorStatus('Urgente')">
+															<i class="ace-icon fa fa-warning"></i> Urgente <span id="contador-urgente" class="badge badge-white" style="margin-left: 5px;">0</span>
+														</button>
+
+														<button type="button" class="btn btn-xs btn-warning btn-bold" onclick="filtrarPorStatus('Atenção')">
+															<i class="ace-icon fa fa-exclamation-triangle"></i> Atenção <span id="contador-atencao" class="badge badge-white" style="margin-left: 5px;">0</span>
+														</button>
+
+														<button type="button" class="btn btn-xs btn-success btn-bold" onclick="filtrarPorStatus('Ok')">
+															<i class="ace-icon fa fa-check"></i> Ok <span id="contador-ok" class="badge badge-white" style="margin-left: 5px;">0</span>
+														</button>
+
+														
+													</div>
+												</div>
 														</th>
 													</tr>
 												</thead>
@@ -213,10 +201,11 @@
 												<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data do Laudo</th>
 												<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Período Validade</th>
 												<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data de Validade</th>
-												<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Médico</th>
-												<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Especialidade</th>
-												<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data alteração</th>
-												<th tabindex="10">Ação</th>
+												<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Status</th>
+												<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Médico</th>
+												<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Especialidade</th>
+												<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data alteração</th>
+												<th tabindex="11">Ação</th>
 											</tr>
 										</thead>
 											
@@ -251,6 +240,7 @@
 													<td>{{laudo_dataString}}</td>
 													<td>{{laudo_periodoValidade}}</td>
 													<td>{{laudo_prazo}}</td>
+													<td></td>
 													<td>{{laudo_medico}}</td>
 													<td>{{laudo_medicoesp}}</td>
 													<td>{{#verificarVazioOuIndefinido laudo_dataediString}}
@@ -326,37 +316,134 @@
 
 				<!-- page specific plugin scripts -->
 		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
-		
-
 		<!-- inline scripts related to this page -->
-		<script type="text/javascript">
-		$(document).ready(function() {
-			$("#dynamic-table").DataTable({
-			"language": { "url": "/js/lang/datatable-pt-br.json" },
-			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null, null,null,null,null,{ "bSortable": false }],
-			"responsive": true,
-			"lengthMenu": [ 100, 200],
-			"lengthChange": true,
-			"autoWidth": true,
-			"paging": true,
-			"lengthChange": true,
-			"searching": true,
-			"ordering": true,
-			"info": true,
-			
-			select: {
-						style: 'multi'
-					}
-			});
-		});
-		//$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
-		</script>
-		<script>
-			document.addEventListener("DOMContentLoaded", function () {
-				aplicarCoresPrazo();
-			});
-		</script>
+		<!-- ÚNICO SCRIPT FINAL - TUDO EM ORDEM -->
+<!-- ÚNICO SCRIPT FINAL - TUDO EM ORDEM -->
+<script>
+// Função principal: aplica cores, status e atualiza contadores
+function aplicarCoresPrazo() {
+    const linhas = document.querySelectorAll("tbody tr");
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0); // zerar horas
+
+    const statusPorClasse = {
+        "purple": "Expirado",
+        "danger": "Urgente",
+        "warning": "Atenção",
+        "success": "Ok"
+    };
+
+    const contadores = { "Expirado": 0, "Urgente": 0, "Atenção": 0, "Ok": 0 };
+
+    linhas.forEach(linha => {
+        const celulaPrazo = linha.querySelector("td:nth-child(6)"); // Data de Validade
+        const celulaStatus = linha.querySelector("td:nth-child(7)"); // Status
+
+        if (!celulaPrazo || !celulaStatus) return;
+
+        const dataTexto = celulaPrazo.textContent.trim();
+        if (!dataTexto) return;
+
+        const [dia, mes, ano] = dataTexto.split("/").map(Number);
+        if (isNaN(dia) || isNaN(mes) || isNaN(ano)) return;
+
+        const dataPrazo = new Date(ano, mes - 1, dia);
+        dataPrazo.setHours(0, 0, 0, 0);
+
+        const diffMs = dataPrazo - hoje;
+        const diffDias = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+        const diffMeses = (dataPrazo.getFullYear() - hoje.getFullYear()) * 12 + (dataPrazo.getMonth() - hoje.getMonth());
+
+        let classeBadge = "success";
+        if (diffMs <= 0) classeBadge = "purple";
+        else if (diffDias < 30) classeBadge = "danger";
+        else if (diffMeses < 2) classeBadge = "warning";
+
+        const nomeStatus = statusPorClasse[classeBadge];
+        if (contadores[nomeStatus] !== undefined) {
+            contadores[nomeStatus]++;
+        }
+
+        // === Atualiza coluna 6: data com badge ===
+        const spanData = document.createElement("span");
+        spanData.className = `badge badge-${classeBadge}`;
+        spanData.textContent = dataTexto;
+        celulaPrazo.innerHTML = "";
+        celulaPrazo.appendChild(spanData);
+
+        // === Atualiza coluna 7: status com badge ===
+        const spanStatus = document.createElement("span");
+        spanStatus.className = `badge badge-${classeBadge}`;
+        spanStatus.textContent = nomeStatus;
+        celulaStatus.innerHTML = "";
+        celulaStatus.appendChild(spanStatus);
+        celulaStatus.setAttribute("data-status", nomeStatus.toLowerCase());
+    });
+
+    // === Atualiza contadores nos botões ===
+    $("#contador-expirado").text(contadores["Expirado"]);
+    $("#contador-urgente").text(contadores["Urgente"]);
+    $("#contador-atencao").text(contadores["Atenção"]);
+    $("#contador-ok").text(contadores["Ok"]);
+    $("#contador-todos").text(linhas.length);
+}
+
+// Variável global para armazenar a instância do DataTable
+let tabelaInstancia = null;
+
+// Função para filtrar por status
+function filtrarPorStatus(status) {
+    if (!tabelaInstancia) {
+        console.warn("Tabela ainda não inicializada.");
+        return;
+    }
+
+    if (status === '') {
+        tabelaInstancia.search('').draw(); // Mostra todos
+    } else {
+        tabelaInstancia.column(6).search(status, false, false).draw(); // Filtro na coluna 7
+    }
+}
+
+// Função para limpar o filtro (igual a "Todos")
+function resetarFiltro() {
+    if (!tabelaInstancia) {
+        console.warn("Tabela ainda não inicializada.");
+        return;
+    }
+    tabelaInstancia.search('').draw();
+}
+
+// Execução principal: tudo em ordem
+document.addEventListener("DOMContentLoaded", function () {
+    // Primeiro: aplica cores e status
+    aplicarCoresPrazo();
+
+    // Depois: inicializa o DataTables e armazena a instância
+    tabelaInstancia = $("#dynamic-table").DataTable({
+        "language": { "url": "/js/lang/datatable-pt-br.json" },
+        "aaSorting": [],
+        "aoColumns": [
+            { "bSortable": false }, null, null, null, null,
+            null, null, null, null, null, { "bSortable": false }
+        ],
+        "responsive": true,
+        "lengthMenu": [100, 200],
+        "lengthChange": true,
+        "autoWidth": true,
+        "paging": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        select: { style: 'multi' }
+    });
+
+    // Sincroniza contadores ao digitar na busca
+    $('#dynamic-table_filter input').on('keyup', function() {
+        setTimeout(aplicarCoresPrazo, 150);
+    });
+});
+</script>
 
 	</body>
 

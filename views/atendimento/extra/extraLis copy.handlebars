@@ -47,59 +47,12 @@
 			}
 		</style>
 		<script>
-		// Função principal: inicializa os selects e mantém sincronia com campos ocultos
-		function inicializarFiltros() {
-			const anoSelect = document.getElementById('anoSelect');
-			const mesSelect = document.getElementById('mesSelect');
-			const anoHidden = document.getElementById('anoAtend');
-			const mesHidden = document.getElementById('mesAtend');
-
-			// Valores recebidos da rota (Handlebars)
-			const valorAno = "{{filtroAno}}";
-			const valorMes = "{{filtroMes}}";
-
-			// === 1. Inicializa os selects com os valores do filtro ===
-			if (anoSelect && valorAno) {
-				anoSelect.value = valorAno; // Seleciona o ano no <select>
+			function atualizaCampos() {
+				document.getElementById('anoAtend').value = document.getElementById('anoSelect').value;
+				document.getElementById('mesAtend').value = document.getElementById('mesSelect').value;
 			}
-
-			if (mesSelect && valorMes !== "" && valorMes !== undefined) {
-				mesSelect.value = valorMes; // Seleciona o mês no <select> (ex: 7 → Agosto)
-			}
-
-			// === 2. Atualiza os campos ocultos com os valores atuais ===
-			if (anoHidden && anoSelect) {
-				anoHidden.value = anoSelect.value;
-			}
-			if (mesHidden && mesSelect) {
-				mesHidden.value = mesSelect.value;
-			}
-		}
-
-		// Função para sincronizar os campos ocultos quando o usuário muda o filtro
-		function sincronizarCampos() {
-			const anoSelect = document.getElementById('anoSelect');
-			const mesSelect = document.getElementById('mesSelect');
-			const anoHidden = document.getElementById('anoAtend');
-			const mesHidden = document.getElementById('mesAtend');
-
-			if (anoSelect && mesSelect && anoHidden && mesHidden) {
-				anoHidden.value = anoSelect.value;
-				mesHidden.value = mesSelect.value;
-			}
-		}
-
-		// Executa ao carregar a página
-		document.addEventListener("DOMContentLoaded", function () {
-			inicializarFiltros(); // Preenche selects e campos ocultos
-
-			// Adiciona listeners para mudanças
-			const anoSelect = document.getElementById('anoSelect');
-			const mesSelect = document.getElementById('mesSelect');
-
-			if (anoSelect) anoSelect.addEventListener('change', sincronizarCampos);
-			if (mesSelect) mesSelect.addEventListener('change', sincronizarCampos);
-		});
+			// Inicializa
+			atualizaCampos();
 		</script>
 	</head>
 
@@ -122,86 +75,90 @@
 					{{else}}
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
-					<!-- Formulário 1: Pesquisa -->
-					<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/atendimento/extra/lisF" method="POST">
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/atendimento/extra/lisF" method="POST">
 						
-						<div class="col-xs-12">
-							<div class="row">
-								<table id="tabela-customizada">
-									<thead>
-										<tr>
-											<th><label>Tipo Filtro:&nbsp;</label></th>
-											<th><label>Ano:&nbsp;</label></th>
-											<th><label>Mês:&nbsp;</label></th>
-											<th></th>
-											<th></th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>
-												<div class="input-group">
-													<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha...">
-														<option value="Ano/Mes" selected>Ano/Mês</option>
-													</select>
-												</div>
-											</td>
-											<td>
-												<div id="divAnoAtend">
-													<select name="anoAtend" id="anoSelect" class="chosen-select" data-placeholder="Escolha...">
-														<option value="">Selecione</option>
-														{{#each anos}}
-															<option value="{{ano_nome}}" {{#ifCond this.ano_nome '==' ../filtroAno}}selected{{/ifCond}}>{{ano_nome}}</option>
-														{{/each}}
-													</select>
-												</div>
-											</td>
-											<td>
-												<div id="divMesAtend">
-													<select name="mesAtend" id="mesSelect" class="chosen-select" data-placeholder="Escolha...">
-														<option value="0">Janeiro</option>
-														<option value="1">Fevereiro</option>
-														<option value="2">Março</option>
-														<option value="3">Abril</option>
-														<option value="4">Maio</option>
-														<option value="5">Junho</option>
-														<option value="6">Julho</option>
-														<option value="7">Agosto</option>
-														<option value="8">Setembro</option>
-														<option value="9">Outubro</option>
-														<option value="10">Novembro</option>
-														<option value="11">Dezembro</option>
-													</select>
-												</div>
-											</td>
-											<td>
-												<button type="submit" class="btn btn-xs btn-info">
-													<i class="ace-icon fa fa-search-plus"></i> Pesquisar
-												</button>
-											</td>
-										</tr>
-									</tbody>
-								</table>
+							<div class="col-xs-12">
+								<div class="row">
+									<table id="tabela-customizada">
+										<thead>
+											<tr>
+												<th><label>Tipo Filtro:&nbsp;</label></th>
+												<th><label id="divAnoAtendlab" for="id-date-picker-1">Ano:&nbsp;</label></th>
+												<th><label id="divMesAtendlab" for="id-date-picker-1">Mês:&nbsp;</label></th>
+												<th><label id="divDataFillab"  >Data:&nbsp;</label></th>
+												<th></th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													<div class="input-group">
+														<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes">
+															<option selected value="Ano/Mes">Ano/Mês</option>
+															
+														</select>
+													</div>
+												</td>
+												<td>
+													<div id="divAnoAtend">
+														<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" >
+															{{#each anos}}
+																<option value="{{ano_nome}}">{{ano_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
+												</td>
+												<td>
+													<div id="divMesAtend">
+														<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" >
+															<option value="0">Janeiro</option>
+															<option value="1">Fevereiro</option>
+															<option value="2">Março</option>
+															<option value="3">Abril</option>
+															<option value="4">Maio</option>
+															<option value="5">Junho</option>
+															<option value="6">Julho</option>
+															<option value="7">Agosto</option>
+															<option value="8">Setembro</option>
+															<option value="9">Outubro</option>
+															<option value="10">Novembro</option>
+															<option value="11">Dezembro</option>
+														</select>
+													</div>
+												</td>
+												<td>
+													<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info">
+													<i class="ace-icon fa fa-search-plus"></i>
+													Pesquisar
+													</button>
+												</td>
+												<td>
+													
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									
+								</div>
 							</div>
-						</div>
-					</form>
+						</form>
+						<form action="/menu/atendimento/extra/extraCopia" method="POST">
+										<!-- Campos ocultos preenchidos pelo JS -->
+										<input type="text" name="anoAtend" id="anoAtend" value="2025">
+										<input type="text" name="mesAtend" id="mesAtend" value="7">
 
-					<!-- Formulário 2: Exportação (campos ocultos sincronizados) -->
-					<form action="/menu/atendimento/extra/extraCopia" method="POST" id="formExportacao">
-						<!-- Campos ocultos -->
-						<input type="hidden" name="anoAtend" id="anoAtend" value="{{filtroAno}}">
-						<input type="hidden" name="mesAtend" id="mesAtend" value="{{filtroMes}}">
+										
 
-						<button 
-							type="submit"
-							class="btn btn-xs btn-danger"
-							style="margin-left: 25px;"
-							onclick="return confirm('Exportar agendamentos extras?')">
-							<i class="ace-icon fa fa-cogs"></i>
-							Exportar Agendamentos para Extra
-						</button>
-					</form>
-			
+										<button 
+											type="submit"
+											class="btn btn-xs btn-danger"
+											style="margin-left: 25px;"
+											onclick="return confirm('Exportar agendamentos extras?')">
+											<i class="ace-icon fa fa-cogs"></i>
+											Exportar Agendamentos para Extra
+										</button>
+									</form>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
 								<!-- PAGE CONTENT BEGINS -->

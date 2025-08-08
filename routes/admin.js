@@ -1122,10 +1122,7 @@ router.get("/agenda/lisF", fncGeral.IsAuthenticated, (req,res) =>{//direciona a 
     fncAgenda.carregaAgendaF(req, res);
 })
 
-//controle de Extras vindo da Agenda Fixa
-router.get("/atendimento/extra/extraLis", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Fixa.
-    fncAgenda.carregaControleextrasF(req, res);
-})
+
 
 router.post("/agenda/filF", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de filtro de Fixa.
     fncAgenda.carregaAgendaFilF(req, res);
@@ -2275,14 +2272,26 @@ router.post('/atendimento/extra/lisF', fncGeral.IsAuthenticated, (req,res) =>{//
     fncExtra.filtraExtra(req,res);
 })
 
+//Lista todos os Extras da agenda depois de realizar a copia quem chama essa rota é a função extraCopia
+// Rota GET para exibir a lista com filtros
+router.get('/atendimento/extra/controleF', fncGeral.IsAuthenticated, (req, res) => {
+    fncExtra.filtraExtra(req, res, new Resposta());
+});
+
+//controle de Extras vindo da Agenda Fixa
+router.get("/atendimento/extra/extraLis", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Fixa.
+    fncAgenda.carregaControleextrasF(req, res);
+})
+
 //Lista todos os Extras Controles
 router.get('/atendimento/extra/lisctrl', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
     fncExtra.listaExtractrl(req,res);
 })
-//Lista todos os Extras Exportados para Base de Extras a fim de Auditar e gerar Atendimentos para seguir à Cobrança
+//Lista controle extra pelo menu
 router.get('/atendimento/extra/ctrlextra', fncGeral.IsAuthenticated, (req,res) =>{
     fncExtra.controleExtra(req,res);
 })
+
 //Lista todos os Extras
 router.post('/atendimento/extra/ctrlextraF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
     fncExtra.controleExtraFil(req,res);
@@ -2296,10 +2305,15 @@ router.get('/extra/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Ext
     fncExtra.deletaExtra(req,res);
 })
 
-// Rota para copiar agendamentos extras
-router.post('/extra/extraCopia', fncGeral.IsAuthenticated, (req, res) => {
-    fncExtra.extraCopiar(req, res);
-});
+router.post('/atendimento/extra/extraCopia', fncGeral.IsAuthenticated, async (req, res) => {
+    try {
+        await fncExtra.extraCopiar(req, res);
+    } catch (error) {
+        console.error('Erro na rota /extra/extraCopia:', error);
+        req.flash('error_message', 'Erro interno ao processar a cópia.');
+        return res.redirect('/admin/erro');
+    }
+})
 
 //Menu Laudos ** Area Tecnicos   
 //Carrega Cadastro de Laudo 

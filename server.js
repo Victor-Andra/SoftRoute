@@ -283,6 +283,93 @@ app.post('/upload', upload.single('file'), (req, res) => {
                         return options.inverse(this);
                     }
                 },
+
+                // Helper ifCond
+                /**
+                 * Helper personalizado Handlebars: {{#ifCond}}
+                 * 
+                 * Permite realizar comparações lógicas em templates .hbs, já que o Handlebars
+                 * não suporta operadores lógicos nativamente em blocos `if`.
+                 * 
+                 * Sintaxe:
+                 * {{#ifCond valor1 "operador" valor2}}
+                 *   <!-- conteúdo se VERDADEIRO -->
+                 * {{else}}
+                 *   <!-- conteúdo se FALSO -->
+                 * {{/ifCond}}
+                 * 
+                 * Operadores suportados:
+                 *   ==   -> Igualdade (não estrita)
+                 *   ===  -> Igualdade estrita (valor e tipo)
+                 *   !=   -> Diferente (não estrito)
+                 *   !==  -> Diferente estrito
+                 *   <    -> Menor que
+                 *   <=   -> Menor ou igual
+                 *   >    -> Maior que
+                 *   >=   -> Maior ou igual
+                 *   &&   -> AND lógico (E)
+                 *   ||   -> OR lógico (OU)
+                 * 
+                 * Exemplos de uso no template:
+                 * 
+                 * 1. Comparar se o mês selecionado é Abril (valor 3):
+                 *    {{#ifCond filtroMes "==" 3}}
+                 *        <option value="3" selected>Abril</option>
+                 *    {{else}}
+                 *        <option value="3">Abril</option>
+                 *    {{/ifCond}}
+                 * 
+                 * 2. Comparar se o ano é 2025:
+                 *    {{#ifCond filtroAno "==" "2025"}}
+                 *        selected
+                 *    {{/ifCond}}
+                 * 
+                 * 3. Verificar se dois valores são estritamente iguais:
+                 *    {{#ifCond status "===" "Ativo"}}
+                 *        <span class="badge badge-success">Ativo</span>
+                 *    {{/ifCond}}
+                 * 
+                 * 4. Usar "maior que" para validar dias:
+                 *    {{#ifCond diasRestantes ">" 30}}
+                 *        <span>Prazo longo</span>
+                 *    {{/ifCond}}
+                 * 
+                 * 5. Combinar condições com AND (&&):
+                 *    {{#ifCond (gt valor 10) "&&" (lt valor 20)}}
+                 *        Valor entre 10 e 20
+                 *    {{/ifCond}}
+                 * 
+                 * Importante:
+                 * - Use aspas em strings e sem aspas em números, conforme o tipo do dado.
+                 * - Certifique-se de que as variáveis (como `filtroMes`, `filtroAno`) estão
+                 *   sendo passadas corretamente no `res.render()` do backend.
+                 */
+                ifCond: function(v1, operator, v2, options) {
+                    switch (operator) {
+                        case '==':
+                            return (v1 == v2) ? options.fn(this) : options.inverse(this);
+                        case '===':
+                            return (v1 === v2) ? options.fn(this) : options.inverse(this);
+                        case '!=':
+                            return (v1 != v2) ? options.fn(this) : options.inverse(this);
+                        case '!==':
+                            return (v1 !== v2) ? options.fn(this) : options.inverse(this);
+                        case '<':
+                            return (v1 < v2) ? options.fn(this) : options.inverse(this);
+                        case '<=':
+                            return (v1 <= v2) ? options.fn(this) : options.inverse(this);
+                        case '>':
+                            return (v1 > v2) ? options.fn(this) : options.inverse(this);
+                        case '>=':
+                            return (v1 >= v2) ? options.fn(this) : options.inverse(this);
+                        case '&&':
+                            return (v1 && v2) ? options.fn(this) : options.inverse(this);
+                        case '||':
+                            return (v1 || v2) ? options.fn(this) : options.inverse(this);
+                        default:
+                            return options.inverse(this);
+                    }
+                },
                 /**
                  * Helper Handlebars: {{formatDate "formato" data}}
                  * Criado em 26/06/2025 às 11:25 por Wagner Cintra

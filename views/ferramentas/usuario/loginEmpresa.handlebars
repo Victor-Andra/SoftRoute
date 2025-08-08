@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <title>Login - Bem Vindos!</title>
+  <title>Login Empresa</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     /* Reset básico */
@@ -108,20 +108,15 @@
     </div>
 
 	<h5 class="header blue lighter bigger" style="text-align: center;">
-		<b>Bem-vindo!</b> Faça seu login
+		<b>Bem-vindo!</b> Escolha a empresa a qual quer se conectar.
 	</h5>
 	
     <form action="/menu/login" method="post">
      
 
       <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required />
-      </div>
-
-      <div class="form-group">
-        <label for="senha">Senha</label>
-        <input type="password" id="senha" name="senha" required />
+        <label for="email">Empresa</label>
+        <input type="empresa" id="empresa" name="email" required />
       </div>
 
       <button type="submit">
@@ -129,11 +124,7 @@
       </button>
     </form>
 
-   <div class="text-center">
-		<button class="forgot-btn" onclick="javascript:mudaAcao('/menu/ferramentas/usuario/esqueciMinhaSenha');">
-			<i class="fa fa-comment-o"></i> Esqueci minha Senha!
-		</button>
-	</div>
+  
   </div>
 
 </body>

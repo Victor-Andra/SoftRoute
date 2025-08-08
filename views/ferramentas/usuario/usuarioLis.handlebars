@@ -56,7 +56,9 @@
 															
 															{{#each ../perfis}}
 																{{#ifEqual _id ../usuario_perfilid}}
-																	<td>{{perfil_nome}}</td>
+																	<td>
+																		<span class="label label-sm label-info">{{perfil_nome}}</span>&nbsp;{{perfil_descricao}}
+																	</td>
 																{{/ifEqual}}
 															{{/each}}
 
