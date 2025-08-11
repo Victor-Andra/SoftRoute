@@ -64,6 +64,11 @@ const perfilClass = require("../models/perfil")
 const Perfil = mongoose.model("tb_perfil")
 const fncPerfil = require("../functions/fncPerfil")
 
+//usufunc, funcionalidades que os usuários podem ter acesso
+const usufuncClass = require("../models/usufunc")
+const Usufunc = mongoose.model("tb_usufunc")
+const fncUsufunc = require("../functions/fncUsufunc")
+
 //sala, onde são realizadas os atendimentos
 const salaClass = require("../models/sala")
 const Sala = mongoose.model("tb_sala")
@@ -3714,7 +3719,31 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         router.post('/ferramentas/usuario/mudarNomeTerapeuta', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento
             fncUsuario.mudarNomeTerapeuta(req, res);
         })
+//Menu Ferramentas
+        //Usufunc - Funcionalidades dos usuários podem acessar
+        router.get('/ferramentas/usufunc/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas salas
+            fncUsufunc.listaUsufunc(req, res);
+        })
 
+        router.get('/ferramentas/usufunc/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de sala
+            fncUsufunc.carregaUsufunc(req, res);
+        })
+
+        router.post('/ferramentas/usufunc/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona sala
+            fncUsufunc.cadastraUsufunc(req, res);
+        })
+
+        router.get('/ferramentas/usufunc/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta sala
+            fncUsufunc.deletaUsufunc(req, res);
+        })
+
+        router.get('/ferramentas/usufunc/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de sala
+            fncUsufunc.carregaUsufuncEdi(req, res);
+        })
+
+        router.post('/ferramentas/usufunc/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Salaimento
+            fncUsufunc.atualizaUsufunc(req, res);
+        })
 //Menu Ferramentas
     //Ajuda
         router.get('/ferramentas/ajuda', fncGeral.IsAuthenticated, (req,res) =>{

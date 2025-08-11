@@ -35,6 +35,7 @@ const UsuarioSchema = mongoose.Schema({
     usuario_funcaoid : { type: ObjectId, required: true },
     usuario_dataadm : { type: String, required: false },
     usuario_perfilid : { type: String, required: false },
+    usuario_empresaid : { type: String, required: false },//Escolhe empresa, aqui será carregada uma array
     usuario_status : { type: String, required: false },
     usuario_senha : {type: String, required: false },
     usuario_img : { type: Buffer, required: false },// Utiliza Buffer para armazenar dados binários da imagem
@@ -98,6 +99,7 @@ class Usuario{
         usuario_funcaoid,
         usuario_dataadm,
         usuario_perfilid,
+        usuario_empresaid,//Escolhe empresa, aqui será carregada uma array
         usuario_status,
         usuario_senha,
         usuario_img,//Imagem foto miniatura
@@ -154,6 +156,7 @@ class Usuario{
 
         this.usuario_funcaoid = usuario_funcaoid ,
         this.usuario_perfilid = usuario_perfilid ,
+        this.usuario_empresaid = usuario_empresaid ,
         this.usuario_dataadm = usuario_dataadm,
         this.usuario_status = usuario_status ,
         this.usuario_senha = usuario_senha ,
@@ -239,8 +242,8 @@ module.exports = {
                 usuario_conta : req.body.usuarioConta ,
                 usuario_contatipo : req.body.usuarioContaTipo,
                 usuario_contrato : req.body.usuarioContrato ,
-
                 usuario_funcaoid : req.body.usuarioFuncaoid ,
+                usuario_empresaid : req.body.usuarioEmpresaid ,//Empresa id aqui entra uma array, pois pode ter acesso a mais d euma empresa
                 usuario_perfilid : req.body.usuarioPerfilid ,
                 usuario_dataadm : req.body.usuarioDataadm , //Data de admissão, alterado em 27/08/2024
                 usuario_status : req.body.usuarioStatus ,
@@ -319,6 +322,7 @@ module.exports = {
             usuario_contrato : req.body.usuarioContrato ,
 
             usuario_funcaoid : req.body.usuarioFuncaoid ,
+            usuario_empresaid : req.body.usuarioEmpresaid ,//Empresa id aqui entra uma array, pois pode ter acesso a mais d euma empresa
             usuario_perfilid : req.body.usuarioPerfilid ,
             usuario_dataadm : req.body.usuarioDataadm , //Data de admissão, alterado em 27/08/2024
             usuario_status : req.body.usuarioStatus ,

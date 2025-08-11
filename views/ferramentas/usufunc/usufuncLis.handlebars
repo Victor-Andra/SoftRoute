@@ -2,7 +2,7 @@
 <html lang="pt-br"><head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
-		<title>Lista de Salas</title>
+		<title>Lista de Funcionalidade dos Usuários</title>
 
 		
 	</head>
@@ -19,7 +19,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Lista de Salas</li>
+							<li class="active">Funcionalidade dos Usuários</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					{{#each error}}
@@ -52,8 +52,8 @@
 																<span class="lbl"></span>
 															</label>
 														</th>
-														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Sala: activate to sort column ascending">Sala</th>
-														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Descrição:     activate to sort column ascending">Descrição</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Código</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Descrição</th>
 														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Status</th>
 														<th>Ação</th>
 
@@ -62,7 +62,7 @@
 												</thead>
 												
 												<tbody>
-													{{#each salas}}
+													{{#each usufuncs}}
 														<tr>
 															<th class="center">
 																<label class="pos-rel">
@@ -70,22 +70,21 @@
 																	<span class="lbl"></span>
 																</label>
 															</th>
-															<td>{{sala_nome}}</td>
-															<td>{{sala_descricao}}</td>
+															<td>{{usufunc_codigo}}</td>
+															<td>{{usufunc_descricao}}</td>
 															<td>
-																{{#ifEqual this.sala_status "Inativo"}}
-																	<span class="label label-sm label-danger">{{sala_status}}</span>
+																{{#ifEqual this.usufunc_status "Inativo"}}
+																	<span class="label label-sm label-danger">{{usufunc_status}}</span>
 																	{{else}}
-																	<span class="label label-sm label-success">{{sala_status}}</span>
+																	<span class="label label-sm label-success">{{usufunc_status}}</span>
 																{{/ifEqual}}
-
 															</td>
 															<td>
 																<div class="action-buttons">
-																	<a class="green" href="/menu/ferramentas/sala/edi/{{_id}}">
+																	<a class="green" href="/menu/ferramentas/usufunc/edi/{{_id}}">
 																		<i class="ace-icon fa fa-pencil bigger-130"></i>
 																	</a>
-																	<a class="hidden" class="red" href="/menu/ferramentas/sala/del/{{_id}}">
+																	<a class="hidden" class="red" href="/menu/ferramentas/usufunc/del/{{_id}}">
 																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																	</a>
 																</div>
@@ -154,9 +153,9 @@
             "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
         },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null,{ "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [50, 100, 200],
+			"lengthMenu": [ 50, 100, 200],
 			"lengthChange": true,
 			"autoWidth": true,
 			"paging": true,
