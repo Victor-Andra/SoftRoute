@@ -1,289 +1,347 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
-		<title>Empresa</title>
-	</head>
+<head>
+    <title>Empresa</title>
+    <!-- Inclua os CSS do Bootstrap e Ace Admin aqui -->
+	<style>
+		.form-group .input-group.input-30 {
+		max-width: 30%;
+		display: inline-flex; /* ou flex */
+		}
+	</style>
+</head>
 
-	<body onload="javascript:controlaNave();" class="no-skin">
+<body onload="javascript:controlaNave();" class="no-skin">
 
+<div class="main-container ace-save-state" id="main-container">
 
-		<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href="#">Home</a>
+                    </li>
+                    <li class="active">Empresa Cadastro</li>
+                </ul>
+            </div>
 
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- PAGE CONTENT BEGINS -->
+                    <form class="form-horizontal" role="form" action="/menu/ferramentas/empresa/add" method="POST">
 
-			<div class="main-content">
-				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-						<ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Home</a>
-							</li>
+                        <!-- Abas -->
+                        <div class="tabbable">
+                            <ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#basico" aria-expanded="true">
+                                        <i class="red ace-icon fa fa-building bigger-120"></i>
+                                        Dados Básicos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#end" aria-expanded="false">
+                                        <i class="orange ace-icon fa fa-map-marker bigger-120"></i>
+                                        Endereço
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#contato" aria-expanded="false">
+                                        <i class="green ace-icon fa fa-phone-square bigger-120"></i>
+                                        Contato
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#obs" aria-expanded="false">
+                                        <i class="pink ace-icon fa fa-file-text bigger-120"></i>
+                                        Observações
+                                    </a>
+                                </li>
+                            </ul>
 
-							<li class="active">Empresa Cadastro</li>
-						</ul><!-- /.breadcrumb -->
+                            <div class="tab-content">
 
-					</div>
+                                <!-- DADOS BÁSICOS -->
+                                <div id="basico" class="tab-pane fade active in">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="widget-box">
+                                                <div class="widget-header">
+                                                    <h4 class="widget-title">Informações Básicas</h4>
+                                                </div>
+                                                <div class="widget-body">
+                                                    <div class="widget-main">
 
-					<div class="row">
-						<div class="col-xs-12">
-							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/ferramentas/empresa/add" method="POST">
+                                                        <label>Unidade</label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-12">
+                                                                <input type="text" name="empresaUnidade" id="empresaUnidade" class="form-control" />
+                                                            </div>
+                                                        </div>
 
+                                                        <label>Razão Social</label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-12">
+                                                                <input type="text" name="empresaNome" id="empresaNome" class="form-control" />
+                                                            </div>
+                                                        </div>
 
-								<div class="col-sm-12"><!-- Widget Dados Básicos -->
-									<div class="widget-box">
-										<div class="widget-header">
-											<h4 class="widget-title">Dados</h4>
+                                                        <label>Nome Fantasia</label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-12">
+                                                                <input type="text" name="empresaFantasia" id="empresaFantasia" class="form-control" />
+                                                            </div>
+                                                        </div>
 
-											<span class="widget-toolbar">
+                                                        <label>CNPJ</label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-6">
+                                                                <input type="text" name="empresaCnpj" id="empresaCnpj" class="form-control" />
+                                                            </div>
+                                                        </div>
 
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
+                                                        <label>Inscrição Municipal</label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-6">
+                                                                <input type="text" name="empresaMuni" id="empresaMuni" class="form-control" />
+                                                            </div>
+                                                        </div>
 
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
+                                                        <label>Inscrição Estadual</label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-6">
+                                                                <input type="text" name="empresaEstad" id="empresaEstad" class="form-control" />
+                                                            </div>
+                                                        </div>
 
-											</span>
-										</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-										<div class="widget-body">
-											<div class="widget-main">
+                                <!-- ENDEREÇO -->
+                                <div id="end" class="tab-pane fade">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="widget-box">
+                                                <div class="widget-header">
+                                                    <h4 class="widget-title">Endereço</h4>
+                                                </div>
+                                                <div class="widget-body">
+                                                    <div class="widget-main">
 
-												<label> Unidade</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<input type="text" name="empresaUnidade" id="empresaUnidade"  class="form-control" />
-													</div>
+                                                        <label>Endereço</label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-12">
+                                                                <input type="text" name="empresaEnd" id="empresaEnd" class="form-control" />
+                                                            </div>
+                                                        </div>
+
+                                                        <label>Complemento</label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-6">
+                                                                <input type="text" name="empresaEndcompl" id="empresaEndcompl" class="form-control" />
+                                                            </div>
+                                                        </div>
+
+                                                        <label>Bairro</label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-9">
+                                                                <input type="text" name="empresaEndbairro" id="empresaEndbairro" class="form-control" />
+                                                            </div>
+                                                        </div>
+
+                                                        <label>Cidade</label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-9">
+                                                                <input type="text" name="empresaEndcidade" id="empresaEndcidade" class="form-control" />
+                                                            </div>
+                                                        </div>
+
+                                                        <label>UF</label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-4">
+                                                                <select name="empresaEnduf" id="empresaEnduf" class="chosen-select" data-placeholder="Escolha...">
+                                                                    <option value="">&nbsp;</option>
+                                                                    {{#each estados}}
+                                                                    <option value="{{_id}}">{{estado_uf}}</option>
+                                                                    {{/each}}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                        <label>CEP
+                                                            <small class="text-warning">00000-000</small>
+                                                        </label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-4">
+                                                                <input type="text" name="empresaEndcep" id="empresaEndcep" class="form-control" />
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+								<!-- CONTATO -->
+								<div id="contato" class="tab-pane fade">
+									<div class="row">
+										<div class="col-xs-12">
+											<div class="widget-box">
+												<div class="widget-header">
+													<h4 class="widget-title">Contatos</h4>
 												</div>
-				
-												<label> Razão Social</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<input type="text" name="empresaNome" id="empresaNome"  class="form-control" />
-													</div>
-												</div>
+												<div class="widget-body">
+													<div class="widget-main">
 
-												<label> Nome Fantasia</label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<input type="text" name="empresaFantasia" id="empresaFantasia" placeholder="" class="form-control" />
-													</div>
-												</div>
-
-
-												<label> CNPJ</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="empresaCnpj" id="empresaCnpj" class="form-control" />
-													</div>
-												</div>
-
-
-												<label> Inscrição Municipal</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="empresaMuni" id="empresaMuni" class="form-control" />
-													</div>
-												</div>
-
-												<label> Inscrição Estadual</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="empresaEstad" id="empresaEstad" class="form-control" />
-													</div>
-												</div>
-
-												<label > Endereço </label>
-												<div class="form-group">
-													<div class="col-sm-12">
-														<input type="text" name="empresaEnd" id="empresaEnd" class="form-control" />
-													</div>
-												</div>
-				
-												<label> Complemento </label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" name="empresaEndcompl" id="empresaEndcompl" class="form-control" />
-													</div>
-												</div>
-				
-												<label> Bairro </label>
-												<div class="form-group">
-													<div class="col-sm-9">
-														<input type="text" name="empresaEndbairro" id="empresaEndbairro" class="form-control" />
-													</div>
-												</div>
-				
-												<label> Cidade </label>
-												<div class="form-group">
-													<div class="col-sm-9">
-														<input type="text" name="empresaEndcidade" id="empresaEndcidade" class="form-control" />
-													</div>
-												</div>
-
-												<label>UF</label>
-												<div class="form-group">
-														<div class="col-sm-4">
-															<select name="empresaEnduf"  id="empresaEnduf"  class="chosen-select" data-placeholder="Escolha...">
-																	<option value="">&nbsp;</option>
-																	{{#each estados}}
-																	<option value="{{_id}}">{{estado_uf}}</option>
-																	{{else}}
-																	{{/each}}
-															</select>
+														<!-- Wrapper com padding interno para alinhar todos os campos -->
+														<div class="form-group" style="padding-left: 15px; padding-right: 15px;">
+															<!-- WhatsApp -->
+															<label>WhatsApp</label>
+															<div class="input-group" style="max-width: 30%;">
+																<span class="input-group-addon">
+																	<i class="ace-icon fa fa-whatsapp"></i>
+																</span>
+																<input type="text"
+																	name="empresaWhatsapp"
+																	id="empresaWhatsapp"
+																	class="form-control input-mask-phone"
+																	style="width: 100%;" />
+															</div>
 														</div>
-												</div>
-				
-												<label>CEP
-													<small class="text-warning">00000-000</small>
-												</label>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<input type="text" name="empresaEndcep" id="empresaEndcep" class="form-control" />
+
+														<div class="form-group" style="padding-left: 15px; padding-right: 15px;">
+															<label>Celular</label>
+															<div class="input-group" style="max-width: 30%;">
+																<span class="input-group-addon">
+																	<i class="ace-icon fa fa-phone"></i>
+																</span>
+																<input type="text"
+																	name="empresaCel"
+																	id="empresaCel"
+																	class="form-control input-mask-phone"
+																	style="width: 100%;" />
+															</div>
+														</div>
+
+														<div class="form-group" style="padding-left: 15px; padding-right: 15px;">
+															<label>Telefone Fixo</label>
+															<div class="input-group" style="max-width: 30%;">
+																<span class="input-group-addon">
+																	<i class="ace-icon fa fa-phone"></i>
+																</span>
+																<input type="text"
+																	name="empresaFixo"
+																	id="empresaFixo"
+																	class="form-control input-mask-phone"
+																	style="width: 100%;" />
+															</div>
+														</div>
+
+														<div class="form-group" style="padding-left: 15px; padding-right: 15px;">
+															<label>E-mail</label>
+															<div class="input-group" style="max-width: 30%;">
+																<span class="input-group-addon">
+																	<i class="ace-icon fa fa-envelope"></i>
+																</span>
+																<input type="email"
+																	name="empresaEmail"
+																	id="empresaEmail"
+																	class="form-control"
+																	style="width: 100%;" />
+															</div>
+														</div>
+
+														<div class="form-group" style="padding-left: 15px; padding-right: 15px;">
+															<label>Site</label>
+															<div class="input-group" style="max-width: 30%;">
+																<span class="input-group-addon">
+																	<i class="ace-icon fa fa-globe"></i>
+																</span>
+																<input type="url"
+																	name="empresaSite"
+																	id="empresaSite"
+																	class="form-control"
+																	style="width: 100%;" />
+															</div>
+														</div>
+
 													</div>
 												</div>
-
-
-												<div>
-													<label>WhatsApp
-														<small class="text-warning"></small>
-													</label>
-									
-													<div class="input-group">
-														<span class="input-group-addon">
-															<i class="ace-icon fa fa-phone"></i>
-														</span>
-									
-														<input name="empresaWhatsapp" id="empresaWhatsapp" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Whatsapp" />
-													</div>
-												</div>
-				
-									
-												<div>
-													<label>Celular
-														<small class="text-warning"> </small>
-													</label>
-									
-													<div class="input-group">
-														<span class="input-group-addon">
-															<i class="ace-icon fa fa-phone"></i>
-														</span>
-									
-														<input name="empresaCel" id="empresaCel" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" />
-													</div>
-												</div>
-
-												<div>
-													<label>Celular
-														<small class="text-warning"> </small>
-													</label>
-									
-													<div class="input-group">
-														<span class="input-group-addon">
-															<i class="ace-icon fa fa-phone"></i>
-														</span>
-									
-														<input name="empresaFixo" id="empresaFixo" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" />
-													</div>
-												</div>
-
-												<div>
-													<label>E-mail
-														<small class="text-warning"></small>
-													</label>
-									
-													<div class="input-group">
-														<span class="input-group-addon">
-															<i class="ace-icon fa fa-envelope-open"></i>
-														</span>
-									
-														<input name="empresaEmail" id="empresaEmail" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" />
-													</div>
-												</div>
-
-
-												<div>
-													<label>Site
-														<small class="text-warning"></small>
-													</label>
-									
-													<div class="input-group">
-														<span class="input-group-addon">
-															<i class="ace-icon fa fa-home"></i>
-														</span>
-									
-														<input name="empresaSite" id="empresaSite" class="col-sm-4" class="form-control input-mask-phone" type="text" id="Celular" />
-													</div>
-												</div>
-												
-												<div>
-													<label>Status
-														<small class="text-warning"></small>
-													</label>
-									
-													<div class="input-group">
-														<span class="input-group-addon">
-															<i class="ace-icon fa fa-home"></i>
-														</span>
-									
-														<input name="convStatus" id="convStatus" class="col-sm-4" class="form-control input-mask-phone" type="text" />
-													</div>
-												</div>
-
-												<label> Observações </label>
-												<div class="form-group">
-													<div class="col-sm-9">
-														<input type="text" name="empresaObs" id="empresaObs" class="form-control" />
-													</div>
-												</div>
-
-
 											</div>
 										</div>
 									</div>
 								</div>
-							
-							
-								<div class="space-4"></div>							
-								<div class="space-4"></div>
-	
-								<div class="form-actions">
-									<div class="col-md-offset-3 col-md-9">
-										<button class="btn btn-info"  name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-	
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  href="/menu/admin/branco">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
-									</div>
-								</div>
+                                <!-- OBSERVAÇÕES -->
+                                <div id="obs" class="tab-pane fade">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="widget-box">
+                                                <div class="widget-header">
+                                                    <h4 class="widget-title">Status e Observações</h4>
+                                                </div>
+                                                <div class="widget-body">
+                                                    <div class="widget-main">
+														<div class="form-group" style="padding-left: 15px; padding-right: 15px;">
+															<label>Status</label>
+															<div class="input-group" style="max-width: 30%;">
+																 <span class="input-group-addon">
+                                                                    <i class="ace-icon fa fa-toggle-on"></i>
+                                                                </span>
+                                                                <input type="text" name="convStatus" id="convStatus" class="form-control col-sm-4" />
+															</div>
+														</div>
+                                                        
 
-							</form>
+                                                        <label>Observações</label>
+                                                        <div class="form-group">
+                                                            <div class="col-sm-9">
+                                                                <textarea name="empresaObs" id="empresaObs" class="form-control" rows="4"></textarea>
+                                                            </div>
+                                                        </div>
 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-						</div><!-- /.col -->
-					</div><!-- /.row -->
+                            </div> <!-- fim tab-content -->
+                        </div> <!-- fim tabbable -->
 
+                        <!-- Botões de ação fora das abas -->
+                        <div class="space-4"></div>
+                        <div class="space-4"></div>
 
+                        <div class="form-actions text-right" style="text-align: center;">
+                            <button class="btn btn-info" type="submit" name="acao">
+                                <i class="ace-icon fa fa-check bigger-110"></i>
+                                Salvar
+                            </button>
+                            &nbsp;
+                            <a href="/menu/admin/branco" class="btn btn-warning">
+                                <i class="ace-icon fa fa-undo bigger-110"></i>
+                                Voltar
+                            </a>
+                        </div>
 
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-				</div>
-			</div><!-- /.main-content -->
+<!-- Scripts (jQuery, Bootstrap, Ace Admin, etc.) -->
+<!-- Certifique-se de incluir os JS necessários para funcionar os tabs, chosen, máscaras, etc. -->
 
-
-		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
-
-	</body>
+</body>
 </html>

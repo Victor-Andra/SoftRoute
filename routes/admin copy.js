@@ -64,6 +64,11 @@ const perfilClass = require("../models/perfil")
 const Perfil = mongoose.model("tb_perfil")
 const fncPerfil = require("../functions/fncPerfil")
 
+//usufunc, funcionalidades que os usuários podem ter acesso
+const usufuncClass = require("../models/usufunc")
+const Usufunc = mongoose.model("tb_usufunc")
+const fncUsufunc = require("../functions/fncUsufunc")
+
 //sala, onde são realizadas os atendimentos
 const salaClass = require("../models/sala")
 const Sala = mongoose.model("tb_sala")
@@ -89,12 +94,6 @@ const fncEstado = require("../functions/fncEstado")
 const anoClass = require("../models/ano")
 const Ano = mongoose.model("tb_ano")
 const fncAno = require("../functions/fncAno")
-
-//Funcionalidade, cadastro das Funcionalidades para definição das permissões
-const funcionalidadeClass = require("../models/funcionalidade")
-const Funcionalidade = mongoose.model("tb_funcionalidade")
-const fncFuncionalidade = require("../functions/fncFuncionalidade")
-
 
 //usuario, cadastro dos usuários
 const usuarioClass = require("../models/usuario")
@@ -540,7 +539,7 @@ router.post('/ferramentas/usuario/definirSenha', (req,res)=>{
 })
 
 
-router.post('/login', passport.authenticate('local', {
+router.post('/login/backup', passport.authenticate('local', {
     failureRedirect: '/menu/login',
     failureMessage: true
 }), async function (req, res) {
@@ -728,6 +727,204 @@ router.post('/login', passport.authenticate('local', {
     }
 });
 
+router.post('/login', passport.authenticate('local', {
+    failureRedirect: '/menu/login',
+    failureMessage: true
+}), async function (req, res) {
+    try {
+        // Variáveis iniciais
+        let aux = 1;
+        const hoje = new Date();
+        const diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
+        const mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
+
+        // Calcular domingo (início da semana)
+        const domingo = new Date(hoje);
+        domingo.setDate(hoje.getDate() - hoje.getDay()); // 0 = domingo
+
+        // Construir dias da semana: domingo a sábado
+        const semanaDias = Array.from({ length: 7 }).map((_, i) => {
+            const d = new Date(domingo);
+            d.setDate(domingo.getDate() + i);
+            return {
+                dia: String(d.getUTCDate()).padStart(2, '0'),
+                mes: String(d.getUTCMonth() + 1).padStart(2, '0')
+            };
+        });
+
+        // Função auxiliar: filtrar aniversariantes da semana
+        function filtrarAniversariantes(lista, tipo, campoNomeOriginal) {
+            return lista
+                .map(p => {
+                    const dataNasc = new Date(p[`${tipo}_datanasc`]);
+                    const dia = String(dataNasc.getUTCDate()).padStart(2, '0');
+                    const mes = String(dataNasc.getUTCMonth() + 1).padStart(2, '0');
+                    return {
+                        dtnasc: dataNasc,
+                        diaNascimento: dia,
+                        mesNascimento: mes,
+                        hoje: dia === diaAtual && mes === mesAtual,
+                        ...(tipo === 'usuario' ? { usuario_nome: p.usuario_nome } : { bene_nome: p.bene_nome })
+                    };
+                })
+                .filter(p =>
+                    semanaDias.some(s =>
+                        s.dia === p.diaNascimento && s.mes === p.mesNascimento
+                    )
+                )
+                .sort((a, b) => {
+                    if (a.mesNascimento !== b.mesNascimento) return a.mesNascimento - b.mesNascimento;
+                    return a.diaNascimento - b.diaNascimento;
+                });
+        }
+
+        // Função para normalizar o campo agenda_selo
+        function normalizeBoolean(value) {
+            if (typeof value === "boolean") {
+                return value; // Já é um booleano, retorna como está
+            }
+            if (typeof value === "string") {
+                return value.toLowerCase() === "true"; // Converte strings "true" ou "false" para booleano
+            }
+            return false; // Caso padrão (se for null, undefined ou outro tipo)
+        }
+
+        // Verificar usuário e perfil
+        const usu = await Usuario.findOne({ usuario_email: req.body.email, usuario_senha: req.body.senha });
+        if (!usu || usu.usuario_status !== "Ativo") {
+            req.flash("error_message", "Usuário ou senha inválidos ou inativo.");
+            return res.redirect('/menu/login');
+        }
+
+        const perfilId = usu.usuario_perfilid;
+        const idUsu = usu._id;
+
+        // Definir tempo de expiração do cookie
+        const tempoCookie = ["62421801a12aa557219a0fb9", "62421857a12aa557219a0fc1", "624218f5a12aa557219a0fd0"].includes(perfilId)
+            ? (5 * 60 * 60 * 1000) // 5 horas
+            : (2 * 60 * 60 * 1000); // 2 horas
+
+        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + tempoCookie) });
+        res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + tempoCookie) });
+
+        // Buscar dados gerais
+        const [usuarios, benes, salas, terapias, benesFull] = await Promise.all([
+            Usuario.find({ usuario_status: "Ativo" }),
+            Bene.find({ bene_status: "Ativo" }),
+            Sala.find(),
+            Terapia.find(),
+            Bene.find()
+        ]);
+
+        // Filtrar aniversariantes da semana
+        const aniversariantesDaSemanaUsuario = filtrarAniversariantes(usuarios, "usuario", "nome");
+        const aniversariantesDaSemanaBene = filtrarAniversariantes(benes, "bene", "nome");
+
+        // Agendas semanais
+        const inicioSemana = new Date(domingo);
+        const fimSemana = new Date(domingo);
+        fimSemana.setDate(domingo.getDate() + 6);
+
+        const agendasSemanais = await Agenda.find({
+            agenda_data: { $gte: inicioSemana, $lte: fimSemana },
+            agenda_usuid: idUsu
+        });
+
+        const evolucaoFaltante = agendasSemanais
+            .filter(a => !normalizeBoolean(a.agenda_selo)) // Normaliza o campo agenda_selo
+            .map(a => {
+                const dat = new Date(a.agenda_data);
+                const hora = String(dat.getUTCHours()).padStart(2, '0');
+                const minuto = String(dat.getUTCMinutes()).padStart(2, '0');
+                const sala = salas.find(s => String(s._id) === String(a.agenda_salaid));
+                const bene = benesFull.find(b => String(b._id) === String(a.agenda_beneid));
+                const terapia = terapias.find(t => String(t._id) === String(a.agenda_terapiaid));
+                return {
+                    _id: a._id,
+                    agenda_data: fncGeral.getDataFMTOption(dat, "/"),
+                    agenda_hora: `${hora}:${minuto}`,
+                    agenda_data_dia: fncGeral.getDataFMT(dat),
+                    agenda_aux: aux++,
+                    agenda_data_semana: ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()],
+                    sala_nome: sala?.sala_nome || "Sala não encontrada",
+                    bene_apelido: bene?.bene_apelido || "Beneficiário não encontrado",
+                    terapia_nomecid: terapia?.terapia_nomecid || "Terapia não encontrada",
+                    dia_hora_ordenação: `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${hora}${minuto}`,
+                    agenda_selo: normalizeBoolean(a.agenda_selo) // Normaliza o campo agenda_selo
+                };
+            }).sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
+
+        // Agendas do dia (com filtro)
+        const inicioDia = new Date();
+        inicioDia.setHours(0, 0, 0, 0);
+        const fimDia = new Date();
+        fimDia.setHours(23, 59, 59, 999);
+
+        let agendas = await Agenda.find({
+            agenda_data: { $gte: inicioDia, $lte: fimDia },
+            agenda_usuid: idUsu,
+            agenda_temp: false
+        });
+
+        agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
+
+        agendas.forEach(a => {
+            const dat = new Date(a.agenda_data);
+            a.agenda_data_dia = fncGeral.getDataFMT(dat);
+            a.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getUTCMinutes()).padStart(2, '0')}`;
+            a.agenda_aux = aux++;
+            a.dia_hora_ordenação = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${String(dat.getUTCHours()).padStart(2, '0')}${String(dat.getUTCMinutes()).padStart(2, '0')}`;
+            a.agenda_data_semana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()];
+            a.agenda_selo = normalizeBoolean(a.agenda_selo); // Normaliza o campo agenda_selo
+        });
+
+        const agendaFinal = agendas.sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
+
+        // Buscar dados adicionais
+        const [terapias2, benes2, usuarios2] = await Promise.all([
+            Terapia.find(),
+            Bene.find(),
+            Usuario.find({
+                usuario_status: "Ativo",
+                $or: [
+                    { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                    { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                ]
+            })
+        ]);
+
+        // Mensagem de feedback
+        const flash = new Resposta();
+        if (!usu.usuario_palavrachave || usu.usuario_palavrachave === "undefined") {
+            flash.sucesso = "almost";
+            flash.texto = "Você ainda não cadastrou sua Palavra Chave.";
+        } else if (usu.usuario_senha === "123456789") {
+            flash.sucesso = "almost";
+            flash.texto = "Você ainda não alterou sua senha temporária.";
+        } else {
+            flash.sucesso = "true";
+            flash.texto = "Logado com sucesso!";
+        }
+
+        // Renderizar a view
+        res.render("branco", {
+            flash,
+            aniversariantesDaSemanaUsuario,
+            aniversariantesDaSemanaBene,
+            agendas: agendaFinal,
+            evolucaoFaltante,
+            terapias: terapias2,
+            agendasSemanaiss: agendaFinal,
+            benes: benes,
+            salas,
+            usuarios: usuarios2
+        });
+    } catch (err) {
+        console.error("Erro no login:", err);
+        req.flash("error_message", "Erro ao autenticar o usuário.");
+        res.redirect('/menu/login');
+    }
+});
 
 router.get('/menuT', (req,res)=>{
     let lvl = 3;
@@ -924,10 +1121,7 @@ router.get("/agenda/lisF", fncGeral.IsAuthenticated, (req,res) =>{//direciona a 
     fncAgenda.carregaAgendaF(req, res);
 })
 
-//controle de Extras vindo da Agenda Fixa
-router.get("/atendimento/extra/extraLis", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Fixa.
-    fncAgenda.carregaControleextrasF(req, res);
-})
+
 
 router.post("/agenda/filF", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de filtro de Fixa.
     fncAgenda.carregaAgendaFilF(req, res);
@@ -2077,14 +2271,26 @@ router.post('/atendimento/extra/lisF', fncGeral.IsAuthenticated, (req,res) =>{//
     fncExtra.filtraExtra(req,res);
 })
 
+//Lista todos os Extras da agenda depois de realizar a copia quem chama essa rota é a função extraCopia
+// Rota GET para exibir a lista com filtros
+router.get('/atendimento/extra/controleF', fncGeral.IsAuthenticated, (req, res) => {
+    fncExtra.filtraExtra(req, res, new Resposta());
+});
+
+//controle de Extras vindo da Agenda Fixa
+router.get("/atendimento/extra/extraLis", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Fixa.
+    fncAgenda.carregaControleextrasF(req, res);
+})
+
 //Lista todos os Extras Controles
 router.get('/atendimento/extra/lisctrl', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
     fncExtra.listaExtractrl(req,res);
 })
-//Lista todos os Extras Exportados para Base de Extras a fim de Auditar e gerar Atendimentos para seguir à Cobrança
+//Lista controle extra pelo menu
 router.get('/atendimento/extra/ctrlextra', fncGeral.IsAuthenticated, (req,res) =>{
     fncExtra.controleExtra(req,res);
 })
+
 //Lista todos os Extras
 router.post('/atendimento/extra/ctrlextraF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Extra, com bene e data.
     fncExtra.controleExtraFil(req,res);
@@ -2098,10 +2304,15 @@ router.get('/extra/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Ext
     fncExtra.deletaExtra(req,res);
 })
 
-// Rota para copiar agendamentos extras
-router.post('/extra/extraCopia', fncGeral.IsAuthenticated, (req, res) => {
-    fncExtra.extraCopiar(req, res);
-});
+router.post('/atendimento/extra/extraCopia', fncGeral.IsAuthenticated, async (req, res) => {
+    try {
+        await fncExtra.extraCopiar(req, res);
+    } catch (error) {
+        console.error('Erro na rota /extra/extraCopia:', error);
+        req.flash('error_message', 'Erro interno ao processar a cópia.');
+        return res.redirect('/admin/erro');
+    }
+})
 
 //Menu Laudos ** Area Tecnicos   
 //Carrega Cadastro de Laudo 
@@ -3159,40 +3370,7 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
     router.post('/ferramentas/ano/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Empresa
         fncAno.atualizaAno(req, res);
     })
-//Menu Ferramentas
-    //funcionalidade
-    router.get('/ferramentas/funcionalidade/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas Funcionalidade
-        fncFuncionalidade.listaFuncionalidade(req, res);
-    })
-    
-    router.get('/ferramentas/funcionalidade/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Funcionalidade.
-        fncFuncionalidade.carregaFuncionalidade(req, res);
-    })
 
-    router.post('/ferramentas/funcionalidade/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Funcionalidade
-    fncFuncionalidade.cadastraFuncionalidade(req, res);
-
-    })
-    
-    router.get('/ferramentas/funcionalidade/del/:id', fncGeral.IsAuthenticated, async (req, res) => {
-        try {
-          const funcionalidadeId = req.params.id;
-          await fncFuncionalidade.deletaFuncionalidade(funcionalidadeId, req, res);
-          // Redireciona para a listagem após a deleção
-          res.redirect('/menu/ferramentas/funcionalidade/lis'); // URL da listagem
-        } catch (err) {
-          console.error(err);
-          res.render('admin/erro');
-        }
-      })
-    
-    router.get('/ferramentas/funcionalidade/edi/:id', fncGeral.IsAuthenticated, (req, res) =>{//direciona a edição de empresa
-        fncFuncionalidade.carregaFuncionalidadeEdi(req, res);
-    })
-
-    router.post('/ferramentas/funcionalidade/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Empresa
-        fncFuncionalidade.atualizaFuncionalidade(req, res);
-    })
 //Menu Ferramentas
     //Especialidade do Plano de tratamento
         router.get('/ferramentas/especialidadePlano/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas especialidadePlanos
@@ -3502,7 +3680,31 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         router.post('/ferramentas/usuario/mudarNomeTerapeuta', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Usuarioimento
             fncUsuario.mudarNomeTerapeuta(req, res);
         })
+//Menu Ferramentas
+        //Usufunc - Funcionalidades dos usuários podem acessar
+        router.get('/ferramentas/usufunc/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas salas
+            fncUsufunc.listaUsufunc(req, res);
+        })
 
+        router.get('/ferramentas/usufunc/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de sala
+            fncUsufunc.carregaUsufunc(req, res);
+        })
+
+        router.post('/ferramentas/usufunc/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona sala
+            fncUsufunc.cadastraUsufunc(req, res);
+        })
+
+        router.get('/ferramentas/usufunc/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta sala
+            fncUsufunc.deletaUsufunc(req, res);
+        })
+
+        router.get('/ferramentas/usufunc/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de sala
+            fncUsufunc.carregaUsufuncEdi(req, res);
+        })
+
+        router.post('/ferramentas/usufunc/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Salaimento
+            fncUsufunc.atualizaUsufunc(req, res);
+        })
 //Menu Ferramentas
     //Ajuda
         router.get('/ferramentas/ajuda', fncGeral.IsAuthenticated, (req,res) =>{

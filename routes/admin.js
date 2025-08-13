@@ -95,12 +95,6 @@ const anoClass = require("../models/ano")
 const Ano = mongoose.model("tb_ano")
 const fncAno = require("../functions/fncAno")
 
-//Funcionalidade, cadastro das Funcionalidades para definição das permissões
-const funcionalidadeClass = require("../models/funcionalidade")
-const Funcionalidade = mongoose.model("tb_funcionalidade")
-const fncFuncionalidade = require("../functions/fncFuncionalidade")
-
-
 //usuario, cadastro dos usuários
 const usuarioClass = require("../models/usuario")
 const Usuario = mongoose.model("tb_usuario")
@@ -3376,40 +3370,7 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
     router.post('/ferramentas/ano/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Empresa
         fncAno.atualizaAno(req, res);
     })
-//Menu Ferramentas
-    //funcionalidade
-    router.get('/ferramentas/funcionalidade/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas Funcionalidade
-        fncFuncionalidade.listaFuncionalidade(req, res);
-    })
-    
-    router.get('/ferramentas/funcionalidade/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Funcionalidade.
-        fncFuncionalidade.carregaFuncionalidade(req, res);
-    })
 
-    router.post('/ferramentas/funcionalidade/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Funcionalidade
-    fncFuncionalidade.cadastraFuncionalidade(req, res);
-
-    })
-    
-    router.get('/ferramentas/funcionalidade/del/:id', fncGeral.IsAuthenticated, async (req, res) => {
-        try {
-          const funcionalidadeId = req.params.id;
-          await fncFuncionalidade.deletaFuncionalidade(funcionalidadeId, req, res);
-          // Redireciona para a listagem após a deleção
-          res.redirect('/menu/ferramentas/funcionalidade/lis'); // URL da listagem
-        } catch (err) {
-          console.error(err);
-          res.render('admin/erro');
-        }
-      })
-    
-    router.get('/ferramentas/funcionalidade/edi/:id', fncGeral.IsAuthenticated, (req, res) =>{//direciona a edição de empresa
-        fncFuncionalidade.carregaFuncionalidadeEdi(req, res);
-    })
-
-    router.post('/ferramentas/funcionalidade/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Empresa
-        fncFuncionalidade.atualizaFuncionalidade(req, res);
-    })
 //Menu Ferramentas
     //Especialidade do Plano de tratamento
         router.get('/ferramentas/especialidadePlano/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas especialidadePlanos

@@ -2,92 +2,65 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 
 const EmpresaSchema = mongoose.Schema({
-    empresa_unidade : {
-        type: String,
-        unique: true,
-        required: true
-    },
-    empresa_nome : {
-        type: String,
-        unique: true,
-        required: true
-    },
-    empresa_fantasia : {
-        type: String,
-
-    },
-    empresa_cnpj : {
-        type: String,
-        required: true
-    },
-    empresa_muni : {
-        type: String,
-
-    },
-    empresa_estad : {
-        type: String,
-
-    },
-    empresa_end : {
-        type: String,
-        required: true
-    },
-    empresa_endcompl : {
-        type: String,
-
-    },
-    empresa_endbairro : {
-        type: String,
-        required: true
-    },
-    empresa_endcidade : {
-        type: String,
-        required: true
-    },
-    empresa_enduf : {
-        type: String,
-        required: true
-    },
-    empresa_endcep : {
-        type: String,
-        required: true
-    },
-    empresa_whatsapp : {
-        type: String,
-        required: true
-    },
-    empresa_cel : {
-        type: String,
-
-    },
-    empresa_fixo : {
-        type: String,
-
-    },
-    empresa_email : {
-        type: String,
-        required: true
-    },
-    empresa_site : {
-        type: String,
-    },
-    empresa_obs : {
-        type: String,
-    },
-    empresa_datacad: {
-        type: Date
-    },
-    empresa_dataedi: {
-        type: Date
-    }
+    empresa_unidade : {type: String, unique: true, required: true },
+    empresa_nome : { type: String, unique: true, required: true },
+    empresa_fantasia : { type: String, required: true},
+    empresa_cnpj : { type: String, required: true },
+    empresa_muni : { type: String, required: false },
+    empresa_estad : { type: String, required: false },
+    empresa_end : { type: String, required: false },
+    empresa_endcompl : { type: String, required: false },
+    empresa_endbairro : { type: String, required: false },
+    empresa_endcidade : { type: String, required: false },
+    empresa_enduf : { type: String, required: false },
+    empresa_endcep : { type: String, required: false },
+    empresa_whatsapp : { type: String, required: false },
+    empresa_cel : { type: String, required: false },
+    empresa_fixo : { type: String, required: false },
+    empresa_email : { type: String, required: false },
+    empresa_site : { type: String, required: false },
+    empresa_obs : { type: String, required: false },
+    empresa_status : { type: Boolean, required: false },//Boleano
+    //controle CRUD
+    empresa_datacad: { type: Date, required: false },
+    empresa_dataedi: { type: Date, required: false },
+    empresa_usuidcad: { type: ObjectId, required: false },
+    empresa_usuidedi: { type: ObjectId, required: false },
+    empresa_lixo :{ type: Boolean, required: false },//Boleano
+    empresa_datalixo: { type: String, required: false },
+    empresa_usuidlixo: { type: ObjectId, required: false }
     
 })
 
 class Empresa{
-    constructor(empresa_unidade,empresa_nome,empresa_fantasia,empresa_cnpj,empresa_muni
-        ,empresa_estad,empresa_end,empresa_endcompl,empresa_endbairro,empresa_endcidade
-        ,empresa_enduf,empresa_endcep,empresa_whatsapp,empresa_cel,empresa_fixo
-        ,empresa_email,empresa_site,empresa_obs,empresa_datacad,empresa_dataedi 
+    constructor(
+        empresa_unidade,
+        empresa_nome,
+        empresa_fantasia,
+        empresa_cnpj,
+        empresa_muni,
+        empresa_estad,
+        empresa_end,
+        empresa_endcompl,
+        empresa_endbairro,
+        empresa_endcidade,
+        empresa_enduf,
+        empresa_endcep,
+        empresa_whatsapp,
+        empresa_cel,
+        empresa_fixo,
+        empresa_email,
+        empresa_site,
+        empresa_obs,
+        empresa_status,//Boleano
+        //controle CRUD
+        empresa_datacad,
+        empresa_dataedi,
+        empresa_usuidcad,
+        empresa_usuidedi,
+        empresa_lixo,//Boleano
+        empresa_datalixo,
+        empresa_usuidlixo
         ){
         this.empresa_unidade  = empresa_unidade,
         this.empresa_nome  = empresa_nome,
@@ -107,19 +80,24 @@ class Empresa{
         this.empresa_email  = empresa_email,
         this.empresa_site  = empresa_site,
         this.empresa_obs  = empresa_obs,
-        this.empresa_datacad  = empresa_datacad,
-        this.empresa_dataedi  = empresa_dataedi
-            
+        this.empresa_status  = empresa_status,//Boleano
+        //controle CRUD
+        this.empresa_datacad = empresa_datacad,
+        this.empresa_dataedi = empresa_dataedi,
+        this.empresa_usuidcad = empresa_usuidcad,
+        this.empresa_usuidedi = empresa_usuidedi,
+        this.empresa_lixo = empresa_lixo,//Boleano
+        this.empresa_datalixo = empresa_datalixo,
+        this.empresa_usuidlixo = empresa_usuidlixo
     }
 }
-
-
 
 EmpresaSchema.loadClass(Empresa)
 const EmpresaModel = mongoose.model('tb_empresa', EmpresaSchema)
 module.exports = {EmpresaModel,EmpresaSchema,
     empresaEditar: async (req, res) => {
         let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];
         let resultado;
         //Pega data atual
         
@@ -144,9 +122,11 @@ module.exports = {EmpresaModel,EmpresaSchema,
                 empresa_email: req.body.empresaEmail,
                 empresa_site: req.body.empresaSite,
                 empresa_obs: req.body.empresaObs,
-                empresa_dataedi: dataAtual
+                empresa_status: req.body.empresaStatus,
+                empresa_usuidedi : usuarioAtual, 
+                empresa_dataedi: dataAtual,
+                empresa_lixo : false
                 }}
-                
         ).then((res) =>{
             console.log("Salvo")
             resultado = true;
@@ -159,16 +139,14 @@ module.exports = {EmpresaModel,EmpresaSchema,
         return resultado;
     },
 
-
-
-
-
     empresaAdicionar: async (req,res) => {
         let empresaExiste =  await EmpresaModel.findOne({empresa_nome: req.body.empresaNome});//quando não acha fica null
         let dataAtual = new Date();
-        
+        let usuarioAtual = req.cookies['idUsu'];
+        let resultado;
         if(empresaExiste){//se tiver null cai no else
             return "O nome da empresa já existe";
+            //programar alert
         } else {
             console.log("empresamodel");
             const newEmpresa = new EmpresaModel({
@@ -190,7 +168,10 @@ module.exports = {EmpresaModel,EmpresaSchema,
                 empresa_email: req.body.empresaEmail,
                 empresa_site: req.body.empresaSite,
                 empresa_obs: req.body.empresaObs,
-                empresa_datacad: dataAtual
+                empresa_status: true,
+                empresa_lixo : false,
+                empresa_datacad: dataAtual,
+                empresa_usuidcad : usuarioAtual, 
             });
             console.log("newEmpresa save");
             await newEmpresa.save().then(()=>{

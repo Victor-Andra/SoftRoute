@@ -774,6 +774,9 @@ module.exports = {
                                     case "Feriado":
                                         terapiaAtend = ats.atend_mergeterapiaid;
                                         break;
+                                    case "Falta Absoluta":
+                                        terapiaAtend = ats.atend_mergeterapiaid;
+                                        break;
                                     case "Glosa":
                                         terapiaAtend = ats.atend_terapiaid;
                                         break;
@@ -824,6 +827,10 @@ module.exports = {
                                         terapiaAtend = atend.atend_mergeterapiaid;
                                         creVal = atend.atend_mergevalorcre;
                                         break;
+                                    case "Falta Absoluta":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
+                                        break;
                                     case "Glosa":
                                         terapiaAtend = atend.atend_terapiaid;
                                         creVal = atend.atend_valorcre;
@@ -854,7 +861,7 @@ module.exports = {
                                         break;
                                 }
 
-                                if ((""+t._id) === (""+terapiaAtend)){
+                                if ((""+t._id) === (""+terapiaAtend) && categorias != "Falta Absoluta"){
                                     qtdIds++;
                                     creValFinal = creVal;
                                     //console.log("TERAPIA OK")
@@ -1081,6 +1088,10 @@ module.exports = {
                                             terapiaAtend = "break";
                                             terapeutaAtend = "break";
                                             break;
+                                        case "Falta Absoluta":
+                                            terapiaAtend = "break";
+                                            terapeutaAtend = "break";
+                                            break;
                                         case "SubstitutoFixo":
                                             terapiaAtend = atend.atend_fixoterapiaid;
                                             terapeutaAtend = atend.atend_fixoterapeutaid;
@@ -1093,7 +1104,7 @@ module.exports = {
                                     }
                                 }
                                 
-                                if (categorias != "Feriado"){
+                                if (categorias != "Feriado" && categorias != "Falta Absoluta"){
                                     /*
                                     terapia.forEach((ttt)=>{
                                         if ((""+ttt._id) == (""+terapiaAtend)){
@@ -1703,6 +1714,9 @@ module.exports = {
                                                     case "Feriado":
                                                         terapiaAtend = "break";
                                                         break;
+                                                    case "Falta Absoluta":
+                                                        terapiaAtend = "break";
+                                                        break;
                                                     case "SubstitutoFixo":
                                                         terapiaAtend = ats.atend_fixoterapiaid;
                                                         break;
@@ -1721,11 +1735,14 @@ module.exports = {
                                         if ((""+atend.atend_convid+"") == (""+convid+"")){
                                         categorias = atend.atend_categoria
                                         
-                                        if (atend.atend_fixo == "true" && categorias != "Feriado"){
+                                        if (atend.atend_fixo == "true" && categorias != "Feriado" && categorias != "Falta Absoluta"){
                                             terapiaAtend = atend.atend_fixoterapiaid;
                                             creVal = atend.atend_fixovalorcre;
                                         } else {
                                             switch (categorias){
+                                                case "Feriado":
+                                                    terapiaAtend = "break";
+                                                    break;
                                                 case "Feriado":
                                                     terapiaAtend = "break";
                                                     break;
@@ -1742,7 +1759,7 @@ module.exports = {
                                         console.log("atend: "+atend)
         //Abrir comentar aqui
                                         //Atencao Analise 0 acima
-                                        if (categorias != "Feriado" && categorias != "Falta Justificada" && atend.atend_fixo == "true" && (creVal == undefined || creVal == "undefined" || creVal == "0,00")){
+                                        if (categorias != "Feriado" && categorias != "Falta Absoluta" && categorias != "Falta Justificada" && atend.atend_fixo == "true" && (creVal == undefined || creVal == "undefined" || creVal == "0,00")){
                                             let convcreval;
                                             let convcreTes;
                                             let agendacreTes;
@@ -2131,6 +2148,9 @@ module.exports = {
                                         case "Feriado":
                                             terapiaAtend = "break";
                                             break;
+                                        case "Feriado":
+                                            terapiaAtend = "break";
+                                            break;
                                         case "SubstitutoFixo":
                                             terapiaAtend = atend.atend_mergeterapiaid;
                                             creVal = atend.atend_fixovalorcre;
@@ -2141,7 +2161,7 @@ module.exports = {
                                             break;
                                     }
                                 }
-                                if (categorias != "Feriado" && categorias != "Falta Justificada" && atend.atend_fixo == "true" && (creVal == "0,00" || creVal == undefined || creVal == "undefined")){
+                                if (categorias != "Feriado" && categorias != "Falta Absoluta" && categorias != "Falta Justificada" && atend.atend_fixo == "true" && (creVal == "0,00" || creVal == undefined || creVal == "undefined")){
                                     let convcreval;
                                     let convcreTes;
                                     let agendacreTes;

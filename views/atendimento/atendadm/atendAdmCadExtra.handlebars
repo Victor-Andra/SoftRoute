@@ -126,7 +126,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Cadastro de Atendimentos para Extras</li>
+							<li class="active">Cadastro de Atendimentos para Extras x</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<div class="row">
@@ -138,6 +138,7 @@
 										<div class="widget-header">
 											<h4 class="widget-title">Atendimentos para Extras</h4>
 											<div class="hidden">
+												<input id="atendUsuid" name="atendUsuid" value="{{atend.atend_usuid}}" />
 												<input id="nextNum" name="nextNum" type="number"  value="{{atend.atend_num}}" />
 												<input id="atendExtraid" name="atendExtraid" value="{{atend.atend_extraid}}" />
 											</div>
@@ -161,7 +162,7 @@
 														São Indexados com o Extra a ele relacionado.
 														Podendo ter ou não mais de um atendimento para o Extra.
 												</div>
-												<input id="atendUsuid" name="atendUsuid" value="" />
+												
 
 														<label for="id-date-picker-1">Data atendimento</label>
 														<div class="row">

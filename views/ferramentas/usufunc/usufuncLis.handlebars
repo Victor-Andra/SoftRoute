@@ -3,7 +3,52 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>Lista de Funcionalidade dos Usuários</title>
+		 <style>
+        /*Tooltip personalizado */
+            .custom-tooltip {
+                position: relative;
+                display: inline-block;
+                cursor: pointer;
+            }
 
+            .tooltip-text {
+                visibility: hidden;
+                width: max-content;
+                background-color: #f3dfdf;
+                color: red;
+                font-size: 8px;
+                text-align: left;
+                border-radius: 4px;
+                padding: 8px 12px;
+                position: absolute;
+                z-index: 9999;
+                bottom: 125%; /* Acima do ícone */
+                left: 50%;
+                transform: translateX(-50%);
+                opacity: 0.9;
+                white-space: normal;
+                min-width: 150px;
+                max-width: 300px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: opacity 0.3s;
+            }
+
+            .tooltip-text::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #f3dfdf transparent transparent transparent;
+            }
+
+            /* Mostra o tooltip quando o mouse passa sobre o link */
+            .custom-tooltip:hover .tooltip-text {
+                visibility: visible;
+            }
+    </style>
 		
 	</head>
 
@@ -53,9 +98,14 @@
 															</label>
 														</th>
 														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Código</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Nome</th>
 														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Descrição</th>
 														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Status</th>
-														<th>Ação</th>
+														<th>Ação
+															<a class="blue" href="/menu/ferramentas/usufunc/cad">
+																<i class="ace-icon fa fa-plus bigger-130"></i>
+															</a>
+														</th>
 
 													</tr>
 													
@@ -71,6 +121,7 @@
 																</label>
 															</th>
 															<td>{{usufunc_codigo}}</td>
+															<td>{{usufunc_nome}}</td>
 															<td>{{usufunc_descricao}}</td>
 															<td>
 																{{#ifEqual this.usufunc_status "Inativo"}}
@@ -87,11 +138,20 @@
 																	<a class="hidden" class="red" href="/menu/ferramentas/usufunc/del/{{_id}}">
 																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																	</a>
+																	<a class="blue custom-tooltip" name="acaoVerquemalterou" id="acaoVerquemalterou">
+																		<i class="ace-icon fa fa-eye bigger-130"></i>
+																		<span class="tooltip-text">{{funcionalidade_dataedi}}<br>
+																		
+																			{{#each usuarios}}
+																				{{#ifEqual this._id ../funcionalidade_usuidedi}}
+																					<td>{{usuario_nome}}</td>
+																				{{/ifEqual}}
+																			{{/each}}
+																		
+																		</span>
+																	</a>
 																</div>
-																<div class="hidden-md hidden-lg">
-																	
-																	</div>
-																</div>
+																
 															</td>
 														</tr>
 													{{/each}}
@@ -153,7 +213,7 @@
             "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
         },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null,{ "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [ 50, 100, 200],
 			"lengthChange": true,

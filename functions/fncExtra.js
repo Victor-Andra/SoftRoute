@@ -1777,12 +1777,17 @@ extraCopiar: async (req, res) => {
     console.log("🚀 Iniciando cópia de agendamentos extras");
 
     try {
+        let flash = new Resposta();
+        let resultado;
+
         const { anoAtend, mesAtend } = req.body;
 
         // ✅ Validação
         if (!anoAtend || !mesAtend || isNaN(anoAtend) || isNaN(mesAtend)) {
-            req.flash("error_message", "Ano ou mês inválido.");
-            return res.redirect('back'); // Volta para a mesma página
+            //req.flash("error_message", "Ano ou mês inválido.");
+            //return res.redirect('back'); // Volta para a mesma página
+            flash.sucesso = "false";
+            flash.texto = "Ano ou mês inválido.";
         }
 
         const ano = parseInt(anoAtend);
@@ -1800,16 +1805,20 @@ extraCopiar: async (req, res) => {
         }).lean();
 
         if (agendamentos.length === 0) {
-            req.flash("info_message", "Nenhum agendamento extra encontrado.");
-            return res.redirect('back');
+            //req.flash("info_message", "Nenhum agendamento extra encontrado.");
+            //return res.redirect('back');
+            flash.sucesso = "false";
+            flash.texto = "Nenhum agendamento extra encontrado.";
         }
 
         console.log(`✅ Encontrados ${agendamentos.length} agendamentos.`);
 
         const usuarioId = req.user?._id || req.cookies['idUsu'];
         if (!usuarioId) {
-            req.flash("error_message", "Usuário não autenticado.");
-            return res.redirect('back');
+            //req.flash("error_message", "Usuário não autenticado.");
+            //return res.redirect('back');
+            flash.sucesso = "false";
+            flash.texto = "Usuário não autenticado.";
         }
 
         const agora = new Date();
@@ -1881,25 +1890,161 @@ extraCopiar: async (req, res) => {
             });
 
         if (novosExtras.length === 0) {
-            req.flash("info_message", "Todos os agendamentos já foram exportados anteriormente.");
+            //req.flash("info_message", "Todos os agendamentos já foram exportados anteriormente.");
+            flash.sucesso = "false";
+            flash.texto = "Todos os agendamentos já foram exportados anteriormente.";
         } else {
             const resultado = await Extra.insertMany(novosExtras, { ordered: false });
             const inseridos = resultado.length;
-            req.flash("success_message", `✅ ${inseridos} novos registros copiados!`);
+            //req.flash("success_message", `✅ ${inseridos} novos registros copiados!`);
+            flash.sucesso = "true"
+            flash.texto = ("✅ "+resultado.length+" novos registros copiados!");
             console.log(`✅ ${inseridos} registros inseridos.`);
         }
 
         console.log("🏁 Cópia finalizada com sucesso.");
-        return res.redirect('back'); // Volta para a mesma página
+        //return res.redirect('back'); // Volta para a mesma página
+
+
+//XXXXXXXXXXXXXXXX      não deletar      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+        const tipoData = req.body.tipoData;
+        console.log("  → anoAtend:", req.body.anoAtend);
+        console.log("  → mesAtend:", req.body.mesAtend);
+
+        if (tipoData === "Ano/Mes") {
+            const ano = parseInt(anoAtend);
+            const mes = parseInt(mesAtend);
+            const primeiroDia = new Date(Date.UTC(ano, mes, 1));
+            const ultimoDia = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999));
+            dataIni = primeiroDia.toISOString();
+            dataFim = ultimoDia.toISOString();
+        } else {
+            // Outros tipos de filtro (Semana, Dia) — mantenha seu código existente
+            // ...
+            return res.render('admin/erro', { message: "Tipo de filtro não suportado." });
+        }
+
+        console.log("dataIni:", dataIni);
+        console.log("dataFim:", dataFim);
+
+        Agenda.find({
+            agenda_data: { $gte: dataIni, $lte: dataFim },
+            agenda_extra: true,
+            agenda_cobrarextra: true
+        })
+        .then((agendas) => {
+            const extraIds = agendas.map(extra => extra._id);
+
+            let atendimentosPromise;
+            if (extraIds.length > 0) {
+                atendimentosPromise = Atend.find({ atend_extraid: { $in: extraIds } }).exec();
+            } else {
+                atendimentosPromise = Promise.resolve([]);
+            }
+
+            agendas.forEach((a) => {
+                const data = new Date(a.agenda_data);
+                let hor = data.getUTCHours().toString().padStart(2, '0');
+                let min = data.getUTCMinutes().toString().padStart(2, '0');
+                a.extra_hora = `${hor}:${min}`;
+                a.extra_data_dia = fncGeral.getDataFMT(data);
+            });
+
+            Bene.find()
+            .then((bene) => {
+                bene.sort((a, b) => a.bene_nome.localeCompare(b, 'pt-BR'));
+
+                Usuario.find({
+                    usuario_status: "Ativo",
+                    $or: [
+                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                    ]
+                })
+                .then((terapeuta) => {
+                    terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b, 'pt-BR'));
+                    Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
+                    .then((horaage) => {
+                        Sala.find()
+                        .then((salas) => {
+                            salas.sort((a, b) => a.sala_nome.localeCompare(b, 'pt-BR'));
+                            Terapia.find()
+                            .then((terapias) => {
+                                Conv.find()
+                                .then((convs) => {
+                                    convs.sort((a, b) => a.conv_nome.localeCompare(b, 'pt-BR'));
+                                    Ano.find()
+                                    .then((anos) => {
+                                        atendimentosPromise.then((atendimentos) => {
+                                            // ✅ AQUI: repassamos os valores do filtro para a view
+                                            res.render('atendimento/extra/extraLis', {
+                                                extras: agendas,
+                                                benes: bene,
+                                                terapeutas: terapeuta,
+                                                horaages: horaage,
+                                                salas: salas,
+                                                terapias: terapias,
+                                                convs: convs,
+                                                anos: anos,
+                                                atends: atendimentos,
+                                                flash,
+
+                                                // ✅ Valores do filtro para manter no formulário
+                                                filtroTipo: tipoData,
+                                                filtroAno: anoAtend,
+                                                filtroMes: mesAtend
+                                            });
+                                        })
+                                        .catch((err) => {
+                                            console.error("Erro ao carregar atendimentos:", err);
+                                            res.render('atendimento/extra/extraLis', {
+                                                extras: agendas,
+                                                benes: bene,
+                                                terapeutas: terapeuta,
+                                                horaages: horaage,
+                                                salas: salas,
+                                                terapias: terapias,
+                                                convs: convs,
+                                                anos: anos,
+                                                atends: [],
+                                                flash,
+                                                filtroTipo: tipoData,
+                                                filtroAno: anoAtend,
+                                                filtroMes: mesAtend
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        }).catch((err) => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar!");
+            res.redirect('atendimento/extra/extraLis');
+        });
+
+
+//XXXXXXXXXXXXXXXX      não deletar      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
 
     } catch (error) {
         console.error("❌ Erro na cópia:", error);
         if (error.code === 11000) {
-            req.flash("info_message", "Alguns registros já foram copiados (duplicatas ignoradas).");
+            //req.flash("info_message", "Alguns registros já foram copiados (duplicatas ignoradas).");
+            flash.sucesso = "false";
+            flash.texto = "Alguns registros já foram copiados (duplicatas ignoradas).";
         } else {
-            req.flash("error_message", "Erro ao copiar os extras.");
+            //req.flash("error_message", "Erro ao copiar os extras.");
+            flash.sucesso = "false";
+            flash.texto = "Erro ao copiar os extras.";
         }
-        return res.redirect('back'); // Volta sem quebrar
+        //return res.redirect('back'); // Volta sem quebrar
     }
 },
     atualizaExtra(req,res){

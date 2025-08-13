@@ -147,8 +147,8 @@
                             <!-- Formulário para atualizar Extra -->
                             <form class="form-horizontal" role="form" action="/menu/atendimento/extra/atualizar" method="POST"> <!-- Action atualizada -->
                                 <!-- Campo oculto para o ID do Extra -->
-                                <input  id="extraId" name="extraId" value="{{extra._id}}" />
-                                <input  id="_id" name="_id" value="{{extra._id}}" />
+                                <input class="hidden" id="extraId" name="extraId" value="{{extra._id}}" />
+                                <input class="hidden" id="_id" name="_id" value="{{extra._id}}" />
                                 <!-- Campo oculto para data/hora combinada -->
                                 <input type="hidden" id="extraAtenddata" name="extraAtenddata" value="{{extra.extra_data}}" /> <!-- Ajustar conforme campo real -->
                                 <div class="col-sm-12"><!-- Widget Dados Básicos -->
@@ -164,71 +164,98 @@
                                         </div>
                                         <div class="widget-body">
                                             <div class="widget-main">
-                                                <label > Quem criou o extra na agenda? </label>
-                                                <div class="form-group">
-                                                    <div class="col-sm-6">
-                                                        
-                                                        <select name="extraUsucad" id="extraUsucad" class="chosen-select" data-placeholder="Escolha..." >
-																	{{#each usuarios}}
-																	    <option value="{{_id}}">{{usuario_nome}}</option>
-																	{{/each}}
-															</select>
+                                               <div class="row">
+                                                <!-- Campo: Data Cadastro -->
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <label for="extraDatacad">Data Cadastro</label>
+                                                    <div class="input-group">
+                                                        <input 
+                                                            type="date" 
+                                                            name="extraDatacad" 
+                                                            id="extraDatacad" 
+                                                            class="form-control" 
+                                                            value="{{extra.extra_datacad}}" />
                                                     </div>
                                                 </div>
-                                                <label for="extradata">Data cadastro</label>
-                                                <div class="row">
-                                                    <div class="col-sm-4">
-                                                        <div class="input-group">
-                                                            <input name="extraDatacad" id="extraDatacad" type="date" />
+
+                                                <!-- Campo: Usuário que criou -->
+                                                <div class="col-xs-12 col-sm-6">
+                                                    <label>Quem criou o extra na agenda?</label>
+                                                    <select name="extraUsucad" id="extraUsucad" class="chosen-select form-control" data-placeholder="Escolha um usuário...">
+                                                        <option value=""></option>
+                                                        {{#each usuarios}}
+                                                            <option value="{{_id}}" {{#ifEqual ../extra.extra_usucad _id}}selected{{/ifEqual}}>
+                                                                {{usuario_nome}}
+                                                            </option>
+                                                        {{/each}}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                                <!-- LINHA 1: Quem Alterou + Data Edição -->
+                                                <!-- LINHA 1: Data Edição + Quem Alterou -->
+                                                    <div class="row form-group">
+                                                        <!-- Data Edição (à esquerda) -->
+                                                        <div class="col-xs-12 col-sm-6">
+                                                            <label>Data Edição</label>
+                                                            <input 
+                                                                type="date" 
+                                                                name="extraData" 
+                                                                id="extraData" 
+                                                                class="form-control" 
+                                                                value="{{extra.extra_data}}" />
+                                                        </div>
+
+                                                        <!-- Quem Alterou (à direita) -->
+                                                        <div class="col-xs-12 col-sm-6">
+                                                            <label>Quem alterou o extra na agenda?</label>
+                                                            <select name="extraUsuedi" id="extraUsuedi" class="chosen-select form-control" data-placeholder="Escolha...">
+                                                                <option value=""></option>
+                                                                {{#each usuarios}}
+                                                                    <option value="{{_id}}" {{#ifEqual ../extra.extra_usuedi _id}}selected{{/ifEqual}}>
+                                                                        {{usuario_nome}}
+                                                                    </option>
+                                                                {{/each}}
+                                                            </select>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <label > Quem alterou o extra na agenda? </label>
-                                                <div class="form-group">
-                                                    <div class="col-sm-6">
-                                                        
-                                                        <select name="extraUsu" id="extraUsu" class="chosen-select" data-placeholder="Escolha..." >
-																	{{#each usuarios}}
-																	    <option value="{{_id}}">{{usuario_nome}}</option>
-																	{{/each}}
-															</select>
-                                                    </div>
-                                                </div>
-                                                <label for="extradata">Data Edição</label>
-                                                <div class="row">
-                                                    <div class="col-sm-4">
-                                                        <div class="input-group">
-                                                            <input name="extraData" id="extraData" type="date" />
+
+                                                    <!-- LINHA 2: Data Exportação + Hora Exportação + Quem Exportou -->
+                                                    <div class="row form-group">
+                                                        <!-- Data Exportação (esquerda) -->
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <label>Data Exportação</label>
+                                                            <input 
+                                                                type="date" 
+                                                                name="extraDtaExportado" 
+                                                                id="extraDtaExportado" 
+                                                                class="form-control" 
+                                                                value="{{extra.extra_dtaExportado}}" />
+                                                        </div>
+
+                                                        <!-- Hora Exportação (centro) -->
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <label>Hora Exportação</label>
+                                                            <input 
+                                                                type="time" 
+                                                                name="extraHoraExportado" 
+                                                                id="extraHoraExportado" 
+                                                                class="form-control" 
+                                                                value="{{extra.extra_horaExportado}}" />
+                                                        </div>
+
+                                                        <!-- Quem Exportou (direita) -->
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <label>Quem Exportou o Extra para Controle?</label>
+                                                            <select name="extraUsuidExportou" id="extraUsuidExportou" class="chosen-select form-control" data-placeholder="Escolha...">
+                                                                <option value=""></option>
+                                                                {{#each usuarios}}
+                                                                    <option value="{{_id}}" {{#ifEqual ../extra.extra_usuidExportou _id}}selected{{/ifEqual}}>
+                                                                        {{usuario_nome}}
+                                                                    </option>
+                                                                {{/each}}
+                                                            </select>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <label > Quem Exportou o Extra para Controle? </label>
-                                                <div class="form-group">
-                                                    <div class="col-sm-6">
-                                                        
-                                                        <select name="extraUsuidExportou" id="extraUsuidExportou" class="chosen-select" data-placeholder="Escolha..."  value="{{extra.extra_usuidExportou}}">
-                                                            {{#each usuarios}}
-                                                                <option value="{{_id}}">{{usuario_nome}}</option>
-                                                            {{/each}}
-														</select>
-                                                    </div>
-                                                </div>
-                                                <label >Data Exportação</label>
-                                                <div class="row">
-                                                    <div class="col-sm-4">
-                                                        <div class="input-group">
-                                                            <input name="extraDtaExportado" id="extraDtaExportado" type="date" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <label >Hora Exportação</label>
-                                                <div class="row">
-                                                    <div class="col-sm-4">
-                                                        <div class="input-group">
-                                                            <input name="extraHoraExportado" id="extraHoraExportado" type="time"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                                 <label for="extrasAuditado">Auditado</label>
                                                 <div class="form-group">
                                                     <div class="col-sm-6">
@@ -417,7 +444,7 @@
                                                 </div>
 
                                                 <!-- Campos Ocultos para Edição (Dados Originais) -->
-                                                <div id="divCarrega" name="divCarrega" class="">
+                                                <div id="divCarrega" name="divCarrega" class="hidden">
                                                     <!-- Campos de data/hora -->
                                                     <input id="extraDataEdi" name="extraDataEdi" value="{{extra.extra_data}}" />
                                                     <input id="extraHoraEdi" name="extraHoraEdi" value="{{extra.extra_hora}}" />

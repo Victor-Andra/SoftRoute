@@ -1,62 +1,60 @@
 //Exports
 const mongoose = require("mongoose")
 
-//usufuncs
-const usufuncClass = require("../models/usufunc")
-const Usufunc = mongoose.model("tb_usufunc")
-
+//usupermiss
+const usupermisClass = require("../models/usupermis")
+const Usupermis = mongoose.model("tb_usupermis")
 
 //Classes Extrangeiras
 const estadoClass = require("../models/estado")
-const usuarioClass = require("../models/usuario")
 
 //Tabelas Extrangeiras
 const Estado = mongoose.model("tb_estado")
-const Usuario = mongoose.model("tb_usuario")
 
 
 module.exports = {
-    listaUsufunc(req,res){
-        console.log('listando usufuncs')
-        Usuario.find().then((usuario) =>{
-        Usufunc.find().then((usufunc) =>{
+    listaUsupermis(req,res){
+        console.log('listando usupermiss')
+        Usupermis.find().then((usupermis) =>{
             console.log("Listagem Realizada!")
-            res.render('ferramentas/usufunc/usufuncLis', {usufuncs: usufunc, usuarios: usuario})
-        })}).catch((err) =>{
+            res.render('ferramentas/usupermis/usupermisLis', {usupermiss: usupermis})
+        }).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar Usufuncs")
+            req.flash("error_message", "houve um erro ao listar Usupermiss")
             res.redirect('admin/erro')
         })
 
     },
 
-    carregaUsufunc(req,res){
+    carregaUsupermis(req,res){
         Estado.find().then((estado)=>{
             console.log("Listagem Realizada de Ufs!")
-            res.render("ferramentas/usufunc/usufuncCad", {estados: estado})
+            res.render("ferramentas/usupermis/usupermisCad", {estados: estado})
         }).catch((err) =>{
             console.log(err)
-            req.flash("error_message", "houve um erro ao listar Usufuncs")
+            req.flash("error_message", "houve um erro ao listar Usupermiss")
             res.redirect('admin/erro')
         })
 
     },
 
 
-    carregaUsufuncEdi(req,res){
-        Usufunc.findById(req.params.id).then((usufunc) =>{
+    carregaUsupermisEdi(req,res){
+        Usupermis.findById(req.params.id).then((usupermis) =>{
+            console.log(usupermis)
+                Estado.find().then((estado)=>{
                     console.log("Listagem Realizada de Estados")
-            res.render('ferramentas/usufunc/usufuncEdi', {usufunc})
-        }).catch((err) =>{
+            res.render('ferramentas/usupermis/usupermisEdi', {usupermis, estados: estado})
+        })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
         })
     },
 
-    cadastraUsufunc(req,res){
+    cadastraUsupermis(req,res){
         let resposta
-        let cadastro = usufuncClass.usufuncAdicionar(req,res);//variavel para armazenar a função que armazena o async
+        let cadastro = usupermisClass.usupermisAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
         cadastro.then((result)=>{
             resposta = true;
@@ -67,7 +65,7 @@ module.exports = {
             if (resposta == true){
                 console.log('verdadeiro')
                 req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaUsufunc(req,res)
+                this.listaUsupermis(req,res)
             } else {
                 console.log('falso')
                 req.flash("error_message", "houve um erro ao abrir o cadastro!")
@@ -76,10 +74,10 @@ module.exports = {
         })
     },
 
-    atualizaUsufunc(req,res){
+    atualizaUsupermis(req,res){
         let resposta;
         try{
-            usufuncClass.usufuncEditar(req,res).then((res)=>{
+            usupermisClass.usupermisEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resposta = res;
@@ -90,9 +88,9 @@ module.exports = {
                 res.render('admin/erro')
             }).finally(() =>{
                 if(resposta){
-                    //Volta para a usufunc de listagem
+                    //Volta para a usupermis de listagem
                     console.log('verdadeiro')
-                    this.listaUsufunc(req,res)
+                    this.listaUsupermis(req,res)
                 }else{
                     //passar classe de erro
                     console.log("error")
@@ -106,14 +104,14 @@ module.exports = {
     },
 
 
-    deletaUsufunc(req,res){
-        Usufunc.deleteOne({_id: req.params.id}).then(() =>{
-            Usufunc.find().then((usufunc) =>{
-                req.flash("success_message", "Usufunc deletada!")
-                res.render('ferramentas/usufunc/usufuncLis', {usufuncs: usufunc})
+    deletaUsupermis(req,res){
+        Usupermis.deleteOne({_id: req.params.id}).then(() =>{
+            Usupermis.find().then((usupermis) =>{
+                req.flash("success_message", "Usupermis deletada!")
+                res.render('ferramentas/usupermis/usupermisLis', {usupermiss: usupermis})
             }).catch((err) =>{
                 console.log(err)
-                req.flash("error_message", "houve um erro ao listar Usufuncs")
+                req.flash("error_message", "houve um erro ao listar Usupermiss")
                 res.render('admin/erro')
             })
         })

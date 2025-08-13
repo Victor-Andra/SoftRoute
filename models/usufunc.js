@@ -3,6 +3,7 @@ const ObjectId = mongoose.Types.ObjectId
 
 const UsufuncSchema = mongoose.Schema({
     usufunc_codigo: { type: String, unique: true, required: true },
+    usufunc_nome: { type: String, required: true},
     usufunc_descricao: { type: String, required: true},
     usufunc_status: { type: String, required: false },
     //controle CRUD
@@ -19,6 +20,7 @@ const UsufuncSchema = mongoose.Schema({
 class Usufunc{
     constructor(
         usufunc_codigo,
+        usufunc_nome,
         usufunc_descricao,
         usufunc_status,
         //controle CRUD
@@ -31,6 +33,7 @@ class Usufunc{
         usufunc_usuidlixo
         ){
         this.usufunc_codigo = usufunc_codigo,
+        this.usufunc_nome = usufunc_nome,
         this.usufunc_descricao = usufunc_descricao,
         this.usufunc_status = usufunc_status,
         //controle CRUD
@@ -57,6 +60,7 @@ module.exports = {UsufuncModel,UsufuncSchema,
         await UsufuncModel.findByIdAndUpdate(req.body.usufuncId, 
             {$set: {
                 usufunc_codigo: req.body.usufuncCodigo,
+                usufunc_nome: req.body.usufuncNome,
                 usufunc_descricao: req.body.usufuncDescricao,
                 usufunc_status: req.body.usufuncStatus,
                 usufunc_usuidedi : usuarioAtual, 
@@ -88,6 +92,7 @@ module.exports = {UsufuncModel,UsufuncSchema,
             console.log("usufuncmodel");
             const newUsufunc = new UsufuncModel({
                 usufunc_codigo: req.body.usufuncCodigo,
+                usufunc_nome: req.body.usufuncNome,
                 usufunc_descricao: req.body.usufuncDescricao,
                 usufunc_status: "Ativo",
                 usufunc_datacad: dataAtual,
