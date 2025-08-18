@@ -1343,6 +1343,10 @@ module.exports = {
                                             terapiaAtend = "break";
                                             terapeutaAtend = "break";
                                             break;
+                                        case "Falta Absoluta":
+                                            terapiaAtend = "break";
+                                            terapeutaAtend = "break";
+                                            break;
                                         case "SubstitutoFixo":
                                             terapiaAtend = atend.atend_fixoterapiaid;
                                             terapeutaAtend = atend.atend_fixoterapeutaid;
@@ -1487,6 +1491,9 @@ module.exports = {
                                         case "Falta Justificada":
                                             terapiaAtend = ats.atend_mergeterapiaid;
                                             break;
+                                        case "Falta Absoluta":
+                                            terapiaAtend = ats.atend_mergeterapiaid;
+                                            break;
                                         case "Feriado":
                                             terapiaAtend = ats.atend_mergeterapiaid;
                                             break;
@@ -1533,6 +1540,10 @@ module.exports = {
                                             creVal = atend.atend_mergevalorcre;
                                             break;
                                         case "Falta Justificada":
+                                            terapiaAtend = atend.atend_mergeterapiaid;
+                                            creVal = atend.atend_mergevalorcre;
+                                            break;
+                                        case "Falta Absoluta":
                                             terapiaAtend = atend.atend_mergeterapiaid;
                                             creVal = atend.atend_mergevalorcre;
                                             break;
@@ -1900,6 +1911,9 @@ module.exports = {
                                         case "Falta Justificada":
                                             terapiaAtend = ats.atend_mergeterapiaid;
                                             break;
+                                        case "Falta Absoluta":
+                                            terapiaAtend = ats.atend_mergeterapiaid;
+                                            break;
                                         case "Feriado":
                                             terapiaAtend = ats.atend_mergeterapiaid;
                                             break;
@@ -1946,6 +1960,10 @@ module.exports = {
                                             creVal = atend.atend_mergevalorcre;
                                             break;
                                         case "Falta Justificada":
+                                            terapiaAtend = atend.atend_mergeterapiaid;
+                                            creVal = atend.atend_mergevalorcre;
+                                            break;
+                                        case "Falta Absoluta":
                                             terapiaAtend = atend.atend_mergeterapiaid;
                                             creVal = atend.atend_mergevalorcre;
                                             break;
@@ -2327,6 +2345,9 @@ module.exports = {
                                             case "Falta Justificada":
                                                 terapiaAtend = ats.atend_mergeterapiaid;
                                                 break;
+                                            case "Falta Absoluta":
+                                                terapiaAtend = ats.atend_mergeterapiaid;
+                                                break;
                                             case "Feriado":
                                                 terapiaAtend = "break";
                                                 break;
@@ -2383,6 +2404,10 @@ module.exports = {
                                             //terapiaAtend = atend.atend_terapiaid;
                                             break;
                                         case "Falta Justificada":
+                                            terapiaAtend = atend.atend_mergeterapiaid;
+                                            creVal = atend.atend_mergevalorcre;
+                                            break;
+                                        case "Falta Absoluta":
                                             terapiaAtend = atend.atend_mergeterapiaid;
                                             creVal = atend.atend_mergevalorcre;
                                             break;
@@ -2558,6 +2583,9 @@ module.exports = {
                                     case "Falta Justificada":
                                         terapiaAtend = ats.atend_mergeterapiaid;
                                         break;
+                                    case "Falta Absoluta":
+                                        terapiaAtend = ats.atend_mergeterapiaid;
+                                        break;
                                     case "Feriado":
                                         terapiaAtend = ats.atend_mergeterapiaid;
                                         break;
@@ -2604,6 +2632,10 @@ module.exports = {
                                         creVal = atend.atend_valorcre;
                                         break;
                                     case "Falta Justificada":
+                                        terapiaAtend = atend.atend_mergeterapiaid;
+                                        creVal = atend.atend_mergevalorcre;
+                                        break;
+                                    case "Falta Absoluta":
                                         terapiaAtend = atend.atend_mergeterapiaid;
                                         creVal = atend.atend_mergevalorcre;
                                         break;
@@ -2978,6 +3010,11 @@ module.exports = {
                                                     //terapiaAtend = agenda.agenda_terapiaid;
                                                     //terapeutaAtend = agenda.agenda_usuid;
                                                     break;
+                                                case "Falta Absoluta":
+                                                    continuar = "false";
+                                                    //terapiaAtend = agenda.agenda_terapiaid;
+                                                    //terapeutaAtend = agenda.agenda_usuid;
+                                                    break;
                                                 case "Feriado":
                                                     continuar = "false";
                                                     //terapiaAtend = agenda.agenda_terapiaid;
@@ -3236,6 +3273,11 @@ module.exports = {
                                         //terapiaAtend = agenda.agenda_terapiaid;
                                         //terapeutaAtend = agenda.agenda_usuid;
                                         break;
+                                    case "Falta Absoluta":
+                                        continuar = "false";
+                                        //terapiaAtend = agenda.agenda_terapiaid;
+                                        //terapeutaAtend = agenda.agenda_usuid;
+                                        break;
                                     case "Feriado":
                                         continuar = "false";
                                         //terapiaAtend = agenda.agenda_terapiaid;
@@ -3391,6 +3433,10 @@ module.exports = {
                                     terapeutaAtend = atend.atend_terapeutaid;
                                     break;
                                 case "Falta Justificada":
+                                    terapiaAtend = atend.atend_mergeterapiaid
+                                    terapeutaAtend = atend.atend_mergeterapeutaid;;
+                                    break;
+                                case "Falta Absoluta":
                                     terapiaAtend = atend.atend_mergeterapiaid
                                     terapeutaAtend = atend.atend_mergeterapeutaid;;
                                     break;
@@ -3698,6 +3744,11 @@ console.log("TESTE")
                                                     beneAtend = agenda.agenda_beneid;
                                                     break;
                                                 case "Falta Justificada":
+                                                    continuar = "false";
+                                                    //terapiaAtend = agenda.agenda_terapiaid;
+                                                    //terapeutaAtend = agenda.agenda_usuid;
+                                                    break;
+                                                case "Falta Absoluta":
                                                     continuar = "false";
                                                     //terapiaAtend = agenda.agenda_terapiaid;
                                                     //terapeutaAtend = agenda.agenda_usuid;

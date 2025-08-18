@@ -91,6 +91,7 @@
 
 			document.getElementById("beneConvid").value = document.getElementById("beneConvEdi").value;
 			document.getElementById("beneLiminar").value = document.getElementById("beneLiminarEdi").value;
+			document.getElementById("beneNcarteiraconv").value = document.getElementById("beneNcarteiraconvEdi").value;//Numero da carteira do convênio do Beneficiário 2025/08/14
 			document.getElementById("beneImphora").value = document.getElementById("beneImphoraEdi").value;
 			document.getElementById("beneImpcarimbo").value = document.getElementById("beneImpcarimboEdi").value;
 			document.getElementById("beneOut").value = document.getElementById("beneOutEdi").value;
@@ -257,6 +258,7 @@
 			
 			<input id="beneConvEdi" name="beneConvEdi" value="{{beneEdi.bene_convid}}"/>
 			<input id="beneLiminarEdi" name="beneLiminarEdi" value="{{beneEdi.bene_liminar}}"/>
+			<input id="beneNcarteiraconvEdi" name="beneNcarteiraconvEdi" value="{{beneEdi.bene_ncarteiraconv}}"/>
 			<input id="beneImphoraEdi" name="beneImphoraEdi" value="{{beneEdi.bene_imphora}}"/>
 			<input id="beneImpcarimboEdi" name="beneImpcarimboEdi" value="{{beneEdi.bene_impcarimbo}}"/>
 
@@ -631,6 +633,13 @@
 																		{{/each}}
 																</select>
 															</div>
+													</div>
+													
+													<label>Número da Carteira do Convênio</label>
+													<div class="form-group">
+														<div class="col-xs-12 col-sm-3 col-md-3">
+															<input type="text" name="beneNcarteiraconv" id="beneNcarteiraconv" class="form-control" />
+														</div>
 													</div>
 													<br>
 													<label>Por Liminar</label>

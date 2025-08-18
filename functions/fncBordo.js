@@ -426,6 +426,10 @@ module.exports = {
                                             terapiaAtend = atend.atend_mergeterapiaid
                                             terapeutaAtend = atend.atend_mergeterapeutaid;;
                                             break;
+                                        case "Falta Absoluta":
+                                            terapiaAtend = atend.atend_mergeterapiaid
+                                            terapeutaAtend = atend.atend_mergeterapeutaid;;
+                                            break;
                                         case "Glosa":
                                             terapiaAtend = atend.atend_terapiaid;
                                             terapeutaAtend = atend.atend_terapeutaid;

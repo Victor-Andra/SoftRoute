@@ -11363,6 +11363,138 @@ module.exports = {
                                             })
 
                                             break;
+                                        case "Falta Absoluta":
+                                            agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
+                                            agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                            agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                            convcre.forEach((ccre)=>{
+                                                convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
+                                                if( convcreTes == agendacreTes){
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = ccre.convcre_convCpfCnpj;
+                                                    convcreval = ccre.convcre_valor;
+                                                }
+                                                if( convcreTes == agendacreTesSub){
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpjSub = ccre.convcre_convCpfCnpj;
+                                                    convcrevalSub = ccre.convcre_valor;
+                                                }
+                                                if (a.agenda_categoria == "SubstitutoFixo"){
+                                                    if( convcreTes == agendacreTesFixo){
+                                                        //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                        convCreCpfCnpjFixo = ccre.convcre_convCpfCnpj;
+                                                        convcrevalFixo = ccre.convcre_valor;
+                                                    }
+                                                }
+                                            })
+
+                                            agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+"";//padrão
+                                            agendadebTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";//Semanal
+                                            agendadebTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+"";//SubFixa
+                                            convdeb.forEach((cdeb)=>{
+                                                convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";
+                                                if(convdebTes == agendadebTes){
+                                                    //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                    convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
+                                                    convdebval = cdeb.convdeb_valor;
+                                                }
+                                                if(convdebTes == agendadebTesSub){
+                                                    //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                    convDebCpfCnpjSub = cdeb.convdeb_convCpfCnpj;
+                                                    convdebvalSub = cdeb.convdeb_valor;
+                                                }
+                                                if (a.agenda_categoria == "SubstitutoFixo"){
+                                                    if(convdebTes == agendadebTesFixo){
+                                                        //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convDebCpfCnpjFixo = cdeb.convdeb_convCpfCnpj;
+                                                        convdebvalFixo = cdeb.convdeb_valor;
+                                                    }
+                                                }
+                                            })
+
+                                            if (a.agenda_categoria == "SubstitutoFixo"){
+                                                newAtend = new Atend({
+                                                    atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                    atend_categoria : "Falta Absoluta",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                    atend_beneid : a.agenda_beneid,//Faltou e outro foi alocado
+                                                    atend_convid : a.agenda_convid,//
+                                                    atend_usuid : idUsu,
+                                                    atend_atenddata : a.agenda_data,//
+                                                    atend_atendhora : hora,//
+                                                    atend_terapeutaid : a.agenda_usuid,//Atenderá o outro bene pelo merge
+                                                    atend_terapiaid : a.agenda_terapiaid,//
+                                                    atend_salaid : a.agenda_salaid,//
+                                                    atend_valorcre : convcreval,//não recebe pois foi avisado previamente
+                                                    atend_valordeb : convdebval,//não paga porque não atendeu ao bene em questão
+                                                    atend_mergeterapeutaid : agendaSub.agenda_usuid,//Atendendo outro bene
+                                                    atend_mergeterapiaid : agendaSub.agenda_terapiaid,
+                                                    atend_mergevalorcre : convcrevalSub,//recebe pelo novo bene
+                                                    atend_mergevalordeb : convdebvalSub,//paga pelo atendimento do novo bene
+                                                    atend_fixoterapeutaid : a.agenda_mergeterapeutaid,
+                                                    atend_fixoterapiaid : a.agenda_mergeterapiaid,
+                                                    atend_fixovalorcre : convcrevalFixo,
+                                                    atend_fixovalordeb : convdebvalFixo,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
+                                                    atend_fixo : "true",
+                                                    atend_num : nextNum,
+                                                    atend_datacad : dataAtual.toISOString()
+                                                });
+                                            } else {
+                                                newAtend = new Atend({
+                                                    atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                    atend_categoria : "Falta Absoluta",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                    atend_beneid : a.agenda_beneid,//Faltou e outro foi alocado
+                                                    atend_convid : a.agenda_convid,//
+                                                    atend_usuid : idUsu,
+                                                    atend_atenddata : a.agenda_data,//
+                                                    atend_atendhora : hora,//
+                                                    atend_terapeutaid : a.agenda_usuid,//Atenderá o outro bene pelo merge
+                                                    atend_terapiaid : a.agenda_terapiaid,//
+                                                    atend_salaid : a.agenda_salaid,//
+                                                    atend_valorcre : convcreval,//não recebe pois foi avisado previamente
+                                                    atend_valordeb : convdebval,//não paga porque não atendeu ao bene em questão
+                                                    atend_mergeterapeutaid : agendaSub.agenda_usuid,//Atendendo outro bene
+                                                    atend_mergeterapiaid : agendaSub.agenda_terapiaid,
+                                                    atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
+                                                    atend_mergevalordeb : convdebvalSub,
+                                                    atend_agenda_f_id_orig : a._id,
+                                                    atend_agenda_s_id_orig : agendaSub._id,
+                                                    atend_fixo : "false",
+                                                    atend_num : nextNum,
+                                                    atend_datacad : dataAtual.toISOString()
+                                                });
+                                            }
+
+                                            newCre = new Cre({
+                                                credit_atendnum : nextNum ,
+                                                credit_categoria : "Falta Absoluta" ,
+                                                credit_terapiaid : a.agenda_terapiaid ,
+                                                credit_terapeutaid : a.agenda_usuid ,
+                                                credit_convid : a.agenda_convid ,
+                                                credit_nome : "Atendimento "+nextNum ,
+                                                credit_cpfcnpj : convCreCpfCnpj ,
+                                                credit_dataevento : agendaSub.agenda_data,
+                                                credit_datavenci : dataVenci ,
+                                                credit_valorprev : convcreval ,
+                                                credit_datacad : dataAtual
+                                            })
+
+                                            newDeb = new Deb({
+                                                debit_atendnum : nextNum ,
+                                                debit_categoria : "Falta Absoluta" ,
+                                                debit_terapiaid : a.agenda_terapiaid ,
+                                                debit_terapeutaid : a.agenda_usuid ,
+                                                debit_convid : a.agenda_convid ,
+                                                debit_nome : "Atendimento "+nextNum ,
+                                                debit_cpfcnpj : convCreCpfCnpj ,
+                                                debit_dataevento : agendaSub.agenda_data,
+                                                debit_datavenci : dataVenci ,
+                                                debit_valorprev : convcreval ,
+                                                debit_datacad : dataAtual
+                                            })
+
+                                            break;
                                         case "Feriado":
                                             agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
                                             agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
@@ -11443,7 +11575,7 @@ module.exports = {
                                             } else {
                                                 newAtend = new Atend({
                                                     atend_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
-                                                    atend_categoria : "Falta Justificada",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                    atend_categoria : "Feriado",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
                                                     atend_beneid : a.agenda_beneid,//Faltou e outro foi alocado
                                                     atend_convid : a.agenda_convid,//
                                                     atend_usuid : idUsu,
@@ -13061,6 +13193,63 @@ module.exports = {
                                             newDeb = "";
 
                                             break;
+                                        case "Falta Absoluta":
+
+                                            agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                            convcre.forEach((ccre)=>{
+                                                convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+""
+                                                if( convcreTes == agendacreTes){
+                                                    //console.log("if ("+convcreTes+" == "+agendacreTes)
+                                                    convCreCpfCnpj = ccre.convcre_convCpfCnpj;
+                                                    convcreval = ccre.convcre_valor;
+                                                }
+                                            })
+
+                                            agendadebTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                            convdeb.forEach((cdeb)=>{
+                                                if(teraContrato == 'CLT' || teraContrato == 'CNPJ Fixo'){
+                                                    convdebval = "0,00";
+                                                } else {
+                                                    convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+""
+                                                    if(convdebTes == agendadebTes){
+                                                        //console.log("if ("+convdebTes+" == "+agendadebTes)
+                                                        convDebCpfCnpj = cdeb.convdeb_convCpfCnpj;
+                                                        convdebval = cdeb.convdeb_valor;
+                                                    }
+                                                }
+                                            })
+
+                                            Usuario.find({_id: a.agenda_usuid}).then((u)=>{
+                                                if(u.usuario_contrato == "CNPJ Fixo" || u.usuario_contrato == "CLT"){
+                                                    convdebval = "0,00";
+                                                }
+                                            })
+
+                                            newExtra = new Extra({
+                                                extra_org : "Administrativo",//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                                extra_categoria : "Falta Absoluta",//depende do lançamento na agenda semanal, se for administrativo, pode ser supervisão, substituição
+                                                extra_beneid : a.agenda_beneid,//Faltou e outro foi alocado
+                                                extra_convid : a.agenda_convid,//
+                                                extra_usuid : idUsu,
+                                                extra_data: agendaSub.agenda_data,//
+                                                extra_hora : hora,//
+                                                extra_terapeutaid : agendaSub.agenda_terapiaid,//Atenderá o outro bene pelo merge
+                                                extra_terapiaid : agendaSub.agenda_usuid,//
+                                                extra_salaid : a.agenda_salaid,//
+                                                extra_valorcre : "0,00",//não recebe pois foi avisado previamente
+                                                extra_valordeb : "0,00",//não paga porque não atendeu ao bene em questão
+                                                extra_mergeterapeutaid : a.agenda_terapiaid,//Atendendo outro bene
+                                                extra_mergeterapiaid : a.agenda_usuid,
+                                                extra_mergevalorcre : convcreval,//recebe pelo novo bene
+                                                extra_mergevalordeb : convdebval,//paga pelo atendimento do novo bene
+                                                extra_num : nextNum,
+                                                extra_datacad : dataAtual.toISOString()
+                                            });
+
+                                            newCre = "";
+                                            newDeb = "";
+
+                                            break;
                                         case "Glosa":
                                             agendacreTes = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
                                             convcre.forEach((ccre)=>{
@@ -13823,6 +14012,9 @@ module.exports = {
         console.log("req.body.agendaCateg: "+req.body.agendaCateg)
         if (req.body.agendaCateg == "Feriado"){
             resultado = agendaClass.agendaFeriado(req,res);
+        } else if (req.body.agendaCateg == "Falta Absoluta"){
+            resultado = atendClass.atendFaltaDia(req,res);
+            resultado = agendaClass.agendaFaltaDia(req,res);
         } else {
             resultado = agendaClass.agendaFaltaDia(req,res);
         }

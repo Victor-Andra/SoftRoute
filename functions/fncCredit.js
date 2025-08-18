@@ -474,6 +474,16 @@ module.exports = {
                         valorPrev = req.body.atendMergevalorcre;
                         dataEdi = new Date();
                         break;
+                    case "Falta Absoluta":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendMergevalorcre;
+                        dataEdi = new Date();
+                        break;
+                    case "Feriado":
+                        dataEvento = new Date(req.body.atendAtenddata);
+                        valorPrev = req.body.atendMergevalorcre;
+                        dataEdi = new Date();
+                        break;
                     case "Glosa":
                         dataEvento = new Date(req.body.atendAtenddata);
                         valorPrev = req.body.atendValorcre;
@@ -498,6 +508,8 @@ module.exports = {
                         dataEvento = new Date(req.body.atendAtenddata);
                         valorPrev = req.body.atendValorcre;
                         dataEdi = new Date();
+                        break;
+                    default:
                         break;
                 }
                 Credit.findByIdAndUpdate(cre._id, { $set: {credit_dataevento : dataEvento, credit_valorprev : valorPrev, credit_dataedi : dataEdi}})

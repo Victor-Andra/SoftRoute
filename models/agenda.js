@@ -411,7 +411,7 @@ module.exports = {AgendaModel,AgendaSchema,
             console.log("turnoIni? "+turnoIni)
             console.log("turnoFim? "+turnoFim)
         }
-        console.log("req.body.agendaCateg: "+req.body.agendaCateg)
+        console.log("req.body.agendaCateg: "+req.body.agendaCateg);
         if (beneidx == "-" && req.body.agendaMergeterapeutaid == "-") {
             resultado = "false";
         } else if (beneidx != "-" && teraidx == "-") {
@@ -425,11 +425,12 @@ module.exports = {AgendaModel,AgendaSchema,
         }
         if (resultado != "false"){
             await AgendaModel.find(busca).then((agenda)=>{
-                console.log("agenda:"+agenda.length)
+                console.log("agenda:"+agenda.length);
                 agenda.forEach(a => {
                     arrayIds.push(a._id);
                 })
                 AgendaModel.find({agenda_tempId: {$in: arrayIds}}).then((agendaSemanal)=>{
+                    console.log("agendaSemanal:"+agendaSemanal.length);
                     agendaSemanal.forEach(as => {
                         agendaFinal.push(as);
                     })
@@ -499,7 +500,12 @@ module.exports = {AgendaModel,AgendaSchema,
                                     agenda_datacad : dataAtual
                                 });
                                 arrayAgendasNovas.push(newAgenda)
-                                newAgenda.save()
+                                newAgenda.save().then((resultado)=>{
+                                    console.log("Resultado: "+resultado)
+                                }).catch((err)=>{
+                                    console.log("err: "+err)
+                                })
+                                console.log("salvo!")
                             } else {
                                 let newAgenda = new AgendaModel({
                                     agenda_data : a.agenda_data ,
@@ -524,7 +530,12 @@ module.exports = {AgendaModel,AgendaSchema,
                                     agenda_datacad : dataAtual
                                 });
                                 arrayAgendasNovas.push(newAgenda)
-                                newAgenda.save()
+                                newAgenda.save().then((resultado)=>{
+                                    console.log("Resultado: "+resultado)
+                                }).catch((err)=>{
+                                    console.log("err: "+err)
+                                })
+                                console.log("salvo2!")
                             }
                         }
                     });

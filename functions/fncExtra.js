@@ -1922,7 +1922,7 @@ extraCopiar: async (req, res) => {
             dataFim = ultimoDia.toISOString();
         } else {
             // Outros tipos de filtro (Semana, Dia) — mantenha seu código existente
-            // ...
+            // ...O codigo ta terminando aqui abaixo victor 13/8/2025 16:35
             return res.render('admin/erro', { message: "Tipo de filtro não suportado." });
         }
 

@@ -71,7 +71,7 @@
 				}
 			}
 			function ocultaDivFaltas(){
-				if (document.getElementById("agendaCateg").value == "Falta" || document.getElementById("agendaCateg").value == "Falta Justificada"){
+				if (document.getElementById("agendaCateg").value == "Falta" || document.getElementById("agendaCateg").value == "Falta Justificada" || document.getElementById("agendaCateg").value == "Falta Absoluta"){
 					document.getElementById("divFalta").style.display = "";
 				} else {
 					document.getElementById("divFalta").style.display = "none";
@@ -568,6 +568,7 @@
 																<select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." value="Padrão" onchange="javascript:ocultaDivFaltas();">
 																	<option style="background-color: yellow;" value="Falta">Falta</option>
 																	<option style="background-color: orange;" value="Falta Justificada">Falta Justificada</option>
+																	<option style="background-color: orange;" value="Falta Absoluta">Falta Absoluta</option>
 																	<option style="background-color: orange;" value="Feriado">Feriado</option>
 																	<option style="background-color: cyan;" value="Substituição">Substituição</option>
 																	<option style="background-color: lightgrey;" value="Padrão" >Padrão</option>
