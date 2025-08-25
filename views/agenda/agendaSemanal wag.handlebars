@@ -171,9 +171,9 @@
 								let motivo;
 
 								if (extra != null){
-									console.log("NAO FALSO")
+									//console.log("NAO FALSO")
 									motivo = extra.value;
-									console.log(motivo);
+									//console.log(motivo);
 									switch (motivo) {
 										case "Falta" :
 											val.style.backgroundColor = "yellow";
@@ -204,13 +204,12 @@
 											val.style.backgroundColor = "lightgreen";
 											break;
 										default :
-											console.log("PORRA???")
 											val.style.backgroundColor = "aquamarine";
 											break;
 									}
-									console.log("motivo ???");
+									//console.log("motivo ???");
 									document.getElementById(id).append(val);
-									console.log("APPENDADO????")
+									//console.log("APPENDADO????")
 								} else {
 									motivo = hav.value;
 									switch (motivo) {

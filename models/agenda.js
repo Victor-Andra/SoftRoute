@@ -451,7 +451,6 @@ module.exports = {AgendaModel,AgendaSchema,
                         } else {
                             agendaS = "true";
                         }
-                        
                         if (agendaS == "true"){
                             arrayAgendasNovas.push(a);
                             AgendaModel.findByIdAndUpdate(a._id, 

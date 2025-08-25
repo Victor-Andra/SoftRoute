@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const fncGeral = require('../functions/fncGeral')
 const ObjectId = mongoose.Types.ObjectId
 
 const AtendSchema = mongoose.Schema({
@@ -571,7 +572,7 @@ module.exports = {AtendModel,AtendSchema,
         }
         if (resultado != "false"){
             await AtendModel.find(busca).then((atend)=>{
-                console.log("agenda:"+atend.length);
+                console.log("atend:"+atend.length);
                 atend.forEach(a => {
                     AtendModel.findByIdAndUpdate(a._id, 
                         {$set: {

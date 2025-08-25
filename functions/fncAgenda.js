@@ -14017,12 +14017,14 @@ module.exports = {
         let resultado;
         console.log("req.body.agendaCateg: "+req.body.agendaCateg)
         if (req.body.agendaCateg == "Feriado"){
-            resultado = agendaClass.agendaFeriado(req,res);
+            console.log("FUCK")
+            //resultado = agendaClass.agendaFeriado(req,res);
         } else if (req.body.agendaCateg == "Falta Absoluta"){
+            resultado = agendaClass.agendaFaltaDia(req,res);
             resultado = atendClass.atendFaltaDia(req,res);
-            resultado = agendaClass.agendaFaltaDia(req,res);
         } else {
-            resultado = agendaClass.agendaFaltaDia(req,res);
+            console.log("FUCK2")
+            //resultado = agendaClass.agendaFaltaDia(req,res);
         }
         
         if (resultado = "true") {
