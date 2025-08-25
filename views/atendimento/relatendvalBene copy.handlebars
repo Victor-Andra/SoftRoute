@@ -2,26 +2,16 @@
 <html lang="pt-br">
 	<head>
 		<title>Relatório Analítico de Atendimentos por Beneficiário</title>
-				<style>
-				
-				<style>
-			/* Oculta elementos na tela */
-			@media screen {
-				.print-header {
-					display: none;
-				}
-			}
-
-			/* Estilos para impressão */
-			@media print {
-				.noprint {
+			<style>
+				@media print {
+					.noprint {
 					display: none !important;
-				}
+					}
 
-				/* Cabeçalho fixo com paginação no topo */
-				.print-header {
+					.print-footer {
+					display: block;
 					position: fixed;
-					top: 0;
+					bottom: 0;
 					left: 0;
 					right: 0;
 					text-align: center;
@@ -29,42 +19,27 @@
 					padding: 5px 0;
 					background: white;
 					z-index: 9999;
-					/* Sem borda inferior */
-				}
+					}
 
-				/* Margem superior para acomodar o cabeçalho fixo */
-				body {
-					margin-top: 5mm;
-					margin-bottom: 1cm;
-				}
+					body {
+					margin-bottom: 40mm; /* espaço para o rodapé */
+					}
 
-				/* Paginação no topo de cada página */
-				@page {
+					@page {
 					margin: 1cm;
-					size: A4 portrait;
-					@top-center {
+					@bottom-center {
 						content: "Página " counter(page) " de " counter(pages);
 						font-size: 11px;
-						color: #000;
 					}
-					@bottom-center {
-						content: ""; /* Remove rodapé padrão */
 					}
 				}
 
-				/* Garante apenas uma página em branco no final */
-				.blank-page {
-					page-break-before: always;
-				}
-			}
-			/* Estilos específicos para impressão em modo paisagem */
-				@media print and (orientation: landscape) {
-					/* Apenas garantimos que o noprint continue funcionando */
-					.noprint {
-						display: none !important;
+				@media screen {
+					.print-footer {
+					display: none;
 					}
 				}
-	    </style>
+			</style>
 	</head>
 	<body onload="javascript:controlaNave();mostrarPagina();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -297,11 +272,8 @@
 			</div>
 		</div>
 			
-		<!-- Cabeçalho de impressão (paginação no topo) -->
-		<div class="print-header"></div>
 
-		<!-- Página em branco única no final -->
-		<div style="page-break-before: always;"></div>
+		<div class="print-footer" id="printFooter"></div>
 	</body>
 
 </html>

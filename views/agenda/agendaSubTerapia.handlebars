@@ -60,33 +60,42 @@
 													Utilizado para correção de agenda e atendimentos. O alcance da alteração depende do que for preenchido na data e dados originais e a troca depende dos dados de substituto.
 												</div>
 												<div class="row">
-													<div class="col-xs-12 col-sm-6">
-														<label for="id-date-picker-1">Data inicial</label>
-														<div class="row">
+													<div class="col-xs-12" >
+														<label>Filtro</label>
+														<div class="form-group">
 															<div class="col-sm-6">
-																<div class="input-group">
-																	<input name="dataIni" id="dataIni" type="date" style="width: 200px;" onchange="javascript:formataDataIni();" >
-																	<input class="hidden" name="agendaDataIni" id="agendaDataIni" >
-																</div>
+																<select name="filtroPesquisa" id="filtroPesquisa" class="chosen-select" data-placeholder="Escolha..." >
+																	<option value="-">-</option>
+																	<option value="TrocaBeneFiltroData">Trocar beneficiário filtrando apenas por data</option>
+																</select>
 															</div>
 														</div>
-													</div><!-- /.span -->
-													<div class="col-xs-12 col-sm-6">
-														<label for="id-date-picker-1">Data final</label>
-														<div class="row">
-															<div class="col-sm-6">
-																<div class="input-group">
-																	<input name="dataFim" id="dataFim" type="date" style="width: 200px;" onchange="javascript:formataDataFim();" >
-																	<input class="hidden" name="agendaDataFim" id="agendaDataFim" >
-																</div>
-															</div>
-														</div>
-													</div><!-- /.span -->
+													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-12" >
-														<label>Beneficiário</label>
-														<div class="form-group" >
+														<label>Data inicial</label>
+														<div class="form-group">
+															<div class="col-sm-6">
+																<input name="dataIni" id="dataIni" type="date" style="width: 200px;" onchange="javascript:formataDataIni();" >
+																<input class="hidden" name="agendaDataIni" id="agendaDataIni" >
+															</div>
+															<div class="col-xs-12 col-sm-6">
+																<label>Data final</label>
+																<div class="row">
+																	<div class="col-sm-6">
+																		<input name="dataFim" id="dataFim" type="date" style="width: 200px;" onchange="javascript:formataDataFim();" >
+																		<input class="hidden" name="agendaDataFim" id="agendaDataFim" >
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12" >
+														<label>Beneficiário original</label>
+														<div class="form-group">
 															<div class="col-sm-6">
 																<select name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." >
 																	<option value="-">-</option>
@@ -95,7 +104,24 @@
 																	{{/each}}
 																</select>
 															</div>
+															<div class="col-xs-12 col-sm-6">
+																<label>Beneficiário substituto</label>
+																<div class="row">
+																	<div class="col-sm-6">
+																		<select name="agendaBeneSubid" id="agendaBeneSubid" class="chosen-select" data-placeholder="Escolha..." >
+																			<option value="-">-</option>
+																			{{#each benes}}
+																				<option value="{{_id}}">{{bene_nome}}</option>
+																			{{/each}}
+																		</select>
+																	</div>
+																</div>
+															</div>
 														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12" >
 														<label>Terapeuta original</label>
 														<div class="form-group">
 															<div class="col-sm-6">

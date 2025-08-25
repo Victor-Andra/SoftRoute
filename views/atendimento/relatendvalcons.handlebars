@@ -2,54 +2,69 @@
 <html lang="pt-br">
 	<head>
 		<title>Relatório de Consolidado por Beneficiário</title>
-		<style>
-			/* Estilos para tela */
-			@media screen {
-				.print-footer {
-					display: none;
-				}
+				<style>
+			
+			<style>
+		/* Oculta elementos na tela */
+		@media screen {
+			.print-header {
+				display: none;
+			}
+		}
+
+		/* Estilos para impressão */
+		@media print {
+			.noprint {
+				display: none !important;
 			}
 
-			/* Estilos para impressão */
-			@media print {
-				.noprint {
-					display: none !important;
-				}
+			/* Cabeçalho fixo com paginação no topo */
+			.print-header {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				text-align: center;
+				font-size: 11px;
+				padding: 5px 0;
+				background: white;
+				z-index: 9999;
+				/* Sem borda inferior */
+			}
 
-				.print-footer {
-					display: block;
-					position: fixed;
-					bottom: 0;
-					left: 0;
-					right: 0;
-					text-align: center;
+			/* Margem superior para acomodar o cabeçalho fixo */
+			body {
+				margin-top: 5mm;
+				margin-bottom: 1cm;
+			}
+
+			/* Paginação no topo de cada página */
+			@page {
+				margin: 1cm;
+				size: A4 portrait;
+				@top-center {
+					content: "Página " counter(page) " de " counter(pages);
 					font-size: 11px;
-					padding: 5px 0;
-					background: white;
-					z-index: 9999;
+					color: #000;
 				}
-
-				body {
-					margin-bottom: 40mm; /* Espaço para rodapé fixo */
-				}
-
-				@page {
-					margin: 1cm;
-					@bottom-center {
-						content: "Página " counter(page) " de " counter(pages);
-						font-size: 11px;
-					}
+				@bottom-center {
+					content: ""; /* Remove rodapé padrão */
 				}
 			}
 
-			/* Estilos específicos para impressão em modo paisagem */
+			/* Garante apenas uma página em branco no final */
+			.blank-page {
+				page-break-before: always;
+			}
+		}
+		/* Estilos específicos para impressão em modo paisagem */
 			@media print and (orientation: landscape) {
 				/* Apenas garantimos que o noprint continue funcionando */
 				.noprint {
 					display: none !important;
 				}
 			}
-		</style>
+	    </style>
 		<script type="text/javascript">
 			function atualizaDataIni(){
 				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
@@ -231,6 +246,10 @@
 				</div>
 			</div>
 		</div><!-- /.Área reservada para Assinaturas -->
-	  <div class="print-footer" id="printFooter"></div>
+	<!-- Cabeçalho de impressão (paginação no topo) -->
+		<div class="print-header"></div>
+
+		<!-- Página em branco única no final -->
+		<div style="page-break-before: always;"></div>
 	</body>
 </html>

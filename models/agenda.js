@@ -538,7 +538,7 @@ module.exports = {AgendaModel,AgendaSchema,
                                 console.log("salvo2!")
                             }
                         }
-                    });
+                    })
                 })
             }).catch((err) =>{
                 retorno = err
