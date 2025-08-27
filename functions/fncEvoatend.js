@@ -2064,10 +2064,11 @@ module.exports = {FiltroEvoatend,
                         Sala.find().then((sala)=>{
                             sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                             Terapia.find().then((terapia)=>{
+                                 Ano.find().then((ano)=>{
                                 Conv.find().then((conv)=>{
                                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                    res.render('area/evol/evoatendgeralLis', {agendas: idsAgendasEx,terapeutas: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, filtroTela, flash})
-        })})})})})})}).catch((err) =>{
+                                    res.render('area/evol/evoatendgeralLis', {agendas: idsAgendasEx, anos: ano, terapeutas: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, filtroTela, flash})
+        })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')

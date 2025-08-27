@@ -3,68 +3,54 @@
 	<head>
 		<title>Relatório Analítico de Atendimentos por Beneficiário</title>
 		<style>
-			
-			<style>
-		/* Oculta elementos na tela */
-		@media screen {
-			.print-header {
-				display: none;
-			}
-		}
-
-		/* Estilos para impressão */
-		@media print {
-			.noprint {
-				display: none !important;
-			}
-
-			/* Cabeçalho fixo com paginação no topo */
-			.print-header {
-				position: fixed;
-				top: 0;
-				left: 0;
-				right: 0;
-				text-align: center;
-				font-size: 11px;
-				padding: 5px 0;
-				background: white;
-				z-index: 9999;
-				/* Sem borda inferior */
-			}
-
-			/* Margem superior para acomodar o cabeçalho fixo */
-			body {
-				margin-top: 5mm;
-				margin-bottom: 1cm;
-			}
-
-			/* Paginação no topo de cada página */
-			@page {
-				margin: 1cm;
-				size: A4 portrait;
-				@top-center {
-					content: "Página " counter(page) " de " counter(pages);
-					font-size: 11px;
-					color: #000;
-				}
-				@bottom-center {
-					content: ""; /* Remove rodapé padrão */
+			/* Oculta elementos na tela */
+			@media screen {
+				.print-header {
+					display: none;
 				}
 			}
 
-			/* Garante apenas uma página em branco no final */
-			.blank-page {
-				page-break-before: always;
-			}
-		}
-		/* Estilos específicos para impressão em modo paisagem */
-			@media print and (orientation: landscape) {
-				/* Apenas garantimos que o noprint continue funcionando */
+			/* Estilos para impressão */
+			@media print {
 				.noprint {
 					display: none !important;
 				}
+
+				.print-header {
+					position: fixed;
+					top: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 5px 0;
+					background: white;
+					z-index: 9999;
+				}
+
+				body {
+					margin-top: 5mm;
+					margin-bottom: 1cm;
+				}
+
+				@page {
+					margin: 1cm;
+					size: A4 landscape; /* <-- paisagem aqui */
+					@top-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 11px;
+						color: #000;
+					}
+					@bottom-center {
+						content: "";
+					}
+				}
+
+				.blank-page {
+					page-break-before: always;
+				}
 			}
-	    </style>
+		</style>
 		<script type="text/javascript">
 			function atualizaDataIni(){
 				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();

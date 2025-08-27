@@ -1007,113 +1007,22 @@ module.exports = {
             }
         })
     },
-    auditaEGeraExtra: async (req, res) => {
-        try {
-            const { id } = req.params;
-            const idUsu = req.cookies['idUsu'];
-            const usuarioNome = req.cookies['nomeUsu'] || 'Usuário';
-
-            // 1. Validar se o ID é válido
-            if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-                return res.status(400).json({
-                    success: false,
-                    message: "ID inválido."
-                });
-            }
-
-            // 2. Buscar o extra no banco
-            const extra = await extraClass.ExtraModel.findById(id);
-            if (!extra) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Extra não encontrado."
-                });
-            }
-
-            // 3. Verificar se já foi auditado ou está com status "Gerado"
-            if (extra.extra_auditado === true) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Este extra já foi auditado."
-                });
-            }
-
-            if (extra.extra_extraStatus === "Gerado") {
-                return res.status(400).json({
-                    success: false,
-                    message: "Este extra já está com status 'Gerado'."
-                });
-            }
-
-            // 4. Preparar dados para atualização com os nomes CORRETOS do schema
-            const agora = new Date();
-            const dataAtualISO = agora.toISOString(); // Formato: "2025-04-05T14:30:00.000Z"
-            const dataFormatadaLog = agora.toLocaleString('pt-BR'); // Para o log: "05/04/2025 14:30:00"
-
-            const logAtualizacao = extra.extra_log
-                ? `${extra.extra_log} | Extra auditado via botão rápido em ${dataFormatadaLog} por ${usuarioNome}.`
-                : `Extra auditado via botão rápido em ${dataFormatadaLog} por ${usuarioNome}.`;
-
-            const dadosAtualizacao = {
-                extraId: id,
-                extraAuditado: true,
-                extraExtraStatus: "Gerado",
-                extraExtraStatusPg: extra.extra_extraStatusPg || false,
-                extra_usuedi: idUsu,              // ✅ Nome correto no banco
-                extra_dataedi: dataAtualISO,      // ✅ Nome correto + data atual
-                extraLog: logAtualizacao          // Será usado como extra_log
-            };
-
-            // 5. Simular req para reutilizar a função extraEditar
-            const reqMock = {
-                ...req,
-                body: dadosAtualizacao
-            };
-
-            // 6. Chamar a função de edição existente
-            const resultado = await extraClass.extraEditar(reqMock, res);
-
-            if (resultado === true) {
-                return res.json({
-                    success: true,
-                    message: "Extra auditado e marcado como 'Gerado' com sucesso!"
-                });
-            } else {
-                console.error("Erro ao atualizar via extraEditar:", resultado);
-                return res.status(500).json({
-                    success: false,
-                    message: "Falha ao salvar no banco de dados."
-                });
-            }
-
-        } catch (err) {
-            console.error("Erro em auditaEGeraExtra:", err);
-            return res.status(500).json({
-                success: false,
-                message: "Erro interno do servidor."
-            });
-        }
-    },
-/**
- * Função que copia agendamentos extras (agenda_extra e agenda_cobrarextra = true)
- * de um mês específico para a coleção tb_extra, evitando duplicidades.
- * Após a cópia, chama filtraExtra para exibir os dados com os filtros aplicados.
- */
-    extraCopiar: async (req, res) => {
-        console.log("🚀 Iniciando cópia de agendamentos extras");
+    /**
+     * Função que copia agendamentos extras (agenda_extra e agenda_cobrarextra = true)
+     * de um mês específico para a coleção tb_extra, evitando duplicidades.
+     */
+    extraCopiarOLD6: async (req, res) => {
+        let flash = new Resposta()
+        let resultado;
+        console.log("Iniciando função de cópia de agendamentos extras para controle");
 
         try {
-            let flash = new Resposta();
-            let resultado;
-
             const { anoAtend, mesAtend } = req.body;
 
             // ✅ Validação
             if (!anoAtend || !mesAtend || isNaN(anoAtend) || isNaN(mesAtend)) {
-                //req.flash("error_message", "Ano ou mês inválido.");
-                //return res.redirect('back'); // Volta para a mesma página
-                flash.sucesso = "false";
-                flash.texto = "Ano ou mês inválido.";
+                req.flash("error_message", "Ano ou mês inválido.");
+                return res.redirect('/atendimento/extra/lisF');
             }
 
             const ano = parseInt(anoAtend);
@@ -1131,32 +1040,34 @@ module.exports = {
             }).lean();
 
             if (agendamentos.length === 0) {
-                //req.flash("info_message", "Nenhum agendamento extra encontrado.");
-                //return res.redirect('back');
-                flash.sucesso = "false";
-                flash.texto = "Nenhum agendamento extra encontrado.";
+                req.flash("info_message", "Nenhum agendamento extra encontrado.");
+                this.filtraExtra(req,res, flash);
             }
 
-            console.log(`✅ Encontrados ${agendamentos.length} agendamentos.`);
+            console.log(`✅ Encontrados ${agendamentos.length} agendamentos para copiar.`);
 
             const usuarioId = req.user?._id || req.cookies['idUsu'];
             if (!usuarioId) {
-                //req.flash("error_message", "Usuário não autenticado.");
-                //return res.redirect('back');
-                flash.sucesso = "false";
-                flash.texto = "Usuário não autenticado.";
+                req.flash("error_message", "Usuário não autenticado.");
+                return res.redirect('/atendimento/extra/lisF');
             }
 
             const agora = new Date();
             const dataExportacao = agora.toISOString().split('T')[0];
             const horaExportacao = `${agora.getUTCHours().toString().padStart(2, '0')}:${agora.getUTCMinutes().toString().padStart(2, '0')}`;
 
-            // 🧠 IDs das agendas já copiadas
-            const agendaIds = agendamentos.map(ag => ag._id);
-            const jaCopiados = await Extra.find({ extra_copiado: { $in: agendaIds } }).select('extra_copiado');
-            const jaCopiadosSet = new Set(jaCopiados.map(e => e.extra_copiado.toString()));
+            // 🧠 Extrai os _id das agendas para verificar duplicatas
+            const agendaIds = agendamentos.map(ag => ag._id); // _id já é ObjectId
 
-            // 🧮 Filtra os novos
+            // 🔎 Verifica quais já foram copiados (pelo extra_copiado)
+            const jaCopiados = await Extra.find({
+                extra_copiado: { $in: agendaIds }
+            }).select('extra_copiado');
+
+            const jaCopiadosSet = new Set(jaCopiados.map(e => e.extra_copiado.toString()));
+            console.log(`🔍 Já foram copiados: ${jaCopiadosSet.size} registros.`);
+
+            // 🧮 Filtra: só os que ainda não foram copiados
             const novosExtras = agendamentos
                 .filter(ag => !jaCopiadosSet.has(ag._id.toString()))
                 .map(ag => {
@@ -1166,6 +1077,7 @@ module.exports = {
                     const horaFormatada = `${hora}:${minuto}`;
 
                     return new Extra({
+                        // Campos copiados
                         extra_data: ag.agenda_data,
                         extra_hora: horaFormatada,
                         extra_data_semana: ag.agenda_data_semana,
@@ -1206,7 +1118,7 @@ module.exports = {
                         extra_tipo: "Padrão",
                         extra_auditado: false,
                         extra_auditadoObs: "",
-                        extra_copiado: ag._id,
+                        extra_copiado: ag._id, // ✅ _id da Agenda (garante unicidade)
                         extra_dtaExportado: dataExportacao,
                         extra_horaExportado: horaExportacao,
                         extra_usuidExportou: usuarioId,
@@ -1216,130 +1128,891 @@ module.exports = {
                 });
 
             if (novosExtras.length === 0) {
-                //req.flash("info_message", "Todos os agendamentos já foram exportados anteriormente.");
+                req.flash("info_message", "Todos os agendamentos já foram exportados anteriormente.");
+                console.log("🟡 Nenhum novo registro para inserir.");
+            } else {
+                const extrainsert = await Extra.insertMany(novosExtras, { ordered: false });
+                const inseridos = extrainsert.length;
+                console.log(`✅ ${inseridos} novos registros copiados para tb_extra.`);
+                req.flash("success_message", `Exportação concluída! ${inseridos} novos registros criados.`);
+            }
+
+            console.log("🏁 Processo de cópia finalizado com sucesso.");
+            //res.render('/menu/atendimento/extra/controleF', {anoAtend, mesAtend});
+            if (resultado === true) {
+                flash.sucesso = "true";
+                flash.texto = "Cópia dos extras!";
+            } else {
                 flash.sucesso = "false";
-                flash.texto = "Todos os agendamentos já foram exportados anteriormente.";
-            } else {
-                const resultado = await Extra.insertMany(novosExtras, { ordered: false });
-                const inseridos = resultado.length;
-                //req.flash("success_message", `✅ ${inseridos} novos registros copiados!`);
-                flash.sucesso = "true"
-                flash.texto = ("✅ "+resultado.length+" novos registros copiados!");
-                console.log(`✅ ${inseridos} registros inseridos.`);
+                flash.texto = "Erro ao cópia dos extras: " + res.retorno;
             }
+            let aaa = extraClass.filtraExtra(req,res,flash);
+            console.log(aaa);
 
-            console.log("🏁 Cópia finalizada com sucesso.");
-            //return res.redirect('back'); // Volta para a mesma página
+        } catch (error) {
+            console.error("❌ Erro ao copiar agendamentos:", error);
 
+            flash.sucesso = "false";
+            flash.texto = "Erro ao cópia dos extras: "+error;
 
-    //XXXXXXXXXXXXXXXX      não deletar      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+            console.log("⚠️ Processo concluído com avisos.");
+            this.filtraExtra(req,res,flash);
+        }
+    },
+/**
+ * Função que copia agendamentos extras (agenda_extra e agenda_cobrarextra = true)
+ * de um mês específico para a coleção tb_extra, evitando duplicidades.
+ * Após a cópia, chama filtraExtra para exibir os dados com os filtros aplicados.
+ */
+extraCopiarOLD2: async function (req, res) {
+    const flash = new Resposta();
+    console.log("Iniciando função de cópia de agendamentos extras para controle");
 
+    try {
+        const { anoAtend, mesAtend } = req.body;
 
-            const tipoData = req.body.tipoData;
-            console.log("  → anoAtend:", req.body.anoAtend);
-            console.log("  → mesAtend:", req.body.mesAtend);
+        // ✅ Validação
+        if (!anoAtend || !mesAtend || isNaN(anoAtend) || isNaN(mesAtend)) {
+            req.flash("error_message", "Ano ou mês inválido.");
+            return res.redirect('/atendimento/extra/lisF');
+        }
 
-            if (tipoData === "Ano/Mes") {
-                const ano = parseInt(anoAtend);
-                const mes = parseInt(mesAtend);
-                const primeiroDia = new Date(Date.UTC(ano, mes, 1));
-                const ultimoDia = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999));
-                dataIni = primeiroDia.toISOString();
-                dataFim = ultimoDia.toISOString();
-            } else {
-                // Outros tipos de filtro (Semana, Dia) — mantenha seu código existente
-                // ...O codigo ta terminando aqui abaixo victor 13/8/2025 16:35
-                return res.render('admin/erro', { message: "Tipo de filtro não suportado." });
-            }
+        const ano = parseInt(anoAtend);
+        const mes = parseInt(mesAtend);
 
-            console.log("dataIni:", dataIni);
-            console.log("dataFim:", dataFim);
+        const dataIni = new Date(Date.UTC(ano, mes, 1, 0, 0, 0, 0));
+        const dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999));
 
-            Agenda.find({
-                agenda_data: { $gte: dataIni, $lte: dataFim },
-                agenda_extra: true,
-                agenda_cobrarextra: true
-            })
-            .then((agendas) => {
-                const extraIds = agendas.map(extra => extra._id);
+        console.log(`🔍 Buscando agendamentos de ${dataIni.toISOString()} até ${dataFim.toISOString()}`);
 
-                let atendimentosPromise;
-                if (extraIds.length > 0) {
-                    atendimentosPromise = Atend.find({ atend_extraid: { $in: extraIds } }).exec();
-                } else {
-                    atendimentosPromise = Promise.resolve([]);
-                }
+        const agendamentos = await Agenda.find({
+            agenda_data: { $gte: dataIni, $lte: dataFim },
+            agenda_extra: true,
+            agenda_cobrarextra: true
+        }).lean();
 
-                agendas.forEach((a) => {
-                    const data = new Date(a.agenda_data);
-                    let hor = data.getUTCHours().toString().padStart(2, '0');
-                    let min = data.getUTCMinutes().toString().padStart(2, '0');
-                    a.extra_hora = `${hor}:${min}`;
-                    a.extra_data_dia = fncGeral.getDataFMT(data);
+        if (agendamentos.length === 0) {
+            req.flash("info_message", "Nenhum agendamento extra encontrado.");
+            // Passa os filtros para manter na view
+            flash.filtroAno = anoAtend;
+            flash.filtroMes = mesAtend;
+            return this.filtraExtra(req, res, flash);
+        }
+
+        console.log(`✅ Encontrados ${agendamentos.length} agendamentos para copiar.`);
+
+        const usuarioId = req.user?._id || req.cookies['idUsu'];
+        if (!usuarioId) {
+            req.flash("error_message", "Usuário não autenticado.");
+            return res.redirect('/atendimento/extra/lisF');
+        }
+
+        const agora = new Date();
+        const dataExportacao = agora.toISOString().split('T')[0];
+        const horaExportacao = `${agora.getUTCHours().toString().padStart(2, '0')}:${agora.getUTCMinutes().toString().padStart(2, '0')}`;
+
+        // 🧠 Extrai os _id das agendas para verificar duplicatas
+        const agendaIds = agendamentos.map(ag => ag._id);
+
+        // 🔎 Verifica quais já foram copiados
+        const jaCopiados = await Extra.find({
+            extra_copiado: { $in: agendaIds }
+        }).select('extra_copiado');
+
+        const jaCopiadosSet = new Set(jaCopiados.map(e => e.extra_copiado.toString()));
+        console.log(`🔍 Já foram copiados: ${jaCopiadosSet.size} registros.`);
+
+        // 🧮 Filtra: só os que ainda não foram copiados
+        const novosExtras = agendamentos
+            .filter(ag => !jaCopiadosSet.has(ag._id.toString()))
+            .map(ag => {
+                const dataAgenda = new Date(ag.agenda_data);
+                const hora = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                const minuto = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+                const horaFormatada = `${hora}:${minuto}`;
+
+                return new Extra({
+                    // Campos copiados da agenda
+                    extra_data: ag.agenda_data,
+                    extra_hora: horaFormatada,
+                    extra_data_semana: ag.agenda_data_semana,
+                    extra_data_dia: fncGeral.getDataFMT(dataAgenda),
+                    extra_beneid: ag.agenda_beneid,
+                    extra_convid: ag.agenda_convid,
+                    extra_salaid: ag.agenda_salaid,
+                    extra_terapiaid: ag.agenda_terapiaid,
+                    extra_usuid: ag.agenda_usuid,
+                    extra_mergeterapeutaid: ag.agenda_mergeterapeutaid,
+                    extra_mergeterapiaid: ag.agenda_mergeterapiaid,
+                    extra_migrado: ag.agenda_migrado,
+                    extra_datacad: ag.agenda_datacad,
+                    extra_dataedi: ag.agenda_dataedi,
+                    extra_categoria: ag.agenda_categoria,
+                    extra_org: ag.agenda_org,
+                    extra_obs: ag.agenda_obs,
+                    extra_aux: ag.agenda_aux,
+                    extra_temp: ag.agenda_temp,
+                    extra_tempId: ag.agenda_tempId,
+                    extra_tempmotivo: ag.agenda_tempmotivo,
+                    extra_extra: ag.agenda_extra,
+                    extra_cobrarextra: ag.agenda_cobrarextra,
+                    extra_evolucao: ag.agenda_evolucao,
+                    extra_copia: ag.agenda_copia,
+                    extra_selo: ag.agenda_selo,
+                    extra_dataSelo: ag.agenda_dataSelo,
+                    extra_atrazo: ag.agenda_atrazo,
+                    extra_rel: ag.agenda_rel,
+                    extra_turnoFalta: ag.agenda_turnoFalta,
+                    extra_faltaId: ag.agenda_faltaId,
+                    extra_falta: ag.agenda_falta,
+                    extra_usuedi: ag.agenda_usuedi,
+                    extra_log: ag.agenda_log,
+                    extra_usucad: ag.agenda_usucad,
+
+                    // Campos exclusivos do Extra
+                    extra_tipo: "Padrão",
+                    extra_auditado: false,
+                    extra_auditadoObs: "",
+                    extra_copiado: ag._id,
+                    extra_dtaExportado: dataExportacao,
+                    extra_horaExportado: horaExportacao,
+                    extra_usuidExportou: usuarioId,
+                    extra_extraStatus: "Aguardando",
+                    extra_extraStatusPg: false
                 });
+            });
 
-                Bene.find()
-                .then((bene) => {
-                    bene.sort((a, b) => a.bene_nome.localeCompare(b, 'pt-BR'));
+        if (novosExtras.length === 0) {
+            req.flash("info_message", "Todos os agendamentos já foram exportados anteriormente.");
+            console.log("🟡 Nenhum novo registro para inserir.");
+        } else {
+            const resultado = await Extra.insertMany(novosExtras, { ordered: false });
+            const inseridos = resultado.length;
+            console.log(`✅ ${inseridos} novos registros copiados para tb_extra.`);
+            req.flash("success_message", `Exportação concluída! ${inseridos} novos registros criados.`);
+        }
 
-                    Usuario.find({
-                        usuario_status: "Ativo",
-                        $or: [
-                            { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                            { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                        ]
-                    })
-                    .then((terapeuta) => {
-                        terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b, 'pt-BR'));
-                        Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
-                        .then((horaage) => {
-                            Sala.find()
-                            .then((salas) => {
-                                salas.sort((a, b) => a.sala_nome.localeCompare(b, 'pt-BR'));
-                                Terapia.find()
-                                .then((terapias) => {
-                                    Conv.find()
-                                    .then((convs) => {
-                                        convs.sort((a, b) => a.conv_nome.localeCompare(b, 'pt-BR'));
-                                        Ano.find()
-                                        .then((anos) => {
-                                            atendimentosPromise.then((atendimentos) => {
-                                                // ✅ AQUI: repassamos os valores do filtro para a view
-                                                res.render('atendimento/extra/extraLis', {
-                                                    extras: agendas,
-                                                    benes: bene,
-                                                    terapeutas: terapeuta,
-                                                    horaages: horaage,
-                                                    salas: salas,
-                                                    terapias: terapias,
-                                                    convs: convs,
-                                                    anos: anos,
-                                                    atends: atendimentos,
-                                                    flash,
+        console.log("🏁 Processo de cópia finalizado com sucesso.");
 
-                                                    // ✅ Valores do filtro para manter no formulário
-                                                    filtroTipo: tipoData,
-                                                    filtroAno: anoAtend,
-                                                    filtroMes: mesAtend
-                                                });
-                                            })
-                                            .catch((err) => {
-                                                console.error("Erro ao carregar atendimentos:", err);
-                                                res.render('atendimento/extra/extraLis', {
-                                                    extras: agendas,
-                                                    benes: bene,
-                                                    terapeutas: terapeuta,
-                                                    horaages: horaage,
-                                                    salas: salas,
-                                                    terapias: terapias,
-                                                    convs: convs,
-                                                    anos: anos,
-                                                    atends: [],
-                                                    flash,
-                                                    filtroTipo: tipoData,
-                                                    filtroAno: anoAtend,
-                                                    filtroMes: mesAtend
-                                                });
+        // ✅ Prepara flash com os filtros para manter na view
+        flash.filtroAno = anoAtend;
+        flash.filtroMes = mesAtend;
+        flash.sucesso = "true";
+        flash.texto = "Cópia dos extras realizada com sucesso!";
+
+        // ✅ Chama filtraExtra com os dados do filtro
+        return this.filtraExtra(req, res, flash);
+
+    } catch (error) {
+        console.error("❌ Erro ao copiar agendamentos:", error);
+
+        // Define mensagem de erro
+        if (error.code === 11000) {
+            req.flash("info_message", "Alguns registros já foram copiados anteriormente (duplicatas ignoradas).");
+        } else {
+            req.flash("error_message", "Erro ao copiar os registros.");
+        }
+
+        // ✅ Passa filtros mesmo em caso de erro
+        const { anoAtend, mesAtend } = req.body;
+        const flash = new Resposta();
+        flash.filtroAno = anoAtend;
+        flash.filtroMes = mesAtend;
+        flash.sucesso = "false";
+        flash.texto = "Erro ao copiar os extras: " + error.message;
+
+        return this.filtraExtra(req, res, flash);
+    }
+},
+/**
+ * Copia agendamentos extras para tb_extra e redireciona para controle com filtros
+ */
+extraCopiarOLD3: async (req, res) => {
+    const flash = new Resposta();
+    console.log("Iniciando função de cópia de agendamentos extras para controle");
+
+    try {
+        const { anoAtend, mesAtend } = req.body;
+
+        // ✅ Validação
+        if (!anoAtend || !mesAtend || isNaN(anoAtend) || isNaN(mesAtend)) {
+            req.flash("error_message", "Ano ou mês inválido.");
+            return res.redirect('/atendimento/extra/lisF');
+        }
+
+        const ano = parseInt(anoAtend);
+        const mes = parseInt(mesAtend);
+
+        const dataIni = new Date(Date.UTC(ano, mes, 1, 0, 0, 0, 0));
+        const dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999));
+
+        console.log(`🔍 Buscando agendamentos de ${dataIni.toISOString()} até ${dataFim.toISOString()}`);
+
+        const agendamentos = await Agenda.find({
+            agenda_data: { $gte: dataIni, $lte: dataFim },
+            agenda_extra: true,
+            agenda_cobrarextra: true
+        }).lean();
+
+        if (agendamentos.length === 0) {
+            req.flash("info_message", "Nenhum agendamento extra encontrado.");
+            // ✅ Chama filtraExtra com os filtros
+            return fncExtra.filtraExtra(req, res, {
+                ...flash,
+                filtroAno: anoAtend,
+                filtroMes: mesAtend
+            });
+        }
+
+        console.log(`✅ Encontrados ${agendamentos.length} agendamentos para copiar.`);
+
+        const usuarioId = req.user?._id || req.cookies['idUsu'];
+        if (!usuarioId) {
+            req.flash("error_message", "Usuário não autenticado.");
+            return res.redirect('/atendimento/extra/lisF');
+        }
+
+        const agora = new Date();
+        const dataExportacao = agora.toISOString().split('T')[0];
+        const horaExportacao = `${agora.getUTCHours().toString().padStart(2, '0')}:${agora.getUTCMinutes().toString().padStart(2, '0')}`;
+
+        const agendaIds = agendamentos.map(ag => ag._id);
+        const jaCopiados = await Extra.find({
+            extra_copiado: { $in: agendaIds }
+        }).select('extra_copiado');
+
+        const jaCopiadosSet = new Set(jaCopiados.map(e => e.extra_copiado.toString()));
+        console.log(`🔍 Já foram copiados: ${jaCopiadosSet.size} registros.`);
+
+        const novosExtras = agendamentos
+            .filter(ag => !jaCopiadosSet.has(ag._id.toString()))
+            .map(ag => {
+                const dataAgenda = new Date(ag.agenda_data);
+                const hora = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                const minuto = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+                const horaFormatada = `${hora}:${minuto}`;
+
+                return new Extra({
+                    extra_data: ag.agenda_data,
+                    extra_hora: horaFormatada,
+                    extra_data_semana: ag.agenda_data_semana,
+                    extra_data_dia: fncGeral.getDataFMT(dataAgenda),
+                    extra_beneid: ag.agenda_beneid,
+                    extra_convid: ag.agenda_convid,
+                    extra_salaid: ag.agenda_salaid,
+                    extra_terapiaid: ag.agenda_terapiaid,
+                    extra_usuid: ag.agenda_usuid,
+                    extra_mergeterapeutaid: ag.agenda_mergeterapeutaid,
+                    extra_mergeterapiaid: ag.agenda_mergeterapiaid,
+                    extra_migrado: ag.agenda_migrado,
+                    extra_datacad: ag.agenda_datacad,
+                    extra_dataedi: ag.agenda_dataedi,
+                    extra_categoria: ag.agenda_categoria,
+                    extra_org: ag.agenda_org,
+                    extra_obs: ag.agenda_obs,
+                    extra_aux: ag.agenda_aux,
+                    extra_temp: ag.agenda_temp,
+                    extra_tempId: ag.agenda_tempId,
+                    extra_tempmotivo: ag.agenda_tempmotivo,
+                    extra_extra: ag.agenda_extra,
+                    extra_cobrarextra: ag.agenda_cobrarextra,
+                    extra_evolucao: ag.agenda_evolucao,
+                    extra_copia: ag.agenda_copia,
+                    extra_selo: ag.agenda_selo,
+                    extra_dataSelo: ag.agenda_dataSelo,
+                    extra_atrazo: ag.agenda_atrazo,
+                    extra_rel: ag.agenda_rel,
+                    extra_turnoFalta: ag.agenda_turnoFalta,
+                    extra_faltaId: ag.agenda_faltaId,
+                    extra_falta: ag.agenda_falta,
+                    extra_usuedi: ag.agenda_usuedi,
+                    extra_log: ag.agenda_log,
+                    extra_usucad: ag.agenda_usucad,
+
+                    // Campos exclusivos
+                    extra_tipo: "Padrão",
+                    extra_auditado: false,
+                    extra_auditadoObs: "",
+                    extra_copiado: ag._id,
+                    extra_dtaExportado: dataExportacao,
+                    extra_horaExportado: horaExportacao,
+                    extra_usuidExportou: usuarioId,
+                    extra_extraStatus: "Aguardando",
+                    extra_extraStatusPg: false
+                });
+            });
+
+        if (novosExtras.length === 0) {
+            req.flash("info_message", "Todos os agendamentos já foram exportados anteriormente.");
+        } else {
+            const resultado = await Extra.insertMany(novosExtras, { ordered: false });
+            const inseridos = resultado.length;
+            console.log(`✅ ${inseridos} novos registros copiados.`);
+            req.flash("success_message", `Exportação concluída! ${inseridos} novos registros criados.`);
+        }
+
+        console.log("🏁 Processo de cópia finalizado com sucesso.");
+
+        // ✅ Prepara flash com os filtros
+        flash.filtroAno = anoAtend;
+        flash.filtroMes = mesAtend;
+        flash.sucesso = "true";
+        flash.texto = "Cópia realizada com sucesso!";
+
+        // ✅ Chama filtraExtra diretamente do módulo
+        return fncExtra.filtraExtra(req, res, flash);
+
+    } catch (error) {
+        console.error("❌ Erro CRÍTICO em extraCopiar:", error);
+
+        // ✅ Garante que o erro não quebre tudo
+        req.flash("error_message", "Erro ao copiar agendamentos. Veja o console.");
+        
+        // ✅ Mesmo em erro, tenta chamar filtraExtra com dados
+        const { anoAtend, mesAtend } = req.body;
+        const flashErro = new Resposta();
+        flashErro.filtroAno = anoAtend;
+        flashErro.filtroMes = mesAtend;
+        flashErro.sucesso = "false";
+        flashErro.texto = "Erro: " + error.message;
+
+        // ✅ Evita loop de erro
+        try {
+            return fncExtra.filtraExtra(req, res, flashErro);
+        } catch (innerError) {
+            console.error("❌ Erro ao chamar filtraExtra após falha:", innerError);
+            return res.redirect('/admin/erro'); // fallback
+        }
+    }
+},
+/**
+ * Função que copia agendamentos extras para tb_extra e chama filtraExtra com filtros
+ */
+extraCopiarOLD4: async function (req, res) { // ✅ async function, não arrow
+    const flash = new Resposta();
+    console.log("Iniciando função de cópia de agendamentos extras para controle");
+
+    try {
+        const { anoAtend, mesAtend } = req.body;
+
+        // ✅ Validação
+        if (!anoAtend || !mesAtend || isNaN(anoAtend) || isNaN(mesAtend)) {
+            req.flash("error_message", "Ano ou mês inválido.");
+            return res.redirect('/atendimento/extra/lisF');
+        }
+
+        const ano = parseInt(anoAtend);
+        const mes = parseInt(mesAtend);
+
+        const dataIni = new Date(Date.UTC(ano, mes, 1, 0, 0, 0, 0));
+        const dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999));
+
+        console.log(`🔍 Buscando agendamentos de ${dataIni.toISOString()} até ${dataFim.toISOString()}`);
+
+        const agendamentos = await Agenda.find({
+            agenda_data: { $gte: dataIni, $lte: dataFim },
+            agenda_extra: true,
+            agenda_cobrarextra: true
+        }).lean();
+
+        if (agendamentos.length === 0) {
+            req.flash("info_message", "Nenhum agendamento extra encontrado.");
+            flash.filtroAno = anoAtend;
+            flash.filtroMes = mesAtend;
+            return this.filtraExtra(req, res, flash); // ✅ this funciona agora
+        }
+
+        console.log(`✅ Encontrados ${agendamentos.length} agendamentos para copiar.`);
+
+        const usuarioId = req.user?._id || req.cookies['idUsu'];
+        if (!usuarioId) {
+            req.flash("error_message", "Usuário não autenticado.");
+            return res.redirect('/atendimento/extra/lisF');
+        }
+
+        const agora = new Date();
+        const dataExportacao = agora.toISOString().split('T')[0];
+        const horaExportacao = `${agora.getUTCHours().toString().padStart(2, '0')}:${agora.getUTCMinutes().toString().padStart(2, '0')}`;
+
+        const agendaIds = agendamentos.map(ag => ag._id);
+        const jaCopiados = await Extra.find({
+            extra_copiado: { $in: agendaIds }
+        }).select('extra_copiado');
+
+        const jaCopiadosSet = new Set(jaCopiados.map(e => e.extra_copiado.toString()));
+        console.log(`🔍 Já foram copiados: ${jaCopiadosSet.size} registros.`);
+
+        const novosExtras = agendamentos
+            .filter(ag => !jaCopiadosSet.has(ag._id.toString()))
+            .map(ag => {
+                const dataAgenda = new Date(ag.agenda_data);
+                const hora = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                const minuto = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+                const horaFormatada = `${hora}:${minuto}`;
+
+                return new Extra({
+                    extra_data: ag.agenda_data,
+                    extra_hora: horaFormatada,
+                    extra_data_semana: ag.agenda_data_semana,
+                    extra_data_dia: fncGeral.getDataFMT(dataAgenda),
+                    extra_beneid: ag.agenda_beneid,
+                    extra_convid: ag.agenda_convid,
+                    extra_salaid: ag.agenda_salaid,
+                    extra_terapiaid: ag.agenda_terapiaid,
+                    extra_usuid: ag.agenda_usuid,
+                    extra_mergeterapeutaid: ag.agenda_mergeterapeutaid,
+                    extra_mergeterapiaid: ag.agenda_mergeterapiaid,
+                    extra_migrado: ag.agenda_migrado,
+                    extra_datacad: ag.agenda_datacad,
+                    extra_dataedi: ag.agenda_dataedi,
+                    extra_categoria: ag.agenda_categoria,
+                    extra_org: ag.agenda_org,
+                    extra_obs: ag.agenda_obs,
+                    extra_aux: ag.agenda_aux,
+                    extra_temp: ag.agenda_temp,
+                    extra_tempId: ag.agenda_tempId,
+                    extra_tempmotivo: ag.agenda_tempmotivo,
+                    extra_extra: ag.agenda_extra,
+                    extra_cobrarextra: ag.agenda_cobrarextra,
+                    extra_evolucao: ag.agenda_evolucao,
+                    extra_copia: ag.agenda_copia,
+                    extra_selo: ag.agenda_selo,
+                    extra_dataSelo: ag.agenda_dataSelo,
+                    extra_atrazo: ag.agenda_atrazo,
+                    extra_rel: ag.agenda_rel,
+                    extra_turnoFalta: ag.agenda_turnoFalta,
+                    extra_faltaId: ag.agenda_faltaId,
+                    extra_falta: ag.agenda_falta,
+                    extra_usuedi: ag.agenda_usuedi,
+                    extra_log: ag.agenda_log,
+                    extra_usucad: ag.agenda_usucad,
+
+                    // Campos exclusivos
+                    extra_tipo: "Padrão",
+                    extra_auditado: false,
+                    extra_auditadoObs: "",
+                    extra_copiado: ag._id,
+                    extra_dtaExportado: dataExportacao,
+                    extra_horaExportado: horaExportacao,
+                    extra_usuidExportou: usuarioId,
+                    extra_extraStatus: "Aguardando",
+                    extra_extraStatusPg: false
+                });
+            });
+
+        if (novosExtras.length === 0) {
+            req.flash("info_message", "Todos os agendamentos já foram exportados anteriormente.");
+        } else {
+            const resultado = await Extra.insertMany(novosExtras, { ordered: false });
+            const inseridos = resultado.length;
+            console.log(`✅ ${inseridos} novos registros copiados para tb_extra.`);
+            req.flash("success_message", `Exportação concluída! ${inseridos} novos registros criados.`);
+        }
+
+        console.log("🏁 Processo de cópia finalizado com sucesso.");
+
+        // ✅ Prepara flash com filtros
+        flash.filtroAno = anoAtend;
+        flash.filtroMes = mesAtend;
+        flash.sucesso = "true";
+        flash.texto = "Cópia realizada com sucesso!";
+
+        // ✅ Chama filtraExtra do mesmo módulo
+        return this.filtraExtra(req, res, flash);
+
+    } catch (error) {
+        console.error("❌ Erro ao copiar agendamentos:", error);
+
+        const { anoAtend, mesAtend } = req.body;
+        const flashErro = new Resposta();
+        flashErro.filtroAno = anoAtend;
+        flashErro.filtroMes = mesAtend;
+        flashErro.sucesso = "false";
+        flashErro.texto = "Erro: " + error.message;
+
+        try {
+            return this.filtraExtra(req, res, flashErro); // ✅ this funciona com async function
+        } catch (innerError) {
+            console.error("❌ Erro ao chamar filtraExtra:", innerError);
+            return res.redirect('/admin/erro');
+        }
+    }
+},
+/**
+ * Copia agendamentos extras para tb_extra e retorna para a mesma página
+ */
+extraCopiarOLD5: async (req, res) => {
+    console.log("🚀 Iniciando cópia de agendamentos extras");
+
+    try {
+        const { anoAtend, mesAtend } = req.body;
+
+        // ✅ Validação
+        if (!anoAtend || !mesAtend || isNaN(anoAtend) || isNaN(mesAtend)) {
+            req.flash("error_message", "Ano ou mês inválido.");
+            return res.redirect('back'); // Volta para a mesma página
+        }
+
+        const ano = parseInt(anoAtend);
+        const mes = parseInt(mesAtend);
+
+        const dataIni = new Date(Date.UTC(ano, mes, 1, 0, 0, 0, 0));
+        const dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999));
+
+        console.log(`🔍 Buscando agendamentos de ${dataIni.toISOString()} até ${dataFim.toISOString()}`);
+
+        const agendamentos = await Agenda.find({
+            agenda_data: { $gte: dataIni, $lte: dataFim },
+            agenda_extra: true,
+            agenda_cobrarextra: true
+        }).lean();
+
+        if (agendamentos.length === 0) {
+            req.flash("info_message", "Nenhum agendamento extra encontrado.");
+            return res.redirect('back');
+        }
+
+        console.log(`✅ Encontrados ${agendamentos.length} agendamentos.`);
+
+        const usuarioId = req.user?._id || req.cookies['idUsu'];
+        if (!usuarioId) {
+            req.flash("error_message", "Usuário não autenticado.");
+            return res.redirect('back');
+        }
+
+        const agora = new Date();
+        const dataExportacao = agora.toISOString().split('T')[0];
+        const horaExportacao = `${agora.getUTCHours().toString().padStart(2, '0')}:${agora.getUTCMinutes().toString().padStart(2, '0')}`;
+
+        // 🧠 IDs das agendas já copiadas
+        const agendaIds = agendamentos.map(ag => ag._id);
+        const jaCopiados = await Extra.find({ extra_copiado: { $in: agendaIds } }).select('extra_copiado');
+        const jaCopiadosSet = new Set(jaCopiados.map(e => e.extra_copiado.toString()));
+
+        // 🧮 Filtra os novos
+        const novosExtras = agendamentos
+            .filter(ag => !jaCopiadosSet.has(ag._id.toString()))
+            .map(ag => {
+                const dataAgenda = new Date(ag.agenda_data);
+                const hora = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                const minuto = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+                const horaFormatada = `${hora}:${minuto}`;
+
+                return new Extra({
+                    extra_data: ag.agenda_data,
+                    extra_hora: horaFormatada,
+                    extra_data_semana: ag.agenda_data_semana,
+                    extra_data_dia: fncGeral.getDataFMT(dataAgenda),
+                    extra_beneid: ag.agenda_beneid,
+                    extra_convid: ag.agenda_convid,
+                    extra_salaid: ag.agenda_salaid,
+                    extra_terapiaid: ag.agenda_terapiaid,
+                    extra_usuid: ag.agenda_usuid,
+                    extra_mergeterapeutaid: ag.agenda_mergeterapeutaid,
+                    extra_mergeterapiaid: ag.agenda_mergeterapiaid,
+                    extra_migrado: ag.agenda_migrado,
+                    extra_datacad: ag.agenda_datacad,
+                    extra_dataedi: ag.agenda_dataedi,
+                    extra_categoria: ag.agenda_categoria,
+                    extra_org: ag.agenda_org,
+                    extra_obs: ag.agenda_obs,
+                    extra_aux: ag.agenda_aux,
+                    extra_temp: ag.agenda_temp,
+                    extra_tempId: ag.agenda_tempId,
+                    extra_tempmotivo: ag.agenda_tempmotivo,
+                    extra_extra: ag.agenda_extra,
+                    extra_cobrarextra: ag.agenda_cobrarextra,
+                    extra_evolucao: ag.agenda_evolucao,
+                    extra_copia: ag.agenda_copia,
+                    extra_selo: ag.agenda_selo,
+                    extra_dataSelo: ag.agenda_dataSelo,
+                    extra_atrazo: ag.agenda_atrazo,
+                    extra_rel: ag.agenda_rel,
+                    extra_turnoFalta: ag.agenda_turnoFalta,
+                    extra_faltaId: ag.agenda_faltaId,
+                    extra_falta: ag.agenda_falta,
+                    extra_usuedi: ag.agenda_usuedi,
+                    extra_log: ag.agenda_log,
+                    extra_usucad: ag.agenda_usucad,
+
+                    // Campos exclusivos
+                    extra_tipo: "Padrão",
+                    extra_auditado: false,
+                    extra_auditadoObs: "",
+                    extra_copiado: ag._id,
+                    extra_dtaExportado: dataExportacao,
+                    extra_horaExportado: horaExportacao,
+                    extra_usuidExportou: usuarioId,
+                    extra_extraStatus: "Aguardando",
+                    extra_extraStatusPg: false
+                });
+            });
+
+        if (novosExtras.length === 0) {
+            req.flash("info_message", "Todos os agendamentos já foram exportados anteriormente.");
+        } else {
+            const resultado = await Extra.insertMany(novosExtras, { ordered: false });
+            const inseridos = resultado.length;
+            req.flash("success_message", `✅ ${inseridos} novos registros copiados!`);
+            console.log(`✅ ${inseridos} registros inseridos.`);
+        }
+
+        console.log("🏁 Cópia finalizada com sucesso.");
+        return res.redirect('back'); // Volta para a mesma página
+
+    } catch (error) {
+        console.error("❌ Erro na cópia:", error);
+        if (error.code === 11000) {
+            req.flash("info_message", "Alguns registros já foram copiados (duplicatas ignoradas).");
+        } else {
+            req.flash("error_message", "Erro ao copiar os extras.");
+        }
+        return res.redirect('back'); // Volta sem quebrar
+    }
+},
+/**
+ * Copia agendamentos extras para tb_extra e retorna para a mesma página
+ */
+extraCopiar: async (req, res) => {
+    console.log("🚀 Iniciando cópia de agendamentos extras");
+
+    try {
+        let flash = new Resposta();
+        let resultado;
+
+        const { anoAtend, mesAtend } = req.body;
+
+        // ✅ Validação
+        if (!anoAtend || !mesAtend || isNaN(anoAtend) || isNaN(mesAtend)) {
+            //req.flash("error_message", "Ano ou mês inválido.");
+            //return res.redirect('back'); // Volta para a mesma página
+            flash.sucesso = "false";
+            flash.texto = "Ano ou mês inválido.";
+        }
+
+        const ano = parseInt(anoAtend);
+        const mes = parseInt(mesAtend);
+
+        const dataIni = new Date(Date.UTC(ano, mes, 1, 0, 0, 0, 0));
+        const dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999));
+
+        console.log(`🔍 Buscando agendamentos de ${dataIni.toISOString()} até ${dataFim.toISOString()}`);
+
+        const agendamentos = await Agenda.find({
+            agenda_data: { $gte: dataIni, $lte: dataFim },
+            agenda_extra: true,
+            agenda_cobrarextra: true
+        }).lean();
+
+        if (agendamentos.length === 0) {
+            //req.flash("info_message", "Nenhum agendamento extra encontrado.");
+            //return res.redirect('back');
+            flash.sucesso = "false";
+            flash.texto = "Nenhum agendamento extra encontrado.";
+        }
+
+        console.log(`✅ Encontrados ${agendamentos.length} agendamentos.`);
+
+        const usuarioId = req.user?._id || req.cookies['idUsu'];
+        if (!usuarioId) {
+            //req.flash("error_message", "Usuário não autenticado.");
+            //return res.redirect('back');
+            flash.sucesso = "false";
+            flash.texto = "Usuário não autenticado.";
+        }
+
+        const agora = new Date();
+        const dataExportacao = agora.toISOString().split('T')[0];
+        const horaExportacao = `${agora.getUTCHours().toString().padStart(2, '0')}:${agora.getUTCMinutes().toString().padStart(2, '0')}`;
+
+        // 🧠 IDs das agendas já copiadas
+        const agendaIds = agendamentos.map(ag => ag._id);
+        const jaCopiados = await Extra.find({ extra_copiado: { $in: agendaIds } }).select('extra_copiado');
+        const jaCopiadosSet = new Set(jaCopiados.map(e => e.extra_copiado.toString()));
+
+        // 🧮 Filtra os novos
+        const novosExtras = agendamentos
+            .filter(ag => !jaCopiadosSet.has(ag._id.toString()))
+            .map(ag => {
+                const dataAgenda = new Date(ag.agenda_data);
+                const hora = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                const minuto = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+                const horaFormatada = `${hora}:${minuto}`;
+
+                return new Extra({
+                    extra_data: ag.agenda_data,
+                    extra_hora: horaFormatada,
+                    extra_data_semana: ag.agenda_data_semana,
+                    extra_data_dia: fncGeral.getDataFMT(dataAgenda),
+                    extra_beneid: ag.agenda_beneid,
+                    extra_convid: ag.agenda_convid,
+                    extra_salaid: ag.agenda_salaid,
+                    extra_terapiaid: ag.agenda_terapiaid,
+                    extra_usuid: ag.agenda_usuid,
+                    extra_mergeterapeutaid: ag.agenda_mergeterapeutaid,
+                    extra_mergeterapiaid: ag.agenda_mergeterapiaid,
+                    extra_migrado: ag.agenda_migrado,
+                    extra_datacad: ag.agenda_datacad,
+                    extra_dataedi: ag.agenda_dataedi,
+                    extra_categoria: ag.agenda_categoria,
+                    extra_org: ag.agenda_org,
+                    extra_obs: ag.agenda_obs,
+                    extra_aux: ag.agenda_aux,
+                    extra_temp: ag.agenda_temp,
+                    extra_tempId: ag.agenda_tempId,
+                    extra_tempmotivo: ag.agenda_tempmotivo,
+                    extra_extra: ag.agenda_extra,
+                    extra_cobrarextra: ag.agenda_cobrarextra,
+                    extra_evolucao: ag.agenda_evolucao,
+                    extra_copia: ag.agenda_copia,
+                    extra_selo: ag.agenda_selo,
+                    extra_dataSelo: ag.agenda_dataSelo,
+                    extra_atrazo: ag.agenda_atrazo,
+                    extra_rel: ag.agenda_rel,
+                    extra_turnoFalta: ag.agenda_turnoFalta,
+                    extra_faltaId: ag.agenda_faltaId,
+                    extra_falta: ag.agenda_falta,
+                    extra_usuedi: ag.agenda_usuedi,
+                    extra_log: ag.agenda_log,
+                    extra_usucad: ag.agenda_usucad,
+
+                    // Campos exclusivos
+                    extra_tipo: "Padrão",
+                    extra_auditado: false,
+                    extra_auditadoObs: "",
+                    extra_copiado: ag._id,
+                    extra_dtaExportado: dataExportacao,
+                    extra_horaExportado: horaExportacao,
+                    extra_usuidExportou: usuarioId,
+                    extra_extraStatus: "Aguardando",
+                    extra_extraStatusPg: false
+                });
+            });
+
+        if (novosExtras.length === 0) {
+            //req.flash("info_message", "Todos os agendamentos já foram exportados anteriormente.");
+            flash.sucesso = "false";
+            flash.texto = "Todos os agendamentos já foram exportados anteriormente.";
+        } else {
+            const resultado = await Extra.insertMany(novosExtras, { ordered: false });
+            const inseridos = resultado.length;
+            //req.flash("success_message", `✅ ${inseridos} novos registros copiados!`);
+            flash.sucesso = "true"
+            flash.texto = ("✅ "+resultado.length+" novos registros copiados!");
+            console.log(`✅ ${inseridos} registros inseridos.`);
+        }
+
+        console.log("🏁 Cópia finalizada com sucesso.");
+        //return res.redirect('back'); // Volta para a mesma página
+
+
+//XXXXXXXXXXXXXXXX      não deletar      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+        const tipoData = req.body.tipoData;
+        console.log("  → anoAtend:", req.body.anoAtend);
+        console.log("  → mesAtend:", req.body.mesAtend);
+
+        if (tipoData === "Ano/Mes") {
+            const ano = parseInt(anoAtend);
+            const mes = parseInt(mesAtend);
+            const primeiroDia = new Date(Date.UTC(ano, mes, 1));
+            const ultimoDia = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999));
+            dataIni = primeiroDia.toISOString();
+            dataFim = ultimoDia.toISOString();
+        } else {
+            // Outros tipos de filtro (Semana, Dia) — mantenha seu código existente
+            // ...O codigo ta terminando aqui abaixo victor 13/8/2025 16:35
+            return res.render('admin/erro', { message: "Tipo de filtro não suportado." });
+        }
+
+        console.log("dataIni:", dataIni);
+        console.log("dataFim:", dataFim);
+
+        Agenda.find({
+            agenda_data: { $gte: dataIni, $lte: dataFim },
+            agenda_extra: true,
+            agenda_cobrarextra: true
+        })
+        .then((agendas) => {
+            const extraIds = agendas.map(extra => extra._id);
+
+            let atendimentosPromise;
+            if (extraIds.length > 0) {
+                atendimentosPromise = Atend.find({ atend_extraid: { $in: extraIds } }).exec();
+            } else {
+                atendimentosPromise = Promise.resolve([]);
+            }
+
+            agendas.forEach((a) => {
+                const data = new Date(a.agenda_data);
+                let hor = data.getUTCHours().toString().padStart(2, '0');
+                let min = data.getUTCMinutes().toString().padStart(2, '0');
+                a.extra_hora = `${hor}:${min}`;
+                a.extra_data_dia = fncGeral.getDataFMT(data);
+            });
+
+            Bene.find()
+            .then((bene) => {
+                bene.sort((a, b) => a.bene_nome.localeCompare(b, 'pt-BR'));
+
+                Usuario.find({
+                    usuario_status: "Ativo",
+                    $or: [
+                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                    ]
+                })
+                .then((terapeuta) => {
+                    terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b, 'pt-BR'));
+                    Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
+                    .then((horaage) => {
+                        Sala.find()
+                        .then((salas) => {
+                            salas.sort((a, b) => a.sala_nome.localeCompare(b, 'pt-BR'));
+                            Terapia.find()
+                            .then((terapias) => {
+                                Conv.find()
+                                .then((convs) => {
+                                    convs.sort((a, b) => a.conv_nome.localeCompare(b, 'pt-BR'));
+                                    Ano.find()
+                                    .then((anos) => {
+                                        atendimentosPromise.then((atendimentos) => {
+                                            // ✅ AQUI: repassamos os valores do filtro para a view
+                                            res.render('atendimento/extra/extraLis', {
+                                                extras: agendas,
+                                                benes: bene,
+                                                terapeutas: terapeuta,
+                                                horaages: horaage,
+                                                salas: salas,
+                                                terapias: terapias,
+                                                convs: convs,
+                                                anos: anos,
+                                                atends: atendimentos,
+                                                flash,
+
+                                                // ✅ Valores do filtro para manter no formulário
+                                                filtroTipo: tipoData,
+                                                filtroAno: anoAtend,
+                                                filtroMes: mesAtend
+                                            });
+                                        })
+                                        .catch((err) => {
+                                            console.error("Erro ao carregar atendimentos:", err);
+                                            res.render('atendimento/extra/extraLis', {
+                                                extras: agendas,
+                                                benes: bene,
+                                                terapeutas: terapeuta,
+                                                horaages: horaage,
+                                                salas: salas,
+                                                terapias: terapias,
+                                                convs: convs,
+                                                anos: anos,
+                                                atends: [],
+                                                flash,
+                                                filtroTipo: tipoData,
+                                                filtroAno: anoAtend,
+                                                filtroMes: mesAtend
                                             });
                                         });
                                     });
@@ -1348,31 +2021,32 @@ module.exports = {
                         });
                     });
                 });
-            }).catch((err) => {
-                console.error(err);
-                req.flash("error_message", "Houve um erro ao listar!");
-                res.redirect('atendimento/extra/extraLis');
             });
+        }).catch((err) => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar!");
+            res.redirect('atendimento/extra/extraLis');
+        });
 
 
-    //XXXXXXXXXXXXXXXX      não deletar      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//XXXXXXXXXXXXXXXX      não deletar      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 
 
-        } catch (error) {
-            console.error("❌ Erro na cópia:", error);
-            if (error.code === 11000) {
-                //req.flash("info_message", "Alguns registros já foram copiados (duplicatas ignoradas).");
-                flash.sucesso = "false";
-                flash.texto = "Alguns registros já foram copiados (duplicatas ignoradas).";
-            } else {
-                //req.flash("error_message", "Erro ao copiar os extras.");
-                flash.sucesso = "false";
-                flash.texto = "Erro ao copiar os extras.";
-            }
-            //return res.redirect('back'); // Volta sem quebrar
+    } catch (error) {
+        console.error("❌ Erro na cópia:", error);
+        if (error.code === 11000) {
+            //req.flash("info_message", "Alguns registros já foram copiados (duplicatas ignoradas).");
+            flash.sucesso = "false";
+            flash.texto = "Alguns registros já foram copiados (duplicatas ignoradas).";
+        } else {
+            //req.flash("error_message", "Erro ao copiar os extras.");
+            flash.sucesso = "false";
+            flash.texto = "Erro ao copiar os extras.";
         }
-    },
+        //return res.redirect('back'); // Volta sem quebrar
+    }
+},
     atualizaExtra(req,res){
         let resultado
         let flash = new Resposta()

@@ -78,18 +78,6 @@
 			.custom-tooltip:hover .tooltip-text {
 				visibility: visible;
 			}
-			.btn-rounded {
-				border-radius: 20px !important;
-				padding-left: 14px;
-				padding-right: 14px;
-				font-weight: 500;
-				box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-				transition: all 0.2s ease;
-			}
-			.btn-rounded:hover {
-				transform: translateY(-1px);
-				box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-			}
 		</style>
 		
 		<script type="text/javascript">
@@ -99,15 +87,9 @@
 			}
 			
 		</script>
-		<script type="text/javascript">
+		<script>
 			async function auditareExtra(id) {
-				const botao = document.querySelector(`[onclick="auditareExtra('${id}')"]`);
-				
-				const dataEdi = botao?.getAttribute('data-dataedi') || 'Não informado';
-				const usuEdi = botao?.getAttribute('data-usuedi') || 'Não informado';
-				const dataCad = botao?.getAttribute('data-datacad') || 'Não informado';
-				const usuCad = botao?.getAttribute('data-usucad') || 'Não informado';
-
+				// Confirmação antes de prosseguir
 				if (!confirm("Tem certeza que deseja auditar este extra e marcar como 'Gerado'?")) {
 					return;
 				}
@@ -117,55 +99,54 @@
 						method: 'PATCH',
 						headers: {
 							'Content-Type': 'application/json',
-						}
+						},
+						body: JSON.stringify({
+							extra_auditado: true,
+							extra_extraStatus: "Gerado"
+						})
 					});
 
-					const data = await response.json();
+					if (response.ok) {
+						// ✅ Sucesso: atualiza a interface
+						const cell = document.getElementById(`auditado-cell-${id}`);
+						cell.innerHTML = '<span class="badge badge-success">Sim</span>';
 
-					if (response.ok && data.success) {
-						// Atualiza Auditado
-						const auditadoCell = document.getElementById(`auditado-cell-${id}`);
-						if (auditadoCell) {
-							auditadoCell.innerHTML = '<span class="badge badge-success">Sim</span>';
-						}
-
-						// Atualiza Status + todos os ícones
-						const statusCell = document.getElementById(`status-cell-${id}`);
-						if (statusCell) {
-							statusCell.innerHTML = `
-								<span class="badge badge-danger">Gerado</span>
-								<br>
-								<a class="green" href="/menu/atendimento/extra/edi/${id}">
-									<i class="ace-icon fa fa-pencil bigger-130"></i>
-								</a>
-								<a class="red" onclick="javascript:confirmeDeletar('${id}');">
-									<i class="ace-icon fa fa-trash-o bigger-130"></i>
-								</a>
-								<!-- Tooltip com dados -->
-								<a class="purple custom-tooltip" name="acaoCrud" id="acaoCrud">
-									<i class="ace-icon fa fa-eye bigger-130"></i>
-									<span class="tooltip-text">
-										<strong>Última Edição:</strong>
-										<p><b>${dataEdi}</b></p>
-										<p>${usuEdi}</p>
-										<strong>Cadastrado em:</strong>
-										<p><b>${dataCad}</b></p>
-										<p>${usuCad}</p>
-									</span>
-								</a>
-							`;
-						}
-
+						// Mostra alerta de sucesso
 						mostraAlerta("Extra auditado e marcado como 'Gerado' com sucesso!", "success");
+
+						// Opcional: recarrega a página após 2 segundos para atualizar contadores
+						// setTimeout(() => location.reload(), 2000);
 					} else {
+						const data = await response.json();
 						mostraAlerta("Erro: " + (data.message || "Falha ao atualizar"), "danger");
 					}
 				} catch (err) {
-					console.error("Erro no auditareExtra:", err);
+					console.error(err);
 					mostraAlerta("Erro de conexão com o servidor.", "danger");
 				}
 			}
-		</script>			
+
+			// Função para exibir alerta dinâmico
+			function mostraAlerta(mensagem, tipo = "info") {
+				const alerta = document.createElement("div");
+				alerta.className = `alert alert-${tipo} alert-dismissible fade in`;
+				alerta.style.marginTop = "10px";
+				alerta.innerHTML = `
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					${mensagem}
+				`;
+				const formPesquisa = document.getElementById("divFormPesquisa");
+				formPesquisa.parentNode.insertBefore(alerta, formPesquisa.nextSibling);
+
+				// Remove o alerta após 5 segundos
+				setTimeout(() => {
+					alerta.remove();
+				}, 5000);
+			}
+		</script>
+				
 	</head>
 
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
@@ -325,18 +306,13 @@
 															<span class="badge badge-success">Sim</span>
 														{{else}}
 															<button 
-																class="btn btn-xs btn-info btn-rounded"
-																onclick="auditareExtra('{{_id}}')"
-																data-dataedi="{{extraDataedifor}}"
-																data-usuedi="{{extrausuedinome}}"
-																data-datacad="{{extraDatacadfor}}"
-																data-usucad="{{extraUsucadnome}}">
-																<i class="ace-icon fa fa-check"></i> Auditar
-																<span class="tooltip-text">Auditar e alterar o status desse Extra!</span>
+																class="btn btn-xs btn-warning"
+																onclick="auditareExtra('{{_id}}')">
+																<i class="ace-icon fa fa-check"></i> Auditar e Gerar
 															</button>
 														{{/if}}
 													</td>
-													<td id="status-cell-{{_id}}" style="text-align: center;">
+													<td style="text-align: center;">
 														{{#ifEqual extra_extraStatus "Aguardando"}}
 															<span class="badge badge-warning">{{extra_extraStatus}}</span>
 															{{else}}

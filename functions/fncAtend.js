@@ -1715,7 +1715,7 @@ module.exports = {
                                     at.forEach((ats)=>{
                                         if ((""+ats.atend_convid+"") == (""+convid+"")){
                                             categorias = ats.atend_categoria
-                                            if (ats.atend_fixo == "true" && categorias != "Feriado"){
+                                            if (ats.atend_fixo == "true" && categorias != "Feriado" && categorias != "Falta Absoluta"){
                                                 terapiaAtend = ats.atend_fixoterapiaid;
                                                 //console.log("ats.atend_fixoterapiaid: "+ats.atend_fixoterapiaid)
                                             } else {

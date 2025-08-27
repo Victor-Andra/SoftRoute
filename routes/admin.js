@@ -2314,6 +2314,12 @@ router.post('/atendimento/extra/extraCopia', fncGeral.IsAuthenticated, async (re
     }
 })
 
+// ROTA: PATCH /menu/atendimento/extra/auditare/:id
+router.patch('/atendimento/extra/auditare/:id', fncGeral.IsAuthenticated, (req, res) => {
+    // Apenas chama a função — ela já lida com req e res
+    fncExtra.auditaEGeraExtra(req, res);
+}),
+
 //Menu Laudos ** Area Tecnicos   
 //Carrega Cadastro de Laudo 
 router.get('/area/laudo/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
