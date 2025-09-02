@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Editar Permissões do Usuário</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/chosen.min.css">
+    <style>
+        .form-group { margin-bottom: 15px; }
+        .btn { margin-right: 5px; }
+        #botoes-permissao {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+            display: none;
+        }
+        #botoes-permissao .btn {
+            margin: 0 5px;
+            min-width: 90px;
+        }
+    </style>
+</head>
+<body class="no-skin">
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li><i class="ace-icon fa fa-home home-icon"></i><a href="/menu">Home</a></li>
+                    <li><a href="/menu/ferramentas/usuario/lis">Permissões</a></li>
+                    <li class="active">Editar</li>
+                </ul>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="widget-box">
+                        <div class="widget-header"><h4>Editar Permissões</h4></div>
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <form id="form-permissoes" method="POST" action="/menu/ferramentas/usupermis/atu">
+                                    <input type="text" name="usupermis_id" value="{{_id}}">
+
+                                    <div class="form-group">
+                                        <label>Usuário</label>
+                                        <select name="usupermis_usuid" class="chosen-select" disabled>
+                                            {{#each usuarios}}
+                                                <option value="{{_id}}" {{#ifCond _id '==' ../usupermis.usupermis_usuid}}selected{{/ifCond}}>
+                                                    {{usuario_nome}}
+                                                </option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Empresa</label>
+                                        <select name="usupermis_empresaid" class="chosen-select" disabled>
+                                            {{#each empresas}}
+                                                <option value="{{_id}}" {{#ifCond _id '==' ../usupermis.usupermis_empresaid}}selected{{/ifCond}}>
+                                                    {{empresa_nome}}
+                                                </option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+
+                                    <!-- Barra de Ações Rápidas -->
+                                    <div id="botoes-permissao">
+                                        <strong style="margin-right: 10px;">Aplicar para todos:</strong>
+                                        <button type="button" class="btn btn-xs" style="background: #ddd; color: #333;" onclick="aplicarParaTodos('1')">1 - Sem acesso</button>
+                                        <button type="button" class="btn btn-xs btn-info" onclick="aplicarParaTodos('2')">2 - Listar</button>
+                                        <button type="button" class="btn btn-xs btn-primary" onclick="aplicarParaTodos('3')">3 - Ver</button>
+                                        <button type="button" class="btn btn-xs btn-success" onclick="aplicarParaTodos('4')">4 - Criar</button>
+                                        <button type="button" class="btn btn-xs btn-warning" onclick="aplicarParaTodos('5')">5 - Editar</button>
+                                        <button type="button" class="btn btn-xs btn-danger" onclick="aplicarParaTodos('6')">6 - Total</button>
+                                    </div>
+
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th style="width: 5%;" class="center">
+                                                    <label class="pos-rel">
+                                                        <input type="checkbox" class="ace" id="check-all" />
+                                                        <span class="lbl"></span>
+                                                    </label>
+                                                </th>
+                                                <th style="width: 15%;">Código</th>
+                                                <th style="width: 30%;">Nome</th>
+                                                <th style="width: 50%;">Permissão</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each usufuncs}}
+                                            <tr>
+                                                <td class="center">
+                                                    <label class="pos-rel">
+                                                        <input type="checkbox" class="ace perm-checkbox" />
+                                                        <span class="lbl"></span>
+                                                    </label>
+                                                </td>
+                                                <td>{{usufunc_codigo}}</td>
+                                                <td>{{usufunc_nome}}</td>
+                                                <td>
+                                                    <select name="permissoes[{{_id}}]" class="form-control input-sm" style="width: 100%;">
+                                                        <option value="1" {{#ifCond (lookup ../permissoes _id) '==' '1'}}selected{{/ifCond}}>1 - Sem acesso</option>
+                                                        <option value="2" {{#ifCond (lookup ../permissoes _id) '==' '2'}}selected{{/ifCond}}>2 - Listar</option>
+                                                        <option value="3" {{#ifCond (lookup ../permissoes _id) '==' '3'}}selected{{/ifCond}}>3 - Ver</option>
+                                                        <option value="4" {{#ifCond (lookup ../permissoes _id) '==' '4'}}selected{{/ifCond}}>4 - Criar</option>
+                                                        <option value="5" {{#ifCond (lookup ../permissoes _id) '==' '5'}}selected{{/ifCond}}>5 - Editar</option>
+                                                        <option value="6" {{#ifCond (lookup ../permissoes _id) '==' '6'}}selected{{/ifCond}}>6 - Total</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+
+                                    <div class="form-actions center" style="margin-top: 20px;">
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="ace-icon fa fa-save"></i> Salvar Alterações
+                                        </button>
+                                        &nbsp;
+                                        <a href="/menu/ferramentas/usupermis/lis" class="btn btn-warning">
+                                            <i class="ace-icon fa fa-arrow-left"></i> Voltar
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/chosen.jquery.min.js"></script>
+<script>
+// =============================
+// FUNÇÕES DE APOIO
+// =============================
+
+// Aplicar permissão para todos os selecionados
+function aplicarParaTodos(tipo) {
+    const checkboxes = document.querySelectorAll('.perm-checkbox:checked');
+    if (checkboxes.length === 0) {
+        alert('Selecione pelo menos uma funcionalidade.');
+        return;
+    }
+
+    checkboxes.forEach(cb => {
+        const row = cb.closest('tr');
+        const select = row.querySelector('select[name^="permissoes"]');
+        if (select) select.value = tipo;
+    });
+}
+
+// Atualizar barra de ações
+function atualizarBarra() {
+    const totalSelecionados = document.querySelectorAll('.perm-checkbox:checked').length;
+    document.getElementById('botoes-permissao').style.display = totalSelecionados > 0 ? 'block' : 'none';
+}
+
+// Evento: Marcar/desmarcar todos
+document.getElementById('check-all').addEventListener('change', function () {
+    const isChecked = this.checked;
+    document.querySelectorAll('.perm-checkbox').forEach(cb => {
+        cb.checked = isChecked;
+    });
+    atualizarBarra();
+});
+
+// Evento: Checkbox individual
+document.querySelectorAll('.perm-checkbox').forEach(cb => {
+    cb.addEventListener('change', atualizarBarra);
+});
+
+// Inicializar Chosen
+jQuery(function($) {
+    $('.chosen-select').chosen({ width: "100%" });
+    $(window).on('resize', function() {
+        $('.chosen-select').each(function() {
+            $(this).next().css('width', $(this).parent().width());
+        });
+    }).trigger('resize');
+});
+
+// Mostrar barra ao carregar
+atualizarBarra();
+</script>
+</body>
+</html>

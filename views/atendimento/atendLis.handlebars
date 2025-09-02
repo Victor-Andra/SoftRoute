@@ -574,6 +574,10 @@
 																					{{#ifEqual this.atend_categoria "SubstitutoFixo"}}
 																					<span class="label label-sm label-success">Sem Evento</span>
 																					{{else}}
+																						{{#ifEqual this.atend_categoria "Falta Absoluta"}}
+																						<span class="label label-sm label-warning">Falta Absoluta</span>
+																						{{else}}
+																						{{/ifEqual}}
 																					{{/ifEqual}}
 																				{{/ifEqual}}
 																			{{/ifEqual}}

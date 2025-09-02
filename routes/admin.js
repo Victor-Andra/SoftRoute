@@ -69,6 +69,11 @@ const usufuncClass = require("../models/usufunc")
 const Usufunc = mongoose.model("tb_usufunc")
 const fncUsufunc = require("../functions/fncUsufunc")
 
+//usufunc, funcionalidades que os usuários podem ter acesso
+const usupermisClass = require("../models/usupermis")
+const Usupermis = mongoose.model("tb_usupermis")
+const fncUsupermis = require("../functions/fncUsupermis")
+
 //sala, onde são realizadas os atendimentos
 const salaClass = require("../models/sala")
 const Sala = mongoose.model("tb_sala")
@@ -3710,6 +3715,49 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
 
         router.post('/ferramentas/usufunc/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Salaimento
             fncUsufunc.atualizaUsufunc(req, res);
+        })
+//Menu Ferramentas
+        //Usupermis - Permissão de Acesso aos usuários
+        router.get('/ferramentas/usupermis/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas salas
+            fncUsupermis.listaUsupermis(req, res);
+        })
+
+        router.get('/ferramentas/usupermis/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de sala
+            fncUsupermis.carregaUsupermis(req, res);
+        })
+
+        router.post('/ferramentas/usupermis/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona sala
+            fncUsupermis.cadastraUsupermis(req, res);
+        })
+
+        router.get('/ferramentas/usupermis/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta sala
+            fncUsupermis.deletaUsupermis(req, res);
+        })
+
+        router.get('/ferramentas/usupermis/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de sala
+            fncUsupermis.carregaUsupermisEdi(req, res);
+        })
+
+        router.post('/ferramentas/usupermis/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Salaimento
+            fncUsupermis.atualizaUsupermis(req, res);
+        })
+
+       // Novas rotas para gestão em massa
+        router.get('/ferramentas/usupermis/massa', fncGeral.IsAuthenticated, (req, res) => {
+            fncUsupermis.gestaoMassa(req, res);
+        })
+
+        router.get('/ferramentas/usupermis/api/permissoes', fncGeral.IsAuthenticated, (req, res) => {
+            fncUsupermis.apiPermissoesUsuario(req, res);
+        })
+
+        router.post('/ferramentas/usupermis/salvar-massa', fncGeral.IsAuthenticated, (req, res) => {
+            fncUsupermis.salvarEmMassa(req, res);
+        })
+       // Rota: Editar permissões do usuário
+        router.get('/ferramentas/usupermis/edi/:id', fncGeral.IsAuthenticated, (req, res) => {
+            console.log('🔹 Rota /usupermis/edi chamada com ID:', req.params.id);
+            fncUsupermis.carregaPermissoesPorUsuario(req, res);
         })
 //Menu Ferramentas
     //Ajuda

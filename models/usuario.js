@@ -65,6 +65,12 @@ const UsuarioSchema = mongoose.Schema({
     usuario_palavrachavedatacad :{type: String, required: false},
     usuario_palavraschaveantigas :{type: String, required: false},
     usuario_obs :{type: String, required: false },
+    //controle CRUD
+    usuario_usuidcad: {type: ObjectId, required: false },
+    usuario_usuidedi: {type: ObjectId, required: false },
+    usuario_lixo :{ type: String, required: false },
+    usuario_datalixo: { type: Date, required: false },
+    usuario_usuidlixo: { type: ObjectId, required: false },
     usuario_datacad: {type: Date, required: false },
     usuario_dataedi: {type: Date, required: false }
 })
@@ -125,6 +131,12 @@ class Usuario{
         usuario_palavrachavedatacad, 
         usuario_palavraschaveantigas,
         usuario_obs,
+        //Campos de controle
+        usuario_usuidcad,
+        usuario_usuidedi,
+        usuario_lixo,
+        usuario_datalixo,
+        usuario_usuidlixo,
         usuario_datacad,
         usuario_dataedi
         ){
@@ -184,7 +196,13 @@ class Usuario{
         this.usuario_palavrachavedatacad = usuario_palavrachavedatacad ,
         this.usuario_palavraschaveantigas = usuario_palavraschaveantigas ,
         this.usuario_obs = usuario_obs ,
-        this.usuario_datacad = usuario_datacad ,
+        //campos de controle
+        this.usuario_usuidcad = usuario_usuidcad,
+        this.usuario_usuidedi = usuario_usuidedi,
+        this.usuario_lixo = usuario_lixo,
+        this.usuario_datalixo = usuario_datalixo,
+        this.usuario_usuidlixo = usuario_usuidlixo,
+        this.usuario_datacad = usuario_datacad,
         this.usuario_dataedi = usuario_dataedi
     }
 }
@@ -272,6 +290,8 @@ module.exports = {
                 usuario_tipopix : req.body.usuarioTipoPix,
                 usuario_pix : req.body.usuarioPix ,
                 usuario_obs : req.body.usuarioObs,
+                //campos de controle
+                usuario_usuidedi : usuarioAtual,
                 usuario_dataedi : dataAtual
                 }}
         ).then((res) =>{
@@ -351,6 +371,8 @@ module.exports = {
             usuario_tipopix : req.body.usuarioTipoPix,
             usuario_pix : req.body.usuarioPix ,
             usuario_obs : req.body.usuarioObs,
+            //campos de controle
+            usuario_usuidcad : usuarioAtual,
             usuario_datacad : dataAtual
             });
             console.log("newUsuario save");

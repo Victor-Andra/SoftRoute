@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Gestão de Permissões em Massa</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+	#botoes-permissao {
+		text-align: center;
+		margin: 15px 0;
+		padding: 10px;
+		background: #f8f9fa;
+		border-radius: 5px;
+		border-left: 4px solid #007bff;
+		display: none;
+	}
+
+	#botoes-permissao .btn {
+		margin: 0 5px;
+		min-width: 90px;
+	}
+	</style>
+</head>
+<body onload="javascript:controlaNave();" class="no-skin">
+
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li><i class="ace-icon fa fa-home home-icon"></i><a href="/menu">Home</a></li>
+                    <li><a href="/menu/ferramentas/usupermis/lis">Permissões</a></li>
+                    <li class="active">Em Massa</li>
+                </ul>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- Filtros -->
+                    <div class="widget-box">
+                        <div class="widget-header"><h4>Selecione Empresa e Usuário</h4></div>
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <p>Selecione um usuário e empresa para configurar todas as funcionalidades de uma vez.</p>
+                                <form class="form-horizontal" style="margin-bottom: 20px;">
+                                    <div class="form-group">
+                                        <label class="col-sm-2">Empresa</label>
+                                        <div class="col-sm-4">
+                                            <select id="select-empresa" class="chosen-select" required>
+                                                <option value="">Selecione</option>
+                                                {{#each empresas}}
+                                                    <option value="{{_id}}">{{empresa_nome}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2">Usuário</label>
+                                        <div class="col-sm-4">
+                                            <select id="select-usuario" class="chosen-select" required>
+                                                <option value="">Selecione</option>
+                                                {{#each usuarios}}
+                                                    <option value="{{_id}}">{{usuario_nome}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-offset-2 col-sm-4">
+                                            <button type="button" class="btn btn-primary" onclick="carregarPermissoes()">
+                                                <i class="ace-icon fa fa-refresh"></i> Carregar Funcionalidades
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Ações Rápidas (oculta por padrão) -->
+                    <div id="botoes-permissao" style="display: none; margin: 15px 0; padding: 10px; background: #f8f9fa; border-radius: 5px;">
+                        <strong style="margin-right: 10px;">Aplicar para selecionados:</strong>
+                        <button type="button" class="btn btn-xs" style="background: #ddd; color: #333;" onclick="aplicarPermissao('1')">1 - Sem acesso</button>
+                        <button type="button" class="btn btn-xs btn-info" onclick="aplicarPermissao('2')">2 - Listar</button>
+                        <button type="button" class="btn btn-xs btn-primary" onclick="aplicarPermissao('3')">3 - Ver</button>
+                        <button type="button" class="btn btn-xs btn-success" onclick="aplicarPermissao('4')">4 - Criar</button>
+                        <button type="button" class="btn btn-xs btn-warning" onclick="aplicarPermissao('5')">5 - Editar</button>
+                        <button type="button" class="btn btn-xs btn-danger" onclick="aplicarPermissao('6')">6 - Total</button>
+                    </div>
+
+                    <!-- Tabela de Permissões -->
+                    <div id="container-tabela" style="display: none;">
+                        <div class="widget-box">
+                            <div class="widget-header">
+                                <h4 id="titulo-usuario">Permissões para: </h4>
+                            </div>
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <table id="dynamic-table-permissoes" class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                               <th class="center" style="width: 5%;">
+													<label class="pos-rel">
+														<input type="checkbox" class="ace" id="check-all" />
+														<span class="lbl"></span>
+													</label>
+												</th>
+                                                <th style="width: 15%;">Código</th>
+                                                <th style="width: 30%;">Nome</th>
+                                                <th style="width: 50%;">Permissão</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="lista-funcionalidades">
+                                            <!-- Preenchido dinamicamente -->
+                                        </tbody>
+                                    </table>
+
+                                    <div class="form-actions center" style="margin-top: 20px;">
+                                        <button class="btn btn-success" onclick="salvarPermissoes()">
+                                            <i class="ace-icon fa fa-save"></i> Salvar Todas as Permissões
+                                        </button>
+                                        &nbsp;
+                                        <a href="/menu/ferramentas/usupermis/lis" class="btn btn-warning">
+                                            <i class="ace-icon fa fa-arrow-left"></i> Voltar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts Únicos e Organizados -->
+<script>
+// =============================
+// DADOS INICIAIS (Handlebars)
+// =============================
+const funcionalidades = [
+    {{#each usufuncs}}
+    { 
+        _id: "{{_id}}", 
+        nome: "{{usufunc_nome}}", 
+        codigo: "{{usufunc_codigo}}" 
+    }{{#unless @last}},{{/unless}}
+    {{/each}}
+];
+
+let dataTable = null;
+
+// =============================
+// FUNÇÃO: Carregar Permissões
+// =============================
+async function carregarPermissoes() {
+    const empId = document.getElementById('select-empresa').value;
+    const usuid = document.getElementById('select-usuario').value;
+
+    if (!empId || !usuid) {
+        alert("Selecione empresa e usuário.");
+        return;
+    }
+
+    const usuarioNome = document.querySelector('#select-usuario option[value="' + usuid + '"]').text;
+    document.getElementById('titulo-usuario').textContent = `Permissões para: ${usuarioNome}`;
+    document.getElementById('container-tabela').style.display = 'block';
+
+    // Buscar permissões existentes
+    const res = await fetch(`/menu/ferramentas/usupermis/api/permissoes?usuid=${usuid}&empid=${empId}`);
+    const permissoes = await res.json();
+
+    // Destruir DataTable se já existir
+    if (dataTable) {
+        dataTable.destroy();
+        document.getElementById('lista-funcionalidades').innerHTML = '';
+    }
+
+    // Preencher linhas
+    const tbody = document.getElementById('lista-funcionalidades');
+    funcionalidades.forEach(f => {
+        const tipo = permissoes[f._id] || '1';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="center">
+                <label class="pos-rel">
+                    <input type="checkbox" class="ace perm-checkbox" data-funcid="${f._id}" />
+                    <span class="lbl"></span>
+                </label>
+            </td>
+            <td>${f.codigo}</td>
+            <td>${f.nome}</td>
+            <td>
+                <select name="perm[${f._id}]" class="form-control input-sm chosen-select-perm" style="width: 100%;">
+                    <option value="1" ${tipo === '1' ? 'selected' : ''}>1 - Sem acesso</option>
+                    <option value="2" ${tipo === '2' ? 'selected' : ''}>2 - Listar</option>
+                    <option value="3" ${tipo === '3' ? 'selected' : ''}>3 - Ver</option>
+                    <option value="4" ${tipo === '4' ? 'selected' : ''}>4 - Criar</option>
+                    <option value="5" ${tipo === '5' ? 'selected' : ''}>5 - Editar</option>
+                    <option value="6" ${tipo === '6' ? 'selected' : ''}>6 - Total</option>
+                </select>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    // Inicializar DataTable
+    dataTable = $('#dynamic-table-permissoes').DataTable({
+        "language": { "url": "/js/lang/datatable-pt-br.json" },
+        "aaSorting": [],
+        "aoColumns": [
+            { "bSortable": false },
+            null,
+            null,
+            { "bSortable": false }
+        ],
+        "responsive": true,
+        "lengthMenu": [200, 500],
+        "autoWidth": false,
+        "paging": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "drawCallback": function() {
+            $('.chosen-select-perm').chosen({ width: "100%" });
+            // Atualiza barra ao redesenhar (ex: ao pesquisar)
+            atualizarBarraAcoes();
+        }
+    });
+
+    // Reaplicar chosen
+    $('.chosen-select-perm').chosen({ width: "100%" });
+
+    // ✅ 1. MOSTRAR BARRA AO CARREGAR (mesmo sem seleção)
+    document.getElementById('botoes-permissao').style.display = 'block';
+
+    // ✅ Inicializar estado do checkbox "Selecionar Todos"
+    document.getElementById('check-all').checked = false;
+
+    // Forçar atualização da barra
+    atualizarBarraAcoes();
+}
+
+// =============================
+// FUNÇÃO: Aplicar Permissão
+// =============================
+function aplicarPermissao(tipo) {
+    const checkboxes = document.querySelectorAll('.perm-checkbox:checked');
+    if (checkboxes.length === 0) {
+        alert('Selecione pelo menos uma funcionalidade.');
+        return;
+    }
+
+    checkboxes.forEach(cb => {
+        const funcId = cb.getAttribute('data-funcid');
+        const select = document.querySelector(`select[name="perm[${funcId}]"]`);
+        if (select) {
+            select.value = tipo;
+            $(select).trigger('chosen:updated');
+        }
+    });
+}
+
+// =============================
+// FUNÇÃO: Atualizar Barra de Ações
+// =============================
+function atualizarBarraAcoes() {
+    const totalSelecionados = document.querySelectorAll('.perm-checkbox:checked').length;
+    const barra = document.getElementById('botoes-permissao');
+
+    if (barra) {
+        barra.style.display = totalSelecionados > 0 ? 'block' : 'none';
+    }
+}
+
+// =============================
+// EVENTOS: Marcar/Desmarcar Todos + Atualizar Barra
+// =============================
+// =============================
+// EVENTO: Checkbox "Selecionar Todos" (com delegação)
+// =============================
+document.body.addEventListener('change', function(e) {
+    if (!e.target) return;
+
+    const checkAll = document.getElementById('check-all');
+    const checkboxes = document.querySelectorAll('.perm-checkbox');
+
+    // ✅ 1. Se clicou no "Selecionar Todos"
+    if (e.target.id === 'check-all') {
+        const isChecked = checkAll.checked;
+
+        checkboxes.forEach(cb => {
+            cb.checked = isChecked;
+        });
+
+        // Força atualização da barra
+        setTimeout(atualizarBarraAcoes, 100);
+        return;
+    }
+
+    // ✅ 2. Se clicou em um checkbox individual
+    if (e.target.classList.contains('perm-checkbox')) {
+        const total = checkboxes.length;
+        const checked = document.querySelectorAll('.perm-checkbox:checked').length;
+
+        // Atualiza estado do "check-all"
+        if (checked === 0) {
+            checkAll.checked = false;
+            checkAll.indeterminate = false;
+        } else if (checked === total) {
+            checkAll.checked = true;
+            checkAll.indeterminate = false;
+        } else {
+            checkAll.checked = false;
+            checkAll.indeterminate = true;
+        }
+
+        // Atualiza barra
+        setTimeout(atualizarBarraAcoes, 100);
+    }
+});
+// =============================
+// FUNÇÃO: Salvar Permissões
+// =============================
+async function salvarPermissoes() {
+    const empId = document.getElementById('select-empresa').value;
+    const usuid = document.getElementById('select-usuario').value;
+
+    const formData = new FormData();
+    formData.append('usupermis_usuid', usuid);
+    formData.append('usupermis_empresaid', empId);
+
+    document.querySelectorAll('select[name^="perm"]').forEach(el => {
+        const funcId = el.name.match(/\[(.*?)\]/)[1];
+        formData.append(`permissoes[${funcId}]`, el.value);
+    });
+
+    const res = await fetch('/menu/ferramentas/usupermis/salvar-massa', {
+        method: 'POST',
+        body: new URLSearchParams(formData)
+    });
+
+    if (res.ok) {
+        alert('Permissões salvas com sucesso!');
+    } else {
+        alert('Erro ao salvar permissões.');
+    }
+}
+
+// =============================
+// INICIALIZAÇÃO DO CHOSEN (filtros)
+// =============================
+jQuery(function($) {
+    $('.chosen-select').chosen({ allow_single_deselect: true, width: "100%" });
+    $(window).off('resize.chosen').on('resize.chosen', function() {
+        $('.chosen-select').each(function() {
+            $(this).next().css({ 'width': $(this).parent().width() });
+        });
+    }).trigger('resize.chosen');
+});
+</script>
+</body>
+</html>

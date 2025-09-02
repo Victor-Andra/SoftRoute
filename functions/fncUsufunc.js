@@ -10,6 +10,7 @@ const Usufunc = mongoose.model("tb_usufunc")
 const estadoClass = require("../models/estado")
 const usuarioClass = require("../models/usuario")
 
+
 //Tabelas Extrangeiras
 const Estado = mongoose.model("tb_estado")
 const Usuario = mongoose.model("tb_usuario")

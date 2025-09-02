@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Funcionalidade dos Usuárioss</title>
+		<script>
+			function alteraStatus() {
+				if (document.getElementById("usufuncStatusCheck").checked){
+					document.getElementById("usufuncStatus").value = "Ativo";
+				} else {
+					document.getElementById("usufuncStatus").value = "Inativo";
+				}
+			}
+			function carregaBody() {
+				if (document.getElementById("usufuncStatus").value = "Ativo"){
+					document.getElementById("usufuncStatusCheck").checked = true;
+				} else {
+					document.getElementById("usufuncStatusCheck").checked = false;
+				}
+			}
+		</script>
+	</head>
+	<body onload="javascript:controlaNave();carregaBody()" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Funcionalidade dos Usuários Editar</a>
+							</li>
+							<li class="active">Editar</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form"  action="/menu/ferramentas/usufunc/atualizar" method="POST">
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">usufuncStatus</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+											
+												<label> Código da Funcionalidade</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="usufuncCodigo" id="usufuncCodigo" class="form-control" value="{{usufunc.usufunc_codigo}}" />
+													</div>
+												</div>
+												<div class="space space-8"></div>
+												<label> Nome da funcionalidade</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="usufuncNome"  id="usufuncNome" class="form-control" value="{{usufunc.usufunc_nome}}" />
+													</div>
+												</div>
+												<div class="space space-8"></div>
+												<label> Descrição</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="usufuncDescricao"  id="usufuncDescricao" class="form-control" value="{{usufunc.usufunc_descricao}}" />
+													</div>
+												</div>
+												<label> Status</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<label class="pos-rel">
+															<input type="checkbox" name="usufuncStatusCheck" id="usufuncStatusCheck" onchange="javascript:alteraStatus()" />
+															Ativo
+														</label>
+														<input hidden type="text" name="usufuncStatus"  id="usufuncStatus" class="form-control" value="{{usufunc.usufunc_status}}" />
+													</div>
+												</div>
+												<div class="hidden">
+													<input name="usufuncId"value="{{usufunc._id}}" />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								<div class="form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info"  name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning"  href="/menu/ferramentas/usufunc/lis"/>
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</button>
+									</div>
+								</div>
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+		<!-- basic scripts -->
+	</body>
+</html>
