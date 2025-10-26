@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const AtendArquivoSchema = mongoose.Schema({
     atend_org :{
@@ -179,9 +180,15 @@ class AtendArquivo{
 }
 
 AtendArquivoSchema.loadClass(AtendArquivo)
-const AtendArquivoModel = mongoose.model('tb_atendarquivo', AtendArquivoSchema)
+var AtendArquivoModel = getModel("softroute", 'tb_atendarquivo', AtendArquivoSchema)
 module.exports = {AtendArquivoModel,AtendArquivoSchema,
     atendArquivoEditar: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtendArquivoModel = getModel(db, 'tb_atendarquivo', AtendArquivoSchema);
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -221,6 +228,12 @@ module.exports = {AtendArquivoModel,AtendArquivoSchema,
         return resultado;
     },
     atendArquivoAdicionar: async (req,res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtendArquivoModel = getModel(db, 'tb_atendarquivo', AtendArquivoSchema);
+        //;
+
         let dataAtual = new Date();
         console.log("atendmodel");
         console.log("req.body.atendAtenddata:")
@@ -258,6 +271,12 @@ module.exports = {AtendArquivoModel,AtendArquivoSchema,
         });
     },
     montaArquivoAtend(req,res){
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtendArquivoModel = getModel(db, 'tb_atendarquivo', AtendArquivoSchema);
+        //;
+
         const newAtend = new AtendModel({
             atend_org : req.body.atendOrg,
             atend_categoria : req.body.atendCategoria,
@@ -284,6 +303,12 @@ module.exports = {AtendArquivoModel,AtendArquivoSchema,
         return newAtend;
     },
     gerarArquivoAtend: async (atend) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtendArquivoModel = getModel(db, 'tb_atendarquivo', AtendArquivoSchema);
+        //;
+
         console.log("cadastrando novo atend!");
         console.log("atend: "+atend);
         await atend.save().then(()=>{
@@ -293,9 +318,16 @@ module.exports = {AtendArquivoModel,AtendArquivoSchema,
             console.log(err)
             return err;
         });
-    }
+    },
     
-    ,atendArquivoUpdateCampos: async (req,res) => {
+    atendArquivoUpdateCampos: async (req,res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtendArquivoModel = getModel(db, 'tb_atendarquivo', AtendArquivoSchema);
+        //;
+
+
         let resultado;
         let busca;
         let troca;

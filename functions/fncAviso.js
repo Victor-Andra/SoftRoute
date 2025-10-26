@@ -1,32 +1,28 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Plano de Avisoamento 
 const avisoClass = require("../models/aviso")
 
-
 //Classes Extrangeiras
-const beneClass = require("../models/bene")
-const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
-const terapiaClass = require("../models/terapia")
 
 //Tabela Plano de Avisoamento 
-const Aviso = mongoose.model("tb_aviso")
+var Aviso = getModel("SoftRoute", 'tb_aviso', avisoClass.AvisoSchema)
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 //Funções auxiliares
-
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaAviso(req, res){
+        let db = req.cookies['preferredDb'];
+        Aviso = getModel(db, 'tb_aviso', avisoClass.AvisoSchema)
+
         let convs = new Array();
         console.log('listando Diários de Aviso')
         Aviso.find().then((aviso) =>{
@@ -40,8 +36,10 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
     carregaAviso(req,res){
+        let db = req.cookies['preferredDb'];
+        Aviso = getModel(db, 'tb_aviso', avisoClass.AvisoSchema)
+
         Aviso.find().then((aviso)=>{
             Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     res.render("dash/avisoCad", {avisos: aviso, usuarios: usuario })
@@ -51,8 +49,10 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
     carregaAvisoEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Aviso = getModel(db, 'tb_aviso', avisoClass.AvisoSchema)
+
         Aviso.find().then((aviso) =>{
             Usuario.find().then((usuario)=>{
                 usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
@@ -63,7 +63,6 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-
     cadastraAviso(req,res){
         console.log("chegou")
         let resultado
@@ -92,7 +91,6 @@ module.exports = {
             }
         })
     },
-
     atualizaAviso(req,res){
         let resultado
         let resposta = new Resposta()
@@ -127,12 +125,13 @@ module.exports = {
             res.render('admin/erro')
         }
     },
-
-
     deletaAviso(req,res){
+        let db = req.cookies['preferredDb'];
+        Aviso = getModel(db, 'tb_aviso', avisoClass.AvisoSchema)
+
         Aviso.deleteOne({_id: req.params.id}).then(() =>{
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
+            Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                console.log("Listagem Realizada de Usuário")
                                
                 req.flash("success_message", "Avisoamento Fisioterapêutico deletado!")
                 res.render('dash/avisoLis', {avisos: aviso, usuarios: usuario})
@@ -143,6 +142,4 @@ module.exports = {
             })
         })
     }
-
-
 }

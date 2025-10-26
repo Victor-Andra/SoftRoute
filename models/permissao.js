@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const PermissaoSchema = mongoose.Schema({
     permissao_data: { type: String, required: false },
@@ -34,9 +35,18 @@ class Permissao{
 }
 
 PermissaoSchema.loadClass(Permissao)
-const PermissaoModel = mongoose.model('tb_permissao', PermissaoSchema)
-module.exports = {PermissaoModel,PermissaoSchema,
+var PermissaoModel = getModel("softroute", 'tb_permissao', PermissaoSchema)
+module.exports = {
+    PermissaoModel,
+    PermissaoSchema,
+
     permissaoEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        PermissaoModel = getModel(db, 'tb_permissao', PermissaoSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -76,6 +86,12 @@ module.exports = {PermissaoModel,PermissaoSchema,
             
     },
     permissaoAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        PermissaoModel = getModel(db, 'tb_permissao', PermissaoSchema)
+        //;
+
         //Validar se a Permissaoese existe
         console.log("permissaomodel");
         let dataAtual = new Date();

@@ -1,16 +1,20 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //prognivels
 const prognivelClass = require("../models/prognivel")
-const respostaClass = require("../models/resposta")
 
 //prognivel, tipos de prognivel 
-const Prognivel = mongoose.model("tb_prognivel")
-const Resposta = mongoose.model("tb_resposta")
+var Prognivel = getModel("SoftRoute", 'tb_prognivel', prognivelClass.PrognivelSchema)
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaPrognivel(req,res,resposta){
+        let db = req.cookies['preferredDb'];
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+
         let flash = new Resposta()
         console.log('listando prognivels')
         Prognivel.find().then((prognivel) =>{
@@ -39,6 +43,9 @@ module.exports = {
     },
 
     carregaPrognivelEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+
         Prognivel.findById(req.params.id).then((prognivel) =>{
             console.log(prognivel)
             res.render('area/aba/prognivel/prognivelEdi', {prognivel})
@@ -111,6 +118,9 @@ module.exports = {
     },
 
     deletaPrognivel(req,res){
+        let db = req.cookies['preferredDb'];
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+
         Prognivel.deleteOne({_id: req.params.id}).then(() =>{
             Prognivel.find().then((prognivel) =>{
                 req.flash("success_message", "Método deletado!")
@@ -122,5 +132,4 @@ module.exports = {
             })
         })
     }
-
 }

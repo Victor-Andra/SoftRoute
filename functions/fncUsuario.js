@@ -1,34 +1,51 @@
 //Exports
 const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
+
 
 
 //usuarios
 const usuarioClass = require("../models/usuario")
-const Usuario = mongoose.model("tb_usuario")
+const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 //Classes Extrangeiras
 const estadoClass = require("../models/estado")
 const perfilClass = require("../models/perfil")
 const funcaoClass = require("../models/funcao")
+const especialidadeClass = require("../models/especialidade")
 const especializacaoClass = require("../models/especializacao")
+const empresaClass = require("../models/empresa")
 const metodoClass = require("../models/metodo")
 const metoutClass = require("../models/metout")
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
-
+const usufuncClass =  require("../models/usufunc")//base das funcionalidades do sistema
+const usupermisClass = require("../models/usupermis")//funcionalidades que o usuário tem permissã e qual tipo de permissão
 
 //Tabelas extrangeiras   
-const Estado = mongoose.model("tb_estado")
-const Perfil = mongoose.model("tb_perfil")
-const Funcao = mongoose.model("tb_funcao")
-const Especialidade = mongoose.model("tb_especialidade")
-const Especializacao = mongoose.model("tb_especializacao")
-const Metodo = mongoose.model("tb_metodo")
-const Metout = mongoose.model("tb_metout")
+var Empresa = getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema)
+var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
+var Perfil = getModel("PortalDoUsuario", 'tb_perfil', perfilClass.PerfilSchema)
+var Funcao = getModel("PortalDoUsuario", 'tb_funcao', funcaoClass.FuncaoSchema)
+var Especialidade = getModel("PortalDoUsuario", 'tb_especialidade', especialidadeClass.EspecialidadeSchema)
+var Especializacao = getModel("PortalDoUsuario", 'tb_especializacao', especializacaoClass.EspecializacaoSchema)
+var Metodo = getModel("SoftRoute", 'tb_metodo', metodoClass.MetodoSchema)
+var Metout = getModel("SoftRoute", 'tb_metout', metoutClass.MetoutSchema)
+var Usufunc = getModel("PortalDoUsuario", 'tb_usufunc', usufuncClass.UsufuncSchema)
+var Usupermis = getModel("PortalDoUsuario", 'tb_usupermis', usupermisClass.UsupermisSchema)
 
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaUsuario(req,res){
+        let db = req.cookies['preferredDb'];
+
+        Perfil = getModel(db, 'tb_perfil', perfilClass.PerfilSchema)
+        Funcao = getModel(db, 'tb_funcao', funcaoClass.FuncaoSchema)
+        Especialidade = getModel(db, 'tb_especialidade', especialidadeClass.EspecialidadeSchema)
+        Especializacao = getModel(db, 'tb_especializacao', especializacaoClass.EspecializacaoSchema)
+        Metodo = getModel(db, 'tb_metodo', metodoClass.MetodoSchema)
+        Metout = getModel(db, 'tb_metout', metoutClass.MetoutSchema)
+
         Usuario.find().then((usuario) =>{
             usuario.sort((a,b) => ((a.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuário por nome completo
             Perfil.find().then((perfil)=>{
@@ -50,27 +67,46 @@ module.exports = {
 
     },
     carregaUsuario(req,res){
+        let db = req.cookies['preferredDb'];
+        Perfil = getModel(db, 'tb_perfil', perfilClass.PerfilSchema)
+        Funcao = getModel(db, 'tb_funcao', funcaoClass.FuncaoSchema)
+        Especialidade = getModel(db, 'tb_especialidade', especialidadeClass.EspecialidadeSchema)
+        Especializacao = getModel(db, 'tb_especializacao', especializacaoClass.EspecializacaoSchema)
+        Metodo = getModel(db, 'tb_metodo', metodoClass.MetodoSchema)
+        Metout = getModel(db, 'tb_metout', metoutClass.MetoutSchema)
+
         Usuario.find().then((usuario) =>{
             Estado.find().then((estado)=>{
-                    Perfil.find().then((perfil)=>{
-                        Funcao.find().then((funcao)=>{
-                            Especialidade.find().then((especialidade)=>{  //Graduação
-                                especialidade.sort((a,b) => ((a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena as graduações
-                                    Especializacao.find().then((especializacao)=>{ //Especialização
-                                        especializacao.sort((a,b) => ((a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena Especização
-                                        Metodo.find().then((metodo)=>{ //Métodos
-                                            metodo.sort((a,b) => ((a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
-                                                Metout.find().then((metout)=>{ //Métodos
-                                                    metout.sort((a,b) => ((a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Outros Métodos
-                                            res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, metouts: metout, funcaos: funcao})
-        })})})})})})})}).catch((err) =>{
+                Perfil.find().then((perfil)=>{
+                    Funcao.find().then((funcao)=>{
+                        Especialidade.find().then((especialidade)=>{  //Graduação
+                            especialidade.sort((a,b) => ((a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena as graduações
+                            Especializacao.find().then((especializacao)=>{ //Especialização
+                                especializacao.sort((a,b) => ((a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena Especização
+                                Metodo.find().then((metodo)=>{ //Métodos
+                                    metodo.sort((a,b) => ((a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
+                                    Metout.find().then((metout)=>{ //Métodos
+                                        metout.sort((a,b) => ((a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Outros Métodos
+                                            Usufunc.find().then((usufunc)=>{
+                                                Usupermis.find().then((usupermis)=>{
+                                                    res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, usupermiss:usupermis, usufuncs: usufunc, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, metouts: metout, funcaos: funcao})
+        })})})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')
         })
-
     },
-    carregaUsuarioEdi(req,res){
+    carregaUsuarioEdiOLD(req,res){
+        let db = req.cookies['preferredDb'];
+        Empresa = getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema)
+        
+        Perfil = getModel(db, 'tb_perfil', perfilClass.PerfilSchema)
+        Funcao = getModel(db, 'tb_funcao', funcaoClass.FuncaoSchema)
+        Especialidade = getModel(db, 'tb_especialidade', especialidadeClass.EspecialidadeSchema)
+        Especializacao = getModel(db, 'tb_especializacao', especializacaoClass.EspecializacaoSchema)
+        Metodo = getModel(db, 'tb_metodo', metodoClass.MetodoSchema)
+        Metout = getModel(db, 'tb_metout', metoutClass.MetoutSchema)
+
         let base64Image;
         Usuario.findById(req.params.id).then((usuario) =>{
             Estado.find().then((estado)=>{
@@ -87,12 +123,143 @@ module.exports = {
                                     metodo.sort((a,b) => ((a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
                                     Metout.find().then((metout)=>{ //Métodos
                                         metout.sort((a,b) => ((a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Outros Métodos
-                                    res.render('ferramentas/usuario/usuarioEdi', {usuario, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, metouts: metout, funcaos: funcao, base64Image})
-        })})})})})})})}).catch((err) =>{
+                                        Empresa.find().then((empresa)=>{
+                                            Usufunc.find().then((usufunc)=>{
+                                                Usupermis.find({ usupermis_usuid: new mongoose.Types.ObjectId(req.params.id) }).then((usupermis)=>{
+                                            res.render('ferramentas/usuario/usuarioEdi', {usuario, usupermiss:usupermis, usufuncs: usufunc, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, metouts: metout, funcaos: funcao, empresas: empresa, base64Image})
+        })})})})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
         })
+    },
+    carregaUsuarioEdi(req, res) {
+        const usuarioId = req.params.id;
+
+        // Modelos do PortalDoUsuario
+        const Empresa = getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema);
+        const Perfil = getModel("PortalDoUsuario", 'tb_perfil', perfilClass.PerfilSchema);
+        const Funcao = getModel("PortalDoUsuario", 'tb_funcao', funcaoClass.FuncaoSchema);
+        const Especialidade = getModel("PortalDoUsuario", 'tb_especialidade', especialidadeClass.EspecialidadeSchema);
+        const Especializacao = getModel("PortalDoUsuario", 'tb_especializacao', especializacaoClass.EspecializacaoSchema);
+        const Metodo = getModel("PortalDoUsuario", 'tb_metodo', metodoClass.MetodoSchema);
+        const Metout = getModel("PortalDoUsuario", 'tb_metout', metoutClass.MetoutSchema);
+        const Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema);
+        const Usufunc = getModel("PortalDoUsuario", 'tb_usufunc', usufuncClass.UsufuncSchema);
+        const Usupermis = getModel("PortalDoUsuario", 'tb_usupermis', usupermisClass.UsupermisSchema);
+
+        let base64Image;
+
+        Usuario.findById(usuarioId)
+            .then(usuario => {
+                if (!usuario) {
+                    req.flash("error_message", "Usuário não encontrado.");
+                    return res.redirect('/menu/ferramentas/usuario/lis');
+                }
+
+                if (usuario.usuario_carimbo) {
+                    base64Image = Buffer.from(usuario.usuario_carimbo).toString('base64');
+                }
+
+                return Promise.all([
+                    Estado.find(),
+                    Perfil.find(),
+                    Funcao.find(),
+                    Especialidade.find().sort({ especialidade_nome: 1 }),
+                    Especializacao.find().sort({ especializacao_nome: 1 }),
+                    Metodo.find().sort({ metodo_ordem: 1 }),
+                    Metout.find().sort({ metout_ordem: 1 }),
+                    Empresa.find(),
+                    Usufunc.find({ usufunc_status: 'Ativo' }),
+                    Usupermis.find({ usupermis_usuid: new mongoose.Types.ObjectId(usuarioId) })
+                ]).then(([estados, perfils, funcaos, especialidades, especializacaos, metodos, metouts, empresas, usufuncs, usupermis]) => {
+
+                    // --- 1. Criar mapa de permissões: funcId → empresaId → tipo ---
+                    const mapaPermissoes = {};
+                    usupermis.forEach(p => {
+                        const funcId = p.usupermis_codfunc.toString();
+                        const empId = p.usupermis_empresaid ? p.usupermis_empresaid.toString() : null;
+                        if (empId) {
+                            if (!mapaPermissoes[funcId]) mapaPermissoes[funcId] = {};
+                            mapaPermissoes[funcId][empId] = p.usupermis_tipo;
+                        }
+                    });
+
+                    // --- 2. Permissões Habilitadas (≥2) → Tabela da Esquerda ---
+                    const permissoesHabilitadas = [];
+                    empresas.forEach(empresa => {
+                        const funcsDaEmpresa = []; 
+                        usufuncs.forEach(func => {
+                            const tipo = mapaPermissoes[func._id.toString()]?.[empresa._id.toString()];
+                            if (tipo && parseInt(tipo) >= 2) {
+                                funcsDaEmpresa.push({
+                                    func_id: func._id.toString(),
+                                    func_codigo: func.usufunc_codigo,
+                                    usufunc_nome: func.usufunc_nome,
+                                    usupermis_tipo: tipo,
+                                    empresa_id: empresa._id.toString() // ← ADICIONE ESTA LINHA
+                                });
+                            }
+                        });
+                        if (funcsDaEmpresa.length > 0) {
+                            permissoesHabilitadas.push({
+                                empresa_nome: empresa.empresa_nome,
+                                empresa_id: empresa._id.toString(), // ← e esta aqui
+                                funcionalidades: funcsDaEmpresa
+                            });
+                        }
+                    });
+
+                    // --- 3. Permissões para Habilitar (=1 ou ausentes) → Tabela da Direita ---
+                    const permissoesParaHabilitar = [];
+                    empresas.forEach(empresa => {
+                        const funcsDaEmpresa = [];
+
+                        usufuncs.forEach(func => {
+                            const tipo = mapaPermissoes[func._id.toString()]?.[empresa._id.toString()] || "1";
+                            if (parseInt(tipo) === 1) {
+                                funcsDaEmpresa.push({
+                                    func_id: func._id.toString(),
+                                    func_codigo: func.usufunc_codigo,
+                                    func_nome: func.usufunc_nome,
+                                    empresa_id: empresa._id.toString(),
+                                    empresa_nome: empresa.empresa_nome,
+                                    tipo_atual: tipo
+                                });
+                            }
+                        });
+
+                        if (funcsDaEmpresa.length > 0) {
+                            permissoesParaHabilitar.push({
+                                empresa_nome: empresa.empresa_nome,
+                                funcionalidades: funcsDaEmpresa
+                            });
+                        }
+                    });
+
+                    // Renderiza a view com todos os dados
+                    res.render('ferramentas/usuario/usuarioEdi', {
+                        usuario,
+                        estados,
+                        perfils,
+                        funcaos,
+                        especialidades,
+                        especializacaos,
+                        metodos,
+                        metouts,
+                        empresas,
+                        usufuncs,
+                        permissoesHabilitadas,
+                        permissoesParaHabilitar,
+                        base64Image
+                    });
+                });
+            })
+            .catch(err => {
+                console.error("Erro ao carregar edição de usuário:", err);
+                req.flash("error_message", "Erro ao carregar dados do usuário.");
+                res.redirect('/menu/ferramentas/usuario/lis');
+            });
     },
     cadastraUsuario(req,res){
         let cadastro = usuarioClass.usuarioAdicionar(req,res);//variavel para armazenar a função que armazena o async
@@ -438,7 +605,6 @@ module.exports = {
             res.redirect('admin/erro');
         });
     },
-
     carregaCarimboLis(req,res){
         let base64Image;
         Usuario.findOne({_id: req.params.id}).then((usuario) =>{
@@ -478,5 +644,70 @@ module.exports = {
                 res.render('admin/branco', {flash});
             }
         })
+    },
+    // fncUsuario.js
+
+    // Função auxiliar: gera os dias da semana atual no formato { dia: '05', mes: '04' }
+    getDiasDaSemana() {
+        const hoje = new Date();
+        const domingo = new Date(hoje);
+        domingo.setDate(hoje.getDate() - hoje.getDay()); // domingo da semana atual
+
+        const dias = [];
+        for (let i = 0; i < 7; i++) {
+            const data = new Date(domingo);
+            data.setDate(domingo.getDate() + i);
+            const dia = String(data.getUTCDate()).padStart(2, '0');
+            const mes = String(data.getUTCMonth() + 1).padStart(2, '0');
+            dias.push({ dia, mes });
+        }
+        return dias;
+    },
+
+    // Função auxiliar interna (não exportada diretamente, mas usada pelos métodos)
+    getDiasDaSemana() {
+        const hoje = new Date();
+        const domingo = new Date(hoje);
+        domingo.setDate(hoje.getDate() - hoje.getDay());
+
+        const dias = [];
+        for (let i = 0; i < 7; i++) {
+            const data = new Date(domingo);
+            data.setDate(domingo.getDate() + i);
+            const dia = String(data.getUTCDate()).padStart(2, '0');
+            const mes = String(data.getUTCMonth() + 1).padStart(2, '0');
+            dias.push({ dia, mes });
+        }
+        return dias;
+    },
+
+    // Método público: filtra aniversariantes da semana (pode ser chamado de fora)
+    filtrarAniversariantesDaSemana(lista, tipo) {
+        const semanaDias = this.getDiasDaSemana(); // usa 'this' porque está dentro do objeto
+
+        return lista
+            .map(p => {
+                const campoData = tipo === 'usuario' ? p.usuario_datanasc : p.bene_datanasc;
+                if (!campoData) return null;
+
+                const dataNasc = new Date(campoData);
+                const dia = String(dataNasc.getUTCDate()).padStart(2, '0');
+                const mes = String(dataNasc.getUTCMonth() + 1).padStart(2, '0');
+
+                return {
+                    ...p,
+                    diaNascimento: dia,
+                    mesNascimento: mes,
+                    nome: tipo === 'usuario' ? p.usuario_nome : p.bene_nome
+                };
+            })
+            .filter(p => p !== null)
+            .filter(p =>
+                semanaDias.some(s => s.dia === p.diaNascimento && s.mes === p.mesNascimento)
+            )
+            .sort((a, b) => {
+                if (a.mesNascimento !== b.mesNascimento) return a.mesNascimento - b.mesNascimento;
+                return a.diaNascimento - b.diaNascimento;
+            });
     }
-}
+}; // <-- Este fecha o module.exports

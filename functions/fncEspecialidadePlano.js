@@ -1,16 +1,20 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //especialidadePlanos
 const especialidadePlanoClass = require("../models/especialidadePlano")
-const respostaClass = require("../models/resposta")
 
 //especialidadePlano, tipos de especialidadePlano 
-const EspecialidadePlano = mongoose.model("tb_especialidadePlano")
-const Resposta = mongoose.model("tb_resposta")
+const EspecialidadePlano = getModel("SoftRoute", 'tb_especialidadePlano', especialidadePlanoClass.EspecialidadePlanoSchema)
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaEspecialidadePlano(req,res,resposta){
+        let db = req.cookies['preferredDb'];
+        EspecialidadePlano = getModel(db, 'tb_especialidadePlano', especialidadePlanoClass.EspecialidadePlanoSchema)
+
         let flash = new Resposta()
         console.log('listando especialidadePlanos')
         EspecialidadePlano.find().then((especialidadePlano) =>{
@@ -37,6 +41,9 @@ module.exports = {
         res.render("ferramentas/especialidadePlano/especialidadePlanoCad")
     },
     carregaEspecialidadePlanoEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        EspecialidadePlano = getModel(db, 'tb_especialidadePlano', especialidadePlanoClass.EspecialidadePlanoSchema)
+
         EspecialidadePlano.findById(req.params.id).then((especialidadePlano) =>{
             console.log(especialidadePlano)
                 console.log("Listagem Realizada de Estados")
@@ -110,6 +117,9 @@ module.exports = {
         }
     },
     deletaEspecialidadePlano(req,res){
+        let db = req.cookies['preferredDb'];
+        EspecialidadePlano = getModel(db, 'tb_especialidadePlano', especialidadePlanoClass.EspecialidadePlanoSchema)
+
         EspecialidadePlano.deleteOne({_id: req.params.id}).then(() =>{
             EspecialidadePlano.find().then((especialidadePlano) =>{
                 req.flash("success_message", "EspecialidadePlano deletada!")

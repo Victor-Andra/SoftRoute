@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Analise funcional do comportamento
 const ataClass = require("../models/ata")
@@ -8,27 +8,24 @@ const ataClass = require("../models/ata")
 
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
-const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
-const terapiaClass = require("../models/terapia")
-const respostaClass = require("../models/resposta")
 //Tabela Ata
-const Ata = mongoose.model("tb_ata")
+var Ata = getModel("SoftRoute", 'tb_ata', ataClass.AtaSchema)
 
 //Tabelas Extrangeiras
-
-const Resposta = mongoose.model("tb_resposta")
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 //Funções auxiliares
-
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaAta(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Ata = getModel(db, 'tb_ata', ataClass.AtaSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         let perfilAtual = req.cookies['lvlUsu'];
         Ata.find().then((ata) =>{
@@ -70,7 +67,7 @@ module.exports = {
                 fulldate=(datacorrec.getFullYear()+"-"+mes+"-"+dia).toString();
                 b.datacorrec=fulldate;
             })
-           
+
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada bene!")
@@ -89,13 +86,17 @@ module.exports = {
 
 
     carregaAta(req,res){
+        let db = req.cookies['preferredDb'];
+
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         Bene.find({bene_status: "Ativo", bene_nome: { $not: /\./ } }).then((bene) => {
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
             //console.log("Listagem Realizada de Beneficiários!")
-                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                    //console.log("Listagem Realizada de Usuário")
-                            res.render("area/escalas/ata/ataCad", {Benes: bene, Terapeutas: terapeuta})
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Usuário")
+                res.render("area/escalas/ata/ataCad", {Benes: bene, Terapeutas: terapeuta})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
@@ -103,10 +104,11 @@ module.exports = {
         })
 
     },
-
-  
-    
     carregaAtaEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Ata = getModel(db, 'tb_ata', ataClass.AtaSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         let perfilAtual = req.cookies['lvlUsu'];
         Ata.findOne({_id : req.params.id}).then((ata)=>{
@@ -187,6 +189,9 @@ module.exports = {
     },
 
     deletaAtaold(req,res){
+        let db = req.cookies['preferredDb'];
+        Ata = getModel(db, 'tb_ata', ataClass.AtaSchema)
+
         let resposta;
         let flash = new Resposta()
         Ata.deleteOne({_id: req.params.id}).then(() =>{

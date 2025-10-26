@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Analise funcional do comportamento
 const natClass = require("../models/nat")
@@ -13,13 +13,13 @@ const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 
 //Tabela NAT
-const Nat = mongoose.model("tb_nat")
+var Nat = getModel("SoftRoute", 'tb_nat', natClass.NatSchema)
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 
 
 //Funções auxiliares
@@ -27,34 +27,38 @@ const Terapia = mongoose.model("tb_terapia")
 
 module.exports = {
     listaNat(req, res){
+        let db = req.cookies['preferredDb'];
+        Nat = getModel(db, 'tb_nat', natClass.NatSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let convs = new Array();
         console.log('listando Diários de Nat')
         Nat.find().then((nat) =>{
             console.log("Listagem Realizada dos Diários de Nat!")
             Bene.find({bene_status:"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                    console.log("Listagem Realizada bene!")
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                        //console.log("Listagem Realizada de Usuário")
-            res.render('area/aba/nat/natLis', {Nats: nat, Terapeutas: terapeuta, Benes: bene})
+                console.log("Listagem Realizada bene!")
+                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                    //console.log("Listagem Realizada de Usuário")
+                    res.render('area/aba/nat/natLis', {Nats: nat, Terapeutas: terapeuta, Benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Nat")
             res.redirect('admin/erro')
         })
     },
-
-
-
     carregaNat(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         Bene.find().then((bene)=>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
             //console.log("Listagem Realizada de Beneficiários!")
-                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                    //console.log("Listagem Realizada de Usuário")
-                            res.render("area/aba/nat/natCad", {Benes: bene, Terapeutas: terapeuta})
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Usuário")
+                res.render("area/aba/nat/natCad", {Benes: bene, Terapeutas: terapeuta})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
@@ -62,10 +66,12 @@ module.exports = {
         })
 
     },
-
-  
-    
     carregaNatEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
@@ -75,14 +81,13 @@ module.exports = {
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Beneficiários!")
-                                res.render("area/aba/nat/natEdi", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
+                        res.render("area/aba/nat/natEdi", {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
         })
     },
-
     cadastraNat(req,res){
         console.log("chegou")
         let resultado
@@ -111,7 +116,6 @@ module.exports = {
             }
         })
     },
-
     atualizaNat(req,res){
         let resultado
         let resposta = new Resposta()
@@ -146,19 +150,23 @@ module.exports = {
             res.render('admin/erro')
         }
     },
-
-
     deletaNat(req,res){
-        Natfisio.deleteOne({_id: req.params.id}).then(() =>{
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Nat = getModel(db, 'tb_nat', natClass.NatSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
+        Nat.deleteOne({_id: req.params.id}).then(() =>{
             Conv.find().then((conv)=>{
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Natamento Fisioterapêutico deletado!")
-                res.render('area/aba/nat/natLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
+                    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                        console.log("Listagem Realizada de Usuário")
+                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                            console.log("Listagem Realizada de beneficiarios")
+                            req.flash("success_message", "Natamento Fisioterapêutico deletado!")
+                            res.render('area/aba/nat/natLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
             })})})}).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
@@ -166,6 +174,4 @@ module.exports = {
             })
         })
     }
-
-
 }

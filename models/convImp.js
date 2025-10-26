@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
-
+const { getModel } = require('../functions/fncGeral');
 
 const ConvimpSchema = mongoose.Schema({
     convimp_convid :{ type: ObjectId, required: true },
@@ -34,9 +34,15 @@ class Convimp{
 
 
 ConvimpSchema.loadClass(Convimp)
-const ConvimpModel = mongoose.model('tb_convimp', ConvimpSchema)
+var ConvimpModel = getModel("softroute", 'tb_convimp', ConvimpSchema)
 module.exports = {ConvimpModel,ConvimpSchema,
     convimpEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ConvimpModel = getModel(db, 'tb_convimp', ConvimpSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -64,6 +70,12 @@ module.exports = {ConvimpModel,ConvimpSchema,
         return resultado;
     },
     convimpAdicionar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ConvimpModel = getModel(db, 'tb_convimp', ConvimpSchema)
+        //;
+
         let dataAtual = new Date();
         let convimpExiste =  await ConvimpModel.findOne({
             convimp_convid : req.body.convimpConvid ,
@@ -100,6 +112,12 @@ module.exports = {ConvimpModel,ConvimpSchema,
         }
     },
     convimpCarregarTodos: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ConvimpModel = getModel(db, 'tb_convimp', ConvimpSchema)
+        //;
+
         let convimps;
         await ConvimpModel.find({}).then((convimp) => {
             convimps = convimp;

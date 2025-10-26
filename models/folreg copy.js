@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const FolregSchema = mongoose.Schema({
     folreg_tiporeg :{ type: String, required: false },
@@ -477,9 +478,18 @@ class Folreg{
 }
 
 FolregSchema.loadClass(Folreg)
-const FolregModel = mongoose.model('tb_folreg', FolregSchema)
-module.exports = {FolregModel,FolregSchema,
+var FolregModel = getModel("softroute", 'tb_folreg', FolregSchema)
+module.exports = {
+    FolregModel,
+    FolregSchema,
+
     folregEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        FolregModel = getModel(db, 'tb_folreg', FolregSchema)
+        //;
+
        //Pega data atual
        let dataAtual = new Date();
        //Pega Usuário Atual
@@ -636,6 +646,12 @@ module.exports = {FolregModel,FolregSchema,
         return resultado;
     },
     folregAdicionar: async (req,res) => {
+
+       //Estrutura Multiempresa
+       let db = req.cookies['preferredDb'];
+       FolregModel = getModel(db, 'tb_folreg', FolregSchema)
+       //;
+
       //Pega data atual
       let dataAtual = new Date();
       //Pega Usuário Atual

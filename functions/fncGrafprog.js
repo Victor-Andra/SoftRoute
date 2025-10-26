@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Plano de Grafprogamento 
 const grafprogClass = require("../models/grafprog")
@@ -13,30 +13,34 @@ const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 
 //Tabela Plano de Grafprogamento 
-const Grafprog = mongoose.model("tb_grafprog")
+var Grafprog = getModel("SoftRoute", 'tb_grafprog', grafprogClass.GrafprogSchema)
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 
 //Funções auxiliares
-
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaGrafprog(req, res){
+        let db = req.cookies['preferredDb'];
+        Grafprog = getModel(db, 'tb_grafprog', grafprogClass.GrafprogSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let convs = new Array();
         console.log('listando Diários de Grafprog')
         Grafprog.find().then((grafprog) =>{
             console.log("Listagem Realizada dos Diários de Grafprog!")
-                Bene.findById(req.params.id).then((bene) =>{
-                    console.log("Listagem Realizada bene!")
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                        //console.log("Listagem Realizada de Usuário")
-            res.render('area/aba/grafprog/grafprogLis', {Grafprogs: grafprog, Terapeutas: terapeuta, Benes: bene})
+            Bene.findById(req.params.id).then((bene) =>{
+                console.log("Listagem Realizada bene!")
+                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                    //console.log("Listagem Realizada de Usuário")
+                    res.render('area/aba/grafprog/grafprogLis', {Grafprogs: grafprog, Terapeutas: terapeuta, Benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Grafprog")
@@ -45,6 +49,11 @@ module.exports = {
     },
 
     carregaGrafprog(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
@@ -64,6 +73,11 @@ module.exports = {
     },
 
     carregaGrafprogEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
@@ -85,7 +99,7 @@ module.exports = {
         let resultado
         let resposta = new Resposta()
         
-        grafprogClass.cadastraGrafprogFisio(req,res).then((result)=>{
+        grafprogClass.grafprogAdicionar(req,res).then((result)=>{
             console.log("Cadastro Realizado!")
             console.log(res)
             resultado = true;
@@ -146,17 +160,23 @@ module.exports = {
 
 
     deletaGrafprog(req,res){
-        Grafprogfisio.deleteOne({_id: req.params.id}).then(() =>{
+        let db = req.cookies['preferredDb'];
+        Grafprog = getModel(db, 'tb_grafprog', grafprogClass.GrafprogSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
+        Grafprog.deleteOne({_id: req.params.id}).then(() =>{
             Conv.find().then((conv)=>{
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Grafprogamento Fisioterapêutico deletado!")
-                res.render('area/aba/grafprog/grafprogLis', {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene, flash})
+                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                            console.log("Listagem Realizada de beneficiarios")
+                            req.flash("success_message", "Grafprogamento Fisioterapêutico deletado!")
+                            res.render('area/aba/grafprog/grafprogLis', {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene, flash})
             })})})}).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
@@ -164,6 +184,4 @@ module.exports = {
             })
         })
     }
-
-
 }

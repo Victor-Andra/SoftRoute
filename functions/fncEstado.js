@@ -1,17 +1,21 @@
 //Exports
 const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
 
 //estados e unidades federativas    
-const Estado = mongoose.model("tb_estado")
 const estadoClass = require("../models/estado")
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
 
+var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
 
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 
 module.exports = {
-   listaEstado(req, res) {
+    listaEstado(req, res) {
+        let db = req.cookies['preferredDb'];
+        
+
         console.log('listando estados');
         Estado.find().then((estados) => {
             // Função auxiliar para formatar data
@@ -52,6 +56,9 @@ module.exports = {
         });
     },
     carregaEstado(req,res){
+        let db = req.cookies['preferredDb'];
+        
+
         Estado.find().then((estado)=>{
             console.log("Listagem Realizada de Ufs!")
             res.render("ferramentas/estado/estadoCad", {estados: estado})
@@ -63,6 +70,9 @@ module.exports = {
 
     },
     carregaEstadoEdi(req, res){
+        let db = req.cookies['preferredDb'];
+        
+
         let base64Image
         Estado.findOne({_id: req.params.id}).then((estado) =>{
             //console.log(estado)
@@ -103,6 +113,9 @@ module.exports = {
     
    
     atualizaEstado(req,res){
+        let db = req.cookies['preferredDb'];
+        
+
         let resposta;
         try{
             estadoClass.estadoEditar(req,res).then((res)=>{
@@ -138,6 +151,9 @@ module.exports = {
 
 
     deletaEstado(req,res){
+        let db = req.cookies['preferredDb'];
+        
+
         Estado.deleteOne({_id: req.params.id}).then(() =>{
             Estado.find().then((estado) =>{
                 req.flash("success_message", "Estado deletada!")
@@ -149,6 +165,4 @@ module.exports = {
             })
         })
     }
-
-
 }

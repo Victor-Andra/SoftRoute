@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const AtecSchema = mongoose.Schema({
     atec_beneid :{ type: ObjectId, required: false },
@@ -331,9 +332,17 @@ class Atec{
 }
 
 AtecSchema.loadClass(Atec)
-const AtecModel = mongoose.model('tb_atec', AtecSchema)
-module.exports = {AtecModel,AtecSchema,
+var AtecModel = getModel("softroute", 'tb_atec', AtecSchema)
+module.exports = { 
+    AtecModel,
+    AtecSchema,
     atecEditar: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtecModel = getModel(db, 'tb_atec', AtecSchema);
+        //;
+
         //Pega data atual
         let dataAtual = new Date();
         //Pega o usuario atual
@@ -456,6 +465,12 @@ module.exports = {AtecModel,AtecSchema,
         return resultado;
     },
     atecAdicionar: async (req,res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtecModel = getModel(db, 'tb_atec', AtecSchema);
+        //;
+
         //Pega data atual
         let dataAtual = new Date();
         //Pega o usuario atual

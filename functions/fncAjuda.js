@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Ajuda
 const ajudaClass = require("../models/ajuda")
@@ -9,21 +9,21 @@ const ajudaClass = require("../models/ajuda")
 const usuarioClass = require("../models/usuario")
 
 //Tabela Ajuda
-const Ajuda = mongoose.model("tb_ajuda")
+var Ajuda = getModel("SoftRoute", 'tb_ajuda', ajudaClass.AjudaSchema)
 
 //Tabelas Extrangeiras
-const Usuario = mongoose.model("tb_usuario")
-
-
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 //Funções auxiliares
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
-const fncGeral = require("./fncGeral")
-const ObjectId = require('mongodb').ObjectId;
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaAjuda(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Ajuda = getModel(db, 'tb_ajuda', ajudaClass.AjudaSchema)
+        
+
         let flash = new Resposta()
         let resultado;
         let ajuda = [];
@@ -49,6 +49,9 @@ module.exports = {
     },
    
     carregaAjudacad(req,res){
+        let db = req.cookies['preferredDb'];
+        Ajuda = getModel(db, 'tb_ajuda', ajudaClass.AjudaSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         console.log("usuarioAtual:"+usuarioAtual)
         Ajuda.find().then((ajuda) =>{
@@ -64,6 +67,9 @@ module.exports = {
     },
  
     carregaAjudaedi(req,res){
+        let db = req.cookies['preferredDb'];
+        Ajuda = getModel(db, 'tb_ajuda', ajudaClass.AjudaSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         Ajuda.findById(req.params.id).then((ajuda) =>{console.log("ID: "+ajuda._id)
             ajuda.sort((a,b) => ((a.ajuda_pergunta.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.ajuda_pergunta.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.ajuda_pergunta.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.ajuda_pergunta.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena pela pergunta
@@ -139,6 +145,9 @@ module.exports = {
     },
 
     deletaAjuda(req,res){
+        let db = req.cookies['preferredDb'];
+        Ajuda = getModel(db, 'tb_ajuda', ajudaClass.AjudaSchema)
+
         let resposta;
         let flash = new Resposta()
         Ajuda.deleteOne({_id: req.params.id}).then(() =>{

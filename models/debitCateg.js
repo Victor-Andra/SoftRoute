@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const DebitcategSchema = mongoose.Schema({
     debitcateg_nome: {
@@ -32,17 +33,16 @@ class Debitcateg{
         this.debitcateg_dataedi = debitcateg_dataedi
     }
 }
-let DebitcategModel;
 DebitcategSchema.loadClass(Debitcateg)
-try {
-    DebitcategModel = mongoose.model('tb_debitcateg')
-} catch (error) {
-    DebitcategModel = mongoose.model('tb_debitcateg', DebitcategSchema)
-}
-
-//const DebitcategModel = mongoose.model('tb_debitcateg', DebitcategSchema)
+var DebitcategModel = getModel("softroute", 'tb_debitcateg', DebitcategSchema)
 module.exports = {DebitcategModel,DebitcategSchema,
     debitcategEditar: async (req, res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitcategModel = getModel(db, 'tb_debitcateg', DebitcategSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -67,6 +67,12 @@ module.exports = {DebitcategModel,DebitcategSchema,
         return resultado;
     },
     debitcategAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitcategModel = getModel(db, 'tb_debitcateg', DebitcategSchema)
+        //;
+
         let dataAtual = new Date();
         console.log("debitcategmodel");
         const newDebitcateg = new DebitcategModel({

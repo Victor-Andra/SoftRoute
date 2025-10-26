@@ -1,29 +1,30 @@
 /*
 //Exports
 const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
 //Atend, Atendimento Padrão 
 const atendClass = require("../models/atend")
-const Atend = mongoose.model("tb_atend")
+const Atend = getModel("softroute", 'tb_atend', atendClass.AtendSchema)
 //beneficiario, clientes
-const Bene = mongoose.model("tb_bene")
+const Bene = getModel("softroute", 'tb_bene', beneClass.BeneSchema)
 //convenio, planos de saúde e particular
-const Conv = mongoose.model("tb_conv")
+const Conv = getModel("softroute", 'tb_conv', convClass.ConvSchema)
 //convcre, Recebimentos pela terapia realizada ao beneficiário
 const creditClass = require("../models/credit")
-const Convcre = mongoose.model("tb_convcre")
+const Convcre = getModel("softroute", 'tb_convcre', convcreClass.ConvcreSchema)
 //convdeb, Pagamentos pela terapia realizada pelo Terapeuta
 const debitClass = require("../models/debit")
-const Convdeb = mongoose.model("tb_convdeb")
+const Convdeb = getModel("softroute", 'tb_convdeb', convdebClass.ConvdebSchema)
 //Tabil
 const tabilClass = require("../models/tabil")
 const { carregaAtendAdmEdi } = require("./fncAtendAdm")
-const Tabil = mongoose.model("tb_tabil")
+const Tabil = getModel("softroute", 'tb_tabil', tabilClass.TabilSchema)
 //usuario, cadstro dos usuários
-const Usuario = mongoose.model("tb_usuario")
+const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 //terapia, tipos de terapias realiazadas
-const Terapia = mongoose.model("tb_terapia")
+const Terapia = getModel("softroute", 'tb_terapia', terapiaClass.TerapiaSchema)
 //Agenda
-const Agenda = mongoose.model("tb_agenda")
+const Agenda = getModel("softroute", 'tb_agenda', agendaTecClass.AgendaSchema)
 
 module.exports = {
     carregaAgenda(req,res){

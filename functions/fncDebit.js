@@ -1,43 +1,49 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //convdeb, Pagamentos pela terapia realizada pelo Terapeuta
 const debitClass = require("../models/debit")
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
-const debitsubcategClass = require("../models/debitSubcateg")
-const debitcategClass = require("../models/debitCateg")
+const debitSubcategClass = require("../models/debitSubcateg")
+const debitCategClass = require("../models/debitCateg")
 const terapiaClass = require("../models/terapia")
 const usuarioClass = require("../models/usuario")
 const fornecClass = require("../models/fornec")
 
-const Debit = mongoose.model("tb_debit")
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Debitsubcateg = mongoose.model("tb_debitsubcateg")
-const Debitcateg = mongoose.model("tb_debitcateg")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Fornec = mongoose.model("tb_fornec")
+var Debit = getModel("SoftRoute", 'tb_debit', debitClass.DebitSchema)
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Debitsubcateg = getModel("SoftRoute", 'tb_debitsubcateg', debitSubcategClass.DebitsubcategSchema)
+var Debitcateg = getModel("SoftRoute", 'tb_debitcateg', debitCategClass.DebitcategSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Fornec = getModel("SoftRoute", 'tb_fornec', fornecClass.FornecSchema)
+
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     debitAdicionarApoio: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+
         let debitExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         let dtVenci = new Date(req.body.debitDatavenci);
         let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
-            debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
+            debitExiste = await Debit.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            debitExiste =  await DebitModel.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
+            debitExiste =  await Debit.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(debitExiste){//se tiver null cai no else
             return "O nome da debit já existe";
             //programar alert
         } else {
-            console.log("debitmodel");
-            const newDebit = new DebitModel({
+            console.log("Debit");
+            const newDebit = new Debit({
                 debit_atendnum : req.body.nextNum ,
                 /*
                 debit_categoria : "Apoio" ,
@@ -71,22 +77,25 @@ module.exports = {
         }
     },
     debitAdicionarExtra: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+
         let debitExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         let dtVenci = new Date(req.body.debitDatavenci);
         let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
-            debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
+            debitExiste = await Debit.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            debitExiste =  await DebitModel.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
+            debitExiste =  await Debit.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(debitExiste){//se tiver null cai no else
             return "O nome da debit já existe";
             //programar alert
         } else {
-            console.log("debitmodel");
-            const newDebit = new DebitModel({
+            console.log("Debit");
+            const newDebit = new Debit({
                 debit_atendnum : req.body.nextNum ,
                 /*
                 debit_categoria : "Extra" ,
@@ -120,22 +129,25 @@ module.exports = {
         }
     },
     debitAdicionarFalta: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+
         let debitExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         let dtVenci = new Date(req.body.debitDatavenci);
         let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
-            debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
+            debitExiste = await Debit.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            debitExiste =  await DebitModel.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
+            debitExiste =  await Debit.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(debitExiste){//se tiver null cai no else
             return "O nome da debit já existe";
             //programar alert
         } else {
-            console.log("debitmodel");
-            const newDebit = new DebitModel({
+            console.log("Debit");
+            const newDebit = new Debit({
                 debit_atendnum : req.body.nextNum ,
                 /*
                 debit_categoria : "Falta" ,
@@ -169,22 +181,25 @@ module.exports = {
         }
     },
     debitAdicionarGlosa: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+
         let debitExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         let dtVenci = new Date(req.body.debitDatavenci);
         let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
-            debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
+            debitExiste = await Debit.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            debitExiste =  await DebitModel.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
+            debitExiste =  await Debit.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(debitExiste){//se tiver null cai no else
             return "O nome da debit já existe";
             //programar alert
         } else {
-            console.log("debitmodel");
-            const newDebit = new DebitModel({
+            console.log("Debit");
+            const newDebit = new Debit({
                 debit_atendnum : req.body.nextNum ,
                 /*
                 debit_categoria : "Glosa" ,
@@ -218,22 +233,25 @@ module.exports = {
         }
     },
     debitAdicionarPadrão: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+
         let debitExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         let dtVenci = new Date(req.body.debitDatavenci);
         let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
-            debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
+            debitExiste = await Debit.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            debitExiste =  await DebitModel.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
+            debitExiste =  await Debit.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(debitExiste){//se tiver null cai no else
             return "O nome da debit já existe";
             //programar alert
         } else {
-            console.log("debitmodel");
-            const newDebit = new DebitModel({
+            console.log("Debit");
+            const newDebit = new Debit({
                 debit_atendnum : req.body.nextNum ,
                 /*
                 debit_categoria : "Padrão" ,
@@ -267,22 +285,25 @@ module.exports = {
         }
     },
     debitAdicionarPais: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+
         let debitExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         let dtVenci = new Date(req.body.debitDatavenci);
         let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
-            debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
+            debitExiste = await Debit.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            debitExiste =  await DebitModel.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
+            debitExiste =  await Debit.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(debitExiste){//se tiver null cai no else
             return "O nome da debit já existe";
             //programar alert
         } else {
-            console.log("debitmodel");
-            const newDebit = new DebitModel({
+            console.log("Debit");
+            const newDebit = new Debit({
                 debit_atendnum : req.body.nextNum ,
                 /*
                 debit_categoria : "Pais" ,
@@ -316,22 +337,25 @@ module.exports = {
         }
     },
     debitAdicionarSubstituto: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+
         let debitExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         let dtVenci = new Date(req.body.debitDatavenci);
         let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
-            debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
+            debitExiste = await Debit.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            debitExiste =  await DebitModel.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
+            debitExiste =  await Debit.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(debitExiste){//se tiver null cai no else
             return "O nome da debit já existe";
             //programar alert
         } else {
-            console.log("debitmodel");
-            const newDebit = new DebitModel({
+            console.log("Debit");
+            const newDebit = new Debit({
                 debit_atendnum : req.body.nextNum ,
                 /*
                 debit_categoria : "Substituto" ,
@@ -365,22 +389,25 @@ module.exports = {
         }
     },
     debitAdicionarSupervisao: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+
         let debitExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         let dtVenci = new Date(req.body.debitDatavenci);
         let dtPg = new Date(req.body.debitDatapg);
         if(req.body.debitNome == undefined){//mudar o campo
-            debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
+            debitExiste = await Debit.findOne({debit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            debitExiste =  await DebitModel.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
+            debitExiste =  await Debit.findOne({debit_nome: req.body.debitNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(debitExiste){//se tiver null cai no else
             return "O nome da debit já existe";
             //programar alert
         } else {
-            console.log("debitmodel");
-            const newDebit = new DebitModel({
+            console.log("Debit");
+            const newDebit = new Debit({
                 debit_atendnum : req.body.nextNum ,
                 /*
                 debit_categoria : "Supervisao" ,
@@ -414,12 +441,21 @@ module.exports = {
         }
     },
     delete(req,res){
+        let db = req.cookies['preferredDb'];
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+
         Debit.deleteOne({_id: req.params.id}).then(() =>{
             req.flash("success_message", "Debit deletada!")
             this.listar(req,res);
         })
     },
     carregaEditar(req,res){
+        let db = req.cookies['preferredDb'];
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+        Debitsubcateg = getModel(db, 'tb_debitsubcateg', debitSubcategClass.DebitsubcategSchema)
+        Debitcateg = getModel(db, 'tb_debitcateg', debitCategClass.DebitcategSchema)
+        Fornec = getModel(db, 'tb_fornec', fornecClass.FornecSchema)
+
         Debit.findById(req.params.id).then((debit) =>{
             Fornec.find().then((fornec)=>{
                 console.log("Listagem Realizada de Fornecedores!")
@@ -485,6 +521,12 @@ module.exports = {
         }
     },
     listar(req,res){
+        let db = req.cookies['preferredDb'];
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+        Debitsubcateg = getModel(db, 'tb_debitsubcateg', debitSubcategClass.DebitsubcategSchema)
+        Debitcateg = getModel(db, 'tb_debitcateg', debitCategClass.DebitcategSchema)
+        Fornec = getModel(db, 'tb_fornec', fornecClass.FornecSchema)
+
         Debit.find().then((debit) =>{
             console.log("Listagem Realizada!")
             Fornec.find().then((fornec)=>{
@@ -501,6 +543,14 @@ module.exports = {
         })
     },
     carregaDebit(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Debitsubcateg = getModel(db, 'tb_debitsubcateg', debitSubcategClass.DebitsubcategSchema)
+        Debitcateg = getModel(db, 'tb_debitcateg', debitCategClass.DebitcategSchema)
+        Fornec = getModel(db, 'tb_fornec', fornecClass.FornecSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Bene.find({"bene_status":"Ativo"}).then((bene)=>{
             console.log("Listagem Realizada de Beneficiários!")
             Conv.find({"conv_status":"Ativo"}).then((conv)=>{
@@ -523,6 +573,9 @@ module.exports = {
         })
     },
     debitAtendEditar(req,res){
+        let db = req.cookies['preferredDb'];
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+
         let dataEvento;
         let valorPrev;
         let dataEdi;

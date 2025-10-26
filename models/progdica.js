@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const ProgdicaSchema = mongoose.Schema({
     progdica_nome: {type: String, unique: true, required: true},
@@ -36,9 +37,18 @@ class Progdica{
 
 
 ProgdicaSchema.loadClass(Progdica)
-const ProgdicaModel = mongoose.model('tb_progdica', ProgdicaSchema)
-module.exports = {ProgdicaModel,ProgdicaSchema,
+var ProgdicaModel = getModel("softroute", 'tb_progdica', ProgdicaSchema)
+module.exports = {
+    ProgdicaModel,
+    ProgdicaSchema,
+
     progdicaEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ProgdicaModel = getModel(db, 'tb_progdica', ProgdicaSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -65,6 +75,12 @@ module.exports = {ProgdicaModel,ProgdicaSchema,
         return resultado;
     },
     progdicaAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ProgdicaModel = getModel(db, 'tb_progdica', ProgdicaSchema)
+        //;
+        
          let dataAtual = new Date();
             console.log("progdicamodel");
             const newProgdica = new ProgdicaModel({

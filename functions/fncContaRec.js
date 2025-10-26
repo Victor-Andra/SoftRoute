@@ -1,30 +1,27 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 
 //convdeb, Pagamentos pela terapia realizada pelo Terapeuta
-const contaRecClass = require("../models/contaRec");
-
-const ContaRec = mongoose.model("tb_contarec")
 const beneClass = require("../models/bene")
+const contaRecClass = require("../models/contaRec");
 const convClass = require("../models/conv")
-const usuClass = require("../models/usuario")
 const convImpClass = require("../models/convImp")
 const impostoClass = require("../models/imposto")
-const respostaClass = require("../models/resposta")
+
 //Tabela Ata
 
 
 //tabelas Extrangeira
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const ConvImp = mongoose.model("tb_convimp")
-const Imposto = mongoose.model("tb_imposto")
-const Resposta = mongoose.model("tb_resposta")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var ContaRec = getModel("SoftRoute", 'tb_contarec', contaRecClass.ContaRecSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var ConvImp = getModel("SoftRoute", 'tb_convimp', convImpClass.ConvimpSchema)
+var Imposto = getModel("SoftRoute", 'tb_imposto', impostoClass.ImpostoSchema)
 
 //Funções auxiliares
-const fncContaRec = require("./fncContaRec")
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     
@@ -41,22 +38,36 @@ module.exports = {
     },
     
     delete(req,res){
+        let db = req.cookies['preferredDb'];
+        ContaRec = getModel(db, 'tb_contarec', contaRecClass.ContaRecSchema)
+
         ContaRec.deleteOne({_id: req.params.id}).then(() =>{
             req.flash("success_message", "ContaRec deletada!")
             this.listar(req,res);
         })
     },
     carregaEditar(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        ContaRec = getModel(db, 'tb_contarec', contaRecClass.ContaRecSchema)
+
         ContaRec.findById(req.params.id).then((contaRec) =>{
             Bene.find().then((bene)=>{
                 Conv.find().then((conv)=>{
-                        res.render('financeiro/receita/contaRecEdi', {benes: bene, convs: conv, contaRec})
+                    res.render('financeiro/receita/contaRecEdi', {benes: bene, convs: conv, contaRec})
         })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
     },
     carregaCadastro(req, res) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        ConvImp = getModel(db, 'tb_convimp', convImpClass.ConvimpSchema)
+        ContaRec = getModel(db, 'tb_contarec', contaRecClass.ContaRecSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
     
@@ -137,6 +148,11 @@ module.exports = {
     
    
     listar(req, res){
+        let db = req.cookies['preferredDb'];
+        ContaRec = getModel(db, 'tb_contarec', contaRecClass.ContaRecSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Imposto = getModel(db, 'tb_imposto', impostoClass.ImpostoSchema)
+
         ContaRec.find().then((conta) =>{
             conta.forEach((b)=>{
                 //console.log("b.dataevento"+b.dataevento)

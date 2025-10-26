@@ -1,35 +1,26 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classes Extrangeiras
 const usuarioClass = require("../models/usuario")
 const convClass = require("../models/conv")//convenio
 const beneClass = require("../models/bene")
 const atendClass = require("../models/atend")
-const fncCredit = require("../functions/fncCredit")
-const fncGeral = require("../functions/fncGeral")
-const fncAtendAdm = require("./fncAtendAdm")
-const fncAgenda = require("./fncAgenda")
-const agenda = require("../models/agenda")
+const terapiaClass = require("../models/terapia")
 const ObjectId = require('mongodb').ObjectId;
 
 //Tabelas Extrangeiras
-const Atend = mongoose.model("tb_atend")
-const Agenda = mongoose.model("tb_agenda")
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Convcre = mongoose.model("tb_convcre")
-const Convdeb = mongoose.model("tb_convdeb")
-const Convimp = mongoose.model("tb_convimp")//Tabela dos Impostos vinvulados ao convênio, a quantidade de impostos e alíquotas variam para cada convênio.
-const Credit = mongoose.model("tb_credit")
-const Debit = mongoose.model("tb_debit")
-const Tabil = mongoose.model("tb_tabil")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Sala = mongoose.model("tb_sala")
+var Atend = getModel("SoftRoute", 'tb_atend', atendClass.AtendSchema)
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 
 //Funções auxiliares
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
+
 class RelObjvalor{
     constructor(
         idlocal,
@@ -47,6 +38,11 @@ class RelObjvalor{
 module.exports = {
     //carregaDashfinan(req,res){
     carregaDashfinan(req,res){
+        let db = req.cookies['preferredDb'];
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         // Variável para habilitar/desabilitar logs
         const habilitarConsoleLog = true;
     
@@ -213,6 +209,10 @@ module.exports = {
     },
     //carregaDashfinan res.render("dash/dashFinan"
     carregaDashadminin_Primeira(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+
         let qtregsbene;
         let arrayRelQtValor = [];
         let totalBene;
@@ -249,6 +249,10 @@ module.exports = {
         })
     },
     carregaDashadminin_Segunda(req, res) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+
         let qtregsbene;
         let arrayRelQtValor = [];
         let totalBene;
@@ -341,6 +345,10 @@ module.exports = {
         });
     },
     carregaDashadminin(req, res) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+
         let qtregsbene;
         let arrayRelQtValor = [];
         let totalBene;

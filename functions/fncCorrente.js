@@ -1,10 +1,10 @@
 //Exports
 //Constante do Mongo Db
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //Corrente 
 const correnteClass = require("../models/corrente")
-const Corrente = mongoose.model("tb_corrente")
+var Corrente = getModel("SoftRoute", 'tb_corrente', correnteClass.CorrenteSchema)
 
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
@@ -12,19 +12,21 @@ const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 const convClass = require("../models/conv")
 
-
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Conv = mongoose.model("tb_conv")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
 
-
-
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
 
     listaCorrente(req, res){
+        let db = req.cookies['preferredDb'];
+        Corrente = getModel(db, 'tb_corrente', correnteClass.CorrenteSchema)
+
         Corrente.findOne().then((corrente) =>{
             console.log("Listagem Realizada!")
             res.render('financeiro/corrente/correnteLis', {correntes: corrente})
@@ -36,24 +38,26 @@ module.exports = {
     },
 
     carregaCorrente(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Bene.find().then((bene)=>{
             console.log("Listagem Realizada de Ufs")
-                Conv.find().then((conv)=>{
-                    console.log("Listagem Realizada de Convenios")
-                        Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
-                                        Terapia.find().then((terapia)=>{
-                                            console.log("Listagem Realizada de Convenios")
-                                        
-                    res.render("financeiro/corrente/correnteCad", {benes: bene, convs: conv, usuarios: usuario, terapias: terapia})
+            Conv.find().then((conv)=>{
+                console.log("Listagem Realizada de Convenios")
+                Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    console.log("Listagem Realizada de Usuário")
+                    Terapia.find().then((terapia)=>{
+                        console.log("Listagem Realizada de Convenios")
+                        res.render("financeiro/corrente/correnteCad", {benes: bene, convs: conv, usuarios: usuario, terapias: terapia})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
         })
     },
-
-
     cadastraCorrente(req,res){
         let cadastro = correnteClass.correnteAdicionar(req,res);//variavel para armazenar a função que armazena o async
 
@@ -67,6 +71,9 @@ module.exports = {
     },
 
     deletaCorrente(req, res){
+        let db = req.cookies['preferredDb'];
+        Corrente = getModel(db, 'tb_corrente', correnteClass.CorrenteSchema)
+
         Corrente.deleteOne({_id: req.params.id}).then(() =>{
             Corrente.findOne().then((corrente) =>{
                 req.flash("success_message", "Corrente deletada!")
@@ -80,6 +87,9 @@ module.exports = {
 
 
     atualizaCorrente(req, res){
+        let db = req.cookies['preferredDb'];
+        Corrente = getModel(db, 'tb_corrente', correnteClass.CorrenteSchema)
+
         let resposta;
         try{
             correnteClass.correnteEditar(req,res).then((res)=>{
@@ -116,6 +126,9 @@ module.exports = {
     },
 
     carregaCorrenteEdi(req, res){
+        let db = req.cookies['preferredDb'];
+        Corrente = getModel(db, 'tb_corrente', correnteClass.CorrenteSchema)
+
         Corrente.findById(req.params.id).then((corrente) =>{
             res.render('financeiro/corrente/correntEdi', corrente)
         }).catch((err) =>{

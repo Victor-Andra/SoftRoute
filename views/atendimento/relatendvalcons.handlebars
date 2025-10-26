@@ -74,6 +74,41 @@
 				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataFim').value = fulldate;
 			}
+			// Função de validação
+			function validarConsAtendBene(event) {
+				const selectBeneficiario = document.getElementById('relBeneid');
+				const alertaErro = document.getElementById('alertaErro');
+
+				if (!selectBeneficiario || !selectBeneficiario.value) {
+					event.preventDefault();
+					alertaErro.style.display = 'block';
+					return false;
+				} else {
+					alertaErro.style.display = 'none';
+					return true;
+				}
+			}
+
+			// Esconde o alerta quando o usuário seleciona um beneficiário
+			function esconderAlertaAoSelecionarBeneficiario() {
+				const alertaErro = document.getElementById('alertaErro');
+				if (this.value) {
+					alertaErro.style.display = 'none';
+				}
+			}
+
+			// Inicializa os listeners quando o DOM estiver pronto
+			document.addEventListener('DOMContentLoaded', function () {
+				const form = document.getElementById('ConsAtendBene');
+				const selectBeneficiario = document.getElementById('relBeneid');
+
+				if (form) {
+					form.addEventListener('submit', validarConsAtendBene);
+				}
+				if (selectBeneficiario) {
+					selectBeneficiario.addEventListener('change', esconderAlertaAoSelecionarBeneficiario);
+				}
+			});
 			function carregaBody(){
 				/*
 				let sessoes = document.getElementsByName("sessoes")
@@ -98,7 +133,17 @@
 							<li class="active">Consolidado por Beneficiário</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					<form role="form" class="noprint" action="/menu/atendimento/relatendvalconss" method="POST">
+					<form role="form" class="noprint" name="ConsAtendBene" id="ConsAtendBene" action="/menu/atendimento/relatendvalconss" method="POST">
+						
+						<!-- Alerta-->
+						<div id="alertaErro" style="display: none;" class="alert alert-danger">
+							<button type="button" class="close" data-dismiss="alert">
+								<i class="ace-icon fa fa-times"></i>
+							</button>
+							<strong>Importante!</strong> Por favor escolha um beneficiário.
+						</div>
+						<!-- /.Alerta-->
+
 						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center;" style="text-align: center;">
 							<ul class="breadcrumb" >
 								<label>Período de:</label>

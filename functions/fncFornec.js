@@ -1,34 +1,24 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //Fornecedor
 const fornecClass = require("../models/fornec")
-const Fornec = mongoose.model("tb_fornec")
+var Fornec = getModel("SoftRoute", 'tb_fornec', fornecClass.FornecSchema)
 
 
 //Classes Extrangeiras
-const atendClass = require("../models/atend")
-const beneClass = require("../models/bene")
-const convClass = require("../models/conv")
-const usuarioClass = require("../models/usuario")
-const terapiaClass = require("../models/terapia")
-const horaageClass = require("../models/horaAge")
 const estadoClass = require("../models/estado")
-const agendaClass = require("../models/agenda")
 
 //Tabelas Extrangeiras
-const Atend = mongoose.model("tb_atend")
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Horaage = mongoose.model("tb_horaage")
-const Estado = mongoose.model("tb_estado")
-const Agenda = mongoose.model("tb_agenda")
-
+var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     carregaFornecCad(req,res){
+        let db = req.cookies['preferredDb'];
+        
+
         Estado.find().then((estado)=>{
             console.log("Listagem Realizada de Ufs!")
             res.render("financeiro/fornecedor/fornecCad", {estados: estado})
@@ -60,6 +50,9 @@ module.exports = {
     },
 
     deletaFornec(req, res){
+        let db = req.cookies['preferredDb'];
+        Fornec = getModel(db, 'tb_fornec', fornecClass.FornecSchema)
+
         Fornec.deleteOne({_id: req.params.id}).then(() =>{
             Fornec.find().then((fornec) =>{
                 req.flash("success_message", "Fornec deletada!")
@@ -72,6 +65,9 @@ module.exports = {
     },
 
     atualizaFornec(req, res){
+        let db = req.cookies['preferredDb'];
+        Fornec = getModel(db, 'tb_fornec', fornecClass.FornecSchema)
+
         let resposta;
         try{
             fornecClass.fornecEditar(req,res).then((res)=>{
@@ -107,6 +103,9 @@ module.exports = {
     },
 
     carregaFornecEdi(req, res){
+        let db = req.cookies['preferredDb'];
+        Fornec = getModel(db, 'tb_fornec', fornecClass.FornecSchema)
+
         Fornec.findById(req.params.id).then((fornec) =>{
             res.render('financeiro/fornecedor/fornecEdi', fornec)
         }).catch((err) =>{
@@ -117,7 +116,9 @@ module.exports = {
     },
 
     listaFornec(req, res){
-            
+        let db = req.cookies['preferredDb'];
+        Fornec = getModel(db, 'tb_fornec', fornecClass.FornecSchema)
+
         Fornec.find().then((fornec) =>{
             console.log("Listagem Realizada!")
             res.render('financeiro/fornecedor/fornecLis', {fornecs: fornec})

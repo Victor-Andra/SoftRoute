@@ -1,18 +1,24 @@
 // Exports
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
 
-// Modelos Mongoose
-const Terapia = mongoose.model("tb_terapia");
-const Usuario = mongoose.model("tb_usuario");
 
 // Classes e funções customizadas
 const terapiaClass = require("../models/terapia");
 const usuarioClass = require("../models/usuario");
-const fncGeral = require("./fncGeral");
 
+// Modelos Mongoose
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema);
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
    listaTerapia(req, res) {
+        let db = req.cookies['preferredDb'];
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         console.log('listando terapias');
 
         function formatDateToBR(date) {
@@ -26,7 +32,8 @@ module.exports = {
             return `${dia}/${mes}/${ano} h${hora}:${minuto}`;
         }
 
-        Terapia.find({ terapia_status: "Ativo" }).then(async (terapiaList) => {
+        Terapia.find().then(async (terapiaList) => {
+            //Terapia.find({ terapia_status: "Ativo" }).then(async (terapiaList) => {
             if (!terapiaList.length) {
                 return res.render("ferramentas/terapia/terapiaLis", { terapias: [] });
             }
@@ -72,9 +79,10 @@ module.exports = {
             res.redirect("/admin/erro");
         });
     },
-
-
     carregaTerapiaEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Terapia.findById(req.params.id).then((terapia) =>{
             console.log(terapia)
             res.render('ferramentas/terapia/terapiaEdi', {terapia})
@@ -84,7 +92,6 @@ module.exports = {
         })
 
     },
-
    carregaTerapia(req, res) {
         try {
             res.render("ferramentas/terapia/terapiaCad");
@@ -93,7 +100,6 @@ module.exports = {
             res.render("admin/erro");
         }
     },
-
     cadastraTerapia(req,res){
         let cadastro = terapiaClass.terapiaAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
@@ -107,8 +113,10 @@ module.exports = {
         }
 
     },
-
     editarTerapia(req,res){
+        let db = req.cookies['preferredDb'];
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let resposta;
         try{
             terapiaClass.terapiaEditar(req,res).then((res)=>{
@@ -143,9 +151,10 @@ module.exports = {
         }
 
     },
-
-
     deletaTerapia(req,res){
+        let db = req.cookies['preferredDb'];
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Terapia.deleteOne({_id: req.params.id}).then(() =>{
             Terapia.find().then((terapia) =>{
                 req.flash("success_message", "Terapia deletada!")
@@ -158,8 +167,10 @@ module.exports = {
         })
 
     },
-
     atualizaTerapia(req, res){
+        let db = req.cookies['preferredDb'];
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let resposta;
         try{
             terapiaClass.terapiaEditar(req,res).then((res)=>{
@@ -192,8 +203,5 @@ module.exports = {
         } catch(err1){
             console.log(err1)
         }
-    },
-
-
-
+    }
 }

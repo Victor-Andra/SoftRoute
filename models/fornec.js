@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const FornecSchema = mongoose.Schema({
 
@@ -154,9 +155,18 @@ class Fornec{
 
 
 FornecSchema.loadClass(Fornec)
-const FornecModel = mongoose.model('tb_fornec', FornecSchema)
-module.exports = {FornecModel,FornecSchema,
+var FornecModel = getModel("softroute", 'tb_fornec', FornecSchema)
+module.exports = {
+    FornecModel,
+    FornecSchema,
+
     fornecEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        FornecModel = getModel(db, 'tb_fornec', FornecSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -202,6 +212,12 @@ module.exports = {FornecModel,FornecSchema,
 
 
     fornecAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        FornecModel = getModel(db, 'tb_fornec', FornecSchema)
+        //;
+
         let fornecExiste =  await FornecModel.findOne({fornec_nome: req.body.fornecNome, fornec_cnpj: req.body.fornecCnpj});//quando não acha fica null
         let dataAtual = new Date();
         

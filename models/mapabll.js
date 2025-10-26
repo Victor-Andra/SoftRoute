@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const MapabllSchema = mongoose.Schema({
     mapabll_beneid :{
@@ -53,9 +54,18 @@ class Mapabll{
 }
 
 MapabllSchema.loadClass(Mapabll)
-const MapabllModel = mongoose.model('tb_mapabll', MapabllSchema)
-module.exports = {MapabllModel,MapabllSchema,
+var MapabllModel = getModel("softroute", 'tb_mapabll', MapabllSchema)
+module.exports = {
+    MapabllModel,
+    MapabllSchema,
+
     mapabllEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        MapabllModel = getModel(db, 'tb_mapabll', MapabllSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -81,6 +91,12 @@ module.exports = {MapabllModel,MapabllSchema,
         return resultado;
     },
     mapabllAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        MapabllModel = getModel(db, 'tb_mapabll', MapabllSchema)
+        //;
+
         let dataAtual = new Date();
         console.log("mapabllmodel");
         console.log("req.body.mapablldata:")

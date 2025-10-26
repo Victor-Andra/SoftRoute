@@ -1,10 +1,10 @@
 //Exports
 const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
 
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Plano de Impostoamento 
 const impostoClass = require("../models/imposto")
-
 
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
@@ -14,26 +14,28 @@ const terapiaClass = require("../models/terapia")
 const escolaClass = require("../models/escola")
 
 //Tabela Plano de Impostoamento 
-const Imposto = mongoose.model("tb_imposto")
+var Imposto = getModel("SoftRoute", 'tb_imposto', impostoClass.ImpostoSchema)
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Escola = mongoose.model("tb_escola")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Escola = getModel("SoftRoute", 'tb_escola', escolaClass.EscolaSchema)
 
 //Funções auxiliares
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
-const fncGeral = require("./fncGeral")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     listaImposto(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Imposto = getModel(db, 'tb_imposto', impostoClass.ImpostoSchema)
+
         let flash = new Resposta();
-            Imposto.find().then((imposto)=>{
-                    res.render('financeiro/imposto/impostoLis', {impostos: imposto, flash})
+        Imposto.find().then((imposto)=>{
+            res.render('financeiro/imposto/impostoLis', {impostos: imposto, flash})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -41,6 +43,10 @@ module.exports = {
         })
     },
     carregaImposto(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         console.log("usuarioAtual:"+usuarioAtual)
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -58,6 +64,13 @@ module.exports = {
 
     },
     carregaImpostoedi(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Imposto = getModel(db, 'tb_imposto', impostoClass.ImpostoSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         Imposto.findById(req.params.id).then((imposto) =>{console.log("ID: "+imposto._id)
             Conv.find().then((conv)=>{
@@ -81,6 +94,10 @@ module.exports = {
         })
     },
     filtraImposto(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Imposto = getModel(db, 'tb_imposto', impostoClass.ImpostoSchema)
+
         let flash = new Resposta();
         //console.log('listando Impostoeses')
         Imposto.find({imposto_beneid: req.body.impostoBeneid}).then((imposto) =>{
@@ -123,6 +140,10 @@ module.exports = {
         })
     },
     carregaImposto(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         console.log("usuarioAtual:"+usuarioAtual)
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -140,6 +161,13 @@ module.exports = {
 
     },
     carregaImpostoedi(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Imposto = getModel(db, 'tb_imposto', impostoClass.ImpostoSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         Imposto.findById(req.params.id).then((imposto) =>{console.log("ID: "+imposto._id)
             Conv.find().then((conv)=>{
@@ -223,29 +251,31 @@ module.exports = {
         }
     },
     deletaImposto(req, res) {
+        let db = req.cookies['preferredDb'];
+        Imposto = getModel(db, 'tb_imposto', impostoClass.ImpostoSchema)
+
         let flash = new Resposta();
     
-        Imposto.deleteOne({ _id: req.params.id })
-            .then(result => {
-                if (result.deletedCount > 0) {
-                    // A exclusão foi bem-sucedida
-                    flash.texto = "Imposto deletado com sucesso!";
-                    flash.sucesso = "true";
-                } else {
-                    // Não foi possível encontrar o imposto com o ID fornecido
-                    flash.texto = "Imposto não encontrado";
-                    flash.sucesso = "false";
-                }
-            })
-            .catch(err => {
-                // Ocorreu um erro durante a exclusão
-                console.error('Erro ao deletar o imposto:', err);
-                flash.texto = "Erro ao deletar o Imposto";
+        Imposto.deleteOne({ _id: req.params.id }).then(result => {
+            if (result.deletedCount > 0) {
+                // A exclusão foi bem-sucedida
+                flash.texto = "Imposto deletado com sucesso!";
+                flash.sucesso = "true";
+            } else {
+                // Não foi possível encontrar o imposto com o ID fornecido
+                flash.texto = "Imposto não encontrado";
                 flash.sucesso = "false";
-            })
-            .finally(() => {
-                // Independentemente do resultado, redirecione para a lista de impostos
-                this.listaImposto(req, res, flash);
-            });
+            }
+        })
+        .catch(err => {
+            // Ocorreu um erro durante a exclusão
+            console.error('Erro ao deletar o imposto:', err);
+            flash.texto = "Erro ao deletar o Imposto";
+            flash.sucesso = "false";
+        })
+        .finally(() => {
+            // Independentemente do resultado, redirecione para a lista de impostos
+            this.listaImposto(req, res, flash);
+        });
     }
 }

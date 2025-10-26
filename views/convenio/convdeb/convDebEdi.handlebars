@@ -3,13 +3,48 @@
 	<head>
 		<title>Débitos de Convênios Edição</title>
 		<script>
-			function carregaBody(){
-				document.getElementById("convdebTerapiaid").value = document.getElementById("convdebTerapiaidEdi").value;
-				document.getElementById("convdebConvid").value = document.getElementById("convdebConvidEdi").value;
+		function carregaBody(){
+				let data = document.getElementById("dataEdi").value;
+
+				let ano = data.substring(0,4);
+				let mes = data.substring(5,7);
+				let dia = data.toString().substring(8,10);
+				/*
+				let prs = parseInt(mes,10);
+				prs=prs-1;
+				//console.log("prs:"+prs)
+				let mesformat;
+				if(prs<=9){
+					mesformat = "0"+prs+""
+				} else {
+					mesformat = ""+prs+""
+				}
+				
+				let dt = new Date(ano,mesformat,dia,0,0,0,0)
+				dt.setUTCHours(0);
+				dt.setMinutes(0);
+				dt.setSeconds(0);
+				*/
+				let fulldate=(ano+"-"+mes+"-"+dia).toString();
+				document.getElementById("convdebData").value = fulldate;
+				document.getElementById("convdebConvid").value = document.getElementById("convIdEdi").value;
+				document.getElementById("convdebTerapiaid").value = document.getElementById("terapiaIdEdi").value;
+				document.getElementById("convdebStatus").value = document.getElementById("convdebStatusEdi").value;
+				atualizaData();
+			}
+			function atualizaData(){
+				var hora = "00:00"
+				var data = document.getElementById("convdebData").value+"T"+hora+":00.000Z";
+				var datafmt = new Date(data);
+				document.getElementById("convdebDataFinal").value = datafmt.toISOString();
 			}
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+		<div id="divCarrega" name="divCarrega" class="hidden">
+			<input id="convdebId" name="convdebId" value="{{convdeb._id}}"/>
+			<input id="convdebStatusEdi" name="convdebStatusEdi" value="{{convdeb.convdeb_status}}"/>
+		</div>
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -69,6 +104,15 @@
 														<div class="input-group">
 															<input name="convdebData" id="convdebData"  type="date" value="{{convdeb.convdeb_data}}"/>
 														</div>
+													</div>
+												</div>
+												<label>Status</label>
+												<div class="form-group">
+													<div class="col-sm-2">
+														<select name="convdebStatus" id="convdebStatus" class="chosen-select" style="width: 100px;">
+															<option value="Ativo">Ativo</option>
+															<option value="Inativo">Inativo</option>
+														</select>
 													</div>
 												</div>
 												<div class="space space-8"></div>

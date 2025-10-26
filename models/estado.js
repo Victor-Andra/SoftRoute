@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const multer = require('multer');
 const storage = multer.memoryStorage(); // Armazena a imagem na memória como um Buffer
@@ -51,13 +52,17 @@ class Estado {
 }
 
 EstadoSchema.loadClass(Estado);
-const EstadoModel = mongoose.model('tb_estado', EstadoSchema);
+const EstadoModel = getModel("PortalDoUsuario", 'tb_estado', EstadoSchema)
 
 module.exports = {
   EstadoModel,
   EstadoSchema,
 
    estadoAdicionar: async (req, res) => {
+
+    //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+    //;
+
     let resultado;
     //Pega data atual
     let usuarioAtual = req.cookies['idUsu'];
@@ -102,6 +107,10 @@ module.exports = {
   },
   
   estadoEditar: async (req, res) => {
+
+    //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+    //;
+
     try {
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];

@@ -1,13 +1,13 @@
 <body class="no-skin">
-<div id="navbar" class="navbar navbar-default    navbar-collapse       h-navbar ace-save-state navbar-fixed-top">
+<div id="navbar" class="navbar navbar-default navbar-collapse       h-navbar ace-save-state navbar-fixed-top">
 	<script type="text/javascript">
 		try{ace.settings.loadState('main-container')}catch(e){}
 	</script>
 	<div class="navbar-header pull-left">
-		<a class="navbar-brand">
+		<a class="navbar-brand" id="empresaFantasia">
 			<small>
 				<i class="fa fa-puzzle-piece white"></i>
-				Soft Route
+				Soft Route <label ></label>
 			</small>
 		</a>
 		<!--
@@ -490,6 +490,38 @@
 								</li>
 							</ul>
 						</li>
+						<li class="hover">
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-file-o blue"></i>
+								<label class="sidebar-label">Gestão</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								
+								<li class="hover">
+									<a href="/menu/atendimento/atendreltera/gestao/relatendgestaoana">
+										<i class="menu-icon fa fa-file-text-o green"></i>
+										<label class="sidebar-label">Atendimento Analítico</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/atendimento/atendreltera/gestao/relatendgestaocons">
+										<i class="menu-icon fa fa fa-server blue"></i>
+										<label class="sidebar-label">Atendimento Consolidado</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/atendimento/atendreltera/gestao/relatendgestaoconsfechado">
+										<i class="menu-icon fa fa fa-server blue"></i>
+										<label class="sidebar-label">Atendimento Consolidado</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
 
 					</ul>
 				</li>
@@ -805,6 +837,31 @@
 								</li>
 								<li class="hover">
 									<a href="/menu/area/anamn/lis">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Listar</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+						<li class="hover">
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-futbol-o red"></i>
+								<label class="sidebar-label">Avaliação Fisio</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							
+							<ul class="submenu">
+								<li class="hover">
+									<a href="/menu/area/avafisio/cad">
+										<i class="menu-icon fa fa-plus purple"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/area/avafisio/lis">
 										<i class="menu-icon fa fa-list pink"></i>
 										<label class="sidebar-label">Listar</label>
 									</a>
@@ -1141,10 +1198,10 @@
 								</ul>
 							</li>
 							
-							<li class="hover"><!-- .ABA -->
+							<li class="hover"><!-- .Configuração ABA -->
 								<a href="#" class="dropdown-toggle">
 									<i class="menu-icon fa fa-cube pink"></i>
-									<label class="sidebar-label">ABA</label>
+									<label class="sidebar-label">Configuração ABA</label>
 									<b class="arrow fa fa fa-caret-right"></b>
 								</a>
 								
@@ -1344,37 +1401,61 @@
 									</li>
 								</ul>
 							</li>
-							<li class="hover">
+							<li class="hover"><!-- .Lista de Evolução -->
 							<a href="#" class="dropdown-toggle">
 								<i class="menu-icon fa fa-coffee red"></i>
 								<label class="sidebar-label">Lista de Evolução</label>
 								<b class="arrow fa fa fa-caret-right"></b>
 							</a>
 							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a href="/menu/area/evol/evoatendgeralLis">
-										<i class="menu-icon fa fa-check-circle blue"></i>
-										<label class="sidebar-label">Todas</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="/menu/area/evoatendfechadoLis">
-										<i class="menu-icon fa fa-check green"></i>
-										<label class="sidebar-label">Quem realizou?</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="/menu/area/evoatendabertoLis">
-										<i class="menu-icon fa fa-exclamation red"></i>
-										<label class="sidebar-label">Quem não realizou?</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								
-							</ul>
+								<ul class="submenu">
+									<li class="hover">
+										<a href="/menu/area/evol/evoatendgeralLis">
+											<i class="menu-icon fa fa-check-circle blue"></i>
+											<label class="sidebar-label">Todas</label>
+										</a>
+										<b class="arrow"></b>
+									</li>
+									<li class="hover">
+										<a href="/menu/area/evoatendfechadoLis">
+											<i class="menu-icon fa fa-check green"></i>
+											<label class="sidebar-label">Quem realizou?</label>
+										</a>
+										<b class="arrow"></b>
+									</li>
+									<li class="hover">
+										<a href="/menu/area/evoatendabertoLis">
+											<i class="menu-icon fa fa-exclamation red"></i>
+											<label class="sidebar-label">Quem não realizou?</label>
+										</a>
+										<b class="arrow"></b>
+									</li>
+									
+								</ul>
+							</li>
+							<li class="hover"><!-- .Padrões de Evolução -->
+								<a href="#" class="dropdown-toggle">
+									<i class="menu-icon fa fa fa-car red"></i>
+									<label class="sidebar-label">Padrões de Evolução</label>
+									<b class="arrow fa fa fa-caret-right"></b>
+								</a>
+								<b class="arrow"></b>
+								<ul class="submenu">
+									<li class="hover">
+										<a href="/menu/area/evolucaoconf/evolucaoconfcad">
+											<i class="menu-icon fa fa-plus blue"></i>
+											<label class="sidebar-label">Novo</label>
+										</a>
+										<b class="arrow"></b>
+									</li>
+									<li class="hover">
+										<a href="/menu/area/evolucaoconf/evolucaoconflis">
+											<i class="menu-icon fa fa-list pink"></i>
+											<label class="sidebar-label">Listar</label>
+										</a>
+										<b class="arrow"></b>
+									</li>
+								</ul>
 							</li>
 						</ul>
 					

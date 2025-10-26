@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const AvisoSchema = mongoose.Schema({
    
@@ -59,9 +60,15 @@ class Aviso{
 }
 
 AvisoSchema.loadClass(Aviso)
-const AvisoModel = mongoose.model('tb_aviso', AvisoSchema)
+var AvisoModel = getModel("softroute", 'tb_aviso', AvisoSchema)
 module.exports = {AvisoModel,AvisoSchema,
     avisoEditar: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AvisoModel = getModel(db, 'tb_aviso', AvisoSchema);
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -96,6 +103,12 @@ module.exports = {AvisoModel,AvisoSchema,
         return resultado;
     },
     avisoAdicionar: async (req,res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AvisoModel = getModel(db, 'tb_aviso', AvisoSchema);
+        //;
+
         let dataAtual = new Date();
         console.log("avisomodel");
         console.log("req.body.avisodata:")

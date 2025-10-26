@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const CorrenteSchema = mongoose.Schema({
     corrente_atendid :{ //Chave estrangeira que vem da tabela Atend (Não é Obrigatório)
@@ -74,9 +75,18 @@ class Corrente{
 
 
 CorrenteSchema.loadClass(Corrente)
-const CorrenteModel = mongoose.model('tb_corrente', CorrenteSchema)
-module.exports = {CorrenteModel,CorrenteSchema,
+var CorrenteModel = getModel("softroute", 'tb_corrente', CorrenteSchema)
+module.exports = {
+    CorrenteModel,
+    CorrenteSchema,
+
     correnteEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        CorrenteModel = getModel(db, 'tb_corrente', CorrenteSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -113,6 +123,12 @@ module.exports = {CorrenteModel,CorrenteSchema,
 
 
     correnteAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        CorrenteModel = getModel(db, 'tb_corrente', CorrenteSchema)
+        //;
+
         let correnteExiste =  await CorrenteModel.findOne({corrente_nome: req.body.correnteNome});//quando não acha fica null
         let dataAtual = new Date();
         

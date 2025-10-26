@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
-const fncGeral = require("../functions/fncGeral")
+const { getModel } = require('../functions/fncGeral');
+const fncGeral = require("../functions/fncGeral");
+const Resposta = fncGeral.Resposta;
 
 const BeneSchema = mongoose.Schema({
 
@@ -354,13 +356,21 @@ class ArrObj{
 }
 
 BeneSchema.loadClass(Bene)
-const BeneModel = mongoose.model('tb_bene', BeneSchema)
-module.exports = {BeneModel,BeneSchema,
+var BeneModel = getModel("softroute", 'tb_bene', BeneSchema)
+module.exports = {
+    BeneModel,
+    BeneSchema,
+    
     beneEditar: async (req, res) => {
+        
+        // Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        BeneModel = getModel(db, 'tb_bene', BeneSchema);
+        //;
+
         let dataAtual = new Date();//Pega data atual
         let resultado;
         let usuarioAtual = req.cookies['idUsu'];
-        
         
         //Realiza Atualização
         await BeneModel.findByIdAndUpdate(req.body.id, 
@@ -488,6 +498,12 @@ module.exports = {BeneModel,BeneSchema,
     },
     
     benesupEditar: async (req, res) => {
+        
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        BeneModel = getModel(db, 'tb_bene', BeneSchema);
+        //;
+
         let dataAtual = new Date();//Pega data atual
         let resultado;
         let usuarioAtual = req.cookies['idUsu'];
@@ -543,6 +559,12 @@ module.exports = {BeneModel,BeneSchema,
     },
     
     beneAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        BeneModel = getModel(db, 'tb_bene', BeneSchema);
+        //;
+
         let beneExiste =  await BeneModel.findOne({bene_nome: req.body.beneNome});//quando não acha fica null
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];
@@ -671,6 +693,12 @@ module.exports = {BeneModel,BeneSchema,
         }
     },
     qtregsbeneativos: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        BeneModel = getModel(db, 'tb_bene', BeneSchema);
+        //;
+
         try {
             // Conta os documentos onde bene_status é igual a "Ativo"
             const qtregs = await BeneModel.countDocuments({ bene_status: "Ativo" });
@@ -684,6 +712,12 @@ module.exports = {BeneModel,BeneSchema,
         }
     },
     qtregsbeneFiltradosold: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        BeneModel = getModel(db, 'tb_bene', BeneSchema);
+        //;
+
         try {
             let obj = new ArrObj();
             let arrayRetorno = [];
@@ -734,6 +768,12 @@ module.exports = {BeneModel,BeneSchema,
         }
     },
     qtregsbeneFiltrados: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        BeneModel = getModel(db, 'tb_bene', BeneSchema);
+        //;
+
         try {
             const idConvEspecifico = "62477742e416141415ff7a88"; // ID do convênio específico
             const arrayRetorno = [];
@@ -792,8 +832,61 @@ module.exports = {BeneModel,BeneSchema,
             console.error("Erro ao contar registros:", error);
             throw error; // Ou retorne um erro personalizado
         }
+    },
+    filtrarAniversariantes(req, tipo) {
+       
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        BeneModel = getModel(db, 'tb_bene', BeneSchema);
+        //;
+
+        var hoje = new Date();
+        var diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
+        var mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
+
+        // Calcular domingo (início da semana)
+        var domingo = new Date(hoje);
+        domingo.setDate(hoje.getDate() - hoje.getDay()); // 0 = domingo
+
+        // Construir dias da semana: domingo a sábado
+        var semanaDias = Array.from({ length: 7 }).map((_, i) => {
+            var d = new Date(domingo);
+            d.setDate(domingo.getDate() + i);
+            return {
+                dia: String(d.getUTCDate()).padStart(2, '0'),
+                mes: String(d.getUTCMonth() + 1).padStart(2, '0')
+            };
+        });
+
+        var hoje = new Date();
+        var diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
+        var mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
+        let benes;
+
+        BeneModel.find().then((resultado)=>{
+            benes = resultado;
+        }).catch((err)=>{
+            console.log("Erro: "+err);
+        }).finally(()=>{
+            return benes.map(p => {
+                const dataNasc = new Date(p[`${tipo}_datanasc`]);
+                const dia = String(dataNasc.getUTCDate()).padStart(2, '0');
+                const mes = String(dataNasc.getUTCMonth() + 1).padStart(2, '0');
+                return {
+                    dtnasc: dataNasc,
+                    diaNascimento: dia,
+                    mesNascimento: mes,
+                    hoje: dia === diaAtual && mes === mesAtual,
+                    ...(tipo === 'usuario' ? { usuario_nome: p.usuario_nome } : { bene_nome: p.bene_nome })
+                };
+            }).filter(p =>
+                semanaDias.some(s =>
+                    s.dia === p.diaNascimento && s.mes === p.mesNascimento
+                )
+            ).sort((a, b) => {
+                if (a.mesNascimento !== b.mesNascimento) return a.mesNascimento - b.mesNascimento;
+                return a.diaNascimento - b.diaNascimento;
+            });
+        })
     }
-   
-    
-    
 };

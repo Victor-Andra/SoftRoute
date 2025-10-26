@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const TerapiaSchema = mongoose.Schema({
     terapia_nome: { type: String, unique: true, required: true },
@@ -52,9 +53,18 @@ class Terapia{
 
 
 TerapiaSchema.loadClass(Terapia)
-const TerapiaModel = mongoose.model('tb_terapia', TerapiaSchema)
-module.exports = {TerapiaModel,TerapiaSchema,
+var TerapiaModel = getModel("softroute", 'tb_terapia', TerapiaSchema)
+module.exports = {
+    TerapiaModel,
+    TerapiaSchema,
+
     terapiaEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        TerapiaModel = getModel(db, 'tb_terapia', TerapiaSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let usuarioAtual = req.cookies['idUsu'];//recupera o ususário atual
@@ -84,6 +94,11 @@ module.exports = {TerapiaModel,TerapiaSchema,
     },
     terapiaAdicionar: async (req,res) => {
 
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        TerapiaModel = getModel(db, 'tb_terapia', TerapiaSchema)
+        //;
+        
         let terapiaExiste =  await TerapiaModel.findOne({terapia_nome: req.body.terapiaNome});//quando não acha fica null
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];//recupera o ususário atual

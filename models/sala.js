@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const SalaSchema = mongoose.Schema({
     sala_nome: { type: String, unique: true, required: true },
@@ -45,9 +46,18 @@ class Sala{
 }
 
 SalaSchema.loadClass(Sala)
-const SalaModel = mongoose.model('tb_sala', SalaSchema)
-module.exports = {SalaModel,SalaSchema,
+var SalaModel = getModel("softroute", 'tb_sala', SalaSchema)
+module.exports = {
+    SalaModel,
+    SalaSchema,
+
     salaEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        SalaModel = getModel(db, 'tb_sala', SalaSchema)
+        //;
+
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];
         let resultado;
@@ -77,6 +87,12 @@ module.exports = {SalaModel,SalaSchema,
 
 
     salaAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        SalaModel = getModel(db, 'tb_sala', SalaSchema)
+        //;
+        
         let salaExiste =  await SalaModel.findOne({sala_nome: req.body.salaNome});//quando não acha fica null
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const FolregSchema = mongoose.Schema({
     folreg_tiporeg :{ type: String, required: false },
@@ -483,9 +484,18 @@ class Folreg{
 }
 
 FolregSchema.loadClass(Folreg)
-const FolregModel = mongoose.model('tb_folreg', FolregSchema)
-module.exports = {FolregModel,FolregSchema,
+var FolregModel = getModel("softroute", 'tb_folreg', FolregSchema)
+module.exports = {
+    FolregModel,
+    FolregSchema,
+
     folregEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        FolregModel = getModel(db, 'tb_folreg', FolregSchema)
+        //;
+
        //Pega data atual
        let dataAtual = new Date();
        //Pega Usuário Atual
@@ -642,174 +652,180 @@ module.exports = {FolregModel,FolregSchema,
         return resultado;
     },
     folregAdicionar: async (req,res) => {
-      //Pega data atual
-      let dataAtual = new Date();
-      //Pega Usuário Atual
-      let usuarioAtual = req.cookies['idUsu'];
-      let resultado;
-      //Realiza Atualização
-        console.log("req.body.folregRaTentDuplCad9: "+req.body.folregRaTentDuplCad9)
-        console.log("req.body.folregRaTentCad1: "+req.body.folregRaTentCad1)
-        const newFolreg = new FolregModel({
-            folreg_tiporeg : req.body.folregTiporeg,
-            folreg_datareg : req.body.folregDatareg,
-            folreg_beneid : req.body.folregBeneid,
-            folreg_progid : req.body.folregProgid,
-            folreg_progtipoid : req.body.folregProgtipoid,
-            folreg_prognivelid : req.body.folregPrognivelid,
-            folreg_setid : req.body.folregSetid,
-            folreg_setnum : req.body.folregSetnum,
-            folreg_setdescr : req.body.folregSetdescr,
-            folreg_setobs : req.body.folregSetobs,
-            folreg_usuid : req.body.folregUsuid,
-            folreg_qtest: req.body.folregQtest,
-            folreg_esta : req.body.folregEsta,
-            folreg_estb : req.body.folregEstb,
-            folreg_estc : req.body.folregEstc,
-            folreg_estd : req.body.folregEstd,
-            folreg_este : req.body.folregEste,
-            folreg_estf : req.body.folregEstf,
-            folreg_estg : req.body.folregEstg,
-            folreg_esth : req.body.folregEsth,
-            folreg_esti : req.body.folregEsti,
-            folreg_estj : req.body.folregEstj,
-            folreg_estseq : req.body.folregEstseq,
-            folreg_obs : req.body.folregObs,
-            
-             //Passos de Dicas
-             folreg_passodicas : req.body.folregPassodicas,
-             folreg_passodicae : req.body.folregPassodicae,
-             folreg_passodicad : req.body.folregPassodicad,
-             //Tipos de dicas originárias do Programa ABA
-             folreg_tipodicaprogs : req.body.folregTipodicaprogs,
-             folreg_tipodicaproge : req.body.folregTipodicaproge,
-             folreg_tipodicaprogd : req.body.folregTipodicaprogd,
 
-            folreg_status : req.body.folregStatus,
-            folreg_t1ests : req.body.folregT1Ests,
-            folreg_t2ests : req.body.folregT2Ests,
-            folreg_t3ests : req.body.folregT3Ests,
-            folreg_t4ests : req.body.folregT4Ests,
-            folreg_t5ests : req.body.folregT5Ests,
-            folreg_t6ests : req.body.folregT6Ests,
-            folreg_t7ests : req.body.folregT7Ests,
-            folreg_t8ests : req.body.folregT8Ests,
-            folreg_t9ests : req.body.folregT9Ests,
-            folreg_t10ests : req.body.folregT10Ests,
-            folreg_t1estd : req.body.folregT1Estd,
-            folreg_t2estd : req.body.folregT2Estd,
-            folreg_t3estd : req.body.folregT3Estd,
-            folreg_t4estd : req.body.folregT4Estd,
-            folreg_t5estd : req.body.folregT5Estd,
-            folreg_t6estd : req.body.folregT6Estd,
-            folreg_t7estd : req.body.folregT7Estd,
-            folreg_t8estd : req.body.folregT8Estd,
-            folreg_t9estd : req.body.folregT9Estd,
-            folreg_t10estd : req.body.folregT10Estd,
-            folreg_t1ressimples : req.body.folregT1Ressimples,
-            folreg_t2ressimples : req.body.folregT2Ressimples,
-            folreg_t3ressimples : req.body.folregT3Ressimples,
-            folreg_t4ressimples : req.body.folregT4Ressimples,
-            folreg_t5ressimples : req.body.folregT5Ressimples,
-            folreg_t6ressimples : req.body.folregT6Ressimples,
-            folreg_t7ressimples : req.body.folregT7Ressimples,
-            folreg_t8ressimples : req.body.folregT8Ressimples,
-            folreg_t9ressimples : req.body.folregT9Ressimples,
-            folreg_t10ressimples : req.body.folregT10Ressimples,
-            folreg_t1tipodsimples : (""+req.body.folregT1tipodsimples1+""),
-            folreg_t2tipodsimples : req.body.folregT2tipodsimples2,
-            folreg_t3tipodsimples : req.body.folregT3tipodsimples3,
-            folreg_t4tipodsimples : req.body.folregT4tipodsimples4,
-            folreg_t5tipodsimples : req.body.folregT5tipodsimples5,
-            folreg_t6tipodsimples : req.body.folregT6tipodsimples6,
-            folreg_t7tipodsimples : req.body.folregT7tipodsimples7,
-            folreg_t8tipodsimples : req.body.folregT8tipodsimples8,
-            folreg_t9tipodsimples : req.body.folregT9tipodsimples9,
-            folreg_t10tipodsimples : req.body.folregT10tipodsimples10,
-            folreg_t1resesqu : req.body.folregT1Resesqu,
-            folreg_t2resesqu : req.body.folregT2Resesqu,
-            folreg_t3resesqu : req.body.folregT3Resesqu,
-            folreg_t4resesqu : req.body.folregT4Resesqu,
-            folreg_t5resesqu : req.body.folregT5Resesqu,
-            folreg_t6resesqu : req.body.folregT6Resesqu,
-            folreg_t7resesqu : req.body.folregT7Resesqu,
-            folreg_t8resesqu : req.body.folregT8Resesqu,
-            folreg_t9resesqu : req.body.folregT9Resesqu,
-            folreg_t10resesqu : req.body.folregT10Resesqu,
-            folreg_t1resdir : req.body.folregT1Resdir,
-            folreg_t2resdir : req.body.folregT2Resdir,
-            folreg_t3resdir : req.body.folregT3Resdir,
-            folreg_t4resdir : req.body.folregT4Resdir,
-            folreg_t5resdir : req.body.folregT5Resdir,
-            folreg_t6resdir : req.body.folregT6Resdir,
-            folreg_t7resdir : req.body.folregT7Resdir,
-            folreg_t8resdir : req.body.folregT8Resdir,
-            folreg_t9resdir : req.body.folregT9Resdir,
-            folreg_t10resdir : req.body.folregT10Resdir,
-            folreg_t1tipodesqu : req.body.folregT1tipodesqu1,
-            folreg_t2tipodesqu : req.body.folregT2tipodesqu2,
-            folreg_t3tipodesqu : req.body.folregT3tipodesqu3,
-            folreg_t4tipodesqu : req.body.folregT4tipodesqu4,
-            folreg_t5tipodesqu : req.body.folregT5tipodesqu5,
-            folreg_t6tipodesqu : req.body.folregT6tipodesqu6,
-            folreg_t7tipodesqu : req.body.folregT7tipodesqu7,
-            folreg_t8tipodesqu : req.body.folregT8tipodesqu8,
-            folreg_t9tipodesqu : req.body.folregT9tipodesqu9,
-            folreg_t10tipodesqu : req.body.folregT10tipodesqu10,
-            folreg_t1tipodird : req.body.folregT1tipodird1,
-            folreg_t2tipodird : req.body.folregT2tipodird2,
-            folreg_t3tipodird : req.body.folregT3tipodird3,
-            folreg_t4tipodird : req.body.folregT4tipodird4,
-            folreg_t5tipodird : req.body.folregT5tipodird5,
-            folreg_t6tipodird : req.body.folregT6tipodird6,
-            folreg_t7tipodird : req.body.folregT7tipodird7,
-            folreg_t8tipodird : req.body.folregT8tipodird8,
-            folreg_t9tipodird : req.body.folregT9tipodird9,
-            folreg_t10tipodird : req.body.folregT10tipodird10,
-            folreg_totalsimples_i : req.body.folregTotalsimples_i,
-            folreg_totalsimples_e : req.body.folregTotalsimples_e,
-            folreg_totalsimples_plusd : req.body.folregTotalsimples_plusd,
-            folreg_totalsimples_minusd : req.body.folregTotalsimples_minusd,
-            folreg_totalduploesq_i : req.body.folregTotalduploesq_i,
-            folreg_totalduploesq_e : req.body.folregTotalduploesq_e,
-            folreg_totalduploesq_plusd : req.body.folregTotalduploesq_plusd,
-            folreg_totalduploesq_minusd : req.body.folregTotalduploesq_minusd,
-            folreg_totalduplodir_i : req.body.folregTotalduplodir_i,
-            folreg_totalduplodir_e : req.body.folregTotalduplodir_e,
-            folreg_totalduplodir_plusd : req.body.folregTotalduplodir_plusd,
-            folreg_totalduplodir_minusd : req.body.folregTotalduplodir_minusd,
-            folreg_ratent1 : req.body.folregRaTentCad1,
-            folreg_ratent2 : req.body.folregRaTentCad2,
-            folreg_ratent3 : req.body.folregRaTentCad3,
-            folreg_ratent4 : req.body.folregRaTentCad4,
-            folreg_ratent5 : req.body.folregRaTentCad5,
-            folreg_ratent6 : req.body.folregRaTentCad6,
-            folreg_ratent7 : req.body.folregRaTentCad7,
-            folreg_ratent8 : req.body.folregRaTentCad8,
-            folreg_ratent9 : req.body.folregRaTentCad9,
-            folreg_ratent10 : req.body.folregRaTentCad10,
-            folreg_ratent_dupl1 : req.body.folregRaTentDuplCad1,
-            folreg_ratent_dupl2 : req.body.folregRaTentDuplCad2,
-            folreg_ratent_dupl3 : req.body.folregRaTentDuplCad3,
-            folreg_ratent_dupl4 : req.body.folregRaTentDuplCad4,
-            folreg_ratent_dupl5 : req.body.folregRaTentDuplCad5,
-            folreg_ratent_dupl6 : req.body.folregRaTentDuplCad6,
-            folreg_ratent_dupl7 : req.body.folregRaTentDuplCad7,
-            folreg_ratent_dupl8 : req.body.folregRaTentDuplCad8,
-            folreg_ratent_dupl9 : req.body.folregRaTentDuplCad9,
-            folreg_ratent_dupl10 : req.body.folregRaTentDuplCad10,
-            //Atributos de controle
-            folreg_usuidcad : usuarioAtual,
-            folreg_datacad : dataAtual.toISOString(),
-            folreg_lixo : "false"
-        });
-        console.log("newAtend save");
-        await newFolreg.save().then(()=>{
-            console.log("Cadastro realizado!");
-            return true;
-        }).catch((err) => {
-            console.log(err)
-            return err;
-        });
+    //Estrutura Multiempresa
+    let db = req.cookies['preferredDb'];
+    FolregModel = getModel(db, 'tb_folreg', FolregSchema)
+    //;
+
+    //Pega data atual
+    let dataAtual = new Date();
+    //Pega Usuário Atual
+    let usuarioAtual = req.cookies['idUsu'];
+    let resultado;
+    //Realiza Atualização
+    console.log("req.body.folregRaTentDuplCad9: "+req.body.folregRaTentDuplCad9)
+    console.log("req.body.folregRaTentCad1: "+req.body.folregRaTentCad1)
+    const newFolreg = new FolregModel({
+        folreg_tiporeg : req.body.folregTiporeg,
+        folreg_datareg : req.body.folregDatareg,
+        folreg_beneid : req.body.folregBeneid,
+        folreg_progid : req.body.folregProgid,
+        folreg_progtipoid : req.body.folregProgtipoid,
+        folreg_prognivelid : req.body.folregPrognivelid,
+        folreg_setid : req.body.folregSetid,
+        folreg_setnum : req.body.folregSetnum,
+        folreg_setdescr : req.body.folregSetdescr,
+        folreg_setobs : req.body.folregSetobs,
+        folreg_usuid : req.body.folregUsuid,
+        folreg_qtest: req.body.folregQtest,
+        folreg_esta : req.body.folregEsta,
+        folreg_estb : req.body.folregEstb,
+        folreg_estc : req.body.folregEstc,
+        folreg_estd : req.body.folregEstd,
+        folreg_este : req.body.folregEste,
+        folreg_estf : req.body.folregEstf,
+        folreg_estg : req.body.folregEstg,
+        folreg_esth : req.body.folregEsth,
+        folreg_esti : req.body.folregEsti,
+        folreg_estj : req.body.folregEstj,
+        folreg_estseq : req.body.folregEstseq,
+        folreg_obs : req.body.folregObs,
+        
+            //Passos de Dicas
+            folreg_passodicas : req.body.folregPassodicas,
+            folreg_passodicae : req.body.folregPassodicae,
+            folreg_passodicad : req.body.folregPassodicad,
+            //Tipos de dicas originárias do Programa ABA
+            folreg_tipodicaprogs : req.body.folregTipodicaprogs,
+            folreg_tipodicaproge : req.body.folregTipodicaproge,
+            folreg_tipodicaprogd : req.body.folregTipodicaprogd,
+
+        folreg_status : req.body.folregStatus,
+        folreg_t1ests : req.body.folregT1Ests,
+        folreg_t2ests : req.body.folregT2Ests,
+        folreg_t3ests : req.body.folregT3Ests,
+        folreg_t4ests : req.body.folregT4Ests,
+        folreg_t5ests : req.body.folregT5Ests,
+        folreg_t6ests : req.body.folregT6Ests,
+        folreg_t7ests : req.body.folregT7Ests,
+        folreg_t8ests : req.body.folregT8Ests,
+        folreg_t9ests : req.body.folregT9Ests,
+        folreg_t10ests : req.body.folregT10Ests,
+        folreg_t1estd : req.body.folregT1Estd,
+        folreg_t2estd : req.body.folregT2Estd,
+        folreg_t3estd : req.body.folregT3Estd,
+        folreg_t4estd : req.body.folregT4Estd,
+        folreg_t5estd : req.body.folregT5Estd,
+        folreg_t6estd : req.body.folregT6Estd,
+        folreg_t7estd : req.body.folregT7Estd,
+        folreg_t8estd : req.body.folregT8Estd,
+        folreg_t9estd : req.body.folregT9Estd,
+        folreg_t10estd : req.body.folregT10Estd,
+        folreg_t1ressimples : req.body.folregT1Ressimples,
+        folreg_t2ressimples : req.body.folregT2Ressimples,
+        folreg_t3ressimples : req.body.folregT3Ressimples,
+        folreg_t4ressimples : req.body.folregT4Ressimples,
+        folreg_t5ressimples : req.body.folregT5Ressimples,
+        folreg_t6ressimples : req.body.folregT6Ressimples,
+        folreg_t7ressimples : req.body.folregT7Ressimples,
+        folreg_t8ressimples : req.body.folregT8Ressimples,
+        folreg_t9ressimples : req.body.folregT9Ressimples,
+        folreg_t10ressimples : req.body.folregT10Ressimples,
+        folreg_t1tipodsimples : (""+req.body.folregT1tipodsimples1+""),
+        folreg_t2tipodsimples : req.body.folregT2tipodsimples2,
+        folreg_t3tipodsimples : req.body.folregT3tipodsimples3,
+        folreg_t4tipodsimples : req.body.folregT4tipodsimples4,
+        folreg_t5tipodsimples : req.body.folregT5tipodsimples5,
+        folreg_t6tipodsimples : req.body.folregT6tipodsimples6,
+        folreg_t7tipodsimples : req.body.folregT7tipodsimples7,
+        folreg_t8tipodsimples : req.body.folregT8tipodsimples8,
+        folreg_t9tipodsimples : req.body.folregT9tipodsimples9,
+        folreg_t10tipodsimples : req.body.folregT10tipodsimples10,
+        folreg_t1resesqu : req.body.folregT1Resesqu,
+        folreg_t2resesqu : req.body.folregT2Resesqu,
+        folreg_t3resesqu : req.body.folregT3Resesqu,
+        folreg_t4resesqu : req.body.folregT4Resesqu,
+        folreg_t5resesqu : req.body.folregT5Resesqu,
+        folreg_t6resesqu : req.body.folregT6Resesqu,
+        folreg_t7resesqu : req.body.folregT7Resesqu,
+        folreg_t8resesqu : req.body.folregT8Resesqu,
+        folreg_t9resesqu : req.body.folregT9Resesqu,
+        folreg_t10resesqu : req.body.folregT10Resesqu,
+        folreg_t1resdir : req.body.folregT1Resdir,
+        folreg_t2resdir : req.body.folregT2Resdir,
+        folreg_t3resdir : req.body.folregT3Resdir,
+        folreg_t4resdir : req.body.folregT4Resdir,
+        folreg_t5resdir : req.body.folregT5Resdir,
+        folreg_t6resdir : req.body.folregT6Resdir,
+        folreg_t7resdir : req.body.folregT7Resdir,
+        folreg_t8resdir : req.body.folregT8Resdir,
+        folreg_t9resdir : req.body.folregT9Resdir,
+        folreg_t10resdir : req.body.folregT10Resdir,
+        folreg_t1tipodesqu : req.body.folregT1tipodesqu1,
+        folreg_t2tipodesqu : req.body.folregT2tipodesqu2,
+        folreg_t3tipodesqu : req.body.folregT3tipodesqu3,
+        folreg_t4tipodesqu : req.body.folregT4tipodesqu4,
+        folreg_t5tipodesqu : req.body.folregT5tipodesqu5,
+        folreg_t6tipodesqu : req.body.folregT6tipodesqu6,
+        folreg_t7tipodesqu : req.body.folregT7tipodesqu7,
+        folreg_t8tipodesqu : req.body.folregT8tipodesqu8,
+        folreg_t9tipodesqu : req.body.folregT9tipodesqu9,
+        folreg_t10tipodesqu : req.body.folregT10tipodesqu10,
+        folreg_t1tipodird : req.body.folregT1tipodird1,
+        folreg_t2tipodird : req.body.folregT2tipodird2,
+        folreg_t3tipodird : req.body.folregT3tipodird3,
+        folreg_t4tipodird : req.body.folregT4tipodird4,
+        folreg_t5tipodird : req.body.folregT5tipodird5,
+        folreg_t6tipodird : req.body.folregT6tipodird6,
+        folreg_t7tipodird : req.body.folregT7tipodird7,
+        folreg_t8tipodird : req.body.folregT8tipodird8,
+        folreg_t9tipodird : req.body.folregT9tipodird9,
+        folreg_t10tipodird : req.body.folregT10tipodird10,
+        folreg_totalsimples_i : req.body.folregTotalsimples_i,
+        folreg_totalsimples_e : req.body.folregTotalsimples_e,
+        folreg_totalsimples_plusd : req.body.folregTotalsimples_plusd,
+        folreg_totalsimples_minusd : req.body.folregTotalsimples_minusd,
+        folreg_totalduploesq_i : req.body.folregTotalduploesq_i,
+        folreg_totalduploesq_e : req.body.folregTotalduploesq_e,
+        folreg_totalduploesq_plusd : req.body.folregTotalduploesq_plusd,
+        folreg_totalduploesq_minusd : req.body.folregTotalduploesq_minusd,
+        folreg_totalduplodir_i : req.body.folregTotalduplodir_i,
+        folreg_totalduplodir_e : req.body.folregTotalduplodir_e,
+        folreg_totalduplodir_plusd : req.body.folregTotalduplodir_plusd,
+        folreg_totalduplodir_minusd : req.body.folregTotalduplodir_minusd,
+        folreg_ratent1 : req.body.folregRaTentCad1,
+        folreg_ratent2 : req.body.folregRaTentCad2,
+        folreg_ratent3 : req.body.folregRaTentCad3,
+        folreg_ratent4 : req.body.folregRaTentCad4,
+        folreg_ratent5 : req.body.folregRaTentCad5,
+        folreg_ratent6 : req.body.folregRaTentCad6,
+        folreg_ratent7 : req.body.folregRaTentCad7,
+        folreg_ratent8 : req.body.folregRaTentCad8,
+        folreg_ratent9 : req.body.folregRaTentCad9,
+        folreg_ratent10 : req.body.folregRaTentCad10,
+        folreg_ratent_dupl1 : req.body.folregRaTentDuplCad1,
+        folreg_ratent_dupl2 : req.body.folregRaTentDuplCad2,
+        folreg_ratent_dupl3 : req.body.folregRaTentDuplCad3,
+        folreg_ratent_dupl4 : req.body.folregRaTentDuplCad4,
+        folreg_ratent_dupl5 : req.body.folregRaTentDuplCad5,
+        folreg_ratent_dupl6 : req.body.folregRaTentDuplCad6,
+        folreg_ratent_dupl7 : req.body.folregRaTentDuplCad7,
+        folreg_ratent_dupl8 : req.body.folregRaTentDuplCad8,
+        folreg_ratent_dupl9 : req.body.folregRaTentDuplCad9,
+        folreg_ratent_dupl10 : req.body.folregRaTentDuplCad10,
+        //Atributos de controle
+        folreg_usuidcad : usuarioAtual,
+        folreg_datacad : dataAtual.toISOString(),
+        folreg_lixo : "false"
+    });
+    console.log("newAtend save");
+    await newFolreg.save().then(()=>{
+        console.log("Cadastro realizado!");
+        return true;
+    }).catch((err) => {
+        console.log(err)
+        return err;
+    });
     }
 };

@@ -1,41 +1,51 @@
 //Exports
 const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
 
 //Atendimentos Administrativos 
 const atendClass = require("../models/atend")
-const Atend = mongoose.model("tb_atend")
+var Atend = getModel("SoftRoute", 'tb_atend', atendClass.AtendSchema)
 
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
-const estadoClass = require("../models/estado")
+const convdebClass = require("../models/convDeb")
+const convcreClass = require("../models/convCre")
 const terapiaClass = require("../models/terapia")
 const usuarioClass = require("../models/usuario")
 const tabilClass = require("../models/tabil")
 const debitClass = require("../models/debit")
-const creditClass = require("../models/credit")
 const salaClass = require("../models/sala")
 const horaageClass = require("../models/horaAge")
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Estado = mongoose.model("tb_estado")
-const Tabil = mongoose.model("tb_tabil")
-const Convdeb = mongoose.model("tb_convdeb")
-const Convcre = mongoose.model("tb_convcre")
-const Sala = mongoose.model("tb_sala")
-const Horaage = mongoose.model("tb_horaage")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Convdeb = getModel("SoftRoute", 'tb_convdeb', convdebClass.ConvdebSchema)
+var Convcre = getModel("SoftRoute", 'tb_convcre', convcreClass.ConvcreSchema)
+var Sala = getModel("SoftRoute", 'tb_sala', salaClass.SalaSchema)
+var Horaage = getModel("SoftRoute", 'tb_horaage', horaageClass.HoraageSchema)
 
 //Funções Auxiliares
 const fncCredit = require("../functions/fncCredit")
 const fncDebit = require("../functions/fncDebit")
-const atendFnc = require("../functions/fncAtend")
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     carregaAtendAdm(req,res){
+        let db = req.cookies['preferredDb'];
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema)
+        Convdeb = getModel(db, 'tb_convdeb', convdebClass.ConvdebSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         let lvlUsu = req.cookies['lvlUsu'];
         let atend;
         Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
@@ -62,7 +72,7 @@ module.exports = {
                                     Sala.find().then((sala)=>{
                                         sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                                         Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                        res.render('atendimento/atendadm/atendAdmCad', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala, horaages: horaage, lvlUsu})
+                                            res.render('atendimento/atendadm/atendAdmCad', {atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala, horaages: horaage, lvlUsu})
         })})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -70,6 +80,16 @@ module.exports = {
         })
     },
     carregaAtendAdmExtra: (req, res) => {
+        let db = req.cookies['preferredDb'];
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema)
+        Convdeb = getModel(db, 'tb_convdeb', convdebClass.ConvdebSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         let lvlUsu = req.cookies['lvlUsu'];
         let atend = {
             atend_num: 0, // valor inicial, NÃO PODE SER 0 AO ENVIAR PRA TELA
@@ -152,6 +172,9 @@ module.exports = {
             });
     },
     cadastraAtendExtra: async (req, res) => {//Nova função para cadastrar o atendimento pertencente ao Extra vinculado o ID do Extra ao atendimento possibilitando sua gestão
+        let db = req.cookies['preferredDb'];
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+
         try {
             const {
                 atendExtraid,
@@ -166,7 +189,7 @@ module.exports = {
             const usuarioAtual = req.cookies.idUsu;
 
             // Cria uma nova instância do modelo Atend
-            const novoAtendimento = new AtendModel({
+            const novoAtendimento = new Atend({
                 atend_num: req.body.atendNum, // ou o nome correto do campo
                 atend_extraid: atendExtraid, // <<<--- Campo que veio do botão plus
                 atend_beneid: atendBeneid,
@@ -191,6 +214,16 @@ module.exports = {
         }
     },
     carregaAtendAdmEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema)
+        Convdeb = getModel(db, 'tb_convdeb', convdebClass.ConvdebSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         let atend;
         let nextNumEdi;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -199,7 +232,7 @@ module.exports = {
             //atendimento.forEach(e => {atend = e});
             //atend.atend_num = atend.atend_num+1;
             //console.log("Listagem Realizada de NextNum")
-            Bene.find({"bene_status":"Ativo"}).then((bene)=>{
+            Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
                 console.log("Listagem Realizada de Beneficiários!")
                 Conv.find({"conv_status":"Ativo"}).then((conv)=>{
@@ -237,7 +270,7 @@ module.exports = {
         let retornoDeb;
         let retornoTab;
         let cadastro = atendClass.atendAdicionar(req,res);//variavel para armazenar a função que armazena o async - Ok
-        let cadastroCre = fncCredit.creditAdicionar(req,res);//variavel para armazenar a função que armazena o async
+        let cadastroCre = fncCredit.creditAdicionarPadrão(req,res);//variavel para armazenar a função que armazena o async
         let cadastroDeb = debitClass.debitAdicionar(req,res);
         let cadastroTab = tabilClass.tabilAdicionar(req,res);
         
@@ -643,6 +676,14 @@ module.exports = {
         })
     },
     listarAtendAdm(req,res){
+        let db = req.cookies['preferredDb'];
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         Atend.findOne().then((atend) =>{
             console.log("Listagem Realizada de Atendimentos!")
             Bene.find().then((bene)=>{
@@ -651,9 +692,9 @@ module.exports = {
                     console.log("Listagem Realizada de Convenios")
                     Usuario.find().then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
-                            Terapia.find().then((terapia)=>{
-                                console.log("Listagem Realizada de Terapia")
-                                res.render("atendimento/atendadm/atendAdmLis", {atends: atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia})
+                        Terapia.find().then((terapia)=>{
+                            console.log("Listagem Realizada de Terapia")
+                            res.render("atendimento/atendadm/atendAdmLis", {atends: atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -661,6 +702,9 @@ module.exports = {
         })
     },
     deletaAtendAdm(req, res){
+        let db = req.cookies['preferredDb'];
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+
         Atend.deleteOne({_id: req.params.id}).then(() =>{
             Atend.find().limit(2).then((atend) =>{
                 req.flash("success_message", "Atend deletada!")
@@ -704,6 +748,12 @@ module.exports = {
         }
     },
     listaAtend2(req, res){
+        let db = req.cookies['preferredDb'];
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let carregaFiltro = "false";
         let fulldate;
         let seg = new Date();
@@ -772,22 +822,27 @@ module.exports = {
         })
     },
     listaAtend(req, res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let carregaFiltro = "false";
         let atend = [];
         let qtdAtends = 0;
-            Bene.find().then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                //console.log("Listagem Realizada de Beneficiários!")
-                Conv.find().then((conv)=>{
-                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    //console.log("Listagem Realizada de Convenios")
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                        //console.log("Listagem Realizada de Usuário")
-                            Terapia.find().then((terapia)=>{
-                                terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                //console.log("Listagem Realizada de Terapia")
-                                res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro})
+        Bene.find().then((bene)=>{
+            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
+            //console.log("Listagem Realizada de Beneficiários!")
+            Conv.find().then((conv)=>{
+                conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Convenios")
+                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                    //console.log("Listagem Realizada de Usuário")
+                    Terapia.find().then((terapia)=>{
+                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                        //console.log("Listagem Realizada de Terapia")
+                        res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

@@ -1,27 +1,24 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //Atend, Atendimento Padrão 
 const atendClass = require("../models/atend")
-const Atend = mongoose.model("tb_atend")
+const Atend = getModel("SoftRoute", 'tb_atend', atendClass.AtendSchema)
 
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
-const convecreClass = require("../models/convCre")
-const convdebClass = require("../models/convDeb")
-const tabilClass = require("../models/tabil")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Convcre = mongoose.model("tb_convcre")
-const Convdeb = mongoose.model("tb_convdeb")
-const Tabil = mongoose.model("tb_tabil")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     /*
@@ -62,6 +59,9 @@ module.exports = {
     },
     */
     carregaEvolucaoEdi(req, res){
+        let db = req.cookies['preferredDb'];
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+
         Atend.findById(req.params.id).then((atend) =>{
             res.render('beneficiario/evolucao/evolucaoEdi', atend)
         }).catch((err) =>{
@@ -70,6 +70,12 @@ module.exports = {
         })
     },
     listaEvolucao(req, res){
+        let db = req.cookies['preferredDb'];
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Atend.findOne().then((atend) =>{
             var tamanho = atend.length;
             var qtdAtends = {qtd: tamanho}
@@ -80,9 +86,9 @@ module.exports = {
                     console.log("Listagem Realizada de Convenios")
                     Usuario.find().then((usuario)=>{
                         console.log("Listagem Realizada de Usuário")
-                            Terapia.find().then((terapia)=>{
-                                console.log("Listagem Realizada de Terapia")
-                                res.render('beneficiario/evolucao/evolucaoLis', {atends: atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, qtdAtends})
+                        Terapia.find().then((terapia)=>{
+                            console.log("Listagem Realizada de Terapia")
+                            res.render('beneficiario/evolucao/evolucaoLis', {atends: atend, benes: bene, convs: conv, usuarios: usuario, terapias: terapia, qtdAtends})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

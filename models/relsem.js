@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const RelsemSchema = mongoose.Schema({
     relsem_id:{ type: ObjectId, required: false },
@@ -51,9 +52,18 @@ class Relsem{
 }
 
 RelsemSchema.loadClass(Relsem)
-const RelsemModel = mongoose.model('tb_relsem', RelsemSchema)
-module.exports = {RelsemModel,RelsemSchema,
+var RelsemModel = getModel("softroute", 'tb_relsem', RelsemSchema)
+module.exports = {
+    RelsemModel,
+    RelsemSchema,
+
     relsemEditar: async (req, res) => {
+        
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        RelsemModel = getModel(db, 'tb_relsem', RelsemSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -92,6 +102,12 @@ module.exports = {RelsemModel,RelsemSchema,
             
     },
     relsemAdicionar: async (req,res) => {
+        
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        RelsemModel = getModel(db, 'tb_relsem', RelsemSchema)
+        //;
+
         //Validar se a Relsemese existe
         console.log("relsemmodel");
         let dataAtual = new Date();

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const VisualSchema = mongoose.Schema({
     visual_id:{ type: ObjectId, required: false },
@@ -51,9 +52,18 @@ class Visual{
 }
 
 VisualSchema.loadClass(Visual)
-const VisualModel = mongoose.model('tb_visual', VisualSchema)
-module.exports = {VisualModel,VisualSchema,
+var VisualModel = getModel("softroute", 'tb_visual', VisualSchema)
+module.exports = {
+    VisualModel,
+    VisualSchema,
+
     visualEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        VisualModel = getModel(db, 'tb_visual', VisualSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -96,6 +106,12 @@ module.exports = {VisualModel,VisualSchema,
             
     },
     visualAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        VisualModel = getModel(db, 'tb_visual', VisualSchema)
+        //;
+        
         //Validar se a Visualese existe
         console.log("visualmodel");
         let dataAtual = new Date();

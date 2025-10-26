@@ -13,7 +13,8 @@ const flash = require("connect-flash")
 const passport = require("passport");
 require("./config/auth")(passport)
 const cookieParser = require('cookie-parser');
-
+const { ObjectId } = require("mongoose").Types;
+const id_global = new ObjectId("6501d2f9a4b3c7e8d9f01234");
 //Multer Upload de arquivos
 const multer = require('multer');
 
@@ -33,10 +34,14 @@ app.post('/upload', upload.single('file'), (req, res) => {
 });
 
 // ... outras rotas ...
-
-
+//remover
+const { getModel } = require('./functions/fncGeral');
+const usuarioClass = require("./models/usuario")
+const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 //Configurações
+    
+
     //Sessão
         app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true, cookie: {maxAge: 18000000}}));
 
@@ -283,7 +288,9 @@ app.post('/upload', upload.single('file'), (req, res) => {
                         return options.inverse(this);
                     }
                 },
-
+                json: function(context) {
+                    return JSON.stringify(context);
+                },
                 // Helper ifCond
                 /**
                  * Helper personalizado Handlebars: {{#ifCond}}
@@ -452,12 +459,15 @@ app.post('/upload', upload.single('file'), (req, res) => {
         app.set('view engine', 'handlebars');
         app.set("views", "./views");
     //Mongoose para atualizar 09/12/2024 implementar poolSize: 150, seNewUrlParser: true, e useUnifiedTopology: true. 
-    //
-        mongoose.connect("mongodb+srv://AdminSR:KKfafxcYLURWoPFe@softroute.tih48.mongodb.net/softroute").then(() => {
+    //mongodb+srv://AdminSR:KKfafxcYLURWoPFe@softroute.tih48.mongodb.net/softrouteFazendinha
+    //mongodb+srv://AdminSR:KKfafxcYLURWoPFe@softroute.tih48.mongodb.net/PortalDoUsuario
+    /*
+        mongoose.connect("mongodb+srv://AdminSR:KKfafxcYLURWoPFe@softroute.tih48.mongodb.net/PortalDoUsuario").then(() => {
             console.log("Conectado com sucesso!");
         }).catch((err) => {
             console.log("Erro do conectar com o mongoose:"+err);
         });
+        */
     //Public
         app.use(express.static(__dirname + '/assets'));
 

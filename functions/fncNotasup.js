@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Notasup
 const notasupClass = require("../models/notasup")
@@ -16,25 +16,27 @@ const progtipoClass = require("../models/progtipo")
 const terapiaClass = require("../models/terapia")
 const fncProg = require("../functions/fncProg")
 
-
 //Tabela Notasup 
-const Notasup = mongoose.model("tb_notasup")
+var Notasup = getModel("SoftRoute", 'tb_notasup', notasupClass.NotasupSchema)
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Prog = mongoose.model("tb_prog")
-const Progtipo = mongoose.model("tb_progtipo")
-const Terapia = mongoose.model("tb_terapia")
-const Notasupobs = mongoose.model("tb_notasupobs")
-const Resposta = mongoose.model("tb_resposta")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Prog = getModel("SoftRoute", 'tb_prog', progClass.ProgSchema)
+var Progtipo = getModel("SoftRoute", 'tb_progtipo', progtipoClass.ProgtipoSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Notasupobs = getModel("SoftRoute", 'tb_notasupobs', notaSupObsClass.NotaSupObsSchema)
 
-//Extrutura de Resposta
-const respostaClass = require("../models/resposta")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaNotasup(req, res){
+        let db = req.cookies['preferredDb'];
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         let lvlUsu = req.cookies['lvlUsu'];
         let idUsu;
@@ -62,6 +64,13 @@ module.exports = {
     },
 
     carregaNotasup(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let beneid = req.params.id
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
@@ -137,6 +146,14 @@ module.exports = {
     },
 
     carregaNotasupEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Notasupobs = getModel(db, 'tb_notasupobs', notaSupObsClass.NotaSupObsSchema)
+
         let idBene = "";
         Notasup.findById(req.params.id).then((notasup) =>{
             idBene = notasup.notasup_beneid;
@@ -230,9 +247,13 @@ module.exports = {
             res.render('admin/erro')
         }
     },
-
-
     deletaNotasup(req,res){
+        let db = req.cookies['preferredDb'];
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Notasup.deleteOne({_id: req.params.id}).then(() =>{
             Conv.find().then((conv)=>{
                 Terapia.find().then((terapia)=>{
@@ -251,10 +272,7 @@ module.exports = {
             })
         })
     },
-
     preCarregaNotasup(req,res){
 
     }
-
-
 }

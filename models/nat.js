@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const NatSchema = mongoose.Schema({
     nat_planotipo :{
@@ -113,9 +114,18 @@ class Nat{
 }
 
 NatSchema.loadClass(Nat)
-const NatModel = mongoose.model('tb_nat', NatSchema)
-module.exports = {NatModel,NatSchema,
+var NatModel = getModel("softroute", 'tb_nat', NatSchema)
+module.exports = {
+    NatModel,
+    NatSchema,
+
     natEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        NatModel = getModel(db, 'tb_nat', NatSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -150,6 +160,12 @@ module.exports = {NatModel,NatSchema,
         return resultado;
     },
     natAdicionar: async (req,res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        NatModel = getModel(db, 'tb_nat', NatSchema)
+        //;
+        
         let dataAtual = new Date();
         console.log("natmodel");
         console.log("req.body.natdata:")

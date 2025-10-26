@@ -66,6 +66,41 @@
 				var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 				return diffDays > 90;
 			}
+			// Função de validação
+			function validarConsAtendTera(event) {
+				const selectTerapia = document.getElementById('relTeraid');
+				const alertaErro = document.getElementById('alertaErro');
+
+				if (!selectTerapia || !selectTerapia.value) {
+					event.preventDefault();
+					alertaErro.style.display = 'block';
+					return false;
+				} else {
+					alertaErro.style.display = 'none';
+					return true;
+				}
+			}
+
+			// Esconde o alerta quando o usuário seleciona um beneficiário
+			function esconderAlertaAoSelecionarTerapia() {
+				const alertaErro = document.getElementById('alertaErro');
+				if (this.value) {
+					alertaErro.style.display = 'none';
+				}
+			}
+
+			// Inicializa os listeners quando o DOM estiver pronto
+			document.addEventListener('DOMContentLoaded', function () {
+				const form = document.getElementById('ConsTerapeuta');
+				const selectTerapia = document.getElementById('relTeraid');
+
+				if (form) {
+					form.addEventListener('submit', validarConsAtendTera);
+				}
+				if (selectTerapia) {
+					selectTerapia.addEventListener('change', esconderAlertaAoSelecionarTerapia);
+				}
+			});
 			function carregaBody(){
 				/*
 				let sessoes = document.getElementsByName("sessoes")
@@ -90,7 +125,14 @@
 							<li class="active">Relatório Consolidado do Terapeuta - Terapia e Valores</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					<form role="form" class="noprint" action="/menu/atendimento/atendreltera/relatendterapiaconss" method="POST">
+					<form id="ConsTerapeuta" name="ConsTerapeuta" role="form" class="noprint" action="/menu/atendimento/atendreltera/relatendterapiaconss" method="POST">
+						<!-- Alerta-->
+						<div id="alertaErro" style="display: none;" class="alert alert-danger">
+							<button type="button" class="close" data-dismiss="alert">
+								<i class="ace-icon fa fa-times"></i>
+							</button>
+							<strong>Importante!</strong> Por favor escolha um Terapeuta.
+						</div>
 						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center;" style="text-align: center;" />
 							<ul class="breadcrumb" >
 								<label>Período de:</label>
@@ -100,11 +142,11 @@
 								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
 								<input class="hidden" id="dataFim" name="dataFim" value="{{pesquisa.dataFim}}" />
 								<label>Terapeuta: </label>
-								<select style="height: 30px; width:300px;" name="relTeraid"  id="relTeraid" class="chosen-select" data-placeholder="Escolha...">
-									{{#each terapeutas}}
-										<option value="{{_id}}">{{usuario_nome}}</option>
-									{{/each}}
-								</select>
+									<select name="relTeraid" id="relTeraid" class="chosen-select">
+										{{#each terapeutas}}
+											<option value="{{_id}}">{{usuario_nome}}</option>
+										{{/each}}
+									</select>
 								<input  hidden id="teraFiltro" name="teraFiltro"  value="{{pesquisa.terapeuta}}" />
 								<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
 									<i class="ace-icon fa fa-search bigger-110"></i>

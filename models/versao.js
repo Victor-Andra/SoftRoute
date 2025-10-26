@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const versaoSchema = mongoose.Schema({
     versao_idver :{ type: ObjectId, required: false },
@@ -43,9 +44,18 @@ class versao{
 }
 
 versaoSchema.loadClass(versao)
-const versaoModel = mongoose.model('tb_versao', versaoSchema)
-module.exports = {versaoModel,versaoSchema,
+var versaoModel = getModel("softroute", 'tb_versao', versaoSchema)
+module.exports = {
+    versaoModel,
+    versaoSchema,
+
     versaoEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        versaoModel = getModel(db, 'tb_versao', versaoSchema)
+        //;
+
         //Pega data atual
         let dataAtual = new Date();
         //Pega o usuario atual
@@ -75,6 +85,12 @@ module.exports = {versaoModel,versaoSchema,
         return resultado;
     },
     versaoAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        versaoModel = getModel(db, 'tb_versao', versaoSchema)
+        //;
+        
         //Pega data atual
         let dataAtual = new Date();
         //Pega o usuario atual

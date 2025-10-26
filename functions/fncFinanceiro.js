@@ -1,15 +1,24 @@
 //Exports
 const mongoose = require("mongoose")
-const Credit = mongoose.model("tb_credit")
-const Debit = mongoose.model("tb_debit")
+const { getModel } = require('../functions/fncGeral');
+
+const debitClass = require("../models/debit")
+const creditClass = require("../models/credit")
+const funcaoClass = require("../models/funcao")
+var Credit = getModel("SoftRoute", 'tb_credit', creditClass.CreditSchema)
+var Debit = getModel("SoftRoute", 'tb_debit', debitClass.DebitSchema)
+var Funcao = getModel("SoftRoute", 'tb_funcao', funcaoClass.FuncaoSchema)
 
 //funcaos
 const fs = require('fs');
-const debitClass = require("../models/debit")
-const creditClass = require("../models/credit")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaFuncao(req,res){
+        let db = req.cookies['preferredDb'];
+        Funcao = getModel(db, 'tb_funcao', funcaoClass.FuncaoSchema)
+
         console.log('listando funcaos')
         Funcao.find().then((funcao) =>{
             console.log("Listagem Realizada!")
@@ -21,6 +30,10 @@ module.exports = {
         })
     },
     listaRelContasAPagar(req,res){
+        let db = req.cookies['preferredDb'];
+        Credit = getModel(db, 'tb_credit', creditClass.CreditSchema)
+        Debit = getModel(db, 'tb_debit', debitClass.DebitSchema)
+
         let agora = new Date();
         agora.setUTCFullYear(agora.getUTCFullYear(),0,1);//1/1/2022
         agora.setUTCHours(0);

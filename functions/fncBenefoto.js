@@ -1,18 +1,21 @@
 //Exports
 const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
 
 //beneFotos  
-const Benefoto = mongoose.model("tb_benefoto")
-const benefotoClass = require("../models/benefoto")
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
 const beneClass = require("../models/bene")
-const Bene = mongoose.model("tb_bene")
+const benefotoClass = require("../models/benefoto")
+var Benefoto = getModel("SoftRoute", 'tb_benefoto', benefotoClass.BenefotoSchema)
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
 
-
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
-   listabeneFoto(req, res) {
+    listabeneFoto(req, res) {
+        let db = req.cookies['preferredDb'];
+        Benefoto = getModel(db, 'tb_benefoto', benefotoClass.BenefotoSchema)
+
         console.log('listando beneFotos');
         Benefoto.find().then((beneFotos) => {
             // Função auxiliar para formatar data
@@ -53,6 +56,10 @@ module.exports = {
         });
     },
     carregabeneFoto(req, res, bene_id) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Benefoto = getModel(db, 'tb_benefoto', benefotoClass.BenefotoSchema)
+
         Benefoto.find().then((benefoto) => {
              Bene.find().then((bene)=>{
              bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
@@ -71,6 +78,9 @@ module.exports = {
         });
     },
     carregabeneFotoEdi(req, res){
+        let db = req.cookies['preferredDb'];
+        Benefoto = getModel(db, 'tb_benefoto', benefotoClass.BenefotoSchema)
+
         let base64Image
         Benefoto.findOne({_id: req.params.id}).then((beneFoto) =>{
             //console.log(beneFoto)
@@ -162,8 +172,11 @@ module.exports = {
         }
     },
     deletabeneFoto(req,res){
-        beneFoto.deleteOne({_id: req.params.id}).then(() =>{
-            beneFoto.find().then((beneFoto) =>{
+        let db = req.cookies['preferredDb'];
+        Benefoto = getModel(db, 'tb_benefoto', benefotoClass.BenefotoSchema)
+
+        Benefoto.deleteOne({_id: req.params.id}).then(() =>{
+            Benefoto.find().then((beneFoto) =>{
                 req.flash("success_message", "beneFoto deletada!")
                 this.listabeneFoto(req,res)
             }).catch((err) =>{

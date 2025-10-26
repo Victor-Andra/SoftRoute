@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const AtendSchema = mongoose.Schema({
     atend_org :{
@@ -179,7 +180,7 @@ class Atend{
 }
 
 AtendSchema.loadClass(Atend)
-const AtendModel = mongoose.model('tb_atend', AtendSchema)
+var AtendModel = getModel("softroute", 'tb_atend', AtendSchema)
 module.exports = {AtendModel,AtendSchema,
     atendEditar: async (req, res) => {
         let dataAtual = new Date();
@@ -230,6 +231,7 @@ module.exports = {AtendModel,AtendSchema,
         console.log("atendmodel");
         console.log("req.body.atendAtenddata:")
         console.log(req.body.atendAtenddata)
+        
         const newAtend = new AtendModel({
             atend_org : req.body.atendOrg,
             atend_categoria : req.body.atendCategoria,

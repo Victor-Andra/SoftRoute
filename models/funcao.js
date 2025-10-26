@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const FuncaoSchema = mongoose.Schema({
     funcao_nome: {
@@ -31,9 +32,18 @@ class Funcao{
 
 
 FuncaoSchema.loadClass(Funcao)
-const FuncaoModel = mongoose.model('tb_funcao', FuncaoSchema)
-module.exports = {FuncaoModel,FuncaoSchema,
+var FuncaoModel = getModel("softroute", 'tb_funcao', FuncaoSchema)
+module.exports = {
+    FuncaoModel,
+    FuncaoSchema,
+
     funcaoEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        FuncaoModel = getModel(db, 'tb_funcao', FuncaoSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -58,12 +68,13 @@ module.exports = {FuncaoModel,FuncaoSchema,
         return resultado;
     },
 
-
-
-
-
-
     funcaoAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        FuncaoModel = getModel(db, 'tb_funcao', FuncaoSchema)
+        //;
+
         console.log('terapia/ dentro do add')
         let funcaoExiste =  await FuncaoModel.findOne({funcao_nome: req.body.funcaoNome});//quando não acha fica null
         let dataAtual = new Date();

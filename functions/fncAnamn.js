@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Anamnese e Beneficiários
 const anamnClass = require("../models/anamn")
@@ -8,39 +8,37 @@ const anamnClass = require("../models/anamn")
 
 //Classes Extrangeiras, Convênios, Terapia, (Técnicos e Usuários)
 const beneClass = require("../models/bene")
-const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
-const terapiaClass = require("../models/terapia")
 
 
 //Tabela Anamnese
-const Anamn = mongoose.model("tb_anamn")
+var Anamn = getModel("SoftRoute", 'tb_anamn', anamnClass.AnamnSchema)
 
 //Tabelas Extrangeiras, Convênios, Terapia, (Técnicos e Usuários)
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 //Funções Auxiliares
-const respostaClass = require("../models/resposta")
-const bene = require("../models/bene")
-const Resposta = mongoose.model("tb_resposta")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
-carregaAnamn(req, res){
-    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-        console.log("Listagem Realizada de Usuário")
-            Bene.find({bene_status: "Ativo"}).then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                console.log("Listagem Realizada de beneficiarios")
+    carregaAnamn(req, res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
+        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+            console.log("Listagem Realizada de Usuário")
+                Bene.find({bene_status: "Ativo"}).then((bene)=>{
+                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    console.log("Listagem Realizada de beneficiarios")
                     res.render("area/anamn/anamnCad", {usuarios: usuario, benes: bene})
-    })}).catch((err) =>{
-        console.log(err)
-        req.flash("error_message", "houve um erro ao listar escolas")
-        res.redirect('admin/erro')
-    })
-},
+        })}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar escolas")
+            res.redirect('admin/erro')
+        })
+    },
     
     cadastraAnamn(req,res){
         console.log("chegou")
@@ -73,9 +71,12 @@ carregaAnamn(req, res){
     },
 
     deletaAnamn(req,res){
+        let db = req.cookies['preferredDb'];
+        Anamn = getModel(db, 'tb_anamn', anamnClass.AnamnSchema)
+
         Anamn.deleteOne({_id: req.params.id}).then(() =>{
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
+            Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                console.log("Listagem Realizada de Usuário")
                 req.flash("success_message", "Anamnese deletada!")
                 this.listaAnamn(req,res);
             }).catch((err) =>{
@@ -114,13 +115,17 @@ carregaAnamn(req, res){
     },
 
     carregaAnamnEdi(req, res){
+        let db = req.cookies['preferredDb'];
+        Anamn = getModel(db, 'tb_anamn', anamnClass.AnamnSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let base64Image;
         Anamn.findById(req.params.id).then((anamn) =>{console.log("ID: "+anamn._id)
             let datanasc2 = new Date(anamn.anamn_benedatanasc);
             anamn.anamn_benedatanasc = new Date(datanasc2.getTime() + 3 * 60 * 60 * 1000)//add 3h ao gtm
             Bene.find().sort({bene_nome: 1}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     if (usuario.usuario_carimbo != 'undefined' && usuario.usuario_carimbo != undefined){
                         base64Image = new Buffer.from(usuario.usuario_carimbo, 'binary').toString('base64');
@@ -134,6 +139,10 @@ carregaAnamn(req, res){
     },
 
     listaAnamn(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Anamn = getModel(db, 'tb_anamn', anamnClass.AnamnSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         //console.log('listando Anamneses')
         Anamn.find().then((anamn) =>{
@@ -248,6 +257,10 @@ carregaAnamn(req, res){
         })
     },
     listaAnamnImp(req, res){
+        let db = req.cookies['preferredDb'];
+        Anamn = getModel(db, 'tb_anamn', anamnClass.AnamnSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         Anamn.findById(req.params.id).then((anamn) =>{
             console.log("anamn:");
             console.log(anamn);

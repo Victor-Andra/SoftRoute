@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
+const fncGeral = require("../functions/fncGeral");
+const Resposta = fncGeral.Resposta;
 
 //Biblioteca de gestão de Imagens para o banco 
 const multer = require('multer');
@@ -65,6 +68,7 @@ const UsuarioSchema = mongoose.Schema({
     usuario_palavrachavedatacad :{type: String, required: false},
     usuario_palavraschaveantigas :{type: String, required: false},
     usuario_obs :{type: String, required: false },
+    usuario_empresaids: [{type: ObjectId, required: false }],
     //controle CRUD
     usuario_usuidcad: {type: ObjectId, required: false },
     usuario_usuidedi: {type: ObjectId, required: false },
@@ -131,6 +135,7 @@ class Usuario{
         usuario_palavrachavedatacad, 
         usuario_palavraschaveantigas,
         usuario_obs,
+        usuario_empresaids,
         //Campos de controle
         usuario_usuidcad,
         usuario_usuidedi,
@@ -195,6 +200,7 @@ class Usuario{
         this.usuario_palavrachave = usuario_palavrachave ,
         this.usuario_palavrachavedatacad = usuario_palavrachavedatacad ,
         this.usuario_palavraschaveantigas = usuario_palavraschaveantigas ,
+        this.usuario_empresaids = usuario_empresaids ,
         this.usuario_obs = usuario_obs ,
         //campos de controle
         this.usuario_usuidcad = usuario_usuidcad,
@@ -208,12 +214,16 @@ class Usuario{
 }
 
 UsuarioSchema.loadClass(Usuario)
-const UsuarioModel = mongoose.model('tb_usuario', UsuarioSchema)
+const UsuarioModel = getModel("PortalDoUsuario", 'tb_usuario', UsuarioSchema)
 module.exports = {
     UsuarioModel,
     UsuarioSchema,
     
     usuarioEditar: async (req, res) => {
+
+        //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+        //;
+        
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -306,6 +316,10 @@ module.exports = {
         return resultado;
     },
     usuarioAdicionar: async (req,res) => {
+
+         //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+        //;
+
         let usuarioExiste =  await UsuarioModel.findOne({usuario_nome: req.body.usuarioNome});//quando não acha fica null
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];
@@ -386,6 +400,10 @@ module.exports = {
         }
     },
     usuarioCadastrarPalavraChave: async (req, res) => {
+
+         //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+        //;
+
         //Realiza Atualização
         let dataAtual = new Date();
         await UsuarioModel.findByIdAndUpdate(mongoose.Types.ObjectId(req.cookies['idUsu']), 
@@ -405,6 +423,10 @@ module.exports = {
         return resultado;
     },
     usuarioMudarSenha: async (req, res) => {
+
+         //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+        //;
+
         //Realiza Atualização
         let dataAtual = new Date();
         let usuarioAtual = "-";
@@ -441,6 +463,10 @@ module.exports = {
         return resultado;
     },
     usuarioDefinirSenha: async (req, res) => {
+
+         //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+        //;
+
         //Realiza Atualização
         let dataAtual = new Date();
         let usuarioAtual = "-";
@@ -476,6 +502,10 @@ module.exports = {
         return resultado;
     },
     usuarioDeletarPalavraChave: async (req, res) => {
+
+         //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+        //;
+
         //Realiza Atualização
         let usuarioAtual = "-";
         let usuarioResp = "-";
@@ -519,6 +549,10 @@ module.exports = {
         return resultado;
     },
     mudarNome: async (req, res) => {
+
+         //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+        //;
+
         await UsuarioModel.findByIdAndUpdate(req.body.terapeutaId, 
             {$set: {
                 usuario_nomecompleto : req.body.usuarioNome,
@@ -535,6 +569,10 @@ module.exports = {
         })
     },
     usuarioCadastrarCarimbo: async (req, res) => {
+
+         //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+        //;
+
         try {
             let dataAtual = new Date();
     
@@ -569,6 +607,69 @@ module.exports = {
             console.error(error);
             return "false";
         }
-    }
+    },
+    filtrarAniversariantes: async (tipo) => {
 
+         //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+        //;
+        
+        console.log("start")
+        let usuarios;
+
+        var hoje = new Date();
+        var diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
+        var mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
+
+        // Calcular domingo (início da semana)
+        var domingo = new Date(hoje);
+        domingo.setDate(hoje.getDate() - hoje.getDay()); // 0 = domingo
+
+        // Construir dias da semana: domingo a sábado
+        var semanaDias = Array.from({ length: 7 }).map((_, i) => {
+            var d = new Date(domingo);
+            d.setDate(domingo.getDate() + i);
+            return {
+                dia: String(d.getUTCDate()).padStart(2, '0'),
+                mes: String(d.getUTCMonth() + 1).padStart(2, '0')
+            };
+        });
+
+        var hoje = new Date();
+        var diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
+        var mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
+        console.log("find them")
+        await UsuarioModel.find().then((resultado)=>{
+            console.log("usuarios");
+            usuarios = resultado;
+            console.log("usuarios: "+usuarios.length);
+        }).catch((err)=>{
+            console.log("Erro: "+err);
+        }).finally(()=>{
+            usuarios = usuarios.map(p => {
+                const dataNasc = new Date(p[`${tipo}_datanasc`]);
+                const dia = String(dataNasc.getUTCDate()).padStart(2, '0');
+                const mes = String(dataNasc.getUTCMonth() + 1).padStart(2, '0');
+
+                return {
+                    dtnasc: dataNasc,
+                    diaNascimento: dia,
+                    mesNascimento: mes,
+                    hoje: dia === diaAtual && mes === mesAtual,
+                    usuario_nome: p.usuario_nome
+                };
+            }).filter(p =>
+                semanaDias.some(s => s.dia === p.diaNascimento && s.mes === p.mesNascimento)
+            ).sort((a, b) => {
+                const mesA = parseInt(a.mesNascimento, 10);
+                const mesB = parseInt(b.mesNascimento, 10);
+                if (mesA !== mesB) return mesA - mesB;
+
+                const diaA = parseInt(a.diaNascimento, 10);
+                const diaB = parseInt(b.diaNascimento, 10);
+                return diaA - diaB;
+            });
+            
+            return usuarios;
+        })
+    }
 };

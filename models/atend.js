@@ -1,27 +1,28 @@
 const mongoose = require('mongoose')
 const fncGeral = require('../functions/fncGeral')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const AtendSchema = mongoose.Schema({
     atend_org :{ type: String, required: true },
     atend_categoria :{ type: String, required: true },
-    atend_beneid :{ type: ObjectId, required: false },
-    atend_convid :{ type: ObjectId, required: true },
-    atend_usuid :{ type: String, required: true },
+    atend_beneid :{ type: ObjectId, required: false },//_id da tb_bene 
+    atend_convid :{ type: ObjectId, required: true },//_id da tb_conv 
+    atend_usuid :{ type: String, required: true },//_id da tb_usuario
     atend_atenddata :{ type: Date, required: true },
     atend_atendhora :{ type: String, required: false },
-    atend_terapeutaid :{ type: ObjectId, required: true },
-    atend_terapiaid :{ type: ObjectId, required: true },
-    atend_salaid :{ type: ObjectId, required: true },
+    atend_terapeutaid :{ type: ObjectId, required: true },//_id da tb_usuario, filtrado pelo campo usuario_funcaoid, valor do campo: 6241030bfbcc51f47c720a0b
+    atend_terapiaid :{ type: ObjectId, required: true },//_id da tb_terapia
+    atend_salaid :{ type: ObjectId, required: true },//_id da tb_sala
     atend_valorcre :{ type: String, required: true },
     atend_valordeb :{ type: String, required: true },
-    atend_mergeterapeutaid :{ type: ObjectId, required: false },
-    atend_mergeterapiaid :{ type: ObjectId, required: false },
+    atend_mergeterapeutaid :{ type: ObjectId, required: false },//_id da tb_usuario, filtrado pelo campo usuario_funcaoid, valor do campo: 6241030bfbcc51f47c720a0b
+    atend_mergeterapiaid :{ type: ObjectId, required: false },//_id da tb_terapia
     atend_mergevalorcre :{ type: String, required: false },
     atend_mergevalordeb :{ type: String, required: false },
     atend_fixo :{ type: String, required: false },
-    atend_fixoterapeutaid :{ type: ObjectId, required: false },
-    atend_fixoterapiaid :{ type: ObjectId, required: false },
+    atend_fixoterapeutaid :{ type: ObjectId, required: false },//_id da tb_usuario, filtrado pelo campo usuario_funcaoid, valor do campo: 6241030bfbcc51f47c720a0b
+    atend_fixoterapiaid :{ type: ObjectId, required: false },//_id da tb_terapia
     atend_fixovalorcre :{ type: String, required: false },
     atend_fixovalordeb :{ type: String, required: false },
     atend_evolucao :{ type: String, required: false },
@@ -32,6 +33,7 @@ const AtendSchema = mongoose.Schema({
     atend_agenda_s_id_orig :{ type: ObjectId, required: false },
     atend_numnf :{ type: String, required: false },
     atend_extraid:{ type: ObjectId, required: false },//Armazena o extraid para gestão, Wagner Cintra, 14/04/2025 
+    atend_usuidcad :{ type: ObjectId, required: false },
     atend_datacad :{ type: Date, required: false },
     atend_usuidedi :{ type: ObjectId, required: false }, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
     atend_dataedi :{ type: Date, required: false }
@@ -66,6 +68,7 @@ class Atend{
         atend_numnf,
         atend_extraid,//Armazena o extraid para gestão, Wagner Cintra, 14/04/2025 
         atend_rel,
+        atend_usuidcad,
         atend_datacad,
         atend_usuidedi, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
         atend_dataedi
@@ -97,6 +100,7 @@ class Atend{
         this.atend_numnf = atend_numnf,
         this.atend_extraid = atend_extraid,//Armazena o extraid para gestão, Wagner Cintra, 14/04/2025 
         this.atend_rel = atend_rel,
+        this.atend_usuidcad = atend_usuidcad,
         this.atend_datacad = atend_datacad,
         this.atend_usuidedi = atend_usuidedi, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
         this.atend_dataedi = atend_dataedi
@@ -104,9 +108,18 @@ class Atend{
 }
 
 AtendSchema.loadClass(Atend)
-const AtendModel = mongoose.model('tb_atend', AtendSchema)
-module.exports = {AtendModel,AtendSchema,
+var AtendModel = getModel("softroute", 'tb_atend', AtendSchema)
+module.exports = {
+    AtendModel,
+    AtendSchema,
+    
     atendEditar: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtendModel = getModel(db, 'tb_atend', AtendSchema);
+        //;
+
         let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
         let resultado;
@@ -153,6 +166,12 @@ module.exports = {AtendModel,AtendSchema,
         return resultado;
     },
     atendAdicionar: async (req,res) => {
+
+         //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtendModel = getModel(db, 'tb_atend', AtendSchema);
+        //;
+
         let dataAtual = new Date();
         console.log("atendmodel");
         console.log("req.body.atendAtenddata:")
@@ -191,6 +210,12 @@ module.exports = {AtendModel,AtendSchema,
         });
     },
     montaAtend(req,res){
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtendModel = getModel(db, 'tb_atend', AtendSchema);
+        //;
+
         const newAtend = new AtendModel({
             atend_org : req.body.atendOrg,
             atend_categoria : req.body.atendCategoria,
@@ -217,6 +242,12 @@ module.exports = {AtendModel,AtendSchema,
         return newAtend;
     },
     gerarAtend: async (atend) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtendModel = getModel(db, 'tb_atend', AtendSchema);
+        //;
+
         console.log("cadastrando novo atend!");
         console.log("atend: "+atend);
         await atend.save().then(()=>{
@@ -226,8 +257,14 @@ module.exports = {AtendModel,AtendSchema,
             console.log(err)
             return err;
         });
-    }
-    ,atendUpdateCampos: async (req,res) => {
+    },
+    atendUpdateCampos: async (req,res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtendModel = getModel(db, 'tb_atend', AtendSchema);
+        //;
+
         let resultado;
         let busca;
         let troca;
@@ -504,6 +541,12 @@ module.exports = {AtendModel,AtendSchema,
     },
 
     atendFaltaDia: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtendModel = getModel(db, 'tb_atend', AtendSchema);
+        //;
+
         let usuarioAtual = req.cookies['idUsu'];
         var retorno;
         let arrayAgendasNovas = [];

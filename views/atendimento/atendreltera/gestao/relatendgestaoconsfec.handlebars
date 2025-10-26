@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Relatório Consolidado de Atendimento – Gestão</title>
+    <style>
+        @media screen { .print-footer { display: none; } }
+        @media print {
+            .noprint { display: none !important; }
+            .print-footer {
+                display: block;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                text-align: center;
+                font-size: 11px;
+                padding: 5px 0;
+                background: white;
+                z-index: 9999;
+            }
+            body { margin-bottom: 30mm; }
+            @page {
+                margin: 1cm;
+                @bottom-center {
+                    content: "Página " counter(page) " de " counter(pages);
+                    font-size: 12px;
+                }
+            }
+        }
+        .subtotal-convenio {
+            background-color: #f5f5f5;
+            font-weight: bold;
+            border-top: 2px solid #333;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+    <script>
+        function validarIntervalo() {
+            const dataInicio = document.getElementById('dataFilDe').value;
+            const dataFim = document.getElementById('dataFilAte').value;
+            if (!dataInicio || !dataFim) {
+                alert("Por favor, preencha ambas as datas.");
+                return false;
+            }
+            const dtIni = new Date(dataInicio);
+            const dtFim = new Date(dataFim);
+            if (dtIni > dtFim) {
+                alert("A data inicial não pode ser maior que a data final.");
+                return false;
+            }
+            const diffDays = Math.ceil(Math.abs(dtFim - dtIni) / (1000 * 60 * 60 * 24));
+            if (diffDays > 31) {
+                alert("O intervalo máximo permitido é de 31 dias.");
+                return false;
+            }
+            return true;
+        }
+
+        function carregaBody(){
+            document.getElementById("dataFilDe").value = "{{pesquisa.dataIni}}".substring(0,10);
+            document.getElementById("dataFilAte").value = "{{pesquisa.dataFim}}".substring(0,10);
+        }
+    </script>
+</head>
+<body onload="carregaBody();controlaNave()" class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner noprint">
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
+                        <li class="active">Relatório Consolidado de Atendimento – Gestão</li>
+                    </ul>
+                </div>
+
+                <form class="noprint" role="form" method="GET" onsubmit="return validarIntervalo()">
+                    <div class="breadcrumbs" style="align-items: center;">
+                        <ul class="breadcrumb">
+                            <label>Período de:</label>
+                            <input style="height: 30px;" id="dataFilDe" name="dataIni" type="date" />
+                            <label>até:</label>
+                            <input style="height: 30px;" id="dataFilAte" name="dataFim" type="date" />
+                            <button class="btn btn-info" type="submit">
+                                <i class="ace-icon fa fa-search bigger-110"></i> Pesquisar
+                            </button>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="space-6"></div>
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="widget-box transparent">
+                                <div style="text-align: center;">
+                                    <img width="140" height="60" src="/images/gallery/logo_route_centro.png">
+                                </div>
+                                <div class="widget-header widget-header-large">
+                                    <h3 class="widget-title grey lighter">
+                                        <i class="ace-icon fa fa-leaf green"></i>
+                                        Relatório Consolidado de Atendimento – Gestão
+                                    </h3>
+                                </div>
+                                <div class="widget-body">
+                                    <div class="widget-main padding-24">
+                                        <div class="row">
+                                            <div class="col-xs-12 label label-lg label-info arrowed-in arrowed-right">
+                                                <b>Informações da Clínica</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled">
+                                                <li><i class="ace-icon fa fa-caret-right blue"></i><b>Prestador:</b> Route Centro de Terapia e Apoio Infantil</li>
+                                                <li><i class="ace-icon fa fa-caret-right blue"></i><b>CNPJ:</b> 33.346.423/0001-17</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-12 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>Período do Relatório</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled">
+                                                <li><i class="ace-icon fa fa-caret-right green"></i><b>De:</b> {{periodoDe}} <b>Até:</b> {{periodoAte}}</li>
+                                            </ul>
+                                        </div>
+
+                                        <!-- === SUBTOTAIS POR CONVÊNIO (RESUMO) === -->
+                                        {{#if subtotaisPorConvenio.length}}
+                                        <div class="row">
+                                            <div class="col-xs-12 label label-lg label-primary arrowed-in arrowed-right">
+                                                <b>Resumo por Convênio</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <table class="table table-bordered table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Convênio</th>
+                                                        <th>Qt. Total</th>
+                                                        <th>Total Crédito (R$)</th>
+                                                        <th>Total Débito (R$)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{#each subtotaisPorConvenio}}
+                                                    <tr class="subtotal-convenio">
+                                                        <td>{{conv_nome}}</td>
+                                                        <td class="center">{{qtd}}</td>
+                                                        <td style="text-align: right;">{{total_valorcre}}</td>
+                                                        <td style="text-align: right;">{{total_valordeb}}</td>
+                                                    </tr>
+                                                    {{/each}}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        {{/if}}
+
+                                        <!-- === DETALHES POR TERAPIA === -->
+                                        <div class="row">
+                                            <div class="col-xs-12 label label-lg label-warning arrowed-in arrowed-right">
+                                                <b>Detalhamento por Terapia e Convênio</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <table class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Terapia</th>
+                                                        <th>Convênio</th>
+                                                        <th>Qt.</th>
+                                                        <th>Tempo</th>
+                                                        <th>Preço (R$)</th>
+                                                        <th>Repasse (R$)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{#each rels}}
+                                                    <tr>
+                                                        <td>{{terapia_nomecid}}</td>
+                                                        <td>{{conv_nome}}</td>
+                                                        <td class="center">{{qtd}}</td>
+                                                        <td class="center">40 min</td>
+                                                        <td style="text-align: right;">{{total_valorcre}}</td>
+                                                        <td style="text-align: right;">{{total_valordeb}}</td>
+                                                    </tr>
+                                                    {{/each}}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-footer" id="printFooter"></div>
+</body>
+</html>

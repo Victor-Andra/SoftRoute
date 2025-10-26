@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const HoraageSchema = mongoose.Schema({
     horaage_hora: {
@@ -39,9 +40,18 @@ class Horaage{
 }
 
 HoraageSchema.loadClass(Horaage)
-const HoraageModel = mongoose.model('tb_horaage', HoraageSchema)
-module.exports = {HoraageModel,HoraageSchema,
+var HoraageModel = getModel("softroute", 'tb_horaage', HoraageSchema)
+module.exports = {
+    HoraageSchema,
+    HoraageModel,
+
     horaageEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        HoraageSchema = getModel(db, 'tb_horaage', HoraageSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -67,12 +77,13 @@ module.exports = {HoraageModel,HoraageSchema,
         return resultado;
     },
 
-
-
-
-
-
     horaageAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        HoraageSchema = getModel(db, 'tb_horaage', HoraageSchema)
+        //;
+
         let horaageExiste =  await HoraageModel.findOne({horaage_hora: req.body.horaageHora});//quando não acha fica null
         let dataAtual = new Date();
         if(horaageExiste){//se tiver null cai no else

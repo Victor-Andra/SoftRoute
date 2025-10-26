@@ -1,9 +1,11 @@
 //Exports
 const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
+
 
 //saudecolabs
 const saudecolabClass = require("../models/saudecolab")
-const Saudecolab = mongoose.model("tb_saudecolab")
+var Saudecolab = getModel("SoftRoute", 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
 
 
 //Classes Extrangeiras
@@ -11,13 +13,17 @@ const estadoClass = require("../models/estado")
 const usuarioClass = require("../models/usuario")
 
 //Tabelas Extrangeiras
-const Estado = mongoose.model("tb_estado")
-const Usuario = mongoose.model("tb_usuario")
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
+var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaSaudecolab(req,res, resposta){
+        let db = req.cookies['preferredDb'];
+        Saudecolab = getModel(db, 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
+
         let flash = Resposta();
         flash = resposta;
         console.log('listando saudecolabs')
@@ -40,8 +46,10 @@ module.exports = {
         })
 
     },
-
     carregaSaudecolab(req,res){
+        let db = req.cookies['preferredDb'];
+        Saudecolab = getModel(db, 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         Saudecolab.find().then((saudecolab)=>{
             Usuario.find({"usuario_status":"Ativo"}).then((usuario)=>{//Usuário 
@@ -55,9 +63,11 @@ module.exports = {
         })
 
     },
-
-
     carregaSaudecolabEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        
+        Saudecolab = getModel(db, 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         Saudecolab.findById(req.params.id).then((saudecolab) =>{
             console.log(saudecolab)
@@ -71,8 +81,10 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-
     cadastraSaudecolab(req,res){
+        let db = req.cookies['preferredDb'];
+        Saudecolab = getModel(db, 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
+
         let resposta;
         let flash = Resposta();
         let existe;
@@ -111,7 +123,6 @@ module.exports = {
             })
         }
     },
-
     atualizaSaudecolab(req,res){
         let resposta;
         try{
@@ -140,9 +151,10 @@ module.exports = {
             console.log(err1)
         }
     },
-
-
     deletaSaudecolab(req,res){
+        let db = req.cookies['preferredDb'];
+        Saudecolab = getModel(db, 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
+
         Saudecolab.deleteOne({_id: req.params.id}).then(() =>{
             Saudecolab.find().then((saudecolab) =>{
                 req.flash("success_message", "Saudecolab deletada!")
@@ -154,6 +166,4 @@ module.exports = {
             })
         })
     }
-
-
 }

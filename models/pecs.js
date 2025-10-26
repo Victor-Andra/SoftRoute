@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const PecsSchema = mongoose.Schema({
     pecs_id:{ type: ObjectId, required: false },
@@ -51,9 +52,18 @@ class Pecs{
 }
 
 PecsSchema.loadClass(Pecs)
-const PecsModel = mongoose.model('tb_pecs', PecsSchema)
-module.exports = {PecsModel,PecsSchema,
+var PecsModel = getModel("softroute", 'tb_pecs', PecsSchema)
+module.exports = {
+    PecsModel,
+    PecsSchema,
+
     pecsEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        PecsModel = getModel(db, 'tb_pecs', PecsSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -96,6 +106,12 @@ module.exports = {PecsModel,PecsSchema,
             
     },
     pecsAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        PecsModel = getModel(db, 'tb_pecs', PecsSchema)
+        //;
+
         //Validar se a Pecsese existe
         console.log("pecsmodel");
         let dataAtual = new Date();

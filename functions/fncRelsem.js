@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Plano de Relsemamento 
 const relsemClass = require("../models/relsem")
@@ -15,24 +15,26 @@ const escolaClass = require("../models/escola")
 const laudoClass = require("../models/laudo")
 
 //Tabela Plano de Relsemamento 
-const Relsem = mongoose.model("tb_relsem")
+var Relsem = getModel("SoftRoute", 'tb_relsem', relsemClass.RelsemSchema)
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Escola = mongoose.model("tb_escola")
-const Laudo = mongoose.model("tb_laudo")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Escola = getModel("SoftRoute", 'tb_escola', escolaClass.EscolaSchema)
+var Laudo = getModel("SoftRoute", 'tb_laudo', laudoClass.LaudoSchema)
 
 //Funções auxiliares
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
-const fncGeral = require("./fncGeral")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     listaRelsem(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         //console.log('listando Relsemeses')
             let relsem;
@@ -48,6 +50,10 @@ module.exports = {
         })
     },
     filtraRelsem(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Relsem = getModel(db, 'tb_relsem', relsemClass.RelsemSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         let dataIni;
         let dataFim;
@@ -104,6 +110,12 @@ module.exports = {
         })
     },
     carregaRelsem(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+        Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         console.log("usuarioAtual:"+usuarioAtual)
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
@@ -121,6 +133,14 @@ module.exports = {
         })
     },
     carregaRelsemedi(req,res){
+        let db = req.cookies['preferredDb'];
+        Relsem = getModel(db, 'tb_relsem', relsemClass.RelsemSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+        Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         Relsem.findById(req.params.id).then((relsem) =>{console.log("ID: "+relsem._id)
             Conv.find().then((conv)=>{
@@ -206,6 +226,9 @@ module.exports = {
         }
     },
     deletaRelsem(req,res){
+        let db = req.cookies['preferredDb'];
+        Relsem = getModel(db, 'tb_relsem', relsemClass.RelsemSchema)
+
         let resposta;
         let flash = new Resposta()
         Relsem.deleteOne({_id: req.params.id}).then(() =>{
@@ -228,6 +251,13 @@ module.exports = {
     },
     
     relsemImp(req,res){
+        let db = req.cookies['preferredDb'];
+        Relsem = getModel(db, 'tb_relsem', relsemClass.RelsemSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         let base64Image0; //Carimbo padrão de Roberta
         let base64Image1; //Carimbo terapeuta padrão
@@ -264,6 +294,13 @@ module.exports = {
     },
 
     relsemImpcapa(req,res){
+        let db = req.cookies['preferredDb'];
+        Relsem = getModel(db, 'tb_relsem', relsemClass.RelsemSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         Relsem.findById(req.params.id).then((relsem) =>{console.log("ID: "+relsem._id)
             Conv.find().then((conv)=>{
@@ -288,6 +325,10 @@ module.exports = {
     },
 
     relsemImpFiltro(req,res){
+        let db = req.cookies['preferredDb'];
+        Relsem = getModel(db, 'tb_relsem', relsemClass.RelsemSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         Relsem.find({relsem_beneid: req.body.relsemBeneid}).then((relsem) =>{
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome

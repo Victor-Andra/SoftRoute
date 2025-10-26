@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const PrognivelSchema = mongoose.Schema({
     prognivel_nome: {type: String, unique: true, required: true},
@@ -36,9 +37,18 @@ class Prognivel{
 
 
 PrognivelSchema.loadClass(Prognivel)
-const PrognivelModel = mongoose.model('tb_prognivel', PrognivelSchema)
-module.exports = {PrognivelModel,PrognivelSchema,
+var PrognivelModel = getModel("softroute", 'tb_prognivel', PrognivelSchema)
+module.exports = {
+    PrognivelModel,
+    PrognivelSchema,
+
     prognivelEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        PrognivelModel = getModel(db, 'tb_prognivel', PrognivelSchema)
+        //;
+
        //Pega data atual
        let dataAtual = new Date();
        //Pega Usuário Atual
@@ -66,6 +76,12 @@ module.exports = {PrognivelModel,PrognivelSchema,
         return resultado;
     },
     prognivelAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        PrognivelModel = getModel(db, 'tb_prognivel', PrognivelSchema)
+        //;
+
         //Pega data atual
         let dataAtual = new Date();
         //Pega Usuário Atual

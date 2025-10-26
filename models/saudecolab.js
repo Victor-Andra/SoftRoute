@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const SaudecolabSchema = mongoose.Schema({
     saudecolab_saudecolabid :{ type: ObjectId, required: false },
@@ -109,12 +110,19 @@ class Saudecolab{
 
 
 SaudecolabSchema.loadClass(Saudecolab)
-const SaudecolabModel = mongoose.model('tb_saudecolab', SaudecolabSchema)
+var SaudecolabModel = getModel("softroute", 'tb_saudecolab', SaudecolabSchema)
 
 module.exports = {
     SaudecolabModel,
     SaudecolabSchema,
+
     saudecolabEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        SaudecolabModel = getModel(db, 'tb_saudecolab', SaudecolabSchema)
+        //;
+
         // Pega data atual
         let dataAtual = new Date();
         // Pega Usuário Atual
@@ -167,6 +175,12 @@ module.exports = {
     },
 
     saudecolabAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        SaudecolabModel = getModel(db, 'tb_saudecolab', SaudecolabSchema)
+        //;
+        
         //Pega data atual
         let dataAtual = new Date();
         //Pega Usuário Atual

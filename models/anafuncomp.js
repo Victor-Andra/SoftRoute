@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
+// Esquema Análise Funcional Comportamental
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 const AnafuncompSchema = mongoose.Schema({
     anafuncomp_planotipo :{
         type: String,
@@ -72,6 +77,10 @@ const AnafuncompSchema = mongoose.Schema({
     }
 })
 
+// Construtor Análise Funcional Comportamental
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 class Anafuncomp{
     constructor(
         anafuncomp_planotipo,
@@ -113,9 +122,22 @@ class Anafuncomp{
 }
 
 AnafuncompSchema.loadClass(Anafuncomp)
-const AnafuncompModel = mongoose.model('tb_anafuncomp', AnafuncompSchema)
-module.exports = {AnafuncompModel,AnafuncompSchema,
+var AnafuncompModel = getModel("softroute", 'tb_anafuncomp', AnafuncompSchema)
+module.exports = {
+    AnafuncompModel,
+    AnafuncompSchema,
+
+    // Editar Análise Funcional Comportamental
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     anafuncompEditar: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AnafuncompModel = getModel(db, 'tb_anafuncomp', AnafuncompSchema);
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -149,7 +171,18 @@ module.exports = {AnafuncompModel,AnafuncompSchema,
         })
         return resultado;
     },
+    
+    // Add Análise Funcional Comportamental
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     anafuncompAdicionar: async (req,res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AnafuncompModel = getModel(db, 'tb_anafuncomp', AnafuncompSchema);
+        //;
+
         let dataAtual = new Date();
         console.log("anafuncompmodel");
         console.log("req.body.anafuncompdata:")

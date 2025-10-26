@@ -5,127 +5,126 @@ const mongoose = require("mongoose")
 const $ = require('jquery')
 const {autenticador} = require("../helpers/autenticador")
 let application = require('../routes/admin')
-
+const connections = require('../serverConnection');
 //funções gerais
 const fncGeral = require("../functions/fncGeral")
-
+const { getModel } = require('../functions/fncGeral');
 //Aviso - Dashboard
 const avisoClass = require("../models/aviso")
-const Aviso = mongoose.model("tb_aviso")
+var Aviso = getModel("softroute", 'tb_aviso', avisoClass.AvisoSchema);//getModel("softroute", 'tb_aviso', avisoClass.AvisoSchema)
 const fncAviso = require("../functions/fncAviso")
 
 //empresa
 const empresaClass = require("../models/empresa")
-const Empresa = mongoose.model("tb_empresa")
+var Empresa = getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema);//getModel("softroute", 'tb_empresa', empresaClass.EmpresaSchema)
 const fncEmpresa = require("../functions/fncEmpresa")
 
 //especialidade
 const especialidadeClass = require("../models/especialidade")
-const Especialidade = mongoose.model("tb_especialidade")
+var Especialidade = getModel("softroute", 'tb_especialidade', especialidadeClass.EspecialidadeSchema);//getModel("softroute", 'tb_especialidade', especialidadeClass.EspecialidadeSchema)
 const fncEspecialidade = require("../functions/fncEspecialidade")
 
 //especialidade do Plano de Tratamento
 const especialidadePlanoClass = require("../models/especialidadePlano")
-const EspecialidadePlano = mongoose.model("tb_especialidadePlano")
+var EspecialidadePlano = getModel("softroute", 'tb_especialidadePlano', especialidadePlanoClass.EspecialidadePlanoSchema);//getModel("softroute", 'tb_especialidadePlano', especialidadePlanoClass.EspecialidadePlanoSchema)
 const fncEspecialidadePlano = require("../functions/fncEspecialidadePlano")
 
 //especializacao
 const especializacaoClass = require("../models/especializacao")
-const Especializacao = mongoose.model("tb_especializacao")
+var Especializacao = getModel("softroute", 'tb_especializacao', especializacaoClass.EspecializacaoSchema);//getModel("softroute", 'tb_especializacao', especializacaoClass.EspecializacaoSchema)
 const fncEspecializacao = require("../functions/fncEspecializacao")
 
 //Método, Metodo, metodo
 const metodoClass = require("../models/metodo")
-const Metodo = mongoose.model("tb_metodo")
+var Metodo = getModel("softroute", 'tb_metodo', metodoClass.MetodoSchema);//getModel("softroute", 'tb_metodo', metodoClass.MetodoSchema)
 const fncMetodo = require("../functions/fncMetodo")
 
 //Métout, Metout, metout, Outros Métodos, 
 const metoutClass = require("../models/metout")
-const Metout = mongoose.model("tb_metout")
+var Metout = getModel("softroute", 'tb_metout', metoutClass.MetoutSchema);//getModel("softroute", 'tb_metout', metoutClass.MetoutSchema)
 const fncMetout = require("../functions/fncMetout")
 
 //escola
 const escolaClass = require("../models/escola")
-const Escola = mongoose.model("tb_escola")
+var Escola = getModel("softroute", 'tb_escola', escolaClass.EscolaSchema);//getModel("softroute", 'tb_escola', escolaClass.EscolaSchema)
 const fncEscola = require("../functions/fncEscola")
 
 //funções, cargos dos funcionários
 const funcaoClass = require("../models/funcao")
-const Funcao = mongoose.model("tb_funcao")
+var Funcao = getModel("softroute", 'tb_funcao', funcaoClass.FuncaoSchema);//getModel("softroute", 'tb_funcao', funcaoClass.FuncaoSchema)
 const fncFuncao = require("../functions/fncFuncao")
 
 //horario Agenda
 const horaageClass = require("../models/horaAge")
-const Horaage = mongoose.model("tb_horaage")
+var Horaage = getModel("softroute", 'tb_horaage', horaageClass.HoraageSchema);//getModel("softroute", 'tb_horaage', horaageClass.HoraageSchema)
 const fncHoraAge = require("../functions/fncHoraAge")
 
 //perfil, níveis de acesso
 const perfilClass = require("../models/perfil")
-const Perfil = mongoose.model("tb_perfil")
+var Perfil = getModel("softroute", 'tb_perfil', perfilClass.PerfilSchema);//getModel("softroute", 'tb_perfil', perfilClass.PerfilSchema)
 const fncPerfil = require("../functions/fncPerfil")
 
 //usufunc, funcionalidades que os usuários podem ter acesso
 const usufuncClass = require("../models/usufunc")
-const Usufunc = mongoose.model("tb_usufunc")
+var Usufunc = getModel("PortalDoUsuario", 'tb_usufunc', usufuncClass.UsufuncSchema);//getModel("softroute", 'tb_usufunc', usufuncClass.UsufuncSchema)
 const fncUsufunc = require("../functions/fncUsufunc")
 
 //usufunc, funcionalidades que os usuários podem ter acesso
 const usupermisClass = require("../models/usupermis")
-const Usupermis = mongoose.model("tb_usupermis")
+var Usupermis = getModel("PortalDoUsuario", 'tb_usupermis', usupermisClass.UsupermisSchema);//getModel("PortalDoUsuario", 'tb_usupermis', usupermisClass.UsupermisSchema)
 const fncUsupermis = require("../functions/fncUsupermis")
 
 //sala, onde são realizadas os atendimentos
 const salaClass = require("../models/sala")
-const Sala = mongoose.model("tb_sala")
+var Sala = getModel("softroute", 'tb_sala', salaClass.SalaSchema);//getModel("softroute", 'tb_sala', salaClass.SalaSchema)
 const fncSala = require("../functions/fncSala")
 
 //Saúde dos colaboradores Ficha, onde são cadastrados as informações de saúde dos colaboradores
 //Para emergência médica e hospitalar/SAMU
 const saudecolabClass = require("../models/saudecolab")
-const Saudecolab = mongoose.model("tb_saudecolab")
+var Saudecolab = getModel("softroute", 'tb_saudecolab', saudecolabClass.SaudecolabSchema);//getModel("softroute", 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
 const fncSaudecolab= require("../functions/fncSaudecolab")
 
 //terapia, tipos de terapias realiazadas
 const terapiaClass = require("../models/terapia")
-const Terapia = mongoose.model("tb_terapia")
+var Terapia = getModel("softroute", 'tb_terapia', terapiaClass.TerapiaSchema);//getModel("softroute", 'tb_terapia', terapiaClass.TerapiaSchema)
 const fncTerapia = require("../functions/fncTerapia")
 
 //estado, cadastro das unidades federativas brasileira
 const estadoClass = require("../models/estado")
-const Estado = mongoose.model("tb_estado")
+var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema);//getModel("softroute", 'tb_estado', estadoClass.EstadoSchema)
 const fncEstado = require("../functions/fncEstado")
 
 //ano, cadastro dos Anos de Atividades 
 const anoClass = require("../models/ano")
-const Ano = mongoose.model("tb_ano")
+var Ano = getModel("softroute", 'tb_ano', anoClass.AnoSchema);//getModel("softroute", 'tb_ano', anoClass.AnoSchema)
 const fncAno = require("../functions/fncAno")
 
 //usuario, cadastro dos usuários
 const usuarioClass = require("../models/usuario")
-const Usuario = mongoose.model("tb_usuario")
+const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);//getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 const fncUsuario = require("../functions/fncUsuario")
-
 
 //beneficiario, clientes
 const beneClass = require("../models/bene")
-const Bene = mongoose.model("tb_bene")
+var Bene = getModel("softroute", 'tb_bene', beneClass.BeneSchema);//getModel("softroute", 'tb_bene', beneClass.BeneSchema)
 const fncBene = require("../functions/fncBene")
 
 //Exceções, Peculiaridades da Fichas de Frequência
 const excecaoClass = require("../models/excecao")
-const Excecao = mongoose.model("tb_excecao")
+var Excecao = getModel("softroute", 'tb_excecao', excecaoClass.ExcecaoSchema);//getModel("softroute", 'tb_excecao', excecaoClass.ExcecaoSchema)
 const fncExcecao = require("../functions/fncExcecao")
 
 //Exceções para Terapeuras
 const excecaoteraClass = require("../models/excecaotera")
-const Excecaotera = mongoose.model("tb_excecaotera")
+var Excecaotera = getModel("softroute", 'tb_excecaotera', excecaoteraClass.ExcecaoteraSchema);//getModel("softroute", 'tb_excecaotera', excecaoteraClass.ExcecaoteraSchema)
 const fncExcecaotera = require("../functions/fncExcecaotera")
 
 //Fotos dos beneficiarios
 //As fotos dos beneficiários ficam em tabela e função a parte para não pesar listagens e outras fuções do sistema
 //Só em rarissimas esceções ele é chamado para exibir a foto, no formulário do Dossiê
 const benefotoClass = require("../models/benefoto")
-const Benefoto = mongoose.model("tb_benefoto")
+var Benefoto = getModel("softroute", 'tb_benefoto', benefotoClass.BenefotoSchema);//getModel("softroute", 'tb_benefoto', benefotoClass.BenefotoSchema)
 const fncBenefoto = require("../functions/fncBenefoto")
 
 // Extraia apenas o que for necessário
@@ -133,12 +132,12 @@ const upload = benefotoClass.upload; // ✅ Importa o upload do Multer
 
 //Evolução Atendimento
 const evoatendClass = require("../models/evoatend")
-const Evoatend = mongoose.model("tb_evoatend")
+var Evoatend = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema);//getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
 const fncEvoatend = require("../functions/fncEvoatend")
 
 //Agenda Técnicos
 const agendaTecClass = require("../models/agenda")
-const AgendaTec = mongoose.model("tb_agenda")
+var AgendaTec = getModel("softroute", 'tb_agenda', agendaTecClass.AgendaSchema);//getModel("softroute", 'tb_agenda', agendaTecClass.AgendaSchema)
 const fncAgendaTec = require("../functions/fncAgendaTec")
 
 //Busca
@@ -146,187 +145,204 @@ const fncBusca = require("../functions/fncBusca")
 
 //Anamnese
 const anamnClass = require("../models/anamn")
-const Anamn = mongoose.model("tb_anamn")
+var Anamn = getModel("softroute", 'tb_anamn', anamnClass.AnamnSchema);//getModel("softroute", 'tb_anamn', anamnClass.AnamnSchema)
 const fncAnamn = require("../functions/fncAnamn")
+
+//Avaliação Fisioterapeutica (Avafisio)
+//Criado em: 2025-09-26 Wagner Cintra
+//Editado em:
+const avafisioClass = require("../models/avafisio")
+var Avafisio = getModel("softroute", 'tb_avafisio', avafisioClass.AvafisioSchema);//getModel("softroute", 'tb_avafisio', avafisioClass.AvafisioSchema)
+const fncAvafisio = require("../functions/fncAvafisio")
+//falta criar as rotas
+
+//Configurações dos Textos pardrões para Evoluções dos Supervisores (Evolucaoconf)
+//Criado em: 2025-09-26 Wagner Cintra
+//Editado em:
+const evolucaoconfClass = require("../models/evolucaoconf")
+var Evolucaoconf = getModel("softroute", 'tb_evolucaoconf', evolucaoconfClass.EvolucaoconfSchema);//getModel("softroute", 'tb_evolucaoconf', evolucaoconfClass.EvolucaoconfSchema)
+const fncEvolucaoconf = require("../functions/fncEvolucaoconf")
+//falta criar as rotas
+
 
 //Diário de Bordo
 const bordoClass = require("../models/bordo")
-const Bordo = mongoose.model("tb_bordo")
+var Bordo = getModel("softroute", 'tb_bordo', bordoClass.BordoSchema);//getModel("softroute", 'tb_bordo', bordoClass.BordoSchema)
 const fncBordo = require("../functions/fncBordo")
 
 
 //plano Tratamento
 const tratClass = require("../models/trat")
-const Trat = mongoose.model("tb_trat")
+var Trat = getModel("softroute", 'tb_trat', tratClass.TratSchema);//getModel("softroute", 'tb_trat', tratClass.TratSchema)
 const fncTrat = require("../functions/fncTrat")
 
 //Extra
 const extraClass = require("../models/extra")
-const Extra = mongoose.model("tb_extra")
+var Extra = getModel("softroute", 'tb_extra', extraClass.ExtraSchema);//getModel("softroute", 'tb_extra', extraClass.ExtraSchema)
 const fncExtra = require("../functions/fncExtra")
 
 //Laudo
 const laudoClass = require("../models/laudo")
-const Laudo = mongoose.model("tb_laudo")
+var Laudo = getModel("softroute", 'tb_laudo', laudoClass.LaudoSchema);//getModel("softroute", 'tb_laudo', laudoClass.LaudoSchema)
 const fncLaudo = require("../functions/fncLaudo")
 
 //VB-Mapp's
 const mappClass = require("../models/mapp")
-const Mapp = mongoose.model("tb_mapp")
+var Mapp = getModel("softroute", 'tb_mapp', mappClass.MappSchema);//getModel("softroute", 'tb_mapp', mappClass.MappSchema)
 const fncMapp = require("../functions/fncMapp")
 
 //ABLLS-R
 const abllsrClass = require("../models/abllsr")
-const Abllsr = mongoose.model("tb_abllsr")
+var Abllsr = getModel("softroute", 'tb_abllsr', abllsrClass.AbllsrSchema);//getModel("softroute", 'tb_abllsr', abllsrClass.AbllsrSchema)
 const fncAbllsr = require("../functions/fncAbllsr")
 
 //VB-Mapabll
 const mapabllClass = require("../models/mapabll")
-const Mapabll = mongoose.model("tb_mapabll")
+var Mapabll = getModel("softroute", 'tb_mapabll', mapabllClass.MapabllSchema);//getModel("softroute", 'tb_mapabll', mapabllClass.MapabllSchema)
 const fncMapabll = require("../functions/fncMapabll")
 
 //Evolução
 const evolClass = require("../models/evol")
-const Evol = mongoose.model("tb_evol")
+var Evol = getModel("softroute", 'tb_evol', evolClass.EvolSchema);//getModel("softroute", 'tb_evol', evolClass.EvolSchema)
 const fncEvol = require("../functions/fncEvol")
 
 //Sonda - ABA
 const sondaClass = require("../models/sonda")
-const Sonda = mongoose.model("tb_sonda")
+var Sonda = getModel("softroute", 'tb_sonda', sondaClass.SondaSchema);//getModel("softroute", 'tb_sonda', sondaClass.SondaSchema)
 const fncSonda = require("../functions/fncSonda")
 
 //Programa - ABA
 const progClass = require("../models/prog")
-const Prog = mongoose.model("tb_prog")
+var Prog = getModel("softroute", 'tb_prog', progClass.ProgSchema);//getModel("softroute", 'tb_prog', progClass.ProgSchema)
 const fncProg = require("../functions/fncProg")
 
 //Programa tipo - ABA
 const progtipoClass = require("../models/progtipo")
-const Progtipo = mongoose.model("tb_progtipo")
+var Progtipo = getModel("softroute", 'tb_progtipo', progtipoClass.ProgtipoSchema);//getModel("softroute", 'tb_progtipo', progtipoClass.ProgtipoSchema)
 const fncProgtipo = require("../functions/fncProgtipo")
 
 //Programa nivel - ABA
 const prognivelClass = require("../models/prognivel")
-const Prognivel = mongoose.model("tb_prognivel")
+var Prognivel = getModel("softroute", 'tb_prognivel', prognivelClass.PrognivelSchema);//getModel("softroute", 'tb_prognivel', prognivelClass.PrognivelSchema)
 const fncPrognivel = require("../functions/fncPrognivel")
 
 //Programa dica - ABA
 const progdicaClass = require("../models/progdica")
-const Progdica = mongoose.model("tb_progdica")
+var Progdica = getModel("softroute", 'tb_progdica', progdicaClass.ProgdicaSchema);//getModel("softroute", 'tb_progdica', progdicaClass.ProgdicaSchema)
 const fncProgdica = require("../functions/fncProgdica")
 
 //Gráfico do Programa - ABA
 const grafprogClass = require("../models/grafprog")
-const Grafprog = mongoose.model("tb_grafprog")
+var Grafprog = getModel("softroute", 'tb_grafprog', grafprogClass.GrafprogSchema);//getModel("softroute", 'tb_grafprog', grafprogClass.GrafprogSchema)
 const fncGrafprog = require("../functions/fncGrafprog")
 
 //SET - ABA
 const progsetClass = require("../models/progset")
-const Progset = mongoose.model("tb_progset")
+var Progset = getModel("softroute", 'tb_progset', progsetClass.ProgsetSchema);//getModel("softroute", 'tb_progset', progsetClass.ProgsetSchema)
 const fncProgset = require("../functions/fncProgset")
 
 //NAT - ABA
 const natClass = require("../models/nat")
-const Nat = mongoose.model("tb_nat")
+var Nat = getModel("softroute", 'tb_nat', natClass.NatSchema);//getModel("softroute", 'tb_nat', natClass.NatSchema)
 const fncNat = require("../functions/fncNat")
 
 //CARS - ABA
 const carsClass = require("../models/cars")
-const Cars = mongoose.model("tb_cars")
+var Cars = getModel("softroute", 'tb_cars', carsClass.CarsSchema);//getModel("softroute", 'tb_cars', carsClass.CarsSchema)
 const fncCars = require("../functions/fncCars")
 
 
 //ATA - ABA
 const ataClass = require("../models/ata")
-const Ata = mongoose.model("tb_ata")
+var Ata = getModel("softroute", 'tb_ata', ataClass.AtaSchema);//getModel("softroute", 'tb_ata', ataClass.AtaSchema)
 const fncAta = require("../functions/fncAta")
 
 
 //ATEC - ABA
 const atecClass = require("../models/atec")
-const Atec = mongoose.model("tb_atec")
+var Atec = getModel("softroute", 'tb_atec', atecClass.AtecSchema);//getModel("softroute", 'tb_atec', atecClass.AtecSchema)
 const fncAtec = require("../functions/fncAtec")
 
 
 //NotaSup
 const notasupClass = require("../models/notasup")
-const Notasup = mongoose.model("tb_notasup")
+var Notasup = getModel("softroute", 'tb_notasup', notasupClass.NotasupSchema);//getModel("softroute", 'tb_notasup', notasupClass.NotasupSchema)
 const fncNotasup = require("../functions/fncNotasup")
 
 //NotaSup
 const notasupobsClass = require("../models/notasupobs")
-const Notasupobs = mongoose.model("tb_notasupobs")
+var Notasupobs = getModel("softroute", 'tb_notasupobs', notasupobsClass.NotaSupObsSchema);//getModel("softroute", 'tb_notasupobs', notasupobsClass.NotaSupObsSchema)
 const fncNotasupobs = require("../functions/fncNotasupobs")
 
 //PECS
 const pecsClass = require("../models/pecs")
-const Pecs = mongoose.model("tb_pecs")
+var Pecs = getModel("softroute", 'tb_pecs', pecsClass.PecsSchema);//getModel("softroute", 'tb_pecs', pecsClass.PecsSchema)
 const fncPecs = require("../functions/fncPecs")
 
 //Visual
 const visualClass = require("../models/visual")
-const Visual = mongoose.model("tb_visual")
+var Visual = getModel("softroute", 'tb_visual', visualClass.VisualSchema);//getModel("softroute", 'tb_visual', visualClass.VisualSchema)
 const fncVisual = require("../functions/fncVisual")
 
 //Relsem
 const relsemClass = require("../models/relsem")
-const Relsem = mongoose.model("tb_relsem")
+var Relsem = getModel("softroute", 'tb_relsem', relsemClass.RelsemSchema);//getModel("softroute", 'tb_relsem', relsemClass.RelsemSchema)
 const fncRelsem = require("../functions/fncRelsem")
 
 
 //Acompanhamento, devolutiva e reuniões
 const acompClass = require("../models/acomp")
-const Acomp = mongoose.model("tb_acomp")
+var Acomp = getModel("softroute", 'tb_acomp', acompClass.AcompSchema);//getModel("softroute", 'tb_acomp', acompClass.AcompSchema)
 const fncAcomp = require("../functions/fncAcomp")
 
 //Folha Registro - ABA
 const folregClass = require("../models/folreg")
-const Folreg = mongoose.model("tb_folreg")
+var Folreg = getModel("softroute", 'tb_folreg', folregClass.FolregSchema);//getModel("softroute", 'tb_folreg', folregClass.FolregSchema)
 const fncFolreg = require("../functions/fncFolreg")
 
 //Gráfico ABC - ABA
 const grafabcClass = require("../models/grafabc")
-const Grafabc = mongoose.model("tb_grafabc")
+var Grafabc = getModel("softroute", 'tb_grafabc', grafabcClass.GrafabcSchema);//getModel("softroute", 'tb_grafabc', grafabcClass.GrafabcSchema)
 const fncGrafabc = require("../functions/fncGrafabc")
 
 //Análise funcional do comportamento
 const anafuncompClass = require("../models/anafuncomp")
-const Anafuncomp = mongoose.model("tb_anafuncomp")
+var Anafuncomp = getModel("softroute", 'tb_anafuncomp', anafuncompClass.AnafuncompSchema);//getModel("softroute", 'tb_anafuncomp', anafuncompClass.AnafuncompSchema)
 const fncAnafuncomp = require("../functions/fncAnafuncomp")
 
 //Evolucao
 const evolucaoClass = require("../models/atend")
-const Evolucao = mongoose.model("tb_atend")
+var Evolucao = getModel("softroute", 'tb_atend', evolucaoClass.EmpresaSchema);//getModel("softroute", 'tb_atend', evolucaoClass.EmpresaSchema)
 const fncEvolucao = require("../functions/fncEvolucao")
 
 //Sessao, Tabela com quantidades de Terapias que o beneficiario podera realizar semanalmente
 const sessaoClass = require("../models/sessao")
-const Sessao = mongoose.model("tb_sessao")
+var Sessao = getModel("softroute", 'tb_sessao', sessaoClass.SessaoSchema);//getModel("softroute", 'tb_sessao', sessaoClass.SessaoSchema)
 
 //convenio, planos de saúde e particular
 const convClass = require("../models/conv")
-const Conv = mongoose.model("tb_conv")
+var Conv = getModel("softroute", 'tb_conv', convClass.ConvSchema);//getModel("softroute", 'tb_conv', convClass.ConvSchema)
 const fncConv = require("../functions/fncConv")
 
 //convcre, Recebimentos pela terapia realizada ao beneficiário
 const convcreClass = require("../models/convCre")
-const Convcre = mongoose.model("tb_convcre")
+var Convcre = getModel("softroute", 'tb_convcre', convcreClass.ConvcreSchema);//getModel("softroute", 'tb_convcre', convcreClass.ConvcreSchema)
 const fncConvcre = require("../functions/fncConvcre")
 
 
 //convdeb, Pagamentos pela terapia realizada pelo Terapeuta
 const convdebClass = require("../models/convDeb")
-const Convdeb = mongoose.model("tb_convdeb")
+var Convdeb = getModel("softroute", 'tb_convdeb', convdebClass.ConvdebSchema);//getModel("softroute", 'tb_convdeb', convdebClass.ConvdebSchema)
 const fncConvdeb = require("../functions/fncConvdeb")
 
 //convimp, Impostos ligados ao convênio
 const convimpClass = require("../models/convImp")
-const Convimp = mongoose.model("tb_convimp")
+var Convimp = getModel("softroute", 'tb_convimp', convimpClass.ConvimpSchema);//getModel("softroute", 'tb_convimp', convimpClass.ConvimpSchema)
 const fncConvimp = require("../functions/fncConvimp")
 
 //Atend, Atendimento Padrão 
 const atendClass = require("../models/atend")
-const Atend = mongoose.model("tb_atend")
+var Atend = getModel("softroute", 'tb_atend', atendClass.AtendSchema);//getModel("softroute", 'tb_atend', atendClass.AtendSchema)
 const fncAtend = require("../functions/fncAtend")
    
 //AtendAdm, Atendimento Administrativo
@@ -335,7 +351,7 @@ const fncAtendAdm = require("../functions/fncAtendAdm")
 
 //AGENDA, Agendamentos Padrão
 const agendaClass = require("../models/agenda")
-const Agenda = mongoose.model("tb_agenda")
+var Agenda = getModel("softroute", 'tb_agenda', agendaClass.AgendaSchema);//getModel("softroute", 'tb_agenda', agendaTecClass.AgendaSchema)
 const fncAgenda = require("../functions/fncAgenda")
 
 
@@ -343,52 +359,52 @@ const fncAgenda = require("../functions/fncAgenda")
 
 //Debit, Débitos (parcialmente vinculadas ao Atendimento)
 const debitClass = require("../models/debit")
-const Debit = mongoose.model("tb_debit")
+var Debit = getModel("softroute", 'tb_debit', debitClass.DebitSchema);//getModel("softroute", 'tb_debit', debitClass.DebitSchema)
 const fncDebit = require("../functions/fncDebit")
 
 //Credit, Créditos (parcialmente vinculadas ao Atendimento)
 const creditClass = require("../models/credit")
-const Credit = mongoose.model("tb_credit")
+var Credit = getModel("softroute", 'tb_credit', creditClass.CreditSchema);//getModel("softroute", 'tb_credit', creditClass.CreditSchema)
 const fncCredit = require("../functions/fncCredit")
 
 //Contas a receber (contaRec, contarec)
 //Migração do Credit para o contaRec (contas a Receber)
 const contaRecClass = require("../models/contaRec")
-const ContaRec = mongoose.model("tb_contarec")
+var ContaRec = getModel("softroute", 'tb_contarec', contaRecClass.ContaRecSchema);//getModel("softroute", 'tb_contarec', contaRecClass.ContaRecSchema)
 const fncContaRec = require("../functions/fncContaRec")
 
 
 //Tabil, Balanço contábil (parcialmente vinculadas ao Atendimento)
 const tabilClass = require("../models/tabil")
-const Tabil = mongoose.model("tb_tabil")
+var Tabil = getModel("softroute", 'tb_tabil', tabilClass.TabilSchema);//getModel("softroute", 'tb_tabil', tabilClass.TabilSchema)
 
 //Corrente, Conta Analise financeira pessoal de cada Terapeuta (vinculadas ao Atendimento)
 const correnteClass = require("../models/corrente")
-const Corrente = mongoose.model("tb_corrente")
+var Corrente = getModel("softroute", 'tb_corrente', correnteClass.CorrenteSchema);//getModel("softroute", 'tb_corrente', correnteClass.CorrenteSchema)
 const fncCorrente = require("../functions/fncCorrente")
 
 //Imposto
 const ImpostoClass = require("../models/imposto")
-const Imposto = mongoose.model("tb_imposto")
+var Imposto = getModel("softroute", 'tb_imposto', ImpostoClass.ImpostoSchema);//getModel("softroute", 'tb_imposto', ImpostoClass.ImpostoSchema)
 const fncImposto = require("../functions/fncImposto")
 
 //RESPOSTA
 const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
+var Resposta = getModel("softroute", 'tb_resposta', respostaClass.RespostaSchema);//getModel("softroute", 'tb_resposta', respostaClass.RespostaSchema)
 
 //Fornecedor, Para cadastrar novas Depesas independentemente dos Atendimentos
 const fornecClass = require("../models/fornec")
-const Fornec = mongoose.model("tb_fornec")
+var Fornec = getModel("softroute", 'tb_fornec', fornecClass.FornecSchema);//getModel("softroute", 'tb_fornec', fornecClass.FornecSchema)
 const fncFornec = require("../functions/fncFornec")
 
 //Categoria, Para cadastrar novas Depesas independentemente dos Atendimentos
 const debitCategClass = require("../models/debitCateg")
-const debitCateg = mongoose.model("tb_debitcateg")
+var debitCateg = getModel("softroute", 'tb_debitcateg', debitCategClass.DebitcategSchema);//getModel("softroute", 'tb_debitcateg', debitCategClass.DebitcategSchema)
 const fncDebitCateg = require("../functions/fncDebitCateg")
 
 //Categoria, Para cadastrar novas Depesas independentemente dos Atendimentos
 const debitSubcategClass = require("../models/debitSubcateg")
-const debitSubcateg = mongoose.model("tb_debitsubcateg")
+var debitSubcateg = getModel("softroute", 'tb_debitsubcateg', debitSubcategClass.DebitsubcategSchema);//getModel("softroute", 'tb_debitsubcateg', debitSubcategClass.DebitsubcategSchema)
 const fncDebitSubcateg = require("../functions/fncDebitSubcateg")
 
 const fncSessao = require('../functions/fncSessao')
@@ -403,7 +419,7 @@ const fncDash = require("../functions/fncDash")
 /*
 //Referencias de Atendimentos (vinculadas diretamente aos Atendimantos)
 const refAtendClass = require("../models/refAtend")
-const RefAtend = mongoose.model("tb_refatend")
+const RefAtend = getModel("softroute", 'tb_refatend', refAtendClass.RefAtendSchema);//getModel("softroute", 'tb_refatend', refAtendClass.RefAtendSchema)
 */
 
 /*
@@ -548,6 +564,9 @@ router.post('/login/backup', passport.authenticate('local', {
     failureRedirect: '/menu/login',
     failureMessage: true
 }), async function (req, res) {
+    let db = req.cookies['preferredDb'];
+    Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+
     let lvl, idUsu, perfilId, ativo;
     let aux = 1;
     let agendaFinal = [];
@@ -571,30 +590,6 @@ router.post('/login/backup', passport.authenticate('local', {
     });
 
     // Função auxiliar: filtrar aniversariantes da semana
-    function filtrarAniversariantes(lista, tipo, campoNomeOriginal) {
-        return lista
-            .map(p => {
-                const dataNasc = new Date(p[`${tipo}_datanasc`]);
-                const dia = String(dataNasc.getUTCDate()).padStart(2, '0');
-                const mes = String(dataNasc.getUTCMonth() + 1).padStart(2, '0');
-                return {
-                    dtnasc: dataNasc,
-                    diaNascimento: dia,
-                    mesNascimento: mes,
-                    hoje: dia === diaAtual && mes === mesAtual,
-                    ...(tipo === 'usuario' ? { usuario_nome: p.usuario_nome } : { bene_nome: p.bene_nome })
-                };
-            })
-            .filter(p =>
-                semanaDias.some(s =>
-                    s.dia === p.diaNascimento && s.mes === p.mesNascimento
-                )
-            )
-            .sort((a, b) => {
-                if (a.mesNascimento !== b.mesNascimento) return a.mesNascimento - b.mesNascimento;
-                return a.diaNascimento - b.diaNascimento;
-            });
-    }
 
     try {
         const benesGeral = await Bene.find({ bene_status: "Ativo" });
@@ -615,13 +610,8 @@ router.post('/login/backup', passport.authenticate('local', {
         res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + tempoCookie) });
         res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + tempoCookie) });
 
-        const [usuarios, benes] = await Promise.all([
-            Usuario.find({ usuario_status: "Ativo" }),
-            Bene.find({ bene_status: "Ativo" })
-        ]);
-
-        const aniversariantesDaSemanaUsuario = filtrarAniversariantes(usuarios, "usuario", "nome");
-        const aniversariantesDaSemanaBene = filtrarAniversariantes(benes, "bene", "nome");
+        const aniversariantesDaSemanaUsuario = usuarioClass.filtrarAniversariantes("usuario");
+        const aniversariantesDaSemanaBene = beneClass.filtrarAniversariantes(req, "bene");
 
         // Agendas semanais
         const inicioSemana = new Date(domingo);
@@ -732,70 +722,83 @@ router.post('/login/backup', passport.authenticate('local', {
     }
 });
 
-router.post('/login', passport.authenticate('local', {
+//inicio conjunto de roteamento e processamento para multiempresa
+//Criado por: Victor Andrade
+//2025-09-19
+router.post('/login', passport.authenticate('local', {//Abre portal Login e senha
     failureRedirect: '/menu/login',
     failureMessage: true
 }), async function (req, res) {
     try {
-        // Variáveis iniciais
-        let aux = 1;
-        const hoje = new Date();
-        const diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
-        const mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
+        // Verificar usuário e perfil
+        Usuario.findOne({ usuario_email: req.body.email, usuario_senha: req.body.senha }).then((usu)=>{
+            console.log("EPA!");
+            if (!usu || usu.usuario_status !== "Ativo") {
+                req.flash("error_message", "Usuário ou senha inválidos ou inativo.");
+                return res.redirect('/menu/login');
+            }
+            if (usu.usuario_empresaids != undefined) {
+                if (usu.usuario_empresaids.length == 1){
+                    Empresa.findOne({_id: usu.usuario_empresaids[0]}).then((empresa)=>{
+                        let dbEscolhida = empresa.empresa_chavedb;
+                        return login(req,res,dbEscolhida);
+                    })
+                } else if (usu.usuario_empresaids.length > 1) {
+                    console.log("+ de 1")
+                    Empresa.find({_id: {$in:usu.usuario_empresaids}}).then((empresa)=>{
+                        let email = req.body.email;
+                        let senha = req.body.senha;
+                        lvl = "x";
+                        res.render("ferramentas/usuario/loginDB", {nivel: lvl, email , senha, empresas: empresa})
+                    })
+                }
+            } else {
+                login(req,res,"SoftRoute");
+                /*
+                console.log("NAO TEM")
+                req.flash("error_message", "Usuário sem vínculo organizacional ou inativo.");
+                return res.redirect('/menu/login');
+                */
+            }
+        });
+    } catch (err) {
+        console.error("Erro no login:", err);
+        req.flash("error_message", "Erro ao autenticar o usuário.");
+        //return res.redirect('/menu/login');
+    }
+});
 
-        // Calcular domingo (início da semana)
-        const domingo = new Date(hoje);
-        domingo.setDate(hoje.getDate() - hoje.getDay()); // 0 = domingo
+router.post('/loginDB', passport.authenticate('local', { //redirecionado se tiver credencial para acessar mais de um banco (empresa)
+    failureRedirect: '/menu/login',
+    failureMessage: true
+}), async function (req, res) {
+    try {
+        let dbEscolhida = req.body.dbEscolhida;
+        console.log("dbEscolhida? "+dbEscolhida)
+        login(req,res, dbEscolhida);
+    } catch (err) {
+        console.error("Erro no login:", err);
+        req.flash("error_message", "Erro ao autenticar o usuário.");
+        res.redirect('/menu/login');
+    }
+});
 
-        // Construir dias da semana: domingo a sábado
-        const semanaDias = Array.from({ length: 7 }).map((_, i) => {
-            const d = new Date(domingo);
-            d.setDate(domingo.getDate() + i);
-            return {
-                dia: String(d.getUTCDate()).padStart(2, '0'),
-                mes: String(d.getUTCMonth() + 1).padStart(2, '0')
-            };
+async function login(req, res, dbEscolhida) { // Processa após verificação de credenciais
+    try {
+        //let db = req.cookies['preferredDb'];
+        let db = dbEscolhida;
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        
+        //console.log("LOGIN??");
+        // Usuário
+        const usu = await Usuario.findOne({
+            usuario_email: req.body.email, 
+            usuario_senha: req.body.senha 
         });
 
-        // Função auxiliar: filtrar aniversariantes da semana
-        function filtrarAniversariantes(lista, tipo, campoNomeOriginal) {
-            return lista
-                .map(p => {
-                    const dataNasc = new Date(p[`${tipo}_datanasc`]);
-                    const dia = String(dataNasc.getUTCDate()).padStart(2, '0');
-                    const mes = String(dataNasc.getUTCMonth() + 1).padStart(2, '0');
-                    return {
-                        dtnasc: dataNasc,
-                        diaNascimento: dia,
-                        mesNascimento: mes,
-                        hoje: dia === diaAtual && mes === mesAtual,
-                        ...(tipo === 'usuario' ? { usuario_nome: p.usuario_nome } : { bene_nome: p.bene_nome })
-                    };
-                })
-                .filter(p =>
-                    semanaDias.some(s =>
-                        s.dia === p.diaNascimento && s.mes === p.mesNascimento
-                    )
-                )
-                .sort((a, b) => {
-                    if (a.mesNascimento !== b.mesNascimento) return a.mesNascimento - b.mesNascimento;
-                    return a.diaNascimento - b.diaNascimento;
-                });
-        }
-
-        // Função para normalizar o campo agenda_selo
-        function normalizeBoolean(value) {
-            if (typeof value === "boolean") {
-                return value; // Já é um booleano, retorna como está
-            }
-            if (typeof value === "string") {
-                return value.toLowerCase() === "true"; // Converte strings "true" ou "false" para booleano
-            }
-            return false; // Caso padrão (se for null, undefined ou outro tipo)
-        }
-
-        // Verificar usuário e perfil
-        const usu = await Usuario.findOne({ usuario_email: req.body.email, usuario_senha: req.body.senha });
         if (!usu || usu.usuario_status !== "Ativo") {
             req.flash("error_message", "Usuário ou senha inválidos ou inativo.");
             return res.redirect('/menu/login');
@@ -803,29 +806,25 @@ router.post('/login', passport.authenticate('local', {
 
         const perfilId = usu.usuario_perfilid;
         const idUsu = usu._id;
-
-        // Definir tempo de expiração do cookie
+        let base = dbEscolhida;
+        console.log("base? "+base);
         const tempoCookie = ["62421801a12aa557219a0fb9", "62421857a12aa557219a0fc1", "624218f5a12aa557219a0fd0"].includes(perfilId)
-            ? (5 * 60 * 60 * 1000) // 5 horas
-            : (2 * 60 * 60 * 1000); // 2 horas
+            ? (5 * 60 * 60 * 1000)
+            : (2 * 60 * 60 * 1000);
 
         res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + tempoCookie) });
         res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + tempoCookie) });
+        res.cookie('preferredDb', base, { expires: new Date(Date.now() + tempoCookie) });
 
-        // Buscar dados gerais
-        const [usuarios, benes, salas, terapias, benesFull] = await Promise.all([
-            Usuario.find({ usuario_status: "Ativo" }),
-            Bene.find({ bene_status: "Ativo" }),
-            Sala.find(),
-            Terapia.find(),
-            Bene.find()
+        // Buscar dados em paralelo
+        const [salas] = await Promise.all([
+            Sala.find()
         ]);
 
-        // Filtrar aniversariantes da semana
-        const aniversariantesDaSemanaUsuario = filtrarAniversariantes(usuarios, "usuario", "nome");
-        const aniversariantesDaSemanaBene = filtrarAniversariantes(benes, "bene", "nome");
-
         // Agendas semanais
+        const hoje = new Date();
+        const domingo = new Date(hoje);
+        domingo.setDate(hoje.getDate() - hoje.getDay());
         const inicioSemana = new Date(domingo);
         const fimSemana = new Date(domingo);
         fimSemana.setDate(domingo.getDate() + 6);
@@ -835,31 +834,7 @@ router.post('/login', passport.authenticate('local', {
             agenda_usuid: idUsu
         });
 
-        const evolucaoFaltante = agendasSemanais
-            .filter(a => !normalizeBoolean(a.agenda_selo)) // Normaliza o campo agenda_selo
-            .map(a => {
-                const dat = new Date(a.agenda_data);
-                const hora = String(dat.getUTCHours()).padStart(2, '0');
-                const minuto = String(dat.getUTCMinutes()).padStart(2, '0');
-                const sala = salas.find(s => String(s._id) === String(a.agenda_salaid));
-                const bene = benesFull.find(b => String(b._id) === String(a.agenda_beneid));
-                const terapia = terapias.find(t => String(t._id) === String(a.agenda_terapiaid));
-                return {
-                    _id: a._id,
-                    agenda_data: fncGeral.getDataFMTOption(dat, "/"),
-                    agenda_hora: `${hora}:${minuto}`,
-                    agenda_data_dia: fncGeral.getDataFMT(dat),
-                    agenda_aux: aux++,
-                    agenda_data_semana: ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()],
-                    sala_nome: sala?.sala_nome || "Sala não encontrada",
-                    bene_apelido: bene?.bene_apelido || "Beneficiário não encontrado",
-                    terapia_nomecid: terapia?.terapia_nomecid || "Terapia não encontrada",
-                    dia_hora_ordenação: `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${hora}${minuto}`,
-                    agenda_selo: normalizeBoolean(a.agenda_selo) // Normaliza o campo agenda_selo
-                };
-            }).sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
-
-        // Agendas do dia (com filtro)
+        // Agendas do dia
         const inicioDia = new Date();
         inicioDia.setHours(0, 0, 0, 0);
         const fimDia = new Date();
@@ -872,18 +847,6 @@ router.post('/login', passport.authenticate('local', {
         });
 
         agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
-
-        agendas.forEach(a => {
-            const dat = new Date(a.agenda_data);
-            a.agenda_data_dia = fncGeral.getDataFMT(dat);
-            a.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getUTCMinutes()).padStart(2, '0')}`;
-            a.agenda_aux = aux++;
-            a.dia_hora_ordenação = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${String(dat.getUTCHours()).padStart(2, '0')}${String(dat.getUTCMinutes()).padStart(2, '0')}`;
-            a.agenda_data_semana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()];
-            a.agenda_selo = normalizeBoolean(a.agenda_selo); // Normaliza o campo agenda_selo
-        });
-
-        const agendaFinal = agendas.sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
 
         // Buscar dados adicionais
         const [terapias2, benes2, usuarios2] = await Promise.all([
@@ -898,7 +861,11 @@ router.post('/login', passport.authenticate('local', {
             })
         ]);
 
-        // Mensagem de feedback
+        var diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
+        var mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
+
+        
+        // Flash
         const flash = new Resposta();
         if (!usu.usuario_palavrachave || usu.usuario_palavrachave === "undefined") {
             flash.sucesso = "almost";
@@ -911,25 +878,37 @@ router.post('/login', passport.authenticate('local', {
             flash.texto = "Logado com sucesso!";
         }
 
-        // Renderizar a view
+        // Buscar aniversariantes (usuários e beneficiários ativos)
+        const [usuariosAtivos, benesAtivos] = await Promise.all([
+            Usuario.find({ usuario_status: "Ativo" }),
+            Bene.find({ bene_status: "Ativo" })
+        ]);
+
+        const aniversariantesDaSemanaUsuario = fncUsuario.filtrarAniversariantesDaSemana(usuariosAtivos, 'usuario');
+        const aniversariantesDaSemanaBene = fncUsuario.filtrarAniversariantesDaSemana(benesAtivos, 'bene');
+
+        console.log("TA CHEGANDO AQUI");
         res.render("branco", {
             flash,
             aniversariantesDaSemanaUsuario,
             aniversariantesDaSemanaBene,
-            agendas: agendaFinal,
-            evolucaoFaltante,
+            agendas,
             terapias: terapias2,
-            agendasSemanaiss: agendaFinal,
-            benes: benes,
+            benes: benes2,
             salas,
             usuarios: usuarios2
         });
+        //console.log("Aniversariantes Bene:", aniversariantesDaSemanaBene);
+        //console.log("Aniversariantes Usuário:", aniversariantesDaSemanaUsuario);
+
     } catch (err) {
         console.error("Erro no login:", err);
         req.flash("error_message", "Erro ao autenticar o usuário.");
         res.redirect('/menu/login');
     }
-});
+}
+//fim conjunto roteamento login
+
 
 router.get('/menuT', (req,res)=>{
     let lvl = 3;
@@ -1113,7 +1092,7 @@ router.post("/agenda/filSala/", fncGeral.IsAuthenticated, (req,res) =>{//direcio
     //console.log("Agenda Filtra Sala")
     fncAgenda.carregaAgendaFilSala(req, res);
 })
-
+/*
 router.get("/agenda/lisA", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem.
     fncAgenda.filtraAgendaA(req, res);
 })
@@ -1121,7 +1100,7 @@ router.get("/agenda/lisA", fncGeral.IsAuthenticated, (req,res) =>{//direciona a 
 router.post("/agenda/filA", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de filtro.
     fncAgenda.filtraAgendaA(req, res);
 })
-
+*/
 router.get("/agenda/lisF", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Fixa.
     fncAgenda.carregaAgendaF(req, res);
 })
@@ -1261,7 +1240,8 @@ router.get('/agenda/atualiza/:id', fncGeral.IsAuthenticated, (req,res) =>{//dire
 
 router.post('/agenda/copiaSemana', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let potinho = Object.assign(new PoteBiscoito, req.cookies);
-    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0" || potinho.lvlUsu == "677704b1a358ba19d0c8eb51" || potinho.lvlUsu == "677704a8a358ba19d0c8eb27") {
+    let usuariosAutorizados = ["62422397cf2fd2bb541f918e","6247ba1cfe2181047dc7c965","627163e1a5fc3fa857f47924"];
+    if (usuariosAutorizados.includes(req.cookies['idUsu']) && (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0" || potinho.lvlUsu == "677704b1a358ba19d0c8eb51" || potinho.lvlUsu == "677704a8a358ba19d0c8eb27")) {
         fncAgenda.copiaSemanaAgendaGeral(req, res);
     } else {
         console.log("Acesso NEGADO!");
@@ -1272,7 +1252,8 @@ router.post('/agenda/copiaSemana', fncGeral.IsAuthenticated, (req,res) =>{//dire
 
 router.post('/agenda/converteDia', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let potinho = Object.assign(new PoteBiscoito, req.cookies);
-    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0" || potinho.lvlUsu == "677704b1a358ba19d0c8eb51" || potinho.lvlUsu == "677704a8a358ba19d0c8eb27") {
+    let usuariosAutorizados = ["62422397cf2fd2bb541f918e","6247ba1cfe2181047dc7c965","627163e1a5fc3fa857f47924"];
+    if (usuariosAutorizados.includes(req.cookies['idUsu']) && (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0" || potinho.lvlUsu == "677704b1a358ba19d0c8eb51" || potinho.lvlUsu == "677704a8a358ba19d0c8eb27")) {
         fncAgenda.converteAgendaEmAtend(req, res);
     } else {
         console.log("Acesso NEGADO!");
@@ -1596,6 +1577,21 @@ router.get('/atendimento/atendreltera/relatendteracons', fncGeral.IsAuthenticate
 router.post('/atendimento/atendreltera/relatendteraconss', fncGeral.IsAuthenticated,(req,res) =>{
     fncAtend.relAtendteraconsFiltro(req,res)
 })
+
+//Gestão - Analitico dos Atendimentos por periodo
+router.get('/atendimento/atendreltera/gestao/relatendgestaoana', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.relatendgestaoana(req, res)
+});
+
+//Gestão - Consolidado dos Atendimentos por periodo
+router.get('/atendimento/atendreltera/gestao/relatendgestaocons', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.relatendgestaocons(req, res)
+});
+
+//Gestão - Consolidado dos Atendimentos por periodo
+router.get('/atendimento/atendreltera/gestao/relatendgestaoconsfechado', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.relatendgestaoconsfechado(req, res)
+});
 
 //Relatório Emissão NF.
 //Emite uma consolidado consolidado por beneficiário com os valores com formatação para emissão de NF ba prefeitura de recife.
@@ -2355,8 +2351,42 @@ router.get('/area/laudo/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//delet
     fncLaudo.deletaLaudo(req,res);
 })
 
+//Menu Area Terapeutas ** Avaliação de Fisioterapia
+//Criado em: 2025-10-02
+//por: Wagner Cintra
+//------------------------------------------------------------------------------------------------
+router.get('/area/avafisio/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona para o formulário de cadastro
+    fncAvafisio.carregaAvafisio(req, res);
+})
+//Cadastrar
+router.post('/area/avafisio/add', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro ao banco
+    fncAvafisio.cadastraAvafisio(req, res);
+})
+
+//Lista Avaliação de Fisioterapia por Tipo, Beneficiário. Tecnico, Medico e data
+router.get('/area/avafisio/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a lista de Avaliação de FisioterapiaARS
+    fncAvafisio.listaAvafisio(req, res);
+})
+//carrega registro para edição Avaliação de Fisioterapia
+router.get('/area/avafisio/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//carrega o cadastro para o Formulario de Edição
+    fncAvafisio.carregaAvafisioEdi(req, res);
+})
+
+router.post('/area/avafisio/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza Avaliação de Fisioterapia 
+    fncAvafisio.atualizaAvafisio(req, res);
+})
+
+//Deleta Avaliação de Fisioterapia Selecionado
+router.get('/area/avafisio/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Avaliação de Fisioterapia
+   fncAvafisio.deletaAvafisio(req,res);
+})
+
+//------------------------------------------------------------------------------------------------
+
+
 //Menu Evoluções ** Area Tecnicos   
 //Carrega Cadastro de Relatório Semestral
+//------------------------------------------------------------------------------------------------
 router.get('/area/evol/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
     fncEvol.carregaEvol(req, res);
 })
@@ -2380,9 +2410,11 @@ router.get('/area/evol/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//dire
 router.get('/area/evol/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
     fncEvol.deletaEvol(req, res);
 })
+//------------------------------------------------------------------------------------------------
 
 //Menu VB-MAPPS ** Area Tecnicos   
 //Carrega Cadastro de Mapp
+//------------------------------------------------------------------------------------------------
 router.get('/area/mapp/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
     fncMapp.carregaMapp(req, res);
 })
@@ -2406,9 +2438,12 @@ router.get('/area/mapp/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona 
 router.get('/area/mapp/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
     fncMapp.deletaMapp(req, res);
 })
+//------------------------------------------------------------------------------------------------
+
 
 //Menu ABLLS-R ** Area Tecnicos   
 //Carrega Cadastro de ABLLS-R
+//------------------------------------------------------------------------------------------------
 router.get('/area/abllsr/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
     fncAbllsr.carregaAbllsr(req, res);
 })
@@ -2432,9 +2467,12 @@ router.get('/area/abllsr/lis', fncGeral.IsAuthenticated, (req,res) =>{//direcion
 router.get('/area/abllsr/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
     fncAbllsr.deletaAbllsr(req, res);
 })
+//------------------------------------------------------------------------------------------------
+
 
 //Menu MapAbll ** Area Tecnicos   
 //Carrega Cadastro de MapAbll
+//------------------------------------------------------------------------------------------------
 router.get('/area/mapabll/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Laudo, com  bene e data.
     fncMapabll.carregaMapabll(req, res);
 })
@@ -2458,10 +2496,11 @@ router.get('/area/mapabll/lis', fncGeral.IsAuthenticated, (req,res) =>{//direcio
 router.get('/area/mapabll/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta Laudo
     fncMapabll.deletaMapabll(req, res);
 })
-
+//------------------------------------------------------------------------------------------------
 
 //Menu Sonda ** Area Tecnicos e ABA 
 //Carrega Cadastro sonda (DELETAR)
+//------------------------------------------------------------------------------------------------
 router.get('/area/aba/sonda/sondacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de diário de sonda, com  bene e data.
     fncSonda.carregaSonda(req, res);
 })
@@ -2475,6 +2514,7 @@ router.get('/area/aba/sonda/sondalis', fncGeral.IsAuthenticated, (req,res) =>{//
 
 //Menu Programas ** Area Tecnicos e ABA 
 //Carrega Cadastro ABA
+//------------------------------------------------------------------------------------------------
 router.get('/area/aba/prog/progcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro  de ABA, com  bene e data.
     fncProg.carregaProg(req, res);
 })
@@ -2532,11 +2572,11 @@ router.get('/area/aba/prog/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//di
 router.post('/area/aba/prog/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do ABA
     fncProg.atualizaProg(req, res);
 })
-
-//------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------
 
 //Menu Dicas ** Area Tecnicos e ABA 
 //Carrega Cadastro de Dicas programa ABA
+//-------------------------------------------------------------------------------------------
 router.get('/area/aba/progdica/progdicacad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de dicas
     fncProgdica.carregaProgdica(req, res);
 })
@@ -2564,8 +2604,8 @@ router.get('/area/aba/progdica/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{
 router.get('/area/aba/progdica/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do metodo
     fncProgdica.atualizaProgdica(req, res);
 })
-
 //------------------------------------------------------------------------------------------------
+
 
 //Menu Nivel ** Area Tecnicos e ABA 
 //Carrega Cadastro de Nivel dos programa ABA
@@ -2843,6 +2883,49 @@ router.post('/area/escalas/cars/atualizar', fncGeral.IsAuthenticated, (req,res) 
 router.get('/area/escalas/cars/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta 
     fncCars.deletaCars(req,res);
 })
+
+//------------------------------------------------------------------------------------------------
+//Menu Evolucaoconf ** Area Supervisão
+//Criado por: Wagner Cintra
+//Criado em: 06/10/2025
+
+//Carrega Cadastro Evolução de Supervisores
+router.get('/area/evolucaoconf/evolucaoconfcad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de registros
+    fncEvolucaoconf.carregaEvolucaoconf(req, res);
+})
+
+//Carrega o Editar da Evolução de Supervisores
+router.get('/area/evolucaoconf/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Nota de Supervisão
+    fncEvolucaoconf.carregaEvolucaoconfEdi(req,res);
+})
+
+//Carrega Lista Evolução de Supervisores
+router.get('/area/evolucaoconf/evolucaoconflis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o lista de Nota de Supervisão
+    fncEvolucaoconf.listaEvolucaoconf(req, res);
+})
+
+// Add Evolução de Supervisores
+router.post('/area/evolucaoconf/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Nota de Supervisão
+    fncEvolucaoconf.cadastraEvolucaoconf(req, res); 
+})
+
+//Atualiza Evolução de Supervisores
+router.post('/area/evolucaoconf/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Nota de Supervisão
+    fncEvolucaoconf.atualizaEvolucaoconf(req,res);
+})
+
+//Lixeira Evolução de Supervisores (Envia para lixeira)
+router.get('/area/evolucaoconf/del/:id', fncGeral.IsAuthenticated, async (req, res) => {
+    try {
+        await fncEvolucaoconf.deletaEvolucaoconf(req.params.id, req, res);
+        req.flash("success_message", "Registro movido para a lixeira.");
+    } catch (err) {
+        console.error(err);
+        req.flash("error_message", "Erro ao excluir registro.");
+    }
+    res.redirect('/menu/area/evolucaoconf/evolucaoconflis');
+});
+
 
 //------------------------------------------------------------------------------------------------
 
@@ -3303,7 +3386,6 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
 
         router.post('/ferramentas/empresa/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona empresa
         fncEmpresa.cadastraEmpresa(req, res);
-
         })
         
         router.get('/ferramentas/empresa/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta empresa
@@ -3754,6 +3836,10 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         router.post('/ferramentas/usupermis/salvar-massa', fncGeral.IsAuthenticated, (req, res) => {
             fncUsupermis.salvarEmMassa(req, res);
         })
+        router.post('/ferramentas/usupermis/salvar-massa-uform', fncGeral.IsAuthenticated, (req, res) => {
+            fncUsupermis.salvarEmMassauform(req, res);
+        });
+
        // Rota: Editar permissões do usuário
         router.get('/ferramentas/usupermis/edi/:id', fncGeral.IsAuthenticated, (req, res) => {
             console.log('🔹 Rota /usupermis/edi chamada com ID:', req.params.id);
@@ -3781,4 +3867,205 @@ Lembrar que o mês é calculado de 0 a 11 !!!
 let dataAtual = new Date()
 let dtNasc = new Date()
 dtNasc.setFullYear(1972,10,12)
+*/
+
+/*
+function login(req,res, dbEscolhida){
+    try {
+        console.log("LOGIN??")
+        // Variáveis iniciais
+        let aux = 1;
+        const hoje = new Date();
+        const diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
+        const mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
+
+        // Calcular domingo (início da semana)
+        const domingo = new Date(hoje);
+        domingo.setDate(hoje.getDate() - hoje.getDay()); // 0 = domingo
+
+        // Construir dias da semana: domingo a sábado
+        const semanaDias = Array.from({ length: 7 }).map((_, i) => {
+            const d = new Date(domingo);
+            d.setDate(domingo.getDate() + i);
+            return {
+                dia: String(d.getUTCDate()).padStart(2, '0'),
+                mes: String(d.getUTCMonth() + 1).padStart(2, '0')
+            };
+        });
+
+        // Função auxiliar: filtrar aniversariantes da semana
+        function filtrarAniversariantes(lista, tipo, campoNomeOriginal) {
+            return lista
+                .map(p => {
+                    const dataNasc = new Date(p[`${tipo}_datanasc`]);
+                    const dia = String(dataNasc.getUTCDate()).padStart(2, '0');
+                    const mes = String(dataNasc.getUTCMonth() + 1).padStart(2, '0');
+                    return {
+                        dtnasc: dataNasc,
+                        diaNascimento: dia,
+                        mesNascimento: mes,
+                        hoje: dia === diaAtual && mes === mesAtual,
+                        ...(tipo === 'usuario' ? { usuario_nome: p.usuario_nome } : { bene_nome: p.bene_nome })
+                    };
+                })
+                .filter(p =>
+                    semanaDias.some(s =>
+                        s.dia === p.diaNascimento && s.mes === p.mesNascimento
+                    )
+                )
+                .sort((a, b) => {
+                    if (a.mesNascimento !== b.mesNascimento) return a.mesNascimento - b.mesNascimento;
+                    return a.diaNascimento - b.diaNascimento;
+                });
+        }
+
+        // Função para normalizar o campo agenda_selo
+        function normalizeBoolean(value) {
+            if (typeof value === "boolean") {
+                return value; // Já é um booleano, retorna como está
+            }
+            if (typeof value === "string") {
+                return value.toLowerCase() === "true"; // Converte strings "true" ou "false" para booleano
+            }
+            return false; // Caso padrão (se for null, undefined ou outro tipo)
+        }
+
+        // Verificar usuário e perfil
+        const usu = Usuario.findOne({ usuario_email: req.body.email, usuario_senha: req.body.senha });
+        if (!usu || usu.usuario_status !== "Ativo") {
+            req.flash("error_message", "Usuário ou senha inválidos ou inativo.");
+            return res.redirect('/menu/login');
+        }
+
+        const perfilId = usu.usuario_perfilid;
+        const idUsu = usu._id;
+        const base = req.body.preferredBase;
+
+        // Definir tempo de expiração do cookie
+        const tempoCookie = ["62421801a12aa557219a0fb9", "62421857a12aa557219a0fc1", "624218f5a12aa557219a0fd0"].includes(perfilId)
+            ? (5 * 60 * 60 * 1000) // 5 horas
+            : (2 * 60 * 60 * 1000); // 2 horas
+
+        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + tempoCookie) });
+        res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + tempoCookie) });
+        res.cookie('preferredDb', base, { expires: new Date(Date.now() + tempoCookie) });
+
+        // Buscar dados gerais
+        const [usuarios, benes, salas, terapias, benesFull] = Promise.all([
+            Usuario.find({ usuario_status: "Ativo" }),
+            Bene.find({ bene_status: "Ativo" }),
+            Sala.find(),
+            Terapia.find(),
+            Bene.find()
+        ]);
+
+        // Filtrar aniversariantes da semana
+        const aniversariantesDaSemanaUsuario = filtrarAniversariantes(usuarios, "usuario", "nome");
+        const aniversariantesDaSemanaBene = filtrarAniversariantes(benes, "bene", "nome");
+
+        // Agendas semanais
+        const inicioSemana = new Date(domingo);
+        const fimSemana = new Date(domingo);
+        fimSemana.setDate(domingo.getDate() + 6);
+
+        const agendasSemanais = Agenda.find({
+            agenda_data: { $gte: inicioSemana, $lte: fimSemana },
+            agenda_usuid: idUsu
+        });
+
+        const evolucaoFaltante = agendasSemanais
+            .filter(a => !normalizeBoolean(a.agenda_selo)) // Normaliza o campo agenda_selo
+            .map(a => {
+                const dat = new Date(a.agenda_data);
+                const hora = String(dat.getUTCHours()).padStart(2, '0');
+                const minuto = String(dat.getUTCMinutes()).padStart(2, '0');
+                const sala = salas.find(s => String(s._id) === String(a.agenda_salaid));
+                const bene = benesFull.find(b => String(b._id) === String(a.agenda_beneid));
+                const terapia = terapias.find(t => String(t._id) === String(a.agenda_terapiaid));
+                return {
+                    _id: a._id,
+                    agenda_data: fncGeral.getDataFMTOption(dat, "/"),
+                    agenda_hora: `${hora}:${minuto}`,
+                    agenda_data_dia: fncGeral.getDataFMT(dat),
+                    agenda_aux: aux++,
+                    agenda_data_semana: ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()],
+                    sala_nome: sala?.sala_nome || "Sala não encontrada",
+                    bene_apelido: bene?.bene_apelido || "Beneficiário não encontrado",
+                    terapia_nomecid: terapia?.terapia_nomecid || "Terapia não encontrada",
+                    dia_hora_ordenação: `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${hora}${minuto}`,
+                    agenda_selo: normalizeBoolean(a.agenda_selo) // Normaliza o campo agenda_selo
+                };
+            }).sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
+
+        // Agendas do dia (com filtro)
+        const inicioDia = new Date();
+        inicioDia.setHours(0, 0, 0, 0);
+        const fimDia = new Date();
+        fimDia.setHours(23, 59, 59, 999);
+
+        let agendas = Agenda.find({
+            agenda_data: { $gte: inicioDia, $lte: fimDia },
+            agenda_usuid: idUsu,
+            agenda_temp: false
+        });
+
+        agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
+
+        agendas.forEach(a => {
+            const dat = new Date(a.agenda_data);
+            a.agenda_data_dia = fncGeral.getDataFMT(dat);
+            a.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getUTCMinutes()).padStart(2, '0')}`;
+            a.agenda_aux = aux++;
+            a.dia_hora_ordenação = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${String(dat.getUTCHours()).padStart(2, '0')}${String(dat.getUTCMinutes()).padStart(2, '0')}`;
+            a.agenda_data_semana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()];
+            a.agenda_selo = normalizeBoolean(a.agenda_selo); // Normaliza o campo agenda_selo
+        });
+
+        const agendaFinal = agendas.sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
+
+        // Buscar dados adicionais
+        const [terapias2, benes2, usuarios2] = Promise.all([
+            Terapia.find(),
+            Bene.find(),
+            Usuario.find({
+                usuario_status: "Ativo",
+                $or: [
+                    { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                    { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                ]
+            })
+        ]);
+
+        // Mensagem de feedback
+        const flash = new Resposta();
+        if (!usu.usuario_palavrachave || usu.usuario_palavrachave === "undefined") {
+            flash.sucesso = "almost";
+            flash.texto = "Você ainda não cadastrou sua Palavra Chave.";
+        } else if (usu.usuario_senha === "123456789") {
+            flash.sucesso = "almost";
+            flash.texto = "Você ainda não alterou sua senha temporária.";
+        } else {
+            flash.sucesso = "true";
+            flash.texto = "Logado com sucesso!";
+        }
+console.log("TA CHEGANDO AQUI")
+        // Renderizar a view
+        res.render("branco", {
+            flash,
+            aniversariantesDaSemanaUsuario,
+            aniversariantesDaSemanaBene,
+            agendas: agendaFinal,
+            evolucaoFaltante,
+            terapias: terapias2,
+            agendasSemanaiss: agendaFinal,
+            benes: benes,
+            salas,
+            usuarios: usuarios2
+        });
+    } catch (err) {
+        console.error("Erro no login:", err);
+        req.flash("error_message", "Erro ao autenticar o usuário.");
+        res.redirect('/menu/login');
+    }
+}
 */

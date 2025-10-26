@@ -1,16 +1,20 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //progtipos
 const progtipoClass = require("../models/progtipo")
-const respostaClass = require("../models/resposta")
 
 //progtipo, tipos de progtipo 
-const Progtipo = mongoose.model("tb_progtipo")
-const Resposta = mongoose.model("tb_resposta")
+var Progtipo = getModel("SoftRoute", 'tb_progtipo', progtipoClass.ProgtipoSchema)
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaProgtipo(req,res,resposta){
+        let db = req.cookies['preferredDb'];
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+
         let flash = new Resposta()
         console.log('listando progtipos')
         Progtipo.find().then((progtipo) =>{
@@ -39,6 +43,9 @@ module.exports = {
     },
 
     carregaProgtipoEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+
         Progtipo.findById(req.params.id).then((progtipo) =>{
             console.log(progtipo)
             res.render('area/aba/progtipo/progtipoEdi', {progtipo})
@@ -111,6 +118,9 @@ module.exports = {
     },
 
     deletaProgtipo(req,res){
+        let db = req.cookies['preferredDb'];
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+
         Progtipo.deleteOne({_id: req.params.id}).then(() =>{
             Progtipo.find().then((progtipo) =>{
                 req.flash("success_message", "Método deletado!")

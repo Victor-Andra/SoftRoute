@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const EmpresaSchema = mongoose.Schema({
     empresa_unidade : {type: String, unique: true, required: true },
@@ -19,6 +20,7 @@ const EmpresaSchema = mongoose.Schema({
     empresa_fixo : { type: String, required: false },
     empresa_email : { type: String, required: false },
     empresa_site : { type: String, required: false },
+    empresa_chavedb : { type: String, required: false },
     empresa_obs : { type: String, required: false },
     empresa_status : { type: Boolean, required: false },//Boleano
     //controle CRUD
@@ -51,6 +53,7 @@ class Empresa{
         empresa_fixo,
         empresa_email,
         empresa_site,
+        empresa_chavedb,
         empresa_obs,
         empresa_status,//Boleano
         //controle CRUD
@@ -79,6 +82,7 @@ class Empresa{
         this.empresa_fixo  = empresa_fixo,
         this.empresa_email  = empresa_email,
         this.empresa_site  = empresa_site,
+        this.empresa_chavedb = empresa_chavedb,
         this.empresa_obs  = empresa_obs,
         this.empresa_status  = empresa_status,//Boleano
         //controle CRUD
@@ -93,9 +97,17 @@ class Empresa{
 }
 
 EmpresaSchema.loadClass(Empresa)
-const EmpresaModel = mongoose.model('tb_empresa', EmpresaSchema)
-module.exports = {EmpresaModel,EmpresaSchema,
+const EmpresaModel = getModel("PortalDoUsuario", 'tb_empresa', EmpresaSchema)
+module.exports = {
+    EmpresaModel,
+    EmpresaSchema,
+
+
     empresaEditar: async (req, res) => {
+
+        //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+        //;
+
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];
         let resultado;
@@ -140,6 +152,10 @@ module.exports = {EmpresaModel,EmpresaSchema,
     },
 
     empresaAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
+        //;
+
         let empresaExiste =  await EmpresaModel.findOne({empresa_nome: req.body.empresaNome});//quando não acha fica null
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];

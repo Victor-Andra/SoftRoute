@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const TratSchema = mongoose.Schema({
     //identificação do plano de tratamento
@@ -138,9 +139,18 @@ class Trat{
 }
 
 TratSchema.loadClass(Trat)
-const TratModel = mongoose.model('tb_trat', TratSchema)
-module.exports = {TratModel,TratSchema,
+var TratModel = getModel("softroute", 'tb_trat', TratSchema)
+module.exports = {
+    TratModel,
+    TratSchema,
+
     tratEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        TratModel = getModel(db, 'tb_trat', TratSchema)
+        //;
+        
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -212,6 +222,12 @@ module.exports = {TratModel,TratSchema,
         return resultado;
     },
     tratLixo: async (req, res) => {
+        
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        TratModel = getModel(db, 'tb_trat', TratSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -248,6 +264,12 @@ module.exports = {TratModel,TratSchema,
         return resultado;
     },
     tratAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        TratModel = getModel(db, 'tb_trat', TratSchema)
+        //;
+
         console.log("tratmodel");
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];

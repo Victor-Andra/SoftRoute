@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const CarsSchema = mongoose.Schema({
     //Atributos básicos
@@ -172,9 +173,15 @@ class Cars{
 }
 
 CarsSchema.loadClass(Cars)
-const CarsModel = mongoose.model('tb_cars', CarsSchema)
+var CarsModel = getModel("softroute", 'tb_cars', CarsSchema)
 module.exports = {CarsModel,CarsSchema,
     carsEditar: async (req, res) => {
+
+        //Estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        CarsModel = getModel(db, 'tb_cars', CarsSchema)
+        //;
+
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];
         let resultado;
@@ -246,6 +253,12 @@ module.exports = {CarsModel,CarsSchema,
         return resultado;
     },
     carsAdicionar: async (req,res) => {
+
+         //Estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        CarsModel = getModel(db, 'tb_cars', CarsSchema)
+        //;
+
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];
         const newCars = new CarsModel({

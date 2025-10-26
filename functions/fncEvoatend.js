@@ -1,22 +1,16 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //Houve alteração na Estrutura e Banco da evolução de atendimentos, eles agora são vinculados à Agenda e Não ao Atendimento.
 //Classes Extrangeiras
 const evoatendClass = require("../models/agenda")
-
 
 //As classe tem que ser declaradas antes das tabelas
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
-const convecreClass = require("../models/convCre")
-const convdebClass = require("../models/convDeb")
-const tabilClass = require("../models/tabil")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
-const creditClass = require("../models/credit")
-const debitClass = require("../models/debit")
 const salaClass = require("../models/sala")
 const horaageClass = require("../models/horaAge")
 const agendaClass = require("../models/agenda")
@@ -24,33 +18,22 @@ const anoClass = require("../models/ano")
 
 
 //Tabelas Extrangeiras
-const Agenda = mongoose.model("tb_agenda")
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Convcre = mongoose.model("tb_convcre")
-const Convdeb = mongoose.model("tb_convdeb")
-const Credit = mongoose.model("tb_credit")
-const Debit = mongoose.model("tb_debit")
-const Tabil = mongoose.model("tb_tabil")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Sala = mongoose.model("tb_sala")
-const Horaage = mongoose.model("tb_horaage")
-const Ano = mongoose.model("tb_ano")
+var Agenda = getModel("SoftRoute", 'tb_agenda', agendaClass.AgendaSchema)
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Sala = getModel("SoftRoute", 'tb_sala', salaClass.SalaSchema)
+var Horaage = getModel("SoftRoute", 'tb_horaage', horaageClass.HoraageSchema)
+var Ano = getModel("SoftRoute", 'tb_ano', anoClass.AnoSchema)
 //Funções auxiliares
 
-const fncCredit = require("../functions/fncCredit")
-const fncDebit = require("../functions/fncDebit")
-const fncAtendAdm = require("./fncAtendAdm")
 const fncAgenda = require("./fncAgenda")
-
-//Funções Extrangeiras
-const fncGeral = require("./fncGeral")
 
 //Funções auxiliares
 const ObjectId = require('mongodb').ObjectId;
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 class FiltroEvoatend{
     constructor(
@@ -74,6 +57,12 @@ class FiltroEvoatend{
 
 module.exports = {FiltroEvoatend,
     listaEvoatend2(req, res){
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let flash = new Resposta();
         let agendaTempArr = [];
         let lvlUsu = req.cookies['lvlUsu'];
@@ -210,6 +199,12 @@ module.exports = {FiltroEvoatend,
         })
     },
     listaEvoatend(req, res){
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let flash = new Resposta();
         let agendaTempArr = [];
         let lvlUsu = req.cookies['lvlUsu'];
@@ -394,6 +389,12 @@ module.exports = {FiltroEvoatend,
         })
     },
     filtraEvoatend4(req, res){
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let filtros = new fncGeral.Filtros();
         let lvlUsu = req.cookies['lvlUsu'];
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
@@ -646,6 +647,12 @@ module.exports = {FiltroEvoatend,
         })
     },
     filtraEvoatend(req, res){
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let filtros = new fncGeral.Filtros();
         let lvlUsu = req.cookies['lvlUsu'];
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
@@ -666,8 +673,6 @@ module.exports = {FiltroEvoatend,
         sex.setSeconds(59);
         let tipoPessoa = req.body.atendTipoPessoa;
         let tipoData = req.body.tipoData;
-        let idsAgendasEx = [];
-        let aux = 1;
 
         switch (tipoData){
             case "Ano/Mes":
@@ -922,6 +927,12 @@ module.exports = {FiltroEvoatend,
     },
 
     filtraEvoatend2(req, res){
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let filtros = new fncGeral.Filtros();
         let lvlUsu = req.cookies['lvlUsu'];
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
@@ -1185,15 +1196,20 @@ module.exports = {FiltroEvoatend,
     },
 
     carregaEvoatend(req,res){
-            Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
-                Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    console.log("Listagem Realizada de Usuário")
-                     Ano.find().then((ano)=>{
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                            console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/evoatendCad", {terapias: terapia, anos: ano, usuarios: usuario, benes: bene})
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
+        Terapia.find().then((terapia)=>{
+            console.log("Listagem Realizada de terapias")
+            Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                console.log("Listagem Realizada de Usuário")
+                Ano.find().then((ano)=>{
+                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                        bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                        console.log("Listagem Realizada de beneficiarios")
+                        res.render("area/evoatendCad", {terapias: terapia, anos: ano, usuarios: usuario, benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
@@ -1203,14 +1219,18 @@ module.exports = {FiltroEvoatend,
     },
 
     carregaEvoatendEdi(req,res){
-            Terapia.find().then((terapia)=>{
-                console.log("Listagem Realizada de terapias")
-                Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                    console.log("Listagem Realizada de Usuário")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                            console.log("Listagem Realizada de beneficiarios")
-                                res.render("area/evoatendEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
+        Terapia.find().then((terapia)=>{
+            console.log("Listagem Realizada de terapias")
+            Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                console.log("Listagem Realizada de Usuário")
+                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    console.log("Listagem Realizada de beneficiarios")
+                    res.render("area/evoatendEdi", {convs: conv, terapias: terapia, usuarios: usuario, benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -1247,6 +1267,9 @@ module.exports = {FiltroEvoatend,
         })
     },
     listaEvoatendabertoOld(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
     
         if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
@@ -1286,6 +1309,10 @@ module.exports = {FiltroEvoatend,
         });
     },
     listaEvoatendaberto(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
 
         if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
@@ -1354,6 +1381,15 @@ module.exports = {FiltroEvoatend,
         });
     },
     filtraEvoatendaberto(req, res, resposta){ //Lista evoluções Agendadas em aberto ou seja evolução não realizada
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         let flash = new Resposta();
         let agendaTempArr = [];
         let idsAgendasEx = [];
@@ -1572,6 +1608,10 @@ module.exports = {FiltroEvoatend,
         })
     },
     listaEvoatendfechado(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
     
         if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
@@ -1598,6 +1638,15 @@ module.exports = {FiltroEvoatend,
         });
     },
     filtraEvoatendfechado(req, res, resposta){ //Lista evoluções Agendadas Fechada ou seja evolução realizada!
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         filtroTela = new FiltroEvoatend();
         let agendaTempArr = [];
         let idsAgendasEx = [];
@@ -1826,6 +1875,10 @@ module.exports = {FiltroEvoatend,
         })
     },
     listaEvoatendgeral(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
     
         if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
@@ -1847,6 +1900,15 @@ module.exports = {FiltroEvoatend,
         });
     },
     filtraEvoatendgeral(req, res, resposta){ //Lista evoluções Agendadas Fechada ou seja evolução realizada!
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         filtroTela = new FiltroEvoatend();
         let agendaTempArr = [];
         let idsAgendasEx = [];
@@ -2064,10 +2126,10 @@ module.exports = {FiltroEvoatend,
                         Sala.find().then((sala)=>{
                             sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                             Terapia.find().then((terapia)=>{
-                                 Ano.find().then((ano)=>{
-                                Conv.find().then((conv)=>{
-                                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                    res.render('area/evol/evoatendgeralLis', {agendas: idsAgendasEx, anos: ano, terapeutas: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, filtroTela, flash})
+                                Ano.find().then((ano)=>{
+                                    Conv.find().then((conv)=>{
+                                        conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                        res.render('area/evol/evoatendgeralLis', {agendas: idsAgendasEx, anos: ano, terapeutas: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, filtroTela, flash})
         })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -2075,6 +2137,9 @@ module.exports = {FiltroEvoatend,
         })
     },
     listaEvoatendrankingOld(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
     
         if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
@@ -2101,6 +2166,10 @@ module.exports = {FiltroEvoatend,
         });
     },
     listaEvoatendranking(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
 
         if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
@@ -2167,6 +2236,14 @@ module.exports = {FiltroEvoatend,
         });
     },
     xfiltraEvoatendranking(req, res, resposta){ //Lista evoluções Agendadas Fechada ou seja evolução realizada!
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         let flash = new Resposta();
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
@@ -2365,6 +2442,9 @@ module.exports = {FiltroEvoatend,
         })
     },
     filtraEvoatendranking(req, res) {
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+
         let flash = new Resposta();
         let seg = new Date(req.body.dataFinal);
         let sex = new Date(req.body.dataFinal);
@@ -2601,7 +2681,7 @@ module.exports = {FiltroEvoatend,
             flash.sucesso = resposta.sucesso;
             flash.texto = resposta.texto;
         }
-        agendaClass.removeEvolucao((req.body.idDeletar),res).then((retorno)=>{
+        agendaClass.removeEvolucao(req,res).then((retorno)=>{
             resultado = retorno;
         }).catch((err) => {
             console.log(err)
@@ -2625,7 +2705,7 @@ module.exports = {FiltroEvoatend,
             flash.sucesso = resposta.sucesso;
             flash.texto = resposta.texto;
         }
-        agendaClass.removeEvolucao((req.body.idDeletar),res).then((retorno)=>{
+        agendaClass.removeEvolucao(req,res).then((retorno)=>{
             resultado = retorno;
         }).catch((err) => {
             console.log(err)

@@ -1,126 +1,130 @@
-//Exports
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const { getModel } = require('../functions/fncGeral');
 
-//metodos
-const metodoClass = require("../models/metodo")
-const respostaClass = require("../models/resposta")
+// Importa a classe
+const metodoClass = require("../models/metodo");
 
-//metodo, tipos de metodo 
-const Metodo = mongoose.model("tb_metodo")
-const Resposta = mongoose.model("tb_resposta")
+// ✅ FIX: Usar SEMPRE PortalDoUsuario
+const Metodo = getModel("PortalDoUsuario", 'tb_metodo', metodoClass.MetodoSchema);
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
-    listaMetodo(req,res,resposta){
-        let flash = new Resposta()
-        console.log('listando metodos')
-        Metodo.find().then((metodo) =>{
-            console.log("Listagem Realizada!")
-
-            if(resposta.sucesso == ""){
-                console.log(' objeto vazio');
-                flash.texto = ""
-                flash.sucesso = ""
-            } else {
-                flash.texto = resposta.texto
-                flash.sucesso = resposta.sucesso
-            }
-
-            res.render('ferramentas/metodo/metodoLis', {metodos: metodo, resposta, flash})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Metodos")
-            res.redirect('admin/erro')
-        })
-
-    },
-
-    carregaMetodo(req,res){
-        res.render("ferramentas/metodo/metodoCad")
-    },
-
-    carregaMetodoEdi(req,res){
-        Metodo.findById(req.params.id).then((metodo) =>{
-            console.log(metodo)
-            res.render('ferramentas/metodo/metodoEdi', {metodo})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as listas!")
-            res.render('admin/erro')
-        })
-    },
-
-    cadastraMetodo(req,res){
-        let resultado
-        let resposta = new Resposta()
-        let cadastro = metodoClass.metodoAdicionar(req,res);//variavel para armazenar a função que armazena o async
+    listaMetodo(req, res, resposta = {}) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        console.log('Listando métodos do PortalDoUsuario');
         
-        cadastro.then((result)=>{
-            resultado = true;
-        }).catch((err)=>{
-            resultado = err
-            console.log("ERRO:"+err)
-        }).finally(()=>{
-            if (resultado == true){
-                console.log('verdadeiro')
-                req.flash("success_message", "Cadastro realizado com sucesso!")
-                resposta.texto = "Cadastrado com sucesso!"
-                resposta.sucesso = "true"
-                this.listaMetodo(req,res,resposta)
-            } else {
-                console.log('falso')
-                resposta.texto = resultado
-                resposta.sucesso = "false"
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
-            }
-        })
+        const flash = new Resposta();
+        
+        Metodo.find()
+            .sort({ metodo_ordem: 1 })
+            .then((metodos) => {
+                console.log("Listagem realizada!");
+
+                if (!resposta.sucesso) {
+                    flash.texto = "";
+                    flash.sucesso = "";
+                } else {
+                    flash.texto = resposta.texto;
+                    flash.sucesso = resposta.sucesso;
+                }
+
+                res.render('ferramentas/metodo/metodoLis', { metodos, resposta: flash });
+            })
+            .catch((err) => {
+                console.error(err);
+                req.flash("error_message", "Houve um erro ao listar Métodos");
+                res.redirect('/admin/erro');
+            });
     },
 
-    atualizaMetodo(req,res){
-        let resultado
-        let resposta = new Resposta()
-        try{
-            metodoClass.metodoEditar(req,res).then((res)=>{
-                console.log("Atualização Realizada!")
-                console.log(res)
-                resultado = res;
-            }).catch((err) =>{
-                console.log("error1")
-                console.log(err)
-                resultado = err;
-                res.render('admin/erro')
-            }).finally(() =>{
-                if (resultado == true){
-                    console.log('verdadeiro')
-                    req.flash("success_message", "Cadastro realizado com sucesso!")
-                    resposta.texto = "Atualizado com sucesso!"
-                    resposta.sucesso = "true"
-                    this.listaMetodo(req,res,resposta)
+    carregaMetodo(req, res) {
+        res.render("ferramentas/metodo/metodoCad");
+        // Usa o modelo já configurado para PortalDoUsuario
+    },
+
+    carregaMetodoEdi(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        Metodo.findById(req.params.id)
+            .then((metodo) => {
+                if (!metodo) {
+                    req.flash("error_message", "Método não encontrado");
+                    return res.redirect('/admin/erro');
+                }
+                res.render('ferramentas/metodo/metodoEdi', { metodo });
+            })
+            .catch((err) => {
+                console.error(err);
+                req.flash("error_message", "Erro ao carregar método para edição");
+                res.render('admin/erro');
+            });
+    },
+
+    cadastraMetodo(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        metodoClass.metodoAdicionar(req, res)
+            .then((resultado) => {
+                const resposta = new Resposta();
+                if (resultado === true) {
+                    req.flash("success_message", "Método cadastrado com sucesso!");
+                    resposta.texto = "Cadastrado com sucesso!";
+                    resposta.sucesso = "true";
+                    this.listaMetodo(req, res, resposta);
                 } else {
-                    console.log('falso')
-                    resposta.texto = resultado
-                    resposta.sucesso = "false"
-                    req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                    this.listaMetodo(req,res,resposta)
+                    // resultado é uma string de erro
+                    req.flash("error_message", resultado);
+                    resposta.texto = resultado;
+                    resposta.sucesso = "false";
+                    res.render('admin/erro', { resposta });
                 }
             })
-        } catch(err1){
-            console.log("Erro TryCatch:"+err1)
-            res.render('admin/erro');
-        }
+            .catch((err) => {
+                console.error("Erro inesperado no cadastro:", err);
+                req.flash("error_message", "Erro inesperado ao cadastrar método");
+                res.render('admin/erro');
+            });
     },
 
-    deletaMetodo(req,res){
-        Metodo.deleteOne({_id: req.params.id}).then(() =>{
-            Metodo.find().then((metodo) =>{
-                req.flash("success_message", "Método deletado!")
-                res.render('ferramentas/metodo/metodoLis', {metodos: metodo})
-            }).catch((err) =>{
-                console.log(err)
-                req.flash("error_message", "houve um erro ao listar Métodos")
-                res.render('admin/erro')
+    atualizaMetodo(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        metodoClass.metodoEditar(req, res)
+            .then((resultado) => {
+                const resposta = new Resposta();
+                if (resultado === true) {
+                    req.flash("success_message", "Método atualizado com sucesso!");
+                    resposta.texto = "Atualizado com sucesso!";
+                    resposta.sucesso = "true";
+                    this.listaMetodo(req, res, resposta);
+                } else {
+                    req.flash("error_message", resultado);
+                    resposta.texto = resultado;
+                    resposta.sucesso = "false";
+                    this.listaMetodo(req, res, resposta);
+                }
             })
-        })
-    }
+            .catch((err) => {
+                console.error("Erro inesperado na atualização:", err);
+                req.flash("error_message", "Erro inesperado ao atualizar método");
+                res.render('admin/erro');
+            });
+    },
 
-}
+    deletaMetodo(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        Metodo.deleteOne({ _id: req.params.id })
+            .then((result) => {
+                if (result.deletedCount === 0) {
+                    req.flash("error_message", "Método não encontrado para exclusão");
+                    return res.redirect('/admin/erro');
+                }
+                req.flash("success_message", "Método deletado com sucesso!");
+                this.listaMetodo(req, res);
+            })
+            .catch((err) => {
+                console.error("Erro ao deletar método:", err);
+                req.flash("error_message", "Erro ao deletar método");
+                res.render('admin/erro');
+            });
+    }
+};

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const EspecialidadePlanoSchema = mongoose.Schema({
     especialidadePlano_nome: { type: String, unique: true, required: true },
@@ -28,9 +29,18 @@ class EspecialidadePlano{
 
 
 EspecialidadePlanoSchema.loadClass(EspecialidadePlano)
-const EspecialidadePlanoModel = mongoose.model('tb_especialidadePlano', EspecialidadePlanoSchema)
-module.exports = {EspecialidadePlanoModel,EspecialidadePlanoSchema,
+var EspecialidadePlanoModel = getModel("softroute", 'tb_especialidadePlano', EspecialidadePlanoSchema)
+module.exports = {
+    EspecialidadePlanoModel,
+    EspecialidadePlanoSchema,
+
     especialidadePlanoEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        EspecialidadePlanoModel = getModel(db, 'tb_especialidadePlano', EspecialidadePlanoSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -61,6 +71,12 @@ module.exports = {EspecialidadePlanoModel,EspecialidadePlanoSchema,
 
 
     especialidadePlanoAdicionar: async (req,res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        EspecialidadePlanoModel = getModel(db, 'tb_especialidadePlano', EspecialidadePlanoSchema)
+        //;
+
          let dataAtual = new Date();
             console.log("especialidadePlanomodel");
             const newEspecialidadePlano = new EspecialidadePlanoModel({

@@ -1,17 +1,18 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //Empresa
 const empresaClass = require("../models/empresa")
-const Empresa = mongoose.model("tb_empresa")
+var Empresa = getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema)
 
 //Classes Extrangeiras
 const estadoClass = require("../models/estado")
 
 //tabelas Extrangeira
-const Estado = mongoose.model("tb_estado")
+var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
 
-
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaEmpresa(req,res){
@@ -24,7 +25,6 @@ module.exports = {
             req.flash("error_message", "houve um erro ao listar Empresas")
             res.redirect('admin/erro')
         })
-
     },
 
     carregaEmpresa(req,res){
@@ -38,14 +38,15 @@ module.exports = {
         })
 
     },
-
-
     carregaEmpresaEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
+
         Empresa.findById(req.params.id).then((empresa) =>{
             console.log(empresa)
-                Estado.find().then((estado)=>{
-                    console.log("Listagem Realizada de Estados")
-            res.render('ferramentas/empresa/empresaEdi', {empresa, estados: estado})
+            Estado.find().then((estado)=>{
+                console.log("Listagem Realizada de Estados")
+                res.render('ferramentas/empresa/empresaEdi', {empresa, estados: estado})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -100,8 +101,6 @@ module.exports = {
             console.log(err1)
         }
     },
-
-
     deletaEmpresa(req,res){
         Empresa.deleteOne({_id: req.params.id}).then(() =>{
             Empresa.find().then((empresa) =>{
@@ -114,6 +113,4 @@ module.exports = {
             })
         })
     }
-
-
 }

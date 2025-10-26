@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Analise funcional do comportamento
 const atecClass = require("../models/atec")
@@ -8,27 +8,27 @@ const atecClass = require("../models/atec")
 
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
-const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
-const respostaClass = require("../models/resposta")
 
 //Tabela Atec
-const Atec = mongoose.model("tb_atec")
+var Atec = getModel("SoftRoute", 'tb_atec', atecClass.AtecSchema)
 
 //Tabelas Extrangeiras
-const Resposta = mongoose.model("tb_resposta")
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 
 //Funções auxiliares
-
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaAtec(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Atec = getModel(db, 'tb_atec', atecClass.AtecSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         let perfilAtual = req.cookies['lvlUsu'];
         Atec.find().then((atec) =>{
@@ -75,17 +75,17 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
-
-
     carregaAtec(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         Bene.find({bene_status: "Ativo", bene_nome: { $not: /\./ } }).then((bene) => {
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
             //console.log("Listagem Realizada de Beneficiários!")
-                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                    //console.log("Listagem Realizada de Usuário")
-                            res.render("area/escalas/atec/atecCad", {Benes: bene, Terapeutas: terapeuta})
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Usuário")
+                res.render("area/escalas/atec/atecCad", {Benes: bene, Terapeutas: terapeuta})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
@@ -93,10 +93,11 @@ module.exports = {
         })
 
     },
-
-  
-    
     carregaAtecEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Atec = getModel(db, 'tb_atec', atecClass.AtecSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         Atec.findOne({_id : req.params.id}).then((atec)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
@@ -106,7 +107,7 @@ module.exports = {
                     Bene.find({bene_status: "Ativo", bene_nome: { $not: /\./ }}).then((bene) => {
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Beneficiários!")
-                                res.render("area/escalas/atec/atecEdi", {atec, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
+                        res.render("area/escalas/atec/atecEdi", {atec, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -176,8 +177,10 @@ module.exports = {
         }
     },
 
-
     deletaAtecold(req,res){
+        let db = req.cookies['preferredDb'];
+        Atec = getModel(db, 'tb_atec', atecClass.AtecSchema)
+
         let resposta;
         let flash = new Resposta()
         Atec.deleteOne({_id: req.params.id}).then(() =>{
@@ -200,6 +203,9 @@ module.exports = {
     },
 
     deletaAtac(req,res){
+        let db = req.cookies['preferredDb'];
+        Atec = getModel(db, 'tb_atec', atecClass.AtecSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         let resposta;
         let flash = new Resposta()

@@ -2,6 +2,7 @@
 //Semelhante ao plano de tratamento, para mudar agora no desenvolvimento definitivo
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const ProgSchema = mongoose.Schema({
     prog_beneid :{ type: ObjectId, required: false },
@@ -99,9 +100,18 @@ class Prog{
 }
 
 ProgSchema.loadClass(Prog)
-const ProgModel = mongoose.model('tb_prog', ProgSchema)
-module.exports = {ProgModel,ProgSchema,
+var ProgModel = getModel("softroute", 'tb_prog', ProgSchema)
+module.exports = {
+    ProgModel,
+    ProgSchema,
+
     progEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ProgModel = getModel(db, 'tb_prog', ProgSchema)
+        //;
+
         //Pega data atual
         let dataAtual = new Date();
         //Pega Usuário Atual
@@ -148,6 +158,12 @@ module.exports = {ProgModel,ProgSchema,
     },
     
     progAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ProgModel = getModel(db, 'tb_prog', ProgSchema)
+        //;
+
         //Pega data atual
         let dataAtual = new Date();
         //Pega Usuário Atual

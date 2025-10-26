@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const GrafabcSchema = mongoose.Schema({
     grafabc_planotipo :{
@@ -113,9 +114,18 @@ class Grafabc{
 }
 
 GrafabcSchema.loadClass(Grafabc)
-const GrafabcModel = mongoose.model('tb_grafabc', GrafabcSchema)
-module.exports = {GrafabcModel,GrafabcSchema,
+var GrafabcModel = getModel("softroute", 'tb_grafabc', GrafabcSchema)
+module.exports = {
+    GrafabcModel,
+    GrafabcSchema,
+
     grafabcEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        GrafabcModel = getModel(db, 'tb_grafabc', GrafabcSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -150,6 +160,12 @@ module.exports = {GrafabcModel,GrafabcSchema,
         return resultado;
     },
     grafabcAdicionar: async (req,res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        GrafabcModel = getModel(db, 'tb_grafabc', GrafabcSchema)
+        //;
+
         let dataAtual = new Date();
         console.log("grafabcmodel");
         console.log("req.body.grafabcdata:")

@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
+// Esquema ABLLS
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 const AbllsrSchema = mongoose.Schema({
     abllsr_beneid :{
         type: ObjectId,
@@ -32,6 +37,10 @@ const AbllsrSchema = mongoose.Schema({
     }
 })
 
+// Construtor ABLLS
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 class Abllsr{
     constructor(
         abllsr_beneid,
@@ -53,9 +62,22 @@ class Abllsr{
 }
 
 AbllsrSchema.loadClass(Abllsr)
-const AbllsrModel = mongoose.model('tb_abllsr', AbllsrSchema)
-module.exports = {AbllsrModel,AbllsrSchema,
+var AbllsrModel = getModel("softroute", 'tb_abllsr', AbllsrSchema)
+module.exports = {
+    AbllsrModel,
+    AbllsrSchema,
+
+    // Editar ABLLS
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     abllsrEditar: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AbllsrModel = getModel(db, 'tb_abllsr', AbllsrSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -80,7 +102,18 @@ module.exports = {AbllsrModel,AbllsrSchema,
         })
         return resultado;
     },
+
+    // Add ABLLS
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     abllsrAdicionar: async (req,res) => {
+
+         //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AbllsrModel = getModel(db, 'tb_abllsr', AbllsrSchema)
+        //;
+
         let dataAtual = new Date();
         console.log("abllsrmodel");
         console.log("req.body.abllsrdata:")

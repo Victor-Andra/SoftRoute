@@ -222,6 +222,12 @@
 					}
 				}
 			}
+			function evolucaoEditar(id){
+				document.getElementById("idEdi").value = id;
+				let form = document.getElementById("divFormPesquisa");
+				form.action = ("/menu/agenda/evolucaosup");
+				form.submit();
+			}
 			function enviarCopia(){
 				let form = document.getElementById("divFormPesquisa");
 				form.action = "/menu/atendimento/copiaAtends";

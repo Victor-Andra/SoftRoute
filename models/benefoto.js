@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const multer = require('multer');
 const storage = multer.memoryStorage(); // Armazena a imagem na memória como um Buffer
@@ -50,13 +51,19 @@ class Benefoto {
 }
 
 BenefotoSchema.loadClass(Benefoto);
-const BenefotoModel = mongoose.model('tb_benefoto', BenefotoSchema);
+var BenefotoModel = getModel("softroute", 'tb_benefoto', BenefotoSchema)
 
 module.exports = {
   BenefotoModel,
   BenefotoSchema,
 
     benefotoAdicionar: async (req, res) => {
+
+        //Estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        BenefotoModel = getModel(db, 'tb_benefoto', BenefotoSchema)
+        //.
+
         try {
             // Processa o upload antes de acessar req.body
             await new Promise((resolve, reject) => {
@@ -102,6 +109,12 @@ module.exports = {
         }
     },
     benefotoEditar: async (req, res) => {
+
+        //Estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        BenefotoModel = getModel(db, 'tb_benefoto', BenefotoSchema)
+        //;
+
         try {
             let dataAtual = new Date();
             let usuarioAtual = req.cookies['idUsu'];
@@ -140,6 +153,12 @@ module.exports = {
         }
     },
     benefotoAtualizar: async (req, res) => {
+
+        //Estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        BenefotoModel = getModel(db, 'tb_benefoto', BenefotoSchema)
+        //;
+
         try {
             // Processa o upload antes de acessar req.body
             await new Promise((resolve, reject) => {

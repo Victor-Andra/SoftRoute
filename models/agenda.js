@@ -1,7 +1,13 @@
 const mongoose = require('mongoose')
 const fncGeral = require('../functions/fncGeral')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
+
+// Esquema Agenda
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 const AgendaSchema = mongoose.Schema({
     agenda_data :{ type: Date, required: false },
     agenda_hora :{ type: String, required: false },
@@ -41,6 +47,10 @@ const AgendaSchema = mongoose.Schema({
     
 })
 
+// Construtor Agenda
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 class Agenda{
     constructor(
         agenda_data,
@@ -118,9 +128,22 @@ class Agenda{
 }
 
 AgendaSchema.loadClass(Agenda)
-const AgendaModel = mongoose.model('tb_agenda', AgendaSchema)
-module.exports = {AgendaModel,AgendaSchema,
+var AgendaModel = getModel("softroute", 'tb_agenda', AgendaSchema)
+module.exports = {
+    AgendaModel,
+    AgendaSchema,
+
+    // Editar Agenda
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     agendaEditar: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
+        //;
+
         let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
         let data = new Date(req.body.agendaData);
@@ -157,7 +180,18 @@ module.exports = {AgendaModel,AgendaSchema,
         })
         return resultado;
     },
+
+    // Add Agenda
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     agendaAdicionar: async (req,res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
+        //;
+
         let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
         let agenda_temp = false;
@@ -205,7 +239,18 @@ module.exports = {AgendaModel,AgendaSchema,
             return err;
         });
     },
+
+    // Add Temp Agenda
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     agendaAdicionarTemp: async (req,res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
+        //;
+
         let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
         let agendaTempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
@@ -251,7 +296,18 @@ module.exports = {AgendaModel,AgendaSchema,
             return err;
         });
     },
+
+    // Editar Temp Agenda
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     agendaEditarTemp: async (req, res) => {
+
+         //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
+        //;
+
         let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
         let data = new Date(req.body.agendaData);
@@ -293,7 +349,18 @@ module.exports = {AgendaModel,AgendaSchema,
         })
         return resultado;
     },
+
+    // Localizar um Temp Agenda
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     agendaFindOne: async (id, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
+        //;
+
         let resultado;
         //Pega data atual
         
@@ -309,7 +376,18 @@ module.exports = {AgendaModel,AgendaSchema,
         })
         return resultado;
     },
+
+    // Evolução Agenda
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     evolucao: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
+        //;
+
         var resultado;
         let selo;
         let selamento;
@@ -355,8 +433,19 @@ module.exports = {AgendaModel,AgendaSchema,
             //console.log("agenda:"+a)
         })
         return resultado;
-    }
-    , agendaFaltaDia: async (req, res) => {
+    },
+
+    // Falta do Dia Agenda
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
+    agendaFaltaDia: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
+        //;
+
         let usuarioAtual = req.cookies['idUsu'];
         var retorno;
         let arrayAgendasNovas = [];
@@ -551,7 +640,18 @@ module.exports = {AgendaModel,AgendaSchema,
             })
         }
     },
+
+    // Feriado do Dia Agenda
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     agendaFeriado: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
+        //;
+
         //console.log("req.body.agendaData: "+req.body.agendaData)
         let dataAtual = new Date();
         let seg = new Date(req.body.agendaData);
@@ -778,7 +878,18 @@ module.exports = {AgendaModel,AgendaSchema,
             });
         })
     */
+
+    // Atualizar Agenda
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     agendaUpdateCampos: async (req,res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
+        //;
+
         let usuarioAtual = req.cookies['idUsu'];
         let resultado;
         let busca;
@@ -941,11 +1052,22 @@ module.exports = {AgendaModel,AgendaSchema,
 
         return resultado;
     },
-    removeEvolucao : async (id, res) => {
+
+    // Remove Eolução Agenda
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
+    removeEvolucao : async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
+        //;
+
         let resultado;
         //Pega data atual
         //Realiza Atualização - Atualização não faz alteração temporaria
-        await AgendaModel.findByIdAndUpdate(id, 
+        await AgendaModel.findByIdAndUpdate(req.params.id, 
             {$set: {
                 agenda_evolucao : "",
                 agenda_atrazo : false,
@@ -962,29 +1084,11 @@ module.exports = {AgendaModel,AgendaSchema,
         })
         return resultado;
     }
-    
-    /*
-    ,kaskopstusagenda: async (id) => {
-        //console.log("id:"+id)
-        //Realiza Atualização - Atualização não faz alteração temporaria
-        await AgendaModel.findByIdAndUpdate(id, 
-            {$set: {
-                agenda_extra : false
-                }}
-        ).then(() =>{
-            //console.log("Salvo")
-            resultado = true;
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
-            //res.redirect('admin/branco')
-        })
-        return resultado;
-    }
-    */
     /*    
     ,agendaAddNovosCampos: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+
         let resultado;
         await AgendaModel.updateMany(
             {agenda_extra: undefined},
@@ -1002,6 +1106,9 @@ module.exports = {AgendaModel,AgendaSchema,
     */
    /*
     ,agendaFaltaDia: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+
         let resultado;
         let diaini = new Date(req.body.dataFinal);
         let diafim = new Date(req.body.dataFinal);

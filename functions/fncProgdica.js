@@ -1,16 +1,21 @@
 //Exports
 const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
 
 //progdicas
 const progdicaClass = require("../models/progdica")
-const respostaClass = require("../models/resposta")
 
 //progdica, tipos de progdica 
-const Progdica = mongoose.model("tb_progdica")
-const Resposta = mongoose.model("tb_resposta")
+var Progdica = getModel("SoftRoute", 'tb_progdica', progdicaClass.ProgdicaSchema)
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaProgdica(req,res,resposta){
+        let db = req.cookies['preferredDb'];
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+
         let flash = new Resposta()
         console.log('listando progdicas')
         Progdica.find().then((progdica) =>{
@@ -37,8 +42,10 @@ module.exports = {
     carregaProgdica(req,res){
         res.render("area/aba/progdica/progdicaCad")
     },
-
     carregaProgdicaEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+
         Progdica.findById(req.params.id).then((progdica) =>{
             console.log(progdica)
             res.render('area/aba/progdica/progdicaEdi', {progdica})
@@ -48,7 +55,6 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-
     cadastraProgdica(req,res){
         let resultado
         let resposta = new Resposta()
@@ -75,7 +81,6 @@ module.exports = {
             }
         })
     },
-
     atualizaProgdica(req,res){
         let resultado
         let resposta = new Resposta()
@@ -109,8 +114,10 @@ module.exports = {
             res.render('admin/erro');
         }
     },
-
     deletaProgdica(req,res){
+        let db = req.cookies['preferredDb'];
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+
         Progdica.deleteOne({_id: req.params.id}).then(() =>{
             Progdica.find().then((progdica) =>{
                 req.flash("success_message", "Método deletado!")
@@ -122,5 +129,4 @@ module.exports = {
             })
         })
     }
-
 }

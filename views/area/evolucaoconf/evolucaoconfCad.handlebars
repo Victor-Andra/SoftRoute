@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Configuração de Padrões de Evolução dos Supervisores </title>
+		<script>
+		
+		</script>
+	</head>
+	<body onload="javascript:controlaNave();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="espace">
+					</div>
+					<div class="page-header">
+						<h1>
+							Evolução dos Supervisores
+							<small>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+								Configuração de Padrões 
+							</small>
+						</h1>
+						
+					</div><!-- /.page-header -->
+					<div class="row">
+						<div class="col-xs-12">
+							<form class="form-horizontal" role="form" action="/menu/area/evolucaoconf/add" method="POST">
+								<div id="divCarrega" name="divCarrega" class="hidden">
+									<!-- IDENTIFICAÇÃO -->
+									<input type="text" id="evolucaoconfCategoriaEdi" name="evolucaoconfCategoriaEdi" value="{{evolucaoconf.evolucaoconf_categoria}}"/>
+									<input type="text" id="evolucaoconfTituloEdi" name="evolucaoconfTituloEdi" value="{{evolucaoconf.evolucaoconf_titulo}}"/>
+									<input type="text" id="evolucaoconfEvolucaopadEdi" name="evolucaoconfEvolucaopadEdi" value="{{evolucaoconf.evolucaoconf_evolucaopad}}"/>
+								</div>
+								<div class="col-xs-12">
+									
+										<div class="alert alert-danger">
+											<button type="button" class="close" data-dismiss="alert">
+												<i class="ace-icon fa fa-times"></i>
+											</button>
+											<strong>Esse cadastro é destinado a padronização das evoluções dos supervisores, se faz necessário por ter padrões repetitivos que podem ser configurados para otimizar a velocidade das evoluções.</strong>
+										</div>
+									
+										<div class="widget-box"><!-- Padronização -->
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="brown ace-icon fa fa-commenting-o bigger-110"></i>
+													Padronização
+												</h4>
+												
+												<span class="widget-toolbar">
+
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+
+												</span>
+											</div>
+
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-sm-12">
+															<div class="alert alert-info">
+																<button type="button" class="close" data-dismiss="alert">
+																	<i class="ace-icon fa fa-times"></i>
+																</button>
+																A Categoria é formulada para separar as padronizações pelas atribuições dos Supervisores e não pelos seus nomes.
+															</div>
+														</div>
+													
+														<div class="col-sm-4">
+															<label>Categoria:</label>
+															<input type="text" name="evolucaoconfCategoria" id="evolucaoconfCategoria" class="form-control"  />
+														</div>
+													</div>
+													<hr>
+													<div class="row">
+														<div class="col-xs-12">
+															<div class="alert alert-warning">
+																<button type="button" class="close" data-dismiss="alert">
+																	<i class="ace-icon fa fa-times"></i>
+																</button>
+																O Tipo de evolução se destina a separar qual atividade foi realizada pelo supervisor e vincular o padrão a esse campo.
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-6">
+															<label>Tipo de Evolução:</label>
+															<input type="text" name="evolucaoconfTitulo" id="evolucaoconfTitulo" class="form-control" />
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-12" >
+															<label>Padrão da Evolução:</label>
+															<textarea name="evolucaoconfEvolucaopad" id="evolucaoconfEvolucaopad" placeholder="Texto padrão para evolução" rows="12" class="form-control"></textarea>
+														</div>
+													</div>
+																										
+												</div>	
+											</div>	
+										</div><!-- /.Padronização -->
+									
+										<div class="col-xs-12" style="text-align: center;" >
+											<button class="btn btn-info" name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning"  type="reset">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+										</div>
+								</div>							
+							</form>
+						</div>
+					</div>
+				</div><!-- /.main-container -->
+			</div><!-- /.main-content -->
+		</div>
+	</body>
+</html>

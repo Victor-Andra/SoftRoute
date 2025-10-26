@@ -1,9 +1,8 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //progs
 const progClass = require("../models/prog")
-const respostaClass = require("../models/resposta")
 
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
@@ -20,26 +19,38 @@ const notasupClass = require("../models/notasup")
 const notasupobsClass = require("../models/notasupobs")
 
 //prog, tipos de prog 
-const Prog = mongoose.model("tb_prog")
-const Resposta = mongoose.model("tb_resposta")
+var Prog = getModel("SoftRoute", 'tb_prog', progClass.ProgSchema)
 
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 
-const Progset = mongoose.model("tb_progset")
-const Progdica = mongoose.model("tb_progdica")
-const Prognivel = mongoose.model("tb_prognivel")
-const Progtipo = mongoose.model("tb_progtipo")
+var Progset = getModel("SoftRoute", 'tb_progset', progsetClass.ProgsetSchema)
+var Progdica = getModel("SoftRoute", 'tb_progdica', progdicaClass.ProgdicaSchema)
+var Prognivel = getModel("SoftRoute", 'tb_prognivel', prognivelClass.PrognivelSchema)
+var Progtipo = getModel("SoftRoute", 'tb_progtipo', progtipoClass.ProgtipoSchema)
 
-const Folreg = mongoose.model("tb_folreg")
-const Notasup = mongoose.model("tb_notasup")
-const Notasupobs = mongoose.model("tb_notasupobs")
+var Folreg = getModel("SoftRoute", 'tb_folreg', folregClass.FolregSchema)
+var Notasup = getModel("SoftRoute", 'tb_notasup', notasupClass.NotasupSchema)
+var Notasupobs = getModel("SoftRoute", 'tb_notasupobs', notasupobsClass.NotaSupObsSchema)
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
    
     filtraProg(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
+
         let flash = new Resposta();
         let lvlUsu = req.cookies['lvlUsu'];
         let dataAtual = new Date();
@@ -202,6 +213,16 @@ module.exports = {
         });
     },
     listaProg_Backup(req, res, resposta) {//original
+        let db = req.cookies['preferredDb'];
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
+
         let flash = new Resposta();
         let lvlUsu = req.cookies['lvlUsu'];
         let dataAtual = new Date();
@@ -359,6 +380,16 @@ module.exports = {
     },
     
     listaProgfiltro_Backup(req, res, resposta) {//Novo lista prog A Lista deve primeiramente buscar o beneficiário, se somente se, o usuário for de ABA
+        let db = req.cookies['preferredDb'];
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
+
         let flash = new Resposta();
         let lvlUsu = req.cookies['lvlUsu'];
         //let abaUsu = req.cookies['abaUsu'];//Novo cookies novo campo no cadastro do usuário, para somente quem tiver "Sim" nesse campo para acessar o ABA
@@ -520,6 +551,16 @@ module.exports = {
     },
 
     xlistaProgfiltro(req, res, resposta) {//Lista ABA ANDAMENTO, Filtrada dos Programas por Beneficiário escolhido no form anterior
+        let db = req.cookies['preferredDb'];
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
+
         console.log("Chamando listaProgfiltro para o ID:", req.params.id);
         const perfilAtual = req.cookies['lvlUsu'];
         const dataAtual = new Date();
@@ -640,6 +681,17 @@ module.exports = {
     },
 
     listaProgfiltro(req, res, resposta) {//Lista ABA ANDAMENTO, Filtrada dos Programas por Beneficiário escolhido no form anterior
+        let db = req.cookies['preferredDb'];
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
+        Notasupobs = getModel(db, 'tb_notasupobs', notasupobsClass.NotaSupObsSchema)
+
         console.log("Chamando listaProgfiltro para o ID:", req.params.id);
         const perfilAtual = req.cookies['lvlUsu'];
         const dataAtual = new Date();
@@ -765,6 +817,16 @@ module.exports = {
   
 
     listaProgfiltroManut(req, res, resposta) {//Lista ABA MANUTENÇÃO, Filtrada dos Programas por Beneficiário escolhido no form anterior 
+        let db = req.cookies['preferredDb'];
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
+
         console.log("Chamando listaProgfiltro para o ID:", req.params.id);
         const perfilAtual = req.cookies['lvlUsu'];
         const dataAtual = new Date();
@@ -887,6 +949,9 @@ module.exports = {
     },
 
     listaProg(req, res, resposta) {//lista prog abrir primeiro para filtrar
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         let lvlUsu = req.cookies['lvlUsu'];
         //let abaUsu = req.cookies['abaUsu'];//Novo cookies novo campo no cadastro do usuário, para somente quem tiver "Sim" nesse campo para acessar o ABA
@@ -920,6 +985,14 @@ module.exports = {
     },
 
     carregaProg(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+
         let idBene;
         if (req.params.id){
             idBene = req.params.id;
@@ -951,6 +1024,14 @@ module.exports = {
     },
 
     carregaProgEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+
         let idBene = "";
         let perfilAtual = req.cookies['lvlUsu'];
         Prog.findById(req.params.id).then((prog) =>{
@@ -1040,6 +1121,9 @@ module.exports = {
     },
 
     deletaProg(req,res){
+        let db = req.cookies['preferredDb'];
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+
         Prog.deleteOne({_id: req.params.id}).then(() =>{
             Prog.find().then((prog) =>{
                 req.flash("success_message", "Método deletado!")

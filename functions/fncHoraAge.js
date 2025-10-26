@@ -1,12 +1,18 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //horaages
-const Horaage = mongoose.model("tb_horaage")
 const horaageClass = require("../models/horaAge")
+var Horaage = getModel("SoftRoute", 'tb_horaage', horaageClass.HoraageSchema)
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaHoraage(req,res){//ok
+        let db = req.cookies['preferredDb'];
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+
         console.log('listando horaages')
         Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage) =>{
             console.log("Listagem Realizada!")
@@ -19,11 +25,14 @@ module.exports = {
 
     },
     carregaHoraage(req,res){
-            res.render('ferramentas/horaage/horarioCad')
+        res.render('ferramentas/horaage/horarioCad')
     },
 
     
     carregaHoraageEdi(req,res){//ok
+        let db = req.cookies['preferredDb'];
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+
         Horaage.findById(req.params.id).then((horaage) =>{
             console.log(horaage)
             res.render("ferramentas/horaage/horarioEdi", {horaage})
@@ -46,6 +55,9 @@ module.exports = {
         }
     },
     atualizaHoraage(req,res){
+        let db = req.cookies['preferredDb'];
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+
         let resposta;
         try{
             horaageClass.horaageEditar(req,res).then((res)=>{
@@ -80,6 +92,9 @@ module.exports = {
         }
     },
     deletaHoraage(req,res){
+        let db = req.cookies['preferredDb'];
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+
         Horaage.deleteOne({_id: req.params.id}).then(() =>{
             Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage) =>{
                 req.flash("success_message", "Horaage deletada!")

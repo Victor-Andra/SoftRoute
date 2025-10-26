@@ -1,19 +1,24 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //funcaos
 const funcaoClass = require("../models/funcao")
-const Funcao = mongoose.model("tb_funcao")
+var Funcao = getModel("SoftRoute", 'tb_funcao', funcaoClass.FuncaoSchema)
 
 
 //Classes Extrangeiras
 const estadoClass = require("../models/estado")
 
 //Tabelas Extrangeiras
-const Estado = mongoose.model("tb_estado")
+var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaFuncao(req,res){
+        let db = req.cookies['preferredDb'];
+        Funcao = getModel(db, 'tb_funcao', funcaoClass.FuncaoSchema)
+
         console.log('listando funcaos')
         Funcao.find().then((funcao) =>{
             console.log("Listagem Realizada!")
@@ -23,10 +28,11 @@ module.exports = {
             req.flash("error_message", "houve um erro ao listar Funcaos")
             res.redirect('admin/erro')
         })
-
     },
-
     carregaFuncao(req,res){
+        let db = req.cookies['preferredDb'];
+        
+
         Estado.find().then((estado)=>{
             console.log("Listagem Realizada de Ufs!")
             res.render("ferramentas/funcao/funcaoCad", {estados: estado})
@@ -37,21 +43,22 @@ module.exports = {
         })
 
     },
-
-
     carregaFuncaoEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Funcao = getModel(db, 'tb_funcao', funcaoClass.FuncaoSchema)
+        
+
         Funcao.findById(req.params.id).then((funcao) =>{
             console.log(funcao)
-                Estado.find().then((estado)=>{
-                    console.log("Listagem Realizada de Estados")
-            res.render('ferramentas/funcao/funcaoEdi', {funcaos: funcao, estados: estado})
+            Estado.find().then((estado)=>{
+                console.log("Listagem Realizada de Estados")
+                res.render('ferramentas/funcao/funcaoEdi', {funcaos: funcao, estados: estado})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
         })
     },
-
     cadastraFuncao(req,res){
         let cadastro = funcaoClass.funcaoAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
@@ -64,8 +71,10 @@ module.exports = {
             res.render('admin/erro');
         }
     },
-
     atualizaFuncao(req,res){
+        let db = req.cookies['preferredDb'];
+        Funcao = getModel(db, 'tb_funcao', funcaoClass.FuncaoSchema)
+
         let resposta;
         try{
             funcaoClass.funcaoEditar(req,res).then((res)=>{
@@ -99,9 +108,10 @@ module.exports = {
             console.log(err1)
         }
     },
-
-
     deletaFuncao(req,res){
+        let db = req.cookies['preferredDb'];
+        Funcao = getModel(db, 'tb_funcao', funcaoClass.FuncaoSchema)
+
         Funcao.deleteOne({_id: req.params.id}).then(() =>{
             Funcao.find().then((funcao) =>{
                 req.flash("success_message", "Funcao deletada!")
@@ -113,6 +123,4 @@ module.exports = {
             })
         })
     }
-
-
 }

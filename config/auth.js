@@ -1,16 +1,16 @@
 const localStrategy = require("passport-local").Strategy
 const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
 //const bcrypt = require("bcryptjs")
 const passport = require("passport")
-const usuario = require("../models/usuario")
+const usuarioClass = require("../models/usuario")
 
 //Model usuario
 require("../models/usuario")
-const Usuario = mongoose.model("tb_usuario")
+const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 module.exports = 
     function(passport){
-
         passport.use(new localStrategy({usernameField: 'email', passwordField: "senha"}, (email, senha, done) =>{
             Usuario.findOne({usuario_email: email}).then((usuario) =>{
                 console.log("start")

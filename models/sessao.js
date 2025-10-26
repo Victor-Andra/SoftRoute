@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const SessaoSchema = mongoose.Schema({
     sessao_beneid :{ type: ObjectId, unique: true, required: false },
@@ -419,9 +420,18 @@ class Sessao{
 }
 
 SessaoSchema.loadClass(Sessao)
-const SessaoModel = mongoose.model('tb_sessao', SessaoSchema)
-module.exports = {SessaoModel,SessaoSchema,
+var SessaoModel = getModel("softroute", 'tb_sessao', SessaoSchema)
+module.exports = {
+    SessaoModel,
+    SessaoSchema,
+
     sessaoEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        SessaoModel = getModel(db, 'tb_sessao', SessaoSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let usuarioAtual = req.cookies['idUsu'];
@@ -577,6 +587,12 @@ module.exports = {SessaoModel,SessaoSchema,
 
 
     sessaoAdicionar: async (req,res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        SessaoModel = getModel(db, 'tb_sessao', SessaoSchema)
+        //;
+        
         //Não Pode haver um Beneficiário com mesma terapia cadastrada Mais de uma Vez.
         //O campo de Integridade verifica se há mais de uma terapia igual para um mesmo beneficiário é impede o cadastro
         let sessaoExiste =  await SessaoModel.findOne({sessao_beneid: req.body.sessaoBeneid , sessao_terapiaid: req.body.sessaoTerapiaid});//quando não acha fica null

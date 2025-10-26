@@ -2,6 +2,7 @@ const { data } = require('jquery')
 const mongoose = require('mongoose')
 const usuario = require('./usuario')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const BordoSchema = mongoose.Schema({
     bordo_terapeutaid:{type: ObjectId, required: true},
@@ -303,9 +304,15 @@ class Bordo{
 }
 
 BordoSchema.loadClass(Bordo)
-const BordoModel = mongoose.model('tb_bordo', BordoSchema)
+var BordoModel = getModel("softroute", 'tb_bordo', BordoSchema)
 module.exports = {BordoModel,BordoSchema,
     bordoEditar: async (req, res) => {
+
+        //Estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        BordoModel = getModel(db, 'tb_bordo', BordoSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -419,6 +426,12 @@ module.exports = {BordoModel,BordoSchema,
         return resultado;
     },
     bordoAdicionar: async (req,res) => {
+
+        //Estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        BordoModel = getModel(db, 'tb_bordo', BordoSchema)
+        //;
+
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];
         

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const ImpostoSchema = mongoose.Schema({
     imposto_id:{ type: ObjectId, required: false },
@@ -41,9 +42,18 @@ class Imposto{
 }
 
 ImpostoSchema.loadClass(Imposto)
-const ImpostoModel = mongoose.model('tb_imposto', ImpostoSchema)
-module.exports = {ImpostoModel,ImpostoSchema,
+var ImpostoModel = getModel("softroute", 'tb_imposto', ImpostoSchema)
+module.exports = {
+    ImpostoModel,
+    ImpostoSchema,
+
     impostoEditar: async (req, response) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ImpostoModel = getModel(db, 'tb_imposto', ImpostoSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -85,6 +95,12 @@ module.exports = {ImpostoModel,ImpostoSchema,
         },
         
     impostoAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ImpostoModel = getModel(db, 'tb_imposto', ImpostoSchema)
+        //;
+
         //Validar se a Impostoese existe
         console.log("impostomodel");
         let dataAtual = new Date();

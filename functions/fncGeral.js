@@ -1,5 +1,17 @@
-const { RespostaModel } = require("../models/resposta");
+//Exports
+const mongoose = require("mongoose")
+const con = require("../serverConnection")
 
+class Resposta{
+    constructor(
+        texto,
+        sucesso
+        ){
+        this.texto = texto,
+        this.sucesso = sucesso
+    }
+}
+const connections = {};
 class Filtros{
     constructor(
         nome,
@@ -9,7 +21,21 @@ class Filtros{
         this.valor = valor
     }
 }
-module.exports = {Filtros,
+
+function getConnection(dbName) {
+    return con.getConnection(dbName);
+}
+/*
+function getModel(dbName, modelName, schema) {
+    const db = getConnection(dbName);
+    return db.models[modelName] || db.model(modelName, schema);
+}
+*/
+module.exports = {Filtros, Resposta,
+    getModel(dbName, modelName, schema) {
+        const db = getConnection(dbName);
+        return db.models[modelName] || db.model(modelName, schema);
+    },
     //Adiciona 0 A datas do sistema.
     adicionaZero(numero){
         if (numero <= 9) 
@@ -24,10 +50,10 @@ module.exports = {Filtros,
             //So, here you are saying that if the route called had any other function, it will goes to the next one ( which is rendering the HTML )
             next();
         }else{
-            let flash = new RespostaModel()
+            let flash = new Resposta()
             //Or else, goes back to login page
             flash.texto = "Você precisa estar logado para acessar o sistema!";
-            flash.texto = "false";
+            flash.sucesso = "false";
             res.render('ferramentas/usuario/login',{flash});
         }
     },
@@ -112,12 +138,18 @@ module.exports = {Filtros,
         mes = data.substring(5,7);
         dia = data.substring(8,10);
 
-        let formatData = new Date(ano, (parseInt(mes)-1), dia);
+        let formatData;
+        if(iniFim == "ini"){
+            formatData = new Date(ano, (parseInt(mes)-1), dia, 0, 0, 0, 0);
+        } else if (iniFim == "fim"){
+            formatData = new Date(ano, (parseInt(mes)-1), dia, 23, 59, 59, 0);
+        }
         /*
         formatData.setFullYear(ano);
         formatData.setUTCMonth((parseInt(mes)-1).toString());//recebendo o mes 1-12 passando para 0-11;
         formatData.setDate(dia);
         */
+        /*
         if(iniFim == "ini"){
             formatData.setHours(0);
             formatData.setMinutes(0);
@@ -127,7 +159,7 @@ module.exports = {Filtros,
             formatData.setMinutes(59);
             formatData.setSeconds(59);
         }
-        
+        */
         //console.log("formatData4:"+formatData)
         return formatData;
     },
@@ -267,5 +299,22 @@ module.exports = {Filtros,
     diasNoMes(mes, ano) {
         var data = new Date(ano, mes, 0);
         return data.getDate();
+    },
+    mascaraValores(val){
+        //Esta mascara só vai até Milhões
+        let t = val.toString();
+        if(val == "0" || val == "0,00"){
+            t = "0,00";
+        } else {
+            if (t.length >= 9){
+                t = t.substring(0,t.length-8)+"."+t.substring(t.length-8,t.length-5)+"."+t.substring(t.length-5,(t.length - 2))+","+t.substring((t.length - 2),t.length)
+            } else if (t.length >= 6){
+                t = t.substring(0,t.length-5)+"."+t.substring(t.length-5,(t.length - 2))+","+t.substring((t.length - 2),t.length)
+            } else {
+                t = t.substring(0,(t.length - 2))+","+t.substring((t.length - 2),t.length)
+            }
+        }
+
+        return t;
     }
 }

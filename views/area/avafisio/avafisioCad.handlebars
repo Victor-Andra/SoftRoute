@@ -1,0 +1,3981 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<title>Avaliação Fisioterapêutica</title>
+	<style>
+		h2,.progress-title{
+		color: #0a1829;
+		}
+		h4{
+		color: #166d9e;
+		}
+		h4 .material-icons, .message-read h4 .fa, .message-read h4 .glyphicon {
+			margin-right: 15px;
+			display: inline-flex;
+			vertical-align: middle;
+		}
+		.material-icons {
+			font-size: 20px;
+		}
+		.progress-title{
+			font-size: 14px;
+			font-weight: 700;
+			margin-bottom: 16px;
+			margin-top: 44px;
+		}
+		.progress-name{
+			font-size: 12px;
+			font-weight: 700;
+			vertical-align: middle;
+			color: #000;
+			text-shadow: 0 0 1px #fff, 0 0 1px #fff, 0 0 1px #fff, 0 0 1px #fff;
+			line-height: 30px;
+		}
+		.progress{
+			height: 30px;
+			background: #e9e9e9;
+			border-radius: 0;
+			box-shadow: none;
+			margin-bottom: 30px;
+			overflow: visible;
+		}
+		.progress .progress-bar{
+			box-shadow: none;
+			position: relative;
+			-webkit-animation: animate-positive 2s;
+			animation: animate-positive 2s;
+			height: 30px;
+		}
+		.progress .progress-value{
+			font-size: 15px;
+			font-weight: bold;
+			color: #000;
+			position: absolute;
+			top: -18px;
+			right: 0;
+		}
+		.col-sm-7 input[type="text"] {
+			width: 100%;
+		}
+		.spanAzul {
+			display: inline-block;
+			position: relative;
+			font-weight: 400;
+			vertical-align: baseline;
+			white-space: nowrap;
+			background-color: #91b8d0;color: #fff;
+			text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+			padding: 4px 22px 5px 9px;
+			margin-bottom: 3px;
+			margin-right: 3px;
+			max-width: 45%;
+		}
+		.aClose {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			right: 0;
+			width: 18px;
+			height: auto;
+			line-height: 25px;
+			text-align: center;
+		}
+		.table-bordered {
+			border: 1px solid #ddd;
+		}
+		.table > thead > tr > th,
+		.table > tbody > tr > td {
+			vertical-align: middle;
+			text-align: center;
+		}
+		/* Cabeçalhos de tabela em cinza escuro */
+		table th {
+			background-color: #fdfbdb7c !important;
+			color: #000000 !important;
+		}
+	</style>
+</head>
+<body onload="javascript:controlaNave();" class="no-skin">
+	<div class="main-container ace-save-state" id="main-container">
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="page-header">
+					<h1>
+						<div class="row">
+							<div class="col-xs-12">
+								Formulário de Avaliação Fisioterapêutica
+							</div>
+						</div>
+						<small>
+							Avaliação Fisioterapêutica – Cadastro e Índice Geral
+						</small>
+					</h1>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<form class="form-horizontal" role="form" action="/menu/area/avafisio/add" method="POST">
+							<!-- IDENTIFICAÇÃO -->
+							<div class="col-xs-12">
+								<div class="widget-box ui-sortable-handle">
+									<div class="widget-header">
+										<h5 class="widget-title">
+											<i class="ace-icon fa fa-user"></i>
+											Identificação
+										</h5>
+										<div class="widget-toolbar">
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</div>
+									</div>
+									<div class="widget-body" style="display: block;">
+										<div class="widget-main">
+											<div class="row">
+												<div class="col-sm-3">
+													<label>Data da avaliação</label>
+													<input type="date" name="avafisiodataava" id="avafisiodataava" class="form-control">
+												</div>
+												<div class="col-sm-3">
+													<label>Data de início do tratamento</label>
+													<input type="date" name="avafisiodatainitrat" id="avafisiodatainitrat" class="form-control">
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Nome</label>
+													<input type="text" name="avafisionomebene" id="avafisionomebene" class="form-control">
+												</div>
+												<div class="col-sm-2">
+													<label>Data de nascimento</label>
+													<input type="date" name="avafisiodatanasc" id="avafisiodatanasc" class="form-control">
+												</div>
+												<div class="col-sm-2">
+													<label>Sexo</label>
+													<select name="avafisiosexo" id="avafisiosexo" class="form-control">
+														<option value="">-</option>
+														<option value="M">Masculino</option>
+														<option value="F">Feminino</option>
+													</select>
+												</div>
+												<div class="col-sm-2">
+													<label>Idade</label>
+													<input type="text" name="avafisioidade" id="avafisioidade" class="form-control">
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-2">
+													<label>ID corrigida</label>
+													<input type="text" name="avafisioidadecorr" id="avafisioidadecorr" class="form-control">
+												</div>
+												<div class="col-sm-2">
+													<label>Peso</label>
+													<input type="text" name="avafisiopeso" id="avafisiopeso" class="form-control">
+												</div>
+												<div class="col-sm-2">
+													<label>Altura</label>
+													<input type="text" name="avafisioaltura" id="avafisioaltura" class="form-control">
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Mãe</label>
+													<input type="text" name="avafisionomemae" id="avafisionomemae" class="form-control">
+												</div>
+												<div class="col-sm-2">
+													<label>Data de nascimento</label>
+													<input type="date" name="avafisiodatanascmae" id="avafisiodatanascmae" class="form-control">
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Pai</label>
+													<input type="text" name="avafisionomepai" id="avafisionomepai" class="form-control">
+												</div>
+												<div class="col-sm-2">
+													<label>Data de nascimento</label>
+													<input type="date" name="avafisiodatanascpai" id="avafisiodatanascpai" class="form-control">
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-12">
+													<label>Hipótese Diagnóstica</label>
+													<textarea name="avafisiohipdiag" id="avafisiohipdiag" class="form-control" rows="2"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- ANAMNESE -->
+							<div class="col-xs-12">
+								<div class="widget-box">
+									<div class="widget-header">
+										<h5 class="widget-title">
+											<i class="ace-icon fa fa-stethoscope"></i>
+											Anamnese
+										</h5>
+										<div class="widget-toolbar">
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</div>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											<!-- Gestação -->
+											<h5>Gestação</h5>
+											<hr>
+											<div class="row">
+												<div class="col-sm-4">
+													<div class="checkbox">
+														<label>
+															<input type="checkbox" name="avafisioassisteprenatal" id="avafisioassisteprenatal" class="ace" value="true">
+															<span class="lbl"> Assistência pré-natal</span>
+														</label>
+													</div>
+												</div>
+												<div class="col-sm-2">
+													<label>N° de consultas</label>
+													<input type="text" name="avafisionconsultas" id="avafisionconsultas" class="form-control">
+												</div>
+												<div class="col-sm-3">
+													<div class="checkbox">
+														<label>
+															<input type="checkbox" name="avafisiogestacaomult" id="avafisiogestacaomult" class="ace"  value="true">
+															<span class="lbl"> Gestação múltipla</span>
+														</label>
+													</div>
+												</div>
+												<div class="col-sm-3">
+													<div class="checkbox">
+														<label>
+															<input type="checkbox" name="avafisioalgumainterco" id="avafisioalgumainterco" class="ace"  value="true">
+															<span class="lbl"> Teve alguma intercorrência</span>
+														</label>
+													</div>
+													<input type="text" name="avafisioalgumaintercoqual" id="avafisioalgumaintercoqual" class="form-control" placeholder="Qual?">
+												</div>
+											</div>
+											<!-- Parto -->
+											<h5>Parto</h5>
+											<hr>
+											<div class="row">
+												<!-- Idade gestacional -->
+												<div class="col-sm-6">
+													<div class="col-sm-12">
+														<label>Idade gestacional:</label>
+													</div>
+													<div class="col-sm-4">
+														<div class="radio">
+															<label>
+																<input type="radio" name="avafisiotipogesta" value="pretermo" class="ace">
+																<span class="lbl"> Pré-termo "< 37 semanas"</span>
+															</label>
+														</div>
+													</div>
+													<div class="col-sm-4">
+														<div class="radio">
+															<label>
+																<input type="radio" name="avafisiotipogesta" value="termo" class="ace">
+																<span class="lbl"> Termo "37–41 semanas + 6 dias"</span>
+															</label>
+														</div>
+													</div>
+													<div class="col-sm-4">
+														<div class="radio">
+															<label>
+																<input type="radio" name="avafisiotipogesta" value="postermo" class="ace">
+																<span class="lbl"> Pós-termo "≥ 42 semanas"</span>
+															</label>
+														</div>
+													</div>
+												</div>
+												<div class="col-sm-6">
+													<!-- Tipo de parto -->
+													<div class="col-sm-12">
+														<label>Tipo de parto:</label>
+													</div>
+													<div class="col-sm-4">
+														<div class="radio">
+															<label>
+																<input type="radio" name="avafisiotipoparto" value="normal" class="ace">
+																<span class="lbl"> Normal</span>
+															</label>
+														</div>
+													</div>
+													<div class="col-sm-4">
+														<div class="radio">
+															<label>
+																<input type="radio" name="avafisiotipoparto" value="cesaria" class="ace">
+																<span class="lbl"> Cesária</span>
+															</label>
+														</div>
+													</div>
+													<div class="col-sm-4">
+														<div class="radio">
+															<label>
+																<input type="radio" name="avafisiotipoparto" value="forceps" class="ace">
+																<span class="lbl"> Fórceps</span>
+															</label>
+														</div>
+													</div>
+												</div>
+											</div>
+											<hr>
+											<div class="row">
+												<div class="col-sm-3">
+													<label>Idade gestacional</label>
+													<input type="text" name="avafisioidadegesta" id="avafisioidadegesta" class="form-control">
+												</div>
+												<div class="col-sm-3">
+													<label>Peso ao nascer</label>
+													<input type="text" name="avafisiopesonascc" id="avafisiopesonascc" class="form-control">
+												</div>
+												<div class="col-sm-2">
+													<label>Apgar 1°min</label>
+													<input type="text" name="avafisioapgar1min" id="avafisioapgar1min" class="form-control">
+												</div>
+												<div class="col-sm-2">
+													<label>Apgar 5°min</label>
+													<input type="text" name="avafisioapgar5min" id="avafisioapgar5min" class="form-control">
+												</div>
+												<div class="col-sm-2">
+													<div class="checkbox">
+														<label>
+															<input type="checkbox" name="avafisiopartointerco" id="avafisiopartointerco" class="ace" value="true">
+															<span class="lbl"> Intercorrência</span>
+														</label>
+													</div>
+													<input type="text" name="avafisiopartointercoobs" id="avafisiopartointercoobs" class="form-control" placeholder="Detalhe">
+												</div>
+											</div>
+											<!-- Amamentação -->
+											<h5>Amamentação</h5>
+											<hr>
+											<div class="row">
+												<div class="col-sm-3">
+													<div class="checkbox">
+														<label>
+															<input type="checkbox" name="avafisioamamentou" id="avafisioamamentou" class="ace"  value="true">
+															<span class="lbl"> Amamentou</span>
+														</label>
+													</div>
+													<input type="text" name="avafisioamamtempo" id="avafisioamamtempo" class="form-control" placeholder="Tempo">
+												</div>
+												<div class="col-sm-3">
+													<div class="checkbox">
+														<label>
+															<input type="checkbox" name="avafisioamamdificul" id="avafisioamamdificul" class="ace" value="true">
+															<span class="lbl"> Apresentou dificuldades</span>
+														</label>
+													</div>
+													<textarea name="avafisioamamdificulquais" id="avafisioamamdificulquais" class="form-control" rows="2" placeholder="Quais?"></textarea>
+												</div>
+											</div>
+											<!-- Condições gerais -->
+											<div class="row">
+												<div class="col-xs-12">
+													<label>Condições do bebê ao nascimento e nos primeiros meses</label>
+													<textarea name="avafisiocondgeraisnascpri" id="avafisiocondgeraisnascpri" class="form-control" rows="2"></textarea>
+												</div>
+											</div>
+											<!-- Patologias e Cirurgias -->
+											<div class="row">
+												<div class="col-sm-6">
+													<div class="checkbox">
+														<label>
+															<input type="checkbox" name="avafisiopatoassoc" id="avafisiopatoassoc" class="ace" value="true">
+															<span class="lbl"> Patologias associadas</span>
+														</label>
+													</div>
+													<textarea name="avafisiopatoassocquais" id="avafisiopatoassocquais" class="form-control" rows="2" placeholder="Quais?"></textarea>
+												</div>
+												<div class="col-sm-6">
+													<div class="checkbox">
+														<label>
+															<input type="checkbox" name="avafisiocirurgia" id="avafisiocirurgia" class="ace" value="true">
+															<span class="lbl"> Cirurgias</span>
+														</label>
+													</div>
+													<div class="row">
+														<div class="col-sm-8">
+															<textarea name="avafisiocirurgiaquais" id="avafisiocirurgiaquais" class="form-control" rows="1" placeholder="Quais?"></textarea>
+														</div>
+														<div class="col-sm-4">
+															<input type="text" name="avafisiocirurgiatempo" id="avafisiocirurgiatempo" class="form-control" placeholder="Tempo">
+														</div>
+													</div>
+												</div>
+											</div>
+											<br>
+											<!-- Medicações -->
+											<div class="row">
+												<div class="col-xs-12">
+													<label>Medicações em uso (nome, dosagem, frequência, finalidade)</label>
+													<textarea name="avafisiomedobs" id="avafisiomedobs" class="form-control" rows="3"></textarea>
+												</div>
+											</div>
+											<br>
+											<!-- Órteses -->
+											<div class="row">
+												<div class="col-xs-12">
+													<label>Utilização de órteses, mobiliários adaptados</label>
+													<textarea name="avafisioortesemob" id="avafisioortesemob" class="form-control" rows="2"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- ATIVIDADES DE VIDA DIÁRIA -->
+							<div class="col-xs-12">
+								<div class="widget-box">
+									<div class="widget-header">
+										<h5 class="widget-title">
+											<i class="ace-icon fa fa-home"></i>
+											Atividades de Vida Diária
+										</h5>
+										<div class="widget-toolbar">
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</div>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											<div class="row">
+												<!-- Alimentação -->
+												<div class="col-sm-4">
+													<label>Alimentação</label><br>
+													<div class="radio inline">
+														<label>
+															<input type="radio" id="avafisioalidep1" name="avafisioalidep" value="dependente" class="ace">
+															<span class="lbl"> Dependente</span>
+														</label>
+													</div>
+													<div class="radio inline">
+														<label>
+															<input type="radio" id="avafisioalidep2" name="avafisioalidep" value="semi-independente" class="ace">
+															<span class="lbl"> Semi-independente</span>
+														</label>
+													</div>
+													<div class="radio inline">
+														<label>
+															<input type="radio" id="avafisioalidep3" name="avafisioalidep" value="independente" class="ace">
+															<span class="lbl"> Independente</span>
+														</label>
+													</div>
+												</div>
+												<!-- Vestuário -->
+												<div class="col-sm-4">
+													<label>Vestuário</label><br>
+													<div class="radio inline">
+														<label>
+															<input type="radio" id="avafisiovestdep1" name="avafisiovestdep" value="dependente" class="ace">
+															<span class="lbl"> Dependente</span>
+														</label>
+													</div>
+													<div class="radio inline">
+														<label>
+															<input type="radio" id="avafisiovestdep2" name="avafisiovestdep" value="semi-independente" class="ace">
+															<span class="lbl"> Semi-independente</span>
+														</label>
+													</div>
+													<div class="radio inline">
+														<label>
+															<input type="radio" id="avafisiovestdep3" name="avafisiovestdep" value="independente" class="ace">
+															<span class="lbl"> Independente</span>
+														</label>
+													</div>
+												</div>
+												<!-- Higiene -->
+												<div class="col-sm-4">
+													<label>Higiene</label><br>
+													<div class="radio inline">
+														<label>
+															<input type="radio" id="avafisiohigidep1" name="avafisiohigidep" value="dependente" class="ace">
+															<span class="lbl"> Dependente</span>
+														</label>
+													</div>
+													<div class="radio inline">
+														<label>
+															<input type="radio" id="avafisiohigidep2" name="avafisiohigidep" value="semi-independente" class="ace">
+															<span class="lbl"> Semi-independente</span>
+														</label>
+													</div>
+													<div class="radio inline">
+														<label>
+															<input type="radio" id="avafisiohigidep3" name="avafisiohigidep" value="independente" class="ace">
+															<span class="lbl"> Independente</span>
+														</label>
+													</div>
+												</div>
+											</div>
+											<hr>
+											<div class="row">
+												<div class="col-xs-12">
+													<label><span class="badge badge-info">Observações</span></label>
+													<textarea name="avafisioobsalivesthigi" id="avafisioobsalivesthigi" class="form-control" rows="2"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- QUEIXA PRINCIPAL E COMPROMETIMENTO -->
+							<div class="col-xs-12">
+								<div class="widget-box">
+									<div class="widget-header">
+										<h5 class="widget-title">
+											<i class="ace-icon fa fa-exclamation-triangle"></i>
+											Queixa Principal e Comprometimento Respiratório
+										</h5>
+										<div class="widget-toolbar">
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</div>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											<div class="row">
+												<div class="col-sm-2">
+													<div class="checkbox">
+														<label>
+															<input type="checkbox" name="avafisiocompriresp" id="avafisiocompriresp" class="ace"  value="true">
+															<span class="lbl"> Comprometimento respiratório</span>
+														</label>
+													</div>
+												</div>
+												<br>
+												<div class="col-sm-10">
+													<textarea name="avafisiocomprirespquais" id="avafisiocomprirespquais" class="form-control" placeholder="Quais?" rows="2"></textarea>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-12">
+													<label>Queixa Principal</label>
+													<textarea name="avafisioqueixaprincipal" id="avafisioqueixaprincipal" class="form-control" rows="2"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12"><!-- EXAME FÍSICO -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h5 class="widget-title">
+											<i class="ace-icon fa fa-user-md"></i>
+											Exame Físico
+										</h5>
+										<div class="widget-toolbar">
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</div>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											<div class="widget-box"><!-- Cabeça -->
+												<div class="widget-header">
+													<h5 class="widget-title">Cabeça</h5>
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</div>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<!-- Posição adotada -->
+														<div class="row">
+															<div class="col-sm-12">
+																<label>Posição adotada na avaliação:</label><br>
+																<div class="radio inline">
+																<label><input type="radio" name="avafisiocabposicao" value="sentada" class="ace"><span class="lbl"> Sentada</span></label>
+																</div>
+																<div class="radio inline">
+																<label><input type="radio" name="avafisiocabposicao" value="pe" class="ace"><span class="lbl"> Em pé</span></label>
+																</div>
+																<div class="radio inline">
+																<label><input type="radio" name="avafisiocabposicao" value="prono" class="ace"><span class="lbl"> Prono (de Bruços)</span></label>
+																</div>
+																<div class="radio inline">
+																<label><input type="radio" name="avafisiocabposicao" value="supino" class="ace"><span class="lbl"> Supino (de Costas)</span></label>
+																</div>
+															</div>
+														</div>
+														<br>
+														<table id="dynamic-table-cabeca" class="table table-striped table-bordered table-hover"><!-- Tabela -->
+															<thead>
+																<tr>
+																	<th rowspan="2">Parte do Corpo</th>
+																	<th rowspan="2">Postura</th>
+																	<th colspan="2">Presença</th>
+																	<th colspan="2">Lateralidade</th>
+																</tr>
+																<tr>
+																	<th><span class="badge badge-success">Sim</span></th>
+																	<th><span class="badge badge-danger">Não</span></th>
+																	<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+																	<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr><!-- Inclinação lateral-->
+																	<td rowspan="4">Cabeça</td>
+																	<td>Inclinação lateral</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocabposinclipre1" name="avafisiocabposinclipre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocabposinclipre2" name="avafisiocabposinclipre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocabposinclidir" id="avafisiocabposinclidir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocabposincliesq" id="avafisiocabposincliesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Inclinação lateral-->
+																<tr><!-- Rotação-->
+																	<td>Rotação</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocabrotacaopre1" name="avafisiocabrotacaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocabrotacaopre2" name="avafisiocabrotacaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocabrotacaodir" id="avafisiocabrotacaodir" class="ace"  value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocabrotacaoesq" id="avafisiocabrotacaoesq" class="ace"  value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Rotação-->
+																<tr><!-- Flexão-->
+																	<td>Flexão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocabflexaope1" name="avafisiocabflexaope" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocabflexaope2" name="avafisiocabflexaope" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocabflexaodir" id="avafisiocabflexaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocabflexaoesq" id="avafisiocabflexaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr>
+																<tr>
+																	<td>Extensão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocabextensaopre1" name="avafisiocabextensaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocabextensaopre2" name="avafisiocabextensaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocabextensaodir" id="avafisiocabextensaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocabextensaoesq" id="avafisiocabextensaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr>
+															</tbody>
+														</table><!-- /.Tabela -->
+														<label><span class="badge badge-info">Observações</span></label>
+														<textarea name="avafisiocabobs" id="avafisiocabobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+													</div>
+												</div>
+											</div>
+											<div class="widget-box"><!-- Ombro -->
+												<div class="widget-header">
+													<h5 class="widget-title">Ombro</h5>
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</div>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<div class="row">
+															<div class="col-sm-12">
+																<label>Posição adotada na avaliação:</label><br>
+																<div class="radio inline">
+																<label><input type="radio" id="avafisioombroposicao1" name="avafisioombroposicao" value="sentada" class="ace"><span class="lbl"> Sentada</span></label>
+																</div>
+																<div class="radio inline">
+																<label><input type="radio" id="avafisioombroposicao2" name="avafisioombroposicao" value="pe" class="ace"><span class="lbl"> Em pé</span></label>
+																</div>
+																<div class="radio inline">
+																<label><input type="radio" id="avafisioombroposicao3" name="avafisioombroposicao" value="prono" class="ace"><span class="lbl"> Prono (de Bruços)</span></label>
+																</div>
+																<div class="radio inline">
+																<label><input type="radio" id="avafisioombroposicao4" name="avafisioombroposicao" value="supino" class="ace"><span class="lbl"> Supino (de Costas)</span></label>
+																</div>
+															</div>
+														</div>
+														<br>
+														<table id="dynamic-table-ombro" class="table table-striped table-bordered table-hover"><!-- Tabela -->
+															<thead>
+																<tr>
+																	<th rowspan="2">Parte do Corpo</th>
+																	<th rowspan="2">Postura</th>
+																	<th colspan="2">Presença</th>
+																	<th colspan="2">Lateralidade</th>
+																</tr>
+																<tr>
+																	<th><span class="badge badge-success">Sim</span></th>
+																	<th><span class="badge badge-danger">Não</span></th>
+																	<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+																	<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr><!-- Rotação Interna-->
+																	<td rowspan="6">Ombro</td>
+																	<td>Rotação Interna</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisioombrorotainternapre1" name="avafisioombrorotainternapre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisioombrorotainternapre2" name="avafisioombrorotainternapre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisioombrorotainternadir" id="avafisioombrorotainternadir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisioombrorotainternaesq" id="avafisioombrorotainternaesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Rotação Interna-->
+																<tr><!-- Rotação Externa-->
+																	<td>Rotação Externa</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisioombrorotaexternapre1" name="avafisioombrorotaexternapre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisioombrorotaexternapre2" name="avafisioombrorotaexternapre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisioombrorotaexternadir" id="avafisioombrorotaexternadir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisioombrorotaexternaesq" id="avafisioombrorotaexternaesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Rotação Externa-->
+																<tr><!-- Elevação-->
+																	<td>Elevação</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisioombroelevacaopre1" name="avafisioombroelevacaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisioombroelevacaopre2" name="avafisioombroelevacaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisioombroelevacaodir" id="avafisioombroelevacaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisioombroelevacaoesq" id="avafisioombroelevacaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Elevação-->
+																<tr><!-- Depressão-->
+																	<td>Depressão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisioombrodepressaopre1" name="avafisioombrodepressaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisioombrodepressaopre2" name="avafisioombrodepressaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisioombrodepressaodir" id="avafisioombrodepressaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisioombrodepressaoesq" id="avafisioombrodepressaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Depressão-->
+																<tr><!-- Protração-->
+																	<td>Protração</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisioombroprotacaopre1" name="avafisioombroprotacaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisioombroprotacaopre2" name="avafisioombroprotacaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisioombroprotacaodir" id="avafisioombroprotacaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisioombroprotacaoesq" id="avafisioombroprotacaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Protração-->
+																<tr><!-- Retração-->
+																	<td>Retração</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisioombroretracaopre1" name="avafisioombroretracaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisioombroretracaopre2" name="avafisioombroretracaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisioombroretracaodir" id="avafisioombroretracaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisioombroretracaoesq" id="avafisioombroretracaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Retração-->
+															</tbody>
+														</table><!-- /.Tabela -->
+														<br>
+														<label><span class="badge badge-info">Observações</span></label>
+														<textarea name="avafisioombroobs" id="avafisioombroobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+													</div>
+												</div>
+											</div>
+											<div class="widget-box"><!-- Cotovelo -->
+												<div class="widget-header">
+													<h5 class="widget-title">Cotovelo</h5>
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</div>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<div class="row">
+															<div class="col-sm-12">
+																<!-- checkboxes de posição -->
+																<div class="row">
+																	<div class="col-sm-12">
+																		<label>Posição adotada na avaliação:</label><br>
+																		<div class="radio inline">
+																		<label><input type="radio" name="avafisiocotoveloposicao" value="sentada" class="ace"><span class="lbl"> Sentada</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio" name="avafisiocotoveloposicao" value="pe" class="ace"><span class="lbl"> Em pé</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio" name="avafisiocotoveloposicao" value="prono" class="ace"><span class="lbl"> Prono (de Bruços)</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio" name="avafisiocotoveloposicao" value="supino" class="ace"><span class="lbl"> Supino (de Costas)</span></label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<br>
+														<table id="dynamic-table-ombro" class="table table-striped table-bordered table-hover"><!-- Tabela -->
+															<thead>
+																<tr>
+																	<th rowspan="2">Parte do Corpo</th>
+																	<th rowspan="2">Postura</th>
+																	<th colspan="2">Presença</th>
+																	<th colspan="2">Lateralidade</th>
+																</tr>
+																<tr>
+																	<th><span class="badge badge-success">Sim</span></th>
+																	<th><span class="badge badge-danger">Não</span></th>
+																	<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+																	<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr><!-- Pronação-->
+																	<td rowspan="6">Pronação</td>
+																	<td>Pronação</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocotovelopronacaopre1" name="avafisiocotovelopronacaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocotovelopronacaopre2" name="avafisiocotovelopronacaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocotovelorotainternadir" id="avafisiocotovelorotainternadir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocotovelorotainternaesq" id="avafisiocotovelorotainternaesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Pronação-->
+																<tr><!-- Supinação-->
+																	<td>Supinação</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisio_cotovelosupinacaopre1" name="avafisio_cotovelosupinacaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisio_cotovelosupinacaopre2" name="avafisio_cotovelosupinacaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisio_cotovelosupinacaodir" id="avafisio_cotovelosupinacaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisio_cotovelosupinacaoesq" id="avafisio_cotovelosupinacaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Supinação-->
+																<tr><!-- Flexão-->
+																	<td>Flexão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocotoveloflexaopre1" name="avafisiocotoveloflexaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocotoveloflexaopre2" name="avafisiocotoveloflexaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocotoveloflexaodir" id="avafisiocotoveloflexaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocotoveloflexaoesq" id="avafisiocotoveloflexaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão-->
+																<tr><!-- Extensão-->
+																	<td>Extensão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocotoveloextensaopre1" name="avafisiocotoveloextensaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiocotoveloextensaopre2" name="avafisiocotoveloextensaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocotoveloextensaodir" id="avafisiocotoveloextensaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiocotoveloextensaoesq" id="avafisiocotoveloextensaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Extensão-->
+															</tbody>
+														</table><!-- /.Tabela -->
+														<br>
+														<label><span class="badge badge-info">Observações</span></label>
+														<textarea id="avafisiocotoveloobs" name="avafisiocotoveloobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+													</div>
+												</div>
+											</div>
+											<div class="widget-box"><!-- Punho -->
+												<div class="widget-header">
+													<h5 class="widget-title">Punho</h5>
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</div>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<div class="row">
+															<div class="col-sm-12">
+																<!-- checkboxes de posição -->
+																<div class="row">
+																	<div class="col-sm-12">
+																		<label>Posição adotada na avaliação:</label><br>
+																		<div class="radio inline">
+																		<label><input type="radio" name="avafisiopunhoposicao" value="sentada" class="ace"><span class="lbl"> Sentada</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio"  name="avafisiopunhoposicao" value="pe" class="ace"><span class="lbl"> Em pé</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio"  name="avafisiopunhoposicao" value="prono" class="ace"><span class="lbl"> Prono (de Bruços)</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio"  name="avafisiopunhoposicao" value="supino" class="ace"><span class="lbl"> Supino (de Costas)</span></label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<br>
+														<table id="dynamic-table-punho" class="table table-striped table-bordered table-hover"><!-- Tabela -->
+															<thead>
+																<tr>
+																	<th rowspan="2">Parte do Corpo</th>
+																	<th rowspan="2">Postura</th>
+																	<th colspan="2">Presença</th>
+																	<th colspan="2">Lateralidade</th>
+																</tr>
+																<tr>
+																	<th><span class="badge badge-success">Sim</span></th>
+																	<th><span class="badge badge-danger">Não</span></th>
+																	<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+																	<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr><!-- Flexão-->
+																	<td rowspan="6">Punho</td>
+																	<td>Flexão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopunhoflexaopre1" name="avafisiopunhoflexaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopunhoflexaopre2" name="avafisiopunhoflexaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopunhoflexaodir" id="avafisiopunhoflexaodir" class="ace" value="true" >
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopunhoflexaoesq" id="avafisiopunhoflexaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão-->
+																<tr><!-- Extensão-->
+																	<td>Extensão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopunhoextensaopre1" name="avafisiopunhoextensaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopunhoextensaopre2" name="avafisiopunhoextensaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopunhoextensaodir" id="avafisiopunhoextensaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopunhoextensaoesq" id="avafisiopunhoextensaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Extensão-->
+																<tr><!-- Desvio Ulnar-->
+																	<td>Desvio Ulnar</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopunhodesvioulnarpre1" name="avafisiopunhodesvioulnarpre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopunhodesvioulnarpre2" name="avafisiopunhodesvioulnarpre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopunhodesvioulnardir" id="avafisiopunhodesvioulnardir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopunhodesvioulnaresq" id="avafisiopunhodesvioulnaresq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Desvio Ulnar-->
+																<tr><!-- Desvio Radial-->
+																	<td>Desvio Radial</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopunhodesvioradialpre1" name="avafisiopunhodesvioradialpre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopunhodesvioradialpre2" name="avafisiopunhodesvioradialpre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopunhodesvioradialdir" id="avafisiopunhodesvioradialdir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopunhodesvioradialesq" id="avafisiopunhodesvioradialesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Extensão-->
+															</tbody>
+														</table><!-- /.Tabela -->
+														<br>
+														<label><span class="badge badge-info">Observações</span></label>
+														<textarea id="avafisiopunhoobs" name="avafisiopunhoobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+													</div>
+												</div>
+											</div>
+											<div class="widget-box"><!-- Mão -->
+												<div class="widget-header">
+													<h5 class="widget-title">Mão</h5>
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</div>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<div class="row">
+															<div class="col-sm-12">
+																<!-- checkboxes de posição -->
+																<div class="row">
+																	<div class="col-sm-12">
+																		<label>Posição adotada na avaliação:</label><br>
+																		<div class="radio inline">
+																		<label><input type="radio" name="avafisiomaoposicao" value="sentada" class="ace"><span class="lbl"> Sentada</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio"  name="avafisiomaoposicao" value="pe" class="ace"><span class="lbl"> Em pé</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio"  name="avafisiomaoposicao" value="prono" class="ace"><span class="lbl"> Prono (de Bruços)</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio"  name="avafisiomaoposicao" value="supino" class="ace"><span class="lbl"> Supino (de Costas)</span></label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<br>
+														<table id="dynamic-table-punho" class="table table-striped table-bordered table-hover"><!-- Tabela -->
+															<thead>
+																<tr>
+																	<th rowspan="2">Parte do Corpo</th>
+																	<th rowspan="2">Postura</th>
+																	<th rowspan="2">Dedo</th>
+																	<th colspan="2">Presença</th>
+																	<th colspan="2">Lateralidade</th>
+																</tr>
+																<tr>
+																	<th><span class="badge badge-success">Sim</span></th>
+																	<th><span class="badge badge-danger">Não</span></th>
+																	<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+																	<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr><!-- Flexão do Polegar-->
+																	<td rowspan="6">Mão</td>
+																	<td>Flexão do polegar</td>
+																	<td rowspan="2">1º Dedo - Polegar</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiomaoflexaopolegarpre1" name="avafisiomaoflexaopolegarpre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiomaoflexaopolegarpre2" name="avafisiomaoflexaopolegarpre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiomaoflexaopolegardir" id="avafisiomaoflexaopolegardir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiomaoflexaopolegaresq" id="avafisiomaoflexaopolegaresq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do dedos-->
+																<tr><!--  Adução do Polegar-->
+																	<td> Adução do Polegar</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiomaoaducaopolegarpre1" name="avafisiomaoaducaopolegarpre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiomaoaducaopolegarpre2" name="avafisiomaoaducaopolegarpre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiomaoaducaopolegardir" id="avafisiomaoaducaopolegardir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiomaoaducaopolegaresq" id="avafisiomaoaducaopolegaresq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Adução do Polegar-->
+																<hr>
+																<tr><!-- Flexão do Dedos Indicador-->
+																	<td>Flexão do dedo</td>
+																	<td>2º Dedo - Indicador</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiomaoflexaoindicadorpre1" name="avafisiomaoflexaoindicadorpre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiomaoflexaoindicadorpre2" name="avafisiomaoflexaoindicadorpre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiomaoflexaoindicadordir" id="avafisiomaoflexaoindicadordir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiomaoflexaoindicadoresq" id="avafisiomaoflexaoindicadoresq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do dedos-->
+																<tr><!-- Flexão do Dedos Médio-->
+																	<td>Flexão do dedo</td>
+																	<td >3º Dedo - Médio</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiomaoflexaomediopre1" name="avafisiomaoflexaomediopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiomaoflexaomediopre2" name="avafisiomaoflexaomediopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiomaoflexaomediodir" id="avafisiomaoflexaomediodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiomaoflexaomedioesq" id="avafisiomaoflexaomedioesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do dedos-->
+																<tr><!-- Flexão do Dedos Anelar-->
+																	<td>Flexão do dedo</td>
+																	<td>4º Dedo - Anelar</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiomaoflexaoanelarpre1" name="avafisiomaoflexaoanelarpre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiomaoflexaoanelarpre2" name="avafisiomaoflexaoanelarpre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiomaoflexaoanelardir" id="avafisiomaoflexaoanelardir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiomaoflexaoanelaresq" id="avafisiomaoflexaoanelaresq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do dedos-->
+																<tr><!-- Flexão do Dedos Mínimo-->
+																	<td>Flexão do dedo</td>
+																	<td>4º Dedo - Mínimo</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiomaoflexaominimopre1" name="avafisiomaoflexaominimopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiomaoflexaominimopre2" name="avafisiomaoflexaominimopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiomaoflexaominimodir" id="avafisiomaoflexaominimodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiomaoflexaominimoesq" id="avafisiomaoflexaominimoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do dedos-->
+															</tbody>
+														</table><!-- /.Tabela -->
+														<br>
+														<label><span class="badge badge-info">Observações</span></label>
+														<textarea id="avafisiomaoobs" name="avafisiomaoobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+													</div>
+												</div>
+											</div>
+											<div class="widget-box"><!-- Tronco -->
+												<div class="widget-header">
+													<h5 class="widget-title">Tronco</h5>
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</div>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<div class="row">
+															<div class="col-sm-12">
+																<!-- checkboxes de posição -->
+																<div class="row">
+																	<div class="col-sm-12">
+																		<label>Posição adotada na avaliação:</label><br>
+																		<div class="radio inline">
+																		<label><input type="radio" name="avafisiotroncoposicao" value="sentada" class="ace"><span class="lbl"> Sentada</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio"  name="avafisiotroncoposicao" value="pe" class="ace"><span class="lbl"> Em pé</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio"  name="avafisiotroncoposicao" value="prono" class="ace"><span class="lbl"> Prono (de Bruços)</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio"  name="avafisiotroncoposicao" value="supino" class="ace"><span class="lbl"> Supino (de Costas)</span></label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<br>
+														<table id="dynamic-table-tronco" class="table table-striped table-bordered table-hover"><!-- Tabela -->
+															<thead>
+																<tr>
+																	<th rowspan="2">Parte do Corpo</th>
+																	<th rowspan="2">Postura</th>
+																	<th colspan="2">Presença</th>
+																	<th colspan="2">Lateralidade</th>
+																</tr>
+																<tr>
+																	<th><span class="badge badge-success">Sim</span></th>
+																	<th><span class="badge badge-danger">Não</span></th>
+																	<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+																	<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr><!-- Flexão Lateral-->
+																	<td rowspan="6">Tronco</td>
+																	<td>Flexão Lateral</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotroncoflexaopre1" name="avafisiotroncoflexaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotroncoflexaopre2" name="avafisiotroncoflexaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotroncoflexaodir" id="avafisiotroncoflexaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotroncoflexaoesq" id="avafisiotroncoflexaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão-->
+																<tr><!-- Escoliose-->
+																	<td>Escoliose</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotroncoescoliosepre1" name="avafisiotroncoescoliosepre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotroncoescoliosepre2" name="avafisiotroncoescoliosepre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotroncoescoliosedir" id="avafisiotroncoescoliosedir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotroncoescolioseesq" id="avafisiotroncoescolioseesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Escoliose-->
+																<tr><!-- Cifose Dorsal-->
+																	<td>Cifose Dorsal</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotroncocifosepre1" name="avafisiotroncocifosepre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotroncocifosepre2" name="avafisiotroncocifosepre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Cifose Dorsal-->
+															</tbody>
+														</table><!-- /.Tabela -->
+														<br>
+														<label><span class="badge badge-info">Observações</span></label>
+														<textarea id="avafisiotroncoobs" name="avafisiotroncoobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+													</div>
+												</div>
+											</div>
+											<div class="widget-box"><!-- Pelve e Quadril -->
+												<div class="widget-header">
+													<h5 class="widget-title">Pelve e Quadril</h5>
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</div>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<div class="row">
+															<div class="col-sm-12">
+																<label>Posição adotada na avaliação:</label><br>
+																<div class="radio inline">
+																<label><input type="radio" name="avafisiopelvequaposicao" value="sentada" class="ace"><span class="lbl"> Sentada</span></label>
+																</div>
+																<div class="radio inline">
+																<label><input type="radio" name="avafisiopelvequaposicao" value="pe" class="ace"><span class="lbl"> Em pé</span></label>
+																</div>
+																<div class="radio inline">
+																<label><input type="radio" name="avafisiopelvequaposicao" value="prono" class="ace"><span class="lbl"> Prono (de Bruços)</span></label>
+																</div>
+																<div class="radio inline">
+																<label><input type="radio" name="avafisiopelvequaposicao" value="supino" class="ace"><span class="lbl"> Supino (de Costas)</span></label>
+																</div>
+															</div>
+														</div>
+														<br>
+														<table id="dynamic-table-ombro" class="table table-striped table-bordered table-hover"><!-- Tabela -->
+															<thead>
+																<tr>
+																	<th rowspan="2">Parte do Corpo</th>
+																	<th rowspan="2">Postura</th>
+																	<th colspan="2">Presença</th>
+																	<th colspan="2">Lateralidade</th>
+																</tr>
+																<tr>
+																	<th><span class="badge badge-success">Sim</span></th>
+																	<th><span class="badge badge-danger">Não</span></th>
+																	<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+																	<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr><!-- Flexão-->
+																	<td rowspan="7">Pelve e Quadril</td>
+																	<td>Flexão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequaflexaopre1" name="avafisiopelvequaflexaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequaflexaopre2" name="avafisiopelvequaflexaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopelvequaflexaodir" id="avafisiopelvequaflexaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopelvequaflexaoesq" id="avafisiopelvequaflexaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão-->
+																<tr><!--  Rotação Interna-->
+																	<td> Rotação Interna</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequarotinternapre1" name="avafisiopelvequarotinternapre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequarotinternapre2" name="avafisiopelvequarotinternapre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopelvequarotinternadir" id="avafisiopelvequarotinternadir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopelvequarotinternaesq" id="avafisiopelvequarotinternaesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Rotação Interna-->
+																<tr><!-- Rotação Externa-->
+																	<td>Rotação Externa</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequarotexternapre1" name="avafisiopelvequarotexternapre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequarotexternapre2" name="avafisiopelvequarotexternapre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopelvequarotexternadir" id="avafisiopelvequarotexternadir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopelvequarotexternaesq" id="avafisiopelvequarotexternaesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Rotação Externa-->
+																<tr><!-- Adução-->
+																	<td>Adução</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequaaducaopre1" name="avafisiopelvequaaducaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequaaducaopre2" name="avafisiopelvequaaducaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopelvequaaducaodir" id="avafisiopelvequaaducaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopelvequaaducaoesq" id="avafisiopelvequaaducaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Adução-->
+																<tr><!-- Abdução-->
+																	<td>Abdução</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequaabducaopre1" name="avafisiopelvequaabducaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequaabducaopre2" name="avafisiopelvequaabducaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopelvequaabducaodir" id="avafisiopelvequaabducaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiopelvequaabducaoesq" id="avafisiopelvequaabducaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Abdução-->
+																<tr><!-- Anteversão-->
+																	<td>Anteversão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequaanteversaopre1" name="avafisiopelvequaanteversaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequaanteversaopre2" name="avafisiopelvequaanteversaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																	</td>
+																	<td>
+																	</td>
+																</tr><!-- /.Anteversão-->
+																<tr><!-- Retroversão-->
+																	<td>Retroversão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequaretroversaopre1" name="avafisiopelvequaretroversaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiopelvequaretroversaopre2" name="avafisiopelvequaretroversaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																	</td>
+																	<td>
+																	</td>
+																</tr><!-- /.Retroversão-->
+															</tbody>
+														</table><!-- /.Tabela -->
+														<br>
+														<label><span class="badge badge-info">Observações</span></label>
+														<textarea name="avafisiopelvequaobs" id="avafisiopelvequaobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+													</div>
+												</div>
+											</div>
+											<div class="widget-box"><!-- Joelho -->
+												<div class="widget-header">
+													<h5 class="widget-title">Joelho</h5>
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</div>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<div class="row">
+															<div class="col-sm-12">
+																<!-- checkboxes de posição -->
+																<div class="row">
+																	<div class="col-sm-12">
+																		<label>Posição adotada na avaliação:</label><br>
+																		<div class="radio inline">
+																		<label><input type="radio" name="avafisiojoelhoposicao" value="sentada" class="ace"><span class="lbl"> Sentada</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio"  name="avafisiojoelhoposicao" value="pe" class="ace"><span class="lbl"> Em pé</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio"  name="avafisiojoelhoposicao" value="prono" class="ace"><span class="lbl"> Prono (de Bruços)</span></label>
+																		</div>
+																		<div class="radio inline">
+																		<label><input type="radio"  name="avafisiojoelhoposicao" value="supino" class="ace"><span class="lbl"> Supino (de Costas)</span></label>
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<br>
+														<table id="dynamic-table-punho" class="table table-striped table-bordered table-hover"><!-- Tabela -->
+															<thead>
+																<tr>
+																	<th rowspan="2">Parte do Corpo</th>
+																	<th rowspan="2">Postura</th>
+																	<th colspan="2">Presença</th>
+																	<th colspan="2">Lateralidade</th>
+																</tr>
+																<tr>
+																	<th><span class="badge badge-success">Sim</span></th>
+																	<th><span class="badge badge-danger">Não</span></th>
+																	<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+																	<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr><!-- Flexão-->
+																	<td rowspan="6">Joelho</td>
+																	<td>Flexão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiojoelhoflexaopre1" name="avafisiojoelhoflexaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiojoelhoflexaopre2" name="avafisiojoelhoflexaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiojoelhoflexaodir" id="avafisiojoelhoflexaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiojoelhoflexaoesq" id="avafisiojoelhoflexaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão-->
+																<tr><!-- Extensão-->
+																	<td>Extensão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiojoelhoextensaopre1" name="avafisiojoelhoextensaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiojoelhoextensaopre2" name="avafisiojoelhoextensaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiojoelhoextensaodir" id="avafisiojoelhoextensaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiojoelhoextensaoesq" id="avafisiojoelhoextensaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Extensão-->
+																<tr><!-- Valgo-->
+																	<td>Valgo</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiojoelhovalgopre1" name="avafisiojoelhovalgopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiojoelhovalgopre2" name="avafisiojoelhovalgopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiojoelhovalgodir" id="avafisiojoelhovalgodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiojoelhovalgoesq" id="avafisiojoelhovalgoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Valgo-->
+																<tr><!-- Varo-->
+																	<td>Varo</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiojoelhovaropre1" name="avafisiojoelhovaropre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiojoelhovaropre2" name="avafisiojoelhovaropre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiojoelhovarodir" id="avafisiojoelhovarodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiojoelhovaroesq" id="avafisiojoelhovaroesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Varo-->
+															</tbody>
+														</table><!-- /.Tabela -->
+														<br>
+														<label><span class="badge badge-info">Observações</span></label>
+														<textarea id="avafisiojoelhoobs" name="avafisiojoelhoobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+													</div>
+												</div>
+											</div>
+											<div class="widget-box"><!-- Tornozelo e Pé -->
+												<div class="widget-header">
+													<h5 class="widget-title">Tornozelo e Pé</h5>
+													<div class="widget-toolbar">
+														<a href="#" data-action="collapse">
+															<i class="ace-icon fa fa-chevron-up"></i>
+														</a>
+													</div>
+												</div>
+												<div class="widget-body">
+													<div class="widget-main">
+														<div class="row">
+															<div class="col-sm-12">
+																<label>Posição adotada na avaliação:</label><br>
+																<div class="radio inline">
+																<label><input type="radio" name="avafisiotornopesentada" value="sentada" class="ace"><span class="lbl"> Sentada</span></label>
+																</div>
+																<div class="radio inline">
+																<label><input type="radio" name="avafisiotornopesentada" value="pe" class="ace"><span class="lbl"> Em pé</span></label>
+																</div>
+																<div class="radio inline">
+																<label><input type="radio" name="avafisiotornopesentada" value="prono" class="ace"><span class="lbl"> Prono (de Bruços)</span></label>
+																</div>
+																<div class="radio inline">
+																<label><input type="radio" name="avafisiotornopesentada" value="supino" class="ace"><span class="lbl"> Supino (de Costas)</span></label>
+																</div>
+															</div>
+														</div>
+														<br>
+														<table id="dynamic-table-tornozelo" class="table table-striped table-bordered table-hover"><!-- Tabela -->
+															<thead>
+																<tr>
+																	<th rowspan="2">Parte do Corpo</th>
+																	<th rowspan="2">Postura</th>
+																	<th colspan="2">Presença</th>
+																	<th colspan="2">Lateralidade</th>
+																</tr>
+																<tr>
+																	<th><span class="badge badge-success">Sim</span></th>
+																	<th><span class="badge badge-danger">Não</span></th>
+																	<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+																	<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr><!-- Plantiflexão-->
+																	<td rowspan="4">Tornozelo</td>
+																	<td>Plantiflexão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeplantiflexaopre1" name="avafisiotornopeplantiflexaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeplantiflexaopre2" name="avafisiotornopeplantiflexaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeplantiflexaodir" id="avafisiotornopeplantiflexaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeplantiflexaoesq" id="avafisiotornopeplantiflexaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Plantiflexão-->
+																<tr><!--  Dorsiflexão-->
+																	<td> Dorsiflexão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopedorsiflexaopre1" name="avafisiotornopedorsiflexaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopedorsiflexaopre2" name="avafisiotornopedorsiflexaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopedorsiflexaodir" id="avafisiotornopedorsiflexaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopedorsiflexaoesq" id="avafisiotornopedorsiflexaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Dorsiflexão-->
+																<tr><!-- Eversão-->
+																	<td>Eversão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeeversaopre1" name="avafisiotornopeeversaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeeversaopre2" name="avafisiotornopeeversaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeeversaodir" id="avafisiotornopeeversaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeeversaoesq" id="avafisiotornopeeversaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Eversão-->
+																<tr><!-- Inversão-->
+																	<td>Inversão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeinversaopre1" name="avafisiotornopeinversaopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeinversaopre2" name="avafisiotornopeinversaopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeinversaodir" id="avafisiotornopeinversaodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeinversaoesq" id="avafisiotornopeinversaoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Inversão-->
+															</tbody>
+														</table>
+														<table id="dynamic-table-pe" class="table table-striped table-bordered table-hover"><!-- Tabela -->
+															<thead>
+																<tr>
+																	<th rowspan="2">Parte do Corpo</th>
+																	<th rowspan="2">Postura</th>
+																	<th rowspan="2">Dedo</th>
+																	<th colspan="2">Presença</th>
+																	<th colspan="2">Lateralidade</th>
+																</tr>
+																<tr>
+																	<th><span class="badge badge-success">Sim</span></th>
+																	<th><span class="badge badge-danger">Não</span></th>
+																	<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+																	<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr><!-- Flexão dos Dedão-->
+																	<td rowspan="10">Pé</td>
+																	<td rowspan="5">Flexão dos Dedos</td>
+																	<td>1º Dedo - Dedão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeflexaopolegarpre1" name="avafisiotornopeflexaopolegarpre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeflexaopolegarpre2" name="avafisiotornopeflexaopolegarpre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeflexaopolegardir" id="avafisiotornopeflexaopolegardir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeflexaopolegaresq" id="avafisiotornopeflexaopolegaresq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do Dedão-->
+																<tr><!-- Flexão do Dedos Indicador-->
+																	<td>2º Dedo - Indicador</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeflexaoindicadorpre1" name="avafisiotornopeflexaoindicadorpre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeflexaoindicadorpre2" name="avafisiotornopeflexaoindicadorpre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeflexaoindicadordir" id="avafisiotornopeflexaoindicadordir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeflexaoindicadoresq" id="avafisiotornopeflexaoindicadoresq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do Indicador-->
+																<tr><!-- Flexão do Dedos Médio-->
+																	<td>3º Dedo - Médio</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeflexaomediopre1" name="avafisiotornopeflexaomediopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeflexaomediopre2" name="avafisiotornopeflexaomediopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeflexaomediodir" id="avafisiotornopeflexaomediodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeflexaomedioesq" id="avafisiotornopeflexaomedioesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do Médio-->
+																<tr><!-- Flexão do Dedos Anelar-->
+																	<td>4º Dedo - Anelar</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeflexaoanelarpre" name="avafisiotornopeflexaoanelarpre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeflexaoanelarpre2" name="avafisiotornopeflexaoanelarpre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeflexaoanelardir" id="avafisiotornopeflexaoanelardir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeflexaoanelaresq" id="avafisiotornopeflexaoanelaresq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do Anelar-->
+																<tr><!-- Flexão do Dedos Mínimo-->
+																	<td>5º Dedo - Mínimo</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeflexaominimopre1" name="avafisiotornopeflexaominimopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeflexaominimopre2" name="avafisiotornopeflexaominimopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeflexaominimodir" id="avafisiotornopeflexaominimodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeflexaominimoesq" id="avafisiotornopeflexaominimoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do Mínimo-->
+																<tr><!-- Flexão dos Dedão-->
+																	<td rowspan="5">Extensão dos Dedos</td>
+																	<td>1º Dedo - Dedão</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeextensaopolegarpre1" name="avafisiotornopeextensaopolegarpre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeextensaopolegarpre2" name="avafisiotornopeextensaopolegarpre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeextensaopolegardir" id="avafisiotornopeextensaopolegardir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeextensaopolegaresq" id="avafisiotornopeextensaopolegaresq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do Dedão-->
+																<tr><!-- Flexão do Dedos Indicador-->
+																	<td>2º Dedo - Indicador</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeextensaoindicadorpre1" name="avafisiotornopeextensaoindicadorpre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeextensaoindicadorpre2" name="avafisiotornopeextensaoindicadorpre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeextensaoindicadordir" id="avafisiotornopeextensaoindicadordir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeextensaoindicadoresq" id="avafisiotornopeextensaoindicadoresq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do Indicador-->
+																<tr><!-- Flexão do Dedos Médio-->
+																	<td>3º Dedo - Médio</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeextensaomediopre1" name="avafisiotornopeextensaomediopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeextensaomediopre2" name="avafisiotornopeextensaomediopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeextensaomediodir" id="avafisiotornopeextensaomediodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeextensaomedioesq" id="avafisiotornopeextensaomedioesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do Médio-->
+																<tr><!-- Flexão do Dedos Anelar-->
+																	<td>4º Dedo - Anelar</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeextensaoanelarpre1" name="avafisiotornopeextensaoanelarpre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeextensaoanelarpre2" name="avafisiotornopeextensaoanelarpre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeextensaoanelardir" id="avafisiotornopeextensaoanelardir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeextensaoanelaresq" id="avafisiotornopeextensaoanelaresq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do Anelar-->
+																<tr><!-- Flexão do Dedos Mínimo-->
+																	<td>5º Dedo - Mínimo</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeextensaominimopre1" name="avafisiotornopeextensaominimopre" type="radio" class="ace" value="true" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="radio">
+																			<label>
+																				<input id="avafisiotornopeextensaominimopre2" name="avafisiotornopeextensaominimopre" type="radio" class="ace" value="false" onchange="">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeextensaominimodir" id="avafisiotornopeextensaominimodir" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																	<td>
+																		<div class="checkbox">
+																			<label>
+																				<input type="checkbox" name="avafisiotornopeextensaominimoesq" id="avafisiotornopeextensaominimoesq" class="ace" value="true">
+																				<span class="lbl"></span>
+																			</label>
+																		</div>
+																	</td>
+																</tr><!-- /.Flexão do Mínimo-->
+															</tbody>
+														</table><!-- /.Tabela -->
+														<br>
+														<label><span class="badge badge-info">Observações</span></label>
+														<textarea name="avafisiotornopeobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+													</div>
+												</div>
+											</div>
+										</div> <!-- /.widget-main do widget principal -->
+									</div> <!-- /.widget-body do widget principal -->
+								</div> <!-- /.widget-box principal -->
+							</div>
+							<!-- PALPAÇÃO -->
+							<div class="col-xs-12">
+								<div class="widget-box">
+									<div class="widget-header">
+										<h5 class="widget-title">
+											<i class="ace-icon fa fa-hand-paper-o"></i>
+											Palpação
+										</h5>
+										<div class="widget-toolbar">
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</div>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											<p class="alert alert-info">Legenda:<br><br>
+											<span class="badge badge-info"> (-) = Não Avaliado</span><br>
+											<span class="badge badge-warning">(1) = Flacidez - Diminuída;</span> <br>
+											<span class="badge badge-success">(2) = Normal;</span> <br>
+											<span class="badge badge-danger">(3) = Rigidez - Aumentada.</span>
+											</p>
+											<table class="table table-bordered table-condensed">
+												<thead>
+													<tr>
+														<th>Músculos</th>
+														<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+														<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr><td>Deltóide</td>
+														<td>
+															<select name="avafisiopaldeltoidedir" id="avafisiopaldeltoidedir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisiopaldeltoideesq" id="avafisiopaldeltoideesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Bíceps</td>
+														<td>
+															<select name="avafisiopalbicepsdir" id="avafisiopalbicepsdir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisiopalbicepsesq" id="avafisiopalbicepsesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Tríceps</td>
+														<td>
+															<select name="avafisiopaltricepsdir" id="avafisiopaltricepsdir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisiopaltricepsesq" id="avafisiopaltricepsesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Peitoral</td>
+														<td>
+															<select name="avafisiopalpeitoraldir" id="avafisiopalpeitoraldir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisiopalpeitoralesq" id="avafisiopalpeitoralesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Abdominais</td>
+														<td>
+															<select name="avafisiopalabdominaisdir" id="avafisiopalabdominaisdir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisiopalabdominaisesq" id="avafisiopalabdominaisesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Obliquos</td>
+														<td>
+															<select name="avafisiopalobliquosdir" id="avafisiopalobliquosdir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisiopalobliquosesq" id="avafisiopalobliquosesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Quadríceps</td>
+														<td>
+															<select name="avafisiopalquadricepsdir" id="avafisiopalquadricepsdir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisiopalquadricepsesq" id="avafisiopalquadricepsesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Tríceps Sural</td>
+														<td>
+															<select name="avafisiopaltricepssuraldir" id="avafisiopaltricepssuraldir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisiopaltricepssuralesq" id="avafisiopaltricepssuralesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Isquiotibiais</td>
+														<td>
+															<select name="avafisiopalisquiotibiaisdir" id="avafisiopalisquiotibiaisdir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisiopalisquiotibiaisesq" id="avafisiopalisquiotibiaisesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+															</select>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<div class="row">
+												<div class="col-xs-12">
+													<label><span class="badge badge-info">Observações</span></label>
+													<textarea name="avafisiopalobs" id="avafisiopalobs" class="form-control" placeholder="Observações" rows="2"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- FORÇA MUSCULAR -->
+							<div class="col-xs-12">
+								<div class="widget-box">
+									<div class="widget-header">
+										<h5 class="widget-title">
+											<i class="ace-icon fa fa-bolt"></i>
+											Força Muscular
+										</h5>
+										<div class="widget-toolbar">
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</div>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											<!-- Membros Superiores -->
+											<p class="alert alert-info">Legenda:<br><br>
+											<span class="badge badge-info">(-) = Não Avaliado;</span><br>
+											<span class="badge badge-danger">(0) = Ausência de contração;</span><br>
+											<span class="badge badge-warning">(1) = Há uma leve contração, porém incapaz de produzir movimento;</span><br>
+											<span class="badge badge-purple">(2) = Há movimento somente na ausência da gravidade;</span><br>
+											<span class="badge badge-pink">(3) = Consegue realizar movimento vencendo a gravidade;</span><br>
+											<span class="badge badge-yellow">(4) = Consegue realizar movimento vencendo a gravidade e também uma resistência externa;</span><br>
+											<span class="badge badge-success">(5) = Consegue realizar movimento superando uma resistência maior que o músculo bom;</span><br>
+											</p>
+											
+											<table class="table table-bordered table-condensed">
+												<thead>
+													<tr>
+														<th><span class="badge badge-warning">Membros Superiores</span></th>
+														<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+														<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>Abdução do braço</td>
+														<td>
+															<select name="avafisioforcaabducaobracodir" id="avafisioforcaabducaobracodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaabducaobracoesq" id="avafisioforcaabducaobracoesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Adução do braço</td>
+														<td>
+															<select name="avafisioforcaaducaobracodir" id="avafisioforcaaducaobracodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaaducaobracoesq" id="avafisioforcaaducaobracoesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Flexão do braço</td>
+														<td>
+															<select name="avafisioforcaflexaodobracodir" id="avafisioforcaflexaodobracodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaflexaobracoesq" id="avafisioforcaflexaobracoesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Extensão do braço</td>
+														<td>
+															<select name="avafisioforcaextensaodobracodir" id="avafisioforcaextensaodobracodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaextensaobracoesq" id="avafisioforcaextensaobracoesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Flexão do antebraço</td>
+														<td>
+															<select name="avafisioforcaflexaodoantebracodir" id="avafisioforcaflexaodoantebracodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaflexaoantebracoesq" id="avafisioforcaflexaoantebracoesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Extensão do antebraço</td>
+														<td>
+															<select name="avafisioforcaextensaoantebracodir" id="avafisioforcaextensaoantebracodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaextensaoanteesq" id="avafisioforcaextensaoanteesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Flexão do punho</td>
+														<td>
+															<select name="avafisioforcaflexaopunhodir" id="avafisioforcaflexaopunhodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaflexaopunhoesq" id="avafisioforcaflexaopunhoesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Extensão do punho</td>
+														<td>
+															<select name="avafisioforcaextensaopunhodir" id="avafisioforcaextensaopunhodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaextensaopunhoesq" id="avafisioforcaextensaopunhoesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<!-- Membros Inferiores -->
+											
+											<table class="table table-bordered table-condensed">
+												<thead>
+													<tr>
+														<th><span class="badge badge-purple">Membros Inferiores</span></th>
+														<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+														<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>Flexão do quadril</td>
+														<td>
+															<select name="avafisioforcaflexaoquadrildir" id="avafisioforcaflexaoquadrildir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaflexaoquadrilesq" id="avafisioforcaflexaoquadrilesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Extensão do quadril</td>
+														<td>
+															<select name="avafisioforcaextensaoquadrildir" id="avafisioforcaextensaoquadrildir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaextensaoquadrilesq" id="avafisioforcaextensaoquadrilesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Abdução do quadril</td>
+														<td>
+															<select name="avafisioforcaabducaoquadrildir" id="avafisioforcaabducaoquadrildir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaabducaoquadrilesq" id="avafisioforcaabducaoquadrilesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Adução do quadril</td>
+														<td>
+															<select name="avafisioforcaaducaoquadrildir" id="avafisioforcaaducaoquadrildir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaaducaoquadrilesq" id="avafisioforcaaducaoquadrilesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Flexão do joelho</td>
+														<td>
+															<select name="avafisioforcaflexaojoelhodir" id="avafisioforcaflexaojoelhodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaflexaojoelhoesq" id="avafisioforcaflexaojoelhoesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Extensão do joelho</td>
+														<td>
+															<select name="avafisioforcaextensaojoelhodir" id="avafisioforcaextensaojoelhodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaextensaojoelhoesq" id="avafisioforcaextensaojoelhoesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Flexão do tornozelo</td>
+														<td>
+															<select name="avafisioforcaflexaotornozelodir" id="avafisioforcaflexaotornozelodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaflexaotornoesq" id="avafisioforcaflexaotornoesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Extensão do tornozelo</td>
+														<td>
+															<select name="avafisioforcaextensaotornozelodir" id="avafisioforcaextensaotornozelodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaexttornozeloesq" id="avafisioforcaexttornozeloesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<!-- Tronco -->
+											<h5></h5>
+											<table class="table table-bordered table-condensed">
+												<thead>
+													<tr>
+														<th><span class="badge badge-info">Tronco</span></th>
+														<th><span class="label label-lg label-info arrowed-right">Direita</span></th>
+														<th><span class="label label-lg label-pink arrowed">Esquerda</span></th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr><td>Flexão do tronco</td>
+														<td>
+															<select name="avafisioforcaflexaotroncodir" id="avafisioforcaflexaotroncodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaflexaotroncoesq" id="avafisioforcaflexaotroncoesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+													<tr><td>Extensão do tronco</td>
+														<td>
+															<select name="avafisioforcaextensaotroncodir" id="avafisioforcaextensaotroncodir" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioforcaextensaotroncoesq" id="avafisioforcaextensaotroncoesq" class="form-control">
+																<option value="Não Avaliada">-</option>
+																<option value="0">0</option>
+																<option value="1">1</option>
+																<option value="2">2</option>
+																<option value="3">3</option>
+																<option value="4">4</option>
+																<option value="5">5</option>
+															</select>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<div class="row">
+												<div class="col-xs-12">
+													<label><span class="badge badge-info">Observações</span></label>
+													<textarea name="avafisioforcaobs" id="avafisioforcaobs" class="form-control" placeholder="Observações" rows="2"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- TÔNUS MUSCULAR -->
+							<div class="col-xs-12">
+								<div class="widget-box">
+									<div class="widget-header">
+										<h5 class="widget-title">
+											<i class="ace-icon fa fa-tint"></i>
+											Tônus Muscular
+										</h5>
+										<div class="widget-toolbar">
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</div>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											<div class="row">
+												<div class="col-sm-4">
+													<div class="radio">
+														<label>
+															<input type="radio" name="avafisiotonusmusc" value="Normal" class="ace">
+															<span class="lbl"> Sem alteração</span>
+														</label>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="radio">
+														<label>
+															<input type="radio" name="avafisiotonusmusc" value="Hipertonia" class="ace">
+															<span class="lbl"> Hipertonia</span>
+														</label>
+													</div>
+												</div>
+												<div class="col-sm-4">
+													<div class="radio">
+														<label>
+															<input type="radio" name="avafisiotonusmusc" value="Hipotonia" class="ace">
+															<span class="lbl"> Hipotonia</span>
+														</label>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- REAÇÃO DE PROTEÇÃO -->
+							<div class="col-xs-12">
+								<div class="widget-box">
+									<div class="widget-header">
+										<h5 class="widget-title">
+											<i class="ace-icon fa fa-shield"></i>
+											Reação de Proteção
+										</h5>
+										<div class="widget-toolbar">
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</div>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											<table class="table table-bordered table-condensed">
+												<thead>
+													<tr>
+														<th><span class="badge badge-pink">Posição</span></th>
+														<th>Sentado</th>
+														<th>Em pé</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>Frente</td>
+														<td>
+															<select name="avafisioreaprotfrentesentado" id="avafisioreaprotfrentesentado" class="form-control">
+																<option value="">-</option>
+																<option value="Sim">Sim</option>
+																<option value="Razoável">Razoável</option>
+																<option value="Não">Não</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioreaprotfrentepe" id="avafisioreaprotfrentepe" class="form-control">
+																<option value="">-</option>
+																<option value="Sim">Sim</option>
+																<option value="Razoável">Razoável</option>
+																<option value="Não">Não</option>
+															</select>
+														</td>
+													</tr>
+													<tr>
+														<td>Lado</td>
+														<td>
+															<select name="avafisioreaprotladosentado" id="avafisioreaprotladosentado" class="form-control">
+																<option value="">-</option>
+																<option value="Sim">Sim</option>
+																<option value="Razoável">Razoável</option>
+																<option value="Não">Não</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioreaprotladope" id="avafisioreaprotladope" class="form-control">
+																<option value="">-</option>
+																<option value="Sim">Sim</option>
+																<option value="Razoável">Razoável</option>
+																<option value="Não">Não</option>
+															</select>
+														</td>
+													</tr>
+													<tr>
+														<td>Atrás</td>
+														<td>
+															<select name="avafisioreaprotatrassentado" id="avafisioreaprotatrassentado" class="form-control">
+																<option value="">-</option>
+																<option value="Sim">Sim</option>
+																<option value="Razoável">Razoável</option>
+																<option value="Não">Não</option>
+															</select>
+														</td>
+														<td>
+															<select name="avafisioreaprotatraspe" id="avafisioreaprotatraspe" class="form-control">
+																<option value="">-</option>
+																<option value="Sim">Sim</option>
+																<option value="Razoável">Razoável</option>
+																<option value="Não">Não</option>
+															</select>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+											<div class="row">
+												
+												<div class="col-xs-12">
+													<label><span class="badge badge-info">Observações</span></label>
+													<textarea name="avafisioreaprotobs" id="avafisioreaprotobs" class="form-control" placeholder="Observações" rows="2"></textarea>
+												</div>
+												
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- AVALIAÇÃO MOTORA -->
+							<div class="col-xs-12">
+								<div class="widget-box">
+									<div class="widget-header">
+										<h5 class="widget-title">
+											<i class="ace-icon fa fa-child"></i>
+											Avaliação Motora
+										</h5>
+										<div class="widget-toolbar">
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</div>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											<!-- Função auxiliar para escala Sim/Razoável/Não -->
+											<script>
+												function escalaSNR(campo) {
+													return `
+														<div class="radio inline">
+															<label><input type="radio" name="${campo}" value="Sim" class="ace"><span class="lbl"> Sim</span></label>
+														</div>
+														<div class="radio inline">
+															<label><input type="radio" name="${campo}" value="Razoável" class="ace"><span class="lbl"> Razoável</span></label>
+														</div>
+														<div class="radio inline">
+															<label><input type="radio" name="${campo}" value="Não" class="ace"><span class="lbl"> Não</span></label>
+														</div>
+													`;
+												}
+											</script>
+											<!-- Supino -->
+											<p class="alert alert-info"><strong>1 - Supino</strong></p>
+											<div>Cabeça na linha mediana: <span id="escalasupcabecamed"></span></div>
+											<script>document.getElementById('escalasupcabecamed').innerHTML = escalaSNR('avafisiosupcabecamed');</script>
+											<div>Movimentos anti-gravitários: <span id="escalasupmovanti"></span></div>
+											<script>document.getElementById('escalasupmovanti').innerHTML = escalaSNR('avafisiosupmovanti');</script>
+											<div>Preensão: <span id="escalasuppressao"></span></div>
+											<script>document.getElementById('escalasuppressao').innerHTML = escalaSNR('avafisiosuppressao');</script>
+											<div>Elevação do quadril: <span id="escalasupelevacaoquad"></span></div>
+											<script>document.getElementById('escalasupelevacaoquad').innerHTML = escalaSNR('avafisiosupelevacaoquad');</script>
+											<div>Acompanhar com os olhos um objeto 180°: <span id="escalasupacompolhos"></span></div>
+											<script>document.getElementById('escalasupacompolhos').innerHTML = escalaSNR('avafisiosupacompolhos');</script>
+											<br>
+											<label><span class="badge badge-info">Observações</span></label>
+											<textarea name="avafisiosupobs" id="avafisiosupobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+											<hr>
+											<!-- Postura Lateral -->
+											<p class="alert alert-danger"><strong>2 - Postura Lateral</strong></p>
+											<div>Consegue ficar na postura: <span id="escalaposlatconsficpos"></span></div>
+											<script>document.getElementById('escalaposlatconsficpos').innerHTML = escalaSNR('avafisioposlatconsficpos');</script>
+											<div>Atividade Abdominal: <span id="escalaposlatativabdom"></span></div>
+											<script>document.getElementById('escalaposlatativabdom').innerHTML = escalaSNR('avafisioposlatativabdom');</script>
+											<!-- ... (demais itens seguem o mesmo padrão) -->
+											<br>
+											<label><span class="badge badge-info">Observações</span></label>
+											<textarea name="avafisioposlatobs" id="avafisioposlatobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+											<hr>
+											<!-- Prono -->
+											<p class="alert alert-warning"><strong>3 - Prono</strong></p>
+											<div>Extensão do quadril: <span id="escalapronoextquadril"></span></div>
+											<script>document.getElementById('escalapronoextquadril').innerHTML = escalaSNR('avafisiopronoextquadril');</script>
+											<!-- ... -->
+											<br>
+											<label><span class="badge badge-info">Observações</span></label>
+											<textarea name="avafisiopronoobs" id="avafisiopronoobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+											<hr>
+											<!-- Puxado para sentado -->
+											<p class="alert alert-success"><strong>4 - Puxado para a postura sentada</strong></p>
+											<div>A cabeça flete, o queixo encaixa: <span id="escalapuxposcabflet"></span></div>
+											<script>document.getElementById('escalapuxposcabflet').innerHTML = escalaSNR('avafisiopuxposcabflet');</script>
+											<!-- ... -->
+											<br>
+											<label><span class="badge badge-info">Observações</span></label>
+											<textarea name="avafisiopuxposobs" id="avafisiopuxposobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+											<hr>
+											<!-- Sentado -->
+											<p class="alert alert-info"><strong>5 - Sentado</strong></p>
+											<div>Projeta o corpo para frente: <span id="escalasentprotecab"></span></div>
+											<script>document.getElementById('escalasentprotecab').innerHTML = escalaSNR('avafisiosentprotecab');</script>
+											<!-- ... -->
+											<br>
+											<label><span class="badge badge-info">Observações</span></label>
+											<textarea name="avafisiosentobs" id="avafisiosentobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+											<hr>
+											<!-- Em Pé -->
+											<p class="alert alert-warning"><strong>6 - Em Pé</strong></p>
+											<div>Alinhamento: <span id="escalaempealinha"></span></div>
+											<script>document.getElementById('escalaempealinha').innerHTML = escalaSNR('avafisioempealinha');</script>
+											<!-- ... -->
+											<br>
+											<label><span class="badge badge-info">Observações</span></label>
+											<textarea name="avafisioempeobs" id="avafisioempeobs" class="form-control" placeholder="Observações" rows="1"></textarea>
+											<hr>
+											<!-- Transferências -->
+											<p class="alert alert-danger"><strong>7 - Transferências</strong></p>
+											<div class="row">
+												<div class="col-sm-4">
+													<label>Rola:</label><br>
+													<div class="radio inline"><label><input type="radio" name="avafisiotransrola" value="Sim" class="ace"><span class="lbl"> Sim</span></label></div>
+													<div class="radio inline"><label><input type="radio" name="avafisiotransrola" value="Não" class="ace"><span class="lbl"> Não</span></label></div>
+													<div class="radio inline"><label><input type="radio" name="avafisiotransrola" value="Com ajuda" class="ace"><span class="lbl"> Com ajuda</span></label></div>
+												</div>
+												<!-- Repetir para demais transferências -->
+												<div class="col-sm-4">
+													<label>Marcha:</label><br>
+													<div class="radio inline"><label><input type="radio" name="avafisiotransmarcha" value="Sim" class="ace"><span class="lbl"> Sim</span></label></div>
+													<div class="radio inline"><label><input type="radio" name="avafisiotransmarcha" value="Não" class="ace"><span class="lbl"> Não</span></label></div>
+													<div class="radio inline"><label><input type="radio" name="avafisiotransmarcha" value="Com ajuda" class="ace"><span class="lbl"> Com ajuda</span></label></div>
+												</div>
+											</div>
+											<br>
+											<div class="row">
+												<div class="col-xs-12">
+													<label><span class="badge badge-info">Observações de locomoção/marcha (tipo, dispositivos, padrão, equilíbrio, etc.)</span></label>
+													<textarea name="avafisiolocmarchaobs" id="avafisiolocmarchaobs" class="form-control" placeholder="Observações" rows="3"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- BOTÕES -->
+							<div class="col-xs-12">
+								<div class="col-md-12" style="text-align: center;">
+									<button class="btn btn-info" name="acao" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										Salvar
+									</button>
+									&nbsp; &nbsp; &nbsp;
+									<button class="btn btn-warning" type="button" onclick="window.history.back();">
+										<i class="ace-icon fa fa-undo bigger-110"></i>
+										Voltar
+									</button>
+								</div>
+							</div>
+							<script>
+							function preencherFormularioComTestes() {
+								// Função auxiliar para obter o texto do label associado
+								function getLabelText(input) {
+									const id = input.id;
+									if (id) {
+										const label = document.querySelector(`label[for="${id}"]`);
+										if (label) return label.textContent.trim().replace(/:$/, '');
+									}
+									// Tenta buscar label ancestral (ex: <label><input>Texto</label>)
+									let parent = input.parentElement;
+									while (parent && parent.tagName !== 'LABEL') {
+										parent = parent.parentElement;
+									}
+									if (parent) {
+										return parent.textContent.trim().replace(/:$/, '').replace(/\s*\*?\s*$/, '');
+									}
+									return input.name || 'campo';
+								}
+								// Preenche todos os inputs, selects, textareas
+								const form = document.querySelector('form');
+								if (!form) return;
+								// Text inputs
+								form.querySelectorAll('input[type="text"]').forEach(input => {
+									const label = getLabelText(input);
+									input.value = `Teste: ${label}`;
+								});
+								// Date inputs
+								const hoje = new Date().toISOString().split('T')[0];
+								form.querySelectorAll('input[type="date"]').forEach(input => {
+									input.value = hoje;
+								});
+								// Textareas
+								form.querySelectorAll('textarea').forEach(textarea => {
+									const label = getLabelText(textarea);
+									textarea.value = `Observações de teste para ${label}`;
+								});
+								// Selects (exceto os que já têm valor)
+								form.querySelectorAll('select').forEach(select => {
+									if (!select.value || select.value === '') {
+										// Pula a primeira opção se for placeholder (ex: "-")
+										const opts = Array.from(select.options).filter(opt => 
+											opt.value !== '' && 
+											opt.value !== '-' && 
+											!opt.value.toLowerCase().includes('selec') &&
+											!opt.value.toLowerCase().includes('escolh')
+										);
+										if (opts.length > 0) {
+											select.value = opts[0].value;
+										}
+									}
+								});
+								// Checkboxes → marca todos
+								form.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+									checkbox.checked = true;
+									// Se tiver campo de texto associado (ex: "Qual?"), preenche também
+									const next = checkbox.closest('div')?.nextElementSibling;
+									if (next && next.querySelector('input[type="text"], textarea')) {
+										const textInput = next.querySelector('input[type="text"], textarea');
+										const label = getLabelText(checkbox);
+										textInput.value = `Detalhe de teste para ${label}`;
+									}
+								});
+								// Radios → marca o primeiro de cada grupo
+								const radioGroups = {};
+								form.querySelectorAll('input[type="radio"]').forEach(radio => {
+									if (!radioGroups[radio.name]) {
+										radio.checked = true;
+										radioGroups[radio.name] = true;
+									}
+								});
+								console.log('✅ Formulário preenchido com dados de teste!');
+							}
+							</script>
+							<!-- Botão para testar (opcional) -->
+							<button type="button" class="btn btn-warning" onclick="preencherFormularioComTestes()">
+								Preencher com Dados de Teste
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -10,7 +10,9 @@
 		}
 		</style>
 		<script>
-			
+			function exibenome() {
+				document.getElementById("usuarioNomeCompletoinfo").value = document.getElementById("usuarioNome").value;
+			}
 			function carregarImagem() {
 				var preview = document.getElementById('previewImage');
 				var fileInput = document.getElementById('usuarioCarimbo');
@@ -175,7 +177,13 @@
 							<li class="active">Usuários Editar</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
+					<div class="alert alert-warning" style="font-style: initial;">
+									
+						<strong>
+							<input style="font-size: 16px; font-style: initial; font-color: rgb(106, 116, 10); border: none; background-color: transparent;"  type="text" name="usuarioNomeCompletoinfo"  id="usuarioNomeCompletoinfo" placeholder="" class="form-control"  >
+						</strong>
 
+					</div>
 					<div class="row">
 						<div class="col-xs-12"><!-- PAGE CONTENT BEGINS -->
 							<!-- PAGE CONTENT BEGINS -->
@@ -259,7 +267,7 @@
 																<label > Nome </label>
 																<div class="form-group">
 																	<div class="col-sm-12">
-																		<input type="text" id="usuarioNome" name="usuarioNome" placeholder="" class="form-control" />
+																		<input type="text" id="usuarioNome" name="usuarioNome" placeholder="" class="form-control" onkeypress="javascript:exibenome();" onchange="javascript:exibenome();"/>
 																	</div>
 																</div>
 															</div>
@@ -792,68 +800,29 @@
 																</tr>
 															</thead>
 															<tbody>
+																{{#each usufuncs}}
 																<tr>
-																	<th>
+																	<td class="center">
 																		<label class="pos-rel">
-																			<input type="checkbox" class="ace" />
+																			<input type="checkbox" class="ace perm-checkbox" />
 																			<span class="lbl"></span>
 																		</label>
-																	</th>
-																	
-																	<th>
-																		<label class="pos-rel">
-																			<span class="lbl">Minha Agenda</span>
-																		</label>
-																	</th>
-																	<th>
-																		<label class="pos-rel">
-																			1
-																		</label>
-																	</th>
-																	<th>
-																		<select name="usuariopermissao" class="chosen-select" data-placeholder="Escolha..." >
-																			<option value="1">Sem Acesso</option>
-																			<option value="2">Ver</option>
-																			<option value="3">Listar</option>
-																			<option value="4">Criar</option>
-																			<option value="5">Editar</option>
-																			<option value="6">Total</option>
+																	</td>
+																	<td>{{usufunc_codigo}}</td>
+																	<td>{{usufunc_nome}}</td>
+																	<td>
+																		<select name="permissoes[{{_id}}]" class="form-control input-sm" style="width: 100%;">
+																			<option value="1" {{#ifCond (lookup ../permissoes _id) '==' '1'}}selected{{/ifCond}}>1 - Sem acesso</option>
+																			<option value="2" {{#ifCond (lookup ../permissoes _id) '==' '2'}}selected{{/ifCond}}>2 - Listar</option>
+																			<option value="3" {{#ifCond (lookup ../permissoes _id) '==' '3'}}selected{{/ifCond}}>3 - Ver</option>
+																			<option value="4" {{#ifCond (lookup ../permissoes _id) '==' '4'}}selected{{/ifCond}}>4 - Criar</option>
+																			<option value="5" {{#ifCond (lookup ../permissoes _id) '==' '5'}}selected{{/ifCond}}>5 - Editar</option>
+																			<option value="6" {{#ifCond (lookup ../permissoes _id) '==' '6'}}selected{{/ifCond}}>6 - Total</option>
 																		</select>
-																	</th>
-																{{#each anos}}
-																	<tr>
-																		<th class="center">
-																			<label class="pos-rel">
-																				<input type="checkbox" class="ace" />
-																				<span class="lbl"></span>
-																			</label>
-																		</th>
-																		<td>{{ano_nome}}</td>
-																		<td>{{ano_descricao}}</td>
-																		<td>
-																			<div class="action-buttons">
-																				<a class="green" href="/menu/ferramentas/ano/edi/{{_id}}">
-																					<i class="ace-icon fa fa-pencil bigger-130"></i>
-																				</a>
-																				<a class="red" class="red" href="/menu/ferramentas/ano/del/{{_id}}">
-																					<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																				</a>
-																				<a class="blue custom-tooltip" name="acaoVerquemalterou" id="acaoVerquemalterou">
-																					<i class="ace-icon fa fa-eye bigger-130"></i>
-																					<span class="tooltip-text">{{ano_dataedi}}<br>
-																						{{#each usuarios}}
-																							{{#ifEqual this._id ../ano_usuidedi}}
-																								<td>{{usuario_nome}}</td>
-																							{{/ifEqual}}
-																						{{/each}}
-																					</span>
-																				</a>
-																			</div>
-																		
-																		</td>
-																	</tr>
+																	</td>
+																</tr>
 																{{/each}}
-															</tbody>
+															</tbody>	
 														</table>
 													</div>
 													<div id="carimbo" class="tab-pane fade">

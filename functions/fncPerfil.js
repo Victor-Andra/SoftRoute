@@ -1,112 +1,116 @@
-//Exports
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const { getModel } = require('../functions/fncGeral');
 
-//Perfil
-const perfilClass = require("../models/perfil")
-const Perfil = mongoose.model("tb_perfil")
+// Importa a classe
+const perfilClass = require("../models/perfil");
 
+// ✅ FIX: Usar SEMPRE PortalDoUsuario — NÃO "SoftRoute"
+const Perfil = getModel("PortalDoUsuario", 'tb_perfil', perfilClass.PerfilSchema);
 
-
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
-    listaPerfil(req,res){
-        console.log('listando perfils')
-        Perfil.find().then((perfil) =>{
-            console.log("Listagem Realizada!")
-            res.render('ferramentas/perfil/perfilLis', {perfils: perfil})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Perfils")
-            res.redirect('admin/erro')
-        })
-
+    listaPerfil(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        console.log('Listando perfis do PortalDoUsuario');
+        Perfil.find()
+            .sort({ perfil_nome: 1 })
+            .then((perfils) => {
+                console.log("Listagem realizada!");
+                res.render('ferramentas/perfil/perfilLis', { perfils });
+            })
+            .catch((err) => {
+                console.error("Erro ao listar perfis:", err);
+                req.flash("error_message", "Houve um erro ao listar perfis");
+                res.redirect('/admin/erro');
+            });
     },
 
-    carregaPerfil(req,res){
-        Perfil.find().then((perfil)=>{
-            console.log("Listagem de perfis realizada!")
-            res.render("ferramentas/perfil/perfilCad", {perfils: perfil})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Perfils")
-            res.redirect('admin/erro')
-        })
-
+    carregaPerfil(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        Perfil.find()
+            .then((perfils) => {
+                console.log("Listagem de perfis realizada!");
+                res.render("ferramentas/perfil/perfilCad", { perfils });
+            })
+            .catch((err) => {
+                console.error("Erro ao carregar perfis:", err);
+                req.flash("error_message", "Houve um erro ao listar perfis");
+                res.redirect('/admin/erro');
+            });
     },
 
-
-    carregaPerfilEdi(req,res){
-        Perfil.findById(req.params.id).then((perfil) =>{
-            console.log(perfil)
-                 res.render('ferramentas/perfil/perfilEdi', {perfil})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as listas!")
-            res.render('admin/erro')
-        })
+    carregaPerfilEdi(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        Perfil.findById(req.params.id)
+            .then((perfil) => {
+                if (!perfil) {
+                    req.flash("error_message", "Perfil não encontrado");
+                    return res.redirect('/admin/erro');
+                }
+                res.render('ferramentas/perfil/perfilEdi', { perfil });
+            })
+            .catch((err) => {
+                console.error("Erro ao carregar perfil para edição:", err);
+                req.flash("error_message", "Erro ao carregar perfil");
+                res.render('admin/erro');
+            });
     },
 
-    cadastraPerfil(req,res){
-        let cadastro = perfilClass.perfilAdicionar(req,res);//variavel para armazenar a função que armazena o async
-        
-        if(cadastro){
-            console.log('verdadeiro')
-            res.render('ferramentas/perfil/perfilCad');
-        } else {
-            console.log('falso')
-            res.flash()
-            res.render('admin/erro');
-        }
-    },
-
-    atualizaPerfil(req,res){
-        let resposta;
-        try{
-            perfilClass.perfilEditar(req,res).then((res)=>{
-                console.log("Atualização Realizada!")
-                console.log(res)
-                resposta = res;
-            }).catch((err) =>{
-                console.log("error1")
-                console.log(err)
-                resposta = err;
-                res.render('admin/erro')
-            }).finally(() =>{
-                if(resposta){
-                    //Volta para a perfil de listagem
-                    Perfil.find().then((perfil) =>{
-                        console.log("Listagem Realizada!")
-                        res.render('ferramentas/perfil/perfilLis', {perfils: perfil})
-                    }).catch((err) =>{
-                        console.log("err:")
-                        console.log(err)
-                        res.render('admin/erro')
-                    })
-                }else{
-                    //passar classe de erro
-                    console.log("error")
-                    console.log(resposta)
-                    res.render('admin/erro')
+    cadastraPerfil(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        perfilClass.perfilAdicionar(req, res)
+            .then((resultado) => {
+                if (resultado === true) {
+                    req.flash("success_message", "Perfil cadastrado com sucesso!");
+                    this.listaPerfil(req, res);
+                } else {
+                    req.flash("error_message", resultado);
+                    res.render('admin/erro');
                 }
             })
-        } catch(err1){
-            console.log(err1)
-        }
+            .catch((err) => {
+                console.error("Erro inesperado no cadastro de perfil:", err);
+                req.flash("error_message", "Erro inesperado ao cadastrar perfil");
+                res.render('admin/erro');
+            });
     },
 
-
-    deletaPerfil(req,res){
-        Perfil.deleteOne({_id: req.params.id}).then(() =>{
-            Perfil.find().then((perfil) =>{
-                req.flash("success_message", "Perfil deletada!")
-                res.render('ferramentas/perfil/perfilLis', {perfils: perfil})
-            }).catch((err) =>{
-                console.log(err)
-                req.flash("error_message", "houve um erro ao listar Perfils")
-                res.render('admin/erro')
+    atualizaPerfil(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        perfilClass.perfilEditar(req, res)
+            .then((resultado) => {
+                if (resultado === true) {
+                    req.flash("success_message", "Perfil atualizado com sucesso!");
+                    this.listaPerfil(req, res);
+                } else {
+                    req.flash("error_message", resultado);
+                    res.render('admin/erro');
+                }
             })
-        })
+            .catch((err) => {
+                console.error("Erro inesperado na atualização de perfil:", err);
+                req.flash("error_message", "Erro inesperado ao atualizar perfil");
+                res.render('admin/erro');
+            });
+    },
+
+    deletaPerfil(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        Perfil.deleteOne({ _id: req.params.id })
+            .then((result) => {
+                if (result.deletedCount === 0) {
+                    req.flash("error_message", "Perfil não encontrado para exclusão");
+                    return res.redirect('/admin/erro');
+                }
+                req.flash("success_message", "Perfil deletado com sucesso!");
+                this.listaPerfil(req, res);
+            })
+            .catch((err) => {
+                console.error("Erro ao deletar perfil:", err);
+                req.flash("error_message", "Erro ao deletar perfil");
+                res.render('admin/erro');
+            });
     }
-
-
-}
+};

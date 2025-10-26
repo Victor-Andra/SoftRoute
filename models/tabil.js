@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const TabilSchema = mongoose.Schema({
     tabil_atendnum :{ type: String, required: false },
@@ -69,9 +70,18 @@ class Tabil{
 }
 
 TabilSchema.loadClass(Tabil)
-const TabilModel = mongoose.model('tb_tabil', TabilSchema)
-module.exports = {TabilModel,TabilSchema,
+var TabilModel = getModel("softroute", 'tb_tabil', TabilSchema)
+module.exports = {
+    TabilModel,
+    TabilSchema,
+
     tabilEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        TabilModel = getModel(db, 'tb_tabil', TabilSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -109,6 +119,12 @@ module.exports = {TabilModel,TabilSchema,
         return resultado;
     },
     tabilEditarMerge: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        TabilModel = getModel(db, 'tb_tabil', TabilSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -146,6 +162,12 @@ module.exports = {TabilModel,TabilSchema,
         return resultado;
     },
     tabilAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        TabilModel = getModel(db, 'tb_tabil', TabilSchema)
+        //;
+
         let dataAtual = new Date();
         console.log("tabilmodel");
         const newTabil = new TabilModel({
@@ -172,6 +194,12 @@ module.exports = {TabilModel,TabilSchema,
         });
     },
     tabilAdicionarMerge: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        TabilModel = getModel(db, 'tb_tabil', TabilSchema)
+        //;
+
         let dataAtual = new Date();
         console.log("tabilmodel");
         const newTabil = new TabilModel({

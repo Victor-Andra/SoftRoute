@@ -29,6 +29,7 @@
 				document.getElementById("convcreData").value = fulldate;
 				document.getElementById("convcreConvid").value = document.getElementById("convIdEdi").value;
 				document.getElementById("convcreTerapiaid").value = document.getElementById("terapiaIdEdi").value;
+				document.getElementById("convcreStatus").value = document.getElementById("convcreStatusEdi").value;
 				atualizaData();
 			}
 			function atualizaData(){
@@ -41,7 +42,10 @@
 	</head>
 
 	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
-
+		<div id="divCarrega" name="divCarrega" class="hidden">
+			<input id="convcreId" name="convcreId" value="{{convcre._id}}"/>
+			<input id="convcreStatusEdi" name="convcreStatusEdi" value="{{convcre.convcre_status}}"/>
+		</div>
 
 		<div class="main-container ace-save-state" id="main-container">
 
@@ -132,6 +136,16 @@
 												<div class="form-group">
 													<div class="col-sm-6">
 														<input type="text" name="convcreValor" placeholder="" class="form-control" value="{{convcre.convcre_valor}}"/>
+													</div>
+												</div>
+												
+												<label>Status</label>
+												<div class="form-group">
+													<div class="col-sm-2">
+														<select name="convcreStatus" id="convcreStatus" class="chosen-select" style="width: 100px;">
+															<option value="Ativo">Ativo</option>
+															<option value="Inativo">Inativo</option>
+														</select>
 													</div>
 												</div>
 

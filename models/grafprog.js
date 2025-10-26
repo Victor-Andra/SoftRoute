@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const GrafprogSchema = mongoose.Schema({
     grafprog_planotipo :{
@@ -113,9 +114,18 @@ class Grafprog{
 }
 
 GrafprogSchema.loadClass(Grafprog)
-const GrafprogModel = mongoose.model('tb_grafprog', GrafprogSchema)
-module.exports = {GrafprogModel,GrafprogSchema,
+var GrafprogModel = getModel("softroute", 'tb_grafprog', GrafprogSchema)
+module.exports = {
+    GrafprogModel,
+    GrafprogSchema,
+
     grafprogEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        GrafprogModel = getModel(db, 'tb_grafprog', GrafprogSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -150,6 +160,12 @@ module.exports = {GrafprogModel,GrafprogSchema,
         return resultado;
     },
     grafprogAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        GrafprogModel = getModel(db, 'tb_grafprog', GrafprogSchema)
+        //;
+
         let dataAtual = new Date();
         console.log("grafprogmodel");
         console.log("req.body.grafprogdata:")

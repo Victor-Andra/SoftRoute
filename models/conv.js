@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const ConvSchema = mongoose.Schema({
     conv_nome : { type: String, unique: true, required: true },
@@ -92,9 +93,22 @@ class Conv{
 }
 
 ConvSchema.loadClass(Conv)
-const ConvModel = mongoose.model('tb_conv', ConvSchema)
-module.exports = {ConvModel,ConvSchema,
+var ConvModel = getModel("softroute", 'tb_conv', ConvSchema)
+module.exports = {
+    ConvModel,
+    ConvSchema,
+
+    //Editar Convênios
+    // Criado por: Wagner Cintra
+    // Criado em: 2025/04/01
+    // Editado em: 2025/10/06
     convEditar: async (req, res) => {
+        
+        //Estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        ConvModel = getModel(db, 'tb_conv', ConvSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -137,9 +151,22 @@ module.exports = {ConvModel,ConvSchema,
         return resultado;
     },
 
+    // Add Convênios
+    // Criado por: Wagner Cintra
+    // Criado em: 2023/04/01
+    // Editado em: 2025/10/06
     convAdicionar: async (req,res) => {
+        
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ConvModel = getModel(db, 'tb_conv', ConvSchema)
+        //;
+
         let convExiste =  await ConvModel.findOne({conv_nome: req.body.convNome});//quando não acha fica null
+        
         let dataAtual = new Date();
+        let resultado;
+        let usuarioAtual = req.cookies['idUsu'];
         
         if(convExiste){//se tiver null cai no else
             return "O nome da conv já existe";
@@ -180,15 +207,35 @@ module.exports = {ConvModel,ConvSchema,
         }
     },
 
+    // Qt Registros Convênios
+    // Criado por: Wagner Cintra
+    // Criado em: 2023/04/01
+    // Editado em: 2025/10/06
     qtregs: async(req, res)=>{
-        const qtregs = await ConvModel.estimatedDocumentCount();
+        
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ConvModel = getModel(db, 'tb_conv', ConvSchema)
+        //;
+
+        var qtregs = await ConvModel.estimatedDocumentCount();
         return qtregs;
     },
     
+    // Qt Registros Convênios Ativos
+    // Criado por: Wagner Cintra
+    // Criado em: 2023/04/01
+    // Editado em: 2025/10/06
     qtregsconvativos: async (req, res) => {
+        
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ConvModel = getModel(db, 'tb_conv', ConvSchema)
+        //;
+
         try {
             // Conta os documentos onde conv_status é igual a "Ativo"
-            const qtregs = await ConvModel.countDocuments({ conv_status: "Ativo" });
+            var qtregs = await ConvModel.countDocuments({ conv_status: "Ativo" });
             
             // Retorna a quantidade de registros
             return qtregs;
@@ -196,6 +243,37 @@ module.exports = {ConvModel,ConvSchema,
             // Em caso de erro, retorna uma mensagem de erro
             console.error("Erro ao contar registros:", error);
             throw error; // Ou retorne um erro personalizado
+        }
+    },
+    convDeletar: async (req, res) => {
+        let db = req.cookies['preferredDb'];
+        ConvModel = getModel(db, 'tb_conv', ConvSchema);
+
+        let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];
+
+        // ⚠️ O ID vem de req.params.id, NÃO de req.body!
+        const convId = req.params.id; // ←←← AQUI É O PONTO-CHAVE
+
+        if (!convId) {
+            console.error("ID não fornecido para exclusão");
+            return false;
+        }
+
+        try {
+            const resultado = await ConvModel.findByIdAndUpdate(convId, {
+                $set: {
+                    conv_lixo: "true",
+                    conv_datalixo: dataAtual,
+                    conv_usuidlixo: usuarioAtual,
+                }
+            }, { new: true }); // opcional: retorna o documento atualizado
+
+            console.log("Registro movido para lixeira:", convId);
+            return true;
+        } catch (err) {
+            console.error("Erro ao mover para lixeira:", err);
+            return false;
         }
     }
 

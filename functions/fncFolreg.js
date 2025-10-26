@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Plano de Folregamento 
 const folregClass = require("../models/folreg")
@@ -12,34 +12,37 @@ const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 const progClass = require("../models/prog")
-const progvClass = require("../models/prog")
 const progsetClass = require("../models/progset")
 const progdicaClass = require("../models/progdica")
 const progtipoClass = require("../models/progtipo")
 const prognivelClass = require("../models/prognivel")
-const respostaClass = require("../models/resposta")
 
 //Tabela Plano de Folregamento 
-const Folreg = mongoose.model("tb_folreg")
+var Folreg = getModel("SoftRoute", 'tb_folreg', folregClass.FolregSchema)
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Prog = mongoose.model("tb_prog")
-const Progv = mongoose.model("tb_prog")
-const Progset = mongoose.model("tb_progset")
-const Progdica = mongoose.model("tb_progdica")
-const Progtipo = mongoose.model("tb_progtipo")
-const Prognivel = mongoose.model("tb_prognivel")
-const Resposta = mongoose.model("tb_resposta")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Prog = getModel("SoftRoute", 'tb_prog', progClass.ProgSchema)
+var Progv = getModel("SoftRoute", 'tb_prog', progClass.ProgSchema)
+var Progset = getModel("SoftRoute", 'tb_progset', progsetClass.ProgsetSchema)
+var Progdica = getModel("SoftRoute", 'tb_progdica', progdicaClass.ProgdicaSchema)
+var Progtipo = getModel("SoftRoute", 'tb_progtipo', progtipoClass.ProgtipoSchema)
+var Prognivel = getModel("SoftRoute", 'tb_prognivel', prognivelClass.PrognivelSchema)
 
 //Funções auxiliares
 const fncProg = require("../functions/fncProg")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaFolreg(req, res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
+
         let convs = new Array();
         console.log('listando Diários de Folreg')
         Folreg.find().then((folreg) =>{
@@ -59,6 +62,14 @@ module.exports = {
     },
 
     carregaFolreg(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Progv = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
+
         Bene.find().then((bene)=>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
             //console.log("Listagem Realizada de Beneficiários!")
@@ -83,6 +94,17 @@ module.exports = {
     },
 
     preCarregaFolreg(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Progv = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+
         let usuarioAtualId = req.cookies['idUsu'];
         Bene.find().then((bene)=>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
@@ -108,6 +130,18 @@ module.exports = {
     },
 
     carregaFolregEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Progv = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         Folreg.findById(req.params.id).then((folreg) =>{
             Bene.find().then((bene)=>{
@@ -126,7 +160,7 @@ module.exports = {
                                         Progdica.find().then((progdica)=>{
                                             Progtipo.find().then((progtipo)=>{
                                                 Prognivel.find().then((prognivel)=>{
-                                                 res.render("area/aba/folreg/folregPreEdi", {folreg, benes: bene, convs: conv, terapeutas: terapeuta, progvs: progv, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, progset, prog, bene, usuarioAtual})
+                                                    res.render("area/aba/folreg/folregPreEdi", {folreg, benes: bene, convs: conv, terapeutas: terapeuta, progvs: progv, progdicas: progdica, progtipos: progtipo, prognivels: prognivel, progset, prog, bene, usuarioAtual})
         })})})})})})})})})})}).catch((err) =>{
             console.log(err);
             req.flash("error_message", "houve um erro ao listar Folhas de registro do ABA");
@@ -200,16 +234,22 @@ module.exports = {
 
 
     deletaFolreg(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Folreg.deleteOne({_id: req.params.id}).then(() =>{
             Conv.find().then((conv)=>{
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "folha de registro ABA deletada!")
-                res.render('area/aba/folreg/folregLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
+                    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                        console.log("Listagem Realizada de Usuário")
+                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                            console.log("Listagem Realizada de beneficiarios")
+                            req.flash("success_message", "folha de registro ABA deletada!")
+                            res.render('area/aba/folreg/folregLis', {convs: conv, terapias: terapia, usuarios: usuario, benes: bene, flash})
             })})})}).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar Folhas de registro do ABA")
@@ -217,6 +257,4 @@ module.exports = {
             })
         })
     }
-
-
 }

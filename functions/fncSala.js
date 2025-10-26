@@ -1,19 +1,24 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //salas
 const salaClass = require("../models/sala")
-const Sala = mongoose.model("tb_sala")
+var Sala = getModel("SoftRoute", 'tb_sala', salaClass.SalaSchema)
 
 //Classes Extrangeiras
 const estadoClass = require("../models/estado")
 
 //Tabelas Extrangeiras
-const Estado = mongoose.model("tb_estado")
+var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
 
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaSala(req,res){
+        let db = req.cookies['preferredDb'];
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         console.log('listando salas')
         Sala.find().then((sala) =>{
             console.log("Listagem Realizada!")
@@ -27,6 +32,9 @@ module.exports = {
     },
 
     carregaSala(req,res){
+        let db = req.cookies['preferredDb'];
+        
+
         Estado.find().then((estado)=>{
             console.log("Listagem Realizada de Ufs!")
             res.render("ferramentas/sala/salaCad", {estados: estado})
@@ -40,11 +48,15 @@ module.exports = {
 
 
     carregaSalaEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         Sala.findById(req.params.id).then((sala) =>{
             console.log(sala)
-                Estado.find().then((estado)=>{
-                    console.log("Listagem Realizada de Estados")
-            res.render('ferramentas/sala/salaEdi', {sala, estados: estado})
+            Estado.find().then((estado)=>{
+                console.log("Listagem Realizada de Estados")
+                res.render('ferramentas/sala/salaEdi', {sala, estados: estado})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -73,7 +85,6 @@ module.exports = {
             }
         })
     },
-
     atualizaSala(req,res){
         let resposta;
         try{
@@ -102,9 +113,10 @@ module.exports = {
             console.log(err1)
         }
     },
-
-
     deletaSala(req,res){
+        let db = req.cookies['preferredDb'];
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         Sala.deleteOne({_id: req.params.id}).then(() =>{
             Sala.find().then((sala) =>{
                 req.flash("success_message", "Sala deletada!")
@@ -116,6 +128,4 @@ module.exports = {
             })
         })
     }
-
-
 }

@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
+// Esquema Acompanhamento
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 const AcompSchema = mongoose.Schema({
     acomp_id:{ type: ObjectId, required: false },
     acomp_terapeutaid:{type: ObjectId, required: true},
@@ -18,6 +23,10 @@ const AcompSchema = mongoose.Schema({
     
 })
 
+// Construtor Acompanhamento
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 class Acomp{
     constructor(
         acomp_id,
@@ -51,9 +60,22 @@ class Acomp{
 }
 
 AcompSchema.loadClass(Acomp)
-const AcompModel = mongoose.model('tb_acomp', AcompSchema)
-module.exports = {AcompModel,AcompSchema,
+var AcompModel = getModel("softroute", 'tb_acomp', AcompSchema)
+module.exports = {
+    AcompModel,
+    AcompSchema,
+
+    // Editar Acompanhamento
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     acompEditar: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AcompModel = getModel(db, 'tb_acomp', AcompSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -95,9 +117,19 @@ module.exports = {AcompModel,AcompSchema,
                 return resultado;
             
     },
+
+    // Add Acompanhamento
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     acompAdicionar: async (req,res) => {
-        //Validar se a Acompese existe
-        console.log("acompmodel");
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AcompModel = getModel(db, 'tb_acomp', AcompSchema)
+        //;
+
+
         let dataAtual = new Date();
         let lvlUsu = req.cookies['lvlUsu'];
         let idUsu;

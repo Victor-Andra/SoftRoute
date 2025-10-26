@@ -1,6 +1,11 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
+// Esquema Anamnese
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 const AnamnSchema = mongoose.Schema({
     anamn_id:{ type: ObjectId, required: false },
     anamn_data: { type: String, required: false }, //Ok
@@ -518,6 +523,10 @@ const AnamnSchema = mongoose.Schema({
     anamn_lixo :{ type: String, required: false }
 })
 
+// Construtor Anamnese
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 class Anamn{
     constructor(
     anamn_id,
@@ -1557,9 +1566,23 @@ class Anamn{
 }
 
 AnamnSchema.loadClass(Anamn)
-const AnamnModel = mongoose.model('tb_anamn', AnamnSchema)
-module.exports = {AnamnModel,AnamnSchema,
+var AnamnModel = getModel("softroute", 'tb_anamn', AnamnSchema)
+module.exports = {
+    AnamnModel,
+    AnamnSchema,
+
+    // Editar Anamnese
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     anamnEditar: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AnamnModel = getModel(db, 'tb_anamn', AnamnSchema);
+        //;
+
+
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -2101,7 +2124,17 @@ module.exports = {AnamnModel,AnamnSchema,
                 return resultado;
             
     },
+    // Add Anamnese
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     anamnAdicionar: async (req,res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AnamnModel = getModel(db, 'tb_anamn', AnamnSchema);
+        //;
+
         //Validar se a Anamnese existe
         console.log("anamnmodel");
         let dataAtual = new Date();

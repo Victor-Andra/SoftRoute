@@ -1,74 +1,56 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Plano de Extraamento 
 const extraClass = require("../models/extra")
 
 //Classes Extrangeiras
-const beneClass = require("../models/bene")
-const convClass = require("../models/conv")
-const convecreClass = require("../models/convCre")
-const convdebClass = require("../models/convDeb")
-const tabilClass = require("../models/tabil")
-const usuarioClass = require("../models/usuario")
-const terapiaClass = require("../models/terapia")
-const creditClass = require("../models/credit")
-const debitClass = require("../models/debit")
-const salaClass = require("../models/sala")
-const horaageClass = require("../models/horaAge")
 const agendaClass = require("../models/agenda")
 const anoClass = require("../models/ano")
 const atendClass = require("../models/atend")
+const beneClass = require("../models/bene")
+const convClass = require("../models/conv")
+const convcreClass = require("../models/convCre")
+const convdebClass = require("../models/convDeb")
+const horaageClass = require("../models/horaAge")
+const salaClass = require("../models/sala")
+const terapiaClass = require("../models/terapia")
+const usuarioClass = require("../models/usuario")
 
 //Tabela Plano de Extra 
-const Extra = mongoose.model("tb_extra")
+var Extra = getModel("SoftRoute", 'tb_extra', extraClass.ExtraSchema)
 
 //Tabelas Extrangeiras
-const Agenda = mongoose.model("tb_agenda")
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Convcre = mongoose.model("tb_convcre")
-const Convdeb = mongoose.model("tb_convdeb")
-const Credit = mongoose.model("tb_credit")
-const Debit = mongoose.model("tb_debit")
-const Tabil = mongoose.model("tb_tabil")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Sala = mongoose.model("tb_sala")
-const Horaage = mongoose.model("tb_horaage")
-const Ano = mongoose.model("tb_ano")
-const Atend = mongoose.model("tb_atend")
+var Agenda = getModel("SoftRoute", 'tb_agenda', agendaClass.AgendaSchema)
+var Ano = getModel("SoftRoute", 'tb_ano', anoClass.AnoSchema)
+var Atend = getModel("SoftRoute", 'tb_atend', atendClass.AtendSchema)
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Convcre = getModel("SoftRoute", 'tb_convcre', convcreClass.ConvcreSchema)
+var Convdeb = getModel("SoftRoute", 'tb_convdeb', convdebClass.ConvdebSchema)
+var Horaage = getModel("SoftRoute", 'tb_horaage', horaageClass.HoraageSchema)
+var Sala = getModel("SoftRoute", 'tb_sala', salaClass.SalaSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 //Funções auxiliares
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
-const fncCredit = require("../functions/fncCredit")
-const fncDebit = require("../functions/fncDebit")
-const fncGeral = require("../functions/fncGeral")
-const fncAtendAdm = require("./fncAtendAdm")
-const fncAgenda = require("./fncAgenda")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
-    mascaraValores(val){
-        //Esta mascara só vai até Milhões
-        let t = val.toString();
-        if(val == "0" || val == "0,00"){
-            t = "0,00";
-        } else {
-            if (t.length >= 9){
-                t = t.substring(0,t.length-8)+"."+t.substring(t.length-8,t.length-5)+"."+t.substring(t.length-5,(t.length - 2))+","+t.substring((t.length - 2),t.length)
-            } else if (t.length >= 6){
-                t = t.substring(0,t.length-5)+"."+t.substring(t.length-5,(t.length - 2))+","+t.substring((t.length - 2),t.length)
-            } else {
-                t = t.substring(0,(t.length - 2))+","+t.substring((t.length - 2),t.length)
-            }
-        }
-
-        return t;
-    },
     listaExtra(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema)
+        Convdeb = getModel(db, 'tb_convdeb', convdebClass.ConvdebSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         let flash = new Resposta();
         flash.texto = resposta.texto;
         flash.sucesso = resposta.sucesso;
@@ -182,6 +164,16 @@ module.exports = {
         });
     },
     filtraExtra(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema)
+        Convdeb = getModel(db, 'tb_convdeb', convdebClass.ConvdebSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         if (!resposta || typeof resposta !== 'object') {
             resposta = {
                 texto: '',
@@ -318,6 +310,9 @@ module.exports = {
         });
     },
     listaExtractrl(req, res, resposta){ //
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+
         let flash = new Resposta();
             Ano.find().then((ano)=>{
                 res.render('atendimento/extra/extraLisctrl', {
@@ -331,50 +326,65 @@ module.exports = {
         })
     },
     filtraExtractrl(req, res, resposta){
-    let flash = new Resposta();
-    //console.log('listando Extraeses')
-    Extra.find({extra_beneid: req.body.extraBeneid}).then((extra) =>{
-        extra.sort((a,b) => (a.extra_benenome > b.extra_benenome) ? 1 : ((b.extra_benenome > a.extra_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
-        extra.forEach((c)=>{
-            //console.log("c.datacad"+c.extra_datacad)
-            let datacad = new Date(c.extra_data)
-            let mes = (datacad.getMonth()+1).toString();
-            let dia = (datacad.getUTCDate()).toString();
-            if (mes.length == 1){
-                mes = "0"+mes;
-            }
-            if (dia.length == 1){
-                dia = "0"+dia;
-            }
-            let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
-            c.extra_data=fulldate;
-            
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Extra = getModel(db, 'tb_extra', extraClass.ExtraSchema)
 
+        let flash = new Resposta();
+        //console.log('listando Extraeses')
+        Extra.find({extra_beneid: req.body.extraBeneid}).then((extra) =>{
+            extra.sort((a,b) => (a.extra_benenome > b.extra_benenome) ? 1 : ((b.extra_benenome > a.extra_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
+            extra.forEach((c)=>{
+                //console.log("c.datacad"+c.extra_datacad)
+                let datacad = new Date(c.extra_data)
+                let mes = (datacad.getMonth()+1).toString();
+                let dia = (datacad.getUTCDate()).toString();
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+                let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
+                c.extra_data=fulldate;
+                
+
+            })
+
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
+                Ano.find().then((ano)=>{
+                    Atend.find().then((atend)=>{
+                Usuario.find().then((usuario)=>{
+                    //console.log("Listagem Realizada Usuário!")
+                    /*if(resposta.sucesso == ""){
+                        console.log(' objeto vazio');
+                        flash.texto = ""
+                        flash.sucesso = ""
+                    } else {
+                        console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
+                        flash.texto = resposta.texto
+                        flash.sucesso = resposta.sucesso
+                    }*/
+                    res.render('atendimento/extra/extraLis', {extras: extra, anos: ano, atends: atend, usuarios: usuario, benes: bene, flash})
+        })})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar!")
+            res.redirect('admin/erro')
         })
-
-        Bene.find().then((bene)=>{
-            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-            Ano.find().then((ano)=>{
-                 Atend.find().then((atend)=>{
-            Usuario.find().then((usuario)=>{
-                //console.log("Listagem Realizada Usuário!")
-                /*if(resposta.sucesso == ""){
-                    console.log(' objeto vazio');
-                    flash.texto = ""
-                    flash.sucesso = ""
-                } else {
-                    console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
-                    flash.texto = resposta.texto
-                    flash.sucesso = resposta.sucesso
-                }*/
-                res.render('atendimento/extra/extraLis', {extras: extra, anos: ano, atends: atend, usuarios: usuario, benes: bene, flash})
-    })})})})}).catch((err) =>{
-        console.log(err)
-        req.flash("error_message", "houve um erro ao listar!")
-        res.redirect('admin/erro')
-    })
     },
     controleExtraOld(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Extra = getModel(db, 'tb_extra', extraClass.ExtraSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         let flash = new Resposta();
         console.log("Passo 1: Iniciando busca dos dados básicos...");
         // Pega mês e ano atual para filtragem
@@ -505,6 +515,16 @@ module.exports = {
         });
     },
     controleExtraOLD(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Extra = getModel(db, 'tb_extra', extraClass.ExtraSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         const flash = new Resposta();
 
         try {
@@ -668,6 +688,9 @@ module.exports = {
         }
     },
     controleExtra(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+
         const flash = new Resposta();
 
         try {
@@ -696,6 +719,16 @@ module.exports = {
         }
     },
     controleExtraFil(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Extra = getModel(db, 'tb_extra', extraClass.ExtraSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         const flash = new Resposta();
         try {
             console.log("🔧 Iniciando controle de extras - Buscando dados...");
@@ -864,7 +897,18 @@ module.exports = {
         }
     },      
     carregaExtra(req,res){
-        let atend;
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema)
+        Convdeb = getModel(db, 'tb_convdeb', convdebClass.ConvdebSchema)
+        Extra = getModel(db, 'tb_extra', extraClass.ExtraSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         Extra.find().then((atend)=>{
             Bene.find({"bene_status":"Ativo"}).then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
@@ -894,6 +938,14 @@ module.exports = {
         })
     },
     carregaExtraedi(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Extra = getModel(db, 'tb_extra', extraClass.ExtraSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         Extra.findById(req.params.id).then((extra) =>{console.log("ID: "+extra._id)
             Conv.find().then((conv)=>{
@@ -918,6 +970,13 @@ module.exports = {
         })
     },
     carregaExtraediNew(req, res) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Extra = getModel(db, 'tb_extra', extraClass.ExtraSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         Extra.findById(req.params.id).then((extra) => {
             console.log("ID: " + extra._id);
@@ -1100,6 +1159,15 @@ module.exports = {
  * Após a cópia, chama filtraExtra para exibir os dados com os filtros aplicados.
  */
     extraCopiar: async (req, res) => {
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Extra = getModel(db, 'tb_extra', extraClass.ExtraSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
         console.log("🚀 Iniciando cópia de agendamentos extras");
 
         try {
@@ -1408,6 +1476,9 @@ module.exports = {
         }
     },
     deletaExtra(req,res){
+        let db = req.cookies['preferredDb'];
+        Extra = getModel(db, 'tb_extra', extraClass.ExtraSchema)
+
         let resposta;
         let flash = new Resposta()
         Extra.deleteOne({_id: req.params.id}).then(() =>{

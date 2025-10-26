@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const ProgsetSchema = mongoose.Schema({
     progset_progid :{ type: ObjectId, required: false },
@@ -112,12 +113,19 @@ class Progset{
 
 
 ProgsetSchema.loadClass(Progset)
-const ProgsetModel = mongoose.model('tb_progset', ProgsetSchema)
+var ProgsetModel = getModel("softroute", 'tb_progset', ProgsetSchema)
 
 module.exports = {
     ProgsetModel,
     ProgsetSchema,
+
     progsetEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ProgsetModel = getModel(db, 'tb_progset', ProgsetSchema)
+        //;
+
         // Pega data atual
         let dataAtual = new Date();
         // Pega Usuário Atual
@@ -171,6 +179,12 @@ module.exports = {
     },
 
     progsetAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ProgsetModel = getModel(db, 'tb_progset', ProgsetSchema)
+        //;
+
         //Pega data atual
         let dataAtual = new Date();
         //Pega Usuário Atual

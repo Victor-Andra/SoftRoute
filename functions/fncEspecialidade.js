@@ -1,124 +1,129 @@
-//Exports
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const { getModel } = require('../functions/fncGeral');
 
-//especialidades
-const especialidadeClass = require("../models/especialidade")
-const respostaClass = require("../models/resposta")
+const especialidadeClass = require("../models/especialidade");
 
-//especialidade, tipos de especialidade 
-const Especialidade = mongoose.model("tb_especialidade")
-const Resposta = mongoose.model("tb_resposta")
+// ✅ FIX: Usar SEMPRE PortalDoUsuario — NÃO redefinir dentro das funções
+const Especialidade = getModel("PortalDoUsuario", 'tb_especialidade', especialidadeClass.EspecialidadeSchema);
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
-    listaEspecialidade(req,res,resposta){
-        let flash = new Resposta()
-        console.log('listando especialidades')
-        Especialidade.find().then((especialidade) =>{
-            console.log("Listagem Realizada!")
-            
-            if(resposta.sucesso == ""){
-                console.log(' objeto vazio');
-                flash.texto = ""
-                flash.sucesso = ""
-            } else {
-                console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
-                flash.texto = resposta.texto
-                flash.sucesso = resposta.sucesso
-            }
-            
-            res.render('ferramentas/especialidade/especialidadeLis', {especialidades: especialidade, flash})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Especialidades")
-            res.redirect('admin/erro')
-        })
+    listaEspecialidade(req, res, resposta = {}) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        console.log('Listando especialidades do PortalDoUsuario');
+
+        const flash = new Resposta();
+
+        Especialidade.find()
+            .sort({ especialidade_nome: 1 })
+            .then((especialidades) => {
+                console.log("Listagem realizada!");
+
+                if (!resposta.sucesso) {
+                    flash.texto = "";
+                    flash.sucesso = "";
+                } else {
+                    flash.texto = resposta.texto;
+                    flash.sucesso = resposta.sucesso;
+                }
+
+                res.render('ferramentas/especialidade/especialidadeLis', { especialidades, flash });
+            })
+            .catch((err) => {
+                console.error("Erro ao listar especialidades:", err);
+                req.flash("error_message", "Houve um erro ao listar especialidades");
+                res.redirect('/admin/erro');
+            });
     },
-    carregaEspecialidade(req,res){
-        res.render("ferramentas/especialidade/especialidadeCad")
+
+    carregaEspecialidade(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        res.render("ferramentas/especialidade/especialidadeCad");
     },
-    carregaEspecialidadeEdi(req,res){
-        Especialidade.findById(req.params.id).then((especialidade) =>{
-            console.log(especialidade)
-                console.log("Listagem Realizada de Estados")
-                res.render('ferramentas/especialidade/especialidadeEdi', {especialidade})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as listas!")
-            res.render('admin/erro')
-        })
+
+    carregaEspecialidadeEdi(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        Especialidade.findById(req.params.id)
+            .then((especialidade) => {
+                if (!especialidade) {
+                    req.flash("error_message", "Especialidade não encontrada");
+                    return res.redirect('/admin/erro');
+                }
+                console.log("Especialidade carregada para edição");
+                res.render('ferramentas/especialidade/especialidadeEdi', { especialidade });
+            })
+            .catch((err) => {
+                console.error("Erro ao carregar especialidade:", err);
+                req.flash("error_message", "Erro ao carregar especialidade");
+                res.render('admin/erro');
+            });
     },
-    cadastraEspecialidade(req,res){
-        let resultado
-        let resposta = new Resposta()
-        let cadastro = especialidadeClass.especialidadeAdicionar(req,res);//variavel para armazenar a função que armazena o async
-        
-        cadastro.then((result)=>{
-            resultado = true;
-        }).catch((err)=>{
-            resultado = err
-            console.log("ERRO:"+err)
-        }).finally(()=>{
-            if (resultado == true){
-                resposta.texto = "Cadastrado com sucesso!"
-                resposta.sucesso = "true"
-                console.log('verdadeiro')
-                req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaEspecialidade(req,res,resposta)
-            } else {
-                resposta.texto = resultado
-                resposta.sucesso = "false"
-                console.log('falso')
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
-            }
-        })
-    },
-    atualizaEspecialidade(req,res){
-        let resposta = new Resposta();
-        let resultado;
-        try{
-            especialidadeClass.especialidadeEditar(req,res).then((res)=>{
-                console.log("Atualização Realizada!")
-                console.log(res)
-                resultado = true;
-            }).catch((err) =>{
-                console.log("error1")
-                console.log(err)
-                resultado = err;
-                res.render('admin/erro')
-            }).finally(() =>{
-                if(resultado == true){
-                    resposta.texto = "Atualizado com Sucesso!"
-                    resposta.sucesso = "true"
-                    //Volta para a especialidade de listagem
-                    console.log('verdadeiro')
-                    this.listaEspecialidade(req,res,resposta)
-                }else{
-                    //passar classe de erro
-                    console.log("error")
-                    console.log(resultado)
-                    resposta.texto = resultado
-                    resposta.sucesso = "false"
-                    //Volta para a especialidade de listagem
-                    console.log('false')
-                    this.listaEspecialidade(req,res,resposta)
+
+    cadastraEspecialidade(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        especialidadeClass.especialidadeAdicionar(req, res)
+            .then((resultado) => {
+                const resposta = new Resposta();
+                if (resultado === true) {
+                    req.flash("success_message", "Especialidade cadastrada com sucesso!");
+                    resposta.texto = "Cadastrado com sucesso!";
+                    resposta.sucesso = "true";
+                    this.listaEspecialidade(req, res, resposta);
+                } else {
+                    req.flash("error_message", resultado);
+                    resposta.texto = resultado;
+                    resposta.sucesso = "false";
+                    res.render('admin/erro', { resposta });
                 }
             })
-        } catch(err1){
-            console.log(err1)
-            res.render('admin/erro')
-        }
+            .catch((err) => {
+                console.error("Erro inesperado no cadastro:", err);
+                req.flash("error_message", "Erro inesperado ao cadastrar especialidade");
+                res.render('admin/erro');
+            });
     },
-    deletaEspecialidade(req,res){
-        Especialidade.deleteOne({_id: req.params.id}).then(() =>{
-            Especialidade.find().then((especialidade) =>{
-                req.flash("success_message", "Especialidade deletada!")
-                res.render('ferramentas/especialidade/especialidadeLis', {especialidades: especialidade})
-            }).catch((err) =>{
-                console.log(err)
-                req.flash("error_message", "houve um erro ao listar Especialidades")
-                res.render('admin/erro')
+
+    atualizaEspecialidade(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        especialidadeClass.especialidadeEditar(req, res)
+            .then((resultado) => {
+                const resposta = new Resposta();
+                if (resultado === true) {
+                    req.flash("success_message", "Especialidade atualizada com sucesso!");
+                    resposta.texto = "Atualizado com sucesso!";
+                    resposta.sucesso = "true";
+                    this.listaEspecialidade(req, res, resposta);
+                } else {
+                    req.flash("error_message", resultado);
+                    resposta.texto = resultado;
+                    resposta.sucesso = "false";
+                    this.listaEspecialidade(req, res, resposta);
+                }
             })
-        })
+            .catch((err) => {
+                console.error("Erro inesperado na atualização:", err);
+                req.flash("error_message", "Erro inesperado ao atualizar especialidade");
+                res.render('admin/erro');
+            });
+    },
+
+    deletaEspecialidade(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        Especialidade.deleteOne({ _id: req.params.id })
+            .then((result) => {
+                if (result.deletedCount === 0) {
+                    req.flash("error_message", "Especialidade não encontrada para exclusão");
+                    return res.redirect('/admin/erro');
+                }
+                req.flash("success_message", "Especialidade deletada com sucesso!");
+                this.listaEspecialidade(req, res);
+            })
+            .catch((err) => {
+                console.error("Erro ao deletar especialidade:", err);
+                req.flash("error_message", "Erro ao deletar especialidade");
+                res.render('admin/erro');
+            });
     }
-}
+};

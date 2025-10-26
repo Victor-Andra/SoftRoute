@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Relatório Semestral 
 const evolClass = require("../models/evol")
@@ -11,22 +11,22 @@ const beneClass = require("../models/bene")
 const usuarioClass = require("../models/usuario")
 
 //Tabela Relatório Semestral 
-const Evol = mongoose.model("tb_evol")
+var Evol = getModel("SoftRoute", 'tb_evol', evolClass.EvolSchema)
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Usuario = mongoose.model("tb_usuario")
-
-
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 //Funções auxiliares
-const respostaClass = require("../models/resposta")
-const bene = require("../models/bene")
-const usuario = require("../models/usuario")
-const Resposta = mongoose.model("tb_resposta")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaEvol(req, res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Evol = getModel(db, 'tb_evol', evolClass.EvolSchema)
+
         let evols = new Array();
         console.log('listando Diários de Evol')
         Evol.find().then((evol) =>{
@@ -34,8 +34,8 @@ module.exports = {
             Bene.find().then((bene)=>{
                 console.log("Listagem Realizada bene!")
                     Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                        console.log("Listagem Realizada Usuário!")
-            res.render('area/evol/evolLis', {evols: evol, usuarios: usuario, benes: bene})
+                    console.log("Listagem Realizada Usuário!")
+                    res.render('area/evol/evolLis', {evols: evol, usuarios: usuario, benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Evol")
@@ -44,6 +44,33 @@ module.exports = {
     },
 
     carregaEvol(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Evol = getModel(db, 'tb_evol', evolClass.EvolSchema)
+
+        let evols = new Array();
+        console.log('listando Diários de Evol')
+        Evol.find().then((evol) =>{
+            console.log("Listagem Realizada dos Diários de Evol!")
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Beneficiarios por nome 
+                console.log("Listagem Realizada bene!")
+                Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                    usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena os Usuarios por nome 
+                    console.log("Listagem Realizada Usuário!")
+                    res.render("area/evol/evolCad", {evols: evol, usuarios: usuario, benes: bene})
+        })})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao listar")
+            res.redirect('admin/erro')
+        })
+    },
+
+    carregaEvoledi(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Evol = getModel(db, 'tb_evol', evolClass.EvolSchema)
+
         let evols = new Array();
         console.log('listando Diários de Evol')
         Evol.find().then((evol) =>{
@@ -54,26 +81,7 @@ module.exports = {
                     Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                         usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena os Usuarios por nome 
                         console.log("Listagem Realizada Usuário!")
-                                res.render("area/evol/evolCad", {evols: evol, usuarios: usuario, benes: bene})
-        })})}).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar")
-            res.redirect('admin/erro')
-        })
-    },
-
-    carregaEvoledi(req,res){
-        let evols = new Array();
-        console.log('listando Diários de Evol')
-        Evol.find().then((evol) =>{
-            console.log("Listagem Realizada dos Diários de Evol!")
-            Bene.find().then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Beneficiarios por nome 
-                    console.log("Listagem Realizada bene!")
-                    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                        usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena os Usuarios por nome 
-                            console.log("Listagem Realizada Usuário!")
-                                res.render("area/evol/evolEdi", {evols: evol, usuarios: usuario, benes: bene})
+                        res.render("area/evol/evolEdi", {evols: evol, usuarios: usuario, benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -140,6 +148,9 @@ module.exports = {
     },
 
     deletaEvol(req,res){
+        let db = req.cookies['preferredDb'];
+        Evol = getModel(db, 'tb_evol', evolClass.EvolSchema)
+
         Evol.deleteOne({_id: req.params.id}).then(() =>{
             console.log("Listagem Realizada de Evols")
                 req.flash("success_message", "Evolamento Fisioterapêutico deletado!")

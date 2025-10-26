@@ -1,8 +1,7 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 const notaSupObsClass = require("../models/notasupobs")
-const Notasupobs = mongoose.model("tb_notasupobs")
-const Resposta = mongoose.model("tb_resposta")
+const { getModel } = require('../functions/fncGeral');
 
 const NotasupSchema = mongoose.Schema({
     notasup_tiposup :{ type: String, required: false },
@@ -163,9 +162,31 @@ class Notasup{
 }
 
 NotasupSchema.loadClass(Notasup)
-const NotasupModel = mongoose.model('tb_notasup', NotasupSchema)
-module.exports = {NotasupModel,NotasupSchema,
+var Notasupobs = getModel("softroute", 'tb_notasupobs', notaSupObsClass.NotaSupObsSchema)
+const Resposta = mongoose.Schema({
+    
+    texto: {
+        type: String,
+        unique: true,
+        required: true
+    },
+    sucesso: {
+        type: String,
+        required: true
+    }    
+})
+const NotasupModel = getModel("softroute", 'tb_notasup', NotasupSchema)
+module.exports = {
+    NotasupModel,
+    NotasupSchema,
+
     notasupEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        NotasupModel = getModel(db, 'tb_notasup', NotasupSchema)
+        //;
+
          //Pega data atual
         let dataAtual = new Date();
         let resultado;
@@ -252,6 +273,12 @@ module.exports = {NotasupModel,NotasupSchema,
         return resultado;
     },
     notasupAdicionar: async (req,res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        NotasupModel = getModel(db, 'tb_notasup', NotasupSchema)
+        //;
+
         //Pega data atual
         let dataAtual = new Date();
         let resultado;
@@ -321,6 +348,12 @@ module.exports = {NotasupModel,NotasupSchema,
         });
     },
     notaSupEObsAdicionar: async (req, res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        NotasupModel = getModel(db, 'tb_notasup', NotasupSchema)
+        //;
+
         let resultado;
         let resposta = new Resposta();
         let dataAtual = new Date();

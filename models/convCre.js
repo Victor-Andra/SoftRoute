@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
-
+const { getModel } = require('../functions/fncGeral');
 
 const ConvcreSchema = mongoose.Schema({
     convcre_convid :{ type: ObjectId, required: true  },
@@ -9,6 +9,7 @@ const ConvcreSchema = mongoose.Schema({
     convcre_terapiaid :{ type: ObjectId,  required: true },
     convcre_data :{ type: String, required: true  },
     convcre_valor :{ type: String, required: true  },
+    convcre_status : { type: String, required: false },
     convcre_obs :{ type: String,  required: false  },
     //Atributos de controle
     convcre_datacad :{ type: Date, required: false  },
@@ -29,6 +30,7 @@ class Convcre{
         convcre_terapianome,
         convcre_data,
         convcre_valor,
+        convcre_status,
         convcre_obs,
         //Atributos de controle
         convcre_datacad,
@@ -46,6 +48,7 @@ class Convcre{
             this.convcre_terapianome = convcre_terapianome,
             this.convcre_data = convcre_data,
             this.convcre_valor = convcre_valor,
+            this.convcre_status = convcre_status,
             this.convcre_obs = convcre_obs,
             //Atributos de controle
             this.convcre_datacad = convcre_datacad,
@@ -61,9 +64,22 @@ class Convcre{
 
 
 ConvcreSchema.loadClass(Convcre)
-const ConvcreModel = mongoose.model('tb_convcre', ConvcreSchema)
-module.exports = {ConvcreModel,ConvcreSchema,
+var ConvcreModel = getModel("softroute", 'tb_convcre', ConvcreSchema)
+module.exports = {
+    ConvcreModel,
+    ConvcreSchema,
+
+    // Editar Créditos para Convênios
+    // Criado por: Wagner Cintra
+    // Criado em: 2023/04/01
+    // Editado em: 2025/10/06
     convcreEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ConvcreModel = getModel(db, 'tb_convcre', ConvcreSchema)
+        //;
+
         let dataAtual = new Date();//Pega data atual
         let resultado;
         let usuarioAtual = req.cookies['idUsu'];//Pega usuario atual
@@ -76,6 +92,7 @@ module.exports = {ConvcreModel,ConvcreSchema,
                 convcre_terapiaid : req.body.convcreTerapiaid ,
                 convcre_data : req.body.convcreData ,
                 convcre_valor : req.body.convcreValor ,
+                convcre_status: req.body.convcreStatus,
                 convcre_obs : req.body.convcreObs ,
                 convcre_dataedi : dataAtual,
                 convcre_usuidedi : usuarioAtual,
@@ -91,7 +108,18 @@ module.exports = {ConvcreModel,ConvcreSchema,
         })
         return resultado;
     },
+
+    // Add Créditos para Convênios
+    // Criado por: Wagner Cintra
+    // Criado em: 2023/04/01
+    // Editado em: 2025/10/06
     convcreAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ConvcreModel = getModel(db, 'tb_convcre', ConvcreSchema)
+        //;
+
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];//Pega usuario atual
         let convcreExiste =  await ConvcreModel.findOne({
@@ -100,6 +128,7 @@ module.exports = {ConvcreModel,ConvcreSchema,
             convcre_terapiaid : req.body.convcreTerapiaid ,
             convcre_data : req.body.convcreData ,
             convcre_valor : req.body.convcreValor ,
+            convcre_status: req.body.convcreStatus,
             convcre_obs : req.body.convcreObs
         });//quando não acha fica null
         
@@ -115,6 +144,7 @@ module.exports = {ConvcreModel,ConvcreSchema,
                 convcre_terapiaid : req.body.convcreTerapiaid ,
                 convcre_data : req.body.convcreData ,
                 convcre_valor : req.body.convcreValor ,
+                convcre_status: req.body.convcreStatus,
                 convcre_obs : req.body.convcreObs ,
                 convcre_datacad : dataAtual,
                 convcre_usuidcad : usuarioAtual,
@@ -132,10 +162,42 @@ module.exports = {ConvcreModel,ConvcreSchema,
     },
     convcreCarregarTodos: async (req,res) => {
         let convcres;
+        console.log("CONSULTA")
         await ConvcreModel.find({}).then((convcre) => {
             convcres = convcre;
         });
         
         return convcres;
+    },
+    convcreDeletar: async (req, res) => {
+        let db = req.cookies['preferredDb'];
+        ConvcreModel = getModel(db, 'tb_convcre', ConvcreSchema);
+
+        let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];
+
+        // ⚠️ O ID vem de req.params.id, NÃO de req.body!
+        const convcreId = req.params.id; // ←←← AQUI É O PONTO-CHAVE
+
+        if (!convcreId) {
+            console.error("ID não fornecido para exclusão");
+            return false;
+        }
+
+        try {
+            const resultado = await ConvcreModel.findByIdAndUpdate(convcreId, {
+                $set: {
+                    convcre_lixo: "true",
+                    convcre_datalixo: dataAtual,
+                    convcre_usuidlixo: usuarioAtual,
+                }
+            }, { new: true }); // opcional: retorna o documento atualizado
+
+            console.log("Registro movido para lixeira:", convcreId);
+            return true;
+        } catch (err) {
+            console.error("Erro ao mover para lixeira:", err);
+            return false;
+        }
     }
 };

@@ -1,36 +1,38 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //Créditos de planos de saúde e particular
 const convimpClass = require("../models/convImp")
-const Convimp = mongoose.model("tb_convimp")
+var Convimp = getModel("SoftRoute", 'tb_convimp', convimpClass.ConvimpSchema)
 
 //Classes Extrangeiras
-const beneClass = require("../models/bene")
-const usuarioClass = require("../models/usuario")
 const convClass = require("../models/conv")
 const impostoClass = require("../models/imposto")
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Usuario = mongoose.model("tb_usuario")
-const Conv = mongoose.model("tb_conv")
-const Imposto = mongoose.model("tb_imposto")
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Imposto = getModel("SoftRoute", 'tb_imposto', impostoClass.ImpostoSchema)
 
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaConvimp(req,res){
-        let convimps = new Array();
+        let db = req.cookies['preferredDb'];
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Convimp = getModel(db, 'tb_convimp', convimpClass.ConvimpSchema)
+        Imposto = getModel(db, 'tb_imposto', impostoClass.ImpostoSchema)
+
         Convimp.find().then((convimp) =>{
-        console.log("Listagem Crédito de Convênios!")
-                console.log("Listagem Terapias!")      
-                    Conv.find().then((conv)=>{
-                        conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
-                        console.log("Listagem Convênios!")
-                                Imposto.find().then((imposto)=>{
-                                    imposto.sort((a,b) => (a.imposto_nome > b.imposto_nome) ? 1 : ((b.imposto_nome > a.imposto_nome) ? -1 : 0));//Ordena os impostos por nome .        
-                                    console.log("Listagem Realizada de impostos")  
-                                        res.render('convenio/convimp/convImpLis', {convimps: convimp, impostos: imposto, convs: conv})
+            console.log("Listagem Crédito de Convênios!")
+            console.log("Listagem Terapias!")      
+            Conv.find().then((conv)=>{
+                conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
+                console.log("Listagem Convênios!")
+                Imposto.find().then((imposto)=>{
+                    imposto.sort((a,b) => (a.imposto_nome > b.imposto_nome) ? 1 : ((b.imposto_nome > a.imposto_nome) ? -1 : 0));//Ordena os impostos por nome .        
+                    console.log("Listagem Realizada de impostos")  
+                    res.render('convenio/convimp/convImpLis', {convimps: convimp, impostos: imposto, convs: conv})
             })})}).catch((err) =>{
             console.log(err)
             //req.flash("error_message", "houve um erro ao listar Convimps")
@@ -38,13 +40,17 @@ module.exports = {
         })
     },
     carregaConvimp(req,res){
+        let db = req.cookies['preferredDb'];
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Imposto = getModel(db, 'tb_imposto', impostoClass.ImpostoSchema)
+
         Conv.find().then((conv)=>{
             conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
             console.log("Listagem Realizada de Convênios")
-                Imposto.find().then((imposto)=>{
-                    imposto.sort((a,b) => (a.imposto_nome > b.imposto_nome) ? 1 : ((b.imposto_nome > a.imposto_nome) ? -1 : 0));//Ordena os impostos por nome .        
-                    console.log("Listagem Realizada de impostos")
-                            res.render("convenio/convimp/convImpCad", {convs: conv, impostos: imposto})
+            Imposto.find().then((imposto)=>{
+                imposto.sort((a,b) => (a.imposto_nome > b.imposto_nome) ? 1 : ((b.imposto_nome > a.imposto_nome) ? -1 : 0));//Ordena os impostos por nome .        
+                console.log("Listagem Realizada de impostos")
+                res.render("convenio/convimp/convImpCad", {convs: conv, impostos: imposto})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -52,13 +58,18 @@ module.exports = {
         })
     },
     carregaConvimpEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Convimp = getModel(db, 'tb_convimp', convimpClass.ConvimpSchema)
+        Imposto = getModel(db, 'tb_imposto', impostoClass.ImpostoSchema)
+
         Convimp.findById(req.params.id).then((convimp) =>{
             Conv.find().then((conv)=>{
                 conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome .
                 Imposto.find().then((imposto)=>{
-                    imposto.sort((a,b) => (a.imposto_nome > b.imposto_nome) ? 1 : ((b.imposto_nome > a.imposto_nome) ? -1 : 0));//Ordena os impostos por nome .
-                        console.log("Listagem Realizada de impostos")
-                                res.render('convenio/convimp/convImpEdi', {convimp, convs: conv, impostos: imposto})
+                imposto.sort((a,b) => (a.imposto_nome > b.imposto_nome) ? 1 : ((b.imposto_nome > a.imposto_nome) ? -1 : 0));//Ordena os impostos por nome .
+                console.log("Listagem Realizada de impostos")
+                res.render('convenio/convimp/convImpEdi', {convimp, convs: conv, impostos: imposto})
         })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
@@ -108,6 +119,9 @@ module.exports = {
         })
     },
     deletaConvimp(req,res){
+        let db = req.cookies['preferredDb'];
+        Convimp = getModel(db, 'tb_convimp', convimpClass.ConvimpSchema)
+
         Convimp.deleteOne({_id: req.params.id}).then(() =>{
             this.listaConvimp(req,res);
         }).catch((err) =>{

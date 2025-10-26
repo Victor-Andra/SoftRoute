@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const AtaSchema = mongoose.Schema({
 
@@ -481,14 +482,22 @@ class Ata{
 }
 
 AtaSchema.loadClass(Ata)
-const AtaModel = mongoose.model('tb_ata', AtaSchema)
-module.exports = {AtaModel,AtaSchema,
+var AtaModel = getModel("softroute", 'tb_ata', AtaSchema)
+module.exports = {
+    AtaModel,
+    AtaSchema,
+    
     ataEditar: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtaModel = getModel(db, 'tb_ata', AtaSchema);
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let usuarioAtual = req.cookies['idUsu'];
-        //Pega data atual
-        
+                
         //Realiza Atualização
         await AtaModel.findByIdAndUpdate(req.body.ataId, 
             {$set: {
@@ -659,11 +668,21 @@ module.exports = {AtaModel,AtaSchema,
         })
         return resultado;
     },
-    //Novo adicionar pra implemnetar solução robusta que combine várias abordagens:
+    
+    // Novo adicionar pra implemnetar solução robusta que combine várias abordagens:
     // salvamento automático local 
     // sincronização com o servidor e...
     // recuperação de sessão .
+    // Criado por: Wagner Cintra
+    // Criado em: 2025/04/01
+    // Editado em: 2025/10/03
     ataAdicionar: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtaModel = getModel(db, 'tb_ata', AtaSchema);
+        //;
+
         let dataAtual = new Date();
         console.log("atamodel");
         console.log("req.body.ataI01> "+req.body.ataI01temp)

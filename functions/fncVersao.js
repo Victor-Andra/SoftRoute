@@ -1,29 +1,28 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Analise funcional do comportamento
 const versaoClass = require("../models/versao")
 
-
 //Classes Extrangeiras
 const usuarioClass = require("../models/usuario")
 
-
 //Tabela Versao
-const Versao = mongoose.model("tb_versao")
+var Versao = getModel("SoftRoute", 'tb_versao', versaoClass.versaoSchema)
 
 //Tabelas Extrangeiras
-const Resposta = mongoose.model("tb_resposta")
-const Usuario = mongoose.model("tb_usuario")
-
-
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 //Funções auxiliares
-
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaVersao(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Versao = getModel(db, 'tb_versao', versaoClass.versaoSchema)
+
         let flash = new Resposta();
         let perfilAtual = req.cookies['lvlUsu'];
         Versao.find().then((versao) =>{
@@ -67,39 +66,30 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
-
-
     carregaVersao(req,res){
-        
-                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                    
-                            res.render("area/escalas/versao/versaoCad", {Benes: bene, Terapeutas: terapeuta})
+        Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+            res.render("area/escalas/versao/versaoCad", {Benes: bene, Terapeutas: terapeuta})
         }).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
             res.redirect('admin/erro')
         })
-
     },
-
-  
-    
     carregaVersaoEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Versao = getModel(db, 'tb_versao', versaoClass.versaoSchema)
+
         Versao.findOne({_id : req.params.id}).then((versao)=>{
-           
-                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                    //console.log("Listagem Realizada de Usuário")
-                  
-                                res.render("area/escalas/versao/versaoEdi", {versao, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Usuário")
+                res.render("area/escalas/versao/versaoEdi", {versao, Terapias: terapia, Terapeutas: terapeuta, Benes: bene})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.render('admin/erro')
         })
     },
-
     cadastraVersao(req,res){
         console.log("chegou")
         let resultado
@@ -126,7 +116,6 @@ module.exports = {
             }
         })
     },
-
     atualizaVersao(req,res){
         let resultado
         let resposta = new Resposta()
@@ -161,9 +150,10 @@ module.exports = {
             res.render('admin/erro')
         }
     },
-
-
     deletaVersao(req,res){
+        let db = req.cookies['preferredDb'];
+        Versao = getModel(db, 'tb_versao', versaoClass.versaoSchema)
+
         let resposta;
         let flash = new Resposta()
         Versao.deleteOne({_id: req.params.id}).then(() =>{
@@ -184,5 +174,4 @@ module.exports = {
             this.listaVersao(req,res, resposta)
         })
     }
-
 }

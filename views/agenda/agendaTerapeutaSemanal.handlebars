@@ -104,6 +104,7 @@
 									}
 								}
 								} else if(e.id.indexOf("BeneId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
+									console.log("bene.id: "+e.value)
 									let val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
 									document.getElementById(id).append(val);

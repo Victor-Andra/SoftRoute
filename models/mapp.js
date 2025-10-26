@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const MappSchema = mongoose.Schema({
     mapp_beneid :{
@@ -53,9 +54,18 @@ class Mapp{
 }
 
 MappSchema.loadClass(Mapp)
-const MappModel = mongoose.model('tb_mapp', MappSchema)
-module.exports = {MappModel,MappSchema,
+var MappModel = getModel("softroute", 'tb_mapp', MappSchema)
+module.exports = {
+    MappModel,
+    MappSchema,
+
     mappEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        MappModel = getModel(db, 'tb_mapp', MappSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -81,6 +91,12 @@ module.exports = {MappModel,MappSchema,
         return resultado;
     },
     mappAdicionar: async (req,res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        MappModel = getModel(db, 'tb_mapp', MappSchema)
+        //;
+        
         let dataAtual = new Date();
         console.log("mappmodel");
         console.log("req.body.mappdata:")

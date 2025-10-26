@@ -1,137 +1,133 @@
 //Exports
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const { getModel } = require('../functions/fncGeral');
 
-//As classe tem que ser declaradas antes das tabelas
-//Classe
-const anoClass = require("../models/ano")
+//Classes
+const anoClass = require("../models/ano");
+const usuarioClass = require("../models/usuario");
 
-//Classes Extrangeiras
-const usuarioClass = require("../models/usuario")
+// Tabelas — SEMPRE do PortalDoUsuario
+const Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
+const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
 
-//Tabelas
-//anos
-const Ano = mongoose.model("tb_ano")
-
-//Tabelas Extrangeiras
-const Usuario = mongoose.model("tb_usuario")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
-    listaAno(req,res){
-        console.log('listando anos')
-        Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-        Ano.find({ ano_lixo: "false" }) // Filtra pelo campo
-        .sort({ ano: 1 }) // Ordena por ano crescente (opcional)
-        .then((ano) => {
-            ano.forEach((b)=>{
-            dataedi = new Date(b.ano_dataedi)
-                mes = (dataedi.getMonth()+1).toString();
-                dia = (dataedi.getUTCDate()).toString();
-                if (mes.length == 1){
-                    mes = "0"+mes;
-                }
-                if (dia.length == 1){
-                    dia = "0"+dia;
-                }
-                fulldate=(dataedi.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.dataedi=fulldate;
-            })
-            console.log("Listagem Realizada!")
-            res.render('ferramentas/ano/anoLis', {anos: ano, usuarios: usuario})
-        })}).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Anos")
-            res.redirect('admin/erro')
-        })
-
-    },
-
-    carregaAno(req,res){
-        Ano.find().then((ano)=>{
-            console.log("Listagem Realizada de Anos de Uso!")
-            res.render("ferramentas/ano/anoCad", {anos: ano})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Anos")
-            res.redirect('admin/erro')
-        })
-
-    },
-
-
-    carregaAnoEdi(req,res){
-        Ano.findById(req.params.id).then((ano) =>{console.log("ID: "+ano._id)
-            console.log(ano)
-            res.render('ferramentas/ano/anoEdi', {anos: ano})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as lista!")
-            res.render('admin/erro')
-        })
-    },
-
-    cadastraAno(req,res){
-        let resposta
-        let cadastro = anoClass.anoAdicionar(req,res);//variavel para armazenar a função que armazena o async
+    listaAno(req, res) {
+        console.log('listando anos do PortalDoUsuario');
         
-        cadastro.then((result)=>{
-            resposta = true;
-        }).catch((err)=>{
-            resposta = err
-            console.log("ERRO:"+err)
-        }).finally(()=>{
-            if (resposta == true){
-                console.log('verdadeiro')
-                req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaAno(req,res)
-            } else {
-                console.log('falso')
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro');
-            }
-        })
+        // Busca usuários do PortalDoUsuario (não do softroute!)
+        Usuario.find({
+            "usuario_status": { $in: ["Ativo", "Inativo"] },
+            $or: [
+                { "usuario_funcaoid": "6241030bfbcc51f47c720a0b" },
+                { "usuario_perfilid": { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+            ]
+        }).then((usuarios) => {
+            // Busca anos do PortalDoUsuario
+            Ano.find({ ano_lixo: "false" })
+                .sort({ ano_nome: 1 }) // Ordena por nome do ano
+                .then((anos) => {
+                    // Formata data de edição
+                    anos.forEach((ano) => {
+                        if (ano.ano_dataedi) {
+                            const dataedi = new Date(ano.ano_dataedi);
+                            const mes = String(dataedi.getMonth() + 1).padStart(2, '0');
+                            const dia = String(dataedi.getUTCDate()).padStart(2, '0');
+                            ano.dataedi = `${dataedi.getFullYear()}-${mes}-${dia}`;
+                        } else {
+                            ano.dataedi = '';
+                        }
+                    });
+                    console.log("Listagem Realizada!");
+                    res.render('ferramentas/ano/anoLis', { anos, usuarios });
+                });
+        }).catch((err) => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar Anos");
+            res.redirect('/admin/erro');
+        });
     },
 
-    atualizaAno(req,res){
-        let resposta;
-        try{
-            anoClass.anoEditar(req,res).then((res)=>{
-                console.log("Atualização Realizada!")
-                console.log(res)
-                resposta = res;
-            }).catch((err) =>{
-                console.log("error1")
-                console.log(err)
-                resposta = err;
-                res.render('admin/erro')
-            }).finally(() =>{
-                if(resposta){
-                    //Volta para a ano de listagem
-                    console.log('verdadeiro')
-                    this.listaAno(req,res)
-                }else{
-                    //passar classe de erro
-                    console.log("error")
-                    console.log(resposta)
-                    res.render('admin/erro')
+    carregaAno(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        Ano.find({ ano_lixo: "false" }).then((anos) => {
+            console.log("Listagem Realizada de Anos de Uso!");
+            res.render("ferramentas/ano/anoCad", { anos });
+        }).catch((err) => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar Anos");
+            res.redirect('/admin/erro');
+        });
+    },
+
+    carregaAnoEdi(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        Ano.findById(req.params.id).then((ano) => {
+            if (!ano) {
+                req.flash("error_message", "Ano não encontrado");
+                return res.redirect('/admin/erro');
+            }
+            console.log("ID:", ano._id);
+            res.render('ferramentas/ano/anoEdi', { anos: ano });
+        }).catch((err) => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao carregar o ano para edição");
+            res.render('admin/erro');
+        });
+    },
+
+    cadastraAno(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        anoClass.anoAdicionar(req, res)
+            .then((result) => {
+                if (result === true) {
+                    req.flash("success_message", "Cadastro realizado com sucesso!");
+                    this.listaAno(req, res);
+                } else {
+                    // Se retornar uma string de erro
+                    req.flash("error_message", result || "Erro desconhecido ao cadastrar ano");
+                    res.render('admin/erro');
                 }
             })
-        } catch(err1){
-            console.log(err1)
-        }
+            .catch((err) => {
+                console.error("Erro no cadastro:", err);
+                req.flash("error_message", "Erro ao cadastrar ano");
+                res.render('admin/erro');
+            });
     },
 
-    deletaAno: async (anoId, req, res) => { // Recebe o ID como parâmetro
-        console.log("ID recebido na função deletaAno:", anoId); // Verificação
-      
+    atualizaAno(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        anoClass.anoEditar(req, res)
+            .then((resultado) => {
+                if (resultado === true) {
+                    console.log("Atualização Realizada!");
+                    req.flash("success_message", "Ano atualizado com sucesso!");
+                    this.listaAno(req, res);
+                } else {
+                    console.error("Erro na atualização:", resultado);
+                    req.flash("error_message", "Erro ao atualizar ano");
+                    res.render('admin/erro');
+                }
+            })
+            .catch((err) => {
+                console.error("Erro em atualizaAno:", err);
+                req.flash("error_message", "Erro ao atualizar ano");
+                res.render('admin/erro');
+            });
+    },
+
+    deletaAno: async (anoId, req, res) => {
+        console.log("ID recebido na função deletaAno:", anoId);
         try {
-          // Chama a classe de deleção passando o ID
-          const resultado = await anoClass.anoDeletar(anoId, req, res);
-          console.log("Resultado da deleção:", resultado);
-          return resultado;
+            const resultado = await anoClass.anoDeletar(anoId, req, res);
+            console.log("Resultado da deleção:", resultado);
+            return resultado;
         } catch (err) {
-          console.error("Erro em deletaAno:", err);
-          throw err;
+            console.error("Erro em deletaAno:", err);
+            throw err;
         }
-      }
-   
-}
+    }
+};

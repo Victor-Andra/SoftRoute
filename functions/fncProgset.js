@@ -1,9 +1,8 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //progsets
 const progsetClass = require("../models/progset")
-const respostaClass = require("../models/resposta")
 
 const beneClass = require("../models/bene")
 const usuarioClass = require("../models/usuario")
@@ -16,21 +15,25 @@ const folregClass = require("../models/folreg")
 const fncProg = require("../functions/fncProg")
 
 //progset, tipos de progset 
-const Progset = mongoose.model("tb_progset")
-const Resposta = mongoose.model("tb_resposta")
+var Progset = getModel("SoftRoute", 'tb_progset', progsetClass.ProgsetSchema)
 
-const Bene = mongoose.model("tb_bene")
-const Usuario = mongoose.model("tb_usuario")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
-const Prog = mongoose.model("tb_prog")
-const Progdica = mongoose.model("tb_progdica")
-const Prognivel = mongoose.model("tb_prognivel")
-const Progtipo = mongoose.model("tb_progtipo")
-const Folreg = mongoose.model("tb_folreg")
+var Prog = getModel("SoftRoute", 'tb_prog', progClass.ProgSchema)
+var Progdica = getModel("SoftRoute", 'tb_progdica', progdicaClass.ProgdicaSchema)
+var Prognivel = getModel("SoftRoute", 'tb_prognivel', prognivelClass.PrognivelSchema)
+var Progtipo = getModel("SoftRoute", 'tb_progtipo', progtipoClass.ProgtipoSchema)
+var Folreg = getModel("SoftRoute", 'tb_folreg', folregClass.FolregSchema)
 
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaProgset(req,res,resposta){
+        let db = req.cookies['preferredDb'];
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
+
         let flash = new Resposta()
         console.log('listando progsets')
         Progset.find().then((progset) =>{
@@ -55,6 +58,13 @@ module.exports = {
     },
 
     carregaProgset(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+
         let idProg;
         if (req.params.id){
             idProg = req.params.id;
@@ -98,6 +108,13 @@ module.exports = {
     },
 
     preCarregaProgset(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         let perfilAtual = req.cookies['lvlUsu'];
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
@@ -119,6 +136,15 @@ module.exports = {
     },
 
     carregaProgsetEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
+
         let perfilAtual = req.cookies['lvlUsu'];
         Progset.findById(req.params.id).then((progset) =>{
             console.log("ID: "+progset._id)
@@ -227,6 +253,9 @@ module.exports = {
     },
 
     deletaProgset(req,res){
+        let db = req.cookies['preferredDb'];
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
+
         Progset.deleteOne({_id: req.params.id}).then(() =>{
             Progset.find().then((progset) =>{
                 req.flash("success_message", "Método deletado!")
@@ -238,5 +267,4 @@ module.exports = {
             })
         })
     }
-
 }

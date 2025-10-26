@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Controle de PECS
 const sondaClass = require("../models/sonda")
@@ -8,27 +8,25 @@ const sondaClass = require("../models/sonda")
 
 //Classes Extrangeiras, Convênios, Terapia, (Técnicos e Usuários)
 const beneClass = require("../models/bene")
-const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
-const terapiaClass = require("../models/terapia")
 
 
 //Tabela PECS
-const Sonda = mongoose.model("tb_sonda")
+var Sonda = getModel("SoftRoute", 'tb_sonda', sondaClass.SondaSchema)
 
 //Tabelas Extrangeiras, Convênios, Terapia, (Técnicos e Usuários)
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 //Funções Auxiliares
-const respostaClass = require("../models/resposta")
-const bene = require("../models/bene")
-const Resposta = mongoose.model("tb_resposta")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     carregaSonda(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
             terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
@@ -41,41 +39,42 @@ module.exports = {
         })
 
     },
-    
-        cadastraSonda(req,res){
-            console.log("chegou")
-            let resultado
-            let resposta = new Resposta()
-            
-            sondaClass.sondaAdicionar(req,res).then((result)=>{
-                console.log("Cadastro Realizado!!!")
-                //console.log(res)
-                resultado = true;
-            }).catch((err)=>{
-                console.log("ERRO:");
-                console.log(err);
-                resultado = err
-            }).finally(()=>{
-                if (resultado == true){
-                    resposta.texto = "Cadastrado com sucesso!"
-                    resposta.sucesso = "true"
-                    console.log('verdadeiro')
-                    req.flash("success_message", "Cadastro realizado com sucesso!")
-                    this.listaSonda(req,res,resposta)
-                } else {
-                    resposta.texto = resultado
-                    resposta.sucesso = "false"
-                    console.log('falso')
-                    req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                    res.render('admin/erro', resposta);
-                }
-            })
-        },
-
+    cadastraSonda(req,res){
+        console.log("chegou")
+        let resultado
+        let resposta = new Resposta()
+        
+        sondaClass.sondaAdicionar(req,res).then((result)=>{
+            console.log("Cadastro Realizado!!!")
+            //console.log(res)
+            resultado = true;
+        }).catch((err)=>{
+            console.log("ERRO:");
+            console.log(err);
+            resultado = err
+        }).finally(()=>{
+            if (resultado == true){
+                resposta.texto = "Cadastrado com sucesso!"
+                resposta.sucesso = "true"
+                console.log('verdadeiro')
+                req.flash("success_message", "Cadastro realizado com sucesso!")
+                this.listaSonda(req,res,resposta)
+            } else {
+                resposta.texto = resultado
+                resposta.sucesso = "false"
+                console.log('falso')
+                req.flash("error_message", "houve um erro ao abrir o cadastro!")
+                res.render('admin/erro', resposta);
+            }
+        })
+    },
     deletaSonda(req,res){
+        let db = req.cookies['preferredDb'];
+        Sonda = getModel(db, 'tb_sonda', sondaClass.SondaSchema)
+
         Sonda.deleteOne({_id: req.params.id}).then(() =>{
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
+            Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                console.log("Listagem Realizada de Usuário")
                 req.flash("success_message", "Sondaese deletada!")
                 this.listaSonda(req,res);
             }).catch((err) =>{
@@ -85,7 +84,6 @@ module.exports = {
             })
         })
     },
-
     atualizaSonda(req,res){
         let resposta;
         try{
@@ -112,22 +110,28 @@ module.exports = {
             console.log(err1)
         }
     },
-
     carregaSondaedi(req, res){
+        let db = req.cookies['preferredDb'];
+        Sonda = getModel(db, 'tb_sonda', sondaClass.SondaSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         Sonda.findById(req.params.id).then((sonda) =>{console.log("ID: "+sonda._id)
             Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
-                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                        bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-            res.render('area/aba/sonda/sondaEdi', {sonda, terapeutas: terapeuta, benes: bene})
+                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    res.render('area/aba/sonda/sondaEdi', {sonda, terapeutas: terapeuta, benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
-
     },
 
     listaSonda(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Sonda = getModel(db, 'tb_sonda', sondaClass.SondaSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         //console.log('listando Sondaeses')
         Sonda.find().then((sonda) =>{
@@ -197,6 +201,10 @@ module.exports = {
         })
     },
     listaSondaimp(req, res){
+        let db = req.cookies['preferredDb'];
+        Sonda = getModel(db, 'tb_sonda', sondaClass.SondaSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         Sonda.findById(req.params.id).then((sonda) =>{
             console.log("sonda:");
             console.log(sonda);

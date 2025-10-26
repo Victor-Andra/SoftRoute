@@ -1,126 +1,130 @@
-//Exports
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const { getModel } = require('../functions/fncGeral');
 
-//metouts
-const metoutClass = require("../models/metout")
-const respostaClass = require("../models/resposta")
+// Importa o modelo
+const metoutClass = require("../models/metout");
 
-//metout, tipos de metout 
-const Metout = mongoose.model("tb_metout")
-const Resposta = mongoose.model("tb_resposta")
+// ✅ FIX: Usar SEMPRE PortalDoUsuario — NÃO usar cookie
+const Metout = getModel("PortalDoUsuario", 'tb_metout', metoutClass.MetoutSchema);
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
-    listaMetout(req,res,resposta){
-        let flash = new Resposta()
-        console.log('listando metouts')
-        Metout.find().then((metout) =>{
-            console.log("Listagem Realizada!")
-
-            if(resposta.sucesso == ""){
-                console.log(' objeto vazio');
-                flash.texto = ""
-                flash.sucesso = ""
-            } else {
-                flash.texto = resposta.texto
-                flash.sucesso = resposta.sucesso
-            }
-
-            res.render('ferramentas/metout/metoutLis', {metouts: metout, resposta, flash})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Metouts")
-            res.redirect('admin/erro')
-        })
-
-    },
-
-    carregaMetout(req,res){
-        res.render("ferramentas/metout/metoutCad")
-    },
-
-    carregaMetoutEdi(req,res){
-        Metout.findById(req.params.id).then((metout) =>{
-            console.log(metout)
-            res.render('ferramentas/metout/metoutEdi', {metout})
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as listas!")
-            res.render('admin/erro')
-        })
-    },
-
-    cadastraMetout(req,res){
-        let resultado
-        let resposta = new Resposta()
-        let cadastro = metoutClass.metoutAdicionar(req,res);//variavel para armazenar a função que armazena o async
+    listaMetout(req, res, resposta = {}) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        console.log('Listando metouts do PortalDoUsuario');
         
-        cadastro.then((result)=>{
-            resultado = true;
-        }).catch((err)=>{
-            resultado = err
-            console.log("ERRO:"+err)
-        }).finally(()=>{
-            if (resultado == true){
-                console.log('verdadeiro')
-                req.flash("success_message", "Cadastro realizado com sucesso!")
-                resposta.texto = "Cadastrado com sucesso!"
-                resposta.sucesso = "true"
-                this.listaMetout(req,res,resposta)
-            } else {
-                console.log('falso')
-                resposta.texto = resultado
-                resposta.sucesso = "false"
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
-            }
-        })
+        const flash = new Resposta();
+        
+        Metout.find()
+            .sort({ metout_ordem: 1 })
+            .then((metouts) => {
+                console.log("Listagem de Metouts realizada!");
+
+                if (!resposta.sucesso) {
+                    flash.texto = "";
+                    flash.sucesso = "";
+                } else {
+                    flash.texto = resposta.texto;
+                    flash.sucesso = resposta.sucesso;
+                }
+
+                res.render('ferramentas/metout/metoutLis', { metouts, resposta: flash });
+            })
+            .catch((err) => {
+                console.error("Erro ao listar Metouts:", err);
+                req.flash("error_message", "Houve um erro ao listar Metouts");
+                res.redirect('/admin/erro');
+            });
     },
 
-    atualizaMetout(req,res){
-        let resultado
-        let resposta = new Resposta()
-        try{
-            metoutClass.metoutEditar(req,res).then((res)=>{
-                console.log("Atualização Realizada!")
-                console.log(res)
-                resultado = res;
-            }).catch((err) =>{
-                console.log("error1")
-                console.log(err)
-                resultado = err;
-                res.render('admin/erro')
-            }).finally(() =>{
-                if (resultado == true){
-                    console.log('verdadeiro')
-                    req.flash("success_message", "Cadastro realizado com sucesso!")
-                    resposta.texto = "Atualizado com sucesso!"
-                    resposta.sucesso = "true"
-                    this.listaMetout(req,res,resposta)
+    carregaMetout(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        res.render("ferramentas/metout/metoutCad");
+    },
+
+    carregaMetoutEdi(req, res) {
+        // Usa o modelo já configurado para PortalDoUsuario
+        Metout.findById(req.params.id)
+            .then((metout) => {
+                if (!metout) {
+                    req.flash("error_message", "Metout não encontrado");
+                    return res.redirect('/admin/erro');
+                }
+                res.render('ferramentas/metout/metoutEdi', { metout });
+            })
+            .catch((err) => {
+                console.error("Erro ao carregar Metout:", err);
+                req.flash("error_message", "Erro ao carregar Metout para edição");
+                res.render('admin/erro');
+            });
+    },
+
+    cadastraMetout(req, res) {
+       // Usa o modelo já configurado para PortalDoUsuario
+        metoutClass.metoutAdicionar(req, res)
+            .then((resultado) => {
+                const resposta = new Resposta();
+                if (resultado === true) {
+                    req.flash("success_message", "Metout cadastrado com sucesso!");
+                    resposta.texto = "Cadastrado com sucesso!";
+                    resposta.sucesso = "true";
+                    this.listaMetout(req, res, resposta);
                 } else {
-                    console.log('falso')
-                    resposta.texto = resultado
-                    resposta.sucesso = "false"
-                    req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                    this.listaMetout(req,res,resposta)
+                    req.flash("error_message", resultado);
+                    resposta.texto = resultado;
+                    resposta.sucesso = "false";
+                    res.render('admin/erro', { resposta });
                 }
             })
-        } catch(err1){
-            console.log("Erro TryCatch:"+err1)
-            res.render('admin/erro');
-        }
+            .catch((err) => {
+                console.error("Erro inesperado no cadastro de Metout:", err);
+                req.flash("error_message", "Erro inesperado ao cadastrar Metout");
+                res.render('admin/erro');
+            });
     },
 
-    deletaMetout(req,res){
-        Metout.deleteOne({_id: req.params.id}).then(() =>{
-            Metout.find().then((metout) =>{
-                req.flash("success_message", "Método deletado!")
-                res.render('ferramentas/metout/metoutLis', {metouts: metout})
-            }).catch((err) =>{
-                console.log(err)
-                req.flash("error_message", "houve um erro ao listar Métodos")
-                res.render('admin/erro')
+    atualizaMetout(req, res) {
+        metoutClass.metoutEditar(req, res)
+                // Usa o modelo já configurado para PortalDoUsuario
+            .then((resultado) => {
+                const resposta = new Resposta();
+                if (resultado === true) {
+                    req.flash("success_message", "Metout atualizado com sucesso!");
+                    resposta.texto = "Atualizado com sucesso!";
+                    resposta.sucesso = "true";
+                    this.listaMetout(req, res, resposta);
+                } else {
+                    req.flash("error_message", resultado);
+                    resposta.texto = resultado;
+                    resposta.sucesso = "false";
+                    this.listaMetout(req, res, resposta);
+                }
             })
-        })
-    }
+            .catch((err) => {
+                console.error("Erro inesperado na atualização de Metout:", err);
+                req.flash("error_message", "Erro inesperado ao atualizar Metout");
+                res.render('admin/erro');
+            });
+    },
 
-}
+    deletaMetout(req, res) {
+        
+        Metout.deleteOne({ _id: req.params.id })
+                // Usa o modelo já configurado para PortalDoUsuario
+            .then((result) => {
+                if (result.deletedCount === 0) {
+                    req.flash("error_message", "Metout não encontrado para exclusão");
+                    return res.redirect('/admin/erro');
+                }
+                req.flash("success_message", "Metout deletado com sucesso!");
+                this.listaMetout(req, res);
+            })
+            .catch((err) => {
+                console.error("Erro ao deletar Metout:", err);
+                req.flash("error_message", "Erro ao deletar Metout");
+                res.render('admin/erro');
+            });
+    }
+};

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const AtaSchema = mongoose.Schema({
 
@@ -481,7 +482,7 @@ class Ata{
 }
 
 AtaSchema.loadClass(Ata)
-const AtaModel = mongoose.model('tb_ata', AtaSchema)
+var AtaModel = getModel("softroute", 'tb_ata', AtaSchema)
 module.exports = {AtaModel,AtaSchema,
     ataEditar: async (req, res) => {
         let dataAtual = new Date();

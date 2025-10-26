@@ -1,7 +1,12 @@
 const mongoose = require('mongoose')
 const fncGeral = require('../functions/fncGeral')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
+// Esquema Agenda Arquivo
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 const AgendaArquivoSchema = mongoose.Schema({
     agenda_data :{ type: Date, required: false },
     agenda_hora :{ type: String, required: false },
@@ -41,6 +46,10 @@ const AgendaArquivoSchema = mongoose.Schema({
     
 })
 
+// Construtor Agenda Arquivo
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 class AgendaArquivo{
     constructor(
         agenda_data,
@@ -118,4 +127,4 @@ class AgendaArquivo{
 }
 
 AgendaArquivoSchema.loadClass(AgendaArquivo);
-const AgendaArquivoModel = mongoose.model('tb_agendaArquivo', AgendaArquivoSchema);
+var AgendaArquivoModel = getModel("softroute", 'tb_agendaArquivo', AgendaArquivoSchema)

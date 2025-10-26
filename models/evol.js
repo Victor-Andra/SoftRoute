@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const EvolSchema = mongoose.Schema({
     evol_beneid :{
@@ -53,9 +54,18 @@ class Evol{
 }
 
 EvolSchema.loadClass(Evol)
-const EvolModel = mongoose.model('tb_evol', EvolSchema)
-module.exports = {EvolModel,EvolSchema,
+var EvolModel = getModel("softroute", 'tb_evol', EvolSchema)
+module.exports = {
+    EvolModel,
+    EvolSchema,
+
     evolEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        EvolModel = getModel(db, 'tb_evol', EvolSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -81,6 +91,12 @@ module.exports = {EvolModel,EvolSchema,
         return resultado;
     },
     evolAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        EvolModel = getModel(db, 'tb_evol', EvolSchema)
+        //;
+        
         let dataAtual = new Date();
         console.log("evolmodel");
         console.log("req.body.evoldata:")

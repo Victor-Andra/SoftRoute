@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const DebitsubcategSchema = mongoose.Schema({
     debitsubcateg_nome: {
@@ -52,16 +53,19 @@ class Debitsubcateg{
     }
 }
 
-let DebitsubcategModel
 DebitsubcategSchema.loadClass(Debitsubcateg)
-//try {
-//    DebitsubcategModel = mongoose.model('tb_debitsubcateg')
-//} catch (error) {
-    DebitsubcategModel = mongoose.model('tb_debitsubcateg', DebitsubcategSchema)
-//}
-//const DebitsubcategModel = mongoose.model('tb_debitsubcateg', DebitsubcategSchema)
-module.exports = {DebitsubcategModel,DebitsubcategSchema,
+var DebitsubcategModel = getModel("softroute", 'tb_debitsubcateg', DebitsubcategSchema)
+module.exports = {
+    DebitsubcategModel,
+    DebitsubcategSchema,
+
     debitsubcategEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitsubcategModel = getModel(db, 'tb_debitsubcateg', DebitsubcategSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -88,6 +92,12 @@ module.exports = {DebitsubcategModel,DebitsubcategSchema,
         return resultado;
     },
     debitsubcategAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitsubcategModel = getModel(db, 'tb_debitsubcateg', DebitsubcategSchema)
+        //;
+
          let dataAtual = new Date();
         console.log("debitsubcategmodel");
         const newDebitsubcateg = new DebitsubcategModel({

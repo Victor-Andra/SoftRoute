@@ -1,24 +1,28 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //Subcategorias
 const debitsubcategClass = require("../models/debitSubcateg")
-const Debitsubcateg = mongoose.model("tb_debitsubcateg")
+var Debitsubcateg = getModel("SoftRoute", 'tb_debitsubcateg', debitsubcategClass.DebitsubcategSchema)
 
 //Categorias
-const debitcategClass = require("../models/debitCateg")
-const Debitcateg = mongoose.model("tb_debitcateg")
+const debitCategClass = require("../models/debitCateg")
+var Debitcateg = getModel("SoftRoute", 'tb_debitcateg', debitCategClass.DebitcategSchema)
 
 //Classes Extrangeiras
 
 //Tabelas Extrangeiras
 
 //Funções Auxiliares
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaDebitsubcateg(req,res,resposta){
+        let db = req.cookies['preferredDb'];
+        Debitcateg = getModel(db, 'tb_debitcateg', debitcategClass.DebitcategSchema)
+        Debitsubcateg = getModel(db, 'tb_debitsubcateg', debitsubcategClass.DebitsubcategSchema)
+
         let flash = new Resposta()
         console.log('listando debitsubcategs')
         Debitsubcateg.find().then((subcategoria) =>{
@@ -43,6 +47,9 @@ module.exports = {
         })
     },
     carregaDebitsubcateg(req,res){
+        let db = req.cookies['preferredDb'];
+        Debitcateg = getModel(db, 'tb_debitcateg', debitcategClass.DebitcategSchema)
+
         Debitcateg.find().then((categoria)=>{
             res.render("financeiro/despesa/debitsubcateg/debitsubcategCad",{categorias: categoria})
         }).catch((err) =>{
@@ -52,6 +59,10 @@ module.exports = {
         })
     },
     carregaDebitsubcategEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Debitcateg = getModel(db, 'tb_debitcateg', debitcategClass.DebitcategSchema)
+        Debitsubcateg = getModel(db, 'tb_debitsubcateg', debitsubcategClass.DebitsubcategSchema)
+
         Debitsubcateg.findById(req.params.id).then((subcategoria) =>{
             console.log(subcategoria)
             Debitcateg.find().then((categoria)=>{
@@ -123,6 +134,10 @@ module.exports = {
         }
     },
     deletaDebitsubcateg(req,res){
+        let db = req.cookies['preferredDb'];
+        Debitcateg = getModel(db, 'tb_debitcateg', debitcategClass.DebitcategSchema)
+        Debitsubcateg = getModel(db, 'tb_debitsubcateg', debitsubcategClass.DebitsubcategSchema)
+
         Debitsubcateg.deleteOne({_id: req.params.id}).then(() =>{
             Debitsubcateg.find().then((debitsubcateg) =>{
                 req.flash("success_message", "Debitsubcateg deletada!")

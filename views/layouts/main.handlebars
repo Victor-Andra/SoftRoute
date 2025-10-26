@@ -479,9 +479,51 @@
 					//console.log("naveTerapeuta");
 				}
 			}
+			
+					
+			function getCookie(name) {
+				const value = `; ${document.cookie}`;
+				const parts = value.split(`; ${name}=`);
+				if (parts.length === 2) return parts.pop().split(';').shift();
+				return null;
+			}
+			function identifyDb(){
+				let db = ""; 
+				switch (getCookie("preferredDb")) {
+					case "SoftRoute":
+						db = "";
+						break;
+					case "SoftRouteFazendinha":
+						db = "Fazendinha";
+						break;
+					default:
+						db = "";
+						break;
+				}
+				console.log("Cookie preferredDb:"+ db);
+
+				if (!db) {
+					db = ""; // valor padrão
+				}
+				document.getElementById("empresaFantasia").innerHTML = `<small><i class="fa fa-puzzle-piece white"></i> Soft Route ${db}</small>`;
+			}
+
+			document.addEventListener("DOMContentLoaded", function() {
+				const body = document.getElementById("main-body");
+				const preferredDb = getCookie("preferredDb");
+
+				if (preferredDb === "SoftRoute") {
+					// Remove qualquer skin → "no-skin"
+					body.className = "no-skin"; // ou body.removeAttribute("class");
+				} else {
+					// Aplica skin-5 para qualquer outro valor
+					body.className = "skin-5";
+				}
+			});
+
 		</script>
 	</head>
-	<body class="no-skin">
+	<body id="main-body"><!-- Carrega a skin no addEventListener, logo acima, route (no-skin) e fazendinha (skin-5). -->
 		<div name="navbarPrincipalSelect" id="naveRoot" style="display: none;" class="noprint">
 		{{>_navbar}}
 		</div>
@@ -602,5 +644,9 @@
     <script type="text/javascript" src="/js/ace-elements.min.js"></script>
     <script type="text/javascript" src="/js/ace.min.js"></script>
     <!-- inline scripts related to this page -->
-
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			identifyDb();
+		});
+	</script>
 </html>

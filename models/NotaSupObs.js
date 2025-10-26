@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const NotaSupObsSchema = mongoose.Schema({
     notaSupObs_beneid :{
@@ -41,9 +42,18 @@ class NotaSupObs{
 }
 
 NotaSupObsSchema.loadClass(NotaSupObs)
-const NotaSupObsModel = mongoose.model('tb_notasupobs', NotaSupObsSchema)
-module.exports = {NotaSupObsModel,NotaSupObsSchema,
+var NotaSupObsModel = getModel("softroute", 'tb_notasupobs', NotaSupObsSchema)
+module.exports = {
+    NotaSupObsModel,
+    NotaSupObsSchema,
+
     notaSupObsEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        NotaSupObsModel = getModel(db, 'tb_notasupobs', NotaSupObsSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -67,6 +77,12 @@ module.exports = {NotaSupObsModel,NotaSupObsSchema,
         return resultado;
     },
     notaSupObsAdicionarMuitos: async (req,res,notaSup_id) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        NotaSupObsModel = getModel(db, 'tb_notasupobs', NotaSupObsSchema)
+        //;
+
         let dataAtual = new Date();
         console.log("notaSupObsmodel");
         //trabalhar a func aqui

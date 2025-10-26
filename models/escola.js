@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const EscolaSchema = mongoose.Schema({
     escola_nome : { type: String },
@@ -49,9 +50,18 @@ class Escola{
 
 
 EscolaSchema.loadClass(Escola)
-const EscolaModel = mongoose.model('tb_escola', EscolaSchema)
-module.exports = {EscolaModel,EscolaSchema,
+var EscolaModel = getModel("softroute", 'tb_escola', EscolaSchema)
+module.exports = {
+    EscolaModel,
+    EscolaSchema,
+
     escolaEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        EscolaModel = getModel(db, 'tb_escola', EscolaSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -93,6 +103,12 @@ module.exports = {EscolaModel,EscolaSchema,
 
 
     escolaAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        EscolaModel = getModel(db, 'tb_escola', EscolaSchema)
+        //;
+
         let escolaExiste =  await EscolaModel.findOne({escola_nome: req.body.escolaNome});//quando não acha fica null
         let dataAtual = new Date();
         

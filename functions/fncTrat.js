@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Plano de Tratamento 
 const tratClass = require("../models/trat")
@@ -12,24 +12,27 @@ const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 const laudoClass = require("../models/laudo")
-const fncGeral = require("./fncGeral")
 
 //Tabela Plano de Tratamento 
-const Trat = mongoose.model("tb_trat")
+var Trat = getModel("SoftRoute", 'tb_trat', tratClass.TratSchema)
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Laudo = mongoose.model("tb_laudo")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Laudo = getModel("SoftRoute", 'tb_laudo', laudoClass.LaudoSchema)
 
 //Funções auxiliares
-const Resposta = mongoose.model("tb_resposta")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     listaTrat(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         let perfilAtual = req.cookies['lvlUsu'];
         //console.log('listando plano de tratamento')
@@ -59,6 +62,10 @@ module.exports = {
         })
     },
     filtraTrat(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Trat = getModel(db, 'tb_trat', tratClass.TratSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         let perfilAtual = req.cookies['lvlUsu'];
         let tipoPessoa = req.body.tratTipoPessoa;
@@ -308,8 +315,13 @@ module.exports = {
         })
     },
     carregaTrat(req,res){
-        let idsBene = [];
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema)
 
+        let idsBene = [];
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
@@ -329,8 +341,13 @@ module.exports = {
         })
 
     },
-
     carregaTratedi(req,res){
+        let db = req.cookies['preferredDb'];
+        Trat = getModel(db, 'tb_trat', tratClass.TratSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         let perfilAtual = req.cookies['lvlUsu'];
         Trat.findOne({_id : req.params.id}).then((trat)=>{
@@ -351,6 +368,12 @@ module.exports = {
         })
     },
     tratImp(req,res){
+        let db = req.cookies['preferredDb'];
+        Trat = getModel(db, 'tb_trat', tratClass.TratSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         let perfilAtual = req.cookies['lvlUsu'];
         let carimboUsuPad; //Carimbo padrão de Roberta
@@ -388,7 +411,6 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-   
     cadastraTrat(req,res){
         let resultado
         let flash = new Resposta();
@@ -416,7 +438,6 @@ module.exports = {
             }
         })
     },
-
     atualizaTrat(req,res){
         let resultado
         let resposta = new Resposta()
@@ -451,9 +472,10 @@ module.exports = {
             res.render('admin/erro')
         }
     },
-
-
     deletaTrat(req,res){
+        let db = req.cookies['preferredDb'];
+        Trat = getModel(db, 'tb_trat', tratClass.TratSchema)
+
         let resposta = new Resposta()
         Trat.deleteOne({_id: req.params.id}).then(() =>{
             Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
@@ -480,7 +502,6 @@ module.exports = {
             })
         })
     },
-
     lixoTrat(req,res){
         let resposta = new Resposta()
         let resultado
@@ -515,6 +536,4 @@ module.exports = {
             res.render('admin/erro')
         }
     }
-
-
 }

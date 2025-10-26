@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
+
 //essa tabela devera ser dropada e inseridos novos campos que serão preenchidos pelo relatorio de NF + campos propostos no ato
 //da criação da nf no site da prefeitura de recife.
 const CreditSchema = mongoose.Schema({
@@ -84,9 +86,15 @@ class Credit{
 
 
 CreditSchema.loadClass(Credit)
-const CreditModel = mongoose.model('tb_credit', CreditSchema)
+var CreditModel = getModel("softroute", 'tb_credit', CreditSchema)
 module.exports = {CreditModel,CreditSchema,
     creditEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        CreditModel = getModel(db, 'tb_credit', CreditSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -123,6 +131,12 @@ module.exports = {CreditModel,CreditSchema,
         return resultado;
     },
     creditAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        CreditModel = getModel(db, 'tb_credit', CreditSchema)
+        //;
+
         let creditExiste;
         
         let dataAtual = new Date();

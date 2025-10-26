@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const RespostaSchema = mongoose.Schema({
     texto: {
@@ -24,5 +25,9 @@ class Resposta{
 }
 
 RespostaSchema.loadClass(Resposta)
-const RespostaModel = mongoose.model('tb_resposta', RespostaSchema)
-module.exports = {RespostaModel,RespostaSchema};
+var RespostaModel = getModel("softroute", 'tb_resposta', RespostaSchema)
+module.exports = {
+    RespostaModel,
+    RespostaSchema
+
+};

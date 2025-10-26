@@ -83,10 +83,13 @@
 					let subTotal = s.value * (document.getElementById("valor"+s.id).value);
 					document.getElementById("subtotal"+s.id).value = subTotal;
 				})*/
+				document.getElementById('dataFilDe').value = document.getElementById('dataIni').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
+				document.getElementById('dataFilAte').value = document.getElementById('dataFim').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
+				document.getElementById('relConvid').value = document.getElementById('relConvIdFiltro').value || "766f69643132333435366964";
 			}
 		</script>
 	</head>
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:carregaBody();controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -104,16 +107,18 @@
 							<ul class="breadcrumb" >
 								<label>Período de:</label>
 								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
-								<input class="hidden" id="dataIni" name="dataIni" />
+								<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}" />
 								<label>até:</label>
 								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
-								<input class="hidden" id="dataFim" name="dataFim" />
+								<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}" />
 								<label>Convênio: </label>
 								<select style="height: 30px; width:300px;" name="relConvid"  id="relConvid" class="chosen-select" data-placeholder="Escolha...">
+									<option value="766f69643132333435366964">-</option>
 									{{#each convs}}
 										<option value="{{_id}}">{{conv_nome}}</option>
 									{{/each}}
 								</select>
+								<input class="hidden" id="relConvIdFiltro" name="relConvIdFiltro" value="{{filtro.convId}}" />
 								&nbsp;&nbsp;&nbsp;&nbsp;
 								<label class="control-label bolder red">
 									<select name="exibeInativos" id="exibeInativos" class="chosen-select" value=""  >
@@ -264,5 +269,29 @@
 
 		<!-- Página em branco única no final -->
 		<div style="page-break-before: always;"></div>
+		<script>
+			function restaurarFiltro(filtro) {
+				if (!filtro) return;
+
+				// Atualiza os campos VISÍVEIS
+				if (filtro.dataIni) {
+					// Formato esperado: YYYY-MM-DD (para input type="date")
+					const dataIniFormatada = filtro.dataIni.split('T')[0]; // remove hora
+					document.getElementById('dataFilDe').value = dataIniFormatada;
+				}
+				if (filtro.dataFim) {
+					const dataFimFormatada = filtro.dataFim.split('T')[0];
+					document.getElementById('dataFilAte').value = dataFimFormatada;
+				}
+				if (filtro.convenioId) {
+					document.getElementById('relConvid').value = filtro.convenioId;
+				}
+			}
+
+			document.addEventListener('DOMContentLoaded', () => {
+				const filtro = {{#if filtro}} {{{json filtro}}} {{else}} null {{/if}};
+				restaurarFiltro(filtro);
+			});
+		</script>
 	</body>
 </html>

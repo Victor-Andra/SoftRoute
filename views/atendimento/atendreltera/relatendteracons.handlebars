@@ -55,10 +55,45 @@
 				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataIni').value = fulldate;
 			}
-			function atualizaDataFin(){
+			function atualizaDataFim(){
 				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataFim').value = fulldate;
 			}
+			// Função de validação
+			function validarConsAtendTera(event) {
+				const selectTerapia = document.getElementById('relTeraid');
+				const alertaErro = document.getElementById('alertaErro');
+
+				if (!selectTerapia || !selectTerapia.value) {
+					event.preventDefault();
+					alertaErro.style.display = 'block';
+					return false;
+				} else {
+					alertaErro.style.display = 'none';
+					return true;
+				}
+			}
+
+			// Esconde o alerta quando o usuário seleciona um beneficiário
+			function esconderAlertaAoSelecionarTerapia() {
+				const alertaErro = document.getElementById('alertaErro');
+				if (this.value) {
+					alertaErro.style.display = 'none';
+				}
+			}
+
+			// Inicializa os listeners quando o DOM estiver pronto
+			document.addEventListener('DOMContentLoaded', function () {
+				const form = document.getElementById('ConsAtendBene');
+				const selectTerapia = document.getElementById('relTeraid');
+
+				if (form) {
+					form.addEventListener('submit', validarConsAtendTera);
+				}
+				if (selectTerapia) {
+					selectTerapia.addEventListener('change', esconderAlertaAoSelecionarTerapia);
+				}
+			});
 			function carregaBody(){
 				/*
 				let sessoes = document.getElementsByName("sessoes")
@@ -67,10 +102,11 @@
 					let subTotal = s.value * (document.getElementById("valor"+s.id).value);
 					document.getElementById("subtotal"+s.id).value = subTotal;
 				})*/
-
-				document.getElementById("relTeraid").value  = document.getElementById("teraFiltro").value
-				document.getElementById("dataFilDe").value = document.getElementById("dataIni").value.substring(0,10);
-				document.getElementById("dataFilAte").value =  document.getElementById("dataFim").value.substring(0,10);
+				document.getElementById("relTeraid").value  = document.getElementById("teraFiltro").value || "766f69643132333435366964";
+				document.getElementById("dataFilDe").value = document.getElementById("dataIni").value.substring(0,10) || new Date().toISOString().split('T')[0];
+				document.getElementById("dataFilAte").value =  document.getElementById("dataFim").value.substring(0,10) || new Date().toISOString().split('T')[0];
+				this.atualizaDataIni();
+				this.atualizaDataFim();
 			}
 		</script>
 	</head>
@@ -87,17 +123,26 @@
 							<li class="active">Relatório Consolidado do Terapeuta - Terapia e Valores</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					<form role="form" action="/menu/atendimento/atendreltera/relatendteraconss" method="POST">
+					<form id="ConsTerapia" name="ConsTerapia" role="form" action="/menu/atendimento/atendreltera/relatendteraconss" method="POST">
+						<!-- Alerta-->
+						<div id="alertaErro" style="display: none;" class="alert alert-danger">
+							<button type="button" class="close" data-dismiss="alert">
+								<i class="ace-icon fa fa-times"></i>
+							</button>
+							<strong>Importante!</strong> Por favor escolha um Terapeuta.
+						</div>
+						<!-- /.Alerta-->
 						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center;" style="text-align: center;" />
 							<ul class="breadcrumb" >
 								<label>Período de:</label>
-								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
+								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni();">
 								<input class="hidden" id="dataIni" name="dataIni" value="{{pesquisa.dataIni}}" />
 								<label>até:</label>
-								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
+								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFim();">
 								<input class="hidden" id="dataFim" name="dataFim" value="{{pesquisa.dataFim}}" />
 								<label>Terapeuta: </label>
 								<select style="height: 30px; width:300px;" name="relTeraid"  id="relTeraid" class="chosen-select" data-placeholder="Escolha...">
+									<option value="766f69643132333435366964">-</option>
 									{{#each terapeutas}}
 										<option value="{{_id}}">{{usuario_nome}}</option>
 									{{/each}}

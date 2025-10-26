@@ -1,16 +1,19 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //debitcategs
 const debitcategClass = require("../models/debitCateg")
-const Debitcateg = mongoose.model("tb_debitcateg")
+var Debitcateg = getModel("SoftRoute", 'tb_debitcateg', debitcategClass.DebitcategSchema)
 
 //Funções Auxiliares
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaDebitcateg(req,res,resposta){
+        let db = req.cookies['preferredDb'];
+        Debitcateg = getModel(db, 'tb_debitcateg', debitcategClass.DebitcategSchema)
+
         let flash = new Resposta()
         console.log('listando debitcategs')
         Debitcateg.find().then((categoria) =>{
@@ -37,6 +40,9 @@ module.exports = {
         res.render("financeiro/despesa/debitcateg/debitcategCad")
     },
     carregaDebitcategEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Debitcateg = getModel(db, 'tb_debitcateg', debitcategClass.DebitcategSchema)
+
         Debitcateg.findById(req.params.id).then((categoria) =>{
             console.log(categoria)
                
@@ -110,6 +116,9 @@ module.exports = {
         }
     },
     deletaDebitcateg(req,res){
+        let db = req.cookies['preferredDb'];
+        Debitcateg = getModel(db, 'tb_debitcateg', debitcategClass.DebitcategSchema)
+
         Debitcateg.deleteOne({_id: req.params.id}).then(() =>{
             Debitcateg.find().then((categoria) =>{
                 req.flash("success_message", "Debitcateg deletada!")

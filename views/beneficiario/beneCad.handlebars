@@ -94,6 +94,24 @@
 					document.getElementById("beneIdade").value = calculaIdade(dataFmt);
 				}
 			}
+			// Sua função ajustaData modificada para aceitar o valor formatado em dd/mm/yyyy
+			function ajustaData(){
+				let fullDatas = document.getElementsByName("fullData");
+				fullDatas.forEach((elementox)=>{
+					let id = "atenddata"+elementox.id;
+					let dat = new Date(elementox.value);
+
+					// Trata possíveis datas inválidas
+					if (isNaN(dat.getTime())) {
+						dat = parseDataBr(elementox.value); // tenta parsear se for formato BR
+					}
+
+					let mes = (dat.getMonth()+1).toString().padStart(2, '0');
+					let dia = dat.getDate().toString().padStart(2, '0');
+
+					let fulldate = `${dia}/${mes}/${dat.getFullYear()}`;
+				});
+			}
 			function calculaIdade(dataFmt) {
 				// Data atual
 				const hoje = new Date();

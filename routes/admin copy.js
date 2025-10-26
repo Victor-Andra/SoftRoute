@@ -11,116 +11,116 @@ const fncGeral = require("../functions/fncGeral")
 
 //Aviso - Dashboard
 const avisoClass = require("../models/aviso")
-const Aviso = mongoose.model("tb_aviso")
+const Aviso = getModel("softroute", 'tb_aviso', avisoClass.AvisoSchema)
 const fncAviso = require("../functions/fncAviso")
 
 //empresa
 const empresaClass = require("../models/empresa")
-const Empresa = mongoose.model("tb_empresa")
+const Empresa = getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema)
 const fncEmpresa = require("../functions/fncEmpresa")
 
 //especialidade
 const especialidadeClass = require("../models/especialidade")
-const Especialidade = mongoose.model("tb_especialidade")
+const Especialidade = getModel("softroute", 'tb_especialidade', especialidadeClass.EspecialidadeSchema)
 const fncEspecialidade = require("../functions/fncEspecialidade")
 
 //especialidade do Plano de Tratamento
 const especialidadePlanoClass = require("../models/especialidadePlano")
-const EspecialidadePlano = mongoose.model("tb_especialidadePlano")
+const EspecialidadePlano = getModel("softroute", 'tb_especialidadePlano', especialidadePlanoClass.EspecialidadePlanoSchema)
 const fncEspecialidadePlano = require("../functions/fncEspecialidadePlano")
 
 //especializacao
 const especializacaoClass = require("../models/especializacao")
-const Especializacao = mongoose.model("tb_especializacao")
+const Especializacao = getModel("softroute", 'tb_especializacao', especializacaoClass.EspecializacaoSchema)
 const fncEspecializacao = require("../functions/fncEspecializacao")
 
 //Método, Metodo, metodo
 const metodoClass = require("../models/metodo")
-const Metodo = mongoose.model("tb_metodo")
+const Metodo = getModel("softroute", 'tb_metodo', metodoClass.MetodoSchema)
 const fncMetodo = require("../functions/fncMetodo")
 
 //Métout, Metout, metout, Outros Métodos, 
 const metoutClass = require("../models/metout")
-const Metout = mongoose.model("tb_metout")
+const Metout = getModel("softroute", 'tb_metout', metoutClass.MetoutSchema)
 const fncMetout = require("../functions/fncMetout")
 
 //escola
 const escolaClass = require("../models/escola")
-const Escola = mongoose.model("tb_escola")
+const Escola = getModel("softroute", 'tb_escola', escolaClass.EscolaSchema)
 const fncEscola = require("../functions/fncEscola")
 
 //funções, cargos dos funcionários
 const funcaoClass = require("../models/funcao")
-const Funcao = mongoose.model("tb_funcao")
+const Funcao = getModel("softroute", 'tb_funcao', funcaoClass.FuncaoSchema)
 const fncFuncao = require("../functions/fncFuncao")
 
 //horario Agenda
 const horaageClass = require("../models/horaAge")
-const Horaage = mongoose.model("tb_horaage")
+const Horaage = getModel("softroute", 'tb_horaage', horaageClass.HoraageSchema)
 const fncHoraAge = require("../functions/fncHoraAge")
 
 //perfil, níveis de acesso
 const perfilClass = require("../models/perfil")
-const Perfil = mongoose.model("tb_perfil")
+const Perfil = getModel("softroute", 'tb_perfil', perfilClass.PerfilSchema)
 const fncPerfil = require("../functions/fncPerfil")
 
 //usufunc, funcionalidades que os usuários podem ter acesso
 const usufuncClass = require("../models/usufunc")
-const Usufunc = mongoose.model("tb_usufunc")
+const Usufunc = getModel("PortalDoUsuario", 'tb_usufunc', usufuncClass.UsufuncSchema)
 const fncUsufunc = require("../functions/fncUsufunc")
 
 //sala, onde são realizadas os atendimentos
 const salaClass = require("../models/sala")
-const Sala = mongoose.model("tb_sala")
+const Sala = getModel("softroute", 'tb_sala', salaClass.SalaSchema)
 const fncSala = require("../functions/fncSala")
 
 //Saúde dos colaboradores Ficha, onde são cadastrados as informações de saúde dos colaboradores
 //Para emergência médica e hospitalar/SAMU
 const saudecolabClass = require("../models/saudecolab")
-const Saudecolab = mongoose.model("tb_saudecolab")
+const Saudecolab = getModel("softroute", 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
 const fncSaudecolab= require("../functions/fncSaudecolab")
 
 //terapia, tipos de terapias realiazadas
 const terapiaClass = require("../models/terapia")
-const Terapia = mongoose.model("tb_terapia")
+const Terapia = getModel("softroute", 'tb_terapia', terapiaClass.TerapiaSchema)
 const fncTerapia = require("../functions/fncTerapia")
 
 //estado, cadastro das unidades federativas brasileira
 const estadoClass = require("../models/estado")
-const Estado = mongoose.model("tb_estado")
+const Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
 const fncEstado = require("../functions/fncEstado")
 
 //ano, cadastro dos Anos de Atividades 
 const anoClass = require("../models/ano")
-const Ano = mongoose.model("tb_ano")
+const Ano = getModel("softroute", 'tb_ano', anoClass.AnoSchema)
 const fncAno = require("../functions/fncAno")
 
 //usuario, cadastro dos usuários
 const usuarioClass = require("../models/usuario")
-const Usuario = mongoose.model("tb_usuario")
+const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 const fncUsuario = require("../functions/fncUsuario")
 
 
 //beneficiario, clientes
 const beneClass = require("../models/bene")
-const Bene = mongoose.model("tb_bene")
+const Bene = getModel("softroute", 'tb_bene', beneClass.BeneSchema)
 const fncBene = require("../functions/fncBene")
 
 //Exceções, Peculiaridades da Fichas de Frequência
 const excecaoClass = require("../models/excecao")
-const Excecao = mongoose.model("tb_excecao")
+const Excecao = getModel("softroute", 'tb_excecao', excecaoClass.ExcecaoSchema)
 const fncExcecao = require("../functions/fncExcecao")
 
 //Exceções para Terapeuras
 const excecaoteraClass = require("../models/excecaotera")
-const Excecaotera = mongoose.model("tb_excecaotera")
+const Excecaotera = getModel("softroute", 'tb_excecaotera', excecaoteraClass.ExcecaoteraSchema)
 const fncExcecaotera = require("../functions/fncExcecaotera")
 
 //Fotos dos beneficiarios
 //As fotos dos beneficiários ficam em tabela e função a parte para não pesar listagens e outras fuções do sistema
 //Só em rarissimas esceções ele é chamado para exibir a foto, no formulário do Dossiê
 const benefotoClass = require("../models/benefoto")
-const Benefoto = mongoose.model("tb_benefoto")
+const Benefoto = getModel("softroute", 'tb_benefoto', benefotoClass.BenefotoSchema)
 const fncBenefoto = require("../functions/fncBenefoto")
 
 // Extraia apenas o que for necessário
@@ -128,12 +128,12 @@ const upload = benefotoClass.upload; // ✅ Importa o upload do Multer
 
 //Evolução Atendimento
 const evoatendClass = require("../models/evoatend")
-const Evoatend = mongoose.model("tb_evoatend")
+const Evoatend = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
 const fncEvoatend = require("../functions/fncEvoatend")
 
 //Agenda Técnicos
 const agendaTecClass = require("../models/agenda")
-const AgendaTec = mongoose.model("tb_agenda")
+const AgendaTec = getModel("softroute", 'tb_agenda', agendaTecClass.AgendaSchema)
 const fncAgendaTec = require("../functions/fncAgendaTec")
 
 //Busca
@@ -141,187 +141,187 @@ const fncBusca = require("../functions/fncBusca")
 
 //Anamnese
 const anamnClass = require("../models/anamn")
-const Anamn = mongoose.model("tb_anamn")
+const Anamn = getModel("softroute", 'tb_anamn', anamnClass.AnamnSchema)
 const fncAnamn = require("../functions/fncAnamn")
 
 //Diário de Bordo
 const bordoClass = require("../models/bordo")
-const Bordo = mongoose.model("tb_bordo")
+const Bordo = getModel("softroute", 'tb_bordo', bordoClass.BordoSchema)
 const fncBordo = require("../functions/fncBordo")
 
 
 //plano Tratamento
 const tratClass = require("../models/trat")
-const Trat = mongoose.model("tb_trat")
+const Trat = getModel("softroute", 'tb_trat', tratClass.TratSchema)
 const fncTrat = require("../functions/fncTrat")
 
 //Extra
 const extraClass = require("../models/extra")
-const Extra = mongoose.model("tb_extra")
+const Extra = getModel("softroute", 'tb_extra', extraClass.ExtraSchema)
 const fncExtra = require("../functions/fncExtra")
 
 //Laudo
 const laudoClass = require("../models/laudo")
-const Laudo = mongoose.model("tb_laudo")
+const Laudo = getModel("softroute", 'tb_laudo', laudoClass.LaudoSchema)
 const fncLaudo = require("../functions/fncLaudo")
 
 //VB-Mapp's
 const mappClass = require("../models/mapp")
-const Mapp = mongoose.model("tb_mapp")
+const Mapp = getModel("softroute", 'tb_mapp', mappClass.MappSchema)
 const fncMapp = require("../functions/fncMapp")
 
 //ABLLS-R
 const abllsrClass = require("../models/abllsr")
-const Abllsr = mongoose.model("tb_abllsr")
+const Abllsr = getModel("softroute", 'tb_abllsr', abllsrClass.AbllsrSchema)
 const fncAbllsr = require("../functions/fncAbllsr")
 
 //VB-Mapabll
 const mapabllClass = require("../models/mapabll")
-const Mapabll = mongoose.model("tb_mapabll")
+const Mapabll = getModel("softroute", 'tb_mapabll', mapabllClass.MapabllSchema)
 const fncMapabll = require("../functions/fncMapabll")
 
 //Evolução
 const evolClass = require("../models/evol")
-const Evol = mongoose.model("tb_evol")
+const Evol = getModel("softroute", 'tb_evol', evolClass.EvolSchema)
 const fncEvol = require("../functions/fncEvol")
 
 //Sonda - ABA
 const sondaClass = require("../models/sonda")
-const Sonda = mongoose.model("tb_sonda")
+const Sonda = getModel("softroute", 'tb_sonda', sondaClass.SondaSchema)
 const fncSonda = require("../functions/fncSonda")
 
 //Programa - ABA
 const progClass = require("../models/prog")
-const Prog = mongoose.model("tb_prog")
+const Prog = getModel("softroute", 'tb_prog', progClass.ProgSchema)
 const fncProg = require("../functions/fncProg")
 
 //Programa tipo - ABA
 const progtipoClass = require("../models/progtipo")
-const Progtipo = mongoose.model("tb_progtipo")
+const Progtipo = getModel("softroute", 'tb_progtipo', progtipoClass.ProgtipoSchema)
 const fncProgtipo = require("../functions/fncProgtipo")
 
 //Programa nivel - ABA
 const prognivelClass = require("../models/prognivel")
-const Prognivel = mongoose.model("tb_prognivel")
+const Prognivel = getModel("softroute", 'tb_prognivel', prognivelClass.PrognivelSchema)
 const fncPrognivel = require("../functions/fncPrognivel")
 
 //Programa dica - ABA
 const progdicaClass = require("../models/progdica")
-const Progdica = mongoose.model("tb_progdica")
+const Progdica = getModel("softroute", 'tb_progdica', progdicaClass.ProgdicaSchema)
 const fncProgdica = require("../functions/fncProgdica")
 
 //Gráfico do Programa - ABA
 const grafprogClass = require("../models/grafprog")
-const Grafprog = mongoose.model("tb_grafprog")
+const Grafprog = getModel("softroute", 'tb_grafprog', grafprogClass.GrafprogSchema)
 const fncGrafprog = require("../functions/fncGrafprog")
 
 //SET - ABA
 const progsetClass = require("../models/progset")
-const Progset = mongoose.model("tb_progset")
+const Progset = getModel("softroute", 'tb_progset', progsetClass.ProgsetSchema)
 const fncProgset = require("../functions/fncProgset")
 
 //NAT - ABA
 const natClass = require("../models/nat")
-const Nat = mongoose.model("tb_nat")
+const Nat = getModel("softroute", 'tb_nat', natClass.NatSchema)
 const fncNat = require("../functions/fncNat")
 
 //CARS - ABA
 const carsClass = require("../models/cars")
-const Cars = mongoose.model("tb_cars")
+const Cars = getModel("softroute", 'tb_cars', carsClass.CarsSchema)
 const fncCars = require("../functions/fncCars")
 
 
 //ATA - ABA
 const ataClass = require("../models/ata")
-const Ata = mongoose.model("tb_ata")
+const Ata = getModel("softroute", 'tb_ata', ataClass.AtaSchema)
 const fncAta = require("../functions/fncAta")
 
 
 //ATEC - ABA
 const atecClass = require("../models/atec")
-const Atec = mongoose.model("tb_atec")
+const Atec = getModel("softroute", 'tb_atec', atecClass.AtecSchema)
 const fncAtec = require("../functions/fncAtec")
 
 
 //NotaSup
 const notasupClass = require("../models/notasup")
-const Notasup = mongoose.model("tb_notasup")
+const Notasup = getModel("softroute", 'tb_notasup', notasupClass.NotasupSchema)
 const fncNotasup = require("../functions/fncNotasup")
 
 //NotaSup
 const notasupobsClass = require("../models/notasupobs")
-const Notasupobs = mongoose.model("tb_notasupobs")
+const Notasupobs = getModel("softroute", 'tb_notasupobs', notasupobsClass.NotaSupObsSchema)
 const fncNotasupobs = require("../functions/fncNotasupobs")
 
 //PECS
 const pecsClass = require("../models/pecs")
-const Pecs = mongoose.model("tb_pecs")
+const Pecs = getModel("softroute", 'tb_pecs', pecsClass.PecsSchema)
 const fncPecs = require("../functions/fncPecs")
 
 //Visual
 const visualClass = require("../models/visual")
-const Visual = mongoose.model("tb_visual")
+const Visual = getModel("softroute", 'tb_visual', visualClass.VisualSchema)
 const fncVisual = require("../functions/fncVisual")
 
 //Relsem
 const relsemClass = require("../models/relsem")
-const Relsem = mongoose.model("tb_relsem")
+const Relsem = getModel("softroute", 'tb_relsem', relsemClass.RelsemSchema)
 const fncRelsem = require("../functions/fncRelsem")
 
 
 //Acompanhamento, devolutiva e reuniões
 const acompClass = require("../models/acomp")
-const Acomp = mongoose.model("tb_acomp")
+const Acomp = getModel("softroute", 'tb_acomp', acompClass.AcompSchema)
 const fncAcomp = require("../functions/fncAcomp")
 
 //Folha Registro - ABA
 const folregClass = require("../models/folreg")
-const Folreg = mongoose.model("tb_folreg")
+const Folreg = getModel("softroute", 'tb_folreg', folregClass.FolregSchema)
 const fncFolreg = require("../functions/fncFolreg")
 
 //Gráfico ABC - ABA
 const grafabcClass = require("../models/grafabc")
-const Grafabc = mongoose.model("tb_grafabc")
+const Grafabc = getModel("softroute", 'tb_grafabc', grafabcClass.GrafabcSchema)
 const fncGrafabc = require("../functions/fncGrafabc")
 
 //Análise funcional do comportamento
 const anafuncompClass = require("../models/anafuncomp")
-const Anafuncomp = mongoose.model("tb_anafuncomp")
+const Anafuncomp = getModel("softroute", 'tb_anafuncomp', anafuncompClass.AnafuncompSchema)
 const fncAnafuncomp = require("../functions/fncAnafuncomp")
 
 //Evolucao
 const evolucaoClass = require("../models/atend")
-const Evolucao = mongoose.model("tb_atend")
+const Evolucao = getModel("softroute", 'tb_atend', evolucaoClass.EmpresaSchema)
 const fncEvolucao = require("../functions/fncEvolucao")
 
 //Sessao, Tabela com quantidades de Terapias que o beneficiario podera realizar semanalmente
 const sessaoClass = require("../models/sessao")
-const Sessao = mongoose.model("tb_sessao")
+const Sessao = getModel("softroute", 'tb_sessao', sessaoClass.SessaoSchema)
 
 //convenio, planos de saúde e particular
 const convClass = require("../models/conv")
-const Conv = mongoose.model("tb_conv")
+const Conv = getModel("softroute", 'tb_conv', convClass.ConvSchema)
 const fncConv = require("../functions/fncConv")
 
 //convcre, Recebimentos pela terapia realizada ao beneficiário
 const convcreClass = require("../models/convCre")
-const Convcre = mongoose.model("tb_convcre")
+const Convcre = getModel("softroute", 'tb_convcre', convcreClass.ConvcreSchema)
 const fncConvcre = require("../functions/fncConvcre")
 
 
 //convdeb, Pagamentos pela terapia realizada pelo Terapeuta
 const convdebClass = require("../models/convDeb")
-const Convdeb = mongoose.model("tb_convdeb")
+const Convdeb = getModel("softroute", 'tb_convdeb', convdebClass.ConvdebSchema)
 const fncConvdeb = require("../functions/fncConvdeb")
 
 //convimp, Impostos ligados ao convênio
 const convimpClass = require("../models/convImp")
-const Convimp = mongoose.model("tb_convimp")
+const Convimp = getModel("softroute", 'tb_convimp', convimpClass.ConvimpSchema)
 const fncConvimp = require("../functions/fncConvimp")
 
 //Atend, Atendimento Padrão 
 const atendClass = require("../models/atend")
-const Atend = mongoose.model("tb_atend")
+const Atend = getModel("softroute", 'tb_atend', atendClass.AtendSchema)
 const fncAtend = require("../functions/fncAtend")
    
 //AtendAdm, Atendimento Administrativo
@@ -330,7 +330,7 @@ const fncAtendAdm = require("../functions/fncAtendAdm")
 
 //AGENDA, Agendamentos Padrão
 const agendaClass = require("../models/agenda")
-const Agenda = mongoose.model("tb_agenda")
+const Agenda = getModel("softroute", 'tb_agenda', agendaTecClass.AgendaSchema)
 const fncAgenda = require("../functions/fncAgenda")
 
 
@@ -338,52 +338,52 @@ const fncAgenda = require("../functions/fncAgenda")
 
 //Debit, Débitos (parcialmente vinculadas ao Atendimento)
 const debitClass = require("../models/debit")
-const Debit = mongoose.model("tb_debit")
+const Debit = getModel("softroute", 'tb_debit', debitClass.DebitSchema)
 const fncDebit = require("../functions/fncDebit")
 
 //Credit, Créditos (parcialmente vinculadas ao Atendimento)
 const creditClass = require("../models/credit")
-const Credit = mongoose.model("tb_credit")
+const Credit = getModel("softroute", 'tb_credit', creditClass.CreditSchema)
 const fncCredit = require("../functions/fncCredit")
 
 //Contas a receber (contaRec, contarec)
 //Migração do Credit para o contaRec (contas a Receber)
 const contaRecClass = require("../models/contaRec")
-const ContaRec = mongoose.model("tb_contarec")
+const ContaRec = getModel("softroute", 'tb_contarec', contaRecClass.ContaRecSchema)
 const fncContaRec = require("../functions/fncContaRec")
 
 
 //Tabil, Balanço contábil (parcialmente vinculadas ao Atendimento)
 const tabilClass = require("../models/tabil")
-const Tabil = mongoose.model("tb_tabil")
+const Tabil = getModel("softroute", 'tb_tabil', tabilClass.TabilSchema)
 
 //Corrente, Conta Analise financeira pessoal de cada Terapeuta (vinculadas ao Atendimento)
 const correnteClass = require("../models/corrente")
-const Corrente = mongoose.model("tb_corrente")
+const Corrente = getModel("softroute", 'tb_corrente', correnteClass.CorrenteSchema)
 const fncCorrente = require("../functions/fncCorrente")
 
 //Imposto
 const ImpostoClass = require("../models/imposto")
-const Imposto = mongoose.model("tb_imposto")
+const Imposto = getModel("softroute", 'tb_imposto', ImpostoClass.ImpostoSchema)
 const fncImposto = require("../functions/fncImposto")
 
 //RESPOSTA
 const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
+const Resposta = getModel("softroute", 'tb_resposta', respostaClass.RespostaSchema)
 
 //Fornecedor, Para cadastrar novas Depesas independentemente dos Atendimentos
 const fornecClass = require("../models/fornec")
-const Fornec = mongoose.model("tb_fornec")
+const Fornec = getModel("softroute", 'tb_fornec', fornecClass.FornecSchema)
 const fncFornec = require("../functions/fncFornec")
 
 //Categoria, Para cadastrar novas Depesas independentemente dos Atendimentos
 const debitCategClass = require("../models/debitCateg")
-const debitCateg = mongoose.model("tb_debitcateg")
+const debitCateg = getModel("softroute", 'tb_debitcateg', debitCategClass.DebitcategSchema)
 const fncDebitCateg = require("../functions/fncDebitCateg")
 
 //Categoria, Para cadastrar novas Depesas independentemente dos Atendimentos
 const debitSubcategClass = require("../models/debitSubcateg")
-const debitSubcateg = mongoose.model("tb_debitsubcateg")
+const debitSubcateg = getModel("softroute", 'tb_debitsubcateg', debitSubcategClass.DebitsubcategSchema)
 const fncDebitSubcateg = require("../functions/fncDebitSubcateg")
 
 const fncSessao = require('../functions/fncSessao')
@@ -398,7 +398,7 @@ const fncDash = require("../functions/fncDash")
 /*
 //Referencias de Atendimentos (vinculadas diretamente aos Atendimantos)
 const refAtendClass = require("../models/refAtend")
-const RefAtend = mongoose.model("tb_refatend")
+const RefAtend = getModel("softroute", 'tb_refatend', refAtendClass.RefAtendSchema)
 */
 
 /*
@@ -1108,7 +1108,7 @@ router.post("/agenda/filSala/", fncGeral.IsAuthenticated, (req,res) =>{//direcio
     //console.log("Agenda Filtra Sala")
     fncAgenda.carregaAgendaFilSala(req, res);
 })
-
+/*
 router.get("/agenda/lisA", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem.
     fncAgenda.filtraAgendaA(req, res);
 })
@@ -1116,7 +1116,7 @@ router.get("/agenda/lisA", fncGeral.IsAuthenticated, (req,res) =>{//direciona a 
 router.post("/agenda/filA", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de filtro.
     fncAgenda.filtraAgendaA(req, res);
 })
-
+*/
 router.get("/agenda/lisF", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Fixa.
     fncAgenda.carregaAgendaF(req, res);
 })
@@ -1223,7 +1223,9 @@ router.post('/agenda/cadE/atualiza', fncGeral.IsAuthenticated, (req,res) =>{//di
 router.post('/agenda/deleteall', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let potinho = Object.assign(new PoteBiscoito, req.cookies);
     if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0" || potinho.lvlUsu == "677704b1a358ba19d0c8eb51" || potinho.lvlUsu == "677704a8a358ba19d0c8eb27") {
-        //fncAgenda.deletarTodosAtendimentos(req, res);
+        console.log("Nada Feito!!!");
+        let lvl = "x";
+        res.render("ferramentas/usuario/login", {nivel: lvl});
     } else {
         console.log("Acesso NEGADO!");
         let lvl = "x";
@@ -1231,16 +1233,6 @@ router.post('/agenda/deleteall', fncGeral.IsAuthenticated, (req,res) =>{//direci
     }
 })
 
-router.get('/agenda/deleteall/Teste2342022', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
-    let potinho = Object.assign(new PoteBiscoito, req.cookies);
-    if (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0" || potinho.lvlUsu == "677704b1a358ba19d0c8eb51" || potinho.lvlUsu == "677704a8a358ba19d0c8eb27") {
-        //fncAgenda.deletarTodosAtendimentos2(req, res);
-    } else {
-        console.log("Acesso NEGADO!");
-        let lvl = "x";
-        res.render("ferramentas/usuario/login", {nivel: lvl});
-    }
-})
 /*
 router.get('/agenda/atualiza/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let potinho = Object.assign(new PoteBiscoito, req.cookies);

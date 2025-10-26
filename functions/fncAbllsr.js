@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  ABLLS-R 
 const abllsrClass = require("../models/abllsr")
@@ -11,22 +11,36 @@ const beneClass = require("../models/bene")
 const usuarioClass = require("../models/usuario")
 
 //Tabela Plano de Abllsramento 
-const Abllsr = mongoose.model("tb_abllsr")
+var Abllsr = getModel("SoftRoute", 'tb_abllsr', abllsrClass.AbllsrSchema)
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Usuario = mongoose.model("tb_usuario")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 
 
 //Funções auxiliares
-const respostaClass = require("../models/resposta")
 const bene = require("../models/bene")
 const usuario = require("../models/usuario")
-const Resposta = mongoose.model("tb_resposta")
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
+
 
 module.exports = {
-    listaAbllsr(req, res){
+    listaAbllsr(req, res, resposta){
+        let flash = new Resposta();
+        if (resposta){
+            flash.texto = resposta.texto;
+            flash.sucesso = resposta.sucesso;
+        } else {
+            flash.texto = "Listando";
+            flash.sucesso = "true";
+        }
+        //Definir Base
+        let db = req.cookies['preferredDb'];
+        Abllsr = getModel(db, 'tb_abllsr', abllsrClass.AbllsrSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let abllsrs = new Array();
         console.log('listando Diários de Abllsr')
         Abllsr.findOne().then((abllsr) =>{
@@ -35,7 +49,7 @@ module.exports = {
                 console.log("Listagem Realizada bene!")
                     Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada Usuário!")
-            res.render('area/abllsr/abllsrLis', {abllsrs: abllsr, usuarios: usuario, benes: bene})
+            res.render('area/abllsr/abllsrLis', {abllsrs: abllsr, usuarios: usuario, benes: bene, flash})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Abllsr")
@@ -106,7 +120,7 @@ module.exports = {
 
     atualizaAbllsr(req,res){
         let resultado
-        let resposta = new resposta()
+        let resposta = new Resposta()
         try{
             abllsrClass.abllsrEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")

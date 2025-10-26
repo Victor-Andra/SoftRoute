@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Controle de PECS
 const acompClass = require("../models/acomp")
@@ -8,27 +8,25 @@ const acompClass = require("../models/acomp")
 
 //Classes Extrangeiras, Convênios, Terapia, (Técnicos e Usuários)
 const beneClass = require("../models/bene")
-const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
-const terapiaClass = require("../models/terapia")
 
 
 //Tabela PECS
-const Acomp = mongoose.model("tb_acomp")
+var Acomp = getModel("SoftRoute", 'tb_acomp', acompClass.AcompSchema)
 
 //Tabelas Extrangeiras, Convênios, Terapia, (Técnicos e Usuários)
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 //Funções Auxiliares
-const respostaClass = require("../models/resposta")
-const bene = require("../models/bene")
-const Resposta = mongoose.model("tb_resposta")
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     carregaAcomp(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
             terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
@@ -41,41 +39,42 @@ module.exports = {
         })
 
     },
-    
-        cadastraAcomp(req,res){
-            console.log("chegou")
-            let resultado
-            let resposta = new Resposta()
-            
-            acompClass.acompAdicionar(req,res).then((result)=>{
-                console.log("Cadastro Realizado!!!")
-                //console.log(res)
-                resultado = true;
-            }).catch((err)=>{
-                console.log("ERRO:");
-                console.log(err);
-                resultado = err
-            }).finally(()=>{
-                if (resultado == true){
-                    resposta.texto = "Cadastrado com sucesso!"
-                    resposta.sucesso = "true"
-                    console.log('verdadeiro')
-                    req.flash("success_message", "Cadastro realizado com sucesso!")
-                    this.listaAcomp(req,res,resposta)
-                } else {
-                    resposta.texto = resultado
-                    resposta.sucesso = "false"
-                    console.log('falso')
-                    req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                    res.render('admin/erro', resposta);
-                }
-            })
-        },
-
+    cadastraAcomp(req,res){
+        console.log("chegou")
+        let resultado
+        let resposta = new Resposta()
+        
+        acompClass.acompAdicionar(req,res).then((result)=>{
+            console.log("Cadastro Realizado!!!")
+            //console.log(res)
+            resultado = true;
+        }).catch((err)=>{
+            console.log("ERRO:");
+            console.log(err);
+            resultado = err
+        }).finally(()=>{
+            if (resultado == true){
+                resposta.texto = "Cadastrado com sucesso!"
+                resposta.sucesso = "true"
+                console.log('verdadeiro')
+                req.flash("success_message", "Cadastro realizado com sucesso!")
+                this.listaAcomp(req,res,resposta)
+            } else {
+                resposta.texto = resultado
+                resposta.sucesso = "false"
+                console.log('falso')
+                req.flash("error_message", "houve um erro ao abrir o cadastro!")
+                res.render('admin/erro', resposta);
+            }
+        })
+    },
     deletaAcomp(req,res){
+        let db = req.cookies['preferredDb'];
+        Acomp = getModel(db, 'tb_acomp', acompClass.AcompSchema)
+
         Acomp.deleteOne({_id: req.params.id}).then(() =>{
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
+            Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                console.log("Listagem Realizada de Usuário")
                 req.flash("success_message", "Acompese deletada!")
                 this.listaAcomp(req,res);
             }).catch((err) =>{
@@ -85,7 +84,6 @@ module.exports = {
             })
         })
     },
-
     atualizaAcomp(req,res){
         let resposta;
         try{
@@ -112,22 +110,28 @@ module.exports = {
             console.log(err1)
         }
     },
-
     carregaAcompedi(req, res){
+        let db = req.cookies['preferredDb'];
+        Acomp = getModel(db, 'tb_acomp', acompClass.AcompSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         Acomp.findById(req.params.id).then((acomp) =>{console.log("ID: "+acomp._id)
             Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
-                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                        bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-            res.render('area/aba/acomp/acompEdi', {acomp, terapeutas: terapeuta, benes: bene})
+                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                    res.render('area/aba/acomp/acompEdi', {acomp, terapeutas: terapeuta, benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
 
     },
-
     listaAcomp(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Acomp = getModel(db, 'tb_acomp', acompClass.AcompSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         //console.log('listando Acompeses')
         Acomp.find().then((acomp) =>{
@@ -176,20 +180,20 @@ module.exports = {
             //console.log("acomp:");
             //console.log(acomp);
             //console.log("Listagem Realizada das Acompeses!")
-                Bene.find().then((bene)=>{
-                    //console.log("Listagem Realizada bene!")
-                    Usuario.find().then((usuario)=>{
-                        //console.log("Listagem Realizada Usuário!")
-                        /*if(resposta.sucesso == ""){
-                            console.log(' objeto vazio');
-                            flash.texto = ""
-                            flash.sucesso = ""
-                        } else {
-                            console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
-                            flash.texto = resposta.texto
-                            flash.sucesso = resposta.sucesso
-                        }*/
-            res.render('area/aba/acomp/acompLis', {acomps: acomp, usuarios: usuario, benes: bene, flash})
+            Bene.find().then((bene)=>{
+                //console.log("Listagem Realizada bene!")
+                Usuario.find().then((usuario)=>{
+                    //console.log("Listagem Realizada Usuário!")
+                    /*if(resposta.sucesso == ""){
+                        console.log(' objeto vazio');
+                        flash.texto = ""
+                        flash.sucesso = ""
+                    } else {
+                        console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
+                        flash.texto = resposta.texto
+                        flash.sucesso = resposta.sucesso
+                    }*/
+                    res.render('area/aba/acomp/acompLis', {acomps: acomp, usuarios: usuario, benes: bene, flash})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -197,6 +201,10 @@ module.exports = {
         })
     },
     listaAcompimp(req, res){
+        let db = req.cookies['preferredDb'];
+        Acomp = getModel(db, 'tb_acomp', acompClass.AcompSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        
         Acomp.findById(req.params.id).then((acomp) =>{
             console.log("acomp:");
             console.log(acomp);

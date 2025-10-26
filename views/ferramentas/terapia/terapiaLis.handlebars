@@ -148,11 +148,13 @@
 															</th>
 															<td>{{terapia_nome}}</td>
 															<td>{{terapia_nomecid}}</td>
+															<td>
 																{{#ifEqual this.terapia_status "Inativo"}}
-																	<td><span class="label label-sm label-danger">{{terapia_status}}</span></td>
-																	{{else}}
-																	<td><span class="label label-sm label-success">{{terapia_status}}</span></td>
+																	<span class="badge badge-danger">{{terapia_status}}</span>
+																{{else}}
+																	<span class="badge badge-success">{{terapia_status}}</span>															
 																{{/ifEqual}}
+															</td>
 															<td>{{terapia_descricao}}</td>
 															<td>
 																<div class="action-buttons">
@@ -182,29 +184,6 @@
 												</tbody>
 
 											</table>
-
-											<div class="row">
-													<div class="col-xs-6">
-														<div class="dataTables_info" id="dynamic-table_info" role="status" aria-live="polite">
-												
-
-
-
-
-														</div>
-													</div>
-													
-													<div class="col-xs-6">
-														
-														<div class="dataTables_paginate paging_simple_numbers" id="dynamic-table_paginate">
-						
-														</div>
-													
-													</div>
-											</div>
-										
-										
-										
 									</div>
 								</div>				
 							</div>

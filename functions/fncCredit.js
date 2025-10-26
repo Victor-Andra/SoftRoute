@@ -1,13 +1,13 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 
 //convdeb, Pagamentos pela terapia realizada pelo Terapeuta
 const creditClass = require("../models/credit");
 const terapiaClass = require("../models/terapia")
 
-const Credit = mongoose.model("tb_credit")
-const Terapia = mongoose.model("tb_terapia")
+var Credit = getModel("SoftRoute", 'tb_credit', creditClass.CreditSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 
 //Funções auxiliares
 const fncCredit = require("../functions/fncCredit")
@@ -35,20 +35,23 @@ class CreditLis{
 
 module.exports = {
     creditAdicionarApoio: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Credit = getModel(db, 'tb_credit', creditClass.CreditSchema)
+
         let creditExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
-            creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
+            creditExiste = await Credit.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            creditExiste =  await CreditModel.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
+            creditExiste =  await Credit.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(creditExiste){//se tiver null cai no else
             return "O nome da credit já existe";
             //programar alert
         } else {
-            console.log("creditmodel");
-            const newCredit = new CreditModel({
+            console.log("Credit");
+            const newCredit = new Credit({
                 credit_atendnum : req.body.nextNum ,
                 credit_categoria : "Apoio" ,
                 credit_terapiaid : req.body.atendTerapiaid ,
@@ -78,20 +81,23 @@ module.exports = {
         }
     },
     creditAdicionarExtra: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Credit = getModel(db, 'tb_credit', creditClass.CreditSchema)
+
         let creditExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
-            creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
+            creditExiste = await Credit.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            creditExiste =  await CreditModel.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
+            creditExiste =  await Credit.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(creditExiste){//se tiver null cai no else
             return "O nome da credit já existe";
             //programar alert
         } else {
-            console.log("creditmodel");
-            const newCredit = new CreditModel({
+            console.log("Credit");
+            const newCredit = new Credit({
                 credit_atendnum : req.body.nextNum ,
                 credit_categoria : "Extra" ,
                 credit_terapiaid : req.body.atendTerapiaid ,
@@ -121,20 +127,23 @@ module.exports = {
         }
     },
     creditAdicionarFalta: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Credit = getModel(db, 'tb_credit', creditClass.CreditSchema)
+
         let creditExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
-            creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
+            creditExiste = await Credit.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            creditExiste =  await CreditModel.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
+            creditExiste =  await Credit.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(creditExiste){//se tiver null cai no else
             return "O nome da credit já existe";
             //programar alert
         } else {
-            console.log("creditmodel");
-            const newCredit = new CreditModel({
+            console.log("Credit");
+            const newCredit = new Credit({
                 credit_atendnum : req.body.nextNum ,
                 credit_categoria : "Falta" ,
                 credit_terapiaid : req.body.atendTerapiaid ,
@@ -164,20 +173,23 @@ module.exports = {
         }
     },
     creditAdicionarGlosa: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Credit = getModel(db, 'tb_credit', creditClass.CreditSchema)
+
         let creditExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
-            creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
+            creditExiste = await Credit.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            creditExiste =  await CreditModel.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
+            creditExiste =  await Credit.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(creditExiste){//se tiver null cai no else
             return "O nome da credit já existe";
             //programar alert
         } else {
-            console.log("creditmodel");
-            const newCredit = new CreditModel({
+            console.log("Credit");
+            const newCredit = new Credit({
                 credit_atendnum : req.body.nextNum ,
                 credit_categoria : "Glosa" ,
                 credit_terapiaid : req.body.atendTerapiaid ,
@@ -207,20 +219,23 @@ module.exports = {
         }
     },
     creditAdicionarPadrão: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Credit = getModel(db, 'tb_credit', creditClass.CreditSchema)
+
         let creditExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
-            creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
+            creditExiste = await Credit.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            creditExiste =  await CreditModel.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
+            creditExiste =  await Credit.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(creditExiste){//se tiver null cai no else
             return "O nome da credit já existe";
             //programar alert
         } else {
-            console.log("creditmodel");
-            const newCredit = new CreditModel({
+            console.log("Credit");
+            const newCredit = new Credit({
                 credit_atendnum : req.body.nextNum ,
                 credit_categoria : "Padrão" ,
                 credit_terapiaid : req.body.atendTerapiaid ,
@@ -250,20 +265,23 @@ module.exports = {
         }
     },
     creditAdicionarPais: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Credit = getModel(db, 'tb_credit', creditClass.CreditSchema)
+
         let creditExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
-            creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
+            creditExiste = await Credit.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            creditExiste =  await CreditModel.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
+            creditExiste =  await Credit.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(creditExiste){//se tiver null cai no else
             return "O nome da credit já existe";
             //programar alert
         } else {
-            console.log("creditmodel");
-            const newCredit = new CreditModel({
+            console.log("Credit");
+            const newCredit = new Credit({
                 credit_atendnum : req.body.nextNum ,
                 credit_categoria : "Pais" ,
                 credit_terapiaid : req.body.atendTerapiaid ,
@@ -293,20 +311,23 @@ module.exports = {
         }
     },
     creditAdicionarSubstituto: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Credit = getModel(db, 'tb_credit', creditClass.CreditSchema)
+
         let creditExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
-            creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
+            creditExiste = await Credit.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            creditExiste =  await CreditModel.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
+            creditExiste =  await Credit.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(creditExiste){//se tiver null cai no else
             return "O nome da credit já existe";
             //programar alert
         } else {
-            console.log("creditmodel");
-            const newCredit = new CreditModel({
+            console.log("Credit");
+            const newCredit = new Credit({
                 credit_atendnum : req.body.nextNum ,
                 credit_categoria : "Substituto" ,
                 credit_terapiaid : req.body.atendTerapiaid ,
@@ -336,20 +357,23 @@ module.exports = {
         }
     },
     creditAdicionarSupervisao: async (req,res) => {
+        let db = req.cookies['preferredDb'];
+        Credit = getModel(db, 'tb_credit', creditClass.CreditSchema)
+
         let creditExiste;
         let dtEvento = new Date(req.body.atendAtenddata);
         if(req.body.creditNome == undefined){//mudar o campo
-            creditExiste = await CreditModel.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
+            creditExiste = await Credit.findOne({credit_atendnum: req.body.nextNum});//quando não acha fica null
         } else {
-            creditExiste =  await CreditModel.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
+            creditExiste =  await Credit.findOne({credit_nome: req.body.creditNome});//quando não acha fica null
         }
         let dataAtual = new Date();
         if(creditExiste){//se tiver null cai no else
             return "O nome da credit já existe";
             //programar alert
         } else {
-            console.log("creditmodel");
-            const newCredit = new CreditModel({
+            console.log("Credit");
+            const newCredit = new Credit({
                 credit_atendnum : req.body.nextNum ,
                 credit_categoria : "Supervisao" ,
                 credit_terapiaid : req.body.atendTerapiaid ,
@@ -379,12 +403,18 @@ module.exports = {
         }
     },
     delete(req,res){
+        let db = req.cookies['preferredDb'];
+        Credit = getModel(db, 'tb_credit', creditClass.CreditSchema)
+
         Credit.deleteOne({_id: req.params.id}).then(() =>{
             req.flash("success_message", "Credit deletada!")
             this.listar(req,res);
         })
     },
     carregaEditar(req,res){
+        let db = req.cookies['preferredDb'];
+        Credit = getModel(db, 'tb_credit', creditClass.CreditSchema)
+
         Credit.findById(req.params.id).then((credit) =>{
             res.render('financeiro/receita/creditEdi', credit)
         }).catch((err) =>{
@@ -438,6 +468,9 @@ module.exports = {
         }
     },
     listar(req, res){
+        let db = req.cookies['preferredDb'];
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Terapia.findOne().then((terapia) =>{
             console.log("Listagem Realizada!")
             res.render('financeiro/receita/creditLis', {terapias: terapia})
@@ -448,6 +481,9 @@ module.exports = {
         })
     },
     creditAtendEditar(req,res){
+        let db = req.cookies['preferredDb'];
+        Credit = getModel(db, 'tb_credit', creditClass.CreditSchema)
+
         let dataEvento;
         let valorPrev;
         let dataEdi;

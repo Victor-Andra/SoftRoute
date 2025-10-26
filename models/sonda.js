@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const SondaSchema = mongoose.Schema({
     sonda_id:{ type: ObjectId, required: false },
@@ -51,9 +52,18 @@ class Sonda{
 }
 
 SondaSchema.loadClass(Sonda)
-const SondaModel = mongoose.model('tb_sonda', SondaSchema)
-module.exports = {SondaModel,SondaSchema,
+var SondaModel = getModel("softroute", 'tb_sonda', SondaSchema)
+module.exports = {
+    SondaModel,
+    SondaSchema,
+
     sondaEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        SondaModel = getModel(db, 'tb_sonda', SondaSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -96,6 +106,12 @@ module.exports = {SondaModel,SondaSchema,
             
     },
     sondaAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        SondaModel = getModel(db, 'tb_sonda', SondaSchema)
+        //;
+        
         //Validar se a Sondaese existe
         console.log("sondamodel");
         let dataAtual = new Date();

@@ -1,41 +1,45 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //Escola
 const escolaClass = require("../models/escola")
-const Escola = mongoose.model("tb_escola")
+var Escola = getModel("SoftRoute", 'tb_escola', escolaClass.EscolaSchema)
 
 //Classes Extrangeiras
 const estadoClass = require("../models/estado")
 const beneClass = require("../models/bene")
 
 //tabelas Extrangeira
-const Estado = mongoose.model("tb_estado")
-const Bene = mongoose.model("tb_bene")
+var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
 
 //Funções Auxiliares
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
-
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaEscola(req,res,resposta){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+        
+
         let flash = new Resposta()
         Escola.find().then((escola)=>{
             Estado.find().then((estado)=>{
                 console.log("Listagem Realizada de Ufs")
-                    Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                Bene.find().sort({bene_nome: 1}).then((bene)=>{
                     console.log("Listagem Realizada de beneficiarios")
-                        if(resposta.sucesso == ""){
-                            console.log(' objeto vazio');
-                            flash.texto = ""
-                            flash.sucesso = ""
-                        } else {
-                            console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
-                            flash.texto = resposta.texto
-                            flash.sucesso = resposta.sucesso
-                        }
-                        res.render("beneficiario/escola/escolaLis", {escolas: escola, estados: estado, benes: bene, flash})
+                    if(resposta.sucesso == ""){
+                        console.log(' objeto vazio');
+                        flash.texto = ""
+                        flash.sucesso = ""
+                    } else {
+                        console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
+                        flash.texto = resposta.texto
+                        flash.sucesso = resposta.sucesso
+                    }
+                    res.render("beneficiario/escola/escolaLis", {escolas: escola, estados: estado, benes: bene, flash})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
@@ -44,11 +48,15 @@ module.exports = {
     },
 
     carregaEscola(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+
         Escola.find().then((escola)=>{
             console.log("Listagem Realizada de escolas!")
-                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                    console.log("Listagem Realizada de beneficiarios")
-                        res.render("beneficiario/escola/escolaCad", {escolas: escola, benes: bene})
+            Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                console.log("Listagem Realizada de beneficiarios")
+                res.render("beneficiario/escola/escolaCad", {escolas: escola, benes: bene})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar escolas")
@@ -58,13 +66,18 @@ module.exports = {
     },
 
     carregaEscolaEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+        
+
         Escola.findById(req.params.id).then((escola) =>{
             console.log(escola)
-                Estado.find().then((estado)=>{
-                    console.log("Listagem Realizada de Estados")
-                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                            console.log("Listagem Realizada de beneficiarios")
-            res.render('beneficiario/escola/escolaEdi', {escola, estados: estado, benes: bene})
+            Estado.find().then((estado)=>{
+                console.log("Listagem Realizada de Estados")
+                Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                    console.log("Listagem Realizada de beneficiarios")
+                    res.render('beneficiario/escola/escolaEdi', {escola, estados: estado, benes: bene})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -139,6 +152,9 @@ module.exports = {
 
 
     deletaEscola(req,res){
+        let db = req.cookies['preferredDb'];
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+
         Escola.deleteOne({_id: req.params.id}).then(() =>{
             Escola.find().then((escola) =>{
                 req.flash("success_message", "Escola deletada!")
@@ -150,6 +166,4 @@ module.exports = {
             })
         })
     }
-
-
 }

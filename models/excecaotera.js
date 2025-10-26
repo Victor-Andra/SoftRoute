@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const ExcecaoteraSchema = mongoose.Schema({
 
@@ -49,9 +50,18 @@ class Excecaotera{
 }
 
 ExcecaoteraSchema.loadClass(Excecaotera)
-const ExcecaoteraModel = mongoose.model('tb_excecaotera', ExcecaoteraSchema)
-module.exports = {ExcecaoteraModel,ExcecaoteraSchema,
+var ExcecaoteraModel = getModel("softroute", 'tb_excecaotera', ExcecaoteraSchema)
+module.exports = {
+    ExcecaoteraModel,
+    ExcecaoteraSchema,
+
     excecaoteraEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ExcecaoteraModel = getModel(db, 'tb_excecaotera', ExcecaoteraSchema)
+        //;
+
         let dataAtual = new Date();//Pega data atual
         let resultado;
         let usuarioAtual = req.cookies['idUsu'];
@@ -81,6 +91,12 @@ module.exports = {ExcecaoteraModel,ExcecaoteraSchema,
         return resultado;
     },
     excecaoteraAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ExcecaoteraModel = getModel(db, 'tb_excecaotera', ExcecaoteraSchema)
+        //;
+
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];
         console.log(usuarioAtual);

@@ -1,39 +1,42 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //beneficiario, clientes
-const Bene = mongoose.model("tb_bene")
 const beneClass = require("../models/bene")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
 
 //Classes Extrangeiras
 const convClass = require("../models/conv")
-const { EscolaModel } = require("../models/escola")
 const estadoClass = require("../models/estado")
 const terapiaClass = require("../models/terapia")
 const usuarioClass = require("../models/usuario")
 const escolaClass = require("../models/escola")
-const fncGeral = require("./fncGeral")
-const respostaClass = require("../models/resposta")
-
-
 
 //Tabelas Extrangeiras
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Estado = mongoose.model("tb_estado")
-const Escola = mongoose.model("tb_escola")
-const Resposta = mongoose.model("tb_resposta")
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
+var Escola = getModel("SoftRoute", 'tb_escola', escolaClass.EscolaSchema)
+
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     carregaBene(req,res){
+        let db = req.cookies['preferredDb'];
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+        Estado = getModel(db, 'tb_estado', estadoClass.EstadoSchema)
+        
+
         Escola.find().then((escola)=>{
             escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena Escola por nome 
             Estado.find().then((estado)=>{
                 console.log("Listagem Realizada de Ufs")
                 Conv.find().sort({conv_nome: 1}).then((conv)=>{
-                console.log("Listagem Realizada de Convenios")
-                res.render("beneficiario/beneCad", {escolas: escola, estados: estado, convs: conv})
+                    console.log("Listagem Realizada de Convenios")
+                    res.render("beneficiario/beneCad", {escolas: escola, estados: estado, convs: conv})
         })})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -56,6 +59,10 @@ module.exports = {
     },
 
     deletaBene(req, res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+
         Bene.deleteOne({_id: req.params.id}).then(() =>{
             Bene.find().then((bene) =>{
                 req.flash("success_message", "Bene deletada!")
@@ -131,14 +138,20 @@ module.exports = {
         },
     
     carregaBeneEdi(req, res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+        Estado = getModel(db, 'tb_estado', estadoClass.EstadoSchema)
+
         Escola.find().then((escola)=>{
             Estado.find().then((estado)=>{
                 console.log("Listagem Realizada de Ufs")
-                    Conv.find().sort({conv_nome: 1}).then((conv)=>{
-                        conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
-                        console.log("Listagem Realizada de Convenios")
-                        Bene.findById(req.params.id).then((beneEdi) =>{
-                            res.render("beneficiario/beneEdi", {escolas: escola, estados: estado, convs: conv, beneEdi})
+                Conv.find().sort({conv_nome: 1}).then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
+                    console.log("Listagem Realizada de Convenios")
+                    Bene.findById(req.params.id).then((beneEdi) =>{
+                        res.render("beneficiario/beneEdi", {escolas: escola, estados: estado, convs: conv, beneEdi})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -146,6 +159,12 @@ module.exports = {
         })
     },
     carregaBenesupEdi(req, res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+        Estado = getModel(db, 'tb_estado', estadoClass.EstadoSchema)
+
         Escola.find().then((escola)=>{
             Estado.find().then((estado)=>{
                 console.log("Listagem Realizada de Ufs")
@@ -161,6 +180,12 @@ module.exports = {
         })
     },
     listaBeneOLD(req, res){//Wagner cintra
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Estado = getModel(db, 'tb_estado', estadoClass.EstadoSchema)
+
         console.log('listando beneficiários');
         Bene.find().then((bene) =>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
@@ -202,21 +227,18 @@ module.exports = {
 				}
                 let fullidade = (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
 				b.idade = fullidade;
-
-
-
             })
 
-        console.log("Listagem Realizada Bene!")
-                Conv.find().then((conv)=>{
+            console.log("Listagem Realizada Bene!")
+            Conv.find().then((conv)=>{
                 conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
                 console.log("Listagem Realizada Convênio!")
-                        Terapia.find().then((terapia)=>{
-                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                        console.log("Listagem Realizada Terapia!")
-                                Usuario.find().then((usuario)=>{
-                                console.log("Listagem Realizada Usuário!")
-            res.render('beneficiario/beneLis', {usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
+                Terapia.find().then((terapia)=>{
+                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                    console.log("Listagem Realizada Terapia!")
+                    Usuario.find().then((usuario)=>{
+                        console.log("Listagem Realizada Usuário!")
+                        res.render('beneficiario/beneLis', {usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Benes")
@@ -224,6 +246,13 @@ module.exports = {
         })
     },
     listaBene(req, res) {
+        let db = req.cookies['preferredDb'];
+        console.log("db:"+db)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Estado = getModel(db, 'tb_estado', estadoClass.EstadoSchema)
+
         console.log('listando beneficiários');
 
         // Função auxiliar para formatar data como dd/mm/yyyy hhh:mm
@@ -328,6 +357,12 @@ module.exports = {
         });
     },
     listaBenesup(req, res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Estado = getModel(db, 'tb_estado', estadoClass.EstadoSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let convs = new Array();
         console.log('listando benes')
         Bene.find().then((bene) =>{
@@ -350,17 +385,17 @@ module.exports = {
                 b.datanasc=fulldate;
             })
 
-        console.log("Listagem Realizada Bene!")
-                Conv.find().then((conv)=>{
+            console.log("Listagem Realizada Bene!")
+            Conv.find().then((conv)=>{
                 conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
                 console.log("Listagem Realizada Convênio!")
-                        Terapia.find().then((terapia)=>{
-                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                        console.log("Listagem Realizada Terapia!")
-                                Usuario.find().then((usuario)=>{
-                                console.log("Listagem Realizada Usuário!")
-                                Estado.find().then((estado)=>{
-            res.render('beneficiario/benesupLis', {usuarios: usuario, terapias: terapia, convs: conv, benes: bene, estados: estado})
+                Terapia.find().then((terapia)=>{
+                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                    console.log("Listagem Realizada Terapia!")
+                    Usuario.find().then((usuario)=>{
+                        console.log("Listagem Realizada Usuário!")
+                        Estado.find().then((estado)=>{
+                            res.render('beneficiario/benesupLis', {usuarios: usuario, terapias: terapia, convs: conv, benes: bene, estados: estado})
         })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Benes")
@@ -368,6 +403,11 @@ module.exports = {
         })
     },
     listaBeneImp(req, res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Estado = getModel(db, 'tb_estado', estadoClass.EstadoSchema)
+
         Bene.findById(req.params.id).then((bene) =>{
             console.log(bene)
             Estado.find().then((estado)=>{
@@ -381,6 +421,12 @@ module.exports = {
         })
     },
     listaResp(req, res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Estado = getModel(db, 'tb_estado', estadoClass.EstadoSchema)
+
         let convs = new Array();
         console.log('listando Resp')
         Bene.find().then((bene) =>{
@@ -400,70 +446,67 @@ module.exports = {
                 b.datanasc=fulldate;
             })
 
-        console.log("Listagem Realizada Resp!")
-                Conv.find().then((conv)=>{
+            console.log("Listagem Realizada Resp!")
+            Conv.find().then((conv)=>{
                 conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
                 console.log("Listagem Realizada Convênio!")
-                        Terapia.find().then((terapia)=>{
-                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
-                        console.log("Listagem Realizada Terapia!")
-                                Usuario.find().then((usuario)=>{
-                                console.log("Listagem Realizada Usuário!")
-            res.render('beneficiario/benerespLis', {usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
+                Terapia.find().then((terapia)=>{
+                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
+                    console.log("Listagem Realizada Terapia!")
+                    Usuario.find().then((usuario)=>{
+                        console.log("Listagem Realizada Usuário!")
+                        res.render('beneficiario/benerespLis', {usuarios: usuario, terapias: terapia, convs: conv, benes: bene})
         })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Benes")
             res.redirect('admin/erro')
         })
     },
-   
-  
     relaniverBene(req, res) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Estado = getModel(db, 'tb_estado', estadoClass.EstadoSchema)
+
         let monthsChildren = {};
-    
+
         console.log('Listando Resp');
-    
-        Bene.find({bene_status:"Ativo"}).then((bene) => {
-            bene.forEach((b) => {
-                let datanasc = new Date(b.bene_datanasc);
-                let mes = (datanasc.getUTCMonth() + 1).toString(); // Usar getUTCMonth
-                let dia = (datanasc.getUTCDate()).toString(); // Usar getUTCDate
-    
-                if (mes.length === 1) {
-                    mes = "0" + mes;
-                }
-    
-                if (dia.length === 1) {
-                    dia = "0" + dia;
-                }
-    
+
+        Bene.find({ bene_status: "Ativo" }).then((beneList) => {
+            beneList.forEach((b) => {
+                // Verifica se a data de nascimento é válida
+                if (!b.bene_datanasc) return; // campo inexistente ou null
+
+                const datanasc = new Date(b.bene_datanasc);
+                if (isNaN(datanasc.getTime())) return; // data inválida
+
+                let mes = (datanasc.getUTCMonth() + 1).toString().padStart(2, "0");
+                let dia = (datanasc.getUTCDate()).toString().padStart(2, "0");
+
                 b.mesNascimento = mes;
                 b.diaNascimento = dia;
-    
+
                 // Cria a estrutura do objeto se o mês ainda não existe
                 if (!monthsChildren[mes]) {
                     monthsChildren[mes] = [];
                 }
-    
+
                 monthsChildren[mes].push(b);
             });
-    
+
             // Ordena os meses em ordem crescente
             const sortedMonths = Object.keys(monthsChildren).sort();
-    
+
             // Ordena os dias dentro de cada mês
             for (let month of sortedMonths) {
-                monthsChildren[month].sort((a, b) => {
-                    return a.diaNascimento.localeCompare(b.diaNascimento);
-                });
+                monthsChildren[month].sort((a, b) => a.diaNascimento.localeCompare(b.diaNascimento));
             }
-    
+
             // Cria uma lista ordenada dos meses
             const orderedMonths = sortedMonths.map(month => ({
-                month: month,
-                children: monthsChildren[month]
+                month,
+                children: monthsChildren[month],
             }));
-    
+
             res.render('beneficiario/relaniverBene', { orderedMonths });
         }).catch((err) => {
             console.log(err);
@@ -471,4 +514,5 @@ module.exports = {
             res.redirect('admin/erro');
         });
     }
+
 }

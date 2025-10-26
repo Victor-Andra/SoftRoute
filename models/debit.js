@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const DebitSchema = mongoose.Schema({
     debit_atendnum :{ //Chave estrangeira que vem da tabela Atend (Não é Obrigatório)
@@ -183,9 +184,18 @@ class Debit{
 }
 
 DebitSchema.loadClass(Debit)
-const DebitModel = mongoose.model('tb_debit', DebitSchema)
-module.exports = {DebitModel,DebitSchema,
+var DebitModel = getModel("softroute", 'tb_debit', DebitSchema)
+module.exports = {
+    DebitModel,
+    DebitSchema,
+
     debitEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitModel = getModel(db, 'tb_debit', DebitSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -234,6 +244,12 @@ module.exports = {DebitModel,DebitSchema,
         return resultado;
     },
     debitAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitModel = getModel(db, 'tb_debit', DebitSchema)
+        //;
+
         let dataAtual = new Date();
         let atendnum
         if(req.body.nextNum == undefined || req.body.nextNum == "undefined"){
@@ -281,6 +297,12 @@ module.exports = {DebitModel,DebitSchema,
         });
     },
     debitAdicionarApoio: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitModel = getModel(db, 'tb_debit', DebitSchema)
+        //;
+
         let debitExiste;
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});;//se nao tiver nome é do atendimento
@@ -334,6 +356,12 @@ module.exports = {DebitModel,DebitSchema,
         }
     },
     debitAdicionarExtra: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitModel = getModel(db, 'tb_debit', DebitSchema)
+        //;
+
         let debitExiste;
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});;//se nao tiver nome é do atendimento
@@ -387,6 +415,12 @@ module.exports = {DebitModel,DebitSchema,
         }
     },
     debitAdicionarFalta: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitModel = getModel(db, 'tb_debit', DebitSchema)
+        //;
+
         let debitExiste;
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});;//se nao tiver nome é do atendimento
@@ -440,6 +474,12 @@ module.exports = {DebitModel,DebitSchema,
         }
     },
     debitAdicionarGlosa: async (req,res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitModel = getModel(db, 'tb_debit', DebitSchema)
+        //;
+
         let debitExiste;
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});;//se nao tiver nome é do atendimento
@@ -493,6 +533,12 @@ module.exports = {DebitModel,DebitSchema,
         }
     },
     debitAdicionarPais: async (req,res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitModel = getModel(db, 'tb_debit', DebitSchema)
+        //;
+
         let debitExiste;
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});;//se nao tiver nome é do atendimento
@@ -546,6 +592,12 @@ module.exports = {DebitModel,DebitSchema,
         }
     },
     debitAdicionarSubstituto: async (req,res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitModel = getModel(db, 'tb_debit', DebitSchema)
+        //;
+
         let debitExiste;
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});;//se nao tiver nome é do atendimento
@@ -599,6 +651,12 @@ module.exports = {DebitModel,DebitSchema,
         }
     },
     debitAdicionarSupervisao: async (req,res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        DebitModel = getModel(db, 'tb_debit', DebitSchema)
+        //;
+
         let debitExiste;
         if(req.body.debitNome == undefined){//mudar o campo
             debitExiste = await DebitModel.findOne({debit_atendnum: req.body.nextNum});;//se nao tiver nome é do atendimento

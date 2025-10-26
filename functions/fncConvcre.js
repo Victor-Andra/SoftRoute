@@ -1,49 +1,129 @@
 //Exports
 const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
 
 //Créditos de planos de saúde e particular
 const convcreClass = require("../models/convCre")
-const Convcre = mongoose.model("tb_convcre")
+var Convcre = getModel("SoftRoute", 'tb_convcre', convcreClass.ConvcreSchema)
 
 //Classes Extrangeiras
-const beneClass = require("../models/bene")
-const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 const convClass = require("../models/conv")
+const usuarioClass = require("../models/usuario")
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Conv = mongoose.model("tb_conv")
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
-    listaConvcre(req,res){
+    listaConvcreOLD(req,res){
+        let db = req.cookies['preferredDb'];
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        
+        // Função auxiliar para formatar data como dd/mm/yyyy hhh:mm
+        function formatDateToBR(date) {
+            const d = new Date(date);
+            const dia = String(d.getDate()).padStart(2, '0');
+            const mes = String(d.getMonth() + 1).padStart(2, '0'); // Janeiro é 0
+            const ano = d.getFullYear();
+            const hora = String(d.getHours()).padStart(2, '0');
+            const minuto = String(d.getMinutes()).padStart(2, '0');
+
+            return `${dia}/${mes}/${ano} h${hora}:${minuto}`;
+        }
+
         let convcres = new Array();
         Convcre.find().then((convcre) =>{
-        console.log("Listagem Crédito de Convênios!")
+            console.log("Listagem Crédito de Convênios!")
             Terapia.find().then((terapia)=>{
                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena as Terapias por nome 
                 console.log("Listagem Terapias!")      
-                    Conv.find().then((conv)=>{
-                        conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
-                            console.log("Listagem Convênios!")      
-                            res.render('convenio/convcre/convCreLis', {convcres: convcre, terapias: terapia, convs: conv})
+                Conv.find().then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
+                    console.log("Listagem Convênios!")      
+                    res.render('convenio/convcre/convCreLis', {convcres: convcre, terapias: terapia, convs: conv})
             })})}).catch((err) =>{
             console.log(err)
             //req.flash("error_message", "houve um erro ao listar Convcres")
             res.redirect('admin/erro')
         })
     },
+    listaConvcre(req, res) {
+    let db = req.cookies['preferredDb'];
+    Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+    Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema);
+    Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); // ← Adicionar
+
+    function formatDateToBR(date) {
+        const d = new Date(date);
+        const dia = String(d.getDate()).padStart(2, '0');
+        const mes = String(d.getMonth() + 1).padStart(2, '0');
+        const ano = d.getFullYear();
+        const hora = String(d.getHours()).padStart(2, '0');
+        const minuto = String(d.getMinutes()).padStart(2, '0');
+        return `${dia}/${mes}/${ano} h${hora}:${minuto}`;
+    }
+
+    Promise.all([
+        Convcre.find({ convcre_lixo: { $ne: "true" } }),
+        Terapia.find(),
+        Conv.find(),
+        Usuario.find()
+    ])
+    .then(async ([convcreList, terapiaList, convList, usuarioList]) => {
+        // Mapear usuários
+        const usuarioMap = usuarioList.reduce((acc, u) => {
+            acc[u._id.toString()] = u;
+            return acc;
+        }, {});
+
+        // Processar cada convcre
+        convcreList.forEach(c => {
+            c.datacad = c.convcre_datacad ? formatDateToBR(c.convcre_datacad) : "--/--/---- h--:--";
+            c.dataedi = c.convcre_dataedi ? formatDateToBR(c.convcre_dataedi) : "--/--/---- h--:--";
+
+            const usuarioCad = usuarioMap[c.convcre_usuidcad?.toString()];
+            const usuarioEdi = usuarioMap[c.convcre_usuidedi?.toString()];
+
+            c.usuarioCadNome = usuarioCad ? usuarioCad.usuario_nome : "--";
+            c.usuarioEdiNome = usuarioEdi ? usuarioEdi.usuario_nome : "--";
+        });
+
+        // Ordenações
+        terapiaList.sort((a, b) => a.terapia_nome.localeCompare(b.terapia_nome, 'pt', { sensitivity: 'base' }));
+        convList.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt', { sensitivity: 'base' }));
+
+        res.render('convenio/convcre/convCreLis', {
+            convcres: convcreList,
+            terapias: terapiaList,
+            convs: convList
+        });
+
+    })
+    .catch((err) => {
+        console.error("Erro em listaConvcre:", err);
+        res.redirect('/admin/erro');
+    });
+},
     carregaConvcre(req,res){
+        let db = req.cookies['preferredDb'];
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Conv.find().then((conv)=>{
             conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome 
             console.log("Listagem Realizada de Convênios")
-                Terapia.find().then((terapia)=>{
-                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena as Terapias por nome 
-                    console.log("Listagem Realizada de Terapias")
-                    res.render("convenio/convcre/convCreCad", {convs: conv, terapias: terapia})
+            Terapia.find().then((terapia)=>{
+                terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena as Terapias por nome 
+                console.log("Listagem Realizada de Terapias")
+                res.render("convenio/convcre/convCreCad", {convs: conv, terapias: terapia})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
@@ -51,14 +131,19 @@ module.exports = {
         })
     },
     carregaConvcreEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Convcre.findById(req.params.id).then((convcre) =>{
             Conv.find().then((conv)=>{
                 conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena o convênio por nome .
                 console.log("Listagem Realizada de Convênios")
-                    Terapia.find().then((terapia)=>{
-                        terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena as Terapias por nome 
-                        console.log("Listagem Realizada de Terapias")
-                        res.render('convenio/convcre/convCreEdi', {convcre, convs: conv, terapias: terapia})
+                Terapia.find().then((terapia)=>{
+                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena as Terapias por nome 
+                    console.log("Listagem Realizada de Terapias")
+                    res.render('convenio/convcre/convCreEdi', {convcre, convs: conv, terapias: terapia})
         })})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
@@ -107,12 +192,22 @@ module.exports = {
             }
         })
     },
-    deletaConvcre(req,res){
-        Convcre.deleteOne({_id: req.params.id}).then(() =>{
-            this.listaConvcre(req,res);
-        }).catch((err) =>{
-            console.log(err)
-            res.render('admin/erro')
-        })
+    deletaConvcre(req, res) {
+        convcreClass.convcreDeletar(req, res)
+            .then((sucesso) => {
+                if (sucesso) {
+                    console.log("Registro enviado para Lixeira!");
+                    this.listaConvcre(req, res); // redireciona para listagem
+                } else {
+                    console.log("Falha ao excluir");
+                    res.render('admin/erro');
+                }
+            })
+            .catch((err) => {
+                console.error("Erro inesperado em deletaConvcre:", err);
+                res.render('admin/erro');
+            });
     }
+   
+    
 }

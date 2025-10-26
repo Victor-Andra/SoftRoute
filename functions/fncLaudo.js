@@ -1,5 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Plano de Laudoamento 
 const laudoClass = require("../models/laudo")
@@ -12,23 +13,27 @@ const terapiaClass = require("../models/terapia")
 const escolaClass = require("../models/escola")
 
 //Tabela Plano de Laudoamento 
-const Laudo = mongoose.model("tb_laudo")
+var Laudo = getModel("SoftRoute", 'tb_laudo', laudoClass.LaudoSchema)
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-const Escola = mongoose.model("tb_escola")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
+var Escola = getModel("SoftRoute", 'tb_escola', escolaClass.EscolaSchema)
 
 //Funções auxiliares
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
-const fncGeral = require("./fncGeral")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     listaLaudoold(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema)
+
         let flash = new Resposta();
         let laudo;
         Bene.find().then((bene) => {
@@ -68,6 +73,11 @@ module.exports = {
         })
     },
     listaLaudo(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema)
+
         let flash = new Resposta();
 
         Bene.find({ bene_status: "Ativo" }).then((bene) => {
@@ -147,6 +157,11 @@ module.exports = {
             });
     },
     carregaLaudo(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
             terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
@@ -164,6 +179,13 @@ module.exports = {
         })
     },
     carregaLaudoedi(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         Laudo.findById(req.params.id).then((laudo) =>{console.log("ID: "+laudo._id)
             Conv.find().then((conv)=>{
@@ -183,6 +205,10 @@ module.exports = {
         })
     },
     filtraLaudoold(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema)
+
         let flash = new Resposta();
         //console.log('listando Laudoeses')
         Laudo.find({laudo_beneid: req.body.laudoBeneid}).then((laudo) =>{
@@ -225,6 +251,11 @@ module.exports = {
         })
     },
     filtraLaudoold2(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema)
+
         let flash = new Resposta();
         let laudo;
         Bene.find().then((bene) => {
@@ -264,6 +295,11 @@ module.exports = {
         })
     },
     filtraLaudo(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema)
+
         let flash = new Resposta();
         let mostraInativos = req.body.mostraInativos;
 

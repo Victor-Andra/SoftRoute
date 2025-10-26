@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 //Parte dos campos que serão preenchidos pelo relatorio de NF + campos propostos no ato
 //da criação da nf no site da prefeitura de recife.
 const ContaRecSchema = mongoose.Schema({
@@ -146,9 +147,15 @@ class ContaRec{
 
 
 ContaRecSchema.loadClass(ContaRec)
-const ContaRecModel = mongoose.model('tb_contarec', ContaRecSchema)
+var ContaRecModel = getModel("softroute", 'tb_contarec', ContaRecSchema)
 module.exports = {ContaRecModel, ContaRecSchema,
     contarecEditar: async (req, res) => {
+        
+        //Estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        ContaRecModel = getModel(db, 'tb_contarec', ContaRecSchema)
+        //;
+
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];
         let resultado;
@@ -212,11 +219,17 @@ module.exports = {ContaRecModel, ContaRecSchema,
         return resultado;
     },
     contarecAdicionar: async (req, res) => {
+
+        //Estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        ContaRecModel = getModel(db, 'tb_contarec', ContaRecSchema)
+        //;
+
         try {
             let dataAtual = new Date();
             let usuarioAtual = req.cookies['idUsu'];
     
-            console.log("contarecmodel");
+            console.log("ContaRecModel");
             const newContaRec = new ContaRecModel({
              //Registro de operadores
              contarec_usuidcad : usuarioAtual,

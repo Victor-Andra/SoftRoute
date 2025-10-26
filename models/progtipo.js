@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const ProgtipoSchema = mongoose.Schema({
     progtipo_nome: {type: String, unique: true, required: true},
@@ -36,9 +37,18 @@ class Progtipo{
 
 
 ProgtipoSchema.loadClass(Progtipo)
-const ProgtipoModel = mongoose.model('tb_progtipo', ProgtipoSchema)
-module.exports = {ProgtipoModel,ProgtipoSchema,
+var ProgtipoModel = getModel("softroute", 'tb_progtipo', ProgtipoSchema)
+module.exports = {
+    ProgtipoModel,
+    ProgtipoSchema,
+
     progtipoEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ProgtipoModel = getModel(db, 'tb_progtipo', ProgtipoSchema)
+        //;
+
         //Pega data atual
         let dataAtual = new Date();
         //Pega Usuário Atual
@@ -66,6 +76,12 @@ module.exports = {ProgtipoModel,ProgtipoSchema,
         return resultado;
     },
     progtipoAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ProgtipoModel = getModel(db, 'tb_progtipo', ProgtipoSchema)
+        //;
+
          //Pega data atual
         let dataAtual = new Date();
         //Pega Usuário Atual

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const ConvdebSchema = mongoose.Schema({
 
@@ -8,16 +9,17 @@ const ConvdebSchema = mongoose.Schema({
     convdeb_convnome :{ type: String, required: false },
     convdeb_terapiaid :{ type: ObjectId, required: true },
     convdeb_data :{ type: String, required: true },
+    convdeb_status: { type: String, required: false },
     convdeb_valor :{type: String, required: true },
     convdeb_obs :{type: String, required: false},
     //Atributos de controle
     convdeb_datacad :{type: Date, required: false },
     convdeb_dataedi :{type: Date, required: false },
-    convcre_usuidcad :{ type: ObjectId, required: false },//Wagner C. 18/06/2025
-    convcre_usuidedi :{ type: ObjectId, required: false },//Wagner C. 18/06/2025
-    convcre_usuidlixo :{ type: ObjectId, required: false },//Wagner C. 18/06/2025
-    convcre_datalixo :{ type: String, required: false },//Wagner C. 18/06/2025
-    convcre_lixo :{ type: String, required: false }//Wagner C. 18/06/2025
+    convdeb_usuidcad :{ type: ObjectId, required: false },//Wagner C. 18/06/2025
+    convdeb_usuidedi :{ type: ObjectId, required: false },//Wagner C. 18/06/2025
+    convdeb_usuidlixo :{ type: ObjectId, required: false },//Wagner C. 18/06/2025
+    convdeb_datalixo :{ type: String, required: false },//Wagner C. 18/06/2025
+    convdeb_lixo :{ type: String, required: false }//Wagner C. 18/06/2025
     
 })
 
@@ -28,6 +30,7 @@ class Convdeb{
         convdeb_convnome,
         convdeb_terapiaid,
         convdeb_data,
+        convdeb_status,
         convdeb_valor,
         convdeb_obs,
         //Atributos de controle
@@ -44,6 +47,7 @@ class Convdeb{
             this.convdeb_convnome = convdeb_convnome, //Facilitar identificação do convenio pelo nome
             this.convdeb_terapiaid = convdeb_terapiaid, //Vem da Tabela Terapia
             this.convdeb_data = convdeb_data,
+            this.convdeb_status = convdeb_status,
             this.convdeb_valor = convdeb_valor,
             this.convdeb_obs = convdeb_obs,
             //Atributos de controle
@@ -60,9 +64,23 @@ class Convdeb{
 
 
 ConvdebSchema.loadClass(Convdeb)
-const ConvdebModel = mongoose.model('tb_convdeb', ConvdebSchema)
-module.exports = {ConvdebModel,ConvdebSchema,
+var ConvdebModel = getModel("softroute", 'tb_convdeb', ConvdebSchema)
+module.exports = {
+    ConvdebModel,
+    ConvdebSchema,
+
+    // Editar Débitos para Convênios
+    // Criado por: Wagner Cintra
+    // Criado em: 2023/04/01
+    // Editado em: 2025/10/06
+
     convdebEditar: async (req, res) => {
+
+         //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ConvdebModel = getModel(db, 'tb_convdeb', ConvdebSchema)
+        //;
+
         let dataAtual = new Date();//Pega data atual
         let resultado;
         let usuarioAtual = req.cookies['idUsu'];//Pega usuario atual
@@ -74,6 +92,7 @@ module.exports = {ConvdebModel,ConvdebSchema,
                 convdeb_terapiaid : req.body.convdebTerapiaid ,
                 convdeb_data : req.body.convdebData ,
                 convdeb_valor : req.body.convdebValor ,
+                convdeb_status: req.body.convdebStatus,
                 convdeb_obs : req.body.convdebObs ,
                 convdeb_dataedi : dataAtual,
                 convdeb_usuidedi : usuarioAtual,
@@ -90,14 +109,25 @@ module.exports = {ConvdebModel,ConvdebSchema,
         return resultado;
     },
 
-
+    // Add Débitos para Convênios
+    // Criado por: Wagner Cintra
+    // Criado em: 2023/04/01
+    // Editado em: 2025/10/06
     convdebAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ConvdebModel = getModel(db, 'tb_convdeb', ConvdebSchema)
+        //;
+
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];//Pega usuario atual
         let convdebExiste =  await ConvdebModel.findOne({
             convdeb_convid : req.body.convdebConvid ,
             convdeb_terapiaid : req.body.convdebTerapiaid ,
             convdeb_data : req.body.convdebData ,
+            convdeb_status: req.body.convdebStatus,
+            convdeb_status: req.body.convdebStatus,
             convdeb_valor : req.body.convdebValor
         });//quando não acha fica null
         
@@ -113,7 +143,9 @@ module.exports = {ConvdebModel,ConvdebSchema,
                 convdeb_convnome : req.body.convdebConvnome ,
                 convdeb_terapiaid : req.body.convdebTerapiaid ,
                 convdeb_data : req.body.convdebData ,
+                convdeb_status: req.body.convdebStatus,
                 convdeb_valor : req.body.convdebValor ,
+                convdeb_status: req.body.convdebStatus,
                 convdeb_obs : req.body.convdebObs ,
                 convdeb_datacad : dataAtual,
                 convdeb_usuidcad : usuarioAtual,
@@ -129,12 +161,54 @@ module.exports = {ConvdebModel,ConvdebSchema,
             });
         }
     },
+
+    // Filtro para carregar todos os Débitos para Convênios
+    // Criado por: Wagner Cintra
+    // Criado em: 2023/04/01
+    // Editado em: 2025/10/06
     convdebCarregarTodos: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ConvdebModel = getModel(db, 'tb_convdeb', ConvdebSchema)
+        //;
+
         let convdebs;
         await ConvdebModel.find({}).then((convdeb) => {
             convdebs = convdeb;
         });
         
         return convdebs;
+    },
+    convdebDeletar: async (req, res) => {
+        let db = req.cookies['preferredDb'];
+        ConvdebModel = getModel(db, 'tb_convdeb', ConvdebSchema);
+
+        let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];
+
+        // ⚠️ O ID vem de req.params.id, NÃO de req.body!
+        const convdebId = req.params.id; // ←←← AQUI É O PONTO-CHAVE
+
+        if (!convdebId) {
+            console.error("ID não fornecido para exclusão");
+            return false;
+        }
+
+        try {
+            const resultado = await ConvdebModel.findByIdAndUpdate(convdebId, {
+                $set: {
+                    convdeb_lixo: "true",
+                    convdeb_datalixo: dataAtual,
+                    convdeb_usuidlixo: usuarioAtual,
+                }
+            }, { new: true }); // opcional: retorna o documento atualizado
+
+            console.log("Registro movido para lixeira:", convdebId);
+            return true;
+        } catch (err) {
+            console.error("Erro ao mover para lixeira:", err);
+            return false;
+        }
     }
 };

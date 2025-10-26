@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Notasupobs
 
@@ -9,7 +9,7 @@ const mongoose = require("mongoose")
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
-const notaSupObsClass = require("../models/notasupobs")
+const notaSupClass = require("../models/notasup")
 const progClass = require("../models/prog")
 const progtipoClass = require("../models/progtipo")
 const terapiaClass = require("../models/terapia")
@@ -17,22 +17,26 @@ const fncProg = require("./fncProg")
 
 
 //Tabela Notasup 
-const Notasup = mongoose.model("tb_notasup")
+var Notasup = getModel("SoftRoute", 'tb_notasup', notaSupClass.NotasupSchema)
 
 //Tabelas Extrangeiras
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Prog = mongoose.model("tb_prog")
-const Progtipo = mongoose.model("tb_progtipo")
-const Terapia = mongoose.model("tb_terapia")
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Prog = getModel("SoftRoute", 'tb_prog', progClass.ProgSchema)
+var Progtipo = getModel("SoftRoute", 'tb_progtipo', progtipoClass.ProgtipoSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 
 //Extrutura de Resposta
-const respostaClass = require("../models/resposta")
-const Resposta = mongoose.model("tb_resposta")
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaNotasup(req, res){
+        let db = req.cookies['preferredDb'];
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         let lvlUsu = req.cookies['lvlUsu'];
         let idUsu;
@@ -60,6 +64,13 @@ module.exports = {
     },
 
     carregaNotasup(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let beneid = req.params.id
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
@@ -81,6 +92,11 @@ module.exports = {
     },
 
     carregaNotasupEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Conv.find().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 console.log("Listagem Realizada de terapias")
@@ -99,7 +115,7 @@ module.exports = {
 
     cadastraNotasup(req,res){
         let resposta = new Resposta();
-        notasupClass.notaSupEObsAdicionar(req,res).then((resultado)=>{
+        notaSupClass.notaSupEObsAdicionar(req,res).then((resultado)=>{
             if (resultado == "true"){
                 resposta.texto = "Cadastrado com sucesso!"
                 resposta.sucesso = "true"
@@ -120,7 +136,7 @@ module.exports = {
         let resultado
         let resposta = new Resposta()
         try{
-            notasupClass.escolaEditar(req,res).then((res)=>{
+            notaSupClass.escolaEditar(req,res).then((res)=>{
                 console.log("Atualização Realizada!")
                 console.log(res)
                 resultado = res;
@@ -153,6 +169,12 @@ module.exports = {
 
 
     deletaNotasup(req,res){
+        let db = req.cookies['preferredDb'];
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         Notasup.deleteOne({_id: req.params.id}).then(() =>{
             Conv.find().then((conv)=>{
                 Terapia.find().then((terapia)=>{
@@ -160,10 +182,10 @@ module.exports = {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Usuário")
-                                Bene.find().sort({bene_nome: 1}).then((bene)=>{
-                                    console.log("Listagem Realizada de beneficiarios")
-                req.flash("success_message", "Nota de Supervisão deletado!")
-                res.render('area/aba/notasup/notasupLis', {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene, flash})
+                        Bene.find().sort({bene_nome: 1}).then((bene)=>{
+                            console.log("Listagem Realizada de beneficiarios")
+                            req.flash("success_message", "Nota de Supervisão deletado!")
+                            res.render('area/aba/notasup/notasupLis', {Convs: conv, Terapias: terapia, Terapeutas: terapeuta, Benes: bene, flash})
             })})})}).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
@@ -171,10 +193,7 @@ module.exports = {
             })
         })
     },
-
     preCarregaNotasup(req,res){
 
     }
-
-
 }

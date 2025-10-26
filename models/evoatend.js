@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const EvoatendSchema = mongoose.Schema({
     evoatend_planotipo :{
@@ -113,9 +114,18 @@ class Evoatend{
 }
 
 EvoatendSchema.loadClass(Evoatend)
-const EvoatendModel = mongoose.model('tb_evoatend', EvoatendSchema)
-module.exports = {EvoatendModel,EvoatendSchema,
+var EvoatendModel = getModel("softroute", 'tb_evoatend', EvoatendSchema)
+module.exports = {
+    EvoatendModel,
+    EvoatendSchema,
+
     evoatendEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        EvoatendModel = getModel(db, 'tb_evoatend', EvoatendSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -150,6 +160,12 @@ module.exports = {EvoatendModel,EvoatendSchema,
         return resultado;
     },
     evoatendAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        EvoatendModel = getModel(db, 'tb_evoatend', EvoatendSchema)
+        //;
+
         let dataAtual = new Date();
         console.log("evoatendmodel");
         console.log("req.body.evoatenddata:")

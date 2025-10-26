@@ -2,7 +2,13 @@ const { data } = require('jquery')
 const mongoose = require('mongoose')
 const usuario = require('./usuario')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
+
+// Esquema Ajuda
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 const AjudaSchema = mongoose.Schema({
     //Registro de operadores
     ajuda_datacad :{type: Date, required: false},
@@ -17,6 +23,10 @@ const AjudaSchema = mongoose.Schema({
    
 })
 
+// Construtor Ajuda
+// Criado por: Wagner Cintra
+// Criado em: 2022/03/20
+// Editado em: 2025/10/03
 class Ajuda{
     constructor(
     //Registro de operadores
@@ -44,9 +54,22 @@ class Ajuda{
 }
 
 AjudaSchema.loadClass(Ajuda)
-const AjudaModel = mongoose.model('tb_ajuda', AjudaSchema)
-module.exports = {AjudaModel,AjudaSchema,
+var AjudaModel = getModel("softroute", 'tb_ajuda', AjudaSchema)
+module.exports = {
+    AjudaModel,
+    AjudaSchema,
+
+    // Editar Ajuda
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     ajudaEditar: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AjudaModel = getModel(db, 'tb_ajuda', AjudaSchema);
+        //;
+
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];
         let resultado;
@@ -74,7 +97,17 @@ module.exports = {AjudaModel,AjudaSchema,
         })
         return resultado;
     },
+    // add Ajuda
+    // Criado por: Wagner Cintra
+    // Criado em: 2022/03/20
+    // Editado em: 2025/10/03
     ajudaAdicionar: async (req,res) => {
+
+         //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AjudaModel = getModel(db, 'tb_ajuda', AjudaSchema);
+        //;
+
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];
         

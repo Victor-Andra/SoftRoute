@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const RefAtendSchema = mongoose.Schema({
     next_num :{
@@ -17,9 +18,18 @@ class RefAtend{
 }
 
 RefAtendSchema.loadClass(RefAtend)
-const RefAtendModel = mongoose.model('tb_refatend', RefAtendSchema)
-module.exports = {RefAtendModel,RefAtendSchema,
+var RefAtendModel = getModel("softroute", 'tb_refatend', RefAtendSchema)
+module.exports = {
+    RefAtendModel,
+    RefAtendSchema,
+
     refAtendEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        RefAtendModel = getModel(db, 'tb_refatend', RefAtendSchema)
+        //;
+
         let resultado;
         /*
         //Pega data atual
@@ -45,6 +55,12 @@ module.exports = {RefAtendModel,RefAtendSchema,
         */
     },
     refAtendAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        RefAtendModel = getModel(db, 'tb_refatend', RefAtendSchema)
+        //;
+        
         let RefAtendExiste =  await RefAtendModel.findOne({atend_id: req.body.atendId});//quando não acha fica null
         if(RefAtendExiste){//se tiver null cai no else
             return "O relacionamento já existe";

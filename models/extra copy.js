@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const ExtraSchema = mongoose.Schema({
     //campos exclusivos do controle de extra
@@ -152,9 +153,18 @@ class Extra{
 }
 
 ExtraSchema.loadClass(Extra)
-const ExtraModel = mongoose.model('tb_extra', ExtraSchema)
-module.exports = {ExtraModel,ExtraSchema,
+var ExtraModel = getModel("softroute", 'tb_extra', ExtraSchema)
+module.exports = {
+    ExtraModel,
+    ExtraSchema,
+
     extraEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ExtraModel = getModel(db, 'tb_extra', ExtraSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -232,6 +242,12 @@ module.exports = {ExtraModel,ExtraSchema,
             
     },
     extraAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ExtraModel = getModel(db, 'tb_extra', ExtraSchema)
+        //;
+
         //Validar se a Extraese existe
         console.log("extramodel");
         let dataAtual = new Date();
@@ -302,6 +318,12 @@ module.exports = {ExtraModel,ExtraSchema,
     },
 
     montaExtra(req,res){
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ExtraModel = getModel(db, 'tb_extra', ExtraSchema)
+        //;
+
         const newExtra = new ExtraModel({
             //campos exclusivos extra
             extra_tipo : req.body.extraTipo,
@@ -354,6 +376,12 @@ module.exports = {ExtraModel,ExtraSchema,
         return newExtra;
     },
     gerarExtra: async (extra) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ExtraModel = getModel(db, 'tb_extra', ExtraSchema)
+        //;
+
         console.log("cadastrando novo extra!");
         console.log("extra: "+extra);
         await extra.save().then(()=>{
@@ -363,9 +391,15 @@ module.exports = {ExtraModel,ExtraSchema,
             console.log(err)
             return err;
         });
-    }
+    },
     
-    ,extraUpdateCampos: async (req,res) => {
+    extraUpdateCampos: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        ExtraModel = getModel(db, 'tb_extra', ExtraSchema)
+        //;
+
         let resultado;
         let busca;
         let troca;

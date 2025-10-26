@@ -1,6 +1,6 @@
 //Exports
 const mongoose = require("mongoose")
-
+const { getModel } = require('../functions/fncGeral');
 //As classe tem que ser declaradas antes das tabelas
 //Classe  Analise funcional do comportamento
 const carsClass = require("../models/cars")
@@ -8,27 +8,27 @@ const carsClass = require("../models/cars")
 
 //Classes Extrangeiras
 const beneClass = require("../models/bene")
-const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
-const respostaClass = require("../models/resposta")
 
 //Tabela NAT
-const Cars = mongoose.model("tb_cars")
+var Cars = getModel("SoftRoute", 'tb_cars', carsClass.CarsSchema)
 
 //Tabelas Extrangeiras
-const Resposta = mongoose.model("tb_resposta")
-const Bene = mongoose.model("tb_bene")
-const Conv = mongoose.model("tb_conv")
-const Usuario = mongoose.model("tb_usuario")
-const Terapia = mongoose.model("tb_terapia")
-
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 
 //Funções auxiliares
-
+const fncGeral = require("./fncGeral")
+const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaCars(req, res, resposta){
+        let db = req.cookies['preferredDb'];
+        Cars = getModel(db, 'tb_cars', carsClass.CarsSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let flash = new Resposta();
         let perfilAtual = req.cookies['lvlUsu'];
         Cars.find().then((cars) =>{
@@ -62,10 +62,10 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
-
-
     carregaCars(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         Bene.find({bene_status: "Ativo", bene_nome: { $not: /\./ }}).then((bene) => {
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
             //console.log("Listagem Realizada de Beneficiários!")
@@ -80,10 +80,11 @@ module.exports = {
         })
 
     },
-
-  
-    
     carregaCarsEdi(req,res){
+        let db = req.cookies['preferredDb'];
+        Cars = getModel(db, 'tb_cars', carsClass.CarsSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         let perfilAtual = req.cookies['lvlUsu'];
         Cars.findOne({_id : req.params.id}).then((cars)=>{
@@ -164,17 +165,22 @@ module.exports = {
 
 
     deletaCarsold(req,res){
+        let db = req.cookies['preferredDb'];
+        Cars = getModel(db, 'tb_cars', carsClass.CarsSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
         let flash = new Resposta();
         Cars.deleteOne({_id: req.params.id}).then(() =>{
             Cars.find().then((cars)=>{
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
-                            console.log("Listagem Realizada de Usuário")
-                            Bene.find({ bene_nome: { $not: /\./ } }).then((bene) => {
-                                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                                    console.log("Listagem Realizada de beneficiarios")
-                res.render('area/escalas/cars/carsLis', {carss: cars, terapias: terapia, usuarios: usuario, benes: bene, flash})
+                    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+                        console.log("Listagem Realizada de Usuário")
+                        Bene.find({ bene_nome: { $not: /\./ } }).then((bene) => {
+                            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                            console.log("Listagem Realizada de beneficiarios")
+                            res.render('area/escalas/cars/carsLis', {carss: cars, terapias: terapia, usuarios: usuario, benes: bene, flash})
             })})})}).catch((err) =>{
                 console.log(err)
                 req.flash("error_message", "houve um erro ao listar os Planos de Terapia")
@@ -184,6 +190,9 @@ module.exports = {
     },
 
     deletaCars(req,res){
+        let db = req.cookies['preferredDb'];
+        Cars = getModel(db, 'tb_cars', carsClass.CarsSchema)
+
         let usuarioAtual = req.cookies['idUsu'];
         let resposta;
         let flash = new Resposta()
@@ -205,6 +214,4 @@ module.exports = {
             this.listaCars(req,res, resposta)
         })
     }
-
-
 }

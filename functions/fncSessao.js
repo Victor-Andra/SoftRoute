@@ -1,22 +1,36 @@
 // Imports
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
+const { getModel } = require('../functions/fncGeral');
+
 
 // Modelos
+const beneClass = require("../models/bene");
+const convClass = require("../models/conv");
+const terapiaClass = require("../models/terapia");
+const usuarioClass = require("../models/usuario");
+const agendaClass = require("../models/agenda");
 const sessaoClass = require("../models/sessao");
-const Sessao = mongoose.model("tb_sessao");
 
-const Bene = mongoose.model("tb_bene");
-const Conv = mongoose.model("tb_conv");
-const Terapia = mongoose.model("tb_terapia");
-const Usuario = mongoose.model("tb_usuario");
-const Resposta = mongoose.model("tb_resposta");
-const Agenda = mongoose.model("tb_agenda");
+var Agenda = getModel("SoftRoute", 'tb_agenda', agendaClass.AgendaSchema);
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema);
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema);
+var Sessao = getModel("SoftRoute", 'tb_sessao', sessaoClass.SessaoSchema);
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema);
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
+
+const fncGeral = require("./fncGeral");
+const Resposta = fncGeral.Resposta;
 
 // Exportação das funções
 module.exports = {
-
     // Carrega a tela de cadastro de sessão
     carregaSessao(req, res) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        Sessao = getModel(db, 'tb_sessao', sessaoClass.SessaoSchema);
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
         console.log('listando Sessao');
         Sessao.find().then((sessao) => {
             console.log("Listagem Realizada Sessao!");
@@ -47,7 +61,6 @@ module.exports = {
             res.redirect('/admin/erro');
         });
     },
-
     // Cadastra uma nova sessão
     cadastraSessao(req, res) {
         sessaoClass.sessaoAdicionar(req, res).then(() => {
@@ -59,9 +72,11 @@ module.exports = {
             res.redirect('/admin/erro');
         });
     },
-
     // Deleta uma sessão
     deletaSessao(req, res) {
+        let db = req.cookies['preferredDb'];
+        Sessao = getModel(db, 'tb_sessao', sessaoClass.SessaoSchema);
+
         Sessao.deleteOne({ _id: req.params.id }).then(() => {
             req.flash("success_message", "Sessão deletada!");
             res.redirect('/sessao/lista');
@@ -86,6 +101,12 @@ module.exports = {
 
     // Carrega sessão para edição
     carregaSessaoEdi(req, res) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        Sessao = getModel(db, 'tb_sessao', sessaoClass.SessaoSchema);
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
         Sessao.findOne({ sessao_beneid: req.params.id }).then((sessao) => {
             Bene.find().then((bene) => {
                 Conv.find().then((conv) => {
@@ -112,6 +133,13 @@ module.exports = {
 
     // Lista todas as sessões da semana atual
     async listaSessao(req, res) {
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        Sessao = getModel(db, 'tb_sessao', sessaoClass.SessaoSchema);
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
         console.log('listando Sessao');
 
         function getInicioFimSemana(data) {
@@ -233,6 +261,12 @@ module.exports = {
 
     // Pesquisa individual (sem filtro)
     async pesquisaind(req, res) {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        Sessao = getModel(db, 'tb_sessao', sessaoClass.SessaoSchema);
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
         console.log('Carregando view de filtro');
 
         function getInicioFimSemana(data) {
@@ -303,6 +337,13 @@ module.exports = {
 
     // Filtro com data e beneficiário
     async pesquisaindfil(req, res) {
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        Sessao = getModel(db, 'tb_sessao', sessaoClass.SessaoSchema);
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
         console.log('Carregando view com filtro aplicado');
 
         const { bene_id, data_inicio } = req.body;
@@ -456,6 +497,13 @@ module.exports = {
 
     // Lista sessões filtradas por data
     async listaSessaofilOLD(req, res) {
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        Sessao = getModel(db, 'tb_sessao', sessaoClass.SessaoSchema);
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
         console.log('listando Sessao Filtrada pela data');
 
         function getInicioFimSemana(data) {
@@ -555,143 +603,150 @@ module.exports = {
     },
 
     async listaSessaofil(req, res) {
-    console.log('listando Sessao Filtrada pela data');
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        Sessao = getModel(db, 'tb_sessao', sessaoClass.SessaoSchema);
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
 
-    // Função para calcular início e fim da semana (domingo a sábado)
-    function getInicioFimSemana(data) {
-        const dia = data.getDay(); // 0 = domingo
-        const inicioSemana = new Date(data);
-        inicioSemana.setDate(data.getDate() - dia);
-        inicioSemana.setHours(0, 0, 0, 0);
+        console.log('listando Sessao Filtrada pela data');
 
-        const fimSemana = new Date(inicioSemana);
-        fimSemana.setDate(inicioSemana.getDate() + 6);
-        fimSemana.setHours(23, 59, 59, 999);
+        // Função para calcular início e fim da semana (domingo a sábado)
+        function getInicioFimSemana(data) {
+            const dia = data.getDay(); // 0 = domingo
+            const inicioSemana = new Date(data);
+            inicioSemana.setDate(data.getDate() - dia);
+            inicioSemana.setHours(0, 0, 0, 0);
 
-        return { inicio: inicioSemana, fim: fimSemana };
-    }
+            const fimSemana = new Date(inicioSemana);
+            fimSemana.setDate(inicioSemana.getDate() + 6);
+            fimSemana.setHours(23, 59, 59, 999);
 
-    // Formata data para exibição: dd/mm/aaaa
-    function formatDateToBR(date) {
-        return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
-    }
-
-    try {
-        // Recebe a data do formulário (query ou body), ou usa a data atual
-        let dataSelecionada = req.query.dataFil || req.body.dataFil;
-        const data = new Date(dataSelecionada || new Date());
-
-        // Valida se a data é válida
-        if (isNaN(data.getTime())) {
-            console.error("Data inválida recebida no filtro:", dataSelecionada);
-            return res.status(400).send("Data inválida.");
+            return { inicio: inicioSemana, fim: fimSemana };
         }
 
-        // Define o intervalo da semana (domingo a sábado)
-        const { inicio, fim } = getInicioFimSemana(data);
-        const datainiSemana = formatDateToBR(inicio);
-        const datafimSemana = formatDateToBR(fim);
+        // Formata data para exibição: dd/mm/aaaa
+        function formatDateToBR(date) {
+            return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+        }
 
-        console.log(`Buscando sessões no período: ${datainiSemana} até ${datafimSemana}`);
+        try {
+            // Recebe a data do formulário (query ou body), ou usa a data atual
+            let dataSelecionada = req.query.dataFil || req.body.dataFil;
+            const data = new Date(dataSelecionada || new Date());
 
-        // Passo 1: Buscar todas as sessões no período
-        const sessaoList = await Sessao.find({
-            sessao_data: { $gte: inicio, $lte: fim }
-        });
+            // Valida se a data é válida
+            if (isNaN(data.getTime())) {
+                console.error("Data inválida recebida no filtro:", dataSelecionada);
+                return res.status(400).send("Data inválida.");
+            }
 
-        // Se não houver sessões
-        if (!sessaoList || sessaoList.length === 0) {
-            console.log("Nenhuma sessão encontrada para o período.");
-            return res.render("beneficiario/sessao/sessaoLisfil", {
-                sessaos: [],
-                usuarios: [],
-                terapias: [],
-                convs: [],
-                benes: [],
+            // Define o intervalo da semana (domingo a sábado)
+            const { inicio, fim } = getInicioFimSemana(data);
+            const datainiSemana = formatDateToBR(inicio);
+            const datafimSemana = formatDateToBR(fim);
+
+            console.log(`Buscando sessões no período: ${datainiSemana} até ${datafimSemana}`);
+
+            // Passo 1: Buscar todas as sessões no período
+            const sessaoList = await Sessao.find({
+                sessao_data: { $gte: inicio, $lte: fim }
+            });
+
+            // Se não houver sessões
+            if (!sessaoList || sessaoList.length === 0) {
+                console.log("Nenhuma sessão encontrada para o período.");
+                return res.render("beneficiario/sessao/sessaoLisfil", {
+                    sessaos: [],
+                    usuarios: [],
+                    terapias: [],
+                    convs: [],
+                    benes: [],
+                    datainiSemana,
+                    datafimSemana
+                });
+            }
+
+            // Extrair IDs dos beneficiários envolvidos
+            const beneIds = [...new Set(sessaoList.map(s => s.sessao_beneid.toString()))];
+
+            // Carregar dados relacionados em paralelo
+            const [beneList, convList, terapiaList, usuarioList] = await Promise.all([
+                Bene.find({ _id: { $in: beneIds }, bene_status: "Ativo" }),
+                Conv.find(),
+                Terapia.find(),
+                Usuario.find()
+            ]);
+
+            // Ordenar beneficiários por nome
+            beneList.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome));
+
+            // Passo 2: Buscar AGENDAS com filtro: agenda_extra = false
+            const agendasList = await Promise.all(
+                sessaoList.map(s =>
+                    Agenda.find({
+                        agenda_beneid: s.sessao_beneid,
+                        agenda_data: { $gte: inicio, $lte: fim },
+                        agenda_extra: false  // ✅ Filtro adicionado aqui
+                    })
+                )
+            );
+
+            // Passo 3: Processar cada sessão e calcular quantidades e saldos
+            sessaoList.forEach((sessao, i) => {
+                // Formatar datas de cadastro e edição
+                sessao.datacad = sessao.sessao_datacad
+                    ? new Date(sessao.sessao_datacad).toLocaleString('pt-BR')
+                    : "--/--/---- h--:--";
+
+                sessao.dataedi = sessao.sessao_dataedi
+                    ? new Date(sessao.sessao_dataedi).toLocaleString('pt-BR')
+                    : "--/--/---- h--:--";
+
+                // Adicionar datas da semana para exibição
+                sessao.datainiSemana = datainiSemana;
+                sessao.datafimSemana = datafimSemana;
+
+                // Processar cada terapia (1 a 25)
+                for (let j = 1; j <= 25; j++) {
+                    const fieldTerapiaId = `sessao_terapiaid${j.toString().padStart(2, '0')}`;
+                    const qtPrevField = `sessao_qtterapiaprev${j.toString().padStart(2, '0')}`;
+                    const idTerapia = sessao[fieldTerapiaId];
+                    const qtPrev = parseInt(sessao[qtPrevField]) || 0;
+
+                    // Ignorar se não houver terapia cadastrada
+                    if (!idTerapia) continue;
+
+                    // Contar quantas agendas válidas (não extras) existem para essa terapia
+                    const qtAgenda = (agendasList[i] || []).filter(
+                        a => a.agenda_terapiaid?.toString() === idTerapia.toString()
+                    ).length;
+
+                    // Calcular saldo
+                    const saldo = qtPrev - qtAgenda;
+
+                    // Atribuir valores dinâmicos à sessão
+                    sessao[`terapiaid${j.toString().padStart(2, '0')}qt`] = qtAgenda;
+                    sessao[`terapiaid${j.toString().padStart(2, '0')}saldo`] = saldo > 0 ? `+${saldo}` : saldo.toString();
+                }
+            });
+
+            // Renderizar a view com os dados
+            res.render("beneficiario/sessao/sessaoLisfil", {
+                sessaos: sessaoList,
+                usuarios: usuarioList,
+                terapias: terapiaList,
+                convs: convList,
+                benes: beneList,
                 datainiSemana,
                 datafimSemana
             });
+
+        } catch (err) {
+            console.error("Erro ao listar sessões:", err.message);
+            req.flash("error_message", "Houve um erro ao listar sessões");
+            res.redirect('/admin/erro');
         }
-
-        // Extrair IDs dos beneficiários envolvidos
-        const beneIds = [...new Set(sessaoList.map(s => s.sessao_beneid.toString()))];
-
-        // Carregar dados relacionados em paralelo
-        const [beneList, convList, terapiaList, usuarioList] = await Promise.all([
-            Bene.find({ _id: { $in: beneIds }, bene_status: "Ativo" }),
-            Conv.find(),
-            Terapia.find(),
-            Usuario.find()
-        ]);
-
-        // Ordenar beneficiários por nome
-        beneList.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome));
-
-        // Passo 2: Buscar AGENDAS com filtro: agenda_extra = false
-        const agendasList = await Promise.all(
-            sessaoList.map(s =>
-                Agenda.find({
-                    agenda_beneid: s.sessao_beneid,
-                    agenda_data: { $gte: inicio, $lte: fim },
-                    agenda_extra: false  // ✅ Filtro adicionado aqui
-                })
-            )
-        );
-
-        // Passo 3: Processar cada sessão e calcular quantidades e saldos
-        sessaoList.forEach((sessao, i) => {
-            // Formatar datas de cadastro e edição
-            sessao.datacad = sessao.sessao_datacad
-                ? new Date(sessao.sessao_datacad).toLocaleString('pt-BR')
-                : "--/--/---- h--:--";
-
-            sessao.dataedi = sessao.sessao_dataedi
-                ? new Date(sessao.sessao_dataedi).toLocaleString('pt-BR')
-                : "--/--/---- h--:--";
-
-            // Adicionar datas da semana para exibição
-            sessao.datainiSemana = datainiSemana;
-            sessao.datafimSemana = datafimSemana;
-
-            // Processar cada terapia (1 a 25)
-            for (let j = 1; j <= 25; j++) {
-                const fieldTerapiaId = `sessao_terapiaid${j.toString().padStart(2, '0')}`;
-                const qtPrevField = `sessao_qtterapiaprev${j.toString().padStart(2, '0')}`;
-                const idTerapia = sessao[fieldTerapiaId];
-                const qtPrev = parseInt(sessao[qtPrevField]) || 0;
-
-                // Ignorar se não houver terapia cadastrada
-                if (!idTerapia) continue;
-
-                // Contar quantas agendas válidas (não extras) existem para essa terapia
-                const qtAgenda = (agendasList[i] || []).filter(
-                    a => a.agenda_terapiaid?.toString() === idTerapia.toString()
-                ).length;
-
-                // Calcular saldo
-                const saldo = qtPrev - qtAgenda;
-
-                // Atribuir valores dinâmicos à sessão
-                sessao[`terapiaid${j.toString().padStart(2, '0')}qt`] = qtAgenda;
-                sessao[`terapiaid${j.toString().padStart(2, '0')}saldo`] = saldo > 0 ? `+${saldo}` : saldo.toString();
-            }
-        });
-
-        // Renderizar a view com os dados
-        res.render("beneficiario/sessao/sessaoLisfil", {
-            sessaos: sessaoList,
-            usuarios: usuarioList,
-            terapias: terapiaList,
-            convs: convList,
-            benes: beneList,
-            datainiSemana,
-            datafimSemana
-        });
-
-    } catch (err) {
-        console.error("Erro ao listar sessões:", err.message);
-        req.flash("error_message", "Houve um erro ao listar sessões");
-        res.redirect('/admin/erro');
     }
-}
 };

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
+const { getModel } = require('../functions/fncGeral');
 
 const LaudoSchema = mongoose.Schema({
     laudo_id:{ 
@@ -95,9 +96,18 @@ class Laudo{
 }
 
 LaudoSchema.loadClass(Laudo)
-const LaudoModel = mongoose.model('tb_laudo', LaudoSchema)
-module.exports = {LaudoModel,LaudoSchema,
+var LaudoModel = getModel("softroute", 'tb_laudo', LaudoSchema)
+module.exports = {
+    LaudoModel,
+    LaudoSchema,
+
     laudoEditar: async (req, res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        LaudoModel = getModel(db, 'tb_laudo', LaudoSchema)
+        //;
+
         let dataAtual = new Date();
         let resultado;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -137,6 +147,12 @@ module.exports = {LaudoModel,LaudoSchema,
             
     },
     laudoAdicionar: async (req,res) => {
+
+        //Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        LaudoModel = getModel(db, 'tb_laudo', LaudoSchema)
+        //;
+
         //Validar se a Laudoese existe
         console.log("laudomodel");
         let dataAtual = new Date();
