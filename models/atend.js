@@ -27,6 +27,8 @@ const AtendSchema = mongoose.Schema({
     atend_fixovalordeb :{ type: String, required: false },
     atend_evolucao :{ type: String, required: false },
     atend_obs :{ type: String, required: false },
+    atend_valorcreval :{ type: String, required: false },//Valor a crédito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
+    atend_valordebval :{ type: String, required: false },//Valor a Débito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
     atend_num :{ type: Number, required: true },
     atend_rel :{ type: String, required: false },
     atend_agenda_f_id_orig :{ type: ObjectId, required: false },
@@ -64,6 +66,8 @@ class Atend{
         atend_fixovalordeb,
         atend_evolucao,
         atend_obs,
+        atend_valorcreval,//Valor a crédito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
+        atend_valordebval,//Valor a Débito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
         atend_num,
         atend_numnf,
         atend_extraid,//Armazena o extraid para gestão, Wagner Cintra, 14/04/2025 
@@ -92,10 +96,12 @@ class Atend{
         this.atend_fixo = atend_fixo,
         this.atend_fixoterapeutaid = atend_fixoterapeutaid,
         this.atend_fixoterapiaid = atend_fixoterapiaid,
-        this.atend_fixovalorcre = atend_fixovalorcre,
-        this.atend_fixovalordeb = atend_fixovalordeb,
+        this.atend_fixovalorcre = atend_fixovalorcre, //Valor a Crédito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
+        this.atend_fixovalordeb = atend_fixovalordeb, //Valor a Débito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
         this.atend_evolucao = atend_evolucao,
         this.atend_obs = atend_obs,
+        this.atend_valorcreval = atend_valorcreval,
+        this.atend_valordebval = atend_valordebval,
         this.atend_num = atend_num,
         this.atend_numnf = atend_numnf,
         this.atend_extraid = atend_extraid,//Armazena o extraid para gestão, Wagner Cintra, 14/04/2025 
@@ -151,6 +157,8 @@ module.exports = {
                 atend_fixovalorcre : req.body.atendFixovalorcre,
                 atend_fixovalordeb : req.body.atendFixovalordeb,
                 atend_obs : req.body.atendObs,
+                atend_valorcreval : req.body.atendValorcreval,//Valor a Crédito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
+                atend_valordebval : req.body.atendValordebval,//Valor a Débito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
                 atend_usuidedi : usuarioAtual, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
                 atend_dataedi : dataAtual.toISOString()
                 }}
@@ -194,6 +202,8 @@ module.exports = {
             atend_mergevalorcre : req.body.atendMergevalorcre,
             atend_mergevalordeb : req.body.atendMergevalordeb,
             atend_obs : req.body.atendObs,
+            atend_valorcreval : req.body.atendValorcreval,//Valor a Crédito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
+            atend_valordebval : req.body.atendValordebval,//Valor a Débito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
             atend_num : req.body.nextNum,
             atend_numnf : req.body.atendNumnf,
             atend_extraid : req.body.atendExtraid,
@@ -234,6 +244,8 @@ module.exports = {
             atend_mergevalorcre : req.body.atendMergevalorcre,
             atend_mergevalordeb : req.body.atendMergevalordeb,
             atend_obs : req.body.atendObs,
+            atend_valorcreval : req.body.atendValorcreval,//Valor a Crédito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
+            atend_valordebval : req.body.atendValordebval,//Valor a Débito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
             atend_num : req.body.nextNum,
             atend_numnf : req.body.atendNumnf,
             atend_datacad : dataAtual.toISOString()

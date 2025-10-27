@@ -3,23 +3,19 @@
 	<head>
 		<title>Salas</title>
 		<script>
-			function alteraStatus() {
-				if (document.getElementById("salaStatusCheck").checked){
-					document.getElementById("salaStatus").value = "Ativo";
-				} else {
-					document.getElementById("salaStatus").value = "Inativo";
-				}
+		function carregaBody(){
+				
+				document.getElementById("salaStatus").value = document.getElementById("salaStatusEdi").value;
+				
 			}
-			function carregaBody() {
-				if (document.getElementById("salaStatus").value = "Ativo"){
-					document.getElementById("salaStatusCheck").checked = true;
-				} else {
-					document.getElementById("salaStatusCheck").checked = false;
-				}
-			}
+			
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody()" class="no-skin">
+		<div id="divCarrega" name="divCarrega" class="hidden">
+			<input id="salaId" name="salaId" value="{{sala._id}}"/>
+			<input id="salaStatusEdi" name="salaStatusEdi" value="{{sala.sala_status}}"/>
+		</div>
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -36,6 +32,7 @@
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form"  action="/menu/ferramentas/sala/atualizar" method="POST">
+								<input type="hidden" name="salaId" value="{{sala._id}}" />
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -65,19 +62,17 @@
 														<input type="text" name="salaDescricao"  id="salaDescricao" class="form-control" value="{{sala.sala_descricao}}" />
 													</div>
 												</div>
-												<label> Status</label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<label class="pos-rel">
-															<input type="checkbox" name="salaStatusCheck" id="salaStatusCheck" onchange="javascript:alteraStatus()" />
-															Ativo
-														</label>
-														<input hidden type="text" name="salaStatus"  id="salaStatus" class="form-control" value="{{sala.sala_status}}" />
+												<label>Status</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<select name="salaStatus" id="salaStatus" class="chosen-select" >
+																<option value="-">Não informado</option>
+																<option value="Ativo">Ativo</option>
+																<option value="Inativo">Inativo</option>
+															</select>
+														</div>
 													</div>
-												</div>
-												<div class="hidden">
-													<input name="salaId"value="{{sala._id}}" />
-												</div>
+												
 											</div>
 										</div>
 									</div>

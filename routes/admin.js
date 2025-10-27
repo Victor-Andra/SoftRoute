@@ -792,6 +792,7 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         
+        /*
         //console.log("LOGIN??");
         // Usuário
         const usu = await Usuario.findOne({
@@ -886,6 +887,182 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
 
         const aniversariantesDaSemanaUsuario = fncUsuario.filtrarAniversariantesDaSemana(usuariosAtivos, 'usuario');
         const aniversariantesDaSemanaBene = fncUsuario.filtrarAniversariantesDaSemana(benesAtivos, 'bene');
+*/
+// Variáveis iniciais
+        let aux = 1;
+        const hoje = new Date();
+        const diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
+        const mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
+
+        // Calcular domingo (início da semana)
+        const domingo = new Date(hoje);
+        domingo.setDate(hoje.getDate() - hoje.getDay()); // 0 = domingo
+
+        // Construir dias da semana: domingo a sábado
+        const semanaDias = Array.from({ length: 7 }).map((_, i) => {
+            const d = new Date(domingo);
+            d.setDate(domingo.getDate() + i);
+            return {
+                dia: String(d.getUTCDate()).padStart(2, '0'),
+                mes: String(d.getUTCMonth() + 1).padStart(2, '0')
+            };
+        });
+
+        // Função auxiliar: filtrar aniversariantes da semana
+        function filtrarAniversariantes(lista, tipo, campoNomeOriginal) {
+            return lista
+                .map(p => {
+                    const dataNasc = new Date(p[`${tipo}_datanasc`]);
+                    const dia = String(dataNasc.getUTCDate()).padStart(2, '0');
+                    const mes = String(dataNasc.getUTCMonth() + 1).padStart(2, '0');
+                    return {
+                        dtnasc: dataNasc,
+                        diaNascimento: dia,
+                        mesNascimento: mes,
+                        hoje: dia === diaAtual && mes === mesAtual,
+                        ...(tipo === 'usuario' ? { usuario_nome: p.usuario_nome } : { bene_nome: p.bene_nome })
+                    };
+                })
+                .filter(p =>
+                    semanaDias.some(s =>
+                        s.dia === p.diaNascimento && s.mes === p.mesNascimento
+                    )
+                )
+                .sort((a, b) => {
+                    if (a.mesNascimento !== b.mesNascimento) return a.mesNascimento - b.mesNascimento;
+                    return a.diaNascimento - b.diaNascimento;
+                });
+        }
+
+        // Função para normalizar o campo agenda_selo
+        function normalizeBoolean(value) {
+            if (typeof value === "boolean") {
+                return value; // Já é um booleano, retorna como está
+            }
+            if (typeof value === "string") {
+                return value.toLowerCase() === "true"; // Converte strings "true" ou "false" para booleano
+            }
+            return false; // Caso padrão (se for null, undefined ou outro tipo)
+        }
+
+        // Verificar usuário e perfil
+        const usu = await Usuario.findOne({ usuario_email: req.body.email, usuario_senha: req.body.senha });
+        if (!usu || usu.usuario_status !== "Ativo") {
+            req.flash("error_message", "Usuário ou senha inválidos ou inativo.");
+            return res.redirect('/menu/login');
+        }
+
+        const perfilId = usu.usuario_perfilid;
+        const idUsu = usu._id;
+
+        // Definir tempo de expiração do cookie
+        const tempoCookie = ["62421801a12aa557219a0fb9", "62421857a12aa557219a0fc1", "624218f5a12aa557219a0fd0"].includes(perfilId)
+            ? (5 * 60 * 60 * 1000) // 5 horas
+            : (2 * 60 * 60 * 1000); // 2 horas
+
+        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + tempoCookie) });
+        res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + tempoCookie) });
+
+        // Buscar dados gerais
+        const [usuariosAtivos, benesAtivos, salas, terapias, benesFull] = await Promise.all([
+            Usuario.find({ usuario_status: "Ativo" }),
+            Bene.find({ bene_status: "Ativo" }),
+            Sala.find(),
+            Terapia.find(),
+            Bene.find()
+        ]);
+        
+        const aniversariantesDaSemanaUsuario = fncUsuario.filtrarAniversariantesDaSemana(usuariosAtivos, 'usuario');
+        const aniversariantesDaSemanaBene = fncUsuario.filtrarAniversariantesDaSemana(benesAtivos, 'bene');
+
+        // Agendas semanais
+        const inicioSemana = new Date(domingo);
+        const fimSemana = new Date(domingo);
+        fimSemana.setDate(domingo.getDate() + 6);
+
+        const agendasSemanais = await Agenda.find({
+            agenda_data: { $gte: inicioSemana, $lte: fimSemana },
+            agenda_usuid: idUsu
+        });
+
+        const evolucaoFaltante = agendasSemanais
+            .filter(a => !normalizeBoolean(a.agenda_selo)) // Normaliza o campo agenda_selo
+            .map(a => {
+                const dat = new Date(a.agenda_data);
+                const hora = String(dat.getUTCHours()).padStart(2, '0');
+                const minuto = String(dat.getUTCMinutes()).padStart(2, '0');
+                const sala = salas.find(s => String(s._id) === String(a.agenda_salaid));
+                const bene = benesFull.find(b => String(b._id) === String(a.agenda_beneid));
+                const terapia = terapias.find(t => String(t._id) === String(a.agenda_terapiaid));
+                return {
+                    _id: a._id,
+                    agenda_data: fncGeral.getDataFMTOption(dat, "/"),
+                    agenda_hora: `${hora}:${minuto}`,
+                    agenda_data_dia: fncGeral.getDataFMT(dat),
+                    agenda_aux: aux++,
+                    agenda_data_semana: ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()],
+                    sala_nome: sala?.sala_nome || "Sala não encontrada",
+                    bene_apelido: bene?.bene_apelido || "Beneficiário não encontrado",
+                    terapia_nomecid: terapia?.terapia_nomecid || "Terapia não encontrada",
+                    dia_hora_ordenação: `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${hora}${minuto}`,
+                    agenda_selo: normalizeBoolean(a.agenda_selo) // Normaliza o campo agenda_selo
+                };
+            }).sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
+
+        // Agendas do dia (com filtro)
+        const inicioDia = new Date();
+        inicioDia.setHours(0, 0, 0, 0);
+        const fimDia = new Date();
+        fimDia.setHours(23, 59, 59, 999);
+
+        let agendas = await Agenda.find({
+            agenda_data: { $gte: inicioDia, $lte: fimDia },
+            agenda_usuid: idUsu,
+            agenda_temp: false
+        });
+
+        agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
+
+        agendas.forEach(a => {
+            const dat = new Date(a.agenda_data);
+            a.agenda_data_dia = fncGeral.getDataFMT(dat);
+            a.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getUTCMinutes()).padStart(2, '0')}`;
+            a.agenda_aux = aux++;
+            a.dia_hora_ordenação = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${String(dat.getUTCHours()).padStart(2, '0')}${String(dat.getUTCMinutes()).padStart(2, '0')}`;
+            a.agenda_data_semana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()];
+            a.agenda_selo = normalizeBoolean(a.agenda_selo); // Normaliza o campo agenda_selo
+        });
+
+        const agendaFinal = agendas.sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
+
+        // Buscar dados adicionais
+        const [terapias2, benes2, usuarios2] = await Promise.all([
+            Terapia.find(),
+            Bene.find(),
+            Usuario.find({
+                usuario_status: "Ativo",
+                $or: [
+                    { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                    { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                ]
+            })
+        ]);
+
+        const flash = new Resposta();
+        if (!usu.usuario_palavrachave || usu.usuario_palavrachave === "undefined") {
+            flash.sucesso = "almost";
+            flash.texto = "Você ainda não cadastrou sua Palavra Chave.";
+        } else
+        /*
+         if (usu.usuario_senha === "123456789") {
+            flash.sucesso = "almost";
+            flash.texto = "Você ainda não alterou sua senha temporária.";
+        } else
+        */
+            {
+            flash.sucesso = "true";
+            flash.texto = "Logado com sucesso!";
+        }
 
         console.log("TA CHEGANDO AQUI");
         res.render("branco", {
@@ -908,7 +1085,6 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
     }
 }
 //fim conjunto roteamento login
-
 
 router.get('/menuT', (req,res)=>{
     let lvl = 3;

@@ -118,5 +118,36 @@ module.exports = {
                 return err;
             });
         }
-    }
+    },
+    salaDeletar: async (req, res) => {
+            let db = req.cookies['preferredDb'];
+            SalaModel = getModel(db, 'tb_sala', SalaSchema);
+    
+            let dataAtual = new Date();
+            let usuarioAtual = req.cookies['idUsu'];
+    
+            // ⚠️ O ID vem de req.params.id, NÃO de req.body!
+            const salaId = req.params.id; // ←←← AQUI É O PONTO-CHAVE
+    
+            if (!salaId) {
+                console.error("ID não fornecido para exclusão");
+                return false;
+            }
+    
+            try {
+                const resultado = await SalaModel.findByIdAndUpdate(salaId, {
+                    $set: {
+                        sala_lixo: "true",
+                        sala_datalixo: dataAtual,
+                        sala_usuidlixo: usuarioAtual,
+                    }
+                }, { new: true }); // opcional: retorna o documento atualizado
+    
+                console.log("Registro movido para lixeira:", salaId);
+                return true;
+            } catch (err) {
+                console.error("Erro ao mover para lixeira:", err);
+                return false;
+            }
+        }
 };

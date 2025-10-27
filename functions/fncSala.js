@@ -7,15 +7,17 @@ var Sala = getModel("SoftRoute", 'tb_sala', salaClass.SalaSchema)
 
 //Classes Extrangeiras
 const estadoClass = require("../models/estado")
+const usuarioClass = require("../models/usuario")
 
 //Tabelas Extrangeiras
 var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
 const fncGeral = require("./fncGeral");
 const Resposta = fncGeral.Resposta;
 
 module.exports = {
-    listaSala(req,res){
+    listaSalaOLD(req,res){
         let db = req.cookies['preferredDb'];
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
 
@@ -29,6 +31,53 @@ module.exports = {
             res.redirect('admin/erro')
         })
 
+    },
+    listaSala(req, res) {
+        let db = req.cookies['preferredDb'];
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema); // ← assumindo que o usuário está nesse banco
+
+        // Função auxiliar para formatar data como dd/mm/yyyy hhh:mm
+        function formatDateToBR(date) {
+            if (!date) return "--/--/---- h--:--";
+            const d = new Date(date);
+            const dia = String(d.getDate()).padStart(2, '0');
+            const mes = String(d.getMonth() + 1).padStart(2, '0');
+            const ano = d.getFullYear();
+            const hora = String(d.getHours()).padStart(2, '0');
+            const minuto = String(d.getMinutes()).padStart(2, '0');
+            return `${dia}/${mes}/${ano} h${hora}:${minuto}`;
+        }
+
+        Promise.all([
+            Sala.find({ sala_lixo: { $ne: "true" } }),
+            Usuario.find()
+        ])
+        .then(([salaList, usuarioList]) => {
+            // Cria um mapa de usuários por _id
+            const usuarioMap = usuarioList.reduce((acc, u) => {
+                acc[u._id.toString()] = u;
+                return acc;
+            }, {});
+
+            // Enriquece cada sala com dados formatados e nomes dos usuários
+            salaList.forEach(s => {
+                s.datacad = s.sala_datacad ? formatDateToBR(s.sala_datacad) : "--/--/---- h--:--";
+                s.dataedi = s.sala_dataedi ? formatDateToBR(s.sala_dataedi) : "--/--/---- h--:--";
+
+                const usuarioCad = usuarioMap[s.sala_usuidcad?.toString()];
+                const usuarioEdi = usuarioMap[s.sala_usuidedi?.toString()];
+
+                s.usuarioCadNome = usuarioCad ? usuarioCad.usuario_nome : "Não informado";
+                s.usuarioEdiNome = usuarioEdi ? usuarioEdi.usuario_nome : "Não informado";
+            });
+
+            res.render('ferramentas/sala/salaLis', { salas: salaList });
+        })
+        .catch((err) => {
+            console.error("Erro em listaSala:", err);
+            res.redirect('/admin/erro');
+        });
     },
 
     carregaSala(req,res){
@@ -113,19 +162,20 @@ module.exports = {
             console.log(err1)
         }
     },
-    deletaSala(req,res){
-        let db = req.cookies['preferredDb'];
-        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
-
-        Sala.deleteOne({_id: req.params.id}).then(() =>{
-            Sala.find().then((sala) =>{
-                req.flash("success_message", "Sala deletada!")
-                res.render('ferramentas/sala/salaLis', {salas: sala})
-            }).catch((err) =>{
-                console.log(err)
-                req.flash("error_message", "houve um erro ao listar Salas")
-                res.render('admin/erro')
+    deletaSala(req, res) {
+        salaClass.salaDeletar(req, res)
+            .then((sucesso) => {
+                if (sucesso) {
+                    console.log("Registro enviado para Lixeira!");
+                    this.listaSala(req, res); // redireciona para listagem
+                } else {
+                    console.log("Falha ao excluir");
+                    res.render('admin/erro');
+                }
             })
-        })
+            .catch((err) => {
+                console.error("Erro inesperado em deletaSala:", err);
+                res.render('admin/erro');
+            });
     }
 }
