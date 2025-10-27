@@ -83,17 +83,19 @@
 					let subTotal = s.value * (document.getElementById("valor"+s.id).value);
 					document.getElementById("subtotal"+s.id).value = subTotal;
 				})*/
+
+				//Filtro persistente
 				document.getElementById('dataFilDe').value = document.getElementById('dataIni').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
 				document.getElementById('dataFilAte').value = document.getElementById('dataFim').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
 				document.getElementById('relConvid').value = document.getElementById('relConvIdFiltro').value || "766f69643132333435366964";
 			}
 		</script>
 	</head>
-	<body onload="javascript:carregaBody();controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs_home" style="noprint">
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -103,7 +105,7 @@
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<form role="form" action="/menu/atendimento/relatendvals" method="POST">
-						<div class="breadcrumbs noprint" id="breadcrumbs" style="align-items: center;" style="text-align: center;" />
+						<div class="breadcrumbs noprint" style="align-items: center; text-align: center;" />
 							<ul class="breadcrumb" >
 								<label>Período de:</label>
 								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">

@@ -60,7 +60,6 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
     carregaFolreg(req,res){
         let db = req.cookies['preferredDb'];
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -92,7 +91,6 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
     preCarregaFolreg(req,res){
         let db = req.cookies['preferredDb'];
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -128,7 +126,6 @@ module.exports = {
             res.redirect('admin/erro');
         })
     },
-
     carregaFolregEdi(req,res){
         let db = req.cookies['preferredDb'];
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -167,9 +164,6 @@ module.exports = {
             res.redirect('admin/erro');
         })
     },
-
-    
-
     cadastraFolreg(req,res){
         let resultado
         let resposta = new Resposta()
@@ -186,17 +180,17 @@ module.exports = {
                 req.flash("success_message", "Cadastro realizado com sucesso!")
                 resposta.texto = "Cadastrado com sucesso!"
                 resposta.sucesso = "true"
-                fncProg.listaProg(req,res,resposta)
+                let beneId = req.body.folregBeneid;
+                fncProg.listaProgfiltro(req, beneId, res, resposta);
             } else {
                 console.log('falso')
                 resposta.texto = resultado
                 resposta.sucesso = "false"
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
+                let beneId = req.body.folregBeneid;
+                fncProg.listaProgfiltro(req, beneId, res, resposta);
             }
         })
     },
- 
     atualizaFolreg(req,res){
         let resultado
         let resposta = new Resposta()
@@ -209,21 +203,22 @@ module.exports = {
                 console.log("error1")
                 console.log(err)
                 resultado = err;
-                res.render('admin/erro')
             }).finally(() =>{
                 if(resultado == true){
                     //Volta para a debitsubcateg de listagem
                     console.log("Listagem Realizada!")
                     resposta.texto = "Atualizado com Sucesso!"
                     resposta.sucesso = "true"
-                    fncProg.listaProg(req,res,resposta)
+                    let beneId = req.body.folregBeneid;
+                    fncProg.listaProgfiltro(req, beneId, res, resposta);
                 }else{
                     //passar classe de erro
                     console.log("error")
                     console.log(resultado)
                     resposta.texto = resultado
                     resposta.sucesso = "false"
-                    fncProg.listaProg(req,res,resposta)
+                    let beneId = req.body.folregBeneid;
+                    fncProg.listaProgfiltro(req, beneId, res, resposta);
                 }
             })
         } catch(err1){
@@ -231,8 +226,6 @@ module.exports = {
             res.render('admin/erro')
         }
     },
-
-
     deletaFolreg(req,res){
         let db = req.cookies['preferredDb'];
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)

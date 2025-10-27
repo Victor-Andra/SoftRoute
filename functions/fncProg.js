@@ -680,7 +680,7 @@ module.exports = {
             });
     },
 
-    listaProgfiltro(req, res, resposta) {//Lista ABA ANDAMENTO, Filtrada dos Programas por Beneficiário escolhido no form anterior
+    listaProgfiltro(req, beneId, res, resposta) {//Lista ABA ANDAMENTO, Filtrada dos Programas por Beneficiário escolhido no form anterior
         let db = req.cookies['preferredDb'];
         Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -692,12 +692,13 @@ module.exports = {
         Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
         Notasupobs = getModel(db, 'tb_notasupobs', notasupobsClass.NotaSupObsSchema)
 
-        console.log("Chamando listaProgfiltro para o ID:", req.params.id);
+        
         const perfilAtual = req.cookies['lvlUsu'];
         const dataAtual = new Date();
-        
+        let idBene = beneId || req.params.id;
+        console.log("Chamando listaProgfiltro para o ID:", idBene);
         // Busca o beneficiário selecionado
-        Bene.findOne({ _id: req.params.id, bene_status: "Ativo", bene_aba: "Sim" }).then((bene) => {
+        Bene.findOne({ _id: idBene, bene_status: "Ativo", bene_aba: "Sim" }).then((bene) => {
             if (!bene) {
                 return res.status(404).json({ error: "Beneficiário não encontrado!" });
             }
@@ -796,7 +797,6 @@ module.exports = {
                                                         prognivels: prognivel,
                                                         dataAtual,
                                                         folregs: folreg
-                                                        
                                                     });
                                                 });
                                             });
@@ -1062,8 +1062,8 @@ module.exports = {
     cadastraProg(req,res){
         let resultado
         let resposta = new Resposta()
-        let cadastro = progClass.progAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
+        let cadastro = progClass.progAdicionar(req,res);//variavel para armazenar a função que armazena o async
         cadastro.then((result)=>{
             resultado = true;
         }).catch((err)=>{
@@ -1076,12 +1076,14 @@ module.exports = {
                 resposta.texto = "Cadastrado com sucesso!"
                 resposta.sucesso = "true"
                 this.listaProg(req,res,resposta)
+                let beneId = req.body.progBeneid;
+                fncProg.listaProgfiltro(req, beneId, res, resposta);
             } else {
                 console.log('falso')
                 resposta.texto = resultado
                 resposta.sucesso = "false"
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
+                let beneId = req.body.progBeneid;
+                fncProg.listaProgfiltro(req, beneId, res, resposta);
             }
         })
     },

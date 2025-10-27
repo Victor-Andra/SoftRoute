@@ -6883,7 +6883,7 @@ module.exports = {
                 Sala.find().then((sala)=>{
                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
                     //console.log("Listagem salas!")
-                    Terapia.find().then((terapia)=>{ 
+                   Terapia.find({ terapia_status: "Ativo", terapia_lixo: { $ne: "true" }}).then((terapia)=>{ 
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                         //console.log("Listagem terapia!")
                         Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b", usuario_status:"Ativo"}).then((terapeuta)=>{

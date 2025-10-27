@@ -223,7 +223,10 @@ module.exports = {
 
         //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
         //;
-        
+        let empresaArr = [];
+        if (req.body.usuarioEmpresaid != "766f69643132333435366964" && req.body.usuarioEmpresaid != []){
+            empresaArr.push(req.body.usuarioEmpresaid);
+        }
         let dataAtual = new Date();
         let resultado;
         //Pega data atual
@@ -300,6 +303,7 @@ module.exports = {
                 usuario_tipopix : req.body.usuarioTipoPix,
                 usuario_pix : req.body.usuarioPix ,
                 usuario_obs : req.body.usuarioObs,
+                usuario_empresaids : empresaArr,
                 //campos de controle
                 usuario_usuidedi : usuarioAtual,
                 usuario_dataedi : dataAtual
@@ -319,7 +323,6 @@ module.exports = {
 
          //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
         //;
-
         let usuarioExiste =  await UsuarioModel.findOne({usuario_nome: req.body.usuarioNome});//quando não acha fica null
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];

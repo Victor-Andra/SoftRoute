@@ -23,6 +23,10 @@ const creditClass = require("../models/credit")
 const debitClass = require("../models/debit")
 const salaClass = require("../models/sala")
 
+const perfilClass = require("../models/perfil")
+const funcaoClass = require("../models/funcao")
+
+
 //Tabelas Extrangeiras
 var Agenda = getModel("SoftRoute", 'tb_agenda', agendaClass.AgendaSchema)
 var Ano = getModel("SoftRoute", 'tb_ano', anoClass.AnoSchema)
@@ -37,6 +41,9 @@ var Tabil = getModel("SoftRoute", 'tb_tabil', tabilClass.TabilSchema)
 var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 var Sala = getModel("SoftRoute", 'tb_sala', salaClass.SalaSchema)
+
+var Perfil = getModel("PortalDoUsuario", 'tb_perfil', perfilClass.PerfilSchema)
+var Funcao = getModel("PortalDoUsuario", 'tb_funcao', funcaoClass.FuncaoSchema)
 
 //Funções auxiliares
 const fncGeral = require("./fncGeral")
@@ -996,11 +1003,20 @@ module.exports = {
         let bene_nome;
         let terapiaAtend;
         let terapeutaAtend;
+        
+        //Filtro persistente
+        let filtro = {
+            dataIni: req.body.dataIni || '',
+            dataFim: req.body.dataFim || '',
+            convId: req.body.relConvid || ''
+        };
         console.log("req.body.dataIni: "+req.body.dataIni)
+        
         let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
         let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
         console.log("periodoDe:? "+periodoDe)
         console.log("periodoAte:? "+periodoAte)
+
         let porHoras;
         console.log("req.body.porHoras: "+req.body.porHoras)
         if (req.body.porHoras == "sim"){
@@ -1202,7 +1218,7 @@ module.exports = {
                                     return dataA - dataB;
                                 })
                                 
-                                res.render("atendimento/relatendvalBene", {benes: bene, anos: ano, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome, porHoras})
+                                res.render("atendimento/relatendvalBene", {benes: bene, anos: ano, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome, porHoras, filtro})
                             })
                         })
                     })
@@ -1266,6 +1282,11 @@ module.exports = {
         console.log("req.body.dataIni: "+req.body.dataIni)
         let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
         let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
+        console.log("req.body.dataIni: "+req.body.dataIni)
+        let filtro = {
+            dataIni: req.body.dataIni || '',
+            dataFim: req.body.dataFim || ''
+        };
         console.log("periodoDe:? "+periodoDe)
         console.log("periodoAte:? "+periodoAte)
         let date = new Date();
@@ -1482,8 +1503,8 @@ module.exports = {
             console.log(err)
         })
     },
-
-    relAtendimentoBeneCons(req,res){
+    
+    tendimentoBeneCons(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -3187,6 +3208,7 @@ module.exports = {
     relAtendterapiacons(req,res){
         res.render("atendimento/atendreltera/relatendterapiacons")
     },
+   
     relAtendterapiaconsFiltro(req,res){
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
@@ -3196,7 +3218,9 @@ module.exports = {
         Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema)
         Convdeb = getModel(db, 'tb_convdeb', convdebClass.ConvdebSchema)
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
-       
+        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema)
+        Funcao = getModel(db, 'tb_funcao', funcaoClass.FuncaoSchema)
+        Perfil = getModel(db, 'tb_perfil', perfilClass.PerfilSchema)
 
         let rel = [];
         let agendaFinal = [];
@@ -3239,13 +3263,7 @@ module.exports = {
                         console.log("Listagem Realizada de Convenios")
                         Convdeb.find().then((convdeb) => {
                             console.log("Listagem Realizada de Convenios")
-                           Usuario.find({
-                            "usuario_status": "Ativo",
-                            $or: [
-                                {"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},
-                                {"usuario_perfilid":{$in:["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}
-                            ]
-                            }).then((terapeuta)=>{
+                           Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
                                 terapeuta.some((t)=>{
                                     if((""+t._id) === (""+req.body.relTeraid)){

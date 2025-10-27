@@ -207,13 +207,14 @@ module.exports = {
                 req.flash("success_message", "Cadastro realizado com sucesso!")
                 resposta.texto = "Cadastrado com sucesso!"
                 resposta.sucesso = "true"
-                fncProg.listaProg(req,res,resposta)
+                let beneId = req.body.progsetBeneid;
+                fncProg.listaProgfiltro(req, beneId, res, resposta);
             } else {
                 console.log('falso')
                 resposta.texto = resultado
                 resposta.sucesso = "false"
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
+                let beneId = req.body.progsetBeneid;
+                fncProg.listaProgfiltro(req, beneId, res, resposta);
             }
         })
     },
@@ -237,13 +238,14 @@ module.exports = {
                     req.flash("success_message", "Cadastro realizado com sucesso!")
                     resposta.texto = "Atualizado com sucesso!"
                     resposta.sucesso = "true"
-                    fncProg.listaProg(req, res, resposta)
+                    let beneId = req.body.progsetBeneid;
+                    fncProg.listaProgfiltro(req, beneId, res, resposta);
                 } else {
                     console.log('falso')
                     resposta.texto = resultado
                     resposta.sucesso = "false"
-                    req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                    fncProg.listaProg(req, res, resposta)
+                    let beneId = req.body.progsetBeneid;
+                    fncProg.listaProgfiltro(req, beneId, res, resposta);
                 }
             })
         } catch (err1) {

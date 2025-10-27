@@ -24,7 +24,7 @@ module.exports = {
         let db = req.cookies['preferredDb'];
         Saudecolab = getModel(db, 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
 
-        let flash = Resposta();
+        let flash = new Resposta();
         flash = resposta;
         console.log('listando saudecolabs')
         let filtraUsuario;

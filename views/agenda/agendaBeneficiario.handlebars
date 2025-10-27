@@ -52,6 +52,8 @@
 									//console.log(val)
 									document.getElementById(id).append(val);
 								} else if(e.id.indexOf("TeraId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
+									console.log("valor: "+valor)
+									console.log(document.getElementById(valor));
 									let val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
 									//console.log("val")

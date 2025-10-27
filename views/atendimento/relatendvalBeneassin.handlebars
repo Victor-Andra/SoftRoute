@@ -16,6 +16,7 @@
 					display: none !important;
 				}
 
+				/* Cabeçalho fixo com paginação no topo */
 				.print-header {
 					position: fixed;
 					top: 0;
@@ -26,47 +27,55 @@
 					padding: 5px 0;
 					background: white;
 					z-index: 9999;
+					/* Sem borda inferior */
 				}
 
+				/* Margem superior para acomodar o cabeçalho fixo */
 				body {
 					margin-top: 5mm;
 					margin-bottom: 1cm;
 				}
 
+				/* Paginação no topo de cada página */
 				@page {
 					margin: 1cm;
-					size: A4 landscape; /* <-- paisagem aqui */
+					size: A4 portrait;
 					@top-center {
 						content: "Página " counter(page) " de " counter(pages);
 						font-size: 11px;
 						color: #000;
 					}
 					@bottom-center {
-						content: "";
+						content: ""; /* Remove rodapé padrão */
 					}
 				}
 
+				/* Garante apenas uma página em branco no final */
 				.blank-page {
 					page-break-before: always;
 				}
 			}
-		</style>
-		<script type="text/javascript">
-			function atualizaDataIni(){
-				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
-				document.getElementById('dataIni').value = fulldate;
-			}
-			function atualizaDataFin(){
-				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
-				document.getElementById('dataFim').value = fulldate;
+			/* Estilos específicos para impressão em modo paisagem */
+				@media print and (orientation: landscape) {
+					/* Apenas garantimos que o noprint continue funcionando */
+					.noprint {
+						display: none !important;
+					}
+				}
+	    </style>
+		<script>
+			function carregaBody(){
+				//Filtro persistente
+				document.getElementById('dataFilDe').value = document.getElementById('dataIni').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
+				document.getElementById('dataFilAte').value = document.getElementById('dataFim').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
 			}
 		</script>
 	</head>
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin" >
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner noprint">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs" style="display: none">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs_home" style="noprint" >
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -76,7 +85,7 @@
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<form role="form" action="/menu/atendimento/relatendbeneassins" method="POST">
-						<div class="breadcrumbs noprint" id="breadcrumbs" style="align-items: center;" style="text-align: center;"/>
+						<div class="breadcrumbs noprint" id="breadcrumbs" style="align-items: center; text-align: center;" />
 							<ul class="breadcrumb">
 								<label>Período de:</label>
 								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
@@ -271,5 +280,38 @@
 
 		<!-- Página em branco única no final -->
 		<div style="page-break-before: always;"></div>
+		<script type="text/javascript">
+			function atualizaDataIni(){
+				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataIni').value = fulldate;
+			}
+			function atualizaDataFin(){
+				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataFim').value = fulldate;
+			}
+		
+			function restaurarFiltro(filtro) {
+				if (!filtro) return;
+
+				// Atualiza os campos VISÍVEIS
+				if (filtro.dataIni) {
+					// Formato esperado: YYYY-MM-DD (para input type="date")
+					const dataIniFormatada = filtro.dataIni.split('T')[0]; // remove hora
+					document.getElementById('dataFilDe').value = dataIniFormatada;
+				}
+				if (filtro.dataFim) {
+					const dataFimFormatada = filtro.dataFim.split('T')[0];
+					document.getElementById('dataFilAte').value = dataFimFormatada;
+				}
+				if (filtro.convenioId) {
+					document.getElementById('relConvid').value = filtro.convenioId;
+				}
+			}
+
+			document.addEventListener('DOMContentLoaded', () => {
+				const filtro = {{#if filtro}} {{{json filtro}}} {{else}} null {{/if}};
+				restaurarFiltro(filtro);
+			});
+		</script>
 	</body>
 </html>

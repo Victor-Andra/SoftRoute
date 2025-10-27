@@ -27,8 +27,15 @@ const AtendSchema = mongoose.Schema({
     atend_fixovalordeb :{ type: String, required: false },
     atend_evolucao :{ type: String, required: false },
     atend_obs :{ type: String, required: false },
+    //Informações Validadas pelo fechamento
+    atend_terapiaidval :{ type: ObjectId, required: false },//_id da tb_terapia Validada, Wagner Cintra, 27/10/2025
+    atend_terapeutaidval :{ type: ObjectId, required: false },//_id da tb_usuario Validada, Wagner Cintra, 27/10/2025
     atend_valorcreval :{ type: String, required: false },//Valor a crédito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
     atend_valordebval :{ type: String, required: false },//Valor a Débito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
+    atend_usuarioval: { type: ObjectId, required: false },//_id de Quem validou e fez o fechamento da tb_usuario, Wagner Cintra, 27/10/2025
+    atend_dataval :{ type: Date, required: false },//Data do fechamento desse atendimento, Wagner Cintra, 27/10/2025
+    atend_valbloqueio :{ type: String, required: false },//false ou true para bloquear edição deletar pois esse atendimento foi validado e pertence ao fechamento, Wagner Cintra, 27/10/2025
+
     atend_num :{ type: Number, required: true },
     atend_rel :{ type: String, required: false },
     atend_agenda_f_id_orig :{ type: ObjectId, required: false },

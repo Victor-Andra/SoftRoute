@@ -38,6 +38,7 @@
 				document.getElementById("usuarioMetout").value = document.getElementById("usuMetout").value;
 				document.getElementById("usuarioEscolaridadeobs").value = document.getElementById("usuEscolaridadeobs").value;
 				document.getElementById("usuarioAba").value = document.getElementById("usuAba").value;
+				document.getElementById("usuarioEmpresaid").value = document.getElementById("usuempresaids").value[0];
 				console.log("termina");
 			}
 			
@@ -187,7 +188,7 @@
 										<input id="usuMetout" name="usuMetout" value="{{usuario.usuario_metout}}" />
 										<input id="usuEscolaridadeobs" name="usuEscolaridadeobs" value="{{usuario.usuario_escolaridadeobs}}" />
 										<input id="usuAba" name="usuAba" value="{{usuario.usuario_aba}}" />
-
+										<input id="usuempresaids" name="usuempresaids" value="{{usuario.usuario_empresaids}}" />
 									</div>
 									
 										<div class="col-xl-12" style="padding-top: 50px;">
@@ -825,7 +826,7 @@
 																	<div class="form-group">
 																		<div class="col-sm-4">
 																			<select id="usuarioEmpresaid" name="usuarioEmpresaid" class="chosen-select" data-placeholder="Escolha...">
-																				<option value="-">-</option>
+																				<option value="766f69643132333435366964">-</option>
 																				{{#each empresas}}
 																				<option value="{{_id}}">{{empresa_nome}}</option>
 																				{{/each}}

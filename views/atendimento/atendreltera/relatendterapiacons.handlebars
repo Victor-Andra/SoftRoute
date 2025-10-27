@@ -109,6 +109,10 @@
 					let subTotal = s.value * (document.getElementById("valor"+s.id).value);
 					document.getElementById("subtotal"+s.id).value = subTotal;
 				})*/
+
+				//Filtro persistente
+					document.getElementById("dataFilDe").value = document.getElementById("dataIni").value.substring(0,10) || new Date().toISOString().split('T')[0];
+				document.getElementById("dataFilAte").value =  document.getElementById("dataFim").value.substring(0,10) || new Date().toISOString().split('T')[0];
 			}
 		</script>
 	</head>
@@ -116,7 +120,7 @@
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner noprint">
-					<div class="noprint" class="breadcrumbs ace-save-state" id="breadcrumbs">
+					<div class="noprint" class="breadcrumbs ace-save-state" id="breadcrumbs_home" style="noprint">
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -133,7 +137,7 @@
 							</button>
 							<strong>Importante!</strong> Por favor escolha um Terapeuta.
 						</div>
-						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center;" style="text-align: center;" />
+						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center; text-align: center;" />
 							<ul class="breadcrumb" >
 								<label>Período de:</label>
 								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
@@ -147,7 +151,6 @@
 											<option value="{{_id}}">{{usuario_nome}}</option>
 										{{/each}}
 									</select>
-								<input  hidden id="teraFiltro" name="teraFiltro"  value="{{pesquisa.terapeuta}}" />
 								<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
 									<i class="ace-icon fa fa-search bigger-110"></i>
 									Pesquisar

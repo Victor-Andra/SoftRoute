@@ -2,7 +2,7 @@
 <html lang="pt-br">
 	<head>
 		<title>Relatório Analítico de Atendimentos por Beneficiário</title>
-				<style>
+			<style>
 				
 				<style>
 			/* Oculta elementos na tela */
@@ -64,13 +64,20 @@
 						display: none !important;
 					}
 				}
-	    </style>
+	        </style>
+		<script>
+			function carregaBody(){
+				//Filtro persistente
+				document.getElementById('dataFilDe').value = document.getElementById('dataIni').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
+				document.getElementById('dataFilAte').value = document.getElementById('dataFim').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
+			}
+		</script>
 	</head>
-	<body onload="javascript:controlaNave();mostrarPagina();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();"  class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content"><!-- /main-container -->
 				<div class="main-content-inner noprint"><!-- /main-content-inner -->
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs" style="display: none"><!-- /breadcrumbs -->
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs_home" style="noprint"><!-- /breadcrumbs -->
 						<ul class="breadcrumb"><!-- /breadcrumbs -->
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -270,16 +277,7 @@
 		
 
 <!-- basic scripts -->
-		<script type="text/javascript">
-			function atualizaDataIni(){
-				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
-				document.getElementById('dataIni').value = fulldate;
-			}
-			function atualizaDataFin(){
-				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
-				document.getElementById('dataFim').value = fulldate;
-			}
-		</script>
+		
 		<div class="row">
 			<div class="col-xs-12">
 				<div style="margin-top: 32px;"></div>
@@ -302,6 +300,39 @@
 
 		<!-- Página em branco única no final -->
 		<div style="page-break-before: always;"></div>
+		<script type="text/javascript">
+			function atualizaDataIni(){
+				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataIni').value = fulldate;
+			}
+			function atualizaDataFin(){
+				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataFim').value = fulldate;
+			}
+		
+			function restaurarFiltro(filtro) {
+				if (!filtro) return;
+
+				// Atualiza os campos VISÍVEIS
+				if (filtro.dataIni) {
+					// Formato esperado: YYYY-MM-DD (para input type="date")
+					const dataIniFormatada = filtro.dataIni.split('T')[0]; // remove hora
+					document.getElementById('dataFilDe').value = dataIniFormatada;
+				}
+				if (filtro.dataFim) {
+					const dataFimFormatada = filtro.dataFim.split('T')[0];
+					document.getElementById('dataFilAte').value = dataFimFormatada;
+				}
+				if (filtro.convenioId) {
+					document.getElementById('relConvid').value = filtro.convenioId;
+				}
+			}
+
+			document.addEventListener('DOMContentLoaded', () => {
+				const filtro = {{#if filtro}} {{{json filtro}}} {{else}} null {{/if}};
+				restaurarFiltro(filtro);
+			});
+		</script>
 	</body>
 
 </html>

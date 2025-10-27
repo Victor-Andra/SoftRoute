@@ -68,17 +68,18 @@
 					document.getElementById("subtotal"+s.id).value = subTotal;
 				})*/
 
+				//Filtro persistente
 				document.getElementById("relTeraid").value  = document.getElementById("teraFiltro").value
 				document.getElementById("dataFilDe").value = document.getElementById("dataIni").value.substring(0,10);
 				document.getElementById("dataFilAte").value =  document.getElementById("dataFim").value.substring(0,10);
 			}
 		</script>
 	</head>
-	<body onload="javascript:carregaBody();controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner noprint">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs" style="noprint">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs_home" style="noprint">
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -88,7 +89,7 @@
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<form style="noprint" role="form" action="/menu/atendimento/atendreltera/relatendteraanas" method="POST">
-						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center;" style="text-align: center;"/>
+						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center; text-align: center;" />
 							<ul class="breadcrumb">
 								<label>Período de:</label>
 								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()"  />

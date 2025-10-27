@@ -732,19 +732,23 @@ router.post('/login', passport.authenticate('local', {//Abre portal Login e senh
     try {
         // Verificar usuário e perfil
         Usuario.findOne({ usuario_email: req.body.email, usuario_senha: req.body.senha }).then((usu)=>{
-            console.log("EPA!");
+            console.log("CHUVA!");
             if (!usu || usu.usuario_status !== "Ativo") {
+                console.log("INATIVO OU SEM")
                 req.flash("error_message", "Usuário ou senha inválidos ou inativo.");
                 return res.redirect('/menu/login');
             }
+            console.log("FODASSE?")
             if (usu.usuario_empresaids != undefined) {
+                console.log("FODASSE 2")
                 if (usu.usuario_empresaids.length == 1){
+                    console.log("apenas 1");
                     Empresa.findOne({_id: usu.usuario_empresaids[0]}).then((empresa)=>{
                         let dbEscolhida = empresa.empresa_chavedb;
                         return login(req,res,dbEscolhida);
                     })
                 } else if (usu.usuario_empresaids.length > 1) {
-                    console.log("+ de 1")
+                    console.log("+ de 1");
                     Empresa.find({_id: {$in:usu.usuario_empresaids}}).then((empresa)=>{
                         let email = req.body.email;
                         let senha = req.body.senha;
@@ -753,6 +757,7 @@ router.post('/login', passport.authenticate('local', {//Abre portal Login e senh
                     })
                 }
             } else {
+                console.log("nem 1");
                 login(req,res,"SoftRoute");
                 /*
                 console.log("NAO TEM")
@@ -962,6 +967,7 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
 
         res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + tempoCookie) });
         res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + tempoCookie) });
+        res.cookie('preferredDb', db, { expires: new Date(Date.now() + tempoCookie) });
 
         // Buscar dados gerais
         const [usuariosAtivos, benesAtivos, salas, terapias, benesFull] = await Promise.all([
@@ -2713,7 +2719,7 @@ router.get('/area/aba/prog/proglisF/:id', fncGeral.IsAuthenticated, (req, res) =
     let resposta = new Resposta();
     resposta.texto = "";
     resposta.sucesso = "";
-    fncProg.listaProgfiltro(req, res, resposta);
+    fncProg.listaProgfiltro(req, '', res, resposta);
 });
 
 //Lista Programas ABA filtrado pelo beneficiário carregado com id MANUTENÇÃO
