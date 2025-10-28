@@ -1422,7 +1422,7 @@ router.get('/agenda/atualiza/:id', fncGeral.IsAuthenticated, (req,res) =>{//dire
 
 router.post('/agenda/copiaSemana', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let potinho = Object.assign(new PoteBiscoito, req.cookies);
-    let usuariosAutorizados = ["62422397cf2fd2bb541f918e","6247ba1cfe2181047dc7c965","627163e1a5fc3fa857f47924"];
+    let usuariosAutorizados = ["62422397cf2fd2bb541f918e","6247ba1cfe2181047dc7c965","627163e1a5fc3fa857f47924","6247c4192d0b03c5ada4feb4"];
     if (usuariosAutorizados.includes(req.cookies['idUsu']) && (potinho.lvlUsu == "62421801a12aa557219a0fb9" || potinho.lvlUsu == "62421857a12aa557219a0fc1" || potinho.lvlUsu == "624218f5a12aa557219a0fd0" || potinho.lvlUsu == "677704b1a358ba19d0c8eb51" || potinho.lvlUsu == "677704a8a358ba19d0c8eb27")) {
         fncAgenda.copiaSemanaAgendaGeral(req, res);
     } else {

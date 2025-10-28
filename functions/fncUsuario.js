@@ -21,16 +21,16 @@ const usufuncClass =  require("../models/usufunc")//base das funcionalidades do 
 const usupermisClass = require("../models/usupermis")//funcionalidades que o usuário tem permissã e qual tipo de permissão
 
 //Tabelas extrangeiras   
-const Empresa = getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema)
-const Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
-const Perfil = getModel("PortalDoUsuario", 'tb_perfil', perfilClass.PerfilSchema)
-const Funcao = getModel("PortalDoUsuario", 'tb_funcao', funcaoClass.FuncaoSchema)
-const Especialidade = getModel("PortalDoUsuario", 'tb_especialidade', especialidadeClass.EspecialidadeSchema)
-const Especializacao = getModel("PortalDoUsuario", 'tb_especializacao', especializacaoClass.EspecializacaoSchema)
-const Metodo = getModel("SoftRoute", 'tb_metodo', metodoClass.MetodoSchema)
-const Metout = getModel("SoftRoute", 'tb_metout', metoutClass.MetoutSchema)
-const Usufunc = getModel("PortalDoUsuario", 'tb_usufunc', usufuncClass.UsufuncSchema)
-const Usupermis = getModel("PortalDoUsuario", 'tb_usupermis', usupermisClass.UsupermisSchema)
+var Empresa = getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema)
+var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
+var Perfil = getModel("PortalDoUsuario", 'tb_perfil', perfilClass.PerfilSchema)
+var Funcao = getModel("PortalDoUsuario", 'tb_funcao', funcaoClass.FuncaoSchema)
+var Especialidade = getModel("PortalDoUsuario", 'tb_especialidade', especialidadeClass.EspecialidadeSchema)
+var Especializacao = getModel("PortalDoUsuario", 'tb_especializacao', especializacaoClass.EspecializacaoSchema)
+var Metodo = getModel("SoftRoute", 'tb_metodo', metodoClass.MetodoSchema)
+var Metout = getModel("SoftRoute", 'tb_metout', metoutClass.MetoutSchema)
+var Usufunc = getModel("PortalDoUsuario", 'tb_usufunc', usufuncClass.UsufuncSchema)
+var Usupermis = getModel("PortalDoUsuario", 'tb_usupermis', usupermisClass.UsupermisSchema)
 
 const fncGeral = require("./fncGeral");
 const Resposta = fncGeral.Resposta;
@@ -38,13 +38,6 @@ const Resposta = fncGeral.Resposta;
 module.exports = {
     listaUsuario(req,res){
         let db = req.cookies['preferredDb'];
-
-        Perfil = getModel(db, 'tb_perfil', perfilClass.PerfilSchema)
-        Funcao = getModel(db, 'tb_funcao', funcaoClass.FuncaoSchema)
-        Especialidade = getModel(db, 'tb_especialidade', especialidadeClass.EspecialidadeSchema)
-        Especializacao = getModel(db, 'tb_especializacao', especializacaoClass.EspecializacaoSchema)
-        Metodo = getModel(db, 'tb_metodo', metodoClass.MetodoSchema)
-        Metout = getModel(db, 'tb_metout', metoutClass.MetoutSchema)
 
         Usuario.find().then((usuario) =>{
             usuario.sort((a,b) => ((a.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nomecompleto.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuário por nome completo
@@ -121,7 +114,7 @@ module.exports = {
             especializacaos.sort((a,b) => ((a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena Especização
             metodos.sort((a,b) => ((a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
             metouts.sort((a,b) => ((a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Outros Métodos
-            
+
             res.render("ferramentas/usuario/usuarioCad", {
                 usuarios,
                 estados,
