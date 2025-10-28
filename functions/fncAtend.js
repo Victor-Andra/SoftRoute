@@ -1504,7 +1504,7 @@ module.exports = {
         })
     },
     
-    tendimentoBeneCons(req,res){
+    relAtendimentoBeneCons(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -1986,8 +1986,13 @@ module.exports = {
         let terapiaAtend;
         let creValFinal;
         let atends;
+        console.log("req.body.dataIni: "+req.body.dataIni)
+        console.log("req.body.dataFim: "+req.body.dataFim)
         let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+
+        console.log("seg: "+seg)
+        console.log("sex: "+sex)
         let arrayconvid = [];
         let bene_nome;
         let conv_nome = "Convênio não encontrado"; // Valor padrão

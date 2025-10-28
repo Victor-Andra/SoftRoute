@@ -70,7 +70,7 @@
 				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataIni').value = fulldate;
 			}
-			function atualizaDataFin(){
+			function atualizaDataFim(){
 				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataFim').value = fulldate;
 			}
@@ -113,7 +113,8 @@
 				//Filtro persistente
 				document.getElementById('dataFilDe').value = document.getElementById('dataIni').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
 				document.getElementById('dataFilAte').value = document.getElementById('dataFim').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
-			
+				atualizaDataIni()
+				atualizaDataFim()
 			}
 		</script>
 	</head>
@@ -147,7 +148,7 @@
 								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
 								<input class="hidden" id="dataIni" name="dataIni" />
 								<label>até:</label>
-								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
+								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFim()">
 								<input class="hidden" id="dataFim" name="dataFim" />
 								<label>Beneficiário: </label>
 								<select style="height: 30px; width:300px;" name="relBeneid"  id="relBeneid" class="chosen-select" data-placeholder="Escolha...">
