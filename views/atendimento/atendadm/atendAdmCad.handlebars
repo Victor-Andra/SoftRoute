@@ -29,6 +29,8 @@
 					document.getElementById("tabilValorcredit").value = "0,00";
 					document.getElementById("tabilValordebit").value = "0,00";
 				}
+				document.getElementById("atendFixoCheck").checked = false;
+				document.getElementById("divSubFixo").style.display = "none";
 			}
 			function carregaValoresMerge(){
 				let teraId = document.getElementById("atendMergeTerapiaid").value;
@@ -98,6 +100,15 @@
 				var data = document.getElementById("atenddata").value+"T"+hora+":00.000Z";
 				var datafmt = new Date(data);
 				document.getElementById("atendAtenddata").value = datafmt.toISOString();
+			}
+			function toggleDivSubFixo(){
+				if (document.getElementById("atendFixoCheck").checked == true) {
+					document.getElementById("divSubFixo").style.display = "";
+					document.getElementById("atendFixo").value = "true";
+				} else {
+					document.getElementById("divSubFixo").style.display = "none";
+					document.getElementById("atendFixo").value = "false";
+				}
 			}
 			function carregaBody(){
 				this.carregaValores();
@@ -242,6 +253,7 @@
 														</select>
 													</div>
 												</div>
+												<label {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}} >Substituto Fixo <input id="atendFixoCheck" id="atendFixoCheck" type="checkbox" onchange="javascript:toggleDivSubFixo()"></label>
 												<div class="row">
 													<div class="col-xs-12">
 														<!-- PAGE CONTENT BEGINS -->
@@ -388,6 +400,64 @@
 																				<input type="text" id="atendMergevalordeb" name="atendMergevalordeb" placeholder="0,00" class="red" class="form-control" />
 																			</div>
 																		</div>
+																			</div>
+																		</div>
+																	</div>
+																</div><!-- /.span -->
+															</div><!-- /.row -->
+															<div class="row" id="divSubFixo" {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}}>
+																<div class="col-xs-12 col-sm-12">
+																	<div class="widget-box">
+																		<div class="widget-header">
+																			<h4 class="widget-title">Dados de Sub Fixo</h4>
+																			<input hidden id="atendFixo" name="atendFixo" value="{{atendEdi.atend_fixo}}" />
+																			<span class="widget-toolbar">
+																				<a href="#" data-action="collapse">
+																					<i class="ace-icon fa fa-chevron-up"></i>
+																				</a>
+																			</span>
+																		</div>
+																		<div class="widget-body">
+																			<div class="widget-main">
+																		<div class="alert alert-danger">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			<strong>Alerta!</strong>
+																			Dados informados aqui irão suprimir os demais dados dos relatorios do beneficiario dada a natureza fixa destas informações.<br>
+																		</div>
+																		<label>Terapeuta Fixo</label>
+																		<div class="form-group">
+																			<div class="col-sm-4">
+																				<select id="atendFixoTerapeutaid" name="atendFixoTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValoresFixo()">
+																						<option value="766f69643132333435366964"></option>
+																						{{#each usuarios}}
+																						<option value="{{_id}}">{{usuario_nome}}</option>
+																						{{/each}}
+																				</select>
+																			</div>
+																		</div>
+																		<label>Terapia Fixa</label>
+																		<div class="form-group">
+																				<div class="col-sm-4">
+																					<select id="atendFixoTerapiaid" name="atendFixoTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresFixo()">
+																							<option value="766f69643132333435366964"></option>
+																							{{#each terapias}}
+																							<option value="{{_id}}">{{terapia_nome}}</option>
+																							{{/each}}
+																					</select>
+																				</div>
+																		</div>
+																		<label class="blue"> Valor da Terapia pelo Plano</label>
+																		<div class="form-group">
+																			<div class="col-sm-6">
+																				<input type="text" id="atendFixovalorcre" name="atendFixovalorcre" placeholder="0,00" class="blue" class="form-control" value="0,00" />
+																			</div>
+																		</div>
+																		<label class="red"> Valor da Terapia para o Terapeuta</label>
+																		<div class="form-group">
+																			<div class="col-sm-6">
+																				<input type="text" id="atendFixovalordeb" name="atendFixovalordeb" placeholder="0,00" class="red" class="form-control"  value="0,00" />
 																			</div>
 																		</div>
 																	</div>

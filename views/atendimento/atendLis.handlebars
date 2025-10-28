@@ -576,6 +576,10 @@
 																						{{#ifEqual this.atend_categoria "Falta Absoluta"}}
 																						<span class="label label-sm label-warning">Falta Absoluta</span>
 																						{{else}}
+																							{{#ifEqual this.atend_categoria "Falta Justificada"}}
+																							<span class="label label-sm label-warning">Falta Justificada</span>
+																							{{else}}
+																							{{/ifEqual}}
 																						{{/ifEqual}}
 																					{{/ifEqual}}
 																				{{/ifEqual}}

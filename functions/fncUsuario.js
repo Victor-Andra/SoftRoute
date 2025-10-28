@@ -21,16 +21,16 @@ const usufuncClass =  require("../models/usufunc")//base das funcionalidades do 
 const usupermisClass = require("../models/usupermis")//funcionalidades que o usuário tem permissã e qual tipo de permissão
 
 //Tabelas extrangeiras   
-var Empresa = getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema)
-var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
-var Perfil = getModel("PortalDoUsuario", 'tb_perfil', perfilClass.PerfilSchema)
-var Funcao = getModel("PortalDoUsuario", 'tb_funcao', funcaoClass.FuncaoSchema)
-var Especialidade = getModel("PortalDoUsuario", 'tb_especialidade', especialidadeClass.EspecialidadeSchema)
-var Especializacao = getModel("PortalDoUsuario", 'tb_especializacao', especializacaoClass.EspecializacaoSchema)
-var Metodo = getModel("SoftRoute", 'tb_metodo', metodoClass.MetodoSchema)
-var Metout = getModel("SoftRoute", 'tb_metout', metoutClass.MetoutSchema)
-var Usufunc = getModel("PortalDoUsuario", 'tb_usufunc', usufuncClass.UsufuncSchema)
-var Usupermis = getModel("PortalDoUsuario", 'tb_usupermis', usupermisClass.UsupermisSchema)
+const Empresa = getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema)
+const Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
+const Perfil = getModel("PortalDoUsuario", 'tb_perfil', perfilClass.PerfilSchema)
+const Funcao = getModel("PortalDoUsuario", 'tb_funcao', funcaoClass.FuncaoSchema)
+const Especialidade = getModel("PortalDoUsuario", 'tb_especialidade', especialidadeClass.EspecialidadeSchema)
+const Especializacao = getModel("PortalDoUsuario", 'tb_especializacao', especializacaoClass.EspecializacaoSchema)
+const Metodo = getModel("SoftRoute", 'tb_metodo', metodoClass.MetodoSchema)
+const Metout = getModel("SoftRoute", 'tb_metout', metoutClass.MetoutSchema)
+const Usufunc = getModel("PortalDoUsuario", 'tb_usufunc', usufuncClass.UsufuncSchema)
+const Usupermis = getModel("PortalDoUsuario", 'tb_usupermis', usupermisClass.UsupermisSchema)
 
 const fncGeral = require("./fncGeral");
 const Resposta = fncGeral.Resposta;
@@ -66,6 +66,7 @@ module.exports = {
         })
 
     },
+    /*
     carregaUsuario(req,res){
         let db = req.cookies['preferredDb'];
         Perfil = getModel(db, 'tb_perfil', perfilClass.PerfilSchema)
@@ -87,14 +88,57 @@ module.exports = {
                                     metodo.sort((a,b) => ((a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
                                     Metout.find().then((metout)=>{ //Métodos
                                         metout.sort((a,b) => ((a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Outros Métodos
-                                            Usufunc.find().then((usufunc)=>{
-                                                Usupermis.find().then((usupermis)=>{
-                                                    res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, usupermiss:usupermis, usufuncs: usufunc, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, metouts: metout, funcaos: funcao})
+                                        Usufunc.find().then((usufunc)=>{
+                                            Usupermis.find().then((usupermis)=>{
+                                                res.render("ferramentas/usuario/usuarioCad", {usuarios: usuario, usupermiss:usupermis, usufuncs: usufunc, estados: estado, perfils: perfil, especialidades: especialidade, especializacaos: especializacao, metodos: metodo, metouts: metout, funcaos: funcao})
         })})})})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Usuarios")
             res.redirect('admin/erro')
         })
+    },
+    */
+    async carregaUsuario(req,res){
+        let db = req.cookies['preferredDb'];
+
+        try {
+            const [
+                usuarios, estados, perfils, funcaos, especialidades, especializacaos, metodos, metouts, usufuncs, usupermis
+            ] = await Promise.all([
+                Usuario.find(), // já tava aí antes
+                Estado.find(),
+                Perfil.find(),
+                Funcao.find(),
+                Especialidade.find().collation({ locale: "pt", strength: 1 }).sort({ especialidade_nome: 1 }),
+                Especializacao.find().collation({ locale: "pt", strength: 1 }).sort({ especializacao_nome: 1 }),
+                Metodo.find().collation({ locale: "pt", strength: 1 }).sort({ metodo_ordem: 1 }),
+                Metout.find().collation({ locale: "pt", strength: 1 }).sort({ metout_ordem: 1 }),
+                Usufunc.find(),
+                Usupermis.find()
+            ]);
+
+            especialidades.sort((a,b) => ((a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especialidade_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena as graduações
+            especializacaos.sort((a,b) => ((a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.especializacao_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena Especização
+            metodos.sort((a,b) => ((a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metodo_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Métodos
+            metouts.sort((a,b) => ((a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.metout_ordem.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena os Outros Métodos
+            
+            res.render("ferramentas/usuario/usuarioCad", {
+                usuarios,
+                estados,
+                perfils,
+                funcaos,
+                especialidades,
+                especializacaos,
+                metodos,
+                metouts,
+                usufuncs,
+                usupermis
+            });
+        } catch (err) {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar os dados do usuário");
+            res.redirect("/admin/erro");
+        }
     },
     carregaUsuarioEdiOLD(req,res){
         let db = req.cookies['preferredDb'];
@@ -137,16 +181,8 @@ module.exports = {
         const usuarioId = req.params.id;
 
         // Modelos do PortalDoUsuario
-        const Empresa = getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema);
-        const Perfil = getModel("PortalDoUsuario", 'tb_perfil', perfilClass.PerfilSchema);
-        const Funcao = getModel("PortalDoUsuario", 'tb_funcao', funcaoClass.FuncaoSchema);
-        const Especialidade = getModel("PortalDoUsuario", 'tb_especialidade', especialidadeClass.EspecialidadeSchema);
-        const Especializacao = getModel("PortalDoUsuario", 'tb_especializacao', especializacaoClass.EspecializacaoSchema);
         const Metodo = getModel("PortalDoUsuario", 'tb_metodo', metodoClass.MetodoSchema);
         const Metout = getModel("PortalDoUsuario", 'tb_metout', metoutClass.MetoutSchema);
-        const Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema);
-        const Usufunc = getModel("PortalDoUsuario", 'tb_usufunc', usufuncClass.UsufuncSchema);
-        const Usupermis = getModel("PortalDoUsuario", 'tb_usupermis', usupermisClass.UsupermisSchema);
 
         let base64Image;
 

@@ -147,12 +147,8 @@
 			}
 		</script>
 	</head>
-
 	<body class="no-skin" onload="javascript:controlaNave();carregaBody();preencherCheckboxes();">
-
 		<div class="main-container" id="main-container">
-
-
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state " id="breadcrumbs">
@@ -161,15 +157,11 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Usuários Editar</a>
 							</li>
-
 							<li class="active">Usuários Editar</li>
 						</ul><!-- /.breadcrumb -->
-
 					</div>
-
 					<div class="row">
 						<div class="col-xs-12"><!-- PAGE CONTENT BEGINS -->
-							
 							<form id="formUsuarioAdd" class="form-horizontal" role="form"  action="/menu/ferramentas/usuario/atualizar" method="POST">
 								<document class="document-horizontal" role="document" >
 									<div id="carregaUsu" class="hidden">
@@ -190,209 +182,133 @@
 										<input id="usuAba" name="usuAba" value="{{usuario.usuario_aba}}" />
 										<input id="usuempresaids" name="usuempresaids" value="{{usuario.usuario_empresaids}}" />
 									</div>
-									
 										<div class="col-xl-12" style="padding-top: 50px;">
 											<div class="alert alert-warning" style="font-style: initial;">
 												<strong>
 													<input style="font-size: 16px; font-style: initial; font-color: rgb(106, 116, 10); border: none; background-color: transparent;"  type="text" value="{{usuario.usuarioNomeCompleto}}" name="usuarioNomeCompletoinfo"  id="usuarioNomeCompletoinfo" class="form-control"  >
 												</strong>
-										
 											</div>
 											<div class="tabbable">
 												<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
-													
 													<li class="active">
 														<a data-toggle="tab" href="#basico" aria-expanded="true">
 															<i class="blue ace-icon fa fa-child bigger-120"></i>
 															Dados Básicos
 														</a>
 													</li>
-
-
 													<li class="">
 														<a data-toggle="tab" href="#escolaridade" aria-expanded="false">
 															<i class="green ace-icon fa fa-graduation-cap  bigger-120"></i>
 															Escolaridade
-															
 														</a>
 													</li>
-
 													<li class="">
 														<a data-toggle="tab" href="#end" aria-expanded="false">
 															<i class="orange ace-icon fa fa-globe bigger-120"></i>
 															Endereço
-															
 														</a>
 													</li>
-
 													<li class="">
 														<a data-toggle="tab" href="#contato" aria-expanded="false">
 															<i class="brown ace-icon fa fa-phone bigger-120"></i>
 															Contato
-															
 														</a>
 													</li>
-
 													<li class="">
 														<a data-toggle="tab" href="#finan" aria-expanded="false">
 															<i class="green ace-icon fa fa-money bigger-120"></i>
 															Financeiro
-															
 														</a>
 													</li>
-
-
 													<li class="">
 														<a data-toggle="tab" href="#acesso" aria-expanded="false">
 															<i class="red ace-icon fa fa-key bigger-120"></i>
 															Autenticação e Acesso
-															
 														</a>
 													</li>
-
 													<li class="">
 														<a data-toggle="tab" href="#permiss" aria-expanded="false">
 															<i class="orange ace-icon fa fa-check bigger-120"></i>
 															Permissões
-															
 														</a>
 													</li>
-
 													<li class="">
 														<a data-toggle="tab" href="#carimbo" aria-expanded="false">
 															<i class="blue ace-icon fa fa-tags bigger-120"></i>
 															Carimbo
-															
 														</a>
 													</li>
-
 												</ul>
-
 												<div class="tab-content">
-
 													<div id="basico" class="tab-pane fade active in">
-														
-															<label > Nome </label>
-															<div class="form-group">
-																<div class="col-sm-12">
-																	<input type="text" name="usuarioNome" placeholder="" class="form-control" value="{{usuario.usuario_nome}}" onkeypress="javascript:exibenome();" onchange="javascript:exibenome();"/>
-																</div>
+														<label > Nome </label>
+														<div class="form-group">
+															<div class="col-sm-12">
+																<input type="text" name="usuarioNome" placeholder="" class="form-control" value="{{usuario.usuario_nome}}" onkeypress="javascript:exibenome();" onchange="javascript:exibenome();"/>
 															</div>
-							
-															<label > Nome Completo</label>
-															<div class="form-group">
-																<div class="col-sm-9">
-																	<input type="text" id="usuarioNomeCompleto" name="usuarioNomeCompleto" placeholder="" class="form-control" value="{{usuario.usuario_nomecompleto}}"/>
-																</div>
+														</div>
+														<label > Nome Completo</label>
+														<div class="form-group">
+															<div class="col-sm-9">
+																<input type="text" id="usuarioNomeCompleto" name="usuarioNomeCompleto" placeholder="" class="form-control" value="{{usuario.usuario_nomecompleto}}"/>
 															</div>
-
-
-																<div class="row">
-
-																	<div class="col-xs-12 col-sm-4">
-																		<div >
-
-																			<div>
-																				<div>
-																					<div>
-																						
-																						<label for="id-date-picker-1">Data de nascimento</label>
-																						<div class="row ">
-																							<div class="input-group">
-																								<div class="col-sm-4">
-																									<input id="usuarioDatanasc" name="usuarioDatanasc" type="date" value="{{usuario.usuario_datanasc}}">
-																								</div>
-																							</div>
-																						</div>
-																					
-																					
-																					</div>
-
-
-																				</div>
+														</div>
+														<div class="row">
+															<div class="col-xs-12 col-sm-4">
+																<div >
+																	<label for="id-date-picker-1">Data de nascimento</label>
+																	<div class="row ">
+																		<div class="input-group">
+																			<div class="col-sm-4">
+																				<input id="usuarioDatanasc" name="usuarioDatanasc" type="date" value="{{usuario.usuario_datanasc}}">
 																			</div>
 																		</div>
-																	</div><!-- /.span -->
-
-																	<div class="col-xs-12 col-sm-4">
-																		<div >
-																			<div>
-																				<div>
-																					<div>
-																						<label> CPF </label>
-																						<div class="form-group">
-																							<div class="col-sm-3">
-																								<input type="text" name="usuarioCpf" placeholder="" class="form-control" style="width: 200px;"  value="{{usuario.usuario_cpf}}"/>
-																							</div>
-																						</div>
-
-																					</div>
-
-																				</div>
-																			</div>
-																		</div>
-																	</div><!-- /.span -->
-
-																	<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
-																		<div >
-																			<div >
-																				<div>
-																					<div>
-																						<label> Identidade </label>
-																						<div class="form-group">
-																							<div class="col-sm-9">
-																								<input type="text" name="usuarioIdent" placeholder="" class="form-control"  value="{{usuario.usuario_ident}}"/>
-																							</div>
-																						</div>
-																					</div>
-
-																				</div>
-																			</div>
-																		</div>
-																	</div><!-- /.span -->
-																
+																	</div>
 																</div>
-
-
-
-
-				
-
-
+															</div><!-- /.span -->
+															<div class="col-xs-12 col-sm-4">
+																<div>
+																	<label> CPF </label>
+																	<div class="form-group">
+																		<div class="col-sm-3">
+																			<input type="text" name="usuarioCpf" placeholder="" class="form-control" style="width: 200px;"  value="{{usuario.usuario_cpf}}"/>
+																		</div>
+																	</div>
+																</div>
+															</div><!-- /.span -->
+															<div class="col-xs-12 col-sm-4"><!-- .div não utilizado, apenas para alertas adicionais -->
+																<div>
+																	<label> Identidade </label>
+																	<div class="form-group">
+																		<div class="col-sm-9">
+																			<input type="text" name="usuarioIdent" placeholder="" class="form-control"  value="{{usuario.usuario_ident}}"/>
+																		</div>
+																	</div>
+																</div>
+															</div><!-- /.span -->
+														</div>
 														<div class="row">
 															<div class="col-xs-6">
-
 																<div class="space space-8"></div>
-
 																<label > Nome do Pai </label>
 																<div class="form-group">
 																	<div class="col-sm-12">
 																		<input class="col-sm-8" type="text" name="usuarioNomepai" placeholder="" class="form-control"  value="{{usuario.usuario_nomepai}}"/>
 																	</div>
 																</div>									
-															
 															</div>
-															
 															<div class="col-xs-6">													
-																
 																<div class="space space-8"></div>
-																	<label > Nome da Mãe </label>
-																	<div class="form-group">
-																		<div class="col-sm-12">
-																			<input class="col-sm-8" type="text" name="usuarioNomemae" placeholder="" class="form-control"  value="{{usuario.usuario_nomemae}}"/>
-																		</div>
+																<label > Nome da Mãe </label>
+																<div class="form-group">
+																	<div class="col-sm-12">
+																		<input class="col-sm-8" type="text" name="usuarioNomemae" placeholder="" class="form-control"  value="{{usuario.usuario_nomemae}}"/>
 																	</div>
-															
+																</div>
 															</div>
-													
-																										
 														</div>
-
-
-
 														<div class="row">
 															<div class="col-xs-6">
-
 																<div class="space space-8"></div>
 																<label> Nacionalidade</label>
 																<div class="form-group">
@@ -400,11 +316,8 @@
 																		<input type="text" name="usuarioNacionalidade" placeholder="" class="form-control"  value="{{usuario.usuario_nacionalidade}}"/>
 																	</div>
 																</div>										
-															
 															</div>
-															
 															<div class="col-xs-6">													
-																
 																<div class="space space-8"></div>
 																<label> Naturalidade</label>
 																<div class="form-group">
