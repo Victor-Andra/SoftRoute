@@ -316,5 +316,36 @@ module.exports = {Filtros, Resposta,
         }
 
         return t;
+    },
+    // Funções auxiliares
+    calcularIdade(dataNascimento) {
+        const hoje = new Date();
+        let idadeAnos = hoje.getFullYear() - dataNascimento.getFullYear();
+        const aniversarioEsteAno = new Date(
+            hoje.getFullYear(),
+            dataNascimento.getMonth(),
+            dataNascimento.getDate()
+        );
+
+        if (hoje < aniversarioEsteAno) {
+            idadeAnos -= 1;
+        }
+
+        const idadeMeses = (hoje.getMonth() - dataNascimento.getMonth() + 12) % 12;
+
+        return `${idadeAnos} anos e ${idadeMeses} meses`;
+    },
+    formatarData(data) {
+        const dia = String(data.getUTCDate()).padStart(2, '0');
+        const mes = String(data.getUTCMonth() + 1).padStart(2, '0');
+        const ano = data.getUTCFullYear();
+        return `${ano}-${mes}-${dia}`;
+    },
+    ordenarPorNome(campo) {
+        return (a, b) => {
+            const nomeA = a[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            const nomeB = b[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            return nomeA.localeCompare(nomeB);
+        };
     }
 }

@@ -201,14 +201,14 @@ module.exports = {
                 resposta.texto = "Cadastrado com sucesso!"
                 resposta.sucesso = "true"
                 //console.log('retorno verdadeiro')
-                req.flash("success_message", "Cadastro realizado com sucesso!")
-                this.listaNotasup(req,res,resposta)
+                let beneId = req.body.notasupBeneid;
+                fncProg.listaProgfiltro(req, beneId, res, resposta);
             } else {
                 resposta.texto = "Erro ao carastrar Notas de Supervisão. "+resultado;
                 resposta.sucesso = "false"
                 //console.log('retorno falso')
-                req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                res.render('admin/erro', resposta);
+                let beneId = req.body.notasupBeneid;
+                fncProg.listaProgfiltro(req, beneId, res, resposta);
             }
         })
     },
@@ -232,14 +232,16 @@ module.exports = {
                     //console.log("Listagem Realizada!")
                     resposta.texto = "Atualizado com Sucesso!"
                     resposta.sucesso = "true"
-                    this.listaNotasup(req,res,resposta)
+                    let beneId = req.body.notasupBeneid;
+                    fncProg.listaProgfiltro(req, beneId, res, resposta);
                 }else{
                     //passar classe de erro
                     //console.log("error")
                     //console.log(resultado)
                     resposta.texto = resultado
                     resposta.sucesso = "false"
-                    this.listaNotasup(req,res,resposta)
+                    let beneId = req.body.notasupBeneid;
+                    fncProg.listaProgfiltro(req, beneId, res, resposta);
                 }
             })
         } catch(err1){

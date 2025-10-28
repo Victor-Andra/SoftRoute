@@ -550,7 +550,7 @@ module.exports = {
         });
     },
 
-    xlistaProgfiltro(req, res, resposta) {//Lista ABA ANDAMENTO, Filtrada dos Programas por Beneficiário escolhido no form anterior
+    xlistaProgfiltroOLD(req, res, resposta) {//Lista ABA ANDAMENTO, Filtrada dos Programas por Beneficiário escolhido no form anterior
         let db = req.cookies['preferredDb'];
         Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -566,104 +566,69 @@ module.exports = {
         const dataAtual = new Date();
         
         // Busca o beneficiário selecionado
-        Bene.findOne({ _id: req.params.id, bene_status: "Ativo", bene_aba: "Sim" })
-            .then((bene) => {
-                if (!bene) {
-                    return res.status(404).json({ error: "Beneficiário não encontrado!" });
-                }
-    
-                // Cálculo de idade e datas relacionadas
-                const datanasc = new Date(bene.bene_datanasc);
-                bene.datanasc = formatarData(datanasc);
-                bene.idade = calcularIdade(datanasc);
-                //
-                // Funções auxiliares
-            function calcularIdade(dataNascimento) {
-                const hoje = new Date();
-                let idadeAnos = hoje.getFullYear() - dataNascimento.getFullYear();
-                const aniversarioEsteAno = new Date(
-                    hoje.getFullYear(),
-                    dataNascimento.getMonth(),
-                    dataNascimento.getDate()
-                );
-
-                if (hoje < aniversarioEsteAno) {
-                    idadeAnos -= 1;
-                }
-
-                const idadeMeses = (hoje.getMonth() - dataNascimento.getMonth() + 12) % 12;
-
-                return `${idadeAnos} anos e ${idadeMeses} meses`;
+        Bene.findOne({ _id: req.params.id, bene_status: "Ativo", bene_aba: "Sim" }).then((bene) => {
+            if (!bene) {
+                return res.status(404).json({ error: "Beneficiário não encontrado!" });
             }
 
-            function formatarData(data) {
-                const dia = String(data.getUTCDate()).padStart(2, '0');
-                const mes = String(data.getUTCMonth() + 1).padStart(2, '0');
-                const ano = data.getUTCFullYear();
-                return `${ano}-${mes}-${dia}`;
-            }
+            // Cálculo de idade e datas relacionadas
+            const datanasc = new Date(bene.bene_datanasc);
+            bene.datanasc = fncGeral.formatarData(datanasc);
+            bene.idade = fncGeral.calcularIdade(datanasc);
+            //
+            // Busca as tabelas dependentes
+            Prog.find({ prog_beneid: bene._id , prog_status: { $ne: "Adquirido" }}).then((prog) => {
+                
+                // Variáveis para contar os programas adquiridos e não adquiridos
+                let countProgs = 0;
+                let countProgsC = 0;
+                let countProgsA = 0;
 
-            function ordenarPorNome(campo) {
-                return (a, b) => {
-                    const nomeA = a[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                    const nomeB = b[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                    return nomeA.localeCompare(nomeB);
-                };
-            }
-                // Busca as tabelas dependentes
-                Prog.find({ prog_beneid: bene._id , prog_status: { $ne: "Adquirido" }}).then((prog) => {
-                    
-                    // Variáveis para contar os programas adquiridos e não adquiridos
-                    let countProgs = 0;
-                    let countProgsC = 0;
-                    let countProgsA = 0;
+                prog.forEach((p) => {
+                    p.datacad = fncGeral.formatarData(new Date(p.prog_datacad));
+                    p.dataedi = fncGeral.formatarData(new Date(p.prog_dataedi));
+                });
+                
 
-                    prog.forEach((p) => {
-                        p.datacad = formatarData(new Date(p.prog_datacad));
-                        p.dataedi = formatarData(new Date(p.prog_dataedi));
-                    });
-                    
+                Progdica.find().then((progdica) => {
+                    progdica.sort(fncGeral.ordenarPorNome('progdica_nome'));
 
-                    Progdica.find().then((progdica) => {
-                        progdica.sort(ordenarPorNome('progdica_nome'));
-    
-                        Progtipo.find().then((progtipo) => {
-                            progtipo.sort(ordenarPorNome('progtipo_nome'));
-    
-                            Prognivel.find().then((prognivel) => {
-                                prognivel.sort(ordenarPorNome('prognivel_nome'));
-    
-                                Progset.find().then((progset) => {
-                                    prog.forEach((p) => {
-                                        let total = 0;
-                                        progset.forEach((ps) => {
-                                            if (ps.progset_progid.toString() === p._id.toString()) {
-                                                total += parseInt(ps.progset_qtest || 0);
-                                            }
-                                        });
-                                        p.prog_total_estimulos = total;
+                    Progtipo.find().then((progtipo) => {
+                        progtipo.sort(fncGeral.ordenarPorNome('progtipo_nome'));
+
+                        Prognivel.find().then((prognivel) => {
+                            prognivel.sort(fncGeral.ordenarPorNome('prognivel_nome'));
+
+                            Progset.find().then((progset) => {
+                                prog.forEach((p) => {
+                                    let total = 0;
+                                    progset.forEach((ps) => {
+                                        if (ps.progset_progid.toString() === p._id.toString()) {
+                                            total += parseInt(ps.progset_qtest || 0);
+                                        }
                                     });
-    
-                                    Folreg.find().then((folreg) => {
-                                        Notasup.find().then((notasup) => {
-                                            Usuario.find().then((usuario) => {
-                                                usuario.sort(ordenarPorNome('usuario_nome'));
-    
-                                                // Renderização do formulário com os dados filtrados
-                                                res.render('area/aba/prog/progLisfiltrado', {
-                                                    progs: prog,
-                                                    progsets: progset,
-                                                    usuarios: usuario,
-                                                    benes: [bene],
-                                                    perfilAtual,
-                                                    flash: resposta,
-                                                    progdicas: progdica,
-                                                    progtipos: progtipo,
-                                                    prognivels: prognivel,
-                                                    dataAtual,
-                                                    folregs: folreg,
-                                                    notasups: notasup
-                                                });
+                                    p.prog_total_estimulos = total;
+                                });
+
+                                Folreg.find().then((folreg) => {
+                                    Notasup.find().then((notasup) => {
+                                        Usuario.find().then((usuario) => {
+                                            usuario.sort(fncGeral.ordenarPorNome('usuario_nome'));
+
+                                            // Renderização do formulário com os dados filtrados
+                                            res.render('area/aba/prog/progLisfiltrado', {
+                                                progs: prog,
+                                                progsets: progset,
+                                                usuarios: usuario,
+                                                benes: [bene],
+                                                perfilAtual,
+                                                flash: resposta,
+                                                progdicas: progdica,
+                                                progtipos: progtipo,
+                                                prognivels: prognivel,
+                                                dataAtual,
+                                                folregs: folreg,
+                                                notasups: notasup
                                             });
                                         });
                                     });
@@ -672,15 +637,15 @@ module.exports = {
                         });
                     });
                 });
-            })
-            .catch((err) => {
-                console.error(err);
-                req.flash("error_message", "Houve um erro ao listar!");
-                res.redirect('admin/erro');
             });
+        }).catch((err) => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar!");
+            res.redirect('admin/erro');
+        });
     },
 
-    listaProgfiltro(req, beneId, res, resposta) {//Lista ABA ANDAMENTO, Filtrada dos Programas por Beneficiário escolhido no form anterior
+    listaProgfiltro : async(req, beneId, res, flash) =>{
         let db = req.cookies['preferredDb'];
         Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -691,130 +656,114 @@ module.exports = {
         Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
         Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
         Notasupobs = getModel(db, 'tb_notasupobs', notasupobsClass.NotaSupObsSchema)
+        flash = flash || {};
+        flash.sucesso = "true";
 
-        
         const perfilAtual = req.cookies['lvlUsu'];
         const dataAtual = new Date();
-        let idBene = beneId || req.params.id;
-        console.log("Chamando listaProgfiltro para o ID:", idBene);
-        // Busca o beneficiário selecionado
-        Bene.findOne({ _id: idBene, bene_status: "Ativo", bene_aba: "Sim" }).then((bene) => {
+        const idBene = beneId || req.params.id;
+console.log("beneId: "+beneId);
+console.log("idBene: "+idBene);
+console.log("flash: "+flash);
+console.log("res: "+res);
+
+        let dados = {};
+
+        try {
+            console.log("Chamando listaProgfiltro para o ID:", idBene);
+
+            const bene = await Bene.findOne({ _id: idBene, bene_status: "Ativo", bene_aba: "Sim" });
+
             if (!bene) {
-                return res.status(404).json({ error: "Beneficiário não encontrado!" });
+                flash.sucesso = "false";
+                flash.texto = "Beneficiário não encontrado!";
+                return;
             }
 
-            // Cálculo de idade e datas relacionadas
-            const datanasc = new Date(bene.bene_datanasc);
-            bene.datanasc = formatarData(datanasc);
-            bene.idade = calcularIdade(datanasc);
-            
-                // Funções auxiliares
-                function calcularIdade(dataNascimento) {
-                    const hoje = new Date();
-                    let idadeAnos = hoje.getFullYear() - dataNascimento.getFullYear();
-                    const aniversarioEsteAno = new Date(
-                        hoje.getFullYear(),
-                        dataNascimento.getMonth(),
-                        dataNascimento.getDate()
-                    );
+            const dn = new Date(bene.bene_datanasc);
+            bene.datanasc = fncGeral.formatarData(dn);
+            bene.idade = fncGeral.calcularIdade(dn);
 
-                    if (hoje < aniversarioEsteAno) {
-                        idadeAnos -= 1;
-                    }
+            const [
+                prog, notasup, progdica, progtipo,
+                prognivel, progset, folreg, usuario
+            ] = await Promise.all([
+                Prog.find({ prog_beneid: bene._id, prog_status: { $ne: "Adquirido" }}),
+                Notasup.find({ notasup_beneid: bene._id }),
+                Progdica.find(),
+                Progtipo.find(),
+                Prognivel.find(),
+                Progset.find(),
+                Folreg.find(),
+                Usuario.find()
+            ]);
 
-                    const idadeMeses = (hoje.getMonth() - dataNascimento.getMonth() + 12) % 12;
+            // Ordenações
+            progdica.sort(fncGeral.ordenarPorNome('progdica_nome'));
+            progtipo.sort(fncGeral.ordenarPorNome('progtipo_nome'));
+            prognivel.sort(fncGeral.ordenarPorNome('prognivel_nome'));
+            usuario.sort(fncGeral.ordenarPorNome('usuario_nome'));
 
-                    return `${idadeAnos} anos e ${idadeMeses} meses`;
-                }
-
-                function formatarData(data) {
-                    const dia = String(data.getUTCDate()).padStart(2, '0');
-                    const mes = String(data.getUTCMonth() + 1).padStart(2, '0');
-                    const ano = data.getUTCFullYear();
-                    return `${ano}-${mes}-${dia}`;
-                }
-
-                function ordenarPorNome(campo) {
-                    return (a, b) => {
-                        const nomeA = a[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                        const nomeB = b[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                        return nomeA.localeCompare(nomeB);
-                    };
-                }
-                // Busca as tabelas dependentes
-                Prog.find({ prog_beneid: bene._id , prog_status: { $ne: "Adquirido" }}).then((prog) => {
-                    
-                    // Variáveis para contar os programas adquiridos e não adquiridos
-                    let countProgs = 0;
-                    let countProgsC = 0;
-                    let countProgsA = 0;
-
-                    prog.forEach((p) => {
-                        p.datacad = formatarData(new Date(p.prog_datacad));
-                        p.dataedi = formatarData(new Date(p.prog_dataedi));
-                    });
-                    
-                    Notasup.find({ notasup_beneid: bene._id }).then((notasup) => {
-                        Notasupobs.find({ notaSupObs_notasupId: { $in: notasup.map(n => n._id) } }).then((notasupobs) => {
-                            console.log("Estrutura de notasups:", JSON.stringify(notasup, null, 2));
-                            console.log("Estrutura de notasupobss:", JSON.stringify(notasupobs, null, 2));
-                                    Progdica.find().then((progdica) => {
-                                        progdica.sort(ordenarPorNome('progdica_nome'));
-                                            Progtipo.find().then((progtipo) => {
-                                                progtipo.sort(ordenarPorNome('progtipo_nome'));
-                        
-                                                Prognivel.find().then((prognivel) => {
-                                                    prognivel.sort(ordenarPorNome('prognivel_nome'));
-                        
-                                                    Progset.find().then((progset) => {
-                                                        prog.forEach((p) => {
-                                                            let total = 0;
-                                                            progset.forEach((ps) => {
-                                                                if (ps.progset_progid.toString() === p._id.toString()) {
-                                                                    total += parseInt(ps.progset_qtest || 0);
-                                                                }
-                                                            });
-                                                            p.prog_total_estimulos = total;
-                                                        });
-                        
-                                                        Folreg.find().then((folreg) => {
-                                                            
-                                                            Usuario.find().then((usuario) => {
-                                                                usuario.sort(ordenarPorNome('usuario_nome'));
-
-                                                    // Renderização do formulário com os dados filtrados
-                                                    res.render('area/aba/prog/progLisfiltrado', {
-                                                        progs: prog,
-                                                        notasups: notasup,
-                                                        notasupobss: notasupobs,
-                                                        progsets: progset,
-                                                        usuarios: usuario,
-                                                        benes: [bene],
-                                                        perfilAtual,
-                                                        flash: resposta,
-                                                        progdicas: progdica,
-                                                        progtipos: progtipo,
-                                                        prognivels: prognivel,
-                                                        dataAtual,
-                                                        folregs: folreg
-                                                    });
-                                                });
-                                            });
-                                        });
-                                    });
-                                });
-                            });
-                        });
-                    });
-                });
-            })
-            .catch((err) => {
-                console.error(err);
-                req.flash("error_message", "Houve um erro ao listar!");
-                res.redirect('admin/erro');
+            const notasupobs = await Notasupobs.find({
+                notaSupObs_notasupId: { $in: notasup.map(n => n._id) }
             });
+
+            // Total de estímulos em cada programa
+            prog.forEach(p => {
+                p.datacad = fncGeral.formatarData(new Date(p.prog_datacad));
+                p.dataedi = fncGeral.formatarData(new Date(p.prog_dataedi));
+
+                p.prog_total_estimulos = progset
+                    .filter(ps => ps.progset_progid.toString() === p._id.toString())
+                    .reduce((acc, ps) => acc + (parseInt(ps.progset_qtest) || 0), 0);
+            });
+
+            dados = { bene, prog, notasup, notasupobs, progdica, progtipo, prognivel, progset, folreg, usuario };
+
+        } catch (err) {
+            console.error("Erro no fluxo:", err);
+            flash.sucesso = "false";
+            flash.texto = "Houve um erro ao listar!";
+        } finally {
+            if (flash.sucesso === "true") {
+                res.render('area/aba/prog/progLisfiltrado', {
+                    progs: dados.prog,
+                    notasups: dados.notasup,
+                    notasupobss: dados.notasupobs,
+                    progsets: dados.progset,
+                    usuarios: dados.usuario,
+                    benes: [dados.bene],
+                    perfilAtual,
+                    flash,
+                    progdicas: dados.progdica,
+                    progtipos: dados.progtipo,
+                    prognivels: dados.prognivel,
+                    dataAtual,
+                    folregs: dados.folreg
+                });
+            } else {
+                //let abaUsu = req.cookies['abaUsu'];//Novo cookies novo campo no cadastro do usuário, para somente quem tiver "Sim" nesse campo para acessar o ABA
+                let dataAtual = new Date();
+                let perfilAtual = req.cookies['lvlUsu'];
+            
+                Bene.find({bene_status: "Ativo", bene_nome: { $not: /\./ }, bene_aba: "Sim" }).then((bene) => {
+                    bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+        
+                    res.render('area/aba/prog/progLis', {
+                        benes: bene,
+                        perfilAtual,
+                        flash,
+                        dataAtual,
+                    });
+                        
+                }).catch((err) => {
+                    console.log(err);
+                    req.flash("error_message", "houve um erro ao listar!");
+                    res.redirect('admin/erro');
+                });
+            }
+        }
     },
-  
 
     listaProgfiltroManut(req, res, resposta) {//Lista ABA MANUTENÇÃO, Filtrada dos Programas por Beneficiário escolhido no form anterior 
         let db = req.cookies['preferredDb'];
@@ -948,7 +897,7 @@ module.exports = {
             });
     },
 
-    listaProg(req, res, resposta) {//lista prog abrir primeiro para filtrar
+    listaProg : async (req, res, resposta) => {//lista prog abrir primeiro para filtrar
         let db = req.cookies['preferredDb'];
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
 
@@ -1075,15 +1024,14 @@ module.exports = {
                 req.flash("success_message", "Cadastro realizado com sucesso!")
                 resposta.texto = "Cadastrado com sucesso!"
                 resposta.sucesso = "true"
-                this.listaProg(req,res,resposta)
                 let beneId = req.body.progBeneid;
-                fncProg.listaProgfiltro(req, beneId, res, resposta);
+                this.listaProgfiltro(req, beneId, res, resposta);
             } else {
                 console.log('falso')
                 resposta.texto = resultado
                 resposta.sucesso = "false"
                 let beneId = req.body.progBeneid;
-                fncProg.listaProgfiltro(req, beneId, res, resposta);
+                this.listaProgfiltro(req, beneId, res, resposta);
             }
         })
     },
@@ -1107,13 +1055,14 @@ module.exports = {
                     req.flash("success_message", "Cadastro realizado com sucesso!")
                     resposta.texto = "Atualizado com sucesso!"
                     resposta.sucesso = "true"
-                    this.listaProg(req,res,resposta)
+                    let beneId = req.body.progBeneid;
+                    this.listaProgfiltro(req, beneId, res, resposta);
                 } else {
                     console.log('falso')
                     resposta.texto = resultado
                     resposta.sucesso = "false"
-                    req.flash("error_message", "houve um erro ao abrir o cadastro!")
-                    this.listaProg(req,res,resposta)
+                    let beneId = req.body.progBeneid;
+                    this.listaProgfiltro(req, beneId, res, resposta);
                 }
             })
         } catch(err1){
@@ -1125,15 +1074,29 @@ module.exports = {
     deletaProg(req,res){
         let db = req.cookies['preferredDb'];
         Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
+        let resposta = new Resposta()
 
         Prog.deleteOne({_id: req.params.id}).then(() =>{
             Prog.find().then((prog) =>{
-                req.flash("success_message", "Método deletado!")
-                res.render('area/aba/prog/progLis', {progs: prog})
+                console.log("Deletado!")
+                console.log(prog)
+                resultado = prog;
             }).catch((err) =>{
                 console.log(err)
-                req.flash("error_message", "houve um erro ao listar Métodos")
-                res.render('admin/erro')
+                resultado = err;
+            }).finally(() =>{
+                if (resultado == true){
+                    console.log('verdadeiro')
+                    req.flash("success_message", "Cadastro realizado com sucesso!")
+                    resposta.texto = "Atualizado com sucesso!"
+                    resposta.sucesso = "true"
+                    this.listaProgF(req,res,resposta)
+                } else {
+                    console.log('falso')
+                    resposta.texto = resultado
+                    resposta.sucesso = "false"
+                    this.listaProg(req,res,resposta)
+                }
             })
         })
     }

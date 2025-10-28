@@ -222,36 +222,31 @@ module.exports = {
     atualizaProgset(req, res) {
         let resultado;
         let resposta = new Resposta();
-        try {
-            progsetClass.progsetEditar(req, res).then((res) => {
-                console.log("Atualização Realizada!")
-                console.log(res)
-                resultado = res;
-            }).catch((err) => {
-                console.log("error1")
-                console.log(err)
-                resultado = err;
-                res.render('admin/erro')
-            }).finally(() => {
-                if (resultado == true) {
-                    console.log('verdadeiro')
-                    req.flash("success_message", "Cadastro realizado com sucesso!")
-                    resposta.texto = "Atualizado com sucesso!"
-                    resposta.sucesso = "true"
-                    let beneId = req.body.progsetBeneid;
-                    fncProg.listaProgfiltro(req, beneId, res, resposta);
-                } else {
-                    console.log('falso')
-                    resposta.texto = resultado
-                    resposta.sucesso = "false"
-                    let beneId = req.body.progsetBeneid;
-                    fncProg.listaProgfiltro(req, beneId, res, resposta);
-                }
-            })
-        } catch (err1) {
-            console.log("Erro TryCatch:" + err1)
-            res.render('admin/erro');
-        }
+        var beneId = req.body.progsetBeneidEdi;
+        console.log("antesbeneId: "+beneId);
+        console.log("req.body.progsetBeneid: "+req.body.progsetBeneid);
+        progsetClass.progsetEditar(req, res).then((res) => {
+            console.log("Atualização Realizada!")
+            console.log(res)
+            resultado = res;
+        }).catch((err) => {
+            console.log("error1")
+            console.log(err)
+            resultado = err;
+        }).finally(() => {
+            if (resultado == true) {
+                console.log('verdadeiro')
+                req.flash("success_message", "Cadastro realizado com sucesso!")
+                resposta.texto = "Atualizado com sucesso!"
+                resposta.sucesso = "true"
+                fncProg.listaProgfiltro(req, beneId, res, resposta);
+            } else {
+                console.log('falso')
+                resposta.texto = resultado
+                resposta.sucesso = "false"
+                fncProg.listaProgfiltro(req, beneId, res, resposta);
+            }
+        })
     },
 
     deletaProgset(req,res){

@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 const notaSupObsClass = require("../models/notasupobs")
 const { getModel } = require('../functions/fncGeral');
+const { Resposta } = require('../functions/fncGeral');
 
 const NotasupSchema = mongoose.Schema({
     notasup_tiposup :{ type: String, required: false },
@@ -163,19 +164,7 @@ class Notasup{
 
 NotasupSchema.loadClass(Notasup)
 var Notasupobs = getModel("softroute", 'tb_notasupobs', notaSupObsClass.NotaSupObsSchema)
-const Resposta = mongoose.Schema({
-    
-    texto: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    sucesso: {
-        type: String,
-        required: true
-    }    
-})
-const NotasupModel = getModel("softroute", 'tb_notasup', NotasupSchema)
+var NotasupModel = getModel("softroute", 'tb_notasup', NotasupSchema)
 module.exports = {
     NotasupModel,
     NotasupSchema,

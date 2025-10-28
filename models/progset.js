@@ -132,6 +132,7 @@ module.exports = {
         let usuarioAtual = req.cookies['idUsu'];
         let resultado;
         // Realiza Atualização
+        console.log("req.body.progsetBeneid: "+req.body.progsetBeneid)
         await ProgsetModel.findByIdAndUpdate(req.body.progsetId, 
             {
                 progset_progid: req.body.progsetProgid,

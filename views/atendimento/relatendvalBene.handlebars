@@ -93,12 +93,12 @@
 							<ul class="breadcrumb">
 								<label>Período de:</label>
 								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
-								<input class="hidden" id="dataIni" name="dataIni" />
+								<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}"/>
 								<label>até:</label>
 								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
-								<input class="hidden" id="dataFim" name="dataFim" />
+								<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}"/>
 								<label>Beneficiário: </label>
-								<select style="height: 30px; width:300px;" name="relBeneid" id="relBeneid" class="chosen-select" data-placeholder="Escolha...">
+								<select style="height: 30px; width:300px;" name="relBeneid" id="relBeneid" class="chosen-select" data-placeholder="Escolha..." value="{{filtro.relConvid}}">
 									{{#each benes}}
 									<option value="{{_id}}">{{bene_nome}}</option>
 									{{/each}}
