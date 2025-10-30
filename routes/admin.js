@@ -954,7 +954,7 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
         res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + tempoCookie) });
         res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + tempoCookie) });
         res.cookie('preferredDb', db, { expires: new Date(Date.now() + tempoCookie) });
-
+console.log("DB: "+db)
         // Buscar dados gerais
         const [usuariosAtivos, benesAtivos, salas, terapias, benesFull] = await Promise.all([
             Usuario.find({ usuario_status: "Ativo" }),
@@ -1056,7 +1056,6 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
             flash.texto = "Logado com sucesso!";
         }
 
-        console.log("TA CHEGANDO AQUI");
         res.render("branco", {
             flash,
             aniversariantesDaSemanaUsuario,

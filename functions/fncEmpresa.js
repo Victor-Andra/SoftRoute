@@ -17,7 +17,7 @@ const Resposta = fncGeral.Resposta;
 module.exports = {
     listaEmpresa(req,res){
         console.log('listando empresas')
-        Empresa.find().then((empresa) =>{
+        Empresa.find({empresa_status: true}).then((empresa) =>{
             console.log("Listagem Realizada!")
             res.render('ferramentas/empresa/empresaLis', {empresas: empresa})
         }).catch((err) =>{

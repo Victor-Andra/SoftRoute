@@ -496,6 +496,9 @@
 					case "SoftRouteFazendinha":
 						db = "Fazendinha";
 						break;
+					case "TESTE":
+						db = "AREA DE TESTE";
+						break;
 					default:
 						db = "";
 						break;
@@ -515,9 +518,12 @@
 				if (preferredDb === "SoftRoute") {
 					// Remove qualquer skin → "no-skin"
 					body.className = "no-skin"; // ou body.removeAttribute("class");
+				} else if (preferredDb === "SoftRouteFazendinha") {
+					// Remove qualquer skin → "no-skin"
+					body.className = "skin-5"; // ou body.removeAttribute("class");
 				} else {
 					// Aplica skin-5 para qualquer outro valor
-					body.className = "skin-5";
+					body.className = "skin-1";
 				}
 			});
 
