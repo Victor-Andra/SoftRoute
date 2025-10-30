@@ -590,51 +590,71 @@ module.exports = {
         if (req.body.agendaTurnoFalta == "Manhã"){
             turno = fncGeral.getDateHoursToIsostring(dataIni,horasTurnoManha);
             
-            console.log("dataIni? "+dataIni)
-            console.log("dataFim? "+dataFim)
+            //console.log("dataIni? "+dataIni)
+            //console.log("dataFim? "+dataFim)
             dataFim.setHours(12);
-            console.log("dataIni? "+dataIni)
-            console.log("dataFim? "+dataFim)
+            //console.log("dataIni? "+dataIni)
+            //console.log("dataFim? "+dataFim)
             turnoIni = fncGeral.getDateToIsostring(dataIni);
             turnoFim = fncGeral.getDateToIsostring(dataFim);
-            console.log("turnoIni? "+turnoIni)
-            console.log("turnoFim? "+turnoFim)
+            //console.log("turnoIni? "+turnoIni)
+            //console.log("turnoFim? "+turnoFim)
         } else if (req.body.agendaTurnoFalta == "Tarde"){
-            console.log("TARDE")
+            //console.log("TARDE")
             turno = fncGeral.getDateHoursToIsostring(dataIni,horasTurnoTarde);
 
-            console.log("dataIni? "+dataIni)
-            console.log("dataFim? "+dataFim)
+            //console.log("dataIni? "+dataIni)
+            //console.log("dataFim? "+dataFim)
             dataIni.setHours(12);
-            console.log("dataIni? "+dataIni)
-            console.log("dataFim? "+dataFim)
+            //console.log("dataIni? "+dataIni)
+            //console.log("dataFim? "+dataFim)
             turnoIni = fncGeral.getDateToIsostring(dataIni);
             turnoFim = fncGeral.getDateToIsostring(dataFim);
-            console.log("turnoIni? "+turnoIni)
-            console.log("turnoFim? "+turnoFim)
+            //console.log("turnoIni? "+turnoIni)
+            //console.log("turnoFim? "+turnoFim)
         } else {
             turno = fncGeral.getDateHoursToIsostring(dataIni,horasTurnoCompleto);
 
             turnoIni = fncGeral.getDateToIsostring(dataIni);
             turnoFim = fncGeral.getDateToIsostring(dataFim);
-            console.log("turnoIni? "+turnoIni)
-            console.log("turnoFim? "+turnoFim)
+            //console.log("turnoIni? "+turnoIni)
+            //console.log("turnoFim? "+turnoFim)
         }
-        console.log("req.body.agendaCateg: "+req.body.agendaCateg);
+        //console.log("req.body.agendaCateg: "+req.body.agendaCateg);
         if (beneidx == "-" && teraidx == "-") {
             resultado = "false";
         } else if (beneidx != "-" && teraidx == "-") {
-            busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_beneid: beneidx };
+            console.log("CERTOP")
+            if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_beneid: beneidx , atend_atendhora: { $in: horasTurnoManha }};
+            } else if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_beneid: beneidx , atend_atendhora: { $in: horasTurnoTarde }};
+            } else{
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_beneid: beneidx };
+            }
+            
         } else if (beneidx == "-" && teraidx != "-") {
             console.log("falta terapeuta")
-            busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx };
+            if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_atendhora: { $in: horasTurnoManha } };
+            } else if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_atendhora: { $in: horasTurnoTarde } };
+            } else{
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx };
+            }
         } else if (beneidx != "-" && teraidx != "-") {
             console.log("falta de um bene para um terapeuta")
-            busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_beneid: beneidx };
+            if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_beneid: beneidx , atend_atendhora: { $in: horasTurnoManha } };
+            } else if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_beneid: beneidx , atend_atendhora: { $in: horasTurnoTarde } };
+            } else{
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_beneid: beneidx };
+            }
         }
         if (resultado != "false"){
             await AtendModel.find(busca).then((atend)=>{
-                console.log("atend:"+atend.length);
+                //console.log("atend:"+atend.length);
                 atend.forEach(a => {
                     AtendModel.findByIdAndUpdate(a._id, 
                         {$set: {

@@ -2,10 +2,10 @@
 <html lang="pt-br">
 	<head>
 		<title>Relatório de Atendimentos e Valores por Terapia</title>
-			<style>
+		<style>
 			/* Estilos para tela */
 			@media screen {
-				.print-footer {
+				.print-header {
 					display: none;
 				}
 			}
@@ -16,37 +16,43 @@
 					display: none !important;
 				}
 
-				.print-footer {
-					display: block;
+				/* Cabeçalho fixo com paginação no topo */
+				.print-header {
 					position: fixed;
-					bottom: 0;
+					top: 0;
 					left: 0;
 					right: 0;
 					text-align: center;
 					font-size: 11px;
-					padding: 5px 0;
+					padding: 4px 0;
 					background: white;
 					z-index: 9999;
+					content: "Página " counter(page) " de " counter(pages);
 				}
 
+				/* Margem superior para não sobrepor conteúdo */
 				body {
-					margin-bottom: 30mm; /* Espaço para rodapé fixo */
+					margin-top: 12mm; /* suficiente para o cabeçalho */
+					margin-bottom: 10mm;
 				}
 
+				/* Configuração da página: permite retrato ou paisagem conforme escolha do usuário */
 				@page {
 					margin: 1cm;
-					@bottom-center {
+					/* NÃO defina `size` aqui — isso bloqueia a orientação! */
+					@top-center {
 						content: "Página " counter(page) " de " counter(pages);
-						font-size: 12px;
+						font-size: 11px;
+						color: black;
+					}
+					@bottom-center {
+						content: ""; /* remove qualquer rodapé automático */
 					}
 				}
-			}
 
-			/* Estilos específicos para impressão em modo paisagem */
-			@media print and (orientation: landscape) {
-				/* Apenas garantimos que o noprint continue funcionando */
-				.noprint {
-					display: none !important;
+				/* Garante que elementos grandes não quebrem mal */
+				table {
+					page-break-inside: avoid;
 				}
 			}
 		</style>
@@ -224,21 +230,17 @@
 															<th>Terapia</th>
 															<th>Sessões</th>
 															<th>Valor da Sessão</th>
-															<th>Valor Total</th>															
+															<th>Valor Total</th>
 														</tr>
 													</thead>
 													{{#each rels}}
 														<tbody>
 															<tr>
 																<td class="center">#</td>
-																{{#each ../terapias}}
-																	{{#ifEqual this._id ../nomecid}}
-																		<td>{{terapia_nomecid}}</td>
-																	{{/ifEqual}}
-																{{/each}}
+																<td>{{nomecid}}</td>
 																<td>{{sessoes}}</td>
-																<td>{{valor}}</td>		
-																<td>{{total}}</td>				
+																<td>{{valor}}</td>
+																<td>{{total}}</td>
 															</tr>
 														</tbody>
 													{{/each}}
@@ -247,13 +249,12 @@
 															<td class="right">-</td>
 															<td><b>Total</b></td>
 															<td><b>{{totalSessoes}}</b></td>
-															<td><b>-</b></td>		
-															<td><b>{{totalFinal}}</b></td>					
+															<td><b>-</b></td>
+															<td><b>{{totalFinal}}</b></td>
 														</tr>
 													</footer>
 												</table>
 											</div>
-															
 										</div>
 									</div>
 								</div>

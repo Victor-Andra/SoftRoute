@@ -732,23 +732,17 @@ router.post('/login', passport.authenticate('local', {//Abre portal Login e senh
     try {
         // Verificar usuário e perfil
         Usuario.findOne({ usuario_email: req.body.email, usuario_senha: req.body.senha }).then((usu)=>{
-            console.log("CHUVA!");
             if (!usu || usu.usuario_status !== "Ativo") {
-                console.log("INATIVO OU SEM")
                 req.flash("error_message", "Usuário ou senha inválidos ou inativo.");
                 return res.redirect('/menu/login');
             }
-            console.log("FODASSE?")
             if (usu.usuario_empresaids != undefined) {
-                console.log("FODASSE 2")
                 if (usu.usuario_empresaids.length == 1){
-                    console.log("apenas 1");
                     Empresa.findOne({_id: usu.usuario_empresaids[0]}).then((empresa)=>{
                         let dbEscolhida = empresa.empresa_chavedb;
                         return login(req,res,dbEscolhida);
                     })
                 } else if (usu.usuario_empresaids.length > 1) {
-                    console.log("+ de 1");
                     Empresa.find({_id: {$in:usu.usuario_empresaids}}).then((empresa)=>{
                         let email = req.body.email;
                         let senha = req.body.senha;
@@ -757,19 +751,12 @@ router.post('/login', passport.authenticate('local', {//Abre portal Login e senh
                     })
                 }
             } else {
-                console.log("nem 1");
                 login(req,res,"SoftRoute");
-                /*
-                console.log("NAO TEM")
-                req.flash("error_message", "Usuário sem vínculo organizacional ou inativo.");
-                return res.redirect('/menu/login');
-                */
             }
         });
     } catch (err) {
         console.error("Erro no login:", err);
         req.flash("error_message", "Erro ao autenticar o usuário.");
-        //return res.redirect('/menu/login');
     }
 });
 
@@ -779,7 +766,6 @@ router.post('/loginDB', passport.authenticate('local', { //redirecionado se tive
 }), async function (req, res) {
     try {
         let dbEscolhida = req.body.dbEscolhida;
-        console.log("dbEscolhida? "+dbEscolhida)
         login(req,res, dbEscolhida);
     } catch (err) {
         console.error("Erro no login:", err);

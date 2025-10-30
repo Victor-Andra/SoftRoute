@@ -2,68 +2,59 @@
 <html lang="pt-br">
 	<head>
 		<style>
-			
-			<style>
-		/* Oculta elementos na tela */
-		@media screen {
-			.print-header {
-				display: none;
-			}
-		}
-
-		/* Estilos para impressão */
-		@media print {
-			.noprint {
-				display: none !important;
-			}
-
-			/* Cabeçalho fixo com paginação no topo */
-			.print-header {
-				position: fixed;
-				top: 0;
-				left: 0;
-				right: 0;
-				text-align: center;
-				font-size: 11px;
-				padding: 5px 0;
-				background: white;
-				z-index: 9999;
-				/* Sem borda inferior */
-			}
-
-			/* Margem superior para acomodar o cabeçalho fixo */
-			body {
-				margin-top: 5mm;
-				margin-bottom: 1cm;
-			}
-
-			/* Paginação no topo de cada página */
-			@page {
-				margin: 1cm;
-				size: A4 portrait;
-				@top-center {
-					content: "Página " counter(page) " de " counter(pages);
-					font-size: 11px;
-					color: #000;
-				}
-				@bottom-center {
-					content: ""; /* Remove rodapé padrão */
+			/* Estilos para tela */
+			@media screen {
+				.print-header {
+					display: none;
 				}
 			}
 
-			/* Garante apenas uma página em branco no final */
-			.blank-page {
-				page-break-before: always;
-			}
-		}
-		/* Estilos específicos para impressão em modo paisagem */
-			@media print and (orientation: landscape) {
-				/* Apenas garantimos que o noprint continue funcionando */
+			/* Estilos para impressão */
+			@media print {
 				.noprint {
 					display: none !important;
 				}
+
+				/* Cabeçalho fixo com paginação no topo */
+				.print-header {
+					position: fixed;
+					top: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 4px 0;
+					background: white;
+					z-index: 9999;
+					content: "Página " counter(page) " de " counter(pages);
+				}
+
+				/* Margem superior para não sobrepor conteúdo */
+				body {
+					margin-top: 12mm; /* suficiente para o cabeçalho */
+					margin-bottom: 10mm;
+				}
+
+				/* Configuração da página: permite retrato ou paisagem conforme escolha do usuário */
+				@page {
+					margin: 1cm;
+					/* NÃO defina `size` aqui — isso bloqueia a orientação! */
+					@top-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 11px;
+						color: black;
+					}
+					@bottom-center {
+						content: ""; /* remove qualquer rodapé automático */
+					}
+				}
+
+				/* Garante que elementos grandes não quebrem mal */
+				table {
+					page-break-inside: avoid;
+				}
 			}
-	    </style>
+		</style>
 
 		<title>Relatório de Atendimentos e Valores</title>
 		<script type="text/javascript">
@@ -95,7 +86,7 @@
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs_home" style="noprint">
+					<div class="breadcrumbs ace-save-state noprint" id="breadcrumbs_home">
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -241,16 +232,7 @@
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container --><!-- basic scripts -->
 		<div id="rodape" style="text-align: center; margin-top: 20px;"></div>
-		<script>
-			// Exemplo: Mostrar a primeira página
-            //mostrarPagina(1, 7);
-            function mostrarPagina(paginaAtual, totalPaginas) {
-                  const rodape = document.getElementById("rodape");
-                  if (rodape) {
-                        rodape.innerHTML = `Página ${paginaAtual} de ${totalPaginas}`;
-                  }
-            }
-      </script>
+		
 	   <div class="row"><!-- Área reservada para Assinaturas -->
 			<div class="col-xs-12">
 				<div style="margin-top: 32px;"></div>

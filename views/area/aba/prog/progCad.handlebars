@@ -241,61 +241,61 @@
 			}
 
 			function addExcecaoDicaid() {
-			document.getElementById("spanShowExceTera").style = "display:none";
+				document.getElementById("spanShowExceTera").style = "display:none";
 
-			var id = document.getElementById("progDicatiposelect").value;
-			var progSubid = document.getElementById("progDicatipo");
-			var span = document.getElementById(id + "_spanExce").cloneNode(true);
+				var id = document.getElementById("progDicatiposelect").value;
+				var progSubid = document.getElementById("progDicatipo");
+				var span = document.getElementById(id + "_spanExce").cloneNode(true);
 
-			// Obtendo o nome da opção selecionada
-			var selectedOptionText = $("#progDicatiposelect option:selected").text();
+				// Obtendo o nome da opção selecionada
+				var selectedOptionText = $("#progDicatiposelect option:selected").text();
 
-			span.id = "" + id + "_cloneExceTera";
-			document.getElementById("divExcecaoDica").append(span);
+				span.id = "" + id + "_cloneExceTera";
+				document.getElementById("divExcecaoDica").append(span);
 
-			if (progSubid.value == "") {
-				progSubid.value = "" + id + "";
-			} else {
-				progSubid.value = "" + progSubid.value + "," + id + "";
-			}
+				if (progSubid.value == "") {
+					progSubid.value = "" + id + "";
+				} else {
+					progSubid.value = "" + progSubid.value + "," + id + "";
+				}
 
-			// Adicionando o nome da opção à div progDicatipotext
-			var progDicatipotextInput = document.getElementById("progDicatipotext");
-			if (progDicatipotextInput.value == "") {
-				progDicatipotextInput.value = selectedOptionText;
-			} else {
-				progDicatipotextInput.value += ", " + selectedOptionText;
-			}
-
-			// Chamando atualizaProgressBars após adicionar uma seleção
-			var selectedTextValues = progDicatipotextInput.value; // Alteração aqui
-			atualizaProgressBars(selectedTextValues); // Alteração aqui
-
-			// Resetando o valor do select
-			document.getElementById("progDicatiposelect").value = "766f69643132333435366964";
-		}
-
-		function removeTudo(alvo, clone) {
-			let arr = document.getElementById("" + alvo + "").value.split(",");
-			arr.forEach((a) => {
-				var selectedOptionText = $("#" + a + "_clone" + clone + "Tera").text();
-
-				// Remover o valor correspondente do campo progDicatipotext
+				// Adicionando o nome da opção à div progDicatipotext
 				var progDicatipotextInput = document.getElementById("progDicatipotext");
-				var currentValue = progDicatipotextInput.value;
+				if (progDicatipotextInput.value == "") {
+					progDicatipotextInput.value = selectedOptionText;
+				} else {
+					progDicatipotextInput.value += ", " + selectedOptionText;
+				}
 
-				// Remover o texto da opção atual da string de valor atual
-				var newValue = currentValue.replace(selectedOptionText, "");
+				// Chamando atualizaProgressBars após adicionar uma seleção
+				var selectedTextValues = progDicatipotextInput.value; // Alteração aqui
+				atualizaProgressBars(selectedTextValues); // Alteração aqui
 
-				// Remover qualquer vírgula extra e espaços em branco do novo valor
-				newValue = newValue.replace(/,+/g, ",").replace(/,\s*$/, "").trim();
+				// Resetando o valor do select
+				document.getElementById("progDicatiposelect").value = "766f69643132333435366964";
+			}
 
-				// Atualizar o valor do campo progDicatipotext
-				progDicatipotextInput.value = newValue;
+			function removeTudo(alvo, clone) {
+				let arr = document.getElementById("" + alvo + "").value.split(",");
+				arr.forEach((a) => {
+					var selectedOptionText = $("#" + a + "_clone" + clone + "Tera").text();
 
-				// Remover o elemento clonado
-				$("#" + a + "_clone" + clone + "Tera").remove();
-			});
+					// Remover o valor correspondente do campo progDicatipotext
+					var progDicatipotextInput = document.getElementById("progDicatipotext");
+					var currentValue = progDicatipotextInput.value;
+
+					// Remover o texto da opção atual da string de valor atual
+					var newValue = currentValue.replace(selectedOptionText, "");
+
+					// Remover qualquer vírgula extra e espaços em branco do novo valor
+					newValue = newValue.replace(/,+/g, ",").replace(/,\s*$/, "").trim();
+
+					// Atualizar o valor do campo progDicatipotext
+					progDicatipotextInput.value = newValue;
+
+					// Remover o elemento clonado
+					$("#" + a + "_clone" + clone + "Tera").remove();
+				});
 
 				// Limpar o valor do campo alvo
 				document.getElementById("" + alvo + "").value = "";
@@ -313,45 +313,45 @@
 			}
 
 
-		function atualizaProgressBars(selectedTextValues) {
-			var selectedValues = selectedTextValues.split(", "); // Alteração aqui
-			var numSelected = selectedValues.length;
-			var procdica = document.getElementById("progDicaproced").value;
-			console.log(procdica);
-			if (procdica === "" || "Errorless" || "Most-to-Lead"){
-			// Definindo os valores para os progress-bars com base no número de seleções e ProcDica sendo diferente de "Least-to-Most"
-			var progressValues = [];
-			if (numSelected === 1) {
-				progressValues = [100];
-			} else if (numSelected === 2) {
-				progressValues = [70, 30];
-			} else if (numSelected === 3) {
-				progressValues = [50, 30, 20];
-			} else if (numSelected === 4) {
-				progressValues = [40, 30, 20, 10];
-			} else if (numSelected === 5) {
-				progressValues = [35, 25, 20, 15, 5];
-			} else if (numSelected === 6) {
-				progressValues = [30, 27, 20, 15, 5, 2];
-			}
-			} else {
-			// Definindo os valores para os progress-bars com base no número de seleções e ProcDica sendo igual a "Least-to-Most"
-			// O gráfico fica invertido
-			if (numSelected === 1) {
-				progressValues = [2];
-			} else if (numSelected === 2) {
-				progressValues = [2, 5];
-			} else if (numSelected === 3) {
-				progressValues = [2, 5, 15];
-			} else if (numSelected === 4) {
-				progressValues = [2, 5, 15, 20];
-			} else if (numSelected === 5) {
-				progressValues = [2,5,15,20,25];
-			} else if (numSelected === 6) {
-				progressValues = [2, 5, 15, 20, 27, 30];
-			}
+			function atualizaProgressBars(selectedTextValues) {
+				var selectedValues = selectedTextValues.split(", "); // Alteração aqui
+				var numSelected = selectedValues.length;
+				var procdica = document.getElementById("progDicaproced").value;
+				console.log(procdica);
+				if (procdica === "" || "Errorless" || "Most-to-Lead"){
+				// Definindo os valores para os progress-bars com base no número de seleções e ProcDica sendo diferente de "Least-to-Most"
+				var progressValues = [];
+				if (numSelected === 1) {
+					progressValues = [100];
+				} else if (numSelected === 2) {
+					progressValues = [70, 30];
+				} else if (numSelected === 3) {
+					progressValues = [50, 30, 20];
+				} else if (numSelected === 4) {
+					progressValues = [40, 30, 20, 10];
+				} else if (numSelected === 5) {
+					progressValues = [35, 25, 20, 15, 5];
+				} else if (numSelected === 6) {
+					progressValues = [30, 27, 20, 15, 5, 2];
+				}
+				} else {
+				// Definindo os valores para os progress-bars com base no número de seleções e ProcDica sendo igual a "Least-to-Most"
+				// O gráfico fica invertido
+				if (numSelected === 1) {
+					progressValues = [2];
+				} else if (numSelected === 2) {
+					progressValues = [2, 5];
+				} else if (numSelected === 3) {
+					progressValues = [2, 5, 15];
+				} else if (numSelected === 4) {
+					progressValues = [2, 5, 15, 20];
+				} else if (numSelected === 5) {
+					progressValues = [2,5,15,20,25];
+				} else if (numSelected === 6) {
+					progressValues = [2, 5, 15, 20, 27, 30];
+				}
 
-			}
+				}
 
 				// Atualizando os elementos progress-bar
 				for (var i = 0; i < 6; i++) {
@@ -504,42 +504,38 @@
 														</div>
 													</div>
 												</div>
-													
-													<div class="row">
-														<div class="col-sm-4">
-															<label>Tipo de Programa</label>
+												<div class="row">
+													<div class="col-sm-4">
+														<label>Tipo de Programa</label>
+														<div class="input-group">
 															<div class="input-group">
-																<div class="input-group">
-																	<select name="progTipo" id="progTipo" class="chosen-select" onchange="">
-																			<option value="766f69643132333435366964">-</option>
-																			{{#each progtipos}}
-																				<option value="{{_id}}">{{progtipo_nome}}</option>
-																			{{/each}}
-																	</select>
-																</div>
+																<select name="progTipo" id="progTipo" class="chosen-select" onchange="">
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each progtipos}}
+																		<option value="{{_id}}">{{progtipo_nome}}</option>
+																	{{/each}}
+																</select>
 															</div>
 														</div>
-														
-														<div class="col-sm-4">
-															<label>Nível do Programa</label>
+													</div>
+													<div class="col-sm-4">
+														<label>Nível do Programa</label>
+														<div class="input-group">
 															<div class="input-group">
-																<div class="input-group">
-																	<select name="progNivel" id="progNivel" class="chosen-select" onchange="">
-																			<option value="766f69643132333435366964">-</option>
-																			{{#each prognivels}}
-																				<option value="{{_id}}">{{prognivel_nome}}</option>
-																			{{/each}}
-																	</select>
-																</div>
+																<select name="progNivel" id="progNivel" class="chosen-select" onchange="">
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each prognivels}}
+																			<option value="{{_id}}">{{prognivel_nome}}</option>
+																		{{/each}}
+																</select>
 															</div>
 														</div>
 													</div>
 												</div>
-												
 											</div>
 										</div>
+									</div>
 								</div>
-
 								<div class="col-xs-12 col-md-6 col-sm-6">
 									<div class="widget-box ui-sortable-handle" id="widget-box-1">
 										<div class="widget-header">
@@ -547,25 +543,18 @@
 											<i class="orange ace-icon fa fa-line-chart"></i>
 											Objetivos do Programa
 											</h5>
-											
-
 											<div class="widget-toolbar">
-												
 												<a href="#" data-action="fullscreen" class="orange2">
 													<i class="ace-icon fa fa-expand"></i>
 												</a>
-
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
-
 												<a href="#" data-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
-											
 											</div>
 										</div>
-
 										<div class="widget-body" style="display: block;">
 											<div class="widget-main">
 												<p class="alert alert-info">
@@ -574,35 +563,27 @@
 												<div>
 													<textarea type="text" name="progObjetivo" id="progObjetivo" placeholder="" rows="6" class="form-control"></textarea>
 												</div>
-												
 											</div>
 										</div>
 									</div>
-
 									<div class="widget-box ui-sortable-handle" id="widget-box-5">
 										<div class="widget-header">
 											<h5 class="widget-title">
 												<i class="green ace-icon fa fa-bullseye"></i>
 												Alvo(s)
 											</h5>
-
 											<div class="widget-toolbar">
-								
 												<a href="#" data-action="fullscreen" class="orange2">
 													<i class="ace-icon fa fa-expand"></i>
 												</a>
-
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
 												</a>
-
 												<a href="#" data-action="collapse">
 													<i class="ace-icon fa fa-chevron-up"></i>
 												</a>
-
 											</div>
 										</div>
-
 										<div class="widget-body" style="display: block;">
 											<div class="widget-main">
 												<p class="alert alert-info">
@@ -614,14 +595,12 @@
 											</div>
 										</div>
 									</div>
-
 									<div class="widget-box ui-sortable-handle" id="widget-box-3">
 										<div class="widget-header">
 											<h5 class="widget-title">
 												<i class="brown ace-icon fa fa-cogs"></i>
 												Estrutura do Programa
 											</h5>
-
 											<div class="widget-toolbar">
 												<a href="#" data-action="fullscreen" class="orange2">
 													<i class="ace-icon fa fa-expand"></i>
@@ -634,7 +613,6 @@
 												</a>
 											</div>
 										</div>
-
 										<div class="widget-body" style="display: block;">
 											<div class="widget-main">
 												<div class="row">

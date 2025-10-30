@@ -2,10 +2,8 @@
 <html lang="pt-br">
 	<head>
 		<title>Relatório Analítico de Atendimentos por Beneficiário</title>
-			<style>
-				
-				<style>
-			/* Oculta elementos na tela */
+		<style>
+			/* Estilos para tela */
 			@media screen {
 				.print-header {
 					display: none;
@@ -26,45 +24,38 @@
 					right: 0;
 					text-align: center;
 					font-size: 11px;
-					padding: 5px 0;
+					padding: 4px 0;
 					background: white;
 					z-index: 9999;
-					/* Sem borda inferior */
+					content: "Página " counter(page) " de " counter(pages);
 				}
 
-				/* Margem superior para acomodar o cabeçalho fixo */
+				/* Margem superior para não sobrepor conteúdo */
 				body {
-					margin-top: 5mm;
-					margin-bottom: 1cm;
+					margin-top: 12mm; /* suficiente para o cabeçalho */
+					margin-bottom: 10mm;
 				}
 
-				/* Paginação no topo de cada página */
+				/* Configuração da página: permite retrato ou paisagem conforme escolha do usuário */
 				@page {
 					margin: 1cm;
-					size: A4 portrait;
+					/* NÃO defina `size` aqui — isso bloqueia a orientação! */
 					@top-center {
 						content: "Página " counter(page) " de " counter(pages);
 						font-size: 11px;
-						color: #000;
+						color: black;
 					}
 					@bottom-center {
-						content: ""; /* Remove rodapé padrão */
+						content: ""; /* remove qualquer rodapé automático */
 					}
 				}
 
-				/* Garante apenas uma página em branco no final */
-				.blank-page {
-					page-break-before: always;
+				/* Garante que elementos grandes não quebrem mal */
+				table {
+					page-break-inside: avoid;
 				}
 			}
-			/* Estilos específicos para impressão em modo paisagem */
-				@media print and (orientation: landscape) {
-					/* Apenas garantimos que o noprint continue funcionando */
-					.noprint {
-						display: none !important;
-					}
-				}
-	        </style>
+		</style>
 		<script>
 			function carregaBody(){
 				//Filtro persistente
@@ -77,7 +68,7 @@
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content"><!-- /main-container -->
 				<div class="main-content-inner noprint"><!-- /main-content-inner -->
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs_home" style="noprint"><!-- /breadcrumbs -->
+					<div class="breadcrumbs ace-save-state noprint" id="breadcrumbs_home" ><!-- /breadcrumbs -->
 						<ul class="breadcrumb"><!-- /breadcrumbs -->
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -114,8 +105,8 @@
 								&nbsp;&nbsp;&nbsp;&nbsp;
 								<label class="control-label bolder red">
 									<select name="exibeInativos" id="exibeInativos" class="chosen-select" value="">
-										<option value="nao">Não</option>
 										<option value="sim">Sim</option>
+										<option value="nao">Não</option>
 									</select>
 									<span class="lbl">&nbsp;Exibir Inativos?</span>
 								</label>

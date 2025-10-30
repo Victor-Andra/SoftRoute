@@ -2,69 +2,60 @@
 <html lang="pt-br">
 	<head>
 		<title>Relatório de Consolidado por Beneficiário</title>
-				<style>
-			
-			<style>
-		/* Oculta elementos na tela */
-		@media screen {
-			.print-header {
-				display: none;
-			}
-		}
-
-		/* Estilos para impressão */
-		@media print {
-			.noprint {
-				display: none !important;
-			}
-
-			/* Cabeçalho fixo com paginação no topo */
-			.print-header {
-				position: fixed;
-				top: 0;
-				left: 0;
-				right: 0;
-				text-align: center;
-				font-size: 11px;
-				padding: 5px 0;
-				background: white;
-				z-index: 9999;
-				/* Sem borda inferior */
-			}
-
-			/* Margem superior para acomodar o cabeçalho fixo */
-			body {
-				margin-top: 5mm;
-				margin-bottom: 1cm;
-			}
-
-			/* Paginação no topo de cada página */
-			@page {
-				margin: 1cm;
-				size: A4 portrait;
-				@top-center {
-					content: "Página " counter(page) " de " counter(pages);
-					font-size: 11px;
-					color: #000;
-				}
-				@bottom-center {
-					content: ""; /* Remove rodapé padrão */
+		<style>
+			/* Estilos para tela */
+			@media screen {
+				.print-header {
+					display: none;
 				}
 			}
 
-			/* Garante apenas uma página em branco no final */
-			.blank-page {
-				page-break-before: always;
-			}
-		}
-		/* Estilos específicos para impressão em modo paisagem */
-			@media print and (orientation: landscape) {
-				/* Apenas garantimos que o noprint continue funcionando */
+			/* Estilos para impressão */
+			@media print {
 				.noprint {
 					display: none !important;
 				}
+
+				/* Cabeçalho fixo com paginação no topo */
+				.print-header {
+					position: fixed;
+					top: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 4px 0;
+					background: white;
+					z-index: 9999;
+					content: "Página " counter(page) " de " counter(pages);
+				}
+
+				/* Margem superior para não sobrepor conteúdo */
+				body {
+					margin-top: 12mm; /* suficiente para o cabeçalho */
+					margin-bottom: 10mm;
+				}
+
+				/* Configuração da página: permite retrato ou paisagem conforme escolha do usuário */
+				@page {
+					margin: 1cm;
+					/* NÃO defina `size` aqui — isso bloqueia a orientação! */
+					@top-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 11px;
+						color: black;
+					}
+					@bottom-center {
+						content: ""; /* remove qualquer rodapé automático */
+					}
+				}
+
+				/* Garante que elementos grandes não quebrem mal */
+				table {
+					page-break-inside: avoid;
+				}
 			}
-	    </style>
+		</style>
 		<script type="text/javascript">
 			function atualizaDataIni(){
 				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
@@ -122,7 +113,7 @@
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner noprint">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs_home" style="noprint">
+					<div class="breadcrumbs ace-save-state noprint" id="breadcrumbs_home" >
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
@@ -146,10 +137,10 @@
 							<ul class="breadcrumb" >
 								<label>Período de:</label>
 								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
-								<input class="hidden" id="dataIni" name="dataIni" />
+								<input class="hidden" id="dataIni" name="dataIni"  value="{{filtro.dataIni}}"/>
 								<label>até:</label>
 								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFim()">
-								<input class="hidden" id="dataFim" name="dataFim" />
+								<input class="hidden" id="dataFim" name="dataFim"  value="{{filtro.dataFim}}"/>
 								<label>Beneficiário: </label>
 								<select style="height: 30px; width:300px;" name="relBeneid"  id="relBeneid" class="chosen-select" data-placeholder="Escolha...">
 									{{#each benes}}
