@@ -27,33 +27,32 @@
 					padding: 4px 0;
 					background: white;
 					z-index: 9999;
-					content: "Página " counter(page) " de " counter(pages);
+					/* O content aqui não funciona diretamente em elementos reais,
+					apenas em pseudo-elementos (@page/@top-center cuidará disso) */
 				}
 
-				/* Margem superior para não sobrepor conteúdo */
+				/* Usar padding em vez de margin evita o grande espaço na 1ª página */
 				body {
-					margin-top: 12mm; /* suficiente para o cabeçalho */
-					margin-bottom: 10mm;
+					margin: 0;
+					padding-top: 12mm;  /* espaço para o cabeçalho fixo */
+					padding-bottom: 10mm;
 				}
 
-				/* Configuração da página: permite retrato ou paisagem conforme escolha do usuário */
+				/* Configuração da página (não trava a orientação do usuário) */
 				@page {
 					margin: 1cm;
-					/* NÃO defina `size` aqui — isso bloqueia a orientação! */
+
 					@top-center {
 						content: "Página " counter(page) " de " counter(pages);
 						font-size: 11px;
 						color: black;
 					}
+
 					@bottom-center {
-						content: ""; /* remove qualquer rodapé automático */
+						content: ""; /* remove rodapé automático */
 					}
 				}
 
-				/* Garante que elementos grandes não quebrem mal */
-				table {
-					page-break-inside: avoid;
-				}
 			}
 		</style>
 		<script>
