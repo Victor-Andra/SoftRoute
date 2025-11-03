@@ -954,7 +954,7 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
         res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + tempoCookie) });
         res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + tempoCookie) });
         res.cookie('preferredDb', db, { expires: new Date(Date.now() + tempoCookie) });
-console.log("DB: "+db)
+
         // Buscar dados gerais
         const [usuariosAtivos, benesAtivos, salas, terapias, benesFull] = await Promise.all([
             Usuario.find({ usuario_status: "Ativo" }),
@@ -1735,6 +1735,14 @@ router.get('/atendimento/atendreltera/relatendteraana', fncGeral.IsAuthenticated
 router.post('/atendimento/atendreltera/relatendteraanas', fncGeral.IsAuthenticated,(req,res) =>{
     fncAtend.relAtendteraanaFiltro(req,res)
 })
+
+router.post('/atendimento/atendreltera/relatendteraanasfiltrotodos', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendteraanafiltrotodos(req,res)
+})
+// Rota GET: carrega formulário vazio
+router.get('/atendimento/atendreltera/relatendteraanatodos', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.relAtendteraanatodos(req, res);
+});
 //Relatório Consolidado de Atendimentos por Beneficiário.
 //Emite uma consolidado de todos os atendimentos realizados com Valores pelo beneficiário num determinado período de tempo.
 router.get('/atendimento/atendreltera/relatendteracons', fncGeral.IsAuthenticated,(req,res) =>{

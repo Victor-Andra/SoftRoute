@@ -222,6 +222,47 @@
 								</div>
 							</div>
 						</div><!-- PAGE CONTENT ENDS -->
+						<!-- Resumo de Contagem por Terapia -->
+						<form style="noprint">
+						<div class="col-sm-6" >
+							<div class="row">
+								<div class="col-xs-6" style="margin-top: 20px;">
+									<div class="widget-box transparent" style="noprint">
+										<div class="widget-header">
+											<h5 class="widget-title grey lighter" style="text-align: center;">
+												<i class="ace-icon fa fa-bar-chart green"></i>
+												Resumo por Terapia
+											</h5>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<table class="table table-condensed table-bordered">
+													<thead >
+														<tr class="info">
+															<th>Terapia</th>
+															<th class="center">Total</th>
+														</tr>
+													</thead>
+													<tbody>
+														{{#each totaisTerapia}}
+														<tr>
+															<td>{{terapiaNome}}</td>
+															<td class="center">{{total}}</td>
+														</tr>
+														{{/each}}
+														<tr class="info">
+															<td><b>Total Geral</b></td>
+															<td class="center"><b>{{totalGeral}}</b></td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+																							  </form>
 					</div><!-- /.col -->
 				</div><!-- /.row -->
 			</div><!-- /.main-content -->
