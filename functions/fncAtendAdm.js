@@ -17,6 +17,7 @@ const tabilClass = require("../models/tabil")
 const debitClass = require("../models/debit")
 const salaClass = require("../models/sala")
 const horaageClass = require("../models/horaAge")
+const anoClass = require("../models/ano")
 
 //Tabelas Extrangeiras
 var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
@@ -27,6 +28,7 @@ var Convdeb = getModel("SoftRoute", 'tb_convdeb', convdebClass.ConvdebSchema)
 var Convcre = getModel("SoftRoute", 'tb_convcre', convcreClass.ConvcreSchema)
 var Sala = getModel("SoftRoute", 'tb_sala', salaClass.SalaSchema)
 var Horaage = getModel("SoftRoute", 'tb_horaage', horaageClass.HoraageSchema)
+var Ano = getModel("PortalDoUsuario",'tb_ano', anoClass.AnoSchema)
 
 //Funções Auxiliares
 const fncCredit = require("../functions/fncCredit")
@@ -842,8 +844,9 @@ module.exports = {
                     Terapia.find().then((terapia)=>{
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Terapia")
-                        res.render("atendimento/atendLis", {atends: atend, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro})
-        })})})}).catch((err) =>{
+                         Ano.find().then((ano)=>{
+                        res.render("atendimento/atendLis", {atends: atend, anos: ano, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro})
+        })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')

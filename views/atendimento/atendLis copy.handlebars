@@ -479,7 +479,6 @@
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="5" style="width: 100px;" >Atendimento</th>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="7" style="width: 100px;" ><span class="label label-sm label-success" style="font-size: 14px;" >Original</span></th>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-danger" style="font-size: 14px;" >Substituto Fixo</span></th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-purple" style="font-size: 14px;" >Substituição</span></th>
 													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >&nbsp;</th>
 												</tr>
 												<tr role="row">
@@ -505,11 +504,6 @@
 													<th class="sorting" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
 													<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
 													<th class="sorting" tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
-
-													<th class="sorting" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th class="sorting" tabindex="16" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
-													<th class="sorting" tabindex="17" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
 
 													<th class="" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;">Ação</th>
 												</tr>
@@ -620,7 +614,7 @@
 															<td>{{atend_valordeb}}</td>
 														{{/ifEqual}}
 
-														<!-- .Substitutos Fixos Dados -->
+																												
 														{{#if atend_fixoterapiaid}}
 															{{#compareThis atend_fixoterapiaid "766f69643132333435366964"}}
 																<td>-</td>
@@ -634,6 +628,7 @@
 														{{else}}
 															<td>-</td>
 														{{/if}}
+
 														{{#if atend_fixoterapeutaid}}
 															{{#compareThis atend_fixoterapiaid "766f69643132333435366964"}}
 																<td>-</td>
@@ -667,56 +662,7 @@
 														{{else}}
 															<td>-</td>
 														{{/if}}
-														<!-- /.Substitutos Fixos Dados -->
 														
-														<!-- .Substituições -->
-														{{#if atend_mergeterapiaid}}
-															{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}
-																<td>-</td>
-															{{else}}
-																{{#each ../terapias}}<!-- Ok -->
-																	{{#ifEqual this._id ../atend_mergeterapiaid}}
-																		<td>{{terapia_nome}}</td>
-																	{{/ifEqual}}
-																{{/each}}
-															{{/compareThis}}
-														{{else}}
-															<td>-</td>
-														{{/if}}
-														{{#if atend_mergeterapeutaid}}
-															{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}
-																<td>-</td>
-															{{else}}
-																{{#each ../terapeutas}}<!-- Ok -->
-																	{{#ifEqual this._id ../atend_mergeterapeutaid}}
-																		<td>{{usuario_nome}}</td>
-																	{{/ifEqual}}
-																{{/each}}
-															{{/compareThis}}
-														{{else}}
-															<td>-</td>
-														{{/if}}
-
-														{{#if atend_mergevalorcre}}
-															{{#ifEqual this.atend_mergevalorcre "0,00"}}
-																<td><span class="label label-sm label-warning arrowed">{{atend_mergevalorcre}}</span></td>
-																{{else}}
-																<td>{{atend_mergevalorcre}}</td>
-															{{/ifEqual}}
-														{{else}}
-															<td>-</td>
-														{{/if}}
-														
-														{{#if atend_mergevalordeb}}
-															{{#ifEqual this.atend_mergevalordeb "0,00"}}
-																<td ><span class="label label-sm label-warning arrowed">{{atend_mergevalordeb}}</span></td>
-																{{else}}
-																<td>-</td>
-															{{/ifEqual}}
-														{{else}}
-															<td>-</td>
-														{{/if}}
-														<!-- /.Substituições -->
 														<td>
 															<div class="action-buttons">
 																<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/atendimento/atendadm/edi/{{_id}}">
@@ -771,7 +717,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, null, null, null, null, null,null,null, null, null,null,null,{ "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, null, null, null, null, null,null,null, { "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [ 100, 200, 500, 1000, 2000 ],
 			"lengthChange": true,
