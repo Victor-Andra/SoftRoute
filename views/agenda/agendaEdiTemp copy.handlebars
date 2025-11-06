@@ -25,6 +25,12 @@
 				console.log(v1)
 				document.getElementById("agendaConvid").value = v1;
 			}
+			function carregaValores(){
+				var v1 = document.getElementById(document.getElementById("novaAgendaTerapiaid").value).value.toString();
+				console.log(v1)
+				document.getElementById("agendaTerapiaid").value = v1;
+				document.getElementById("agendaTerapiaidEdi").value = v1;
+			}
 			function atualizaConvId(){
 				let convId = document.getElementById("agendaConvid").value;
 				console.log(convId)
@@ -213,7 +219,7 @@
 															<label style="color: red; font-weight: bold;">Terapia Atual</label>
 															<div class="form-group">
 															<div class="col-sm-4" style="width: 600px;">
-																<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" disabled>
+																<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" onmousedown="return false;"  style="pointer-events:none; background-color:#eee;">
 																{{#each terapias}}
 																	<option value="{{_id}}">{{terapia_nome}}</option>
 																{{/each}}
@@ -221,7 +227,7 @@
 																<br><br>
 																<label style="color: blue; font-weight: bold;">Terapia para substituir a atual acima!</label>
 																<br>
-																<select name="novaAgendaTerapiaid" id="novaAgendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																<select name="agendaTerapiaid" id="novaAgendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 																{{#each terapias}}
 																	<option value="{{_id}}">{{terapia_nome}}</option>
 																{{/each}}

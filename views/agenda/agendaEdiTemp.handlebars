@@ -25,6 +25,17 @@
 				console.log(v1)
 				document.getElementById("agendaConvid").value = v1;
 			}
+			function carregaValores() {
+				const v1 = document.getElementById("novaAgendaTerapiaid").value;
+				console.log("novaAgendaTerapiaid selecionado:", v1);
+
+				// Atualiza o valor do campo de edição e do select bloqueado
+				document.getElementById("agendaTerapiaid").value = v1;
+				document.getElementById("agendaTerapiaidEdi").value = v1;
+
+				// Força o Chosen a atualizar o select desativado
+				$("#agendaTerapiaid").trigger("chosen:updated");
+			}
 			function atualizaConvId(){
 				let convId = document.getElementById("agendaConvid").value;
 				console.log(convId)

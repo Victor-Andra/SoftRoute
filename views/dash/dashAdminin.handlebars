@@ -285,7 +285,12 @@
 									<!-- Resumo 1 -->
 									<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 										<div class="widget-box transparent">
-											<div class="widget-header"><h4 class="widget-title lighter"><i class="ace-icon fa fa-bar-chart green"></i> Atendimentos por Terapia</h4></div>
+											<div class="widget-header">
+												<h4 class="widget-title lighter">
+													<i class="ace-icon fa fa-bar-chart green"></i> 
+														Atendimentos por Terapia
+												</h4>
+											</div>
 											<div class="widget-body">
 												<div class="widget-main">
 													<div class="widget-main no-padding">
@@ -336,13 +341,79 @@
 														</div>
 													</div>
 													<div style=" margin-bottom: 15px;"><canvas id="graficoTerapiaNome"></canvas></div>
-													
-													
 												</div>
 											</div>
 										</div>
 									</div>
-								
+
+									<!-- Resumo 3: Atendimentos por Código (nomecid) — Colunas (ApexCharts) -->
+									<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+										<div class="widget-box transparent">
+											<div class="widget-header">
+												<h4 class="widget-title lighter">
+													<i class="ace-icon fa fa-bar-chart blue"></i>
+													Atendimentos por Código (nomecid) — Colunas
+												</h4>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="widget-main no-padding">
+														<p class="alert alert-info">
+															Quantidade de Terapias por Período — visual por colunas.
+															<span class="badge badge-success">Novo</span>
+														</p>
+													</div>
+
+													<!-- ✅ Widget com tabela (mesma tabela, só com total no foot) -->
+													<div class="widget-box" id="widget-box-TerapiaNomeCid-Colunas">
+														<div class="widget-header">
+															<h5 class="widget-title">
+																<i class="brown ace-icon fa fa-cogs"></i>
+																Resumo por Código (nomecid)
+															</h5>
+															<div class="widget-toolbar">
+																<a href="#" data-action="fullscreen" class="orange2">
+																	<i class="ace-icon fa fa-expand"></i>
+																</a>
+																<a href="#" data-action="collapse">
+																	<i class="ace-icon fa fa-chevron-up"></i>
+																</a>
+															</div>
+														</div>
+														<div class="widget-body">
+															<div class="widget-main">
+																<div class="row">
+																	<div class="col-xs-12">
+																		<table name="tabTerapiaNomeCidColunas" class="table table-condensed table-bordered">
+																			<thead>
+																				<tr class="info">
+																					<th>Código</th>
+																					<th class="center">Total</th>
+																				</tr>
+																			</thead>
+																			<tbody>
+																				{{#each resumoTerapiaNomecid}}
+																				<tr>
+																					<td>{{terapiaNomecid}}</td>
+																					<td class="center">{{total}}</td>
+																				</tr>
+																				{{/each}}
+																			</tbody>
+																			
+																		</table>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+
+													<!-- ✅ Gráfico ApexCharts (colunas apenas) -->
+													<div id="graficoTerapiaNomecidColunas" style="width:100%; height:380px; margin-top:15px;"></div>
+
+												</div>
+											</div>
+										</div>
+									</div>
 									
 								</div>
 							</div>
@@ -746,54 +817,54 @@ function renderGraficoEvolucaoMensalBene() {
 	================================ -->
 
 	<script>
-	function renderGraficoSessoesPorTipo() {
-		console.log("🔍 Renderizando: Gráfico de Pizza - Sessões por Tipo de Beneficiário (Flot.js)");
+		function renderGraficoSessoesPorTipo() {
+			console.log("🔍 Renderizando: Gráfico de Pizza - Sessões por Tipo de Beneficiário (Flot.js)");
 
-		// Captura os dados Handlebars
-		const labels = [{{#each resumoSessoesPorTipo}}"{{tipo}}"{{#unless @last}},{{/unless}}{{/each}}];
-		const valores = [{{#each resumoSessoesPorTipo}}{{total}}{{#unless @last}},{{/unless}}{{/each}}];
-		const cores   = [{{#each resumoSessoesPorTipo}}"{{cor}}"{{#unless @last}},{{/unless}}{{/each}}];
+			// Captura os dados Handlebars
+			const labels = [{{#each resumoSessoesPorTipo}}"{{tipo}}"{{#unless @last}},{{/unless}}{{/each}}];
+			const valores = [{{#each resumoSessoesPorTipo}}{{total}}{{#unless @last}},{{/unless}}{{/each}}];
+			const cores   = [{{#each resumoSessoesPorTipo}}"{{cor}}"{{#unless @last}},{{/unless}}{{/each}}];
 
-		// Monta array no formato esperado pelo Flot
-		const data = labels.map((label, i) => ({
-			label: label,
-			data: valores[i] || 0,
-			color: cores[i] || '#3498db'
-		}));
+			// Monta array no formato esperado pelo Flot
+			const data = labels.map((label, i) => ({
+				label: label,
+				data: valores[i] || 0,
+				color: cores[i] || '#3498db'
+			}));
 
-		// Verifica se há dados válidos
-		if (!data.length || data.every(d => isNaN(d.data))) {
-			console.warn("⚠️ Nenhum dado válido para gráfico de sessões.");
-			return;
-		}
-
-		// Configurações do gráfico
-		const options = {
-			series: {
-				pie: {
-					show: true,
-					radius: 1,
-					label: {
-						show: true,
-						radius: 3 / 4,
-						formatter: function (label, series) {
-							return `<div style='font-size:12px;text-align:center;padding:5px;color:white;'>${label}<br>${Math.round(series.percent)}%</div>`;
-						},
-						background: { opacity: 0.5, color: '#000' }
-					}
-				}
-			},
-			legend: {
-				show: true,
-				position: 'ne'
+			// Verifica se há dados válidos
+			if (!data.length || data.every(d => isNaN(d.data))) {
+				console.warn("⚠️ Nenhum dado válido para gráfico de sessões.");
+				return;
 			}
-		};
 
-		// Renderiza no canvas
-		$.plot("#graficoSessoesPorTipo", data, options);
-	}
-</script>
-<script>
+			// Configurações do gráfico
+			const options = {
+				series: {
+					pie: {
+						show: true,
+						radius: 1,
+						label: {
+							show: true,
+							radius: 3 / 4,
+							formatter: function (label, series) {
+								return `<div style='font-size:12px;text-align:center;padding:5px;color:white;'>${label}<br>${Math.round(series.percent)}%</div>`;
+							},
+							background: { opacity: 0.5, color: '#000' }
+						}
+					}
+				},
+				legend: {
+					show: true,
+					position: 'ne'
+				}
+			};
+
+			// Renderiza no canvas
+			$.plot("#graficoSessoesPorTipo", data, options);
+		}
+	</script>
+	<script>
 		function renderGraficoTerapiaNome() {
 			console.log("🔍 Renderizando: Gráfico de Barras - Terapias (Chart.js)");
 			if (!resumoTerapia || !resumoTerapia.length) return;
@@ -852,6 +923,69 @@ function renderGraficoEvolucaoMensalBene() {
 		}
 	</script>
 
+	<script>
+		function renderGraficoTerapiaNomecidColunas() {
+		console.log("🔍 Renderizando: Gráfico de Colunas — nomecid (ApexCharts, só colunas)");
+
+		if (!resumoTerapiaNomecid || !resumoTerapiaNomecid.length) {
+			console.warn("⚠️ Dados de terapia nomecid ausentes.");
+			return;
+		}
+
+		const labels = resumoTerapiaNomecid.map(r => r.terapiaNomecid);
+		const totais = resumoTerapiaNomecid.map(r => r.total);
+
+		const options = {
+			series: [{
+				name: "Atendimentos",
+				data: totais
+			}],
+			chart: {
+				type: "bar",
+				height: 380,
+				toolbar: { show: true }
+			},
+			plotOptions: {
+				bar: {
+					horizontal: false,
+					columnWidth: "60%",
+					borderRadius: 4
+				}
+			},
+			xaxis: {
+				categories: labels,
+				title: { text: "Código da Terapia (nomecid)" },
+				labels: {
+					rotate: -45,
+					rotateAlways: true,
+					style: { fontSize: '11px' }
+				}
+			},
+			yaxis: {
+				title: { text: "Quantidade" },
+				min: 0,
+				tickAmount: 5
+			},
+			legend: { show: false },
+			colors: ["#2ecc71"],
+			dataLabels: { enabled: true },
+			tooltip: {
+				y: { formatter: val => `${val} atendimento(s)` }
+			},
+			grid: {
+				borderColor: "#eee",
+				strokeDashArray: 3
+			}
+		};
+
+		const el = document.querySelector("#graficoTerapiaNomecidColunas");
+		if (el) {
+			if (el.chart) el.chart.destroy();
+			el.chart = new ApexCharts(el, options);
+			el.chart.render();
+		}
+	}
+	</script>
 	<script>
 		function renderGraficoTerapeuta() {
 			console.log("🔍 Renderizando: Gráfico de Rosca - Terapeutas (Chart.js)");
@@ -932,6 +1066,7 @@ function renderGraficoEvolucaoMensalBene() {
 			// Terapias
 			renderGraficoTerapiaNome();
 			renderGraficoTerapiaNomecid();
+			renderGraficoTerapiaNomecidColunas();
 			
 			//Terapeutas
 			renderGraficoTerapeuta();
