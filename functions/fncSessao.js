@@ -132,7 +132,7 @@ module.exports = {
     },
 
     // Lista todas as sessões da semana atual
-    async listaSessao(req, res) {
+    async listaSessaoOLD(req, res) {
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
@@ -258,7 +258,148 @@ module.exports = {
             res.redirect('/admin/erro');
         }
     },
+async listaSessao(req, res) {
+    let db = req.cookies['preferredDb'];
+    Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+    Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+    Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+    Sessao = getModel(db, 'tb_sessao', sessaoClass.SessaoSchema);
+    Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
 
+    console.log('listando Sessao');
+
+    function getInicioFimSemana(data) {
+        const dia = data.getDay();
+        const inicioSemana = new Date(data);
+        inicioSemana.setDate(data.getDate() - dia);
+        inicioSemana.setHours(0, 0, 0, 0);
+        const fimSemana = new Date(inicioSemana);
+        fimSemana.setDate(inicioSemana.getDate() + 6);
+        fimSemana.setHours(23, 59, 59, 999);
+        return { inicio: inicioSemana, fim: fimSemana };
+    }
+
+    function formatDateToBR(date) {
+        return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+    }
+
+    const hoje = new Date();
+    const { inicio, fim } = getInicioFimSemana(hoje);
+    const datainiSemana = formatDateToBR(inicio);
+    const datafimSemana = formatDateToBR(fim);
+
+    try {
+        const sessaoList = await Sessao.find({
+            sessao_data: { $gte: inicio, $lte: fim }
+        });
+
+        if (sessaoList.length === 0) {
+            return res.render("beneficiario/sessao/sessaoLis", {
+                sessaos: [],
+                usuarios: [],
+                terapias: [],
+                convs: [],
+                benes: [],
+                datainiSemana,
+                datafimSemana
+            });
+        }
+
+        const beneIds = [...new Set(sessaoList.map(s => s.sessao_beneid.toString()))];
+
+        const [beneList, convList, terapiaList, usuarioList] = await Promise.all([
+            Bene.find({ _id: { $in: beneIds }, bene_status: "Ativo" }),
+            Conv.find(),
+            Terapia.find(),
+            Usuario.find()
+        ]);
+
+        const agendasPromises = sessaoList.map(sessao =>
+            Agenda.find({
+                agenda_beneid: sessao.sessao_beneid,
+                agenda_data: { $gte: inicio, $lte: fim },
+                agenda_extra: false
+            })
+        );
+        const agendasList = await Promise.all(agendasPromises);
+
+        for (let i = 0; i < sessaoList.length; i++) {
+            const sessao = sessaoList[i];
+            const agendas = agendasList[i];
+
+            // Formata datas
+            sessao.datacad = sessao.sessao_datacad
+                ? new Date(sessao.sessao_datacad).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                : "--/--/---- h--:--";
+
+            sessao.dataedi = sessao.sessao_dataedi
+                ? new Date(sessao.sessao_dataedi).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                : "--/--/---- h--:--";
+
+            sessao.datainiSemana = datainiSemana;
+            sessao.datafimSemana = datafimSemana;
+
+            // Inicializa totais
+            let totalLiminar = 0;
+            let totalContagem = 0;
+            let totalSaldo = 0;
+
+            // Processa terapias
+            for (let j = 1; j <= 25; j++) {
+                const fieldTerapiaId = `sessao_terapiaid${j.toString().padStart(2, '0')}`;
+                const qtPrevField = `sessao_qtterapiaprev${j.toString().padStart(2, '0')}`;
+                const idTerapia = sessao[fieldTerapiaId];
+                const qtPrev = parseInt(sessao[qtPrevField]) || 0;
+
+                if (!idTerapia || idTerapia.toString() === '766f69643132333435366964') {
+                    sessao[`terapiaid${j.toString().padStart(2, '0')}qt`] = "";
+                    sessao[`terapiaid${j.toString().padStart(2, '0')}saldo`] = "";
+                    sessao[`terapiaid${j.toString().padStart(2, '0')}incons`] = "Campo vazio ou inválido!";
+                    continue;
+                }
+
+                const qtAgenda = agendas.filter(a => a.agenda_terapiaid?.toString() === idTerapia.toString()).length;
+                const saldo = qtPrev - qtAgenda;
+
+                sessao[`terapiaid${j.toString().padStart(2, '0')}qt`] = qtAgenda;
+                sessao[`terapiaid${j.toString().padStart(2, '0')}saldo`] = saldo > 0 ? `+${saldo}` : saldo.toString();
+                sessao[`terapiaid${j.toString().padStart(2, '0')}incons`] = "";
+
+                // Acumula totais
+                totalLiminar += qtPrev;
+                totalContagem += qtAgenda;
+                totalSaldo += saldo;
+            }
+
+            // Armazena os totais na sessão para uso na view
+            sessao.totalLiminar = totalLiminar;
+            sessao.totalContagem = totalContagem;
+            sessao.totalSaldo = totalSaldo;
+        }
+
+        // Adiciona contagem de sessões ao beneficiário
+        beneList.forEach(b => {
+            b.countSessaos = sessaoList.filter(s => s.sessao_beneid.toString() === b._id.toString()).length;
+        });
+
+        beneList.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome));
+
+        res.render("beneficiario/sessao/sessaoLis", {
+            sessaos: sessaoList,
+            usuarios: usuarioList,
+            terapias: terapiaList,
+            convs: convList,
+            benes: beneList,
+            datainiSemana,
+            datafimSemana
+        });
+
+    } catch (err) {
+        console.error("Erro ao listar sessões:", err);
+        req.flash("error_message", "Houve um erro ao listar sessões");
+        res.redirect('/admin/erro');
+    }
+},
     // Pesquisa individual (sem filtro)
     async pesquisaind(req, res) {
         let db = req.cookies['preferredDb'];
@@ -336,7 +477,7 @@ module.exports = {
     },
 
     // Filtro com data e beneficiário
-    async pesquisaindfil(req, res) {
+    async pesquisaindfilOLD(req, res) {// foi acrescentada na nova a soma
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
@@ -494,7 +635,188 @@ module.exports = {
             res.redirect('/admin/erro');
         }
     },
+    async pesquisaindfil(req, res) {
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        Sessao = getModel(db, 'tb_sessao', sessaoClass.SessaoSchema);
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
 
+        console.log('Carregando view com filtro aplicado');
+
+        const { bene_id, data_inicio } = req.body;
+
+        function getInicioFimSemana(data) {
+            const dia = data.getDay();
+            const inicioSemana = new Date(data);
+            inicioSemana.setDate(data.getDate() - dia);
+            inicioSemana.setHours(0, 0, 0, 0);
+            const fimSemana = new Date(inicioSemana);
+            fimSemana.setDate(inicioSemana.getDate() + 6);
+            fimSemana.setHours(23, 59, 59, 999);
+            return { inicio: inicioSemana, fim: fimSemana };
+        }
+
+        function formatDateToBR(date) {
+            return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+        }
+
+        let inicioPeriodo, fimPeriodo;
+        if (data_inicio) {
+            const dataSelecionada = new Date(data_inicio);
+            const periodoAtual = getInicioFimSemana(dataSelecionada);
+            inicioPeriodo = periodoAtual.inicio;
+            fimPeriodo = periodoAtual.fim;
+        } else {
+            const hoje = new Date();
+            const periodoAtual = getInicioFimSemana(hoje);
+            inicioPeriodo = periodoAtual.inicio;
+            fimPeriodo = periodoAtual.fim;
+        }
+
+        const datainiSemana = formatDateToBR(inicioPeriodo);
+        const datafimSemana = formatDateToBR(fimPeriodo);
+
+        try {
+            const [beneList, convList, terapiaList, usuarioList] = await Promise.all([
+                Bene.find({ bene_status: "Ativo" }),
+                Conv.find(),
+                Terapia.find(),
+                Usuario.find()
+            ]);
+
+            beneList.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome));
+
+            // Renderiza sem sessão se não houver bene_id ou for "-"
+            if (!bene_id || bene_id === "-") {
+                return res.render("beneficiario/sessao/sessaoLisindfil", {
+                    sessao: null,
+                    datacad: "--/--/---- h--:--",
+                    dataedi: "--/--/---- h--:--",
+                    usuario_nome_cad: "--",
+                    usuario_nome_edi: "--",
+                    datainiSemana,
+                    datafimSemana,
+                    bene_id: "",
+                    benes: beneList,
+                    convs: convList,
+                    terapias: terapiaList,
+                    usuarios: usuarioList,
+                    sessoesNaoEncontradas: false,
+                    // Totais não aplicáveis
+                    totalLiminar: 0,
+                    totalContagem: 0,
+                    totalSaldo: 0
+                });
+            }
+
+            const sessao = await Sessao.findOne({
+                sessao_beneid: bene_id,
+                sessao_data: { $gte: inicioPeriodo, $lte: fimPeriodo }
+            });
+
+            if (!sessao) {
+                console.log(`⚠️ Nenhuma sessão encontrada para o beneficiário ID: ${bene_id}`);
+                return res.render("beneficiario/sessao/sessaoLisindfil", {
+                    sessao: null,
+                    datacad: "--/--/---- h--:--",
+                    dataedi: "--/--/---- h--:--",
+                    usuario_nome_cad: "--",
+                    usuario_nome_edi: "--",
+                    datainiSemana,
+                    datafimSemana,
+                    bene_id,
+                    benes: beneList,
+                    convs: convList,
+                    terapias: terapiaList,
+                    usuarios: usuarioList,
+                    sessoesNaoEncontradas: true,
+                    totalLiminar: 0,
+                    totalContagem: 0,
+                    totalSaldo: 0
+                });
+            }
+
+            // Formatação de datas
+            const formatDateTime = (date) => date
+                ? new Date(date).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                : "--/--/---- h--:--";
+
+            const datacad = formatDateTime(sessao.sessao_datacad);
+            const dataedi = formatDateTime(sessao.sessao_dataedi);
+
+            const usuarioCad = usuarioList.find(u => u._id.toString() === sessao.sessao_usuidcad?.toString());
+            const usuarioEdi = usuarioList.find(u => u._id.toString() === sessao.sessao_usuidedi?.toString());
+
+            const usuario_nome_cad = usuarioCad ? usuarioCad.usuario_nome : "--";
+            const usuario_nome_edi = usuarioEdi ? usuarioEdi.usuario_nome : "--";
+
+            const agendas = await Agenda.find({
+                agenda_beneid: sessao.sessao_beneid,
+                agenda_data: { $gte: inicioPeriodo, $lte: fimPeriodo },
+                agenda_extra: false
+            });
+
+            // Inicializa variáveis para totais
+            let totalLiminar = 0;
+            let totalContagem = 0;
+            let totalSaldo = 0;
+
+            // Processa as 25 linhas de terapia
+            for (let j = 1; j <= 25; j++) {
+                const fieldTerapiaId = `sessao_terapiaid${j.toString().padStart(2, '0')}`;
+                const qtPrevField = `sessao_qtterapiaprev${j.toString().padStart(2, '0')}`;
+                const idTerapia = sessao[fieldTerapiaId];
+                const qtPrev = parseInt(sessao[qtPrevField]) || 0;
+
+                if (!idTerapia || idTerapia.toString() === '766f69643132333435366964') {
+                    sessao[`terapiaid${j.toString().padStart(2, '0')}qt`] = "";
+                    sessao[`terapiaid${j.toString().padStart(2, '0')}saldo`] = "";
+                    sessao[`terapiaid${j.toString().padStart(2, '0')}incons`] = "Campo vazio ou inválido!";
+                    // Não soma nada para esta linha
+                    continue;
+                }
+
+                const qtAgenda = agendas.filter(a => a.agenda_terapiaid?.toString() === idTerapia.toString()).length;
+                const saldo = qtPrev - qtAgenda;
+
+                sessao[`terapiaid${j.toString().padStart(2, '0')}qt`] = qtAgenda;
+                sessao[`terapiaid${j.toString().padStart(2, '0')}saldo`] = saldo > 0 ? `+${saldo}` : saldo.toString();
+                sessao[`terapiaid${j.toString().padStart(2, '0')}incons`] = "";
+
+                // Acumula os totais (apenas valores numéricos válidos)
+                totalLiminar += qtPrev;
+                totalContagem += qtAgenda;
+                totalSaldo += saldo;
+            }
+
+            console.log(`✅ Sessão encontrada para o beneficiário ID: ${bene_id}`);
+            res.render("beneficiario/sessao/sessaoLisindfil", {
+                sessao,
+                datacad,
+                dataedi,
+                usuario_nome_cad,
+                usuario_nome_edi,
+                datainiSemana,
+                datafimSemana,
+                bene_id,
+                benes: beneList,
+                convs: convList,
+                terapias: terapiaList,
+                usuarios: usuarioList,
+                sessoesNaoEncontradas: false,
+                totalLiminar,
+                totalContagem,
+                totalSaldo
+            });
+
+        } catch (err) {
+            console.error("❌ Erro interno:", err.message);
+            req.flash("error_message", "Houve um erro ao carregar os dados");
+            res.redirect('/admin/erro');
+        }
+    },
     // Lista sessões filtradas por data
     async listaSessaofilOLD(req, res) {
         let db = req.cookies['preferredDb'];

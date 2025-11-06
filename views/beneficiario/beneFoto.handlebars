@@ -29,7 +29,7 @@
     <script>
         function carregarImagem() {
             var preview = document.getElementById('previewImage');
-            var fileInput = document.getElementById('benefotoBandeira');
+            var fileInput = document.getElementById('benefotoFoto'); // <== corrigido!
 
             if (fileInput.files && fileInput.files[0]) {
                 var reader = new FileReader();
@@ -58,6 +58,18 @@
        
 
     </script>
+  <script>
+function carregarBody() {
+    document.getElementById("beneNome").value = document.getElementById("beneNomeEdi").value;
+    document.getElementById("benefotoNome").value = document.getElementById("beneidEdi").value;
+}
+
+window.onload = function() {
+    carregarBody();
+};
+</script>
+
+
 </head>
 
 <body onload="javascript:controlaNave(); " class="no-skin">
@@ -91,8 +103,9 @@
                                     <div class="widget-body">
                                         <div class="widget-main">
                                             <div class="form-group">
-                                                <div hidden class="col-sm-9">
-                                                   <input type="text" name="benefotoBeneid" id="benefotoBeneid" class="form-control" value="{{_id}}"/>
+                                                <div class="col-sm-9">
+                                                   <input hidden type="text" name="benefotoBeneid" id="benefotoBeneid" class="form-control" value="{{_id}}"/>
+                                                   <input id="beneidEdi" name="beneidEdi" value="{{_id}}"/>
                                                 </div>
                                             </div>
                                             
@@ -100,7 +113,14 @@
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label no-padding-right" for="benefotoNome">Nome do benefoto:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" name="benefotoNome" id="benefotoNome" class="form-control" value=""/>
+                                                  
+                                                        <select name="benefotoNome" id="benefotoNome" class="chosen-select" data-placeholder="Escolha...">
+                                                            {{#each benes}}
+                                                                <option value="{{_id}}">{{bene_nome}}</option>
+                                                            {{/each}}
+                                                        </select>
+
+                                                   
                                                 </div>
                                             </div>
 
@@ -113,7 +133,7 @@
                                                     <input type="file" id="benefotoFoto" name="benefotoFoto" accept="image/*" onchange="carregarImagem()" class="form-control" />
                                                     <!-- Prévua da Imagem -->
                                                     <div id="previewBandeira" style="margin-top: 10px;">
-                                                        <img id="previewImage" src="#" alt="Prévia da Bandeira" style="max-width: 200px; border: 1px solid #ddd; padding: 5px;" />
+                                                        <img id="previewImage" src="#" alt="Prévia da Foto" style="max-width: 200px; border: 1px solid #ddd; padding: 5px;" />
                                                     </div>
                                                 </div>
                                             </div>

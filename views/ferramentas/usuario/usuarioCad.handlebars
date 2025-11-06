@@ -39,131 +39,210 @@
 			}
 
 			//Graduação multipla seleção:
-				// Obtém todos os checkboxes com o nome 'usuarioGraduacaoOp'
-				var checkboxes = document.getElementsByName('usuarioGraduacaoOp');
+			// Obtém todos os checkboxes com o nome 'usuarioGraduacaoOp'
+			var checkboxes = document.getElementsByName('usuarioGraduacaoOp');
 
-				// Adiciona um evento change a cada checkbox
-				checkboxes.forEach(function(checkbox) {
-					checkbox.addEventListener('change', function() {
-					updateUsuarioGraduacao();
-					});
+			// Adiciona um evento change a cada checkbox
+			checkboxes.forEach(function(checkbox) {
+				checkbox.addEventListener('change', function() {
+				updateUsuarioGraduacao();
+				});
+			});
+
+			// Função para atualizar o valor do input text com base nas seleções
+			function updateUsuarioGraduacao() {
+				// Obtém todos os checkboxes marcados
+				var selectedCheckboxes = Array.from(checkboxes).filter(function(checkbox) {
+				return checkbox.checked;
 				});
 
-				// Função para atualizar o valor do input text com base nas seleções
-				function updateUsuarioGraduacao() {
-					// Obtém todos os checkboxes marcados
-					var selectedCheckboxes = Array.from(checkboxes).filter(function(checkbox) {
-					return checkbox.checked;
-					});
+				// Obtém os valores dos checkboxes marcados
+				var selectedValues = selectedCheckboxes.map(function(checkbox) {
+				return checkbox.value;
+				});
 
-					// Obtém os valores dos checkboxes marcados
-					var selectedValues = selectedCheckboxes.map(function(checkbox) {
-					return checkbox.value;
-					});
+				// Atualiza o valor do input text com os valores separados por ';'
+				document.getElementById('usuarioGraduacao').value = selectedValues.join(';');
 
-					// Atualiza o valor do input text com os valores separados por ';'
-					document.getElementById('usuarioGraduacao').value = selectedValues.join(';');
-
-				}
-			
+			}
+		
 			//Especialização multipla seleção:
-				// Obtém todos os checkboxes com o nome 'usuarioEspecializacaoOp'
-				var especializacaoCheckboxes = document.getElementsByName('usuarioEspecializacaoOp');
+			// Obtém todos os checkboxes com o nome 'usuarioEspecializacaoOp'
+			var especializacaoCheckboxes = document.getElementsByName('usuarioEspecializacaoOp');
 
-				// Adiciona um evento change a cada checkbox
-				especializacaoCheckboxes.forEach(function(checkbox) {
-					checkbox.addEventListener('change', function() {
-						updateUsuarioEspecializacao();
-					});
+			// Adiciona um evento change a cada checkbox
+			especializacaoCheckboxes.forEach(function(checkbox) {
+				checkbox.addEventListener('change', function() {
+					updateUsuarioEspecializacao();
+				});
+			});
+
+			// Função para atualizar o valor do input text com base nas seleções de especialização
+			function updateUsuarioEspecializacao() {
+				// Obtém todos os checkboxes de especialização marcados
+				var selectedCheckboxes = Array.from(especializacaoCheckboxes).filter(function(checkbox) {
+					return checkbox.checked;
 				});
 
-				// Função para atualizar o valor do input text com base nas seleções de especialização
-				function updateUsuarioEspecializacao() {
-					// Obtém todos os checkboxes de especialização marcados
-					var selectedCheckboxes = Array.from(especializacaoCheckboxes).filter(function(checkbox) {
-						return checkbox.checked;
-					});
+				// Obtém os valores dos checkboxes de especialização marcados
+				var selectedValues = selectedCheckboxes.map(function(checkbox) {
+					return checkbox.value;
+				});
 
-					// Obtém os valores dos checkboxes de especialização marcados
-					var selectedValues = selectedCheckboxes.map(function(checkbox) {
-						return checkbox.value;
-					});
-
-					// Atualiza o valor do input text com os valores separados por ';'
-					document.getElementById('usuarioEspecializacao').value = selectedValues.join(';');
-				}
+				// Atualiza o valor do input text com os valores separados por ';'
+				document.getElementById('usuarioEspecializacao').value = selectedValues.join(';');
+			}
 
 			//Método multipla seleção:
-				// Obtém todos os checkboxes com o nome 'usuarioMetodoOp'
-				var metodoCheckboxes = document.getElementsByName('usuarioMetodoOp');
+			// Obtém todos os checkboxes com o nome 'usuarioMetodoOp'
+			var metodoCheckboxes = document.getElementsByName('usuarioMetodoOp');
 
-				// Adiciona um evento change a cada checkbox
-				metodoCheckboxes.forEach(function(checkbox) {
-					checkbox.addEventListener('change', function() {
-						updateUsuarioMetodo();
-					});
+			// Adiciona um evento change a cada checkbox
+			metodoCheckboxes.forEach(function(checkbox) {
+				checkbox.addEventListener('change', function() {
+					updateUsuarioMetodo();
+				});
+			});
+
+			// Função para atualizar o valor do input text com base nas seleções de método
+			function updateUsuarioMetodo() {
+				// Obtém todos os checkboxes de método marcados
+				var selectedCheckboxes = Array.from(metodoCheckboxes).filter(function(checkbox) {
+					return checkbox.checked;
 				});
 
-				// Função para atualizar o valor do input text com base nas seleções de método
-				function updateUsuarioMetodo() {
-					// Obtém todos os checkboxes de método marcados
-					var selectedCheckboxes = Array.from(metodoCheckboxes).filter(function(checkbox) {
-						return checkbox.checked;
-					});
-
-					// Obtém os valores dos checkboxes de método marcados
-					var selectedValues = selectedCheckboxes.map(function(checkbox) {
-						return checkbox.value;
-					});
-
-					// Atualiza o valor do input text com os valores separados por ';'
-					document.getElementById('usuarioMetodo').value = selectedValues.join(';');
-				}
-
-				//Outros Método multipla seleção:
-				// Obtém todos os checkboxes com o nome 'usuarioMetoutOp'
-				var metoutCheckboxes = document.getElementsByName('usuarioMetoutOp');
-
-				// Adiciona um evento change a cada checkbox
-				metoutCheckboxes.forEach(function(checkbox) {
-					checkbox.addEventListener('change', function() {
-						updateUsuarioMetout();
-					});
+				// Obtém os valores dos checkboxes de método marcados
+				var selectedValues = selectedCheckboxes.map(function(checkbox) {
+					return checkbox.value;
 				});
 
-				// Função para atualizar o valor do input text com base nas seleções de método
-				function updateUsuarioMetout() {
-					// Obtém todos os checkboxes de método marcados
-					var selectedCheckboxes = Array.from(metoutCheckboxes).filter(function(checkbox) {
-						return checkbox.checked;
-					});
+				// Atualiza o valor do input text com os valores separados por ';'
+				document.getElementById('usuarioMetodo').value = selectedValues.join(';');
+			}
 
-					// Obtém os valores dos checkboxes de método marcados
-					var selectedValues = selectedCheckboxes.map(function(checkbox) {
-						return checkbox.value;
-					});
+			//Outros Método multipla seleção:
+			// Obtém todos os checkboxes com o nome 'usuarioMetoutOp'
+			var metoutCheckboxes = document.getElementsByName('usuarioMetoutOp');
 
-					// Atualiza o valor do input text com os valores separados por ';'
-					document.getElementById('usuarioMetout').value = selectedValues.join(';');
+			// Adiciona um evento change a cada checkbox
+			metoutCheckboxes.forEach(function(checkbox) {
+				checkbox.addEventListener('change', function() {
+					updateUsuarioMetout();
+				});
+			});
+
+			// Função para atualizar o valor do input text com base nas seleções de método
+			function updateUsuarioMetout() {
+				// Obtém todos os checkboxes de método marcados
+				var selectedCheckboxes = Array.from(metoutCheckboxes).filter(function(checkbox) {
+					return checkbox.checked;
+				});
+
+				// Obtém os valores dos checkboxes de método marcados
+				var selectedValues = selectedCheckboxes.map(function(checkbox) {
+					return checkbox.value;
+				});
+
+				// Atualiza o valor do input text com os valores separados por ';'
+				document.getElementById('usuarioMetout').value = selectedValues.join(';');
+			}
+
+			function salvar() {
+				if (document.getElementById("login") == undefined || document.getElementById("login") == "") {
+					alert("Por favor preencha o login corretamente.");
+				} else if (document.getElementById("senha") == undefined || document.getElementById("senha") == "") {
+					alert("Por favor preencha a senha corretamente.");
+				} else if (document.getElementById("usuarioEmail") == undefined || document.getElementById("usuarioEmail") == "") {
+					alert("Por favor preencha o email corretamente.");
+				} else {
+					let form = document.getElementById("formUsuarioCad");
+					form.action = "/menu/ferramentas/usuario/add";
+					form.submit();
+				}
+			}
+			function addEmpresaId() {
+				document.getElementById("spanShowEmpresaid").style = "display:none";
+
+				var id = document.getElementById("usuarioEmpresaselect").value;
+				var progSubid = document.getElementById("usuarioEmpresaselect");
+				var span = document.getElementById(id + "_spanExce").cloneNode(true);
+
+				// Obtendo o nome da opção selecionada
+				var selectedOptionText = $("#usuarioEmpresaselect option:selected").text();
+
+				span.id = "" + id + "_cloneExceTera";
+				document.getElementById("divExcecaoDica").append(span);
+
+				if (progSubid.value == "") {
+					progSubid.value = "" + id + "";
+				} else {
+					progSubid.value = "" + progSubid.value + "," + id + "";
 				}
 
-				function salvar() {
-					if (document.getElementById("login") == undefined || document.getElementById("login") == "") {
-						alert("Por favor preencha o login corretamente.");
-					} else if (document.getElementById("senha") == undefined || document.getElementById("senha") == "") {
-						alert("Por favor preencha a senha corretamente.");
-					} else if (document.getElementById("usuarioEmail") == undefined || document.getElementById("usuarioEmail") == "") {
-						alert("Por favor preencha o email corretamente.");
-					} else {
-						let form = document.getElementById("formUsuarioCad");
-						form.action = "/menu/ferramentas/usuario/add";
-						form.submit();
-					}
+				// Adicionando o nome da opção à div usuarioEmpresatext
+				var usuarioEmpresatextInput = document.getElementById("usuarioEmpresatext");
+				if (usuarioEmpresatextInput.value == "") {
+					usuarioEmpresatextInput.value = selectedOptionText;
+				} else {
+					usuarioEmpresatextInput.value += ", " + selectedOptionText;
 				}
+
+				// Chamando atualizaProgressBars após adicionar uma seleção
+				var selectedTextValues = usuarioEmpresatextInput.value; // Alteração aqui
+				atualizaProgressBars(selectedTextValues); // Alteração aqui
+
+				// Resetando o valor do select
+				document.getElementById("usuarioEmpresaselect").value = "766f69643132333435366964";
+			}
+
+			function removeTudo(alvo, clone) {
+				let arr = document.getElementById("" + alvo + "").value.split(",");
+				arr.forEach((a) => {
+					var selectedOptionText = $("#" + a + "_clone" + clone + "Tera").text();
+
+					// Remover o valor correspondente do campo usuarioEmpresatext
+					var usuarioEmpresatextInput = document.getElementById("usuarioEmpresatext");
+					var currentValue = usuarioEmpresatextInput.value;
+
+					// Remover o texto da opção atual da string de valor atual
+					var newValue = currentValue.replace(selectedOptionText, "");
+
+					// Remover qualquer vírgula extra e espaços em branco do novo valor
+					newValue = newValue.replace(/,+/g, ",").replace(/,\s*$/, "").trim();
+
+					// Atualizar o valor do campo usuarioEmpresatext
+					usuarioEmpresatextInput.value = newValue;
+
+					// Remover o elemento clonado
+					$("#" + a + "_clone" + clone + "Tera").remove();
+				});
+
+				// Limpar o valor do campo alvo
+				document.getElementById("" + alvo + "").value = "";
+
+				// Mostrar novamente o span oculto
+				document.getElementById("spanShow" + clone + "Tera").style.display = "";
+
+				// Limpar o valor
+				document.getElementById("progDicatipo").value = "";
+				document.getElementById("usuarioEmpresatext").value = "";
+
+				// Atualizar os progress bars após remover seleções
+				var selectedTextValues = usuarioEmpresatextInput.value; // Alteração aqui
+				atualizaProgressBars(selectedTextValues); // Alteração aqui
+			}
 		</script>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
+		<div  id="divCarrega" hidden>
+			<input type="text" id="usuarioEmpresatext" name="usuarioEmpresatext" style="width: 400px;" value="{{idBene}}" />
+			{{#each empresas}}
+			<span id="{{_id}}_spanEmpresa" class="spanAzul">{{empresa_nome}}
+				<a onclick="javascript:removeUsuarioEmpresaid('{{_id}}');removeUsuarioEmpresatext('{{empresa_nome}}');" class="fa fa-times aClose" ></a>
+			</span>
+			{{/each}}
+		</div>
 		<div class="main-container" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -751,13 +830,21 @@
 																	<label>Empresa</label>
 																	<div class="form-group">
 																		<div class="col-sm-4">
-																			<select id="usuarioEmpresaid" name="usuarioEmpresaid" class="chosen-select" data-placeholder="Escolha...">
+																			<select id="usuarioEmpresaselect" name="usuarioEmpresaselect" class="chosen-select" data-placeholder="Escolha...">
 																				<option value="766f69643132333435366964">-</option>
 																				{{#each empresas}}
 																				<option value="{{_id}}">{{empresa_nome}}</option>
 																				{{/each}}
 																				<option value="Total">Acesso total</option>
 																			</select>
+																			<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="removeTudo('usuarioEmpresa','Exce');">Remover</button>
+																			<div class="row">
+																				<div class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
+																					<div id="divEmpresa" name="empresaIdtemp" style="display: block;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
+																						<span id="spanShowEmpresaid" class="spanAzul">Escolha a empresa</span>
+																					</div>
+																				</div>
+																			</div>
 																		</div>
 																	</div>
 																</div><!-- /.span -->

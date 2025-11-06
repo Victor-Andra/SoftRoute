@@ -21,6 +21,7 @@ const especializacaoClass = require("../models/especializacao")
 const extraClass = require("../models/extra")
 const sessaoClass = require("../models/sessao")
 const excecaoClass = require("../models/excecao")
+const evolucaoconfClass = require("../models/evolucaoconf")
 
 // Models
 var Agenda = getModel("SoftRoute", 'tb_agenda', agendaClass.AgendaSchema)
@@ -42,6 +43,7 @@ var Especializacao = getModel("SoftRoute", 'tb_especializacao', especializacaoCl
 var Extra = getModel("SoftRoute", 'tb_extra', extraClass.ExtraSchema)
 var Sessao = getModel("SoftRoute", 'tb_sessao', sessaoClass.SessaoSchema)
 var Excecao = getModel("SoftRoute", 'tb_excecao', excecaoClass.ExcecaoSchema)
+var Evolucaoconf = getModel("SoftRoute", 'tb_evolucaoconf', evolucaoconfClass.EvolucaoconfSchema)
 
 //Funções Auxiliares
 //const atendFnc = require("../functions/fncAtend")
@@ -51,7 +53,7 @@ var Excecao = getModel("SoftRoute", 'tb_excecao', excecaoClass.ExcecaoSchema)
 const ObjectId = require('mongodb').ObjectId;
 //Gambiarras
 const AgendaArquivoClass = require("../models/agendaArquivo")
-//var AgendaArquivo = getModel("SoftRoute", 'tb_agendaArquivo', AgendaArquivoClass)
+var AgendaArquivo = getModel("SoftRoute", 'tb_agendaArquivo', AgendaArquivoClass)
 const fncGeral = require("./fncGeral")
 const Resposta = fncGeral.Resposta;
 
@@ -6525,14 +6527,26 @@ module.exports = {
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
         Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+        Evolucaoconf = getModel(db, 'tb_evolucaoconf', evolucaoconfClass.EvolucaoconfSchema)
 
         let selo;
         let isAgendaTerapeuta = false;
+        let isAgendaSuperCoo = false;
+        // 62421801a12aa557219a0fb9 = root; 62421857a12aa557219a0fc1 = socios; 644742e378166939169f82a1 = coordenador; 644743aa78166939169f8486 = supervisor
+        
         let lvlUsu = req.cookies['lvlUsu'];
-        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        let arrayIds = ['677e72110967e75764876577', '677e72270967e757648765a0', '677ed0df257b6578c4f433fa', '62421903a12aa557219a0fd3', '6578ab5248bfdf9fe1b2c8d8'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
             if(id == lvlUsu){
                 isAgendaTerapeuta = true;
+                isAgendaSuperCoo = false;
+            }
+        })
+        let arrayidsSup = ['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1','644742e378166939169f82a1','644743aa78166939169f8486'];
+        arrayidsSup.forEach((id)=>{
+            if(id == lvlUsu){
+                isAgendaTerapeuta = true;
+                isAgendaSuperCoo = true;
             }
         })
         let flash = new Resposta()
@@ -6568,13 +6582,26 @@ module.exports = {
                                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                                 //console.log("Listagem terapeutas!")
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                    res.render('agenda/agendaEvolucao', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, atrazo,flash})
-        })})})})})})}).catch((err) =>{
+                                    Evolucaoconf.find().then((evolucaoconf) =>{
+                                        evolucaoconf.sort((a,b) => ((a.evolucaoconf_titulo.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.evolucaoconf_titulo.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.evolucaoconf_titulo.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.evolucaoconf_titulo.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+                                            res.render('agenda/agendaEvolucao', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, isAgendaSuperCoo, selo, atrazo, flash, evolucaoconfs: evolucaoconf})
+        })})})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
     },
+
+
     carregaEvolucaosup(req, res, atrazo, resposta){
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
+
         filtroTela = new FiltroAtend();
         filtroTela.tipoData = req.body.tipoData;
         filtroTela.dataFinal = req.body.dataFinal;
@@ -6586,7 +6613,7 @@ module.exports = {
         let selo;
         let isAgendaTerapeuta = false;
         let lvlUsu = req.cookies['lvlUsu'];
-        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        let arrayIds = ['677e72110967e75764876577', '677e72270967e757648765a0', '677ed0df257b6578c4f433fa', '62421903a12aa557219a0fd3', '6578ab5248bfdf9fe1b2c8d8' ];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
             if(id == lvlUsu){
                 isAgendaTerapeuta = true;
@@ -6675,6 +6702,7 @@ module.exports = {
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
         Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+        Evolucaoconf = getModel(db, 'tb_evolucaoconf', evolucaoconfClass.EvolucaoconfSchema)
 
         /*
         if (atrazo == undefined || atrazo == "undefined"){
@@ -6687,12 +6715,24 @@ module.exports = {
         }
         */
         let isAgendaTerapeuta = false;
+        //677e72110967e75764876577 tec ABA; 677e72270967e757648765a0 Técnico Especialista Estagiário; 677ed0df257b6578c4f433fa Técnico Especialista ABA Estagiário; 62421903a12aa557219a0fd3 Técnico Especialista; 6578ab5248bfdf9fe1b2c8d8 Hibrido (Terapeuta e Administrativo)
+        let isAgendaSuperCoo = false;
+        // 62421801a12aa557219a0fb9 = root; 62421857a12aa557219a0fc1 = socios; 644742e378166939169f82a1 = coordenador; 644743aa78166939169f8486 = supervisor
+        
         let selo = false;
         let lvlUsu = req.cookies['lvlUsu'];
-        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        let arrayIds = ['677e72110967e75764876577', '677e72270967e757648765a0', '677ed0df257b6578c4f433fa', '62421903a12aa557219a0fd3', '6578ab5248bfdf9fe1b2c8d8' ];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
             if(id == lvlUsu){
                 isAgendaTerapeuta = true;
+                isAgendaSuperCoo = false;
+            }
+        })
+        let arrayidsSup = ['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1','644742e378166939169f82a1','644743aa78166939169f8486'];
+        arrayidsSup.forEach((id)=>{
+            if(id == lvlUsu){
+                isAgendaTerapeuta = true;
+                isAgendaSuperCoo = true;
             }
         })
         let flash = new Resposta()
@@ -6731,8 +6771,10 @@ module.exports = {
                                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
                                 //console.log("Listagem terapeutas!")
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-        res.render('agenda/agendaEvolucaoTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, atrazo}) //flash deu erro foi removido
-        })})})})})})}).catch((err) =>{
+                                     Evolucaoconf.find().then((evolucaoconf) =>{
+                                        evolucaoconf.sort((a,b) => ((a.evolucaoconf_titulo.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.evolucaoconf_titulo.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.evolucaoconf_titulo.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.evolucaoconf_titulo.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+        res.render('agenda/agendaEvolucaoTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, isAgendaSuperCoo, evolucaoconfs: evolucaoconf, selo, atrazo}) //flash deu erro foi removido
+        })})})})})})})}).catch((err) =>{
             console.log(err)
             res.render('admin/erro')
         })
@@ -6750,7 +6792,7 @@ module.exports = {
 
         let isAgendaTerapeuta = false;
         let lvlUsu = req.cookies['lvlUsu'];
-        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        let arrayIds = ['677e72110967e75764876577', '677e72270967e757648765a0', '677ed0df257b6578c4f433fa', '62421903a12aa557219a0fd3', '6578ab5248bfdf9fe1b2c8d8' ];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
             if(id == lvlUsu){
                 isAgendaTerapeuta = true;
@@ -7129,331 +7171,243 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    converteAgendaEmAtend(req,res){//Converte a Agenda em Atendimento
-        let db = req.cookies['preferredDb'];
-        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
-        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
-        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+    async converteAgendaEmAtend(req, res) {
+  try {
+    const db = req.cookies['preferredDb'];
+    const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
 
-        //console.log("dia:"+req.body.dataFil)
-        let idUsu = req.cookies['idUsu'];
-        let dataAtual = new Date();
-        let dataVenci = dataAtual;
-        dataVenci.setDate(dataVenci.getDate()+30);
-        let seg = new Date(req.body.dataFil);
-        let sex = new Date(req.body.dataFil);
-        let agendaSub;
-        let newAtend;
-        let newCre;
-        let newDeb;
-        let convcreval;
-        let convdebval;
-        let convcrevalSub;
-        let convdebvalSub;
-        let convcrevalFixo;
-        let convdebvalFixo;
-        let convCreCpfCnpj;
-        let convDebCpfCnpj;
-        let convcreTes;
-        let convdebTes;
-        let nextNum;
-        let roberta;
-        let atend;
-        let agendacreTes;
-        let agendadebTes;
-        let agendacreTesSub;
-        let agendadebTesSub;
-        let agendacreTesFixo;
-        let agendadebTesFixo;
-        let hora;
-        let data;
-        let hor;
-        let min;
-        seg.setHours(0);
-        seg.setMinutes(0);
-        seg.setSeconds(0);
-        sex.setHours(23);
-        sex.setMinutes(59);
-        sex.setSeconds(59);
-        //console.log("seg:"+seg)
-        //console.log("sex:"+sex)
-        //console.log("START CONVERT");
-        switch (seg.getUTCDay()){
-            case 0://DOM
-                seg.setUTCDate(seg.getUTCDate() + 1);
-                sex.setUTCDate(sex.getUTCDate() + 5);
-                break;
-            case 1://SEG
-                sex.setUTCDate(sex.getUTCDate() + 4);
-                break;
-            case 2://TER
-                seg.setUTCDate(seg.getUTCDate() - 1);
-                sex.setUTCDate(sex.getUTCDate() + 3);
-                break;
-            case 3://QUA
-                seg.setUTCDate(seg.getUTCDate() - 2);
-                sex.setUTCDate(sex.getUTCDate() + 2);
-                break;
-            case 4://QUI
-                seg.setUTCDate(seg.getUTCDate() - 3);
-                sex.setUTCDate(sex.getUTCDate() + 1);
-                break;
-            case 5://SEX
-                seg.setUTCDate(seg.getUTCDate() - 4);
-                break;
-            case 6://SAB
-                seg.setUTCDate(seg.getUTCDate() - 5);
-                sex.setUTCDate(sex.getUTCDate() - 1);
-                break;
-            default:
-                seg.setUTCDate(seg.getUTCDate() + 1);
-                sex.setUTCDate(sex.getUTCDate() + 5);
-                break;
+    const idUsu = req.cookies['idUsu'];
+    const dataAtual = new Date();
+
+    // período de busca: transforma dataFil em semana (segunda..sexta) como no código original
+    const baseDate = new Date(req.body.dataFil);
+    //let seg = new Date(baseDate);
+    //let sex = new Date(baseDate);
+    let seg = new Date(2025,6,1,0,0,0,0);
+    let sex = new Date(2025,8,30,23,59,59,0);
+    seg.setHours(0, 0, 0, 0);
+    sex.setHours(23, 59, 59, 999);
+
+    switch (seg.getUTCDay()) {
+      case 0: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
+      case 1: sex.setUTCDate(sex.getUTCDate() + 4); break;
+      case 2: seg.setUTCDate(seg.getUTCDate() - 1); sex.setUTCDate(sex.getUTCDate() + 3); break;
+      case 3: seg.setUTCDate(seg.getUTCDate() - 2); sex.setUTCDate(sex.getUTCDate() + 2); break;
+      case 4: seg.setUTCDate(seg.getUTCDate() - 3); sex.setUTCDate(sex.getUTCDate() + 1); break;
+      case 5: seg.setUTCDate(seg.getUTCDate() - 4); break;
+      case 6: seg.setUTCDate(seg.getUTCDate() - 5); sex.setUTCDate(sex.getUTCDate() - 1); break;
+      default: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
+    }
+    
+    console.log("seg? "+seg)
+    console.log("sex? "+sex)
+    seg.setHours(seg.getHours()-3)
+    sex.setHours(sex.getHours()-3)
+    let dataIni = seg.toISOString();
+    let dataFim = sex.toISOString();
+    console.log("dataIni? "+dataIni)
+    console.log("dataFim? "+dataFim)
+
+    // carrega convcre e convdeb via as promessas existentes
+    const convcre = await convcreClass.convcreCarregarTodos(req, res); // array
+    const convdeb = await convdebClass.convdebCarregarTodos(req, res); // array
+
+    // mapeia convs para lookup rápido com chave `${convid}${terapiaid}`
+    const mapConvCre = new Map();
+    convcre.forEach(c => mapConvCre.set(`${String(c.convcre_convid)}${String(c.convcre_terapiaid)}`, c.convcre_valor));
+    const mapConvDeb = new Map();
+    convdeb.forEach(d => mapConvDeb.set(`${String(d.convdeb_convid)}${String(d.convdeb_terapiaid)}`, d.convdeb_valor));
+
+    // carrega agendas fixa e semanal no período
+    const agendaFixa = await Agenda.find({
+      agenda_data: { $gte: dataIni, $lte: dataFim },
+      agenda_temp: false,
+      $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } }]
+    }).lean();
+    console.log("agendaFixa.length: "+agendaFixa.length)
+
+    const agendaSemanal = await Agenda.find({
+      agenda_data: { $gte: dataIni, $lte: dataFim },
+      agenda_temp: true,
+      $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } }]
+    }).lean();
+    console.log("agendaSemanal.length: "+agendaSemanal.length)
+
+    // índice de semanais por agenda_tempId (pode haver múltiplos por fixa)
+    const semanaisPorTemp = new Map();
+    for (const s of agendaSemanal) {
+      const key = String(s.agenda_tempId);
+      if (!semanaisPorTemp.has(key)) semanaisPorTemp.set(key, []);
+      semanaisPorTemp.get(key).push(s);
+    }
+
+    // pega último atend_num
+    const ultimo = await Atend.findOne().sort({ atend_num: -1 }).lean();
+    let nextNum = ultimo ? (Number(ultimo.atend_num) + 1) : 1;
+
+    // resultados/resumo
+    let totalGerados = 0;
+    let totalMesclados = 0;
+    const erros = [];
+
+    // helper: formata hora HH:MM a partir de Date ou string
+    const getHoraString = (agenda) => {
+      if (agenda.agenda_hora) return String(agenda.agenda_hora).padStart(5, '0'); // já formatada
+      const d = new Date(agenda.agenda_data);
+      const hh = String(d.getUTCHours()).padStart(2, '0');
+      const mm = String(d.getUTCMinutes()).padStart(2, '0');
+      return `${hh}:${mm}`;
+    };
+
+    // helper: pega valor conv (conv id + terapia id) do mapa
+    const getConvCreVal = (convid, terapiaid) => mapConvCre.get(`${String(convid)}${String(terapiaid)}`) || "0,00";
+    const getConvDebVal = (convid, terapiaid) => mapConvDeb.get(`${String(convid)}${String(terapiaid)}`) || "0,00";
+
+    // processa cada agenda fixa; se existir uma semanal vinculada, mescla
+    for (const fixa of agendaFixa) {
+      try {
+        // Se já migrado, pula
+        if (fixa.agenda_migrado) continue;
+
+        // pega semanais vinculadas (pode ser undefined)
+        const semanais = semanaisPorTemp.get(String(fixa._id)) || [];
+
+        // se existir mais de 1 semanal para a mesma fixa na semana, cada semanal resulta em um atendimento
+        if (semanais.length > 0) {
+          for (const s of semanais) {
+            // Constrói atendimento mesclado: os campos "precedem" da semanal:
+            // Campos não separáveis (prevalecem da semanal): usuario, data, hora, origem, categoria, beneficiário, convênio, sala
+            // Base (fixa) fornece outros dados; merge (semanal) sobrescreve alguns (merge fields)
+            const atendData = new Date(s.agenda_data); // usa data/hora da semanal
+            const atendHora = getHoraString(s);
+            const origem = s.agenda_origem || fixa.agenda_origem || "Agenda";
+            const categoria = s.agenda_categoria || fixa.agenda_categoria;
+            const beneid = s.agenda_beneid || fixa.agenda_beneid;
+            const convid = s.agenda_convid || fixa.agenda_convid;
+            const salaid = s.agenda_salaid || fixa.agenda_salaid;
+            // terapeuta principal: se semanal tem usuário diferente, manter usuário da semanal (precede)
+            const terapeutaid = s.agenda_usuid || fixa.agenda_usuid;
+            // terapia escolhida: semanal prevails for therapy where applicable
+            const terapiaid = s.agenda_terapiaid || fixa.agenda_terapiaid;
+
+            // valores convênios:
+            // convcre/de padrão: usa fixa.convid + fixa.terapiaid (base) para valores de cre/de
+            // para merge (semanal) usa s.agenda_convid + s.agenda_terapiaid
+            const convcreval = getConvCreVal(fixa.agenda_convid, fixa.agenda_terapiaid);
+            const convdebval = getConvDebVal(fixa.agenda_convid, fixa.agenda_terapiaid);
+            const convcrevalSub = getConvCreVal(s.agenda_convid, s.agenda_terapiaid);
+            const convdebvalSub = getConvDebVal(s.agenda_convid, s.agenda_terapiaid);
+
+            // valores de fixo (substituto fixo vem da fixa)
+            const convcrevalFixo = getConvCreVal(fixa.agenda_convid, fixa.agenda_mergeterapiaid);
+            const convdebvalFixo = getConvDebVal(fixa.agenda_convid, fixa.agenda_mergeterapiaid);
+
+            // monta objeto Atend respeitando campos do schema
+            const newAtend = new Atend({
+              atend_org: s.agenda_org || fixa.agenda_org || "Administrativo",
+              atend_categoria: categoria,
+              atend_beneid: beneid,
+              atend_convid: convid,
+              atend_usuid: idUsu,
+              atend_atenddata: atendData,
+              atend_atendhora: atendHora,
+              atend_terapeutaid: fixa.agenda_usuid, // terapeuta de origem (fixa) permanece em seu campo principal
+              atend_terapiaid: fixa.agenda_terapiaid,
+              atend_salaid: salaid,
+              atend_valorcre: convcreval,
+              atend_valordeb: convdebval,
+              // merge fields (semanais)
+              atend_mergeterapeutaid: s.agenda_usuid,
+              atend_mergeterapiaid: s.agenda_terapiaid,
+              atend_mergevalorcre: convcrevalSub,
+              atend_mergevalordeb: convdebvalSub,
+              // origem tracking
+              atend_agenda_f_id_orig: fixa._id,
+              atend_agenda_s_id_orig: s._id,
+              atend_fixo: "false",
+              atend_num: nextNum++,
+              atend_datacad: dataAtual.toISOString()
+            });
+
+            // se a fixa tinha substituto fixo, copia os campos fixos para o atendimento
+            if (fixa.agenda_categoria === "SubstitutoFixo" || fixa.agenda_mergeterapeutaid) {
+              newAtend.atend_fixoterapeutaid = fixa.agenda_mergeterapeutaid;
+              newAtend.atend_fixoterapiaid = fixa.agenda_mergeterapiaid;
+              newAtend.atend_fixovalorcre = convcrevalFixo;
+              newAtend.atend_fixovalordeb = convdebvalFixo;
+              newAtend.atend_fixo = "true";
+            }
+
+            // salva e marca agenda fixa como migrada (após sucesso)
+            await newAtend.save();
+            await Agenda.findByIdAndUpdate(fixa._id, { $set: { agenda_migrado: true } });
+            totalGerados++;
+            totalMesclados++;
+          }
+        } else {
+          // não há semanal vinculada: gerar atendimento apenas com dados da fixa (caminho feliz)
+          const atendData = new Date(fixa.agenda_data);
+          const atendHora = getHoraString(fixa);
+
+          const convcreval = getConvCreVal(fixa.agenda_convid, fixa.agenda_terapiaid);
+          const convdebval = getConvDebVal(fixa.agenda_convid, fixa.agenda_terapiaid);
+          const convcrevalFixo = getConvCreVal(fixa.agenda_convid, fixa.agenda_mergeterapiaid);
+          const convdebvalFixo = getConvDebVal(fixa.agenda_convid, fixa.agenda_mergeterapiaid);
+
+          const newAtend = new Atend({
+            atend_org: fixa.agenda_org || "Administrativo",
+            atend_categoria: fixa.agenda_categoria,
+            atend_beneid: fixa.agenda_beneid,
+            atend_convid: fixa.agenda_convid,
+            atend_usuid: idUsu,
+            atend_atenddata: atendData,
+            atend_atendhora: atendHora,
+            atend_terapeutaid: fixa.agenda_usuid,
+            atend_terapiaid: fixa.agenda_terapiaid,
+            atend_salaid: fixa.agenda_salaid,
+            atend_valorcre: convcreval,
+            atend_valordeb: convdebval,
+            atend_agenda_f_id_orig: fixa._id,
+            atend_fixo: "false",
+            atend_num: nextNum++,
+            atend_datacad: dataAtual.toISOString()
+          });
+
+          // caso fixa seja SubstitutoFixo aplica campos de fixo
+          if (fixa.agenda_categoria === "SubstitutoFixo" || fixa.agenda_mergeterapeutaid) {
+            newAtend.atend_fixoterapeutaid = fixa.agenda_mergeterapeutaid;
+            newAtend.atend_fixoterapiaid = fixa.agenda_mergeterapiaid;
+            newAtend.atend_fixovalorcre = convcrevalFixo;
+            newAtend.atend_fixovalordeb = convdebvalFixo;
+            newAtend.atend_fixo = "true";
+          }
+
+          await newAtend.save();
+          await Agenda.findByIdAndUpdate(fixa._id, { $set: { agenda_migrado: true } });
+          totalGerados++;
         }
-        let dataIni = seg.toISOString();
-        let dataFim = sex.toISOString();
-        console.log("dataIni: "+dataIni);
-        console.log("dataFim: "+dataFim);
-        
-        let cc = convcreClass.convcreCarregarTodos(req,res);
-        let cd = convdebClass.convdebCarregarTodos(req,res);
+      } catch (errInner) {
+        console.error("Erro processando fixa", fixa._id, errInner);
+        erros.push({ fixa: fixa._id, error: String(errInner) });
+      }
+    }
 
-        cc.then((convcre)=>{
-            convcre.forEach((c)=>{
-                Conv.findOne({_id: c.convcre_convid}).then((conv)=>{
-                    c.convcre_convCpfCnpj = conv.conv_cnpj;
-                })
-            })
-            //console.log(convcre)
-            cd.then((convdeb)=>{
-                convdeb.forEach((d)=>{
-                    Conv.findOne({_id: d.convdeb_convid}).then((conv)=>{
-                        d.convdeb_convCpfCnpj = conv.conv_cnpj;
-                    })
-                })
-                //console.log(convdeb)
-                Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } } ]}).then((agendaFixa)=>{
-                    Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true, $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } } ]}).then((agendaSemanal)=>{
-                    //-------------------------
-                    console.log("agendaSemanal.length: "+agendaSemanal.length);
-                    Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
-                        //console.log("validação caso seja o primeiro registro")
-                        atendimento.forEach(e => {atend = e});
-                        nextNum = atend.atend_num;
-                        agendaFixa.forEach((a)=>{
-                            agendaSub = '';
-                            convcreval = "0,00";
-                            convdebval = "0,00";
-                            convcrevalSub = "0,00";
-                            convdebvalSub = "0,00";
-                            convcrevalFixo = "0,00";
-                            convdebvalFixo = "0,00";
-                            //if(a.agenda_migrado != undefined){
-                                //console.log("migrado?"+a.agenda_migrado)
-                            //}
-                            //console.log("a.agenda_categoria:"+a.agenda_categoria);
+    // resumo e finalização
+    console.log(`Convertidos: ${totalGerados} atendimentos (mesclados: ${totalMesclados})`);
+    if (erros.length) console.warn("Erros:", erros);
 
-                            if(!a.agenda_migrado){
-                                nextNum = nextNum + 1;
-                                agendaSemanal.forEach((s)=>{
-                                    if (""+a._id === ""+s.agenda_tempId){
-                                        agendaSub = s;
-                                    }
-                                })
-
-                                if (agendaSub != ''){
-                                    data = agendaSub.agenda_data;
-                                    hor = data.getUTCHours();
-                                    min = data.getMinutes();
-
-                                    if((""+min).length == 1){
-                                        min = "0"+min;
-                                    }
-
-                                    if((""+hor).length == 1){
-                                        hor = "0"+hor;
-                                    }
-
-                                    hora = hor+":"+min;
-
-                                    agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
-                                    agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
-                                    agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
-                                    convcre.forEach((ccre)=>{
-                                        convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
-                                        if( convcreTes == agendacreTes){
-                                            convcreval = ccre.convcre_valor;
-                                        }
-                                        if( convcreTes == agendacreTesSub){
-                                            convcrevalSub = ccre.convcre_valor;
-                                        }
-                                        if (a.agenda_categoria == "SubstitutoFixo"){
-                                            if( convcreTes == agendacreTesFixo){
-                                                convcrevalFixo = ccre.convcre_valor;
-                                            }
-                                        }
-                                    })
-
-                                    agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+"";//padrão
-                                    agendadebTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";//Semanal
-                                    agendadebTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+"";//SubFixa
-                                    convdeb.forEach((cdeb)=>{
-                                        convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";
-                                        if(convdebTes == agendadebTes){
-                                            convdebval = cdeb.convdeb_valor;
-                                        }
-                                        if(convdebTes == agendadebTesSub){
-                                            convdebvalSub = cdeb.convdeb_valor;
-                                        }
-                                        if (a.agenda_categoria == "SubstitutoFixo"){
-                                            if(convdebTes == agendadebTesFixo){
-                                                convdebvalFixo = cdeb.convdeb_valor;
-                                            }
-                                        }
-                                    })
-
-                                    newAtend = new Atend({
-                                        atend_org : "Administrativo",//depende do lançamento na agenda semanal
-                                        atend_categoria : agendaSub.agenda_categoria,//depende do lançamento na agenda semanal
-                                        atend_beneid : a.agenda_beneid,//
-                                        atend_convid : a.agenda_convid,//
-                                        atend_usuid : idUsu,//
-                                        atend_atenddata : a.agenda_data,//
-                                        atend_atendhora : hora,//
-                                        atend_terapeutaid : a.agenda_usuid,//Atenderá o outro bene pelo merge
-                                        atend_terapiaid : a.agenda_terapiaid,//
-                                        atend_salaid : a.agenda_salaid,//
-                                        atend_valorcre : convcreval,//não recebe pois foi avisado previamente
-                                        atend_valordeb : convdebval,//não paga porque não atendeu ao bene em questão
-                                        atend_mergeterapeutaid : agendaSub.agenda_usuid,//Atendendo outro bene
-                                        atend_mergeterapiaid : agendaSub.agenda_terapiaid,
-                                        atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
-                                        atend_mergevalordeb : convdebvalSub,//
-                                        atend_agenda_f_id_orig : a._id,//
-                                        atend_agenda_s_id_orig : agendaSub._id,//
-                                        atend_fixo : "false",//
-                                        atend_num : nextNum,//
-                                        atend_datacad : dataAtual.toISOString()//
-                                    });
-
-                                    if (a.agenda_categoria == "SubstitutoFixo"){
-                                        newAtend.atend_fixoterapeutaid = a.agenda_mergeterapeutaid;
-                                        newAtend.atend_fixoterapiaid = a.agenda_mergeterapiaid;
-                                        newAtend.atend_fixovalorcre = convcrevalFixo;
-                                        newAtend.atend_fixovalordeb = convdebvalFixo;
-                                        newAtend.atend_fixo = "true";
-                                        newAtend.atend_num = nextNum;
-                                    }
-                                } else {
-                                    data = a.agenda_data;
-                                    hor = data.getUTCHours();
-                                    min = data.getMinutes();
-
-                                    if((""+min).length == 1){
-                                        min = "0"+min;
-                                    }
-
-                                    if((""+hor).length == 1){
-                                        hor = "0"+hor;
-                                    }
-
-                                    hora = hor+":"+min;
-                                    
-                                    if (a.agenda_categoria == "SubstitutoFixo") {
-                                        agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
-                                        agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
-                                        agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
-                                        convcre.forEach((ccre)=>{
-                                            convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
-                                            if( convcreTes == agendacreTes){
-                                                convcreval = ccre.convcre_valor;
-                                            }
-                                            if (a.agenda_categoria == "SubstitutoFixo"){
-                                                if( convcreTes == agendacreTesFixo){
-                                                    convcrevalFixo = ccre.convcre_valor;
-                                                }
-                                            }
-                                        })
-
-                                        agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+"";//padrão
-                                        agendadebTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+"";//SubFixa
-                                        convdeb.forEach((cdeb)=>{
-                                            convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";
-                                            if(convdebTes == agendadebTes){
-                                                convdebval = cdeb.convdeb_valor;
-                                            }
-                                            if (a.agenda_categoria == "SubstitutoFixo"){
-                                                if(convdebTes == agendadebTesFixo){
-                                                    convdebvalFixo = cdeb.convdeb_valor;
-                                                }
-                                            }
-                                        })
-
-                                        newAtend = new Atend({
-                                            atend_org : a.agenda_org,//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
-                                            atend_categoria : "SubstitutoFixo",//Para quando o convenio não paga o que deve
-                                            atend_beneid : a.agenda_beneid,//
-                                            atend_convid : a.agenda_convid,//
-                                            atend_usuid : idUsu,
-                                            atend_atenddata : a.agenda_data,//
-                                            atend_atendhora : hora,//
-                                            atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
-                                            atend_terapiaid : a.agenda_terapiaid,//Musica
-                                            atend_salaid : a.agenda_salaid,//
-                                            atend_valorcre : convcreval,//Convenio não paga
-                                            atend_valordeb : convdebval,//Paga ao musico
-                                            atend_mergeterapeutaid : new mongoose.mongo.ObjectId('766f69643132333435366964'),//voidid
-                                            atend_mergeterapiaid : new mongoose.mongo.ObjectId('766f69643132333435366964'),//voidid
-                                            atend_mergevalorcre : "0,00",//Recebe pela terapia ABA
-                                            atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
-                                            atend_agenda_f_id_orig : a._id,
-                                            atend_fixo : "false",
-                                            atend_num : nextNum,
-                                            atend_datacad : dataAtual.toISOString()
-                                        });
-                                        
-                                        if (a.agenda_categoria == "SubstitutoFixo"){
-                                            newAtend.atend_categoria = "SubstitutoFixo";
-                                            newAtend.atend_fixoterapeutaid = a.agenda_mergeterapeutaid;
-                                            newAtend.atend_fixoterapiaid = a.agenda_mergeterapiaid;
-                                            newAtend.atend_fixovalorcre = convcrevalFixo;
-                                            newAtend.atend_fixovalordeb = convdebvalFixo;
-                                            newAtend.atend_fixo = "true";
-                                        }
-                                    }
-                                }
-                                //console.log("newAtend:"+newAtend)
-                                nextNum = nextNum ++;
-                                //console.log("newAtend save");
-                                this.geraAtend(newAtend);
-                                if(newCre != ""){
-                                    this.GeraCre(newCre);
-                                    newCre == "";
-                                }
-                                if(newDeb != ""){
-                                    this.GeraDeb(newDeb);
-                                    newDeb == "";
-                                }
-                                //console.log("Setar migrado")
-                                Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: true }}).then(()=>{
-                                    console.log("Feito");
-                                });
-                                //Agenda.findById(a._id)
-                                //console.log("setou migrado")
-                            }
-                            })
-                        })
-                    })
-                })
-            })
-        }).catch((err)=>{
-            console.log(err)
-            res.render('admin/erro')
-        }).finally(()=>{
-            console.log("Finish!")
-            this.carregaAgendaF(req,res);
-        })
-    }, 
+    // recarrega view ou envia sucesso
+    this.carregaAgendaF(req, res); // mantém a chamada final do teu fluxo
+  } catch (err) {
+    console.error("Erro converteAgendaEmAtend:", err);
+    res.render('admin/erro');
+  } finally {
+    console.log("converteAgendaEmAtend finalizado");
+  }
+},
+ 
     copiaExtraordinario(req,res){//Converte a Extraordinarios em Extra
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
@@ -10083,14 +10037,14 @@ module.exports = {
         Atend.find(busca).then((atendimentos)=>{
             cc.then((convcre)=>{
                 convcre.forEach((c)=>{
-                    Conv.findOne({_id: c.convcre_convid}).then((conv)=>{
+                    Conv.findOne({_id: c.convcre_convid,convcre_status: { $ne: "Inativo" },convcre_lixo: { $ne: "true" }}).then((conv)=>{
                         c.convcre_convCpfCnpj = conv.conv_cnpj;
                     })
                 })
                 //console.log(convcre)
                 cd.then((convdeb)=>{
                     convdeb.forEach((d)=>{
-                        Conv.findOne({_id: d.convdeb_convid}).then((conv)=>{
+                        Conv.findOne({_id: d.convdeb_convid,convdeb_status: { $ne: "Inativo" },convdeb_lixo: { $ne: "true" }}).then((conv)=>{
                             d.convdeb_convCpfCnpj = conv.conv_cnpj;
                         })
                     })
@@ -10203,6 +10157,39 @@ module.exports = {
             })
         })
             
+    },
+    arquivarAgendasAntigas : async(req,res) => {
+        try {
+            let db = req.cookies['preferredDb'];
+            Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+            AgendaArquivo = getModel(db, 'tb_agendaArquivo', AgendaArquivoClass)
+            console.log("🔎 Buscando agendas anteriores a 2025...");
+
+            // Definindo a data limite: 1º de janeiro de 2025
+            const limite = new Date("2025-01-01T00:00:00.000Z");
+
+            // Busca todos os registros anteriores a 2025
+            const antigas = await Agenda.find({ agenda_data: { $lt: limite } });
+
+            if (antigas.length === 0) {
+            console.log("✅ Nenhum registro anterior a 2025 encontrado.");
+            return;
+            }
+
+            console.log(`📦 Encontradas ${antigas.length} agendas antigas.`);
+
+            // Insere todas na coleção de arquivo
+            const inseridas = await AgendaArquivo.insertMany(antigas);
+            console.log(`✅ Inseridas ${inseridas.length} agendas em tb_agendaarquivos.`);
+
+            // Remove as antigas da coleção original
+            const removidas = await Agenda.deleteMany({ agenda_data: { $lt: limite } });
+            console.log(`🗑️ Removidas ${removidas.deletedCount} agendas de tb_agendas.`);
+
+            console.log("🎉 Processo de arquivamento concluído com sucesso!");
+        } catch (err) {
+            console.error("❌ Erro ao arquivar agendas:", err);
+        }
     }
 }
 /*
@@ -10997,7 +10984,7 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
             */
 
             /*
-            converteAgendaEmAtend(req,res){//Converte a Agenda em Atendimento
+            converteAgendaEmAtendOldOld(req,res){//Converte a Agenda em Atendimento
         let db = req.cookies['preferredDb'];
         Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
@@ -13256,3 +13243,330 @@ totalRemovidos += resultado.deletedCount;
 
   console.log(`✅ Remoção concluída! Total de registros excluídos: ${totalRemovidos}`);
     */
+   /*
+   converteAgendaEmAtendOld(req,res){//Converte a Agenda em Atendimento
+        let db = req.cookies['preferredDb'];
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+
+        //console.log("dia:"+req.body.dataFil)
+        let idUsu = req.cookies['idUsu'];
+        let dataAtual = new Date();
+        let dataVenci = dataAtual;
+        dataVenci.setDate(dataVenci.getDate()+30);
+        let seg = new Date(req.body.dataFil);
+        let sex = new Date(req.body.dataFil);
+        let agendaSub;
+        let newAtend;
+        let newCre;
+        let newDeb;
+        let convcreval;
+        let convdebval;
+        let convcrevalSub;
+        let convdebvalSub;
+        let convcrevalFixo;
+        let convdebvalFixo;
+        let convCreCpfCnpj;
+        let convDebCpfCnpj;
+        let convcreTes;
+        let convdebTes;
+        let nextNum;
+        let roberta;
+        let atend;
+        let agendacreTes;
+        let agendadebTes;
+        let agendacreTesSub;
+        let agendadebTesSub;
+        let agendacreTesFixo;
+        let agendadebTesFixo;
+        let hora;
+        let data;
+        let hor;
+        let min;
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        //console.log("seg:"+seg)
+        //console.log("sex:"+sex)
+        //console.log("START CONVERT");
+        switch (seg.getUTCDay()){
+            case 0://DOM
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1://SEG
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2://TER
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3://QUA
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4://QUI
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                break;
+            case 5://SEX
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6://SAB
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+        }
+        let dataIni = seg.toISOString();
+        let dataFim = sex.toISOString();
+        console.log("dataIni: "+dataIni);
+        console.log("dataFim: "+dataFim);
+        
+        let cc = convcreClass.convcreCarregarTodos(req,res);
+        let cd = convdebClass.convdebCarregarTodos(req,res);
+
+        cc.then((convcre)=>{
+            convcre.forEach((c)=>{
+                Conv.findOne({_id: c.convcre_convid}).then((conv)=>{
+                    c.convcre_convCpfCnpj = conv.conv_cnpj;
+                })
+            })
+            //console.log(convcre)
+            cd.then((convdeb)=>{
+                convdeb.forEach((d)=>{
+                    Conv.findOne({_id: d.convdeb_convid}).then((conv)=>{
+                        d.convdeb_convCpfCnpj = conv.conv_cnpj;
+                    })
+                })
+                //console.log(convdeb)
+                Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } } ]}).then((agendaFixa)=>{
+                    Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true, $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } } ]}).then((agendaSemanal)=>{
+                    //-------------------------
+                    console.log("agendaSemanal.length: "+agendaSemanal.length);
+                    Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
+                        //console.log("validação caso seja o primeiro registro")
+                        atendimento.forEach(e => {atend = e});
+                        nextNum = atend.atend_num;
+                        agendaFixa.forEach((a)=>{
+                            agendaSub = '';
+                            convcreval = "0,00";
+                            convdebval = "0,00";
+                            convcrevalSub = "0,00";
+                            convdebvalSub = "0,00";
+                            convcrevalFixo = "0,00";
+                            convdebvalFixo = "0,00";
+                            //if(a.agenda_migrado != undefined){
+                                //console.log("migrado?"+a.agenda_migrado)
+                            //}
+                            //console.log("a.agenda_categoria:"+a.agenda_categoria);
+
+                            if(!a.agenda_migrado){
+                                nextNum = nextNum + 1;
+                                agendaSemanal.forEach((s)=>{
+                                    if (""+a._id === ""+s.agenda_tempId){
+                                        agendaSub = s;
+                                    }
+                                })
+
+                                if (agendaSub != ''){
+                                    data = agendaSub.agenda_data;
+                                    hor = data.getUTCHours();
+                                    min = data.getMinutes();
+
+                                    if((""+min).length == 1){
+                                        min = "0"+min;
+                                    }
+
+                                    if((""+hor).length == 1){
+                                        hor = "0"+hor;
+                                    }
+
+                                    hora = hor+":"+min;
+
+                                    agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
+                                    agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                    agendacreTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                    convcre.forEach((ccre)=>{
+                                        convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
+                                        if( convcreTes == agendacreTes){
+                                            convcreval = ccre.convcre_valor;
+                                        }
+                                        if( convcreTes == agendacreTesSub){
+                                            convcrevalSub = ccre.convcre_valor;
+                                        }
+                                        if (a.agenda_categoria == "SubstitutoFixo"){
+                                            if( convcreTes == agendacreTesFixo){
+                                                convcrevalFixo = ccre.convcre_valor;
+                                            }
+                                        }
+                                    })
+
+                                    agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+"";//padrão
+                                    agendadebTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+"";//Semanal
+                                    agendadebTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+"";//SubFixa
+                                    convdeb.forEach((cdeb)=>{
+                                        convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";
+                                        if(convdebTes == agendadebTes){
+                                            convdebval = cdeb.convdeb_valor;
+                                        }
+                                        if(convdebTes == agendadebTesSub){
+                                            convdebvalSub = cdeb.convdeb_valor;
+                                        }
+                                        if (a.agenda_categoria == "SubstitutoFixo"){
+                                            if(convdebTes == agendadebTesFixo){
+                                                convdebvalFixo = cdeb.convdeb_valor;
+                                            }
+                                        }
+                                    })
+
+                                    newAtend = new Atend({
+                                        atend_org : "Administrativo",//depende do lançamento na agenda semanal
+                                        atend_categoria : agendaSub.agenda_categoria,//depende do lançamento na agenda semanal
+                                        atend_beneid : a.agenda_beneid,//
+                                        atend_convid : a.agenda_convid,//
+                                        atend_usuid : idUsu,//
+                                        atend_atenddata : a.agenda_data,//
+                                        atend_atendhora : hora,//
+                                        atend_terapeutaid : a.agenda_usuid,//Atenderá o outro bene pelo merge
+                                        atend_terapiaid : a.agenda_terapiaid,//
+                                        atend_salaid : a.agenda_salaid,//
+                                        atend_valorcre : convcreval,//não recebe pois foi avisado previamente
+                                        atend_valordeb : convdebval,//não paga porque não atendeu ao bene em questão
+                                        atend_mergeterapeutaid : agendaSub.agenda_usuid,//Atendendo outro bene
+                                        atend_mergeterapiaid : agendaSub.agenda_terapiaid,
+                                        atend_mergevalorcre : convcrevalSub,//Recebe pela terapia ABA
+                                        atend_mergevalordeb : convdebvalSub,//
+                                        atend_agenda_f_id_orig : a._id,//
+                                        atend_agenda_s_id_orig : agendaSub._id,//
+                                        atend_fixo : "false",//
+                                        atend_num : nextNum,//
+                                        atend_datacad : dataAtual.toISOString()//
+                                    });
+
+                                    if (a.agenda_categoria == "SubstitutoFixo"){
+                                        newAtend.atend_fixoterapeutaid = a.agenda_mergeterapeutaid;
+                                        newAtend.atend_fixoterapiaid = a.agenda_mergeterapiaid;
+                                        newAtend.atend_fixovalorcre = convcrevalFixo;
+                                        newAtend.atend_fixovalordeb = convdebvalFixo;
+                                        newAtend.atend_fixo = "true";
+                                        newAtend.atend_num = nextNum;
+                                    }
+                                } else {
+                                    data = a.agenda_data;
+                                    hor = data.getUTCHours();
+                                    min = data.getMinutes();
+
+                                    if((""+min).length == 1){
+                                        min = "0"+min;
+                                    }
+
+                                    if((""+hor).length == 1){
+                                        hor = "0"+hor;
+                                    }
+
+                                    hora = hor+":"+min;
+                                    
+                                    if (a.agenda_categoria == "SubstitutoFixo") {
+                                        agendacreTes = ""+agendaSub.agenda_convid + a.agenda_terapiaid+""
+                                        agendacreTesSub = ""+agendaSub.agenda_convid + agendaSub.agenda_terapiaid+""
+                                        agendacreTes = ""+a.agenda_convid + a.agenda_mergeterapiaid+""
+                                        convcre.forEach((ccre)=>{
+                                            convcreTes = ""+ccre.convcre_convid + ccre.convcre_terapiaid+"";
+                                            if( convcreTes == agendacreTes){
+                                                convcreval = ccre.convcre_valor;
+                                            }
+                                            if (a.agenda_categoria == "SubstitutoFixo"){
+                                                if( convcreTes == agendacreTesFixo){
+                                                    convcrevalFixo = ccre.convcre_valor;
+                                                }
+                                            }
+                                        })
+
+                                        agendadebTes = ""+a.agenda_convid + a.agenda_terapiaid+"";//padrão
+                                        agendadebTesFixo = ""+a.agenda_convid + a.agenda_mergeterapiaid+"";//SubFixa
+                                        convdeb.forEach((cdeb)=>{
+                                            convdebTes = ""+cdeb.convdeb_convid + cdeb.convdeb_terapiaid+"";
+                                            if(convdebTes == agendadebTes){
+                                                convdebval = cdeb.convdeb_valor;
+                                            }
+                                            if (a.agenda_categoria == "SubstitutoFixo"){
+                                                if(convdebTes == agendadebTesFixo){
+                                                    convdebvalFixo = cdeb.convdeb_valor;
+                                                }
+                                            }
+                                        })
+
+                                        newAtend = new Atend({
+                                            atend_org : a.agenda_org,//depende do lançamento na agenda semanal, se houver observação. ele é administrativo
+                                            atend_categoria : "SubstitutoFixo",//Para quando o convenio não paga o que deve
+                                            atend_beneid : a.agenda_beneid,//
+                                            atend_convid : a.agenda_convid,//
+                                            atend_usuid : idUsu,
+                                            atend_atenddata : a.agenda_data,//
+                                            atend_atendhora : hora,//
+                                            atend_terapeutaid : a.agenda_usuid,//Terapeuta Principal(Musico)
+                                            atend_terapiaid : a.agenda_terapiaid,//Musica
+                                            atend_salaid : a.agenda_salaid,//
+                                            atend_valorcre : convcreval,//Convenio não paga
+                                            atend_valordeb : convdebval,//Paga ao musico
+                                            atend_mergeterapeutaid : new mongoose.mongo.ObjectId('766f69643132333435366964'),//voidid
+                                            atend_mergeterapiaid : new mongoose.mongo.ObjectId('766f69643132333435366964'),//voidid
+                                            atend_mergevalorcre : "0,00",//Recebe pela terapia ABA
+                                            atend_mergevalordeb : "0,00",//Não paga ao outro Terapeuta
+                                            atend_agenda_f_id_orig : a._id,
+                                            atend_fixo : "false",
+                                            atend_num : nextNum,
+                                            atend_datacad : dataAtual.toISOString()
+                                        });
+                                        
+                                        if (a.agenda_categoria == "SubstitutoFixo"){
+                                            newAtend.atend_categoria = "SubstitutoFixo";
+                                            newAtend.atend_fixoterapeutaid = a.agenda_mergeterapeutaid;
+                                            newAtend.atend_fixoterapiaid = a.agenda_mergeterapiaid;
+                                            newAtend.atend_fixovalorcre = convcrevalFixo;
+                                            newAtend.atend_fixovalordeb = convdebvalFixo;
+                                            newAtend.atend_fixo = "true";
+                                        }
+                                    }
+                                }
+                                //console.log("newAtend:"+newAtend)
+                                nextNum = nextNum ++;
+                                //console.log("newAtend save");
+                                this.geraAtend(newAtend);
+                                if(newCre != ""){
+                                    this.GeraCre(newCre);
+                                    newCre == "";
+                                }
+                                if(newDeb != ""){
+                                    this.GeraDeb(newDeb);
+                                    newDeb == "";
+                                }
+                                //console.log("Setar migrado")
+                                Agenda.findByIdAndUpdate(a._id, { $set: { agenda_migrado: true }}).then(()=>{
+                                    console.log("Feito");
+                                });
+                                //Agenda.findById(a._id)
+                                //console.log("setou migrado")
+                            }
+                            })
+                        })
+                    })
+                })
+            })
+        }).catch((err)=>{
+            console.log(err)
+            res.render('admin/erro')
+        }).finally(()=>{
+            console.log("Finish!")
+            this.carregaAgendaF(req,res);
+        })
+    }, 
+   */

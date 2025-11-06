@@ -226,6 +226,8 @@ module.exports = {
         let empresaArr = [];
         if (req.body.usuarioEmpresaid != "766f69643132333435366964" && req.body.usuarioEmpresaid != []){
             empresaArr.push(req.body.usuarioEmpresaid);
+        } else {
+            empresaArr.push("689b60167618eba5663a7246");
         }
         let dataAtual = new Date();
         let resultado;

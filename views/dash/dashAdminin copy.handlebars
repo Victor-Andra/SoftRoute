@@ -198,23 +198,7 @@
 										</div>
 									</div>
 									
-									<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-										<div class="widget-box transparent">
-											<div class="widget-header"><h4 class="widget-title lighter"><i class="ace-icon fa fa-code purple"></i>Evolução dos Atendimentos por Convênio Anual</h4></div>
-											<div class="widget-body">
-												<div class="widget-main">
-													<div class="widget-main no-padding">
-														<p class="alert alert-info">Evolução dos Atendimentos por Convênio Anual, infome o período para definir o anoi apenas. <span class="badge badge-danger">Funcional!</span></p>
-														
-													</div>
-													
-													<div id="GraficoAtendimentosConv" style="width: 100%; height: 300px;"></div>
-													
-
-												</div>
-											</div>
-										</div>
-									</div>
+								
 									
 								</div>
 
@@ -699,46 +683,7 @@ function renderGraficoEvolucaoMensalBene() {
 		}
 	</script>
 
-	<script>
-		function renderGraficoAtendimentosConv() {
-			console.log("📈 Renderizando gráfico de atendimentos por convênio");
 
-			const labels = [{{#each evolucaoAtendConv.labels}}"{{this}}"{{#unless @last}},{{/unless}}{{/each}}];
-			const seriesBarras = [
-				{{#each evolucaoAtendConv.series}}
-				{
-					name: "{{nome}}",
-					type: "column",
-					data: [{{#each data}}{{this}}{{#unless @last}},{{/unless}}{{/each}}]
-				}{{#unless @last}},{{/unless}}
-				{{/each}}
-			];
-			const serieTotal = {
-				name: "Total de Atendimentos",
-				type: "line",
-				data: [{{#each evolucaoAtendConv.totalMensal}}{{this}}{{#unless @last}},{{/unless}}{{/each}}],
-				marker: { size: 5 },
-				stroke: { width: 3 }
-			};
-
-			const options = {
-				series: [...seriesBarras, serieTotal],
-				chart: { height: 420, stacked: true, toolbar: { show: true } },
-				plotOptions: { bar: { horizontal: false, columnWidth: "55%", borderRadius: 4 } },
-				stroke: { width: [0, 3], curve: "smooth" },
-				markers: { size: 5, strokeWidth: 2, strokeColors: "#fff" },
-				xaxis: { categories: labels, title: { text: "Mês" } },
-				yaxis: { title: { text: "Quantidade de Atendimentos" }, min: 0 },
-				legend: { position: "top" },
-				fill: { opacity: [1, 1, 1, 0.2] },
-				colors: ["#1abc9c","#3498db","#9b59b6","#f1c40f","#e67e22","#e74c3c","#2ecc71","#16a085","#8e44ad","#c0392b"],
-				tooltip: { shared: true, intersect: false, y: { formatter: val => `${Math.round(val)} atendimentos` } },
-				grid: { borderColor: "#eee", strokeDashArray: 4 }
-			};
-
-			new ApexCharts(document.querySelector("#GraficoAtendimentosConv"), options).render();
-		}
-	</script>
 
 
 	<!-- ================================
@@ -927,7 +872,7 @@ function renderGraficoEvolucaoMensalBene() {
 			
 			// Sessões
 			renderGraficoSessoesPorTipo();
-			renderGraficoAtendimentosConv();
+			
 
 			// Terapias
 			renderGraficoTerapiaNome();

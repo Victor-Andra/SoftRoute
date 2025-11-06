@@ -79,7 +79,221 @@
 				// Força a recarga da página anterior
 				window.location.replace(document.referrer);
 			}
+		
+		
 		</script>
+	<script type="text/javascript">
+(function(){
+  function log(...args){ if(window.console) console.log("[Evolucao]", ...args); }
+
+  // lê valor de elemento por id ou name e normaliza pra boolean quando possível
+  function readValueFromEl(el){
+    if(!el) return null;
+    var v = el.value;
+    if(typeof v === "string") v = v.trim().toLowerCase();
+    if(v === "true") return true;
+    if(v === "false") return false;
+    if(el.type === "checkbox") return !!el.checked;
+    return null;
+  }
+
+  // tenta localizar a flag em uma lista de ids/names conhecidos
+  function detectSupervisorFlag(){
+    var candidates = ["isAgendaSuperCoo","isAgendaTerapeuta","isAgendaSuperCooInput","isAgendaTerapeutaInput","agendasup","agendatera"];
+    for(var i=0;i<candidates.length;i++){
+      var id = candidates[i];
+      var elById = document.getElementById(id);
+      if(elById){
+        var v = readValueFromEl(elById);
+        if(v === true || v === false) { log("flag detectada por id:", id, v); return {found:true, id:id, value:v}; }
+      }
+      var elsByName = document.getElementsByName(id);
+      if(elsByName && elsByName.length){
+        var v2 = readValueFromEl(elsByName[0]);
+        if(v2 === true || v2 === false) { log("flag detectada por name:", id, v2); return {found:true, id:id, value:v2}; }
+      }
+    }
+
+    // fallback: procura inputs cujo id/name contenham 'super' ou 'sup'
+    var inputs = document.querySelectorAll('input');
+    for(var j=0;j<inputs.length;j++){
+      var inp = inputs[j];
+      var token = (inp.id||"") + "|" + (inp.name||"");
+      if(/super|sup/i.test(token)){
+        var vv = readValueFromEl(inp);
+        log("fallback candidate:", token, "value:", inp.value);
+        if(vv === true || vv === false) return {found:true, id: inp.id||inp.name||token, value: vv};
+      }
+    }
+
+    // fallback 2: procura os campos explícitos que você adicionou (agendasup / agendatera) mesmo sem id
+    var byNameAgSup = document.getElementsByName("agendasup");
+    if(byNameAgSup && byNameAgSup.length){
+      var v = readValueFromEl(byNameAgSup[0]);
+      if(v === true || v === false) { log("flag detectada por name: agendasup", v); return {found:true, id:"agendasup", value:v}; }
+    }
+    var byNameAgTer = document.getElementsByName("agendatera");
+    if(byNameAgTer && byNameAgTer.length){
+      var v = readValueFromEl(byNameAgTer[0]);
+      if(v === true || v === false) { log("flag detectada por name: agendatera", v); return {found:true, id:"agendatera", value:v}; }
+    }
+
+    log("nenhuma flag clara encontrada; retornando found:false (value=false)");
+    return {found:false, id:null, value:false};
+  }
+
+  // utilitários DOM esperados
+  function $(id){ return document.getElementById(id); }
+
+  document.addEventListener("DOMContentLoaded", function(){
+    try {
+      var catSelect = $("evolucaoconfCategoria");
+      var tituloSelect = $("evolucaoconfTitulo");
+      var evolPad = $("evolucaoconfEvolucaopad");
+      var evolucaoTxt = $("agendaEvolucao");
+      var divEvolucaoConf = $("divEvolucaoConf");
+      var sourceNodes = document.querySelectorAll("#evolucaoconfSource .evitem");
+
+      if(!catSelect || !tituloSelect || !evolPad || !evolucaoTxt || !divEvolucaoConf){
+        log("Elementos obrigatórios faltando:", {
+          cat: !!catSelect, titulo: !!tituloSelect, pad: !!evolPad, ag: !!evolucaoTxt, div: !!divEvolucaoConf
+        });
+        return;
+      }
+
+      // carrega dados do bloco oculto
+      var evolucaoconfs = [];
+      sourceNodes.forEach(function(span){
+        evolucaoconfs.push({
+          evolucaoconf_categoria: span.getAttribute("data-cat") || "",
+          evolucaoconf_titulo: span.getAttribute("data-titulo") || "",
+          evolucaoconf_evolucaopad: span.getAttribute("data-evol") || ""
+        });
+      });
+      log("items evolucaoconf lidos:", evolucaoconfs.length);
+
+      function setOnlyDash(selectEl){
+        selectEl.innerHTML = "";
+        var o = document.createElement("option");
+        o.value = "-"; o.textContent = "-";
+        selectEl.appendChild(o);
+        selectEl.value = "-";
+      }
+
+      function preencherCategorias(){
+        catSelect.innerHTML = "";
+        var optPad = document.createElement("option"); optPad.value = "-"; optPad.textContent = "-"; catSelect.appendChild(optPad);
+        var cats = Array.from(new Set(evolucaoconfs.map(e=>e.evolucaoconf_categoria).filter(Boolean)));
+        cats.sort();
+        cats.forEach(function(c){
+          var o = document.createElement("option"); o.value = c; o.textContent = c; catSelect.appendChild(o);
+        });
+      }
+
+      function preencherTitulos(categoria){
+        tituloSelect.innerHTML = "";
+        var optPad = document.createElement("option"); optPad.value = "-"; optPad.textContent = "-"; tituloSelect.appendChild(optPad);
+        if(!categoria || categoria === "-") return;
+        var filtrados = evolucaoconfs.filter(e => e.evolucaoconf_categoria === categoria);
+        filtrados.sort((a,b)=> a.evolucaoconf_titulo > b.evolucaoconf_titulo ? 1 : -1);
+        filtrados.forEach(function(f){
+          var o = document.createElement("option"); o.value = f.evolucaoconf_titulo; o.textContent = f.evolucaoconf_titulo;
+          o.setAttribute("data-evol", f.evolucaoconf_evolucaopad || "");
+          tituloSelect.appendChild(o);
+        });
+      }
+
+      // eventos
+      catSelect.addEventListener("change", function(){
+        var v = this.value;
+        if(!v || v === "-"){
+          setOnlyDash(tituloSelect);
+          evolPad.value = "";
+          evolucaoTxt.value = "";
+          return;
+        }
+        preencherTitulos(v);
+        evolPad.value = "";
+        evolucaoTxt.value = "";
+      });
+
+      tituloSelect.addEventListener("change", function(){
+        var sel = this.options[this.selectedIndex];
+        if(!sel || sel.value === "-"){
+          evolPad.value = "";
+          evolucaoTxt.value = "";
+          return;
+        }
+        var pad = sel.getAttribute("data-evol") || "";
+        evolPad.value = pad;
+        evolucaoTxt.value = sel.value + "\n" + pad;
+      });
+
+      function resetAndHideAll(){
+        try{ catSelect.value = "-"; }catch(e){}
+        setOnlyDash(tituloSelect);
+        try{ tituloSelect.value = "-"; }catch(e){}
+        evolPad.value = "";
+        evolucaoTxt.value = "";
+        divEvolucaoConf.style.display = "none";
+        catSelect.setAttribute("disabled","disabled");
+        tituloSelect.setAttribute("disabled","disabled");
+        log("reset e hide executados");
+      }
+
+      function enableAndShow(){
+        var cats = Array.from(new Set(evolucaoconfs.map(e=>e.evolucaoconf_categoria).filter(Boolean)));
+        preencherCategorias();
+        divEvolucaoConf.style.display = "";
+        catSelect.removeAttribute("disabled");
+        tituloSelect.removeAttribute("disabled");
+        log("enableAndShow executado");
+      }
+
+      // aplica conforme flag detectada
+      function aplicarSegunFlag(){
+        var flag = detectSupervisorFlag();
+        log("detectSupervisorFlag ->", flag);
+        if(flag.found && flag.value === true){
+          enableAndShow();
+        } else {
+          resetAndHideAll();
+        }
+        return flag;
+      }
+
+      // primeira execução
+      var flag = aplicarSegunFlag();
+
+      // observa inputs que possamos ter utilizado
+      var watchNames = ["isAgendaSuperCoo","isAgendaTerapeuta","agendasup","agendatera"];
+      watchNames.forEach(function(nm){
+        var el = document.getElementById(nm) || document.getElementsByName(nm)[0];
+        if(el){
+          el.addEventListener("change", function(){
+            log("watcher change em", nm, "=>", el.value);
+            aplicarSegunFlag();
+          });
+          el.addEventListener("input", function(){
+            log("watcher input em", nm, "=>", el.value);
+            aplicarSegunFlag();
+          });
+        }
+      });
+
+      // se não encontrou flag por nenhum dos caminhos, ainda aplica reset defensivo
+      if(!flag.found){
+        log("flag não encontrada; aplicando reset defensivo");
+        resetAndHideAll();
+      }
+
+    } catch(err){
+      console.error("[Evolucao] erro:", err);
+    }
+  });
+})();
+</script>
+
 	</head>
 	<body class="no-skin" onload="javascript:controlaCategoria();carregaBody();controlaNave();">
 		<div class="main-container ace-save-state" id="main-container">
@@ -143,44 +357,111 @@
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
+												<input  name="agendasup" hidden type="text" value="{{this.isAgendaSuperCoo}}"/>
+												<input  name="agendatera" hidden type="text" value="{{this.isAgendaTerapeuta}}"/>
+												<!-- Fonte de dados evolucaoconfs (oculto) -->
+												<div id="evolucaoconfSource" style="display:none;">
+												{{#each evolucaoconfs}}
+													<span class="evitem"
+														data-cat="{{evolucaoconf_categoria}}"
+														data-titulo="{{evolucaoconf_titulo}}"
+														data-evol="{{evolucaoconf_evolucaopad}}">
+													</span>
+												{{/each}}
+												</div>
+
 												<div class="row">
+
+													<!-- Campos de configuração de evolução (visíveis apenas se isAgendaSuperCoo for true) -->
+													<div id="divEvolucaoConf" style="display:none;" {{#compareThis this.isAgendaSuperCoo "true"}}{{else}}hidden{{/compareThis}}>
+														<div class="col-sm-12">	
+															<label>Categoria</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="evolucaoconfCategoria" id="evolucaoconfCategoria" class="chosen-select" data-placeholder="Escolha...">
+																		<!-- As opções serão preenchidas via JavaScript -->
+																	</select>
+																</div>
+															</div>
+														</div>
+
+														<div class="col-sm-12">	
+															<label>Escolha o Título</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="evolucaoconfTitulo" id="evolucaoconfTitulo" class="chosen-select" data-placeholder="Escolha...">
+																		<!-- As opções serão preenchidas via JavaScript -->
+																	</select>
+																</div>
+															</div>
+														</div>
+
+														<!-- Campo oculto -->
+														<textarea id="evolucaoconfEvolucaopad" name="evolucaoconfEvolucaopad" rows="4" hidden></textarea>
+													</div>
+													<div class="col-xs-12" {{#compareThis this.isAgendaSuperCoo "true"}}{{else}}hidden{{/compareThis}}>
+														<div class="alert alert-danger">
+															<button type="button" class="close" data-dismiss="alert">
+																<i class="ace-icon fa fa-times"></i>
+															</button>
+															Atenção:<br> Se você iniciar uma evolução e, em seguida, alterar a categoria ou o título, a evolução atual será perdida.
+															<br> Nesse caso, será necessário reescrever todas as particularidades novamente.
+														</div>
+													</div>
+													<!-- Campo de evolução -->
 													<div id="divEvolucao">
 														<div class="col-sm-6">													
-															<label> Evolução</label>
+															<label>Evolução</label>
 															<div class="form-group">
 																<div class="col-sm-12">
-																	<!-- <textarea {{#isTrue selo}} rows="4" readonly="false" {{/isTrue}} id="agendaEvolucao" name="agendaEvolucao" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea> -->
-																	<textarea id="agendaEvolucao" name="agendaEvolucao" rows="4" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
+																	<textarea id="agendaEvolucao" name="agendaEvolucao" rows="6" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
 																</div>
 															</div>
 															<label class="pos-rel">
 																{{#isTrue selo}}
-																<input type="checkbox" style="display: none;" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
-																<b>Evolução Finalizada!</b>
+																	<input type="checkbox" style="display: none;" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" />
+																	<b>Evolução Finalizada!</b>
 																{{else}}
-																<input type="checkbox" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" onchange="javascript:selamento();" />
-																Evolução Finalizada? <b>Marque para concluir a evolução.</b>
+																	<input type="checkbox" name="agendaSelo" id="agendaSelo" value="{{agenda.agenda_selo}}" onchange="javascript:selamento();" />
+																	Evolução Finalizada? <b>Marque para concluir a evolução.</b>
 																{{/isTrue}}
 															</label>
 														</div>
 													</div>
 												</div>
-												<hr>
-												<div class="form-actions">
-													<div class="col-md-offset-3 col-md-9" style="align-items: center;">
-														<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
-															<i class="ace-icon fa fa-check bigger-110"></i>
-															Salvar
-														</button>
-														
-													</div>
-												</div>
-												<hr>
-												<div class="alert alert-warning">
+											</div>
+
+										</div>
+									</div>
+									<hr>
+									
+									<div class="col-md-offset-3 col-md-9" style="align-items: center;">
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										
+									</div>
+									
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Informações do Agendamento</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="alert alert-danger">
 													<button type="button" class="close" data-dismiss="alert">
 														<i class="ace-icon fa fa-times"></i>
 													</button>
-													Informações do agendamento.<br>
+													Informações do agendamento, somente leitura.<br>
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
@@ -340,7 +621,6 @@
 														</label>
 														-->
 												</div>
-												
 											</div>
 										</div>
 									</div>
