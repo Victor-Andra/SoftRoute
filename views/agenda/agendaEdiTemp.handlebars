@@ -66,6 +66,9 @@
 				if (document.getElementById("isAgendaTerapeuta").value == 'true'){
 					document.getElementById("divEvolucao").style = '';
 				}
+				document.getElementById('acaoCancelar').addEventListener('click', function() {
+					window.history.back();
+				});
 			}
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
@@ -77,6 +80,7 @@
 					console.log(chck.value);
 				}
 			}
+			
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:carregaBody();controlaNave();ajustaOption();">

@@ -55,6 +55,9 @@
 					document.getElementById("divEvolucao").style = '';
 				}
 				document.getElementById("agendaEvolucao").value = document.getElementById("agendaEvolucaoEdi").value;
+				document.getElementById('acaoCancelar').addEventListener('click', function() {
+					window.history.back();
+				});
 			}
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");

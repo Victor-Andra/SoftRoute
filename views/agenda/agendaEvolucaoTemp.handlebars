@@ -68,6 +68,9 @@
 			function selamento(){
 				document.getElementById("agendaSelamento").value = document.getElementById("agendaSelo").checked;
 			}
+			document.getElementById('acaoCancelar').addEventListener('click', function() {
+				window.history.back();
+			});
 		</script>
 		<script type="text/javascript">
 (function(){

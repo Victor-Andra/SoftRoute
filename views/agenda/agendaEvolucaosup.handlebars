@@ -37,6 +37,9 @@
 				if (document.getElementById("isAgendaTerapeuta").value == 'true'){
 					document.getElementById("divEvolucao").style = '';
 				}
+				document.getElementById('acaoCancelar').addEventListener('click', function() {
+					window.history.back();
+				});
 			}
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
