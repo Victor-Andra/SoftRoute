@@ -54,6 +54,7 @@
 				if (document.getElementById("isAgendaTerapeuta").value == 'true'){
 					document.getElementById("divEvolucao").style = '';
 				}
+				document.getElementById("agendaEvolucao").value = document.getElementById("agendaEvolucaoEdi").value;
 			}
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
@@ -197,11 +198,13 @@
           setOnlyDash(tituloSelect);
           evolPad.value = "";
           evolucaoTxt.value = "";
+		  console.log("FUCK1");
           return;
         }
         preencherTitulos(v);
         evolPad.value = "";
         evolucaoTxt.value = "";
+		console.log("FUCK2");
       });
 
       tituloSelect.addEventListener("change", function(){
@@ -209,6 +212,7 @@
         if(!sel || sel.value === "-"){
           evolPad.value = "";
           evolucaoTxt.value = "";
+		  console.log("FUCK3");
           return;
         }
         var pad = sel.getAttribute("data-evol") || "";
@@ -222,6 +226,7 @@
         try{ tituloSelect.value = "-"; }catch(e){}
         evolPad.value = "";
         evolucaoTxt.value = "";
+		console.log("FUCK4");
         divEvolucaoConf.style.display = "none";
         catSelect.setAttribute("disabled","disabled");
         tituloSelect.setAttribute("disabled","disabled");
@@ -267,12 +272,6 @@
           });
         }
       });
-
-      // se não encontrou flag por nenhum dos caminhos, ainda aplica reset defensivo
-      if(!flag.found){
-        log("flag não encontrada; aplicando reset defensivo");
-        resetAndHideAll();
-      }
 
     } catch(err){
       console.error("[Evolucao] erro:", err);
@@ -346,14 +345,11 @@
 											<div class="widget-body">
 												<div class="widget-main">
 													<input name="agendasup" hidden type="text" value="{{this.isAgendaSuperCoo}}"/>
-													<input name="agendatera" hidden type="text" value="{{this.isAgendaTerapeuta}}"/>
+													<input name="agendatera" hidden type="text" value="{{isAgendaTerapeuta}}"/>
 													<!-- Fonte de dados evolucaoconfs (oculto) -->
 													<div id="evolucaoconfSource" style="display:none;">
 													{{#each evolucaoconfs}}
-														<span class="evitem"
-															data-cat="{{evolucaoconf_categoria}}"
-															data-titulo="{{evolucaoconf_titulo}}"
-															data-evol="{{evolucaoconf_evolucaopad}}">
+														<span class="evitem" data-cat="{{evolucaoconf_categoria}}" data-titulo="{{evolucaoconf_titulo}}" data-evol="{{evolucaoconf_evolucaopad}}">
 														</span>
 													{{/each}}
 													</div>
@@ -402,7 +398,8 @@
 																<label>Evolução</label>
 																<div class="form-group">
 																	<div class="col-sm-12">
-																		<textarea id="agendaEvolucao" name="agendaEvolucao" rows="6" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
+																		<input id="agendaEvolucaoEdi" name="agendaEvolucaoEdi" hidden value="{{agenda.agenda_evolucao}}" />
+																		<textarea id="agendaEvolucao" name="agendaEvolucao" hidden rows="6" placeholder="" class="form-control"></textarea>
 																	</div>
 																</div>
 																<label class="pos-rel">

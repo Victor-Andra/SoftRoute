@@ -6539,7 +6539,7 @@ module.exports = {
         // 62421801a12aa557219a0fb9 = root; 62421857a12aa557219a0fc1 = socios; 644742e378166939169f82a1 = coordenador; 644743aa78166939169f8486 = supervisor
         
         let lvlUsu = req.cookies['lvlUsu'];
-        let arrayIds = ['677e72110967e75764876577', '677e72270967e757648765a0', '677ed0df257b6578c4f433fa', '62421903a12aa557219a0fd3', '6578ab5248bfdf9fe1b2c8d8'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
+        let arrayIds = ['677e72110967e75764876577', '677e72270967e757648765a0', '677ed0df257b6578c4f433fa', '62421903a12aa557219a0fd3', '6578ab5248bfdf9fe1b2c8d8','6242191fa12aa557219a0fd9'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
             if(id == lvlUsu){
                 isAgendaTerapeuta = true;

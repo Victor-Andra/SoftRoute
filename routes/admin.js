@@ -737,10 +737,15 @@ router.post('/login', passport.authenticate('local', {//Abre portal Login e senh
                 return res.redirect('/menu/login');
             }
             if (usu.usuario_empresaids != undefined) {
-                if (usu.usuario_empresaids.length == 1){
+                if (usu.usuario_empresaids.length == 1 && usu.usuario_empresaids[0] != null){
                     Empresa.findOne({_id: usu.usuario_empresaids[0]}).then((empresa)=>{
-                        let dbEscolhida = empresa.empresa_chavedb;
-                        return login(req,res,dbEscolhida);
+                        if (empresa.empresa_chavedb == null){
+                            let dbEscolhida = "SoftRoute";
+                            return login(req,res,dbEscolhida);
+                        } else {
+                            let dbEscolhida = empresa.empresa_chavedb;
+                            return login(req,res,dbEscolhida);
+                        }
                     })
                 } else if (usu.usuario_empresaids.length > 1) {
                     Empresa.find({_id: {$in:usu.usuario_empresaids}}).then((empresa)=>{
@@ -749,6 +754,8 @@ router.post('/login', passport.authenticate('local', {//Abre portal Login e senh
                         lvl = "x";
                         res.render("ferramentas/usuario/loginDB", {nivel: lvl, email , senha, empresas: empresa})
                     })
+                } else {
+                    login(req,res,"SoftRoute");
                 }
             } else {
                 login(req,res,"SoftRoute");

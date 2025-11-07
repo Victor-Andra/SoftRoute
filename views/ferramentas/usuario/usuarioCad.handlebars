@@ -2,6 +2,9 @@
 <html lang="pt-br">
 	<head>
 		<title>Usuários</title>
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 		<style>
 		.textarea {
 			width: 100%;
@@ -10,6 +13,14 @@
 		}
 		</style>
 		<script>
+			$(document).ready(function() {
+				$('#usuarioEmpresaselect').select2({
+					width: '100%',
+					placeholder: 'Escolha as empresas...',
+					allowClear: true,
+					closeOnSelect: false
+				});
+			});
 			function exibenome() {
 				document.getElementById("usuarioNomeCompletoinfo").value = document.getElementById("usuarioNome").value;
 			}
@@ -194,7 +205,7 @@
 				// Resetando o valor do select
 				document.getElementById("usuarioEmpresaselect").value = "766f69643132333435366964";
 			}
-
+/*
 			function removeTudo(alvo, clone) {
 				let arr = document.getElementById("" + alvo + "").value.split(",");
 				arr.forEach((a) => {
@@ -231,6 +242,7 @@
 				var selectedTextValues = usuarioEmpresatextInput.value; // Alteração aqui
 				atualizaProgressBars(selectedTextValues); // Alteração aqui
 			}
+			*/
 		</script>
 	</head>
 
@@ -830,10 +842,18 @@
 																	<label>Empresa</label>
 																	<div class="form-group">
 																		<div class="col-sm-4">
+																			<!--
 																			<select id="usuarioEmpresaselect" name="usuarioEmpresaselect" class="chosen-select" data-placeholder="Escolha...">
 																				<option value="766f69643132333435366964">-</option>
 																				{{#each empresas}}
 																				<option value="{{_id}}">{{empresa_nome}}</option>
+																				{{/each}}
+																				<option value="Total">Acesso total</option>
+																			</select>
+																			-->
+																			<select id="usuarioEmpresaselect" name="usuarioEmpresaselect[]" class="form-control select2" multiple="multiple" data-placeholder="Escolha as empresas...">
+																				{{#each empresas}}
+																					<option value="{{_id}}">{{empresa_nome}}</option>
 																				{{/each}}
 																				<option value="Total">Acesso total</option>
 																			</select>
