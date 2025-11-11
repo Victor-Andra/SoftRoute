@@ -1117,66 +1117,65 @@ module.exports = {
                                     if (atend.atend_fixo == "true"){
                                         terapiaAtend = atend.atend_fixoterapiaid;
                                         terapeutaAtend = atend.atend_fixoterapeutaid;
-                                    } else {
-                                        switch (categorias){
-                                            /*
-                                            case "Apoio":
-                                                terapiaAtend = atend.atend_terapiaid;
-                                                terapeutaAtend = atend.atend_terapeutaid;
-                                                break;
-                                            case "Extra":
-                                                terapiaAtend = atend.atend_terapiaid;
-                                                terapeutaAtend = atend.atend_terapeutaid;
-                                                break;
-                                            case "Falta":
-                                                terapiaAtend = atend.atend_terapiaid;
-                                                terapeutaAtend = atend.atend_terapeutaid;
-                                                break;
-                                            case "Glosa":
-                                                terapiaAtend = atend.atend_terapiaid;
-                                                terapeutaAtend = atend.atend_terapeutaid;
-                                                break;
-                                            case "Padrão":
-                                                console.log("WTF?")
-                                                terapiaAtend = atend.atend_terapiaid;
-                                                terapeutaAtend = atend.atend_terapeutaid;
-                                                console.log("PADRAO: "+atend)
-                                                break;
-                                            case "Pais":
-                                                terapiaAtend = atend.atend_terapiaid;
-                                                terapeutaAtend = atend.atend_terapeutaid;
-                                                break;
-                                            case "Substituição":
-                                                terapiaAtend = atend.atend_mergeterapiaid;
-                                                terapeutaAtend = atend.atend_mergeterapeutaid;
-                                                break;
-                                            case "Supervisão":
-                                                terapiaAtend = atend.atend_terapiaid;
-                                                terapeutaAtend = atend.atend_terapeutaid;
-                                                break;
-                                            case "Falta Justificada":
-                                                terapiaAtend = "break";
-                                                terapeutaAtend = "break";
-                                                break;
-                                                */
-                                            case "Feriado":
-                                                terapiaAtend = "break";
-                                                terapeutaAtend = "break";
-                                                break;
-                                            case "Falta Absoluta":
-                                                terapiaAtend = "break";
-                                                terapeutaAtend = "break";
-                                                break;
-                                            case "SubstitutoFixo":
-                                                terapiaAtend = atend.atend_fixoterapiaid;
-                                                terapeutaAtend = atend.atend_fixoterapeutaid;
-                                                break;
-                                            default:
-                                                terapiaAtend = atend.atend_terapiaid;
-                                                terapeutaAtend = atend.atend_terapeutaid;
-                                                //console.log("default: "+atend)
-                                                break;
-                                        }
+                                    }
+                                    switch (categorias){
+                                        /*
+                                        case "Apoio":
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            terapeutaAtend = atend.atend_terapeutaid;
+                                            break;
+                                        case "Extra":
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            terapeutaAtend = atend.atend_terapeutaid;
+                                            break;
+                                        case "Falta":
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            terapeutaAtend = atend.atend_terapeutaid;
+                                            break;
+                                        case "Glosa":
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            terapeutaAtend = atend.atend_terapeutaid;
+                                            break;
+                                        case "Padrão":
+                                            console.log("WTF?")
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            terapeutaAtend = atend.atend_terapeutaid;
+                                            console.log("PADRAO: "+atend)
+                                            break;
+                                        case "Pais":
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            terapeutaAtend = atend.atend_terapeutaid;
+                                            break;
+                                        case "Substituição":
+                                            terapiaAtend = atend.atend_mergeterapiaid;
+                                            terapeutaAtend = atend.atend_mergeterapeutaid;
+                                            break;
+                                        case "Supervisão":
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            terapeutaAtend = atend.atend_terapeutaid;
+                                            break;
+                                        case "Falta Justificada":
+                                            terapiaAtend = "break";
+                                            terapeutaAtend = "break";
+                                            break;
+                                            */
+                                        case "Feriado":
+                                            terapiaAtend = "break";
+                                            terapeutaAtend = "break";
+                                            break;
+                                        case "Falta Absoluta":
+                                            terapiaAtend = "break";
+                                            terapeutaAtend = "break";
+                                            break;
+                                        case "SubstitutoFixo":
+                                            terapiaAtend = atend.atend_fixoterapiaid;
+                                            terapeutaAtend = atend.atend_fixoterapeutaid;
+                                            break;
+                                        default:
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            terapeutaAtend = atend.atend_terapeutaid;
+                                            //console.log("default: "+atend)
+                                            break;
                                     }
                                     
                                     if (categorias != "Feriado" && categorias != "Falta Absoluta"){
@@ -1285,7 +1284,8 @@ module.exports = {
         
         let filtro = {
             dataIni: req.body.dataIni || '',
-            dataFim: req.body.dataFim || ''
+            dataFim: req.body.dataFim || '',
+            beneId: req.body.relBeneid || ''
         };
         
         let date = new Date();
@@ -1383,71 +1383,71 @@ module.exports = {
                                             rab.dt = (fncGeral.getData(atend.atend_atenddata));
                                             //console.log("rab.dt: "+rab.dt)
                                         }
-                                        categorias = atend.atend_categoria
-                                        //console.log("categorias:"+categorias)
+                                        categorias = atend.atend_categoria;
+                                        console.log("categorias: " + categorias);
+                                        console.log("_id: " + atend._id);
+                                        console.log("Falta Absoluta" == categorias);
                                         if (atend.atend_fixo == "true"){
                                             terapiaAtend = atend.atend_fixoterapiaid;
                                             terapeutaAtend = atend.atend_fixoterapeutaid;
-                                        } else {
-                                            switch (categorias){
-                                                /*
-                                                case "Apoio":
-                                                    terapiaAtend = atend.atend_terapiaid;
-                                                    terapeutaAtend = atend.atend_terapeutaid;
-                                                    break;
-                                                case "Extra":
-                                                    terapiaAtend = atend.atend_terapiaid;
-                                                    terapeutaAtend = atend.atend_terapeutaid;
-                                                    break;
-                                                case "Falta":
-                                                    terapiaAtend = atend.atend_terapiaid;
-                                                    terapeutaAtend = atend.atend_terapeutaid;
-                                                    break;
-                                                case "Glosa":
-                                                    terapiaAtend = atend.atend_terapiaid;
-                                                    terapeutaAtend = atend.atend_terapeutaid;
-                                                    break;
-                                                case "Padrão":
-                                                    console.log("WTF?")
-                                                    terapiaAtend = atend.atend_terapiaid;
-                                                    terapeutaAtend = atend.atend_terapeutaid;
-                                                    console.log("PADRAO: "+atend)
-                                                    break;
-                                                case "Pais":
-                                                    terapiaAtend = atend.atend_terapiaid;
-                                                    terapeutaAtend = atend.atend_terapeutaid;
-                                                    break;
-                                                case "Substituição":
-                                                    terapiaAtend = atend.atend_mergeterapiaid;
-                                                    terapeutaAtend = atend.atend_mergeterapeutaid;
-                                                    break;
-                                                case "Supervisão":
-                                                    terapiaAtend = atend.atend_terapiaid;
-                                                    terapeutaAtend = atend.atend_terapeutaid;
-                                                    break;
-                                                case "Falta Justificada":
-                                                    terapiaAtend = "break";
-                                                    terapeutaAtend = "break";
-                                                    break;
-                                                    */
-                                                case "Feriado":
-                                                    terapiaAtend = "break";
-                                                    terapeutaAtend = "break";
-                                                    break;
-                                                case "Falta Absoluta":
-                                                    terapiaAtend = "break";
-                                                    terapeutaAtend = "break";
-                                                    break;
-                                                case "SubstitutoFixo":
-                                                    terapiaAtend = atend.atend_fixoterapiaid;
-                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
-                                                    break;
-                                                default:
-                                                    terapiaAtend = atend.atend_terapiaid;
-                                                    terapeutaAtend = atend.atend_terapeutaid;
-                                                    //console.log("default: "+atend)
-                                                    break;
-                                            }
+                                        }
+                                        switch (categorias){
+                                            /*
+                                            case "Apoio":
+                                                terapiaAtend = atend.atend_terapiaid;
+                                                terapeutaAtend = atend.atend_terapeutaid;
+                                                break;
+                                            case "Extra":
+                                                terapiaAtend = atend.atend_terapiaid;
+                                                terapeutaAtend = atend.atend_terapeutaid;
+                                                break;
+                                            case "Falta":
+                                                terapiaAtend = atend.atend_terapiaid;
+                                                terapeutaAtend = atend.atend_terapeutaid;
+                                                break;
+                                            case "Glosa":
+                                                terapiaAtend = atend.atend_terapiaid;
+                                                terapeutaAtend = atend.atend_terapeutaid;
+                                                break;
+                                            case "Padrão":
+                                                console.log("WTF?")
+                                                terapiaAtend = atend.atend_terapiaid;
+                                                terapeutaAtend = atend.atend_terapeutaid;
+                                                console.log("PADRAO: "+atend)
+                                                break;
+                                            case "Pais":
+                                                terapiaAtend = atend.atend_terapiaid;
+                                                terapeutaAtend = atend.atend_terapeutaid;
+                                                break;
+                                            case "Substituição":
+                                                terapiaAtend = atend.atend_mergeterapiaid;
+                                                terapeutaAtend = atend.atend_mergeterapeutaid;
+                                                break;
+                                            case "Supervisão":
+                                                terapiaAtend = atend.atend_terapiaid;
+                                                terapeutaAtend = atend.atend_terapeutaid;
+                                                break;
+                                            case "Falta Justificada":
+                                                terapiaAtend = "break";
+                                                terapeutaAtend = "break";
+                                                break;
+                                                */
+                                            case "Feriado":
+                                                terapiaAtend = "break";
+                                                terapeutaAtend = "break";
+                                                break;
+                                            case "Falta Absoluta":
+                                                terapiaAtend = "break";
+                                                terapeutaAtend = "break";
+                                                break;
+                                            case "SubstitutoFixo":
+                                                terapiaAtend = atend.atend_fixoterapiaid;
+                                                terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                break;
+                                            default:
+                                                terapiaAtend = atend.atend_terapiaid;
+                                                terapeutaAtend = atend.atend_terapeutaid;
+                                                break;
                                         }
                                         if (porSala == "sim"){
                                             sala.forEach((s)=>{
@@ -6332,3 +6332,58 @@ let dataIni2 = dataIni;
     }
 }
            */
+          /*
+          Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        const ini = (new Date("2000-01-01T00:00:00.000Z")).toISOString();
+        const fim = (new Date("2000-01-02T23:59:59.999Z")).toISOString();
+       
+        let updates = [
+        { teraId: "68b88a29a741852d6f4653fb", beneId: "68a3795873ff2bb80b0a4605", piaId: "6915879621d8779aa12a7251", valorCre: "140,00", valorDeb: "52,42" },
+        ...
+        ];
+
+        updates.forEach(u => {
+            //let u = updates[0];
+
+            Atend.updateMany({
+                atend_atenddata: {$gte: ini,$lte: fim},
+                atend_terapeutaid: new ObjectId(u.teraId),
+                atend_beneid: new ObjectId(u.beneId)
+            },
+            {
+                $set: {
+                    atend_terapiaid: new ObjectId(u.piaId),
+                    atend_valorcre: u.valorCre,
+                    atend_valordeb: u.valorDeb
+                }
+            }).then((res) =>{
+                //console.log("Salvo")
+                resultado = true;
+            }).catch((err) =>{
+                console.log("erro mongo:")
+                console.log(err)
+                resultado = err;
+                //res.redirect('admin/branco')
+            }).finally(()=>{
+                console.log("FINISH");
+            });
+            Agenda.updateMany({
+                agenda_data: {$gte: ini,$lte: fim},
+                agenda_usuid: new ObjectId(u.teraId),
+                agenda_beneid: new ObjectId(u.beneId),
+            }, {$set: {
+                agenda_terapiaid: new ObjectId(u.piaId)
+            }}).then((res) =>{
+                //console.log("Salvo")
+                resultado = true;
+            }).catch((err) =>{
+                console.log("erro mongo:")
+                console.log(err)
+                resultado = err;
+                //res.redirect('admin/branco')
+            }).finally(()=>{
+                console.log("FINISH");
+            });
+        });
+          */

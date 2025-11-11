@@ -96,12 +96,13 @@ module.exports = {
 
         try {
             const [
-                usuarios, estados, perfils, funcaos, especialidades, especializacaos, metodos, metouts, usufuncs, usupermis
+                usuarios, estados, perfils, funcaos, empresas, especialidades, especializacaos, metodos, metouts, usufuncs, usupermis
             ] = await Promise.all([
                 Usuario.find(), // já tava aí antes
                 Estado.find(),
                 Perfil.find(),
                 Funcao.find(),
+                Empresa.find(),
                 Especialidade.find().collation({ locale: "pt", strength: 1 }).sort({ especialidade_nome: 1 }),
                 Especializacao.find().collation({ locale: "pt", strength: 1 }).sort({ especializacao_nome: 1 }),
                 Metodo.find().collation({ locale: "pt", strength: 1 }).sort({ metodo_ordem: 1 }),
@@ -120,6 +121,7 @@ module.exports = {
                 estados,
                 perfils,
                 funcaos,
+                empresas,
                 especialidades,
                 especializacaos,
                 metodos,

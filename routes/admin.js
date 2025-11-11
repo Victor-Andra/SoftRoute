@@ -79,6 +79,11 @@ const salaClass = require("../models/sala")
 var Sala = getModel("softroute", 'tb_sala', salaClass.SalaSchema);//getModel("softroute", 'tb_sala', salaClass.SalaSchema)
 const fncSala = require("../functions/fncSala")
 
+//manual, onde são realizadas os atendimentos
+const manualClass = require("../models/manual")
+var Manual = getModel("softroute", 'tb_manual', manualClass.ManualSchema);
+const fncManual = require("../functions/fncManual")
+
 //Saúde dos colaboradores Ficha, onde são cadastrados as informações de saúde dos colaboradores
 //Para emergência médica e hospitalar/SAMU
 const saudecolabClass = require("../models/saudecolab")
@@ -1689,54 +1694,54 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
 //Relatório de Atendimentos por Convênio.
 //pagos pelos convênios, incluindo particular, num determinado período de tempo.
     router.get('/atendimento/relatendval', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.relAtendimentoVal(req,res)
+        fncAtend.relAtendimentoVal(req,res);
     })
 
     router.post('/atendimento/relatendvals', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.relAtendimentoValFiltro(req,res)
+        fncAtend.relAtendimentoValFiltro(req,res);
     })
 
 //Relatório Individual de Atendimentos por Beneficiário.
 //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo.
     router.get('/atendimento/relatendbene', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.relAtendimentoBene(req,res)
+        fncAtend.relAtendimentoBene(req,res);
     })
     router.post('/atendimento/relatendbenes', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.relAtendimentoBeneFiltro(req,res)
+        fncAtend.relAtendimentoBeneFiltro(req,res);
     })
 //Relatório Individual de Atendimentos por Beneficiário.
 //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo 
 //com espaço para assinataura individual, tanto responsável quanto do terapeuta
     router.get('/atendimento/relatendbeneassin', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.relAtendimentoBeneassin(req,res)
+        fncAtend.relAtendimentoBeneassin(req,res);
     })
     router.post('/atendimento/relatendbeneassins', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.relAtendimentoBeneassinFiltro(req,res)
+        fncAtend.relAtendimentoBeneassinFiltro(req,res);
     })
 //Relatório Consolidado de Atendimentos por Beneficiário.
 //Emite uma consolidado de todos os atendimentos realizados com Valores pelo beneficiário num determinado período de tempo.
     router.get('/atendimento/relatendbenecons', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.relAtendimentoBeneCons(req,res)
+        fncAtend.relAtendimentoBeneCons(req,res);
     })
 
     router.post('/atendimento/relatendvalconss', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.relAtendimentoBeneConsFiltro(req,res)
+        fncAtend.relAtendimentoBeneConsFiltro(req,res);
     })
 
 //Relatório de Atendimentos por Terapeutas.
 //para pagamentos aos Terapeutas, num determinado período de tempo.
 router.get('/atendimento/atendreltera/relatendterapiacons', fncGeral.IsAuthenticated,(req,res) =>{
-    res.render("atendimento/atendreltera/relatendterapiacons")
+    res.render("atendimento/atendreltera/relatendterapiacons");
 })
 
 router.post('/atendimento/atendreltera/relatendterapiaconss', fncGeral.IsAuthenticated,(req,res) =>{
-    fncAtend.relAtendterapiaconsFiltro(req,res)
+    fncAtend.relAtendterapiaconsFiltro(req,res);
 })
 
 //Relatório Individual de Atendimentos por Beneficiário.
 //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo.
 router.get('/atendimento/atendreltera/relatendteraana', fncGeral.IsAuthenticated,(req,res) =>{
-    fncAtend.relAtendteraana(req,res)
+    fncAtend.relAtendteraana(req,res);
 })
 
 router.post('/atendimento/atendreltera/relatendteraanas', fncGeral.IsAuthenticated,(req,res) =>{
@@ -3502,6 +3507,24 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
 
 
 //Menu Ferramentas
+    //Manual 2025/11/10 11:13 por Wagner Cintra Rotas atualizadas com view nova que cadastrar e edita se haver _id válido.
+    // ✅ ÚNICA rota para carregar formulário (cadastro OU edição)
+    //    - /ferramentas/manual/form          → cadastro
+    //    - /ferramentas/manual/form/6701...  → edição
+        router.get('/ferramentas/manual/form/:id?', fncGeral.IsAuthenticated, (req, res) => {
+            fncManual.carregarFormulario(req, res);
+        })
+
+        // ✅ Salvar (POST)
+        router.post('/ferramentas/manual/save', fncGeral.IsAuthenticated, (req, res) => {
+            fncManual.salvarManual(req, res);
+        })
+
+        // ✅ Exclusão LÓGICA via GET (compatível com seu <a href="/del/id">)
+        router.get('/ferramentas/manual/del/:id', fncGeral.IsAuthenticated, (req, res) => {
+            fncManual.deletaManual(req, res); // ← sua função já trata req.params.id
+        })
+
     //sala
         router.get('/ferramentas/sala/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas salas
             fncSala.listaSala(req, res);

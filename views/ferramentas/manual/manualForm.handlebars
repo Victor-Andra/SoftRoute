@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageTitle">Carregando...</title>
+
+    <!-- Estilos do Ace Admin -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/assets/css/ace.min.css" />
+
+    <style>
+        .form-group { margin-bottom: 1rem; }
+        .widget-box.segmento { border-left: 3px solid #3c8dbc; }
+        .descricao-item { background-color: #f9f9f9; padding: 10px; margin: 5px 0; border-radius: 4px; }
+        .order-input { width: 80px; }
+    </style>
+</head>
+
+<body onload="javascript:controlaNave();" class="no-skin">
+
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li><i class="ace-icon fa fa-home home-icon"></i><a href="/">Home</a></li>
+                    <li><a href="/ferramentas/manual/lis">Manuais</a></li>
+                    <li class="active" id="breadcrumbTitle">Carregando...</li>
+                </ul>
+            </div>
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form class="form-horizontal" role="form" 
+                              action="/ferramentas/manual/save" method="POST" id="manualForm">
+
+                            <!-- Campo oculto para edição -->
+                            <input type="hidden" id="manualId" name="manualId">
+
+                            <div class="col-sm-12">
+                                <!-- Widget Dados Gerais -->
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h4 class="widget-title">
+                                            <i class="ace-icon fa fa-book"></i>
+                                            <span id="widgetTitle">Dados do Manual</span>
+                                        </h4>
+                                        <span class="widget-toolbar">
+                                            <a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+                                            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+                                        </span>
+                                    </div>
+
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <!-- Nome -->
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right">Nome do Manual:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="manNome" id="manNome" class="form-control" required />
+                                                </div>
+                                            </div>
+
+                                            <!-- Título -->
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right">Título:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="manTitulo" id="manTitulo" class="form-control" required />
+                                                </div>
+                                            </div>
+
+                                            <!-- Introdução -->
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right">Introdução:</label>
+                                                <div class="col-sm-9">
+                                                    <textarea name="manIntro" id="manIntro" class="form-control" rows="3"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <!-- Versão e Data -->
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right">Versão:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="manVersao" id="manVersao" class="form-control" />
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <div class="input-group">
+                                                        <input type="date" name="manVersaodata" id="manVersaodata" class="form-control" />
+                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Widget Segmentos -->
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h4 class="widget-title">
+                                            <i class="ace-icon fa fa-list-ol"></i>
+                                            Segmentos do Manual
+                                        </h4>
+                                        <span class="widget-toolbar">
+                                            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+                                        </span>
+                                    </div>
+
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <div id="segmentos-container">
+                                                <!-- Segmentos serão inseridos aqui pelo JS -->
+                                                <p id="noSegmentosMsg" class="text-muted">Nenhum segmento cadastrado.</p>
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-primary" 
+                                                    onclick="adicionarSegmento()" style="margin-top: 10px;">
+                                                <i class="fa fa-plus"></i> Adicionar Segmento
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ações -->
+                                <div class="form-actions center">
+                                    <button class="btn btn-info" type="submit" id="btnSubmit">
+                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                        <span id="btnSubmitText">Cadastrar</span>
+                                    </button>
+                                    &nbsp; &nbsp;
+                                    <a class="btn btn-warning" href="/ferramentas/manual/lis">
+                                        <i class="ace-icon fa fa-undo bigger-110"></i> Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageTitle">Carregando...</title>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/assets/css/ace.min.css" />
+    <style>
+        .form-group { margin-bottom: 1rem; }
+        .widget-box.segmento { border-left: 3px solid #3c8dbc; }
+        .descricao-item { background-color: #f9f9f9; padding: 10px; margin: 5px 0; border-radius: 4px; }
+        .order-input { width: 80px; }
+        #noSegmentosMsg { display: block; }
+    </style>
+</head>
+<body onload="javascript:controlaNave();" class="no-skin">
+<div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+        <div class="main-content-inner">
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li><i class="ace-icon fa fa-home home-icon"></i><a href="/">Home</a></li>
+                    <li><a href="/ferramentas/manual/lis">Manuais</a></li>
+                    <li class="active" id="breadcrumbTitle">Carregando...</li>
+                </ul>
+            </div>
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form class="form-horizontal" role="form" action="/ferramentas/manual/save" method="POST" id="manualForm">
+                            <input type="hidden" id="manualId" name="manualId">
+                            <div class="col-sm-12">
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h4 class="widget-title"><i class="ace-icon fa fa-book"></i> <span id="widgetTitle">Dados do Manual</span></h4>
+                                        <span class="widget-toolbar">
+                                            <a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+                                            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+                                        </span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right">Nome do Manual:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="manNome" id="manNome" class="form-control" required />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right">Título:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="manTitulo" id="manTitulo" class="form-control" required />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right">Introdução:</label>
+                                                <div class="col-sm-9">
+                                                    <textarea name="manIntro" id="manIntro" class="form-control" rows="3"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right">Versão:</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" name="manVersao" id="manVersao" class="form-control" />
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <div class="input-group">
+                                                        <input type="date" name="manVersaodata" id="manVersaodata" class="form-control" />
+                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h4 class="widget-title"><i class="ace-icon fa fa-list-ol"></i> Segmentos do Manual</h4>
+                                        <span class="widget-toolbar">
+                                            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+                                        </span>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <div id="segmentos-container">
+                                                <p id="noSegmentosMsg" class="text-muted">Nenhum segmento cadastrado.</p>
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-primary" onclick="adicionarSegmento()" style="margin-top: 10px;">
+                                                <i class="fa fa-plus"></i> Adicionar Segmento
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions center">
+                                    <button class="btn btn-info" type="submit" id="btnSubmit">
+                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                        <span id="btnSubmitText">Cadastrar</span>
+                                    </button>
+                                    &nbsp; &nbsp;
+                                    <a class="btn btn-warning" href="/ferramentas/manual/lis">
+                                        <i class="ace-icon fa fa-undo bigger-110"></i> Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script>
+// ✅ Dados seguros do backend
+const modo = '<%- typeof modo !== "undefined" ? modo : "cadastro" %>';
+const manualJSONRaw = '<%- JSON.stringify(manualJSON || null) %>';
+let manualJSON = null;
+try {
+    manualJSON = JSON.parse(manualJSONRaw);
+} catch (e) {
+    console.warn('⚠️ manualJSON inválido:', e);
+    manualJSON = null;
+}
+
+let segmentoIndex = 0;
+let descricaoIndexMap = {};
+
+// ✅ Funções
+function toInputDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? '' : d.toISOString().split('T')[0];
+}
+
+function initForm() {
+    const isEdicao = modo === 'edicao' && manualJSON && manualJSON._id;
+    document.getElementById('pageTitle').textContent = isEdicao ? 'Editar Manual' : 'Novo Manual';
+    document.getElementById('breadcrumbTitle').textContent = isEdicao ? 'Editar Manual' : 'Novo Manual';
+    document.getElementById('widgetTitle').textContent = isEdicao ? 'Editar Manual' : 'Dados do Manual';
+    document.getElementById('btnSubmitText').textContent = isEdicao ? 'Salvar Alterações' : 'Cadastrar';
+
+    if (isEdicao) {
+        document.getElementById('manualId').value = manualJSON._id;
+        document.getElementById('manNome').value = manualJSON.man_nome || '';
+        document.getElementById('manTitulo').value = manualJSON.man_titulo || '';
+        document.getElementById('manIntro').value = manualJSON.man_intro || '';
+        document.getElementById('manVersao').value = manualJSON.man_versao || '';
+        document.getElementById('manVersaodata').value = toInputDate(manualJSON.man_versao);
+        
+        if (manualJSON.segmentos && Array.isArray(manualJSON.segmentos)) {
+            manualJSON.segmentos.forEach(seg => adicionarSegmento(seg));
+        }
+    }
+}
+
+function adicionarSegmento(data = null) {
+    const segId = data?.man_segid || ('temp_' + Date.now());
+    const html = `
+        <div class="widget-box widget-color-light segmento-item" data-seg-id="${segId}">
+            <div class="widget-header widget-header-small">
+                <h6 class="widget-title">Segmento #${segmentoIndex + 1}</h6>
+                <span class="widget-toolbar">
+                    <a href="#" onclick="removerSegmento(this); return false;">
+                        <i class="ace-icon fa fa-times red"></i>
+                    </a>
+                </span>
+            </div>
+            <div class="widget-body">
+                <div class="widget-main">
+                    <input type="hidden" name="segmentos[${segmentoIndex}][man_segid]" value="${segId}">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Ordem:</label>
+                        <div class="col-sm-2">
+                            <input type="number" name="segmentos[${segmentoIndex}][man_segordem]" class="form-control order-input" value="${data?.man_segordem || 0}" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Título:</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="segmentos[${segmentoIndex}][man_segtitulo]" class="form-control" value="${data?.man_segtitulo || ''}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Introdução:</label>
+                        <div class="col-sm-9">
+                            <textarea name="segmentos[${segmentoIndex}][man_segintro]" class="form-control" rows="2">${data?.man_segintro || ''}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Observação Final:</label>
+                        <div class="col-sm-9">
+                            <textarea name="segmentos[${segmentoIndex}][man_segobs]" class="form-control" rows="2">${data?.man_segobs || ''}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label no-padding-right">Subitens:</label>
+                        <div class="col-sm-9">
+                            <div class="descricao-list" id="descricao-list-${segmentoIndex}"></div>
+                            <button type="button" class="btn btn-sm btn-success" onclick="adicionarDescricao(${segmentoIndex})">
+                                <i class="fa fa-plus"></i> Adicionar Subitem
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.getElementById('segmentos-container').insertAdjacentHTML('beforeend', html);
+    
+    if (data?.descricoes?.length) {
+        data.descricoes.forEach(desc => adicionarDescricao(segmentoIndex, desc));
+    }
+
+    descricaoIndexMap[segmentoIndex] = data?.descricoes?.length || 0;
+    segmentoIndex++;
+    document.getElementById('noSegmentosMsg').style.display = 'none';
+}
+
+function adicionarDescricao(segIndex, data = null) {
+    const descIndex = descricaoIndexMap[segIndex] || 0;
+    const html = `
+        <div class="descricao-item">
+            <input type="hidden" name="segmentos[${segIndex}][descricoes][${descIndex}][man_segdescr_id]" 
+                   value="${data?.man_segdescr_id || ('temp_desc_' + Date.now())}">
+            <div class="input-group">
+                <input type="text" name="segmentos[${segIndex}][descricoes][${descIndex}][man_segnumalf]" 
+                       class="form-control input-sm" placeholder="Ex: 1.1, A" 
+                       value="${data?.man_segnumalf || ''}" style="width: 100px;">
+                <input type="text" name="segmentos[${segIndex}][descricoes][${descIndex}][man_segdescr]" 
+                       class="form-control input-sm" placeholder="Descrição" 
+                       value="${data?.man_segdescr || ''}">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-sm btn-danger" 
+                            onclick="this.closest('.descricao-item').remove()">
+                        <i class="fa fa-minus"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    `;
+    document.getElementById(`descricao-list-${segIndex}`).insertAdjacentHTML('beforeend', html);
+    descricaoIndexMap[segIndex] = descIndex + 1;
+}
+
+function removerSegmento(btn) {
+    const segItem = btn.closest('.segmento-item');
+    if (segItem) segItem.remove();
+    if (document.querySelectorAll('.segmento-item').length === 0) {
+        document.getElementById('noSegmentosMsg').style.display = 'block';
+    }
+}
+
+// ✅ Inicializa
+document.addEventListener('DOMContentLoaded', initForm);
+</script>
+</body>
+</html>
+
+</body>
+</html>

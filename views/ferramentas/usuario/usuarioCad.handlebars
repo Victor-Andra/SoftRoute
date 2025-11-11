@@ -2,8 +2,8 @@
 <html lang="pt-br">
 	<head>
 		<title>Usuários</title>
-		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 		<style>
 		.textarea {
@@ -11,14 +11,54 @@
 			box-sizing: border-box;
 			font-size: 12px;
 		}
+		.select2-container {
+			width: 100% !important;
+		}
+
+		.select2-selection__choice {
+			background-color: #007bff !important;
+			color: #fff !important;
+			border: none !important;
+			border-radius: 4px !important;
+			padding: 2px 8px !important;
+		}
+
 		</style>
 		<script>
 			$(document).ready(function() {
-				$('#usuarioEmpresaselect').select2({
+				 // Inicializa o Select2
+				const $select = $('#usuarioEmpresaselect').select2({
 					width: '100%',
 					placeholder: 'Escolha as empresas...',
 					allowClear: true,
 					closeOnSelect: false
+				});
+
+				// 👉 Evento: quando seleciona algo
+				$select.on('change', function(e) {
+					const valores = $(this).val() || [];
+
+					// Se "Acesso total" for selecionado
+					if (valores.includes('Total')) {
+						// Desmarca todas as outras opções e mantém só "Total"
+						$(this).val(['Total']).trigger('change.select2');
+					}
+				});
+
+				// 👉 Botão "Selecionar tudo"
+				$('#selectAllEmpresas').on('click', function() {
+					const allValues = [];
+					$('#usuarioEmpresaselect option').each(function() {
+						if ($(this).val() !== 'Total') {
+							allValues.push($(this).val());
+						}
+					});
+					$select.val(allValues).trigger('change.select2');
+				});
+
+				// 👉 Botão "Limpar"
+				$('#clearEmpresas').on('click', function() {
+					$select.val(null).trigger('change.select2');
 				});
 			});
 			function exibenome() {
@@ -205,48 +245,83 @@
 				// Resetando o valor do select
 				document.getElementById("usuarioEmpresaselect").value = "766f69643132333435366964";
 			}
-/*
-			function removeTudo(alvo, clone) {
-				let arr = document.getElementById("" + alvo + "").value.split(",");
-				arr.forEach((a) => {
-					var selectedOptionText = $("#" + a + "_clone" + clone + "Tera").text();
+			function addEmpresaId() {
+				document.getElementById("spanShowExceTera").style = "display:none";
 
-					// Remover o valor correspondente do campo usuarioEmpresatext
-					var usuarioEmpresatextInput = document.getElementById("usuarioEmpresatext");
-					var currentValue = usuarioEmpresatextInput.value;
+				var id = document.getElementById("progDicatiposelect").value;
+				var progSubid = document.getElementById("progDicatipo");
+				var span = document.getElementById(id + "_spanExce").cloneNode(true);
 
-					// Remover o texto da opção atual da string de valor atual
-					var newValue = currentValue.replace(selectedOptionText, "");
+				// Obtendo o nome da opção selecionada
+				var selectedOptionText = $("#progDicatiposelect option:selected").text();
 
-					// Remover qualquer vírgula extra e espaços em branco do novo valor
-					newValue = newValue.replace(/,+/g, ",").replace(/,\s*$/, "").trim();
+				span.id = "" + id + "_cloneExceTera";
+				document.getElementById("divExcecaoDica").append(span);
 
-					// Atualizar o valor do campo usuarioEmpresatext
-					usuarioEmpresatextInput.value = newValue;
+				if (progSubid.value == "") {
+					progSubid.value = "" + id + "";
+				} else {
+					progSubid.value = "" + progSubid.value + "," + id + "";
+				}
 
-					// Remover o elemento clonado
-					$("#" + a + "_clone" + clone + "Tera").remove();
-				});
+				// Adicionando o nome da opção à div progDicatipotext
+				var progDicatipotextInput = document.getElementById("progDicatipotext");
+				if (progDicatipotextInput.value == "") {
+					progDicatipotextInput.value = selectedOptionText;
+				} else {
+					progDicatipotextInput.value += ", " + selectedOptionText;
+				}
 
-				// Limpar o valor do campo alvo
-				document.getElementById("" + alvo + "").value = "";
-
-				// Mostrar novamente o span oculto
-				document.getElementById("spanShow" + clone + "Tera").style.display = "";
-
-				// Limpar o valor
-				document.getElementById("progDicatipo").value = "";
-				document.getElementById("usuarioEmpresatext").value = "";
-
-				// Atualizar os progress bars após remover seleções
-				var selectedTextValues = usuarioEmpresatextInput.value; // Alteração aqui
+				// Chamando atualizaProgressBars após adicionar uma seleção
+				var selectedTextValues = progDicatipotextInput.value; // Alteração aqui
 				atualizaProgressBars(selectedTextValues); // Alteração aqui
+
+				// Resetando o valor do select
+				document.getElementById("progDicatiposelect").value = "766f69643132333435366964";
 			}
-			*/
+
+			function carregaBody(){
+				$(document).ready(function() {
+					// Inicializa o Select2
+					const $select = $('#usuarioEmpresaselect').select2({
+						width: '100%',
+						placeholder: 'Escolha as empresas...',
+						allowClear: true,
+						closeOnSelect: false
+					});
+
+					// 👉 Evento: quando seleciona algo
+					$select.on('change', function(e) {
+						const valores = $(this).val() || [];
+
+						// Se "Acesso total" for selecionado
+						if (valores.includes('Total')) {
+							// Desmarca todas as outras opções e mantém só "Total"
+							$(this).val(['Total']).trigger('change.select2');
+						}
+					});
+
+					// 👉 Botão "Selecionar tudo"
+					$('#selectAllEmpresas').on('click', function() {
+						const allValues = [];
+						$('#usuarioEmpresaselect option').each(function() {
+							if ($(this).val() !== 'Total') {
+								allValues.push($(this).val());
+							}
+						});
+						$select.val(allValues).trigger('change.select2');
+					});
+
+					// 👉 Botão "Limpar"
+					$('#clearEmpresas').on('click', function() {
+						$select.val(null).trigger('change.select2');
+					});
+				});
+			}
 		</script>
 	</head>
 
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div  id="divCarrega" hidden>
 			<input type="text" id="usuarioEmpresatext" name="usuarioEmpresatext" style="width: 400px;" value="{{idBene}}" />
 			{{#each empresas}}
@@ -254,6 +329,7 @@
 				<a onclick="javascript:removeUsuarioEmpresaid('{{_id}}');removeUsuarioEmpresatext('{{empresa_nome}}');" class="fa fa-times aClose" ></a>
 			</span>
 			{{/each}}
+			<input type="text" id="empresa" name="empresa" style="width: 400px;" value="" />
 		</div>
 		<div class="main-container" id="main-container">
 			<div class="main-content">
@@ -850,18 +926,58 @@
 																				{{/each}}
 																				<option value="Total">Acesso total</option>
 																			</select>
-																			-->
+																			
 																			<select id="usuarioEmpresaselect" name="usuarioEmpresaselect[]" class="form-control select2" multiple="multiple" data-placeholder="Escolha as empresas...">
 																				{{#each empresas}}
 																					<option value="{{_id}}">{{empresa_nome}}</option>
 																				{{/each}}
 																				<option value="Total">Acesso total</option>
 																			</select>
+																			<div class="form-group">
+																			<label for="usuarioEmpresaselect">Empresas</label>
+
+																			<div class="d-flex gap-2 align-items-center mb-2">
+																				<button type="button" id="selectAllEmpresas" class="btn btn-sm btn-primary">Selecionar tudo</button>
+																				<button type="button" id="clearEmpresas" class="btn btn-sm btn-secondary">Limpar</button>
+																			</div>
+
+																			<select id="usuarioEmpresaselect"
+																					name="usuarioEmpresaselect[]"
+																					class="form-control select2"
+																					multiple="multiple"
+																					data-placeholder="Escolha as empresas...">
+																				{{#each empresas}}
+																					<option value="{{_id}}">{{empresa_nome}}</option>
+																				{{/each}}
+																				<option value="Total">Acesso total</option>
+																			</select>
+																			</div>
 																			<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="removeTudo('usuarioEmpresa','Exce');">Remover</button>
 																			<div class="row">
-																				<div class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
+																				<div class="col-xs-12">
 																					<div id="divEmpresa" name="empresaIdtemp" style="display: block;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
 																						<span id="spanShowEmpresaid" class="spanAzul">Escolha a empresa</span>
+																					</div>
+																				</div>
+																			</div>-->
+
+																			<div class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
+																				<select name="empresaIdSelect" id="empresaIdSelect" class="chosen-select" onchange="addEmpresaId();">
+																					<!--progDicatiposelect => empresaIdSelect // addExcecaoDicaid => addEmpresaId -->
+																					<option value="766f69643132333435366964">-</option>
+																					{{#each progdicas}}
+																					<option value="{{_id}}">{{progdica_nome}}</option>
+																					{{else}}
+																					{{/each}}
+																				</select>
+																				<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="removeTudo('progDicatipo','Exce');">Remover</button>
+																				<!-- progDicatipo => empresa -->
+																				<div class="row">
+																					<div class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
+																						<div id="divEmpresa" name="divEmpresa" style="display: block;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
+																							<!--divExcecaoDica => divEmpresa // spanShowExceTera => spanShowEmpresa -->
+																							<span id="spanShowEmpresa" class="spanAzul">Escolha a dica</span>
+																						</div>
 																					</div>
 																				</div>
 																			</div>

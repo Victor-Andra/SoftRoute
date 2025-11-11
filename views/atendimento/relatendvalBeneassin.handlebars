@@ -57,6 +57,7 @@
 				//Filtro persistente
 				document.getElementById('dataFilDe').value = document.getElementById('dataIni').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
 				document.getElementById('dataFilAte').value = document.getElementById('dataFim').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
+				document.getElementById('relBeneid').value = document.getElementById('relBeneidEdi').value;
 			}
 		</script>
 	</head>
@@ -88,6 +89,7 @@
 										<option value="{{_id}}">{{bene_nome}}</option>
 									{{/each}}
 								</select>
+								<input class="hidden" id="relBeneidEdi" name="relBeneidEdi" value="{{filtro.beneId}}" />
 								&nbsp;&nbsp;&nbsp;&nbsp;
 								<label class="control-label bolder red">
 									<select name="porHoras" id="porHoras" class="chosen-select" value=""  >
