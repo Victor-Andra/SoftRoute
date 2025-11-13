@@ -129,6 +129,7 @@
 														</th>
 														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapias</th>
 														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Nome Terapias para Convênios</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Id</th>
 														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Status</th>
 														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Descrição</th>
 														<th>Ação</th>
@@ -148,6 +149,7 @@
 															</th>
 															<td>{{terapia_nome}}</td>
 															<td>{{terapia_nomecid}}</td>
+															<td>{{_id}}</td>
 															<td>
 																{{#ifEqual this.terapia_status "Inativo"}}
 																	<span class="badge badge-danger">{{terapia_status}}</span>
@@ -212,7 +214,7 @@
             "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
         },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null,{ "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null,  null, null, null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [ 200],
 			"lengthChange": true,

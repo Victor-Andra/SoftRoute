@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Par Convênio (Crédito + Débito)</title>
+</head>
+<body onload="javascript:controlaNave();" class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
+                        <li class="active">Cadastro de Par Convênio</li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form class="form-horizontal" role="form" action="/menu/convenio/convpar/add" method="POST">
+                            <!-- Dados Comuns -->
+                            <div class="col-sm-12">
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h4 class="widget-title">Dados Comuns (Crédito e Débito)</h4>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <label>Convênio</label>
+                                            <div class="form-group">
+                                                <div class="col-sm-4">
+                                                    <select name="convConvid" id="convConvid" class="chosen-select" required>
+                                                        {{#each convs}}
+                                                            <option value="{{_id}}">{{conv_nome}}</option>
+                                                        {{/each}}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <label>Terapia</label>
+                                            <div class="form-group">
+                                                <div class="col-sm-4">
+                                                    <select name="terapiaid" id="terapiaid" class="chosen-select" required>
+                                                        {{#each terapias}}
+                                                            <option value="{{_id}}">{{terapia_nome}}</option>
+                                                        {{/each}}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <label for="data">Data</label>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="input-group">
+                                                        <input name="data" id="data" type="date" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <label>Status</label>
+                                            <div class="form-group">
+                                                <div class="col-sm-2">
+                                                    <select name="status" id="status" class="chosen-select">
+                                                        <option value="Ativo">Ativo</option>
+                                                        <option value="Inativo">Inativo</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="space space-8"></div>
+                                            <label>Observações</label>
+                                            <div class="form-group">
+                                                <div class="col-sm-6">
+                                                    <input type="text" name="obs" id="obs" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Valores -->
+                            <div class="col-sm-12">
+                                <div class="widget-box">
+                                    <div class="widget-header">
+                                        <h4 class="widget-title">Valores</h4>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-sm-3">
+                                                    <label>Crédito (R$)</label>
+                                                    <input type="text" name="valorCredito" id="valorCredito"
+                                                           value="0,00" class="form-control money" placeholder="0,00" required />
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <label>Débito (R$)</label>
+                                                    <input type="text" name="valorDebito" id="valorDebito"
+                                                           value="0,00" class="form-control money" placeholder="0,00" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-6"></div>
+                            <div class="form-actions">
+                                <div class="col-xs-12" style="text-align: center;">
+                                    <button class="btn btn-info" type="submit">
+                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                        Salvar Par (Crédito + Débito)
+                                    </button>
+                                    &nbsp; &nbsp; &nbsp;
+                                    <a href="/menu/convenio/convpar/lis" class="btn btn-warning">
+                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                        Cancelar
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

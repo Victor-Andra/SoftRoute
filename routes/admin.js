@@ -340,6 +340,9 @@ const convdebClass = require("../models/convDeb")
 var Convdeb = getModel("softroute", 'tb_convdeb', convdebClass.ConvdebSchema);//getModel("softroute", 'tb_convdeb', convdebClass.ConvdebSchema)
 const fncConvdeb = require("../functions/fncConvdeb")
 
+//convPar, Receitas e pagamentos pela terapia realizada pelo Terapeuta (simultaneamente) Wagner Cintra 2025/11/12
+const fncConvPar = require("../functions/fncConvPar");
+
 //convimp, Impostos ligados ao convênio
 const convimpClass = require("../models/convImp")
 var Convimp = getModel("softroute", 'tb_convimp', convimpClass.ConvimpSchema);//getModel("softroute", 'tb_convimp', convimpClass.ConvimpSchema)
@@ -3417,6 +3420,27 @@ router.get('/convenio/conv/relatendconvval', fncGeral.IsAuthenticated, (req,res)
     router.post('/convenio/convdeb/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da convdeb
         fncConvdeb.editarConvdev(req,res);
     })
+
+    //Menu Convpar gera o debito e crédito simultaneo sem alterar nos condigos existentes
+    //Wagner cintra 2025/11/12
+    // =============== PAR CONVÊNIO (CRÉDITO + DÉBITO) ===============
+
+    router.get('/convenio/convpar/cad', fncGeral.IsAuthenticated, (req, res) => {
+        fncConvPar.carregaConvPar(req, res);
+    });
+
+    router.post('/convenio/convpar/add', fncGeral.IsAuthenticated, (req, res) => {
+        fncConvPar.cadastraConvPar(req, res);
+    });
+
+    router.get('/convenio/convpar/lis', fncGeral.IsAuthenticated, (req, res) => {
+        fncConvPar.listaConvPar(req, res);
+    });
+
+    // (opcional) Edição futura
+    // router.get('/convenio/convpar/edi/:id', fncGeral.IsAuthenticated, (req, res) => {
+    //     fncConvPar.carregaConvParEdi(req, res);
+    // });
 
     //Menu Convenio/Convimp 
     //Impostos pertencentes aos convênios

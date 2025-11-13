@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta charset="utf-8">
+	<title>Lista de Pares Convênio (Crédito + Débito)</title>
+	<style>
+        /* Mantido do seu modelo */
+        .custom-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: max-content;
+            background-color: #f3dfdf;
+            color: red;
+            font-size: 8px;
+            text-align: left;
+            border-radius: 4px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 9999;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.9;
+            white-space: normal;
+            min-width: 150px;
+            max-width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s;
+        }
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #f3dfdf transparent transparent transparent;
+        }
+        .custom-tooltip:hover .tooltip-text {
+            visibility: visible;
+        }
+	</style>
+</head>
+
+<body onload="javascript:controlaNave();" class="no-skin">
+	<div class="main-container ace-save-state" id="main-container">
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li>
+							<i class="ace-icon fa fa-home home-icon"></i>
+							<a href="#">Home</a>
+						</li>
+						<li class="active">Pares Convênio (Crédito + Débito)</li>
+					</ul>
+				</div>
+
+				{{#if flashMessages.error}}
+					<div hidden class="alert alert-danger">{{flashMessages.error}}</div>
+				{{/if}}
+				{{#if flashMessages.success}}
+					<div class="alert alert-success">{{flashMessages.success}}</div>
+				{{/if}}
+
+				<div class="page-content">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="clearfix">
+								<div class="pull-right tableTools-container"></div>
+							</div>
+
+							<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable" role="grid">
+								<thead>
+									<tr role="row">
+										<th class="center">
+											<label class="pos-rel">
+												<input type="checkbox" class="ace" />
+												<span class="lbl"></span>
+											</label>
+										</th>
+										<th>Convênio</th>
+										<th>Terapia</th>
+										<th>Status da Terapia</th>
+										<th>Data</th>
+										<th class="center">Crédito (R$)</th>
+										<th class="center">Débito (R$)</th>
+										<th class="center">Status</th>
+										<th class="center">
+											Ação
+											&nbsp;&nbsp;&nbsp;&nbsp;
+											<a class="blue" href="/menu/convenio/convpar/cad" title="Adicionar novo par!">
+												<i class="ace-icon fa fa-plus bigger-130"></i>
+											</a>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									{{#each pares}}
+										<tr class="{{#if inconsistente}}warning{{/if}}">
+											<td class="center">
+												<label class="pos-rel">
+													<input type="checkbox" class="ace" />
+													<span class="lbl"></span>
+												</label>
+											</td>
+											<td>{{conv_nome}}</td>
+											<td>{{terapia_nome}}</td>
+											<td>
+												{{#ifEqual terapia_status "Inativo"}}
+													<span class="badge badge-danger">{{terapia_status}}</span>
+												{{else}}
+													<span class="badge badge-success">Operacional</span>															
+												{{/ifEqual}}
+											</td>
+											<td>{{data_br}}</td>
+											<td class="center">
+												{{#if temCredito}}
+													<span class="label label-success">{{credito.convcre_valor}}</span>
+												{{else}}
+													<span class="label label-danger">ÓRFÃO</span>
+												{{/if}}
+											</td>
+											<td class="center">
+												{{#if temDebito}}
+													<span class="label label-success">{{debito.convdeb_valor}}</span>
+												{{else}}
+													<span class="label label-danger">ÓRFÃO</span>
+												{{/if}}
+											</td>
+											<td class="center">
+												{{#if inconsistente}}
+													<span class="badge badge-warning">Incompleto</span>
+												{{else}}
+													{{#if ehAtivo}}
+														<span class="badge badge-success">Ativo</span>
+													{{else}}
+														<span class="badge badge-default">Inativo</span>
+													{{/if}}
+												{{/if}}
+											</td>
+											<td class="center">
+    <div class="action-buttons">
+        {{#if temCredito}}
+            <a class="green" href="/menu/convenio/convcre/edi/{{credito._id}}" title="Editar Crédito">
+                <i class="ace-icon fa fa-pencil bigger-130"></i>
+            </a>
+        {{else}}
+            <a class="blue" href="/menu/convenio/convcre/cad?preConvid={{conv_nome}}&preTerapiaid={{terapia_nome}}&preData={{data_br}}" title="Adicionar Crédito">
+                <i class="ace-icon fa fa-plus-circle bigger-130"></i>
+            </a>
+        {{/if}}
+
+        {{#if temDebito}}
+            <a class="green" href="/menu/convenio/convdeb/edi/{{debito._id}}" title="Editar Débito">
+                <i class="ace-icon fa fa-pencil bigger-130"></i>
+            </a>
+        {{else}}
+            <a class="blue" href="/menu/convenio/convdeb/cad?preConvid={{conv_nome}}&preTerapiaid={{terapia_nome}}&preData={{data_br}}" title="Adicionar Débito">
+                <i class="ace-icon fa fa-plus-circle bigger-130"></i>
+            </a>
+        {{/if}}
+
+        <a class="red" href="#" 
+           onclick="excluirPar('{{credito?._id}}', '{{debito?._id}}'); return false;"
+           title="Excluir Par">
+            <i class="ace-icon fa fa-trash-o bigger-130"></i>
+        </a>
+
+        {{#if temCredito}}
+            <a class="purple custom-tooltip" href="#">
+                <i class="ace-icon fa fa-eye bigger-130"></i>
+                <span class="tooltip-text">
+                    <strong>Crédito ({{credito.convcre_valor}})</strong><br>
+                    {{#if credito.dataedi}}
+                        <b>Edição:</b> {{credito.dataedi}} por {{credito.usuarioEdiNome}}<br>
+                    {{/if}}
+                    <b>Cad.:</b> {{credito.datacad}} por {{credito.usuarioCadNome}}
+                </span>
+            </a>
+        {{/if}}
+
+        {{#if temDebito}}
+            <a class="purple custom-tooltip" href="#">
+                <i class="ace-icon fa fa-eye bigger-130"></i>
+                <span class="tooltip-text">
+                    <strong>Débito ({{debito.convdeb_valor}})</strong><br>
+                    {{#if debito.dataedi}}
+                        <b>Edição:</b> {{debito.dataedi}} por {{debito.usuarioEdiNome}}<br>
+                    {{/if}}
+                    <b>Cad.:</b> {{debito.datacad}} por {{debito.usuarioCadNome}}
+                </span>
+            </a>
+        {{/if}}
+    </div>
+</td>
+										</tr>
+									{{/each}}
+
+									{{#unless pares.length}}
+										<tr>
+											<td colspan="8" class="center text-muted">
+												<i class="ace-icon fa fa-exclamation-triangle orange"></i>
+												Nenhum par encontrado.
+											</td>
+										</tr>
+									{{/unless}}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="footer">
+			<div class="footer-inner">
+				<div class="footer-content">
+					<span class="bigger-120">
+						<span class="orange bolder">Soft</span> Route
+					</span>
+					&nbsp; &nbsp;
+					<span class="action-buttons">
+						<a href="#"><i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i></a>
+						<a href="#"><i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i></a>
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
+	</div>
+
+	<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#dynamic-table").DataTable({
+				"language": { "url": "/js/lang/datatable-pt-br.json" },
+				"aaSorting": [],
+				"aoColumns": [
+					{ "bSortable": false },
+					null, null, null, null,
+					{ "sClass": "center" },
+					{ "sClass": "center" },
+					{ "sClass": "center" },
+					{ "bSortable": false, "sClass": "center" }
+				],
+				"responsive": true,
+				"lengthMenu": [300, 500, 1000],
+				"paging": true,
+				"searching": true,
+				"ordering": true,
+				"info": true
+			});
+		});
+
+		function excluirPar(creditoId, debitoId) {
+			if (!creditoId && !debitoId) {
+				alert("Nenhum registro para excluir.");
+				return;
+			}
+			if (confirm("⚠️ Excluir par?\nEsta ação apagará os registros selecionados permanentemente.")) {
+				const form = document.createElement('form');
+				form.method = 'POST';
+				form.action = '/menu/convenio/convpar/delete';
+				if (creditoId) {
+					form.innerHTML += `<input type="hidden" name="creditoId" value="${creditoId}">`;
+				}
+				if (debitoId) {
+					form.innerHTML += `<input type="hidden" name="debitoId" value="${debitoId}">`;
+				}
+				document.body.appendChild(form);
+				form.submit();
+			}
+		}
+	</script>
+</body>
+</html>

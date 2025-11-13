@@ -32,6 +32,7 @@
 													<tr>
 														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Nome Completo: activate to sort column ascending">Nome Completo</th>
 														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Nome: activate to sort column ascending">Nome</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Nome: activate to sort column ascending">Id</th>
 														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Função: activate to sort column ascending">Função</th>
 														<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Função: activate to sort column ascending">Contrato</th>
 														<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" aria-label="Função: activate to sort column ascending">Perfil</th>
@@ -45,6 +46,7 @@
 														<tr>
 															<td>{{usuario_nomecompleto}}</td>
 															<td>{{usuario_nome}}</td>
+															<td>{{_id}}</td>
 															{{#each ../funcaos}}
 																{{#ifEqual _id ../usuario_funcaoid}}
 																	<td>{{funcao_nome}}</td>
@@ -119,7 +121,7 @@
             "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
         },
 			"aaSorting": [],
-			"aoColumns": [null, null, null, null, null, { "bSortable": false }, null,{ "bSortable": false }],
+			"aoColumns": [null, null, null, null, null, null,  { "bSortable": false }, null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [50, 100, 150, 200],
 			"lengthChange": true,
