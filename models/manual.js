@@ -67,31 +67,45 @@ module.exports = {
 
   // Métodos de CRUD (serão usados por fncManual.js)
   async manualAdicionar(req) {
-    const db = req.cookies['preferredDb'];
+    const db = req.cookies['PortalDoUsuario'];
     const ManualModel = getModel(db, 'tb_manual', ManualSchema);
 
     const usuarioAtual = req.cookies['idUsu'];
     const dataAtual = new Date();
 
+    // ✅ Processa segmentos no cadastro (antes estava ignorando!)
+    let segmentos = [];
+    if (Array.isArray(req.body.segmentos)) {
+        segmentos = req.body.segmentos.map(seg => ({
+            man_segid: seg.man_segid || new mongoose.Types.ObjectId(),
+            man_segordem: parseInt(seg.man_segordem) || 0,
+            man_segtitulo: seg.man_segtitulo || '',
+            man_segintro: seg.man_segintro || '',
+            man_segobs: seg.man_segobs || '',
+            descricoes: (seg.descricoes || []).map(desc => ({
+                man_segdescr_id: desc.man_segdescr_id || new mongoose.Types.ObjectId(),
+                man_segnumalf: desc.man_segnumalf || '',
+                man_segdescr: desc.man_segdescr || ''
+            }))
+        }));
+    }
+
     const newManual = new ManualModel({
-      man_nome: req.body.manNome || '',
-      man_titulo: req.body.manTitulo || '',
-      man_intro: req.body.manIntro || '',
-      man_versao: req.body.manVersao || '',
-      man_versaodata: req.body.manVersaodata ? new Date(req.body.manVersaodata) : null,
-
-      segmentos: [], // começa vazio
-
-      man_usuidcad: usuarioAtual,
-      man_datacad: dataAtual,
-      man_lixo: "false"
+        man_nome: req.body.manNome || '',
+        man_titulo: req.body.manTitulo || '',
+        man_intro: req.body.manIntro || '',
+        man_versao: req.body.manVersao || '',
+        man_versaodata: req.body.manVersaodata ? new Date(req.body.manVersaodata) : null,
+        segmentos, // ✅ Agora com os segmentos!
+        man_usuidcad: usuarioAtual,
+        man_datacad: dataAtual,
+        man_lixo: "false"
     });
 
     return await newManual.save();
-  },
-
+},
   async manualEditar(req) {
-    const db = req.cookies['preferredDb'];
+    const db = req.cookies['PortalDoUsuario'];
     const ManualModel = getModel(db, 'tb_manual', ManualSchema);
 
     const usuarioAtual = req.cookies['idUsu'];
@@ -139,7 +153,7 @@ module.exports = {
   },
 
   async manualDeletar(req) {
-    const db = req.cookies['preferredDb'];
+    const db = req.cookies['PortalDoUsuario'];
     const ManualModel = getModel(db, 'tb_manual', ManualSchema);
 
     const usuarioAtual = req.cookies['idUsu'];
@@ -165,7 +179,7 @@ module.exports = {
 
   // Métodos utilitários para segmentos/descrições (opcionais, mas úteis)
   async adicionarSegmento(req) {
-    const db = req.cookies['preferredDb'];
+    const db = req.cookies['PortalDoUsuario'];
     const ManualModel = getModel(db, 'tb_manual', ManualSchema);
 
     const { manualId, segmento } = req.body;
@@ -193,7 +207,7 @@ module.exports = {
   },
 
   async adicionarDescricao(req) {
-    const db = req.cookies['preferredDb'];
+    const db = req.cookies['PortalDoUsuario'];
     const ManualModel = getModel(db, 'tb_manual', ManualSchema);
 
     const { manualId, segId, descricao } = req.body;

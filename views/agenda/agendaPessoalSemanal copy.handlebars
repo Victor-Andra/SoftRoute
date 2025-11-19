@@ -2,7 +2,7 @@
 <html lang="pt-br">
 	<head>
 		<title>Agenda Pessoal Semanal</title>
-		<script type="text/javascript">
+				<script type="text/javascript">
 			function atualizaData(){
 				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
 				var dataFmt = new Date(dataIso);
@@ -12,31 +12,35 @@
 			function carregaBody(){
 				let dtHoje = new Date();
 				let dataDaSemana;
-				switch (dtHoje.getUTCDay()){ // 🔴 Corrigido: 'dat' → 'dtHoje'
+				switch (dat.getUTCDay()){
 					case 0:
-						dataDaSemana = "dom"; break;
+						dataDaSemana = "dom"
 					case 1:
-						dataDaSemana = "seg"; break;
+						dataDaSemana = "seg"
 					case 2:
-						dataDaSemana = "ter"; break;
+						dataDaSemana = "ter"
 					case 3:
-						dataDaSemana = "qua"; break;
+						dataDaSemana = "qua"
 					case 4:
-						dataDaSemana = "qui"; break;
+						dataDaSemana = "qui"
 					case 5:
-						dataDaSemana = "sex"; break;
+						dataDaSemana = "sex"
 					case 6:
-						dataDaSemana = "sab"; break;
+						dataDaSemana = "sab"
 					default:
-						dataDaSemana = "dom";
+						dataDaSemana = "dom"
 				}
 				let dias = ["seg","ter","qua","qui","sex"];
 				try{
 					dias.forEach((dia)=>{
+						console.log("dia:"+dia)
 						document.getElementsByName(dia).forEach((e)=>{
 							let id = "hora"+e.id;
 							let valor = e.value;
 							let tempId = e.id+"_"+e.value;
+							//console.log("valor"+valor)
+							//console.log("id:"+id)
+							//console.log("tempId:"+tempId)
 							if(valor != "766f69643132333435366964"){
 								let val;
 								if(e.id.indexOf("BeneId_") != -1){
@@ -45,55 +49,38 @@
 									document.getElementsByName(tempId).forEach((ti)=>{
 										pintaAgenda(val, ti.value);
 									})
+									console.log("val");
+									console.log(val);
 									document.getElementById(id).append(val);
-								} else if(e.id.indexOf("SalaId_") != -1){
+								} else if(e.id.indexOf("SalaId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
 									val = document.getElementById(valor).cloneNode(true);
 									val.id = val.id+"x";
 									document.getElementsByName(tempId).forEach((ti)=>{
 										pintaAgenda(val, ti.value);
 									})
+									//console.log("val")
+									//console.log(val)
+									document.getElementById(id).append(val);
+								} else if(e.id.indexOf("AcaoId_") != -1 && dia == dataDaSemana){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
+									val = document.getElementById(valor).cloneNode(true);
+									val.id = val.id+"x";
+									document.getElementsByName(tempId).forEach((ti)=>{
+										pintaAgenda(val, ti.value);
+									})
+									//console.log("val")
+									//console.log(val)
 									document.getElementById(id).append(val);
 								}
-								// ➕ NOVO: Tratamento especial para AcaoId_ (apenas para garantir que faltas não tenham lápis)
-								// Mas a lógica principal de substituição do ícone foi movida para o bloco abaixo ↓
 							}
-						});
-
-						// ➕ ADICIONADO: Processamento das ações (AcaoId_) com regra para faltas
-						document.getElementsByName(dia).forEach((e) => {
-							if (e.id.indexOf("AcaoId_") !== -1) {
-								let id = "hora" + e.id;
-								let targetCell = document.getElementById(id);
-								if (!targetCell) return;
-
-								let categoria = e.getAttribute('data-categoria');
-								// ✅ Garante que as duas faltas NUNCA tenham ícone de edição
-								if (categoria === "Falta Justificada" || categoria === "Falta Absoluta") {
-									targetCell.innerHTML = ''; // limpa qualquer conteúdo pré-existente
-									let banDiv = document.createElement('div');
-									banDiv.style.padding = '2px 0';
-									banDiv.innerHTML = `
-										<a class="blue" href="#" onclick="event.preventDefault();">
-											<i class="red ace-icon fa fa-ban bigger-130"></i>
-										</a>
-									`;
-									targetCell.appendChild(banDiv);
-								} else {
-									// Caso normal: clona e move a ação original (lápis)
-									let el = document.getElementById(e.id);
-									if (el) {
-										targetCell.appendChild(el.cloneNode(true));
-									}
-								}
-							}
-						});
+						})
 					})
 				} catch(err){
 					console.log(err);
 				}
 			}
 			function pintaAgenda(val, motivo){
-				// ✅ Já está correto: ambas as faltas viram orange
+
+				console.log(motivo)
 				switch (motivo) {
 					case "Falta" :
 						val.style.backgroundColor = "yellow";
@@ -154,23 +141,13 @@
 							{{#isTrue agenda_temp}}
 								<input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" value="{{agenda_categoria}}">
 								<input name="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" value="{{agenda_categoria}}">
-								<!-- ➕ ADICIONADO: data-categoria e data-id -->
-								<div style="display: block;padding-top:2px;padding-bottom:2px;"
-								     id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}"
-								     name="{{agenda_data_semana}}"
-								     data-categoria="{{agenda_categoria}}"
-								     data-id="{{_id}}">
+								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
 									<a class="blue" href="/menu/agenda/evolucaoTemp/{{_id}}">
 										<i class="ace-icon fa fa-pencil bigger-130"></i>
 									</a>
 								</div>
 							{{else}}
-								<!-- ➕ ADICIONADO: data-categoria e data-id -->
-								<div style="display: block;padding-top:2px;padding-bottom:2px;"
-								     id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}"
-								     name="{{agenda_data_semana}}"
-								     data-categoria="{{agenda_categoria}}"
-								     data-id="{{_id}}">
+								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
 									<a class="blue" href="/menu/agenda/evolucao/{{_id}}">
 										<i class="ace-icon fa fa-pencil bigger-130"></i>
 									</a>
@@ -188,6 +165,7 @@
 					<form class="form-horizontal" role="form" action="/menu/agenda/filPessoalSemanal" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge" >
 							<div style="text-align: center;">
+								<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
 								<label style="margin-left: 25px;">Data:</label>
 								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
 								<input class="hidden" id="dataFinal" name="dataFinal" />
@@ -197,10 +175,10 @@
 							</div>
 						</div>
 					</form>
-					<div class="tab-content">
+					<div class="tab-content"><!-- .tab-contente -->
 						<div class="row">
 							<div class="col-xs-16 col-sm-9">
-								<div id="seg" class="tab-pane fade active in">
+								<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
 									<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
 										<thead>
 											<tr role="row">
@@ -208,15 +186,19 @@
 													<div id="divAlertas">
 														<div class="col-xs-12 col-sm-7" style="padding-top: 2px;">
 															<div class="alert alert-danger">
-																<strong>Agenda</strong><br>
+																<strong>
+																Agenda
+																</strong>
+																<br>
 																{{#each agendas}}
 																	{{#isNull agenda_obs}}
 																	{{else}}
-																		<label>{{agenda_data_semana}} : {{agenda_hora}} / 
-																			{{#each ../salas}}{{#ifEqual ../agenda_salaid _id}}{{sala_nome}}{{/ifEqual}}{{/each}} / 
-																			{{#each ../benes}}{{#ifEqual ../agenda_beneid _id}}{{bene_apelido}}{{/ifEqual}}{{/each}} - {{agenda_obs}}</label><br>
+																		<label>{{agenda_data_semana}} : {{agenda_hora}} / {{#each ../salas}}{{#ifEqual ../agenda_salaid _id}}{{sala_nome}}{{/ifEqual}}{{/each}} / {{#each ../benes}}{{#ifEqual ../agenda_beneid _id}}{{bene_apelido}}{{/ifEqual}}{{/each}} - {{agenda_obs}}</label>
+																		<br>
 																	{{/isNull}}
 																{{/each}}
+																
+																<br>
 															</div>
 														</div>
 													</div>
@@ -227,8 +209,12 @@
 													<div id="divAlertas">
 														<div class="col-xs-14 col-sm-5" style="padding-top: 2px;">
 															<div class="alert alert-warning">
-																<strong>Terapeuta</strong><br>
-																{{usu.usuario_obs}}<br>
+																<strong>
+																Terapeuta
+																</strong>
+																<br>
+																{{usu.usuario_obs}}
+																<br>
 															</div>
 														</div>
 													</div>
@@ -281,13 +267,16 @@
 							</div>
 							<div class="col-xs-16 col-sm-3">	
 								<div class="alert alert">
-									<br><br><br>
+									<br>
+									<br>
+									<br>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+		<!-- basic scripts -->
 	</body>
 </html>

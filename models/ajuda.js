@@ -15,12 +15,14 @@ const AjudaSchema = mongoose.Schema({
     ajuda_dataedi :{type: Date, required: false},
     ajuda_usuidcad :{type: String, required: false},
     ajuda_usuidedi :{type: String, required: false},
+    ajuda_lixo :{ type: String, required: false },
+    ajuda_datalixo: { type: String, required: false },
+    ajuda_usuidlixo: { type: ObjectId, required: false },
     //Ajuda
     ajuda_usuid:{type: ObjectId, required: true},
     ajuda_pergunta :{type: String, required: false},
     ajuda_resposta :{type: String, required: false},
     ajuda_categoria:{type: String, required: false}
-   
 })
 
 // Construtor Ajuda
@@ -34,6 +36,9 @@ class Ajuda{
     ajuda_dataedi,
     ajuda_usuidcad,
     ajuda_usuidedi,
+    ajuda_lixo,
+    ajuda_datalixo,
+    ajuda_usuidlixo,
     //Ajuda
     ajuda_usuid,
     ajuda_pergunta,
@@ -45,6 +50,10 @@ class Ajuda{
     this.ajuda_dataedi = ajuda_dataedi,
     this.ajuda_usuidcad = ajuda_usuidcad,
     this.ajuda_usuidedi = ajuda_usuidedi,
+    this.ajuda_lixo = ajuda_lixo,
+    this.ajuda_datalixo = ajuda_datalixo,
+    this.ajuda_usuidlixo = ajuda_usuidlixo
+    
     //Ajuda
     this.ajuda_usuid = ajuda_usuid,
     this.ajuda_pergunta = ajuda_pergunta,
@@ -54,7 +63,7 @@ class Ajuda{
 }
 
 AjudaSchema.loadClass(Ajuda)
-var AjudaModel = getModel("softroute", 'tb_ajuda', AjudaSchema)
+var AjudaModel = getModel("PortalDoUsuario", 'tb_ajuda', AjudaSchema)
 module.exports = {
     AjudaModel,
     AjudaSchema,

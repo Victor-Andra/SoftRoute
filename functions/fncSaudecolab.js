@@ -86,7 +86,7 @@ module.exports = {
         Saudecolab = getModel(db, 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
 
         let resposta;
-        let flash = Resposta();
+        let flash = new Resposta();
         let existe;
         let usuarioAtual = req.cookies['idUsu'];
         if ((""+usuarioAtual+"") == (""+req.body.saudecolabSaudecolabusuid+"")){

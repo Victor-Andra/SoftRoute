@@ -1,0 +1,196 @@
+<div class="col-sm-12"><!-- Widget de Permissões -->
+    <div class="widget-box">
+    <div class="widget-header">
+        <h4 class="widget-title">Permissões</h4>
+        <span class="widget-toolbar">
+            
+            <a href="#" data-action="collapse">
+                <i class="ace-icon fa fa-chevron-up"></i>
+            </a>
+        </span>
+    </div>
+    <div class="widget-body">
+        <div class="widget-main">
+            {{#ifEqual req.query.permissoes "salvo"}}
+                <div class="alert alert-success" style="font-style: initial; margin-bottom: 20px;">
+                    <strong>As alterações das permissões ao usuário foram salvas!</strong>
+                </div>
+            {{/ifEqual}}
+            <div class="row">
+                <div class="col-sm-12">
+                    <form method="POST" action="/menu/ferramentas/usupermis/salvar-massa-uform">
+                        <!-- ID do usuário sendo editado -->
+                        <input type="hidden" name="usupermis_usuid" value="{{usuario._id}}" />
+                        
+                        <!-- Barra de Ações Rápidas -->
+                        <div class="row" style="text-align: center;">
+                            <div class="col-sm-12">
+                                <div id="botoes-permissao" >
+                                    <strong style="margin-right: 10px;">Aplicar para todos:</strong>
+                                    <button type="button" class="btn btn-xs" style="background: #ddd; color: #333;" onclick="aplicarParaTodos('1')">1 - Sem acesso</button>
+                                    <button type="button" class="btn btn-xs btn-info" onclick="aplicarParaTodos('2')">2 - Listar</button>
+                                    <button type="button" class="btn btn-xs btn-primary" onclick="aplicarParaTodos('3')">3 - Ver</button>
+                                    <button type="button" class="btn btn-xs btn-success" onclick="aplicarParaTodos('4')">4 - Criar</button>
+                                    <button type="button" class="btn btn-xs btn-warning" onclick="aplicarParaTodos('5')">5 - Editar</button>
+                                    <button type="button" class="btn btn-xs btn-danger" onclick="aplicarParaTodos('6')">6 - Total</button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        
+                        <!-- TABELA DA ESQUERDA: PERMISSÕES HABILITADAS -->
+                        <div class="col-sm-6">
+                        <h4>Permissões Cadastradas e Habilitadas</h4>
+
+                        {{#if permissoesHabilitadas}}
+                            {{#each permissoesHabilitadas}}
+                            <div class="panel panel-default" style="margin-bottom: 20px; border: 1px solid #ddd;">
+                                <div >
+                                    
+                                    
+                                
+                                </div>
+                                <table id="dynamic-table-permis-esquerda" class="table table-sm table-bordered" style="margin-bottom: 0;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4">
+                                            {{#ifEqual this.empresa_nome "Route Centro de Terapia e Apoio Infantil Ltda."}}
+                                            <strong>
+                                                <span class="badge badge-info">{{empresa_nome}}</span>
+                                            </strong>
+                                            {{else}}
+                                            <strong>
+                                                <span class="badge badge-purple">{{empresa_nome}}</span>
+                                            </strong>
+                                            {{/ifEqual}}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="width: 5%;" class="center">
+                                            <label class="pos-rel">
+                                            <input type="checkbox" class="ace check-all" data-empresa-id="{{empresa_id}}" />
+                                            <span class="lbl"></span>
+                                            </label>
+                                        </th>
+                                        <th>Código</th>
+                                        <th>Funcionalidade</th>
+                                        <th>Permissão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- TABELA DA ESQUERDA -->
+                                    {{#each funcionalidades}}
+                                    <tr>
+                                    <td class="center">
+                                        <label class="pos-rel">
+                                        <input type="checkbox" class="ace perm-checkbox" data-empresa-id="{{empresa_id}}" />
+                                        <span class="lbl"></span>
+                                        </label>
+                                    </td>
+                                    <td>{{func_codigo}}</td>
+                                    <td>{{usufunc_nome}}</td>
+                                    <td>
+                                        <select name="permissoes[{{func_id}}][{{../empresa_id}}]" class="form-control input-sm">
+                                        <option value="1" {{#ifEqual usupermis_tipo "1"}}selected{{/ifEqual}}>1 - Sem acesso</option>
+                                        <option value="2" {{#ifEqual usupermis_tipo "2"}}selected{{/ifEqual}}>2 - Listar</option>
+                                        <option value="3" {{#ifEqual usupermis_tipo "3"}}selected{{/ifEqual}}>3 - Ver</option>
+                                        <option value="4" {{#ifEqual usupermis_tipo "4"}}selected{{/ifEqual}}>4 - Criar</option>
+                                        <option value="5" {{#ifEqual usupermis_tipo "5"}}selected{{/ifEqual}}>5 - Editar</option>
+                                        <option value="6" {{#ifEqual usupermis_tipo "6"}}selected{{/ifEqual}}>6 - Total</option>
+                                        </select>
+                                    </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                                </table>
+                            </div>
+                            {{/each}}
+                        {{else}}
+                            <div class="alert alert-info" style="margin-top: 15px;">
+                            Nenhuma permissão habilitada.
+                            </div>
+                        {{/if}}
+                        </div>
+                        <!-- TABELA DA DIREITA: PERMISSÕES PARA HABILITAR -->
+                        <div class="col-sm-6">
+                        <h4>Permissões para Habilitar</h4>
+
+                        {{#if permissoesParaHabilitar}}
+                            {{#each permissoesParaHabilitar}}
+                            <div class="panel panel-default" style="margin-bottom: 20px; border: 1px solid #ddd;">
+                                <div>
+
+                                </div>
+                                <table id="dynamic-table-permis-direita" class="table table-sm table-bordered" style="margin-bottom: 0;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4">
+                                            {{#ifEqual this.empresa_nome "Route Centro de Terapia e Apoio Infantil Ltda."}}
+                                            <strong>
+                                                <span class="badge badge-info">{{empresa_nome}}</span>
+                                            </strong>
+                                            {{else}}
+                                            <strong>
+                                                <span class="badge badge-purple">{{empresa_nome}}</span>
+                                            </strong>
+                                            {{/ifEqual}}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="width: 5%;" class="center">
+                                            <label class="pos-rel">
+                                            <input type="checkbox" class="ace check-all" data-empresa-id="{{empresa_id}}" />
+                                            <span class="lbl"></span>
+                                            </label>
+                                        </th>
+                                        <th>Código</th>
+                                        <th>Funcionalidade</th>
+                                        <th>Permissão</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each funcionalidades}}
+                                    <tr>
+                                        <td class="center">
+                                            <label class="pos-rel">
+                                            <input type="checkbox" class="ace perm-checkbox" data-empresa-id="{{empresa_id}}" />
+                                            <span class="lbl"></span>
+                                            </label>
+                                        </td>
+                                        <td>{{func_codigo}}</td>
+                                        <td>{{func_nome}}</td>
+                                        <td>
+                                        <select name="permissoes[{{func_id}}][{{empresa_id}}]" class="form-control input-sm">
+                                            <option value="1" {{#ifEqual tipo_atual "1"}}selected{{/ifEqual}}>1 - Sem acesso</option>
+                                            <option value="2" {{#ifEqual tipo_atual "2"}}selected{{/ifEqual}}>2 - Listar</option>
+                                            <option value="3" {{#ifEqual tipo_atual "3"}}selected{{/ifEqual}}>3 - Ver</option>
+                                            <option value="4" {{#ifEqual tipo_atual "4"}}selected{{/ifEqual}}>4 - Criar</option>
+                                            <option value="5" {{#ifEqual tipo_atual "5"}}selected{{/ifEqual}}>5 - Editar</option>
+                                            <option value="6" {{#ifEqual tipo_atual "6"}}selected{{/ifEqual}}>6 - Total</option>
+                                        </select>
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                                </table>
+                            </div>
+                            {{/each}}
+                        {{else}}
+                            <div class="alert alert-success" style="margin-top: 15px;">
+                            Todas as permissões já estão habilitadas!
+                            </div>
+                        {{/if}}
+                        </div>
+
+                        <div class="form-actions center" style="margin-top: 20px;">
+                            <button type="submit" class="btn btn-success">
+                                <i class="ace-icon fa fa-save"></i> Salvar Permissões
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>

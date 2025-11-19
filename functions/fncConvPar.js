@@ -186,13 +186,13 @@ module.exports = {
     cadastraConvPar: async (req, res) => {
         const bodyCredito = {
             convcreConvid: req.body.convConvid,
-            convcreConvnome: "", // será preenchido no controller (busca por convid)
+            convcreConvnome: "",
             convcreTerapiaid: req.body.terapiaid,
             convcreData: req.body.data,
             convcreValor: req.body.valorCredito,
             convcreStatus: req.body.status,
             convcreObs: req.body.obs
-        };
+    };
 
         const bodyDebito = {
             convdebConvid: req.body.convConvid,
@@ -204,39 +204,30 @@ module.exports = {
             convdebObs: req.body.obs
         };
 
-        const reqCredito = { ...req, body: bodyCredito };
-        const reqDebito = { ...req, body: bodyDebito };
-
         try {
-            // 1. Salva CRÉDITO
-            let sucessoCredito = false;
-            fncConvcre.cadastraConvcre(reqCredito, {
-                redirect: (url) => {
-                    sucessoCredito = !url.includes('/admin/erro');
-                },
-                render: (view) => {
-                    sucessoCredito = (view !== 'admin/erro');
-                }
+            // ✅ Espera o crédito ser salvo
+            const okCredito = await new Promise((resolve) => {
+                fncConvcre.cadastraConvcre({ ...req, body: bodyCredito }, {
+                    redirect: (url) => resolve(!url.includes('/admin/erro')),
+                    render: (view) => resolve(view !== 'admin/erro')
+                });
             });
 
-            if (!sucessoCredito) {
-                req.flash("error_message", "Falha ao salvar crédito. Nenhum registro foi criado.");
+            if (!okCredito) {
+                req.flash("error_message", "Falha ao salvar crédito.");
                 return res.redirect("/menu/convenio/convpar/cad");
             }
 
-            // 2. Salva DÉBITO
-            let sucessoDebito = false;
-            fncConvdeb.cadastraConvdeb(reqDebito, {
-                redirect: (url) => {
-                    sucessoDebito = !url.includes('/admin/erro');
-                },
-                render: (view) => {
-                    sucessoDebito = (view !== 'admin/erro');
-                }
+            // ✅ Espera o débito ser salvo
+            const okDebito = await new Promise((resolve) => {
+                fncConvdeb.cadastraConvdeb({ ...req, body: bodyDebito }, {
+                    redirect: (url) => resolve(!url.includes('/admin/erro')),
+                    render: (view) => resolve(view !== 'admin/erro')
+                });
             });
 
-            if (!sucessoDebito) {
-                req.flash("warning_message", "Débito não foi salvo. Crédito foi mantido. Corrija manualmente.");
+            if (!okDebito) {
+                req.flash("warning_message", "Débito não foi salvo. Crédito foi mantido.");
                 return res.redirect("/menu/convenio/convcre/lis");
             }
 
@@ -249,4 +240,5 @@ module.exports = {
             return res.redirect("/menu/convenio/convpar/cad");
         }
     }
+
 };

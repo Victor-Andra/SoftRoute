@@ -79,7 +79,7 @@ const salaClass = require("../models/sala")
 var Sala = getModel("softroute", 'tb_sala', salaClass.SalaSchema);//getModel("softroute", 'tb_sala', salaClass.SalaSchema)
 const fncSala = require("../functions/fncSala")
 
-//manual, onde são realizadas os atendimentos
+//manual, 
 const manualClass = require("../models/manual")
 var Manual = getModel("softroute", 'tb_manual', manualClass.ManualSchema);
 const fncManual = require("../functions/fncManual")
@@ -104,6 +104,11 @@ const fncEstado = require("../functions/fncEstado")
 const anoClass = require("../models/ano")
 var Ano = getModel("softroute", 'tb_ano', anoClass.AnoSchema);//getModel("softroute", 'tb_ano', anoClass.AnoSchema)
 const fncAno = require("../functions/fncAno")
+
+//Ajuda
+const ajudaClass = require("../models/ajuda")
+var Ajuda = getModel("PortalDoUsuario", 'tb_ajuda', ajudaClass.AjudaSchema);//Wagner cintra 16/11/2025
+const fncAjuda = require("../functions/fncAjuda")
 
 //usuario, cadastro dos usuários
 const usuarioClass = require("../models/usuario")
@@ -3535,11 +3540,8 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
     // ✅ ÚNICA rota para carregar formulário (cadastro OU edição)
     //    - /ferramentas/manual/form          → cadastro
     //    - /ferramentas/manual/form/6701...  → edição
-        router.get('/ferramentas/manual/form/:id?', fncGeral.IsAuthenticated, (req, res) => {
-            fncManual.carregarFormulario(req, res);
-        })
-
-        // ✅ Salvar (POST)
+        
+         // ✅ Salvar (POST)
         router.post('/ferramentas/manual/save', fncGeral.IsAuthenticated, (req, res) => {
             fncManual.salvarManual(req, res);
         })
@@ -3548,6 +3550,20 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         router.get('/ferramentas/manual/del/:id', fncGeral.IsAuthenticated, (req, res) => {
             fncManual.deletaManual(req, res); // ← sua função já trata req.params.id
         })
+
+        // ✅ Listar manuais (GET)
+        router.get('/ferramentas/manual/lis', fncGeral.IsAuthenticated, (req, res) => {
+            fncManual.listarManual(req, res);
+        });
+        // Cadastro
+        router.get('/ferramentas/manual/form', fncGeral.IsAuthenticated, (req, res) => {
+            fncManual.carregarFormulario(req, res);
+        });
+
+        // Edição
+        router.get('/ferramentas/manual/form/:id', fncGeral.IsAuthenticated, (req, res) => {
+            fncManual.carregarFormularioEdi(req, res);
+        });
 
     //sala
         router.get('/ferramentas/sala/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas salas
@@ -4077,7 +4093,7 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
 //Menu Ferramentas
     //Ajuda
         router.get('/ferramentas/ajuda', fncGeral.IsAuthenticated, (req,res) =>{
-            res.render("ferramentas/ajuda")
+            fncAjuda.listaAjuda(req, res);
         })
     
     //Tabela Tese

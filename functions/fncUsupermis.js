@@ -271,7 +271,7 @@ module.exports = {
                 res.redirect('/menu/ferramentas/usuario/lis');
             });
     },
-    salvarEmMassauform(req, res) {
+    salvarEmMassauformOLD2(req, res) {
         const { usupermis_usuid, permissoes } = req.body;
         const dataAtual = new Date();
         const usuarioAtual = req.cookies['idUsu'];
@@ -352,6 +352,175 @@ module.exports = {
                 res.redirect(`/menu/ferramentas/usuario/edi/${usupermis_usuid}`);
             });
     },
+    salvarEmMassauform: async function (req, res) {
+    const { usupermis_usuid, permissoes } = req.body;
+    const dataAtual = new Date();
+    const usuarioAtual = req.cookies['idUsu'];
+
+    if (!usupermis_usuid) {
+        req.flash("error_message", "ID do usuário não informado.");
+        return res.redirect('/menu/ferramentas/usuario/lis');
+    }
+
+    try {
+        // 🔹 1. Salvar permissões
+        const Usupermis = getModel("PortalDoUsuario", 'tb_usupermis', usupermisClass.UsupermisSchema);
+        const Usufunc = getModel("PortalDoUsuario", 'tb_usufunc', usufuncClass.UsufuncSchema);
+        const usufuncs = await Usufunc.find({ usufunc_status: 'Ativo' });
+
+        const operacoes = [];
+        usufuncs.forEach(func => {
+            const funcId = func._id.toString();
+            if (permissoes[funcId] && typeof permissoes[funcId] === 'object') {
+                for (const empId in permissoes[funcId]) {
+                    const tipo = permissoes[funcId][empId];
+                    if (!['1','2','3','4','5','6'].includes(tipo)) continue;
+
+                    // ✅ Salva ou atualiza
+                    operacoes.push({
+                        updateOne: {
+                            filter: {
+                                usupermis_usuid: new mongoose.Types.ObjectId(usupermis_usuid),
+                                usupermis_empresaid: new mongoose.Types.ObjectId(empId),
+                                usupermis_codfunc: new mongoose.Types.ObjectId(funcId)
+                            },
+                            update: {
+                                $set: {
+                                    usupermis_tipo: tipo,
+                                    usupermis_nomefunc: func.usufunc_nome,
+                                    usupermis_codigofunc: func.usufunc_codigo,
+                                    usupermis_usuidedi: new mongoose.Types.ObjectId(usuarioAtual),
+                                    usupermis_dataedi: dataAtual,
+                                    usupermis_lixo: "false"
+                                },
+                                $setOnInsert: {
+                                    usupermis_datacad: dataAtual,
+                                    usupermis_usuidcad: new mongoose.Types.ObjectId(usuarioAtual)
+                                }
+                            },
+                            upsert: true
+                        }
+                    });
+                }
+            }
+        });
+
+        if (operacoes.length > 0) {
+            await Usupermis.bulkWrite(operacoes);
+        }
+
+        // 🔹 2. Agora, recarrega TUDO (como no carregaUsuarioEdi)
+        const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
+        const Metodo = getModel("PortalDoUsuario", 'tb_metodo', metodoClass.MetodoSchema);
+        const Metout = getModel("PortalDoUsuario", 'tb_metout', metoutClass.MetoutSchema);
+
+        const usuario = await Usuario.findById(usupermis_usuid).lean();
+        if (!usuario) throw new Error("Usuário não encontrado");
+
+        let base64Image = usuario.usuario_carimbo 
+            ? Buffer.from(usuario.usuario_carimbo).toString('base64') 
+            : '';
+
+        const [
+            estados, perfils, funcaos, especialidades, especializacaos,
+            metodos, metouts, empresas, usufuncList, usupermisList
+        ] = await Promise.all([
+            getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema).find(),
+            getModel("PortalDoUsuario", 'tb_perfil', perfilClass.PerfilSchema).find(),
+            getModel("PortalDoUsuario", 'tb_funcao', funcaoClass.FuncaoSchema).find(),
+            getModel("PortalDoUsuario", 'tb_especialidade', especialidadeClass.EspecialidadeSchema).sort({ especialidade_nome: 1 }).find(),
+            getModel("PortalDoUsuario", 'tb_especializacao', especializacaoClass.EspecializacaoSchema).sort({ especializacao_nome: 1 }).find(),
+            Metodo.find().sort({ metodo_ordem: 1 }),
+            Metout.find().sort({ metout_ordem: 1 }),
+            getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema).find(),
+            Usufunc.find({ usufunc_status: 'Ativo' }),
+            Usupermis.find({ usupermis_usuid: new mongoose.Types.ObjectId(usupermis_usuid) })
+        ]);
+
+        // 🔹 3. Refaz a divisão entre habilitadas / para habilitar (igual no carregaUsuarioEdi)
+        const mapaPermissoes = {};
+        usupermisList.forEach(p => {
+            const funcId = p.usupermis_codfunc.toString();
+            const empId = p.usupermis_empresaid?.toString();
+            if (empId) {
+                if (!mapaPermissoes[funcId]) mapaPermissoes[funcId] = {};
+                mapaPermissoes[funcId][empId] = p.usupermis_tipo;
+            }
+        });
+
+        const permissoesHabilitadas = [];
+        empresas.forEach(empresa => {
+            const funcsDaEmpresa = [];
+            usufuncList.forEach(func => {
+                const tipo = mapaPermissoes[func._id.toString()]?.[empresa._id.toString()];
+                if (tipo && parseInt(tipo) >= 2) {
+                    funcsDaEmpresa.push({
+                        func_id: func._id.toString(),
+                        func_codigo: func.usufunc_codigo,
+                        usufunc_nome: func.usufunc_nome,
+                        usupermis_tipo: tipo,
+                        empresa_id: empresa._id.toString()
+                    });
+                }
+            });
+            if (funcsDaEmpresa.length > 0) {
+                permissoesHabilitadas.push({
+                    empresa_nome: empresa.empresa_nome,
+                    empresa_id: empresa._id.toString(),
+                    funcionalidades: funcsDaEmpresa
+                });
+            }
+        });
+
+        const permissoesParaHabilitar = [];
+        empresas.forEach(empresa => {
+            const funcsDaEmpresa = [];
+            usufuncList.forEach(func => {
+                const tipo = mapaPermissoes[func._id.toString()]?.[empresa._id.toString()] || "1";
+                if (parseInt(tipo) === 1) {
+                    funcsDaEmpresa.push({
+                        func_id: func._id.toString(),
+                        func_codigo: func.usufunc_codigo,
+                        func_nome: func.usufunc_nome,
+                        empresa_id: empresa._id.toString(),
+                        empresa_nome: empresa.empresa_nome,
+                        tipo_atual: tipo
+                    });
+                }
+            });
+            if (funcsDaEmpresa.length > 0) {
+                permissoesParaHabilitar.push({
+                    empresa_nome: empresa.empresa_nome,
+                    funcionalidades: funcsDaEmpresa
+                });
+            }
+        });
+
+        // ✅ Renderiza a MESMA tela de edição, mas com dados atualizados + flag de sucesso
+        req.flash("success_message", "Permissões salvas com sucesso!");
+        return res.render('ferramentas/usuario/usuarioEdi', {
+            usuario,
+            estados,
+            perfils,
+            funcaos,
+            especialidades,
+            especializacaos,
+            metodos,
+            metouts,
+            empresas,
+            usufuncs: usufuncList,
+            permissoesHabilitadas,
+            permissoesParaHabilitar,
+            base64Image,
+            // ✅ Força o alerta via flash — ou você pode usar req.query, mas flash é mais limpo
+        });
+
+    } catch (err) {
+        console.error("❌ Erro ao salvar permissões:", err);
+        req.flash("error_message", "Erro ao salvar permissões.");
+        return res.redirect(`/menu/ferramentas/usuario/edi/${usupermis_usuid}`);
+    }
+},
     // 4. Carregar permissões do usuário por empresa (tela de edição)
     // functions/fncUsupermis.js
     // fncUsupermis.js

@@ -24,10 +24,10 @@ module.exports = {
    
     // ✅ Nova função: listarManual (GET)
     listarManual(req, res) {
-        let db = req.cookies['PortalDoUsuario'];
+        let db = req.cookies['preferredDb'];
 
         Manual = getModel(db, 'tb_manual', manualClass.ManualSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
 
         // Função auxiliar para formatar data como dd/mm/yyyy hhh:mm
         function formatDateToBR(date) {
@@ -87,11 +87,11 @@ module.exports = {
     },
 
     // ✅ Formulário unificado (cadastro OU edição)
-    carregarFormularioOLD: async function(req, res) {
+    carregarFormulario: async function(req, res) {
         try {
-            const db = req.cookies['PortalDoUsuario'];
+            const db = req.cookies['preferredDb'];
             const ManualModel = getModel(db, 'tb_manual', manualClass.ManualSchema);
-            const EstadoModel = getModel(db, 'tb_estado', estadoClass.EstadoSchema);
+            const EstadoModel = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema);
 
             const estados = await EstadoModel.find().lean();
             let manual = null;
@@ -114,58 +114,12 @@ module.exports = {
             res.redirect('/admin/erro');
         }
     },
-    carregarFormularioOLD2: async function(req, res) {
-        try {
-            const db = req.cookies['PortalDoUsuario'];
-            const ManualModel = getModel(db, 'tb_manual', manualClass.ManualSchema);
-            const EstadoModel = getModel(db, 'tb_estado', estadoClass.EstadoSchema);
-
-            const estados = await EstadoModel.find().lean();
-            let manual = null;
-            let modo = 'cadastro';
-
-            if (req.params.id) {
-                manual = await ManualModel.findById(req.params.id).lean();
-                if (!manual || manual.man_lixo === "true") {
-                    req.flash("error_message", "Manual não encontrado.");
-                    return res.redirect('/admin/erro');
-                }
-                modo = 'edicao';
-            }
-
-            // 👇 ENVIA O OBJETO manual REAL para a view
-            res.render('ferramentas/manual/manualForm', { modo, manual, estados });
-
-        } catch (err) {
-            console.error("carregarFormulario:", err);
-            req.flash("error_message", "Erro ao carregar formulário.");
-            res.redirect('/admin/erro');
-        }
-    },
-    carregarFormulario: async function(req, res) {
-        try {
-            const db = req.cookies['PortalDoUsuario'];
-            const ManualModel = getModel(db, 'tb_manual', manualClass.ManualSchema);
-
-            const manuals = await ManualModel.find().lean();
-
-            return res.render('ferramentas/manual/manualForm', {
-                modo: 'cadastro',
-                manuals
-            });
-
-        } catch (err) {
-            console.error("carregarFormulario:", err);
-            req.flash("error_message", "Erro ao carregar formulário.");
-            res.redirect('/admin/erro');
-        }
-    },
-
+        
     // Mantemos as funções antigas (mas corrigidas para async/await)
     // Se quiser, posso refatorar também carregaManual, etc., mas você pediu só listar.
 
     carregaManual(req, res) {
-        let db = req.cookies['PortalDoUsuario'];
+        let db = req.cookies['preferredDb'];
         const EstadoModel = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema);
 
         EstadoModel.find().then((estados) => {
@@ -178,113 +132,26 @@ module.exports = {
         });
     },
 
-    carregarFormularioEdiOLD: async function(req, res) {
-        try {
-            const db = req.cookies['PortalDoUsuario'];
-            const ManualModel = getModel(db, 'tb_manual', manualClass.ManualSchema);
-            const EstadoModel = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema);
-
-            const estados = await EstadoModel.find().lean();
-
-            let manual = await ManualModel.findById(req.params.id).lean();
-
-            if (!manual || manual.man_lixo === "true") {
-                req.flash("error_message", "Manual não encontrado.");
-                return res.redirect('/admin/erro');
-            }
-
-            return res.render('ferramentas/manual/manualFormEdi', {
-                modo: 'edicao',
-                manual,
-                estados
-            });
-
-        } catch (err) {
-            console.error("carregarFormularioEdi:", err);
-            req.flash("error_message", "Erro ao carregar formulário.");
-            res.redirect('/admin/erro');
-        }
-    },
-carregarFormularioEdi: async function(req, res) {
-    try {
-        const db = req.cookies['PortalDoUsuario'];
+    carregaManualEdi(req, res) {
+        let db = req.cookies['preferredDb'];
         const ManualModel = getModel(db, 'tb_manual', manualClass.ManualSchema);
+        const EstadoModel = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema);
 
-        console.log("📥 REQ PARAMS:", req.params);
-
-        let manual = null;
-        let modo = 'edicao';
-
-        if (req.params.id) {
-            manual = await ManualModel.findById(req.params.id).lean();
-
-            console.log("\n\n==================== 📌 MANUAL RAW DO MONGO ====================");
-            console.log(JSON.stringify(manual, null, 2));
-            console.log("================================================================\n\n");
-
-            if (!manual) {
-                console.log("❌ Manual não encontrado no banco");
-                req.flash("error_message", "Manual não encontrado.");
+        ManualModel.findById(req.params.id).then((manual) => {
+            if (!manual || manual.man_lixo === "true") {
+                req.flash("error_message", "Manual não encontrado ou excluído.");
                 return res.redirect('/admin/erro');
             }
-
-            if (manual.man_lixo === "true") {
-                console.log("⚠️ Manual marcado como lixo");
-                req.flash("error_message", "Manual não encontrado.");
-                return res.redirect('/admin/erro');
-            }
-        }
-
-        // 🔍 Se segmentos vierem undefined, substitui por []
-        if (!manual.segmentos) {
-            console.log("⚠️ Manual.segmentos veio undefined! Ajustando para []");
-            manual.segmentos = [];
-        }
-
-        // DEBUG DE CADA SEGMENTO
-        console.log("\n======= 🧩 DEBUG — SEGMENTOS =======");
-        manual.segmentos.forEach((seg, i) => {
-            console.log(`SEGMENTO ${i}:`, JSON.stringify(seg, null, 2));
-
-            if (!seg.descricoes) {
-                console.log(`⚠️ descricoes do segmento ${i} vieram undefined. Ajustando.`);
-                seg.descricoes = [];
-            }
-
-            seg.descricoes.forEach((desc, j) => {
-                console.log(`  → DESCRIÇÃO ${j}:`, JSON.stringify(desc, null, 2));
+            return EstadoModel.find().then((estados) => {
+                console.log("Listagem Realizada de Estados");
+                res.render('ferramentas/manual/manualEdi', { manual, estados });
             });
+        }).catch((err) => {
+            console.log(err);
+            req.flash("error_message", "Houve um erro ao carregar o manual.");
+            res.render('admin/erro');
         });
-        console.log("===================================\n");
-
-        // ENVIA PARA A VIEW
-        console.log("\n\n==================== 📤 ENVIANDO PARA O HANDLEBARS ====================");
-        console.log("Modo:", modo);
-        console.log("manual enviado:", JSON.stringify(manual, null, 2));
-        console.log("========================================================================\n\n");
-        // 🔹 Pré-calcula índices para evitar {{../@index}} no Handlebars
-        if (manual.segmentos && Array.isArray(manual.segmentos)) {
-            manual.segmentos = manual.segmentos.map((seg, segIndex) => ({
-                ...seg,
-                segIndex: segIndex,
-                descricoes: (seg.descricoes || []).map((desc, descIndex) => ({
-                    ...desc,
-                    segIndex: segIndex,
-                    descIndex: descIndex
-                }))
-            }));
-        }
-        res.render('ferramentas/manual/manualFormEdi', {
-            modo,
-            manual
-        });
-
-    } catch (err) {
-        console.error("\n\n❌ ERRO em carregarFormularioEdi:", err, "\n\n");
-        req.flash("error_message", "Erro ao carregar formulário.");
-        res.redirect('/admin/erro');
-    }
-},
+    },
 
     cadastraManual(req, res) {
         manualClass.manualAdicionar(req, res)
@@ -316,7 +183,7 @@ carregarFormularioEdi: async function(req, res) {
         console.log("🟢 POST /ferramentas/manual/save → salvarManual() chamado");
 
         try {
-            const db = req.cookies['PortalDoUsuario'];
+            const db = req.cookies['preferredDb'];
             const ManualModel = getModel(db, 'tb_manual', manualClass.ManualSchema);
 
             const {

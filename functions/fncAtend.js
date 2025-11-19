@@ -5211,7 +5211,7 @@ module.exports = {
     relatendgestaoconsfechadoNEO: async (req, res) => {
         a;
     },
-relatendgestaoconsfechado: async (req, res) => {
+relatendgestaoconsfechadoOLD_ErroSubsfixo: async (req, res) => {
     try {
         const db = req.cookies['preferredDb'];
         const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
@@ -5435,6 +5435,215 @@ relatendgestaoconsfechado: async (req, res) => {
 
     } catch (err) {
         console.error("[relatendgestaoconsfechado] Erro crítico:", err);
+        res.status(500).send("Erro ao gerar relatório consolidado.");
+    }
+},
+relatendgestaoconsfechado: async (req, res) => {
+    try {
+        const db = req.cookies['preferredDb'];
+        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
+        // --- Normalização das datas (aceita query ou body, array ou string) ---
+        const dataIniStr = Array.isArray(req.query.dataIni) ? req.query.dataIni[0] : (req.query.dataIni || req.body.dataIni);
+        const dataFimStr = Array.isArray(req.query.dataFim) ? req.query.dataFim[0] : (req.query.dataFim || req.body.dataFim);
+
+        if (!dataIniStr || !dataFimStr) {
+            return res.render("atendimento/atendreltera/gestao/relatendgestaocons", {
+                rels: [], subtotaisPorConvenio: [], periodoDe: '', periodoAte: '',
+                pesquisa: { dataIni: '', dataFim: '' }
+            });
+        }
+
+        const dataIni = new Date(dataIniStr);
+        const dataFim = new Date(dataFimStr);
+        if (isNaN(dataIni.getTime()) || isNaN(dataFim.getTime())) {
+            return res.status(400).send("Datas inválidas.");
+        }
+        dataFim.setUTCHours(23, 59, 59, 999);
+
+        const diffDays = Math.ceil((dataFim - dataIni) / (1000 * 60 * 60 * 24));
+        if (diffDays > 31 || diffDays < 0) {
+            return res.status(400).send("O intervalo máximo permitido é de 31 dias.");
+        }
+
+        // --- PIPELINE DE AGREGAÇÃO CORRIGIDA ---
+        const pipeline = [
+            // 1. FILTRO INICIAL: período + EXCLUIR categorias indesejadas
+            {
+                $match: {
+                    atend_atenddata: { $gte: dataIni, $lte: dataFim },
+                    atend_categoria: { $nin: ["Falta Absoluta", "Feriado"] } // ✅ exclui ambos
+                }
+            },
+
+            // 2. DEFINIR TERAPIA EFETIVA e VALOR CRE EFETIVO
+            {
+                $addFields: {
+                    // 🔑 TERAPIA EFETIVA (para agrupamento correto)
+                    terapia_efetiva_id: {
+                        $switch: {
+                            branches: [
+                                {
+                                    case: {
+                                        $and: [
+                                            { $eq: ["$atend_fixo", "true"] },
+                                            { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta"]] } }
+                                        ]
+                                    },
+                                    then: "$atend_fixoterapiaid"
+                                },
+                                {
+                                    case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
+                                    then: "$atend_fixoterapiaid"  // ✅ usa terapia do fixo
+                                }
+                            ],
+                            default: "$atend_terapiaid" // terapia padrão
+                        }
+                    },
+
+                    // 💰 VALOR CRE EFETIVO (prioriza fixo quando aplicável)
+                    valorcre_correto: {
+                        $switch: {
+                            branches: [
+                                {
+                                    case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
+                                    then: { $ifNull: ["$atend_fixovalorcre", "0"] }
+                                },
+                                {
+                                    case: {
+                                        $and: [
+                                            { $eq: ["$atend_fixo", "true"] },
+                                            { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta", "Falta Justificada"]] } }
+                                        ]
+                                    },
+                                    then: { $ifNull: ["$atend_fixovalorcre", "0"] }
+                                },
+                                {
+                                    case: { $in: ["$atend_categoria", ["Falta Justificada"]] },
+                                    then: { $ifNull: ["$atend_mergevalorcre", "0"] }
+                                }
+                            ],
+                            default: { $ifNull: ["$atend_valorcre", "0"] }
+                        }
+                    }
+                }
+            },
+
+            // 3. CONVERTER VALORES PARA NÚMERO (substitui vírgula por ponto)
+            {
+                $addFields: {
+                    _valorcre: {
+                        $cond: {
+                            if: { $or: [{ $eq: ["$valorcre_correto", ""] }, { $eq: ["$valorcre_correto", null] }] },
+                            then: 0,
+                            else: {
+                                $toDouble: {
+                                    $replaceAll: { input: { $toString: "$valorcre_correto" }, find: ",", replacement: "." }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            // 4. LOOKUP: Convênio
+            {
+                $lookup: {
+                    from: Conv.collection.name,
+                    localField: "atend_convid",
+                    foreignField: "_id",
+                    as: "conv"
+                }
+            },
+            { $unwind: { path: "$conv", preserveNullAndEmptyArrays: true } },
+
+            // 5. LOOKUP: Terapia EFETIVA (não mais atend_terapiaid!)
+            {
+                $lookup: {
+                    from: Terapia.collection.name,
+                    localField: "terapia_efetiva_id",
+                    foreignField: "_id",
+                    as: "terapia"
+                }
+            },
+            { $unwind: { path: "$terapia", preserveNullAndEmptyArrays: true } },
+
+            // 6. AGRUPAR por Convênio + Terapia EFETIVA
+            {
+                $group: {
+                    _id: {
+                        conv_nome: { $ifNull: ["$conv.conv_nome", "Sem convênio"] },
+                        terapia_nomecid: { $ifNull: ["$terapia.terapia_nomecid", "Sem terapia"] }
+                    },
+                    qtd: { $sum: 1 },
+                    total_valorcre: { $sum: "$_valorcre" }
+                }
+            },
+            { $sort: { "_id.conv_nome": 1, "_id.terapia_nomecid": 1 } }
+        ];
+
+        // --- EXECUÇÃO ---
+        const rels = await Atend.aggregate(pipeline).exec();
+
+        // --- FORMATAR RESULTADOS ---
+        const relsFormatado = rels.map(r => {
+            const valorcreNum = r.total_valorcre;
+            return {
+                conv_nome: r._id.conv_nome,
+                terapia_nomecid: r._id.terapia_nomecid,
+                qtd: r.qtd,
+                tempo: "40 min", // mantido conforme original
+                total_valorcre: fncGeral.mascaraValores(Math.round(valorcreNum * 100).toString()),
+                _valorcre_num: valorcreNum // auxiliar para cálculos
+            };
+        });
+
+        // --- SUBTOTAIS POR CONVÊNIO ---
+        const subtotaisMap = {};
+        relsFormatado.forEach(item => {
+            const key = item.conv_nome;
+            if (!subtotaisMap[key]) {
+                subtotaisMap[key] = { conv_nome: key, qtd: 0, total_valorcre: 0 };
+            }
+            subtotaisMap[key].qtd += item.qtd;
+            subtotaisMap[key].total_valorcre += item._valorcre_num;
+        });
+
+        const subtotaisPorConvenio = Object.values(subtotaisMap).map(sub => ({
+            conv_nome: sub.conv_nome,
+            qtd: sub.qtd,
+            total_valorcre: fncGeral.mascaraValores(Math.round(sub.total_valorcre * 100).toString())
+        }));
+
+        // --- GRAND TOTAL ---
+        const grandTotal = relsFormatado.reduce((acc, item) => {
+            acc.qtd += item.qtd;
+            acc.total_valorcre += item._valorcre_num;
+            return acc;
+        }, { qtd: 0, total_valorcre: 0 });
+
+        grandTotal.total_valorcre = fncGeral.mascaraValores(Math.round(grandTotal.total_valorcre * 100).toString());
+
+        // --- RENDER ---
+        const periodoDe = fncGeral.getDataInvert(dataIni.toISOString().substring(0, 10));
+        const periodoAte = fncGeral.getDataInvert(dataFim.toISOString().substring(0, 10));
+
+        res.render("atendimento/atendreltera/gestao/relatendgestaoconsfec", {
+            rels: relsFormatado,
+            subtotaisPorConvenio,
+            grandTotal,
+            periodoDe,
+            periodoAte,
+            pesquisa: {
+                dataIni: dataIni.toISOString().substring(0, 10),
+                dataFim: dataFim.toISOString().substring(0, 10)
+            }
+        });
+
+    } catch (err) {
+        console.error("[relatendgestaoconsfechado] Erro:", err);
         res.status(500).send("Erro ao gerar relatório consolidado.");
     }
 },

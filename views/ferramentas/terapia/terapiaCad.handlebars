@@ -43,7 +43,7 @@
 												<label > Nome da Terapia para o Convênio</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="terapiaNomeCid" id="terapiaNomeCid" class="chosen-select" data-placeholder="Escolha...">
+														<select name="terapiaNomeCid" id="terapiaNomeCid" class="form-control select2" data-search="true" data-placeholder="Escolha...">
 															<option value="Não Informado">Não Informado</option>
 															<option value="ARTETERAPIA">ARTETERAPIA</option>
 															<option value="ABA">ABA</option>
@@ -78,7 +78,7 @@
 												<label>Status</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select name="terapiaStatus" id="terapiaStatus" class="chosen-select" >
+														<select name="terapiaStatus" id="terapiaStatus" class="form-control select2" data-search="true" data-placeholder="Escolha...">
 															<option value="-">Não informado</option>
 															<option value="Ativo">Ativo</option>
 															<option value="Inativo">Inativo</option>
@@ -110,5 +110,34 @@
 				</div>
 			</div><!-- /.main-container-->
 		</div><!-- /.main-container ace-save-state -->
+		<script>
+$(function() {
+  if (typeof $.fn.select2 === 'function') {
+    $('.select2').each(function() {
+      var $this = $(this);
+      
+      // ✅ Respeita data-search="true" OU data-search="false"
+      var forceSearch = $this.data('search'); // undefined, true, ou false
+      var minSearch;
+      
+      if (forceSearch === true) {
+        minSearch = 0; // força busca
+      } else if (forceSearch === false) {
+        minSearch = Infinity; // desativa busca mesmo com muitas opções
+      } else {
+        // comportamento padrão: só ativa busca se ≥8 opções
+        minSearch = $this.find('option').length >= 8 ? 0 : Infinity;
+      }
+
+      $this.select2({
+        width: '100%',
+        placeholder: $this.data('placeholder') || 'Selecione...',
+        allowClear: false,
+        minimumResultsForSearch: minSearch
+      });
+    });
+  }
+});
+</script>
 	</body>
 </html>

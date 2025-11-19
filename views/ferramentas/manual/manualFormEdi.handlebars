@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title id="pageTitle">Carregando...</title>
-    
+
     <style>
         .form-group { margin-bottom: 1rem; }
         .widget-box.segmento-item { border-left: 3px solid #3c8dbc; }
@@ -12,55 +12,84 @@
         #noSegmentosMsg { display: block; }
     </style>
 </head>
+
 <body onload="javascript:controlaNave();" class="no-skin">
+
+    <!-- ✅ CAMPOS HIDDEN — SIMPLES, SEM @index, SEM ERRO -->
     <div id="dadosEdicao" hidden>
+
         <!-- Dados principais -->
-        <input id="hid_manualId" value="<%- manual?._id || '' %>">
-        <input id="hid_manNome" value="<%- manual?.man_nome || '' %>">
-        <input id="hid_manTitulo" value="<%- manual?.man_titulo || '' %>">
-        <input id="hid_manIntro" value="<%- manual?.man_intro || '' %>">
-        <input id="hid_manVersao" value="<%- manual?.man_versao || '' %>">
-        <input id="hid_manVersaodata" value="<%- manual?.man_versaodata || '' %>">
-        
+        <input id="hid_manualId" value="{{manual._id}}">
+        <input id="hid_manNome" value="{{manual.man_nome}}">
+        <input id="hid_manTitulo" value="{{manual.man_titulo}}">
+        <input id="hid_manIntro" value="{{manual.man_intro}}">
+        <input id="hid_manVersao" value="{{manual.man_versao}}">
+        <input id="hid_manVersaodata" value="{{manual.man_versaodata}}">
+
         <!-- Contagem de segmentos -->
-        <input id="hid_segCount" value="<%- (manual?.segmentos?.length || 0) %>">
-        
-        <!-- Dados dos segmentos (só se for edição) -->
-        <% if (manual && manual.segmentos) { %>
-            <% manual.segmentos.forEach((seg, i) => { %>
-                <input id="hid_seg_<%- i %>_id" value="<%- seg.man_segid || '' %>">
-                <input id="hid_seg_<%- i %>_ordem" value="<%- seg.man_segordem || '' %>">
-                <input id="hid_seg_<%- i %>_titulo" value="<%- seg.man_segtitulo || '' %>">
-                <input id="hid_seg_<%- i %>_intro" value="<%- seg.man_segintro || '' %>">
-                <input id="hid_seg_<%- i %>_obs" value="<%- seg.man_segobs || '' %>">
-                <input id="hid_seg_<%- i %>_descCount" value="<%- (seg.descricoes?.length || 0) %>">
-                
-                <% if (seg.descricoes) { %>
-                    <% seg.descricoes.forEach((desc, j) => { %>
-                        <input id="hid_seg_<%- i %>_desc_<%- j %>_id" value="<%- desc.man_segdescr_id || '' %>">
-                        <input id="hid_seg_<%- i %>_desc_<%- j %>_numalf" value="<%- desc.man_segnumalf || '' %>">
-                        <input id="hid_seg_<%- i %>_desc_<%- j %>_descr" value="<%- desc.man_segdescr || '' %>">
-                    <% }); %>
-                <% } %>
-            <% }); %>
-        <% } %>
+        <input id="hid_segCount" value="{{manual.segmentos.length}}">
+
+        <!-- 🔸 SEGMENTOS — agora com segIndex explícito -->
+        {{#each manual.segmentos}}
+            <input id="hid_seg_{{segIndex}}_id" value="{{man_segid}}">
+            <input id="hid_seg_{{segIndex}}_ordem" value="{{man_segordem}}">
+            <input id="hid_seg_{{segIndex}}_titulo" value="{{man_segtitulo}}">
+            <input id="hid_seg_{{segIndex}}_intro" value="{{man_segintro}}">
+            <input id="hid_seg_{{segIndex}}_obs" value="{{man_segobs}}">
+            <input id="hid_seg_{{segIndex}}_descCount" value="{{descricoes.length}}">
+
+            <!-- 🔸 DESCRIÇÕES — agora com segIndex e descIndex explícitos -->
+            {{#each descricoes}}
+                <input type="hidden" class="hid-desc"
+                    data-seg-index="{{segIndex}}"
+                    data-desc-index="{{descIndex}}"
+                    data-field="id"
+                    value="{{man_segdescr_id}}">
+                <input type="hidden" class="hid-desc"
+                    data-seg-index="{{segIndex}}"
+                    data-desc-index="{{descIndex}}"
+                    data-field="numalf"
+                    value="{{man_segnumalf}}">
+                <input type="hidden" class="hid-desc"
+                    data-seg-index="{{segIndex}}"
+                    data-desc-index="{{descIndex}}"
+                    data-field="descr"
+                    value="{{man_segdescr}}">
+            {{/each}}
+        {{/each}}
+
     </div>
+
     <div class="main-container ace-save-state" id="main-container">
         <div class="main-content">
             <div class="main-content-inner">
+
                 <div class="breadcrumbs ace-save-state" id="breadcrumbs">
                     <ul class="breadcrumb">
-                        <li><i class="ace-icon fa fa-home home-icon"></i><a href="/">Home</a></li>
+                        <li>
+                            <i class="ace-icon fa fa-home home-icon"></i>
+                            <a href="/">Home</a>
+                        </li>
                         <li><a href="/menu/ferramentas/manual/lis">Manuais</a></li>
                         <li class="active" id="breadcrumbTitle">Carregando...</li>
                     </ul>
                 </div>
+
                 <div class="page-content">
                     <div class="row">
                         <div class="col-xs-12">
-                            <form class="form-horizontal" role="form" action="/menu/ferramentas/manual/save" method="POST" id="manualForm">
+
+                            <form class="form-horizontal"
+                                  role="form"
+                                  action="/menu/ferramentas/manual/save"
+                                  method="POST"
+                                  id="manualForm">
+
                                 <input type="hidden" id="manualId" name="manualId">
+
                                 <div class="col-sm-12">
+
+                                    <!-- BOX DADOS DO MANUAL -->
                                     <div class="widget-box">
                                         <div class="widget-header">
                                             <h4 class="widget-title">
@@ -76,44 +105,77 @@
                                                 </a>
                                             </span>
                                         </div>
+
                                         <div class="widget-body">
                                             <div class="widget-main">
+
                                                 <div class="form-group">
-                                                    <label class="col-sm-3 control-label no-padding-right">Nome do Manual:</label>
+                                                    <label class="col-sm-3 control-label no-padding-right">
+                                                        Nome do Manual:
+                                                    </label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" name="manNome" id="manNome" class="form-control" required />
+                                                        <input type="text"
+                                                               name="manNome"
+                                                               id="manNome"
+                                                               class="form-control"
+                                                               required />
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group">
-                                                    <label class="col-sm-3 control-label no-padding-right">Título:</label>
+                                                    <label class="col-sm-3 control-label no-padding-right">
+                                                        Título:
+                                                    </label>
                                                     <div class="col-sm-9">
-                                                        <input type="text" name="manTitulo" id="manTitulo" class="form-control" required />
+                                                        <input type="text"
+                                                               name="manTitulo"
+                                                               id="manTitulo"
+                                                               class="form-control"
+                                                               required />
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group">
-                                                    <label class="col-sm-3 control-label no-padding-right">Introdução:</label>
+                                                    <label class="col-sm-3 control-label no-padding-right">
+                                                        Introdução:
+                                                    </label>
                                                     <div class="col-sm-9">
-                                                        <textarea name="manIntro" id="manIntro" class="form-control" rows="3"></textarea>
+                                                        <textarea name="manIntro"
+                                                                  id="manIntro"
+                                                                  class="form-control"
+                                                                  rows="3"></textarea>
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group">
-                                                    <label class="col-sm-3 control-label no-padding-right">Versão:</label>
+                                                    <label class="col-sm-3 control-label no-padding-right">
+                                                        Versão:
+                                                    </label>
                                                     <div class="col-sm-4">
-                                                        <input type="text" name="manVersao" id="manVersao" class="form-control" />
+                                                        <input type="text"
+                                                               name="manVersao"
+                                                               id="manVersao"
+                                                               class="form-control" />
                                                     </div>
+
                                                     <div class="col-sm-5">
                                                         <div class="input-group">
-                                                            <input type="date" name="manVersaodata" id="manVersaodata" class="form-control" />
+                                                            <input type="date"
+                                                                   name="manVersaodata"
+                                                                   id="manVersaodata"
+                                                                   class="form-control" />
                                                             <span class="input-group-addon">
                                                                 <i class="fa fa-calendar"></i>
                                                             </span>
                                                         </div>
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
-
+                                    <!-- /BOX DADOS DO MANUAL -->
+                                    <!-- BOX SEGMENTOS -->
                                     <div class="widget-box">
                                         <div class="widget-header">
                                             <h4 class="widget-title">
@@ -126,62 +188,80 @@
                                                 </a>
                                             </span>
                                         </div>
+
                                         <div class="widget-body">
                                             <div class="widget-main">
+
                                                 <div id="segmentos-container">
-                                                    <p id="noSegmentosMsg" class="text-muted">Nenhum segmento cadastrado.</p>
+                                                    <p id="noSegmentosMsg" class="text-muted">
+                                                        Nenhum segmento cadastrado.
+                                                    </p>
                                                 </div>
-                                                <button type="button" class="btn btn-sm btn-primary" onclick="adicionarSegmento()" style="margin-top: 10px;">
-                                                    <i class="fa fa-plus"></i> Adicionar Segmento
+
+                                                <button type="button"
+                                                        class="btn btn-sm btn-primary"
+                                                        onclick="adicionarSegmento()"
+                                                        style="margin-top: 10px;">
+                                                    <i class="fa fa-plus"></i>
+                                                    Adicionar Segmento
                                                 </button>
+
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- /BOX SEGMENTOS -->
 
+                                    <!-- BOTÕES -->
                                     <div class="form-actions center">
                                         <button class="btn btn-info" type="submit" id="btnSubmit">
                                             <i class="ace-icon fa fa-check bigger-110"></i>
                                             <span id="btnSubmitText">Cadastrar</span>
                                         </button>
-                                        &nbsp; &nbsp;
+
+                                        &nbsp;&nbsp;
+
                                         <a class="btn btn-warning" href="/ferramentas/manual/lis">
-                                            <i class="ace-icon fa fa-undo bigger-110"></i> Cancelar
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            Cancelar
                                         </a>
                                     </div>
-                                </div>
+
+                                </div> <!-- /col-sm-12 -->
                             </form>
+
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
-   
     <script>
-        const modo = '<%- typeof modo !== "undefined" ? modo : "cadastro" %>';
-        const temEdicao = '<%- manual && manual._id ? "true" : "false" %>' === 'true';
+        const modo = "{{modo}}";
+        const temEdicao = "{{#if manual._id}}true{{else}}false{{/if}}" === "true";
 
         let segmentoIndex = 0;
         let descricaoIndexMap = {};
 
-        // ✅ Converte data para input[type=date]
+        // Converte data ISO para value do input[type=date]
         function toInputDate(dateStr) {
             if (!dateStr) return '';
             const d = new Date(dateStr);
             return isNaN(d.getTime()) ? '' : d.toISOString().split('T')[0];
         }
 
-        // ✅ Inicializa formulário (edição ou cadastro)
+        // Inicializa formulário
         function initForm() {
-            const isEdicao = modo === 'edicao' && temEdicao;
-            document.getElementById('pageTitle').textContent = isEdicao ? 'Editar Manual' : 'Novo Manual';
-            document.getElementById('breadcrumbTitle').textContent = isEdicao ? 'Editar Manual' : 'Novo Manual';
-            document.getElementById('widgetTitle').textContent = isEdicao ? 'Editar Manual' : 'Dados do Manual';
-            document.getElementById('btnSubmitText').textContent = isEdicao ? 'Salvar Alterações' : 'Cadastrar';
+            const isEdicao = modo === "edicao" && temEdicao;
+
+            document.getElementById('pageTitle').textContent = isEdicao ? "Editar Manual" : "Novo Manual";
+            document.getElementById('breadcrumbTitle').textContent = isEdicao ? "Editar Manual" : "Novo Manual";
+            document.getElementById('widgetTitle').textContent = isEdicao ? "Editar Manual" : "Dados do Manual";
+            document.getElementById('btnSubmitText').textContent = isEdicao ? "Salvar Alterações" : "Cadastrar";
 
             if (isEdicao) {
-                // Preenche campos raiz
+                // Campos raiz
                 document.getElementById('manualId').value = document.getElementById('hid_manualId').value;
                 document.getElementById('manNome').value = document.getElementById('hid_manNome').value;
                 document.getElementById('manTitulo').value = document.getElementById('hid_manTitulo').value;
@@ -189,7 +269,7 @@
                 document.getElementById('manVersao').value = document.getElementById('hid_manVersao').value;
                 document.getElementById('manVersaodata').value = toInputDate(document.getElementById('hid_manVersaodata').value);
 
-                // Preenche segmentos
+                // Carregar segmentos
                 const segCount = parseInt(document.getElementById('hid_segCount').value) || 0;
                 for (let i = 0; i < segCount; i++) {
                     const seg = {
@@ -200,105 +280,151 @@
                         man_segobs: document.getElementById(`hid_seg_${i}_obs`).value,
                         descricoes: []
                     };
+
                     const descCount = parseInt(document.getElementById(`hid_seg_${i}_descCount`).value) || 0;
+
+                    // 🔹 Lê descrições via data-* (seguro, sem getElementById frágil)
                     for (let j = 0; j < descCount; j++) {
+                        const fields = { id: '', numalf: '', descr: '' };
+                        document.querySelectorAll(`input.hid-desc[data-seg-index="${i}"][data-desc-index="${j}"]`)
+                            .forEach(el => {
+                                const field = el.dataset.field;
+                                if (field in fields) fields[field] = el.value;
+                            });
                         seg.descricoes.push({
-                            man_segdescr_id: document.getElementById(`hid_seg_${i}_desc_${j}_id`).value,
-                            man_segnumalf: document.getElementById(`hid_seg_${i}_desc_${j}_numalf`).value,
-                            man_segdescr: document.getElementById(`hid_seg_${i}_desc_${j}_descr`).value
+                            man_segdescr_id: fields.id,
+                            man_segnumalf: fields.numalf,
+                            man_segdescr: fields.descr
                         });
                     }
+
                     adicionarSegmento(seg);
                 }
             }
         }
 
-        // ✅ Adiciona segmento (novo ou pré-preenchido)
+        // Adiciona segmento
         function adicionarSegmento(data = null) {
-            const segId = data?.man_segid || ('temp_' + Date.now());
+            const segIndex = segmentoIndex;
+            const segId = data?.man_segid || ("temp_" + Date.now());
+
             const html = `
                 <div class="widget-box widget-color-light segmento-item" data-seg-id="${segId}">
                     <div class="widget-header widget-header-small">
-                        <h6 class="widget-title">Segmento #${segmentoIndex + 1}</h6>
+                        <h6 class="widget-title">Segmento #${segIndex + 1}</h6>
                         <span class="widget-toolbar">
                             <a href="#" onclick="removerSegmento(this); return false;">
                                 <i class="ace-icon fa fa-times red"></i>
                             </a>
                         </span>
                     </div>
+
                     <div class="widget-body">
                         <div class="widget-main">
-                            <input type="hidden" name="segmentos[${segmentoIndex}][man_segid]" value="${segId}">
+
+                            <input type="hidden"
+                                name="segmentos[${segIndex}][man_segid]"
+                                value="${segId}">
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label no-padding-right">Ordem:</label>
                                 <div class="col-sm-2">
-                                    <input type="number" name="segmentos[${segmentoIndex}][man_segordem]" 
-                                           class="form-control order-input" value="${data?.man_segordem || (segmentoIndex + 1)}" required />
+                                    <input type="number"
+                                        name="segmentos[${segIndex}][man_segordem]"
+                                        class="form-control order-input"
+                                        value="${data?.man_segordem || segIndex + 1}"
+                                        required />
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label no-padding-right">Título:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="segmentos[${segmentoIndex}][man_segtitulo]" 
-                                           class="form-control" value="${data?.man_segtitulo || ''}" />
+                                    <input type="text"
+                                        name="segmentos[${segIndex}][man_segtitulo]"
+                                        class="form-control"
+                                        value="${data?.man_segtitulo || ''}" />
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label no-padding-right">Introdução:</label>
                                 <div class="col-sm-9">
-                                    <textarea name="segmentos[${segmentoIndex}][man_segintro]" 
-                                              class="form-control" rows="2">${data?.man_segintro || ''}</textarea>
+                                    <textarea name="segmentos[${segIndex}][man_segintro]"
+                                              class="form-control"
+                                              rows="2">${data?.man_segintro || ''}</textarea>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label no-padding-right">Observação Final:</label>
                                 <div class="col-sm-9">
-                                    <textarea name="segmentos[${segmentoIndex}][man_segobs]" 
-                                              class="form-control" rows="2">${data?.man_segobs || ''}</textarea>
+                                    <textarea name="segmentos[${segIndex}][man_segobs]"
+                                              class="form-control"
+                                              rows="2">${data?.man_segobs || ''}</textarea>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label no-padding-right">Subitens:</label>
                                 <div class="col-sm-9">
-                                    <div class="descricao-list" id="descricao-list-${segmentoIndex}"></div>
-                                    <button type="button" class="btn btn-sm btn-success" 
-                                            onclick="adicionarDescricao(${segmentoIndex})">
-                                        <i class="fa fa-plus"></i> Adicionar Subitem
+                                    <div class="descricao-list" id="descricao-list-${segIndex}"></div>
+
+                                    <button type="button"
+                                            class="btn btn-sm btn-success"
+                                            onclick="adicionarDescricao(${segIndex})">
+                                        <i class="fa fa-plus"></i>
+                                        Adicionar Subitem
                                     </button>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             `;
-            document.getElementById('segmentos-container').insertAdjacentHTML('beforeend', html);
-            document.getElementById('noSegmentosMsg').style.display = 'none';
 
-            // Adiciona subitens pré-existentes (edição)
-            if (data?.descricoes?.length) {
-                data.descricoes.forEach(desc => adicionarDescricao(segmentoIndex, desc));
-            }
+            const container = document.getElementById('segmentos-container');
+            container.insertAdjacentHTML('beforeend', html);
+            document.getElementById('noSegmentosMsg').style.display = "none";
 
-            descricaoIndexMap[segmentoIndex] = data?.descricoes?.length || 0;
+            setTimeout(() => {
+                if (data?.descricoes?.length) {
+                    data.descricoes.forEach(desc => adicionarDescricao(segIndex, desc));
+                }
+            }, 0);
+
+            descricaoIndexMap[segIndex] = data?.descricoes?.length || 0;
             segmentoIndex++;
         }
 
-        // ✅ Adiciona subitem (descrição) dentro de um segmento
+        // Adiciona subitem
         function adicionarDescricao(segIndex, data = null) {
             const descIndex = descricaoIndexMap[segIndex] || 0;
+
             const html = `
                 <div class="descricao-item">
-                    <input type="hidden" name="segmentos[${segIndex}][descricoes][${descIndex}][man_segdescr_id]" 
-                           value="${data?.man_segdescr_id || ('temp_desc_' + Date.now())}">
+                    <input type="hidden"
+                           name="segmentos[${segIndex}][descricoes][${descIndex}][man_segdescr_id]"
+                           value="${data?.man_segdescr_id || ("temp_desc_" + Date.now())}">
+
                     <div class="input-group">
-                        <input type="text" name="segmentos[${segIndex}][descricoes][${descIndex}][man_segnumalf]" 
-                               class="form-control input-sm" placeholder="Ex: 1.1, A" 
-                               value="${data?.man_segnumalf || ''}" style="width: 100px;">
-                        <input type="text" name="segmentos[${segIndex}][descricoes][${descIndex}][man_segdescr]" 
-                               class="form-control input-sm" placeholder="Descrição" 
-                               value="${data?.man_segdescr || ''}">
+                        <input type="text"
+                            name="segmentos[${segIndex}][descricoes][${descIndex}][man_segnumalf]"
+                            class="form-control input-sm"
+                            placeholder="Ex: 1.1, A"
+                            value="${data?.man_segnumalf || ''}"
+                            style="width: 100px;">
+
+                        <input type="text"
+                            name="segmentos[${segIndex}][descricoes][${descIndex}][man_segdescr]"
+                            class="form-control input-sm"
+                            placeholder="Descrição"
+                            value="${data?.man_segdescr || ''}">
+
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-sm btn-danger" 
+                            <button type="button"
+                                    class="btn btn-sm btn-danger"
                                     onclick="this.closest('.descricao-item').remove()">
                                 <i class="fa fa-minus"></i>
                             </button>
@@ -306,14 +432,18 @@
                     </div>
                 </div>
             `;
-            document.getElementById(`descricao-list-${segIndex}`).insertAdjacentHTML('beforeend', html);
+
+            document
+                .getElementById(`descricao-list-${segIndex}`)
+                .insertAdjacentHTML('beforeend', html);
+
             descricaoIndexMap[segIndex] = descIndex + 1;
         }
 
-        // ✅ Remove segmento inteiro
+        // Remove segmento
         function removerSegmento(btn) {
             const segItem = btn.closest('.segmento-item');
-            if (segItem && confirm('Remover este segmento e todos os seus subitens?')) {
+            if (segItem && confirm("Remover este segmento e todos os seus subitens?")) {
                 segItem.remove();
                 if (document.querySelectorAll('.segmento-item').length === 0) {
                     document.getElementById('noSegmentosMsg').style.display = 'block';
@@ -321,7 +451,6 @@
             }
         }
 
-        // ✅ Inicializa ao carregar
         document.addEventListener('DOMContentLoaded', initForm);
     </script>
 </body>
