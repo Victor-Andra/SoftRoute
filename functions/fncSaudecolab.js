@@ -123,7 +123,7 @@ module.exports = {
             })
         }
     },
-    atualizaSaudecolabOLD(req,res){
+    atualizaSaudecolab(req,res){
         let resposta;
         try{
             saudecolabClass.saudecolabEditar(req,res).then((res)=>{

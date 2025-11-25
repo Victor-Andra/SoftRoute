@@ -110,18 +110,13 @@ class Saudecolab{
 
 
 SaudecolabSchema.loadClass(Saudecolab)
-var SaudecolabModel = getModel("PortalDoUsuario", 'tb_saudecolab', SaudecolabSchema)
+const SaudecolabModel = getModel("PortalDoUsuario", 'tb_saudecolab', SaudecolabSchema)
 
 module.exports = {
     SaudecolabModel,
     SaudecolabSchema,
 
     saudecolabEditar: async (req, res) => {
-
-        //Estrutura Multiempresa
-        let db = "PortalDoUsuario";
-        SaudecolabModel = getModel(db, 'tb_saudecolab', SaudecolabSchema)
-        //;
 
         // Pega data atual
         let dataAtual = new Date();
@@ -175,10 +170,6 @@ module.exports = {
     },
 
     saudecolabAdicionar: async (req, res) => {
-        // Estrutura Multiempresa
-         let db = "PortalDoUsuario" // ⚠️ ver item 3 abaixo!
-        const SaudecolabModel = getModel(db, 'tb_saudecolab', SaudecolabSchema);
-
         // Dados
         const dataAtual = new Date().toISOString();
         const usuarioAtual = req.cookies?.['idUsu'];
