@@ -374,15 +374,11 @@
 														<td>{{#compareThis agenda_selo "true"}}Sim{{else}}Não{{/compareThis}}</td>
 														<td>
 															<div class="action-buttons">
-																<a class="blue" name="acaoEvolucao" id="acaoEvolucao" onclick="javascript:evolucaoEditar('{{_id}}');">
+																<a class="blue" href="/menu/agenda/evolucao/{{_id}}">
 																	<i class="ace-icon fa fa-pencil bigger-130"></i>
 																</a>
 															</div>
-															<div class="action-buttons">
-																<a class="red" name="acaoRemoveEvolucao" id="acaoRemoveEvolucao" onclick="javascript:evolucaoRemover('{{_id}}');">
-																	<i class="ace-icon fa fa-trash bigger-130"></i>
-																</a>
-															</div>
+															
 														</td>
 													</tr>
 												{{/each}}
@@ -396,31 +392,7 @@
 				</div><!-- /.main-content-inner -->
 			</div><!-- /.main-content -->
 
-			<div class="footer">
-				<div class="footer-inner">
-					<div class="footer-content">
-						<span class="bigger-120">
-							<span class="blue bolder">Soft</span>
-							Route
-						</span>
-
-						&nbsp; &nbsp;
-						<span class="action-buttons">
-							<a href="#">
-								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
-							</a>
-
-							<a href="#">
-								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
-							</a>
-						</span>
-					</div>
-				</div>
-			</div>
-
-			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
-				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-			</a>
+			
 		</div><!-- /.main-container ace-save-state -->
 
 		<!-- page specific plugin scripts -->
@@ -435,7 +407,7 @@
 			"aaSorting": [],
 			"aoColumns": [null, null, null, null,  null, null, null,{ "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [ 50, 100, 200],
+			"lengthMenu":[ 100, 200, 300, 500],
 			"lengthChange": true,
 			"autoWidth": false,
 			"paging": true,

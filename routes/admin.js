@@ -1708,6 +1708,14 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
     router.post('/atendimento/relatendvals', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoValFiltro(req,res);
     })
+//Relatório de Atendimentos por Convênio. Tabela Dinamica expansivel
+    router.get('/atendimento/tabdimAtendval', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.tabdimAtendval(req,res);
+    })
+
+    router.post('/atendimento/tabdimAtendimentoValFiltro', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.tabdimAtendimentoValFiltro(req,res);
+    })
 
 //Relatório Individual de Atendimentos por Beneficiário.
 //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo.
@@ -1797,6 +1805,7 @@ router.get('/atendimento/relatendvalnf', fncGeral.IsAuthenticated,(req,res) =>{
 router.post('/atendimento/relatendvalnfs', fncGeral.IsAuthenticated,(req,res) =>{
     fncAtend.relAtendimentoValNfFiltro(req,res)
 })
+
 //Menu Financeiro / AtendAdm
 //Menu AtendAdm
 

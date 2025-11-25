@@ -8,6 +8,7 @@ const AtendSchema = mongoose.Schema({
     atend_categoria :{ type: String, required: true },
     atend_beneid :{ type: ObjectId, required: false },//_id da tb_bene 
     atend_convid :{ type: ObjectId, required: true },//_id da tb_conv 
+    atend_senhaconv :{ type: String, required: false },// 
     atend_usuid :{ type: String, required: true },//_id da tb_usuario
     atend_atenddata :{ type: Date, required: true },
     atend_atendhora :{ type: String, required: false },

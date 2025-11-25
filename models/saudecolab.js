@@ -110,7 +110,7 @@ class Saudecolab{
 
 
 SaudecolabSchema.loadClass(Saudecolab)
-var SaudecolabModel = getModel("softroute", 'tb_saudecolab', SaudecolabSchema)
+var SaudecolabModel = getModel("PortalDoUsuario", 'tb_saudecolab', SaudecolabSchema)
 
 module.exports = {
     SaudecolabModel,
@@ -119,7 +119,7 @@ module.exports = {
     saudecolabEditar: async (req, res) => {
 
         //Estrutura Multiempresa
-        let db = req.cookies['preferredDb'];
+        let db = "PortalDoUsuario";
         SaudecolabModel = getModel(db, 'tb_saudecolab', SaudecolabSchema)
         //;
 
@@ -131,7 +131,7 @@ module.exports = {
         // Realiza Atualização
         await SaudecolabModel.findByIdAndUpdate(req.body.saudecolabId, 
             {
-                saudecolab_progisaudecolab_saudecolabid: req.body.saudecolabSaudecolabid,
+                saudecolab_saudecolabid: req.body.saudecolab_Saudecolabid,
                 saudecolab_saudecolabusuid: req.body.saudecolabSaudecolabusuid,
                 saudecolab_saudecolabdata: req.body.saudecolabSaudecolabdata,
                 saudecolab_tiposangue: req.body.saudecolabTiposangue,
@@ -174,22 +174,18 @@ module.exports = {
         return resultado;
     },
 
-    saudecolabAdicionar: async (req,res) => {
+    saudecolabAdicionar: async (req, res) => {
+        // Estrutura Multiempresa
+         let db = "PortalDoUsuario" // ⚠️ ver item 3 abaixo!
+        const SaudecolabModel = getModel(db, 'tb_saudecolab', SaudecolabSchema);
 
-        //Estrutura Multiempresa
-        let db = req.cookies['preferredDb'];
-        SaudecolabModel = getModel(db, 'tb_saudecolab', SaudecolabSchema)
-        //;
-        
-        //Pega data atual
-        let dataAtual = new Date();
-        //Pega Usuário Atual
-        let usuarioAtual = req.cookies['idUsu'];
-        let resultado;
-        //Realiza Atualização
-            console.log("saudecolabmodel");
+        // Dados
+        const dataAtual = new Date().toISOString();
+        const usuarioAtual = req.cookies?.['idUsu'];
+
+        try {
             const newSaudecolab = new SaudecolabModel({
-                saudecolab_progisaudecolab_saudecolabidd: req.body.saudecolabSaudecolabid,
+                saudecolab_saudecolabid: new mongoose.Types.ObjectId(), // opcional, se quiser pré-definir
                 saudecolab_saudecolabusuid: req.body.saudecolabSaudecolabusuid,
                 saudecolab_saudecolabdata: req.body.saudecolabSaudecolabdata,
                 saudecolab_tiposangue: req.body.saudecolabTiposangue,
@@ -202,7 +198,7 @@ module.exports = {
                 saudecolab_medicamentonaoqual: req.body.saudecolabMedicamentonaoqual,
                 saudecolab_medicamentosim: req.body.saudecolabMedicamentosim,
                 saudecolab_medicamentosimqual: req.body.saudecolabMedicamentosimqual,
-                saudecolab_hipertenso : req.body.saudecolabHipertenso,
+                saudecolab_hipertenso: req.body.saudecolabHipertenso,
                 saudecolab_cardiaco: req.body.saudecolabCardiaco,
                 saudecolab_diabetico: req.body.saudecolabDiabetico,
                 saudecolab_insulina: req.body.saudecolabInsulina,
@@ -215,19 +211,20 @@ module.exports = {
                 saudecolab_celular2: req.body.saudecolabCelular2,
                 saudecolab_obs: req.body.saudecolabObs,
                 saudecolab_aceitartermos: req.body.saudecolabAceitartermos,
-                //Atributos de controle
-                saudecolab_usuidcad : usuarioAtual,
-                saudecolab_datacad : dataAtual.toISOString(),
-                saudecolab_lixo : "false"
+                // Atributos de controle
+                saudecolab_usuidcad: usuarioAtual,
+                saudecolab_datacad: dataAtual,
+                saudecolab_lixo: "false"
             });
-            console.log("newSaudecolab save");
-            await newSaudecolab.save().then(()=>{
-                console.log("Cadastro realizado!");
-                return true;
-            }).catch((err) => {
-                console.log(err)
-                return err;
-            });
-        
+
+            console.log("[saudecolabAdicionar] Salvando documento:", newSaudecolab);
+            const saved = await newSaudecolab.save();
+            console.log("[saudecolabAdicionar] ✅ Salvo com sucesso. ID:", saved._id);
+            return { success: true, data: saved };
+
+        } catch (err) {
+            console.error("[saudecolabAdicionar] ❌ Erro ao salvar:", err);
+            throw err; // ⚠️ Rejeita a Promise para o caller tratar
+        }
     }
 };

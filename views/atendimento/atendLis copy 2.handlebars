@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="pt-br"><head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta charset="utf-8">
+		<title>Lista de Atendimentos</title>
+		<style>
+			/* Tooltip personalizado */
+			.custom-tooltip .tooltip-text {
+				visibility: hidden; /* Inicialmente oculto */
+				width: auto; /* Ajusta automaticamente ao conteúdo */
+				background-color: rgb(243, 223, 223); /* Fundo escuro para contraste */
+				color: red; /* Cor do texto vermelha */
+				font-size: 6px; /* Tamanho da fonte pequena */
+				text-align: center;
+				padding: 2px 5px; /* Espaçamento interno */
+				border-radius: 4px; /* Borda arredondada */
+
+				/* Posicionamento do tooltip */
+				position: absolute;
+				top: -20px; /* Acima do ícone */
+				left: 50%; /* Centralizado horizontalmente */
+				transform: translateX(-50%); /* Ajuste fino para centralizar */
+				z-index: 1; /* Garante que o tooltip fique acima de outros elementos */
+				white-space: nowrap; /* Evita que o texto quebre linha */
+			}
+
+			/* Mostra o tooltip quando o mouse passa sobre o link */
+			.custom-tooltip:hover .tooltip-text {
+				visibility: visible;
+			}
+		</style>
+		
+		<script type="text/javascript">
+			function ajustaData(){
+				let fullDatas = document.getElementsByName("fullData");
+				fullDatas.forEach((elementox)=>{
+					let id = "atenddata"+elementox.id;
+					let dat = new Date(elementox.value);
+					let mes = (dat.getMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+
+					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
+				})
+			}
+			function formataData(){
+				let tipo = document.getElementById("tipoData").value;
+				console.log("tipoData:"+tipoData);
+				if(tipo == "Ano/Mes"){
+					let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
+					let mes = (dat.getUTCMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Semana"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Dia"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				}
+			}
+			function trocaFiltroData(){
+				let fill = document.getElementById("tipoData").value;
+				if(fill == "Ano/Mes"){
+					document.getElementById("divAnoAtend").hidden = false;
+					document.getElementById("divMesAtend").hidden = false;
+					document.getElementById("divDataFil").hidden = true;
+				} else if (fill == "Semana"){
+					document.getElementById("divAnoAtend").hidden = true;
+					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				} else {
+					document.getElementById("divAnoAtend").hidden = true;
+					document.getElementById("divMesAtend").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				}
+			}
+			function trocaFilpessoa() {
+				let fillTipopessoa = document.getElementById("atendTipoPessoa").value;
+				if(fillTipopessoa == "Geral"){
+					document.getElementById("divAtendBeneficiario").hidden = true;
+					document.getElementById("divAtendTerapeuta").hidden = true;
+				} else if(fillTipopessoa == "Beneficiario"){
+					document.getElementById("divAtendBeneficiario").hidden = false;
+					document.getElementById("divAtendTerapeuta").hidden = true;
+				} else {
+					document.getElementById("divAtendBeneficiario").hidden = true;
+					document.getElementById("divAtendTerapeuta").hidden = false;
+				}
+			}
+			function carregaBody(){
+				trocaFiltroData();
+				trocaFilpessoa();
+				formataData();
+				if (document.getElementById("carregaFiltro").value == "true"){
+					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
+					if(document.getElementById("tipoData").value == "Ano/Mes"){
+						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
+						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
+					} else if (document.getElementById("tipoData").value == "Semana"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					} else if (document.getElementById("tipoData").value == "Dia"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					}
+
+					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
+					if (document.getElementById("atendTipoPessoa").value == "Geral"){
+
+					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
+						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value
+					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
+						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
+					}
+				}
+				document.getElementById("atualizaValores").value = "false";
+			}
+			function mostraDivCopia(id){
+				document.getElementById("atualId").value = id;
+				//document.getElementById("atendCategoria").value = document.getElementById("atendCategoria"+id).value;
+				document.getElementById("divCopiaAtend").style.display = "";
+				document.getElementById("divFormPesquisa").style.display = "none";
+			}
+			function ocultaDivCopia(){
+				document.getElementById("divCopiaAtend").style.display = "none";
+				document.getElementById("divFormPesquisa").style.display = "";
+			}
+			function addCopia(){
+				document.getElementById("divCopiaAtend").style.display = "none";
+				document.getElementById("divFormPesquisa").style.display = "";
+				document.getElementById("btnEnviarCopia").style.display = "";
+
+				if(!(document.getElementById("qtd").value == "0" || document.getElementById("qtd").value == '' || document.getElementById("dataCopia").value == '')){
+					let dat = new Date(document.getElementById('dataCopia').value+" "+document.getElementById("atenddatahour"+document.getElementById("atualId").value).value+":00.000Z");
+					console.log("dat:"+dat);
+					let mes = (dat.getUTCMonth()+1).toString();
+					console.log("mes:"+mes);
+					let dia = (dat.getUTCDate()).toString();
+					console.log("dia:"+dia);
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' '+document.getElementById("atenddatahour"+document.getElementById("atualId").value).value+':00.000Z').toString();
+					console.log("fulldate:"+fulldate);
+					if(document.getElementById("temCopia").value == "false"){
+						document.getElementById("idsCopia").value = document.getElementById("atualId").value;
+						document.getElementById("qtdCopia").value = document.getElementById("qtd").value;
+						//document.getElementById("categoriaCopia").value = document.getElementById("atendCategoria").value;
+						document.getElementById("dtCopia").value = fulldate;
+						document.getElementById("temCopia").value = "true";
+					} else {
+						document.getElementById("idsCopia").value = document.getElementById("idsCopia").value+","+document.getElementById("atualId").value;
+						document.getElementById("qtdCopia").value = document.getElementById("qtdCopia").value+","+document.getElementById("qtd").value;
+						document.getElementById("dtCopia").value = document.getElementById("dtCopia").value+","+fulldate;
+						//document.getElementById("categoriaCopia").value = document.getElementById("categoriaCopia").value+","+document.getElementById("atendCategoria").value;
+					}
+				}
+			}
+			function enviarCopia(){
+				let form = document.getElementById("divFormPesquisa");
+				form.action = "/menu/atendimento/copiaAtends";
+				form.submit();
+			}
+			function confirmeDeletar(id){
+				let confirmado = confirm("Quer mesmo deletar este atendimento?");
+				if(confirmado == true){
+					window.location.href=("/menu/atendimento/del/"+id);
+				}
+			}
+			function deletaTudo(){
+				let tem = false;
+				let chekId = document.getElementsByName("chekId");
+				let idsSelecionados = "";
+				chekId.forEach((id)=>{
+					if (id.checked == true){
+						tem = true;
+						if (idsSelecionados == ""){
+							idsSelecionados = id.id;
+						} else {
+							idsSelecionados = idsSelecionados + "," + id.id;
+						}
+					}
+				})
+
+				document.getElementById("idsDeletar").value = idsSelecionados;
+				if (tem){
+					let confirmado = confirm("Quer mesmo deletar todos os atendimentos selecionados?");
+					if(confirmado == true){
+						let confirmado = confirm("Tem certeza? Esta ação é irreversível!");
+						if(confirmado == true){
+							console.log("idsSelecionados: "+idsSelecionados);
+							document.getElementById("divFormPesquisa").action = "/menu/atendimento/deleteAll/";
+							document.getElementById("divFormPesquisa").submit();
+							//window.location.href=("/menu/atendimento/deleteMany/"+idsSelecionados);
+						}
+					}
+				}
+			}
+			function alternarBotao(){
+				let tem = false;
+				let chekId = document.getElementsByName("chekId");
+				chekId.forEach((id)=>{
+					if (id.checked == true){
+						tem = true;
+					}
+				})
+				if (tem){
+					document.getElementById("btnDeleteMany").style.display = "";
+				} else {
+					document.getElementById("btnDeleteMany").style.display = "none";
+				}
+			}
+			function callAtualizarValores(){
+				let confirmado = confirm("Quer mesmo atualizar todos os atendimentos encontrados com essa pesquisa?");
+				if(confirmado == true){
+					let confirmado = confirm("Tem certeza? Esta ação é irreversível!");
+					if(confirmado == true){
+						let form = document.getElementById("divFormPesquisa");
+						document.getElementById("atualizaValores").value = "true";
+						form.action = "/menu/atendimento/lisF/";
+						form.submit();
+					}
+				}
+			}
+		</script>
+	</head>
+	<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+						<div class="espace">
+						</div>
+						<div class="page-header">
+							<h1>
+								Lista de Atendimentos
+							</h1>
+						</div><!-- /.page-header  -->
+
+					{{#each error}}
+						<div class="alert alert-danger">{{texto}}{{error}}</div>
+					{{else}}
+					{{/each}}
+					<div class="hidden">
+						<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+						<input id="atendTerapeutaFil" value="{{atendTerapeuta.atendTerapeuta}}" />
+						<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
+						<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
+						<input id="mesAtendFil" value="{{mesAtend.mesAtend}}" />
+						<input id="anoAtendFil" value="{{anoAtend.anoAtend}}" />
+						<input id="tipoPessoaFil" value="{{tipoPessoa.tipoPessoa}}" />
+						<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
+						<input id="dataIniFil" value="{{dataIni.dataIni}}" />
+						<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+						<input id="idsChecked" value="" />
+					</div>
+					<div class="page-content"><!-- .page-content -->
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/atendimento/lisF" method="POST">
+							<div class="col-xs-12" class="row">
+								<div class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro:&nbsp;</label>
+											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+												<option value="Ano/Mes">Ano/Mês</option>
+												<option value="Semana">Semana</option>
+												<option value="Dia">Dia</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="hidden col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label> Filial:&nbsp;</label>
+											<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
+												<option value="Matriz">Matriz</option>
+												<option value="Filial 1">Filial 1</option>
+												<option value="Filial 2">Filial 2</option>
+												<option value="Filial 3">Filial 3</option>
+												<option value="Filial 4">Filial 4</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAnoAtend" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label for="id-date-picker-1">Ano:&nbsp;</label>
+											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
+												{{#each anos}}
+													<option value="{{ano_nome}}">{{ano_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divMesAtend" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label for="id-date-picker-1">Mês:&nbsp;</label>
+											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+												<option value="0">Janeiro</option>
+												<option value="1">Fevereiro</option>
+												<option value="2">Março</option>
+												<option value="3">Abril</option>
+												<option value="4">Maio</option>
+												<option value="5">Junho</option>
+												<option value="6">Julho</option>
+												<option value="7">Agosto</option>
+												<option value="8">Setembro</option>
+												<option value="9">Outubro</option>
+												<option value="10">Novembro</option>
+												<option value="11">Dezembro</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divDataFil" class="col-sm-2">
+									<div class="input-group">
+										<label>Data:&nbsp;</label>
+										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
+										<input class="hidden" id="dataFinal" name="dataFinal" />
+									</div>
+								</div>
+								<div id="divTipoFil" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Tipo Filtro:&nbsp;</label>
+											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
+												<option value="Geral">Geral</option>
+												<option value="Beneficiario">Beneficiário</option>
+												<option value="Terapeuta">Terapeuta</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAtendBeneficiario" class="col-sm-4">
+									<div class="row">
+										<div class="input-group">
+											<label>Beneficiário:&nbsp;</label>
+											<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha..." value="">
+												{{#each benes}}
+													<option value="{{_id}}">{{bene_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAtendTerapeuta" class="col-sm-4">
+									<div class="row">
+										<div class="input-group">
+											<label>Terapeuta:&nbsp;</label>
+											<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
+												{{#each terapeutas}}
+													<option value="{{_id}}">{{usuario_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Pesquisar
+									</button>
+									<button name="acaoAtualizarValores" id="acaoAtualizarValores" type="button" class="btn btn-xs btn-warning" style="margin-left: 25px;" onclick="javascript:callAtualizarValores();">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Atualizar Valores
+									</button>
+									<button id="btnEnviarCopia" name="acaoCopiar" id="acaoCopiar" class="btn btn-xs btn-info" style="margin-left: 25px;display: none;" onclick="javascript:enviarCopia();">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Realizar Cópias Marcadas
+									</button>
+									<button id="btnDeleteMany" name="acaoDeleteMany" id="acaoDeleteMany" class="btn btn-xs btn-info" style="margin-left: 25px;display: none;" onclick="javascript:deletaTudo();">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Deletar Atendimentos Selecionados
+									</button>
+								</div>
+								<hr>
+							</div>
+							<div class="hidden">
+								<input id="idsCopia" name="idsCopia" value="" />
+								<input id="dtCopia" name="dtCopia" value="" />
+								<input id="qtdCopia" name="qtdCopia" value="" />
+								<input id="categoriaCopia" name="categoriaCopia" value="" />
+								<input id="temCopia" name="temCopia" value="false" />
+								<input id="idsDeletar" name="idsDeletar" value="" />
+								<input id="atualizaValores" name="atualizaValores" value="false" />
+							</div>
+						</form>
+						<div id="divCopiaAtend" class="col-xs-12" class="row" style="display: none;">
+							<div id="divDataCopiaFil" class="col-xs-12 col-sm-2">
+								<div class="input-group">
+									<label>Data:&nbsp;</label>
+									<input style="height: 30px;" id="dataCopia" name="dataCopia" type="date" onchange="javascript:formataDataCopia();">
+								</div>
+							</div>
+							<!--
+							<label>Categoria das Cópias:&nbsp;</label>
+							<select id="atendCategoria" name="atendCategoria" class="chosen-select" data-placeholder="Escolha a opção...">
+								<option id="Apoio" value="Apoio">Apoio</option>
+								<option id="Extra" value="Extra">Extra</option>
+								<option id="Falta" value="Falta">Falta</option>
+								<option id="Falta Justificada" value="Falta Justificada">Falta Justificada</option>
+								<option id="Glosa" value="Glosa">Glosa</option>
+								<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
+								<option id="Pais" value="Pais">Pais</option>
+								<option id="Substituição" value="Substituição">Substituto</option>
+								<option id="Supervisão" value="Supervisão">Supervisão</option>
+							</select>
+							<button name="acaoAddCopia" id="acaoAddCopia" class="green btn btn-xs btn-info" style="margin-left: 25px;" onclick="javascript:addCopia();">
+								<i class="ace-icon fa fa-search-plus "></i>
+								Adicionar Cópia
+							</button>-->
+							<label>Quantidade Cópias:&nbsp;</label>
+							<input style="padding-left: 10px;" id="qtd" name="qtd" value="0" />
+							<button name="acaoAddCopia" id="acaoAddCopia" class="green btn btn-xs btn-info" style="margin-left: 25px;" onclick="javascript:addCopia();">
+								<i class="ace-icon fa fa-search-plus "></i>
+								Adicionar Cópia
+							</button>
+							<button name="acaoOcultaCopia" id="acaoOcultaCopia" class="red btn btn-xs btn-info" style="margin-left: 25px;" onclick="javascript:ocultaDivCopia('{{_id}}');">
+								<i class="ace-icon fa fa-window-close-o "></i>
+								Cancelar
+							</button>
+							<input id="atualId" name="atualId" class="hidden" />
+							<hr>
+						</div>
+						<div class="row"><!--.row -->
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="clearfix" >
+											<div class="pull-right tableTools-container">
+											</div>
+										</div>
+										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+										</div>
+										
+										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+											<thead style="font-size: 11px;">
+												<tr>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="5" style="width: 100px;" >Atendimento</th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="7" style="width: 100px;" ><span class="label label-sm label-success" style="font-size: 14px;" >Original</span></th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-danger" style="font-size: 14px;" >Substituto Fixo</span></th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-purple" style="font-size: 14px;" >Substituição</span></th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >&nbsp;</th>
+												</tr>
+												<tr role="row">
+													<th class="" class="center" tabindex="0">
+														<label class="pos-rel">
+															<input type="checkbox" id="marcar" name="marcar" class="ace" />
+															<span class="lbl"></span>
+														</label>
+													</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >Data</th>
+													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 50px;" >Hora</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Origem</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Categoria</th>
+													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evento</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
+													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
+													
+													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th class="sorting" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
+													<th class="sorting" tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
+
+													<th class="sorting" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+													<th class="sorting" tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="sorting" tabindex="16" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
+													<th class="sorting" tabindex="17" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
+
+													<th class="" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;">Ação</th>
+												</tr>
+											</thead>
+											<tbody style="font-size: 11px;">
+												{{#each atends}}
+													<tr role="row" class="odd">
+														<td class="center">
+															<label class="pos-rel" >
+																<input type="checkbox" class="ace" id="{{_id}}" name="chekId" onchange="javascript:alternarBotao()" />
+																<span class="lbl"></span>
+															</label>
+															<input hidden="true" style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{data}}" />
+															<input hidden="true" style="border: none; width: 35px;" readonly="true" id="atenddatahour{{_id}}" value="{{atend_atendhora}}" />
+														</td>
+														<td>
+															{{data}}
+														</td>	
+														<td>
+															{{atend_atendhora}}
+														</td>				
+														{{#each ../benes}}
+															{{#ifEqual this._id ../atend_beneid}}
+																<td>{{bene_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
+														{{#each ../convs}}<!-- Ok -->	
+															{{#ifEqual this._id ../atend_convid}}
+																<td>{{conv_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
+														
+														<td>
+														{{#ifEqual this.atend_org "ADM"}}
+															<span class="label label-sm label-warning">{{atend_org}}</span>
+														{{else}}
+															<span class="label label-sm label-success">{{atend_org}}</span>
+														{{/ifEqual}}
+														</td>
+														<td>
+															{{#ifEqual this.atend_fixo "true"}}
+																<span class="label label-sm label-danger">Substituto Fixo</span>
+																{{else}}
+																<span class="label label-sm label-success">Padrão</span>
+															{{/ifEqual}}
+														</td>
+
+														<td>
+														{{#ifEqual this.atend_categoria "Feriado"}}
+															<span class="label label-sm label-warning">Feriado</span>
+															{{else}}
+															{{#ifEqual this.atend_categoria "Extra"}}
+																<span class="label label-sm label-purple">Extra</span>
+																{{else}}
+																	{{#ifEqual this.atend_categoria "Substituto"}}
+																	<span class="label label-sm label-pink">Substituição</span>
+																	{{else}}
+																		{{#ifEqual this.atend_categoria "Substituição"}}
+																		<span class="label label-sm label-pink">Substituição</span>
+																		{{else}}
+																			{{#ifEqual this.atend_categoria "Falta"}}
+																			<span class="label label-sm label-yellow">Falta</span>
+																			{{else}}
+																				{{#ifEqual this.atend_categoria "Padrão"}}
+																				<span class="label label-sm label-success">Sem Evento</span>
+																				{{else}}
+																					{{#ifEqual this.atend_categoria "SubstitutoFixo"}}
+																					<span class="label label-sm label-success">Sem Evento</span>
+																					{{else}}
+																						{{#ifEqual this.atend_categoria "Falta Absoluta"}}
+																						<span class="label label-sm label-warning">Falta Absoluta</span>
+																						{{else}}
+																							{{#ifEqual this.atend_categoria "Falta Justificada"}}
+																							<span class="label label-sm label-warning">Falta Justificada</span>
+																							{{else}}
+																							{{/ifEqual}}
+																						{{/ifEqual}}
+																					{{/ifEqual}}
+																				{{/ifEqual}}
+																			{{/ifEqual}}
+																		{{/ifEqual}}
+																	{{/ifEqual}}
+															{{/ifEqual}}
+														{{/ifEqual}}
+														</td>
+														
+
+														{{#each ../terapias}}<!-- Ok -->
+															{{#ifEqual this._id ../atend_terapiaid}}
+																<td>{{terapia_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
+														{{#each ../terapeutas}}<!-- Ok -->
+															{{#ifEqual this._id ../atend_terapeutaid}}
+																<td>{{usuario_nome}}</td>
+															{{/ifEqual}}
+														{{/each}}
+														
+
+														{{#ifEqual this.atend_valorcre "0,00"}}
+															<td><span class="label label-sm label-warning arrowed">{{atend_valorcre}}</span></td>
+															{{else}}
+															<td>{{atend_valorcre}}</td>
+														{{/ifEqual}}
+														{{#ifEqual this.atend_valordeb "0,00"}}
+															<td ><span class="label label-sm label-warning arrowed">{{atend_valordeb}}</span></td>
+															{{else}}
+															<td>{{atend_valordeb}}</td>
+														{{/ifEqual}}
+
+														<!-- .Substitutos Fixos Dados -->
+														{{#if atend_fixoterapiaid}}
+															{{#compareThis atend_fixoterapiaid "766f69643132333435366964"}}
+																<td>-</td>
+															{{else}}
+																{{#each ../terapias}}<!-- Ok -->
+																	{{#ifEqual this._id ../atend_fixoterapiaid}}
+																		<td>{{terapia_nome}}</td>
+																	{{/ifEqual}}
+																{{/each}}
+															{{/compareThis}}
+														{{else}}
+															<td>-</td>
+														{{/if}}
+														{{#if atend_fixoterapeutaid}}
+															{{#compareThis atend_fixoterapiaid "766f69643132333435366964"}}
+																<td>-</td>
+															{{else}}
+																{{#each ../terapeutas}}<!-- Ok -->
+																	{{#ifEqual this._id ../atend_fixoterapeutaid}}
+																		<td>{{usuario_nome}}</td>
+																	{{/ifEqual}}
+																{{/each}}
+															{{/compareThis}}
+														{{else}}
+															<td>-</td>
+														{{/if}}
+
+														{{#if atend_fixovalorcre}}
+															{{#ifEqual this.atend_fixovalorcre "0,00"}}
+																<td><span class="label label-sm label-warning arrowed">{{atend_fixovalorcre}}</span></td>
+																{{else}}
+																<td>{{atend_fixovalorcre}}</td>
+															{{/ifEqual}}
+														{{else}}
+															<td>-</td>
+														{{/if}}
+														
+														{{#if atend_fixovalordeb}}
+															{{#ifEqual this.atend_fixovalordeb "0,00"}}
+																<td ><span class="label label-sm label-warning arrowed">{{atend_fixovalordeb}}</span></td>
+																{{else}}
+																<td>-</td>
+															{{/ifEqual}}
+														{{else}}
+															<td>-</td>
+														{{/if}}
+														<!-- /.Substitutos Fixos Dados -->
+														
+														<!-- .Substituições -->
+														{{#if atend_mergeterapiaid}}
+															{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}
+																<td>-</td>
+															{{else}}
+																{{#each ../terapias}}<!-- Ok -->
+																	{{#ifEqual this._id ../atend_mergeterapiaid}}
+																		<td>{{terapia_nome}}</td>
+																	{{/ifEqual}}
+																{{/each}}
+															{{/compareThis}}
+														{{else}}
+															<td>-</td>
+														{{/if}}
+														{{#if atend_mergeterapeutaid}}
+															{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}
+																<td>-</td>
+															{{else}}
+																{{#each ../terapeutas}}<!-- Ok -->
+																	{{#ifEqual this._id ../atend_mergeterapeutaid}}
+																		<td>{{usuario_nome}}</td>
+																	{{/ifEqual}}
+																{{/each}}
+															{{/compareThis}}
+														{{else}}
+															<td>-</td>
+														{{/if}}
+
+														{{#if atend_mergevalorcre}}
+															{{#ifEqual this.atend_mergevalorcre "0,00"}}
+																<td><span class="label label-sm label-warning arrowed">{{atend_mergevalorcre}}</span></td>
+																{{else}}
+																<td>{{atend_mergevalorcre}}</td>
+															{{/ifEqual}}
+														{{else}}
+															<td>-</td>
+														{{/if}}
+														
+														{{#if atend_mergevalordeb}}
+															{{#ifEqual this.atend_mergevalordeb "0,00"}}
+																<td ><span class="label label-sm label-warning arrowed">{{atend_mergevalordeb}}</span></td>
+																{{else}}
+																<td>-</td>
+															{{/ifEqual}}
+														{{else}}
+															<td>-</td>
+														{{/if}}
+														<!-- /.Substituições -->
+														<td>
+															<div class="action-buttons">
+																<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/atendimento/atendadm/edi/{{_id}}">
+																	<i class="ace-icon fa fa-pencil bigger-130"></i>
+																</a>
+																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																</a>
+																<a class="blue" name="acaoCopiar" id="acaoCopiar" onclick="javascript:mostraDivCopia('{{_id}}');">
+																	<i class="ace-icon fa fa-clone bigger-130"></i>
+																</a>
+																<a class="orange custom-tooltip" name="acaoVerquemalterou" id="acaoVerquemalterou">
+																	<i class="ace-icon fa fa-eye bigger-130"></i>
+																	<span class="tooltip-text">
+																		{{#each ../usuarios}}
+																			{{#ifEqual this._id ../atend_usuidedi}}
+																				{{usuario_nome}}
+																			{{/ifEqual}}
+																		{{/each}}
+																	</span>
+																</a>
+															</div>
+															<div class="hidden-md hidden-lg">
+																<input class="hidden" id="atendCategoria{{_id}}" value="{{atend_categoria}}" />
+															</div>
+														</td>
+													</tr>
+												{{/each}}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content-inner -->
+			</div><!-- /.main-content -->
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container ace-save-state -->
+
+		<!-- basic scripts -->
+
+		<!-- page specific plugin scripts -->
+		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+		
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$("#dynamic-table").DataTable({
+			"language": { "url": "/js/lang/datatable-pt-br.json" },
+			"aaSorting": [],
+			"aoColumns": [{ "bSortable": false }, null, null, null,null, null, null, null, null, null, null, null, null, null,null,null, null, null,null,null,{ "bSortable": false }],
+			"responsive": true,
+			"lengthMenu": [ 100, 200, 500, 1000, 2000 ],
+			"lengthChange": true,
+			"autoWidth": true,
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			
+			select: {
+						style: 'multi'
+					}
+			});
+		});
+		
+		</script>
+	</body>
+</html>
