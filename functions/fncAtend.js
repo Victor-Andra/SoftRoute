@@ -434,6 +434,7 @@ module.exports = {
     listaAtend(req, res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
         Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
@@ -473,7 +474,7 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    filtraAtend(req, res){
+    filtraAtendOLD(req, res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
         Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
@@ -500,6 +501,7 @@ module.exports = {
         let carregaFiltro = "true";
         let atendTerapeuta = req.body.atendTerapeuta;
         let atendBeneficiario = req.body.atendBeneficiario;
+        let atendConv = req.body.atendConv; // ← adicione logo após os outros 'let'
         let dataFinal = req.body.dataFinal;
         let mesAtend = req.body.mesAtend;
         let anoAtend = req.body.anoAtend;
@@ -628,6 +630,10 @@ module.exports = {
                 busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_terapeutaid: req.body.atendTerapeuta };
                 console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
                 break;
+            case "Convenio": // ← novo caso — note o acento no valor, pois vem da view como "Convenio" Wagner cintra 25/11/2025
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, atend_convid: req.body.atendConv };
+                console.log("req.body.atendConv:"+req.body.atendConv);
+                break;
             default:
                 busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
                 break;
@@ -685,13 +691,266 @@ module.exports = {
                                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                                 //console.log("Listagem Realizada de Terapia")
                                     Ano.find().then((ano)=>{
-                                res.render("atendimento/atendLis", {atends: atend, benes: bene, anos: ano, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro, tipoData, tipoPessoa, dataIni, dataFim, dataFinal, mesAtend, anoAtend, atendTerapeuta, atendBeneficiario})
+                                res.render("atendimento/atendLis", {
+                                    atends: atend, benes: bene, anos: ano, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends,
+                                    carregaFiltro, tipoData, tipoPessoa, dataIni, dataFim, dataFinal, mesAtend, anoAtend,
+                                    atendTerapeuta, atendBeneficiario, atendConv  // ← adicionado
+                                });
         })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
         })
     },
+     filtraAtend(req, res){
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
+        if (req.body.atualizaValores == "true"){
+            //console.log("START!")
+            fncAgenda.atualizaValores(req,res);
+        }
+        let fulldate;
+        let tipoPessoa = req.body.atendTipoPessoa;
+        let tipoData = req.body.tipoData;
+        let dataIni;
+        let dataFim;
+        let seg;
+        let sex;
+        let busca;
+        let data;
+        let ano;
+        let mes;
+        let dia;
+        let carregaFiltro = "true";
+        let atendTerapeuta = req.body.atendTerapeuta;
+        let atendBeneficiario = req.body.atendBeneficiario;
+        let atendConv = req.body.atendConv; // ← adicione logo após os outros 'let'
+        let dataFinal = req.body.dataFinal;
+        let mesAtend = req.body.mesAtend;
+        let anoAtend = req.body.anoAtend;
+
+        switch (tipoData){
+            case "Ano/Mes":
+                dataIni = new Date();
+                let mesIni = parseInt(req.body.mesAtend);//UTCMonth = 0-11
+                let anoIni = parseInt(req.body.anoAtend);
+                
+                dataIni.setDate(01);
+                dataIni.setFullYear(anoIni);
+                dataIni.setUTCMonth(mesIni);
+                dataIni.setSeconds(00);
+                dataIni.setMinutes(00);
+                dataIni.setHours(00);
+                
+                dataFim = new Date();
+                dataFim.setFullYear(anoIni);
+                dataFim.setUTCMonth(mesIni+1);
+                dataFim.setDate(01);
+                dataFim.setDate(dataFim.getDate()-1);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
+                break;
+            case "Semana":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
+
+                seg = new Date();
+                seg.setFullYear(ano);
+                seg.setUTCMonth(mes);
+                seg.setUTCDate(dia);
+                seg.setHours(0);
+                seg.setMinutes(0);
+                seg.setSeconds(0);
+
+                sex = new Date();
+                sex.setFullYear(ano);
+                sex.setUTCMonth(mes);
+                sex.setUTCDate(dia);
+                sex.setHours(23);
+                sex.setMinutes(59);
+                sex.setSeconds(59);
+
+                switch (seg.getUTCDay()){
+                    case 0://DOM
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                    case 1://SEG
+                        sex.setUTCDate(sex.getUTCDate() + 4);
+                        break;
+                    case 2://TER
+                        seg.setUTCDate(seg.getUTCDate() - 1);
+                        sex.setUTCDate(sex.getUTCDate() + 3);
+                        break;
+                    case 3://QUA
+                        seg.setUTCDate(seg.getUTCDate() - 2);
+                        sex.setUTCDate(sex.getUTCDate() + 2);
+                        break;
+                    case 4://QUI
+                        seg.setUTCDate(seg.getUTCDate() - 3);
+                        sex.setUTCDate(sex.getUTCDate() + 1);
+                        break;
+                    case 5://SEX
+                        seg.setUTCDate(seg.getUTCDate() - 4);
+                        break;
+                    case 6://SAB
+                        seg.setUTCDate(seg.getUTCDate() - 5);
+                        sex.setUTCDate(sex.getUTCDate() - 1);
+                        break;
+                    default:
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                }
+                dataIni = seg.toISOString();
+                dataFim = sex.toISOString();
+
+                //console.log("req.body.dataFinal:"+req.body.dataFinal)
+                //console.log("seg:"+seg);
+                //console.log("sex:"+sex);
+                
+                break;
+            case "Dia":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = data.substring(5,7);
+                dia = data.substring(8,10);
+
+                dataIni = new Date();
+                dataIni.setFullYear(ano);
+                dataIni.setUTCMonth(mes);
+                dataIni.setUTCDate(dia);
+                dataIni.setHours(0);
+                dataIni.setMinutes(0);
+                dataIni.setSeconds(0);
+
+                dataFim = new Date();
+                dataFim.setFullYear(ano);
+                dataFim.setUTCMonth(mes);
+                dataFim.setUTCDate(dia);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
+                break;
+            default:
+                
+                break;
+        }
+
+        switch (tipoPessoa){
+            case "Geral":
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                break;
+            case "Beneficiario":
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_beneid: req.body.atendBeneficiario };
+                break;
+            case "Terapeuta":
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_terapeutaid: req.body.atendTerapeuta };
+                console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
+                break;
+            case "Convenio": // ← novo caso — note o acento no valor, pois vem da view como "Convenio" Wagner cintra 25/11/2025
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, atend_convid: req.body.atendConv };
+                console.log("req.body.atendConv:"+req.body.atendConv);
+                break;
+            default:
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                break;
+        }
+
+        Atend.find(busca).then((atend) =>{
+            atend.forEach((b)=>{
+                let data;
+                if(b.atend_atenddata){
+                    data = new Date(b.atend_atenddata);
+                } else {
+                    data = new Date();
+                }
+                
+                let mes = (data.getMonth()+1).toString();
+                let dia = (data.getUTCDate()).toString();
+
+                if (mes.length == 1){
+                    mes = "0"+mes;
+                }
+                if (dia.length == 1){
+                    dia = "0"+dia;
+                }
+
+                let hora = (data.getHours()).toString();
+                let minuto = (data.getMinutes()).toString();
+
+                if (hora.length == 1){
+                    hora = "0"+hora;
+                }
+                if (minuto.length == 1){
+                    minuto = "0"+minuto;
+                }
+
+                fulldate=(data.getFullYear()+"-"+mes+"-"+dia).toString();
+                b.data=fulldate;
+                b.hora = hora + ":" + minuto;
+                if(b.atend_org == "Administrativo"){
+                    b.atend_org = "ADM";
+                }
+            })
+            var tamanho = atend.length;
+            var qtdAtends = {qtd: tamanho}
+            //console.log("Listagem Realizada de Atendimentos!")
+            Bene.find().then((bene)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
+                //console.log("Listagem Realizada de Beneficiários!")
+                Conv.find().then((conv)=>{
+                    conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    //console.log("Listagem Realizada de Convenios")
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                        //console.log("Listagem Realizada de Usuário")
+                            Terapia.find().then((terapia)=>{
+                                terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                                //console.log("Listagem Realizada de Terapia")
+                                  // Após Ano.find(), faça uma busca adicional por TODOS os usuários (só para tooltip)
+                                    Ano.find().then((ano) => {
+                                        // Busca todos os usuários (independente de função)
+                                        Usuario.find().then((usuarios) => {
+                                            res.render("atendimento/atendLis", {
+                                                atends: atend,
+                                                benes: bene,
+                                                anos: ano,
+                                                convs: conv,
+                                                terapeutas: terapeuta,   // ← mantém a lista de terapeutas como antes
+                                                terapias: terapia,
+                                                qtdAtends,
+                                                usuarios: usuarios,      // ✅ novo: todos os usuários
+                                                carregaFiltro,
+                                                tipoData,
+                                                tipoPessoa,
+                                                dataIni,
+                                                dataFim,
+                                                dataFinal,
+                                                mesAtend,
+                                                anoAtend,
+                                                atendTerapeuta,
+                                                atendBeneficiario,
+                                                atendConv
+                                            });
+                                        });
+                                    })})})})})}).catch((err) => {
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.redirect('admin/erro')
+        })
+    },
+
     carregaAtendIndBene(req, res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
@@ -1019,150 +1278,271 @@ module.exports = {
             console.log(err)
         })
     },
-tabdimAtendimentoValFiltro(req, res) {
-    const db = req.cookies['preferredDb'];
-    const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
-    const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
-    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
 
-    // === Validação de datas ===
-    const rawIni = req.body.dataIni;
-    const rawFim = req.body.dataFim;
-    const rawConv = req.body.relConvid;
+    tabdimAtendimentoValFiltro(req, res) {
+        const db = req.cookies['preferredDb'];
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
 
-    const hojeStr = new Date().toISOString().replace('T', ' ').substring(0, 23) + 'Z';
-    const safeDataIni = (typeof rawIni === 'string' && rawIni.trim() !== '') ? rawIni : hojeStr;
-    const safeDataFim = (typeof rawFim === 'string' && rawFim.trim() !== '') ? rawFim : hojeStr;
+        const rawIni = req.body.dataIni;
+        const rawFim = req.body.dataFim;
+        const rawConv = req.body.relConvid;
 
-    let seg, sex;
-    try {
-        seg = fncGeral.getDateFromString(safeDataIni, "ini");
-        sex = fncGeral.getDateFromString(safeDataFim, "fim");
-        if (!seg || isNaN(seg.getTime())) throw new Error('Data inicial inválida');
-        if (!sex || isNaN(sex.getTime())) throw new Error('Data final inválida');
-    } catch (err) {
-        console.error('[ERRO data]', { rawIni, rawFim, error: err.message });
-        return res.status(400).send(`
-            <script>
-                alert("Erro nas datas. Verifique o período selecionado.");
-                history.back();
-            </script>
-        `);
-    }
+        const hojeStr = new Date().toISOString().replace('T', ' ').substring(0, 23) + 'Z';
+        const safeDataIni = (typeof rawIni === 'string' && rawIni.trim() !== '') ? rawIni : hojeStr;
+        const safeDataFim = (typeof rawFim === 'string' && rawFim.trim() !== '') ? rawFim : hojeStr;
 
-    const filtro = {
-        dataIni: safeDataIni,
-        dataFim: safeDataFim,
-        convId: rawConv || '766f69643132333435366964'
-    };
+        let seg, sex;
+        try {
+            seg = fncGeral.getDateFromString(safeDataIni, "ini");
+            sex = fncGeral.getDateFromString(safeDataFim, "fim");
+            if (!seg || isNaN(seg.getTime())) throw new Error('Data inicial inválida');
+            if (!sex || isNaN(sex.getTime())) throw new Error('Data final inválida');
+        } catch (err) {
+            console.error('[ERRO data]', { rawIni, rawFim, error: err.message });
+            return res.status(400).send(`
+                <script>
+                    alert("Erro nas datas. Verifique o período selecionado.");
+                    history.back();
+                </script>
+            `);
+        }
 
-    const periodoDe = fncGeral.getDataInvert(safeDataIni.split(' ')[0]);
-    const periodoAte = fncGeral.getDataInvert(safeDataFim.split(' ')[0]);
+        const filtro = {
+            dataIni: safeDataIni,
+            dataFim: safeDataFim,
+            convId: rawConv || '766f69643132333435366964'
+        };
 
-    // === Buscas ===
-    Promise.all([
-        Atend.find({ atend_convid: rawConv, atend_atenddata: { $gte: seg, $lte: sex } }).exec(),
-        Conv.find().exec(),
-        Conv.findById(rawConv).exec(),
-        Terapia.find().exec(),
-        Ano.find().exec()
-    ])
-    .then(([atRaw, convs, convSelecionado, terapias, anos]) => {
-        // ✅ Filtro: remove "Feriado"
-        const atFiltrado = atRaw.filter(a => ("" + a.atend_categoria) !== "Feriado");
-        const conv_nome = convSelecionado ? convSelecionado.conv_nome : "(nenhum)";
+        const periodoDe = fncGeral.getDataInvert(safeDataIni.split(' ')[0]);
+        const periodoAte = fncGeral.getDataInvert(safeDataFim.split(' ')[0]);
 
-        terapias.sort((a, b) => a.terapia_nome.localeCompare(b.terapia_nome));
+        Promise.all([
+            Atend.find({
+                atend_convid: rawConv,
+                atend_atenddata: { $gte: seg, $lte: sex }  // ✅ CORRIGIDO: nome do campo + ":"
+            }).exec(),
+            Conv.find().exec(),
+            Conv.findById(rawConv).exec(),
+            Terapia.find().exec(),
+            Ano.find().exec(),
+            Usuario.find().exec(),
+            Bene.find().exec()
+        ])
+        .then(([atRaw, convs, convSelecionado, terapias, anos, usuarios, benes]) => {
+            const lookupTerapia = {};
+            terapias.forEach(t => { lookupTerapia[t._id] = t.terapia_nome; });
 
-        // === Agrupamento com detalhes ===
-        const rel = [];
-        let sessaoTot = 0;
-        let valTotCentavos = 0;
+            const lookupUsuario = {};
+            usuarios.forEach(u => { lookupUsuario[u._id] = u.usuario_nome; });
 
-        terapias.forEach(t => {
-            const detalhes = [];
-            let qtd = 0;
-            let valorRef = 0;
+            const lookupBene = {};
+            benes.forEach(b => { lookupBene[b._id] = b.bene_nome; });
 
-            atFiltrado.forEach(at => {
-                // Determina terapia e valor
-                let terapiaId, valor;
-                switch (at.atend_categoria) {
-                    case "Falta Justificada":
-                    case "Falta Absoluta":
-                    case "Substituição":
-                    case "SubstitutoFixo":
-                        terapiaId = at.atend_mergeterapiaid;
-                        valor = at.atend_mergevalorcre;
-                        break;
-                    default:
-                        terapiaId = at.atend_terapiaid;
-                        valor = at.atend_valorcre;
-                        break;
-                }
+            const lookupConv = {};
+            convs.forEach(c => { lookupConv[c._id] = c.conv_nome; });
 
-                if (
-                    ("" + terapiaId) === ("" + t._id) &&
-                    at.atend_categoria !== "Falta Absoluta"  // ✅ sua regra
-                ) {
+            const toCentavos = (str) => {
+                if (!str || typeof str !== 'string') return 0;
+                const clean = str.replace(/\D/g, '');
+                return clean.length >= 2
+                    ? parseInt(clean.slice(0, -2) + clean.slice(-2), 10)
+                    : parseInt(clean.padStart(2, '0'), 10);
+            };
+
+            // ✅ Filtra Feriado e Falta Absoluta aqui (garante que não entrem)
+            const atFiltrado = atRaw.filter(a => 
+                a.atend_categoria !== "Feriado" && 
+                a.atend_categoria !== "Falta Absoluta"
+            );
+
+            const conv_nome = lookupConv[rawConv] || "(nenhum)";
+            terapias.sort((a, b) => a.terapia_nome.localeCompare(b.terapia_nome));
+
+            const rel = [];
+            let sessaoTot = 0;
+            let valTotCentavos = 0;
+
+            // ✅ Ordena globalmente ANTES do agrupamento
+            const atOrdenado = atFiltrado
+                .filter(a => a.atend_atenddata)
+                .sort((a, b) => {
+                    const d1 = new Date(a.atend_atenddata).getTime();
+                    const d2 = new Date(b.atend_atenddata).getTime();
+                    if (d1 !== d2) return d1 - d2;
+                    return (a.atend_atendhora || '').localeCompare(b.atend_atendhora || '');
+                });
+
+            terapias.forEach(t => {
+                const detalhes = [];
+                let qtd = 0;
+                let valorCentavos = 0;
+
+                atOrdenado.forEach(at => {
+                    let terapiaId;
+                    switch (at.atend_categoria) {
+                        case "Falta Justificada":
+                        case "Substituição":
+                        case "SubstitutoFixo":
+                            terapiaId = at.atend_mergeterapiaid;
+                            break;
+                        default:
+                            terapiaId = at.atend_terapiaid;
+                            break;
+                    }
+
+                    const idIgual = (a, b) => ("" + (a || '')).trim() === ("" + (b || '')).trim();
+                    if (!idIgual(terapiaId, t._id)) return;
+
+                    const vCent = toCentavos(at.atend_valorcre || "0");
+                    if (qtd === 0 && vCent > 0) valorCentavos = vCent;
                     qtd++;
-                    valorRef = valor || 0;
 
-                    // ✅ Flags para uso com {{#if}} nativo (sem helper `eq`)
+                    let dataFmt = '—';
+                    if (at.atend_atenddata) {
+                        try {
+                            const d = new Date(at.atend_atenddata);
+                            if (!isNaN(d.getTime())) {
+                                dataFmt = fncGeral.getDataInvert(d.toISOString().split('T')[0]);
+                            }
+                        } catch (e) {
+                            dataFmt = '—';
+                        }
+                    }
+
+                   const origemLabel = (() => {
+                        const valor = (at.atend_org || '').trim();
+                        if (valor === "Administrativo") {
+                            return '<span class="label label-sm label-warning">ADM</span>';
+                        } else if (valor === "Padrão") {
+                            return '<span class="label label-sm label-info">PAD</span>';
+                        } else {
+                            return '<span class="label label-sm label-default">—</span>';
+                        }
+                    })();
+
+                    const categoriaLabel = (() => {
+                        const c = at.atend_categoria;
+                        if (c === "Falta Justificada") return '<span class="label label-sm label-warning">Falta Justificada</span>';
+                        if (c === "Substituição" || c === "Substituto") return '<span class="label label-sm label-pink">Substituição</span>';
+                        if (c === "Extra") return '<span class="label label-sm label-purple">Extra</span>';
+                        if (c === "Falta") return '<span class="label label-sm label-yellow">Falta</span>';
+                        if (c === "Padrão" || c === "SubstitutoFixo") return '<span class="label label-sm label-success">Sem Evento</span>';
+                        return c || '—';
+                    })();
+
+                    const eventoLabel = at.atend_fixo === "true"
+                        ? '<span class="label label-sm label-danger">Substituto Fixo</span>'
+                        : '<span class="label label-sm label-success">Padrão</span>';
+
+                    const formatValor = (v) => v === "0,00"
+                        ? `<span class="label label-sm label-warning">${v}</span>`
+                        : v;
+
+                    const beneNome = lookupBene[at.atend_beneid] || '—';
+                    const convNome = lookupConv[at.atend_convid] || '—';
+                    const terapiaOrig = lookupTerapia[at.atend_terapiaid] || '—';
+                    const terapeutaOrig = lookupUsuario[at.atend_terapeutaid] || '—';
+
+                    const terapiaFixa = at.atend_fixoterapiaid && at.atend_fixoterapiaid !== '766f69643132333435366964'
+                        ? lookupTerapia[at.atend_fixoterapiaid] || '—'
+                        : '-';
+
+                    const terapeutaFixo = at.atend_fixoterapeutaid && at.atend_fixoterapeutaid !== '766f69643132333435366964'
+                        ? lookupUsuario[at.atend_fixoterapeutaid] || '—'
+                        : '-';
+
+                    const terapiaSubst = at.atend_mergeterapiaid && at.atend_mergeterapiaid !== '766f69643132333435366964'
+                        ? lookupTerapia[at.atend_mergeterapiaid] || '—'
+                        : '-';
+
+                    const terapeutaSubst = at.atend_mergeterapeutaid && at.atend_mergeterapeutaid !== '766f69643132333435366964'
+                        ? lookupUsuario[at.atend_mergeterapeutaid] || '—'
+                        : '-';
+
                     detalhes.push({
+                        ordem: (detalhes.length + 1).toString(),
                         _id: at._id,
-                        data: fncGeral.getDataInvert(new Date(at.atend_atenddata).toISOString().split('T')[0]),
-                        categoria: at.atend_categoria,
-                        valorFormatado: fncGeral.mascaraValores(String(valor)),
-                        bene_nome: at.atend_benecpfnome || '—',
-                        // 👇 flags booleanas (para {{#if}})
-                        ehFaltaAbsoluta: at.atend_categoria === "Falta Absoluta",
-                        ehFaltaJustificada: at.atend_categoria === "Falta Justificada",
-                        valorDivergente: valor !== valorRef
+                        data: dataFmt,
+                        hora: at.atend_atendhora || '—',
+                        beneNome,
+                        convNome,
+                        origemLabel,
+                        categoriaLabel,
+                        eventoLabel,
+                        terapiaOrig,
+                        terapeutaOrig,
+                        credOrig: formatValor(at.atend_valorcre || "0,00"),
+                        debOrig: formatValor(at.atend_valordeb || "0,00"),
+                        terapiaFixa,
+                        terapeutaFixo,
+                        credFixo: at.atend_fixovalorcre ? formatValor(at.atend_fixovalorcre) : '-',
+                        debFixo: at.atend_fixovalordeb ? formatValor(at.atend_fixovalordeb) : '-',
+                        terapiaSubst,
+                        terapeutaSubst,
+                        credSubst: at.atend_mergevalorcre ? formatValor(at.atend_mergevalorcre) : '-',
+                        debSubst: at.atend_mergevalordeb ? formatValor(at.atend_mergevalordeb) : '-',
+                        permiteEdicao: true // já filtramos Falta Absoluta acima
                     });
-                }
-            });
+                });
 
-            if (qtd > 0) {
-                const totalCentavos = Math.round((parseFloat(valorRef) || 0) * 100) * qtd;
-                const unitario = fncGeral.mascaraValores(String(valorRef));
-                const total = fncGeral.mascaraValores(String(totalCentavos / 100));
+                if (qtd === 0) return;
+
+                if (valorCentavos === 0 && detalhes.length > 0) {
+                    const soma = detalhes.reduce((s, d) => {
+                        const clean = d.credOrig.replace(/<.*?>/g, '').replace(/\D/g, '');
+                        return s + (clean ? parseInt(clean, 10) : 0);
+                    }, 0);
+                    valorCentavos = Math.round(soma / detalhes.length);
+                }
+
+                const totalCentavos = valorCentavos * qtd;
 
                 rel.push({
                     terapiaId: t._id,
                     terapiaNome: t.terapia_nome,
                     sessoes: qtd,
-                    valorUnitario: unitario,
-                    valorTotal: total,
-                    atendimentos: detalhes,
-                    // 👇 flags para linha principal
-                    temFaltaAbsoluta: detalhes.some(d => d.ehFaltaAbsoluta),
-                    temFaltaJustificada: detalhes.some(d => d.ehFaltaJustificada),
-                    temValorDivergente: detalhes.some(d => d.valorDivergente)
+                    valorUnitario: fncGeral.formatarReal(valorCentavos),
+                    valorTotal: fncGeral.formatarReal(totalCentavos),
+                    atendimentos: detalhes
                 });
 
                 sessaoTot += qtd;
                 valTotCentavos += totalCentavos;
-            }
-        });
+            });
 
-        const total = {
-            sessoes: sessaoTot,
-            valor: fncGeral.mascaraValores(String(valTotCentavos / 100)),
-            total: fncGeral.mascaraValores(String(valTotCentavos / 100))
-        };
+            const total = {
+                sessoes: sessaoTot,
+                valor: fncGeral.formatarReal(valTotCentavos),
+                total: fncGeral.formatarReal(valTotCentavos)
+            };
 
-        res.render("atendimento/tabdimatendval", {
-            terapias, anos, convs, rels: rel, total,
-            periodoDe, periodoAte, conv_nome, filtro
+            res.render("atendimento/tabdimatendval", {
+                terapias,
+                anos,
+                convs,
+                rels: rel,
+                total,
+                periodoDe,
+                periodoAte,
+                conv_nome,
+                filtro
+            });
+        })
+        .catch(err => {
+            console.error('[ERRO tabdimAtendimentoValFiltro]', err);
+            res.status(500).send(`
+                <script>
+                    alert("Erro ao carregar relatório. Tente novamente.");
+                    history.back();
+                </script>
+            `);
         });
-    })
-    .catch(err => {
-        console.error('[ERRO tabdim]', err);
-        res.status(500).send(`<script>alert("Erro interno"); history.back();</script>`);
-    });
-},
+    },
     relAtendimentoBene(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)

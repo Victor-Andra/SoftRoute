@@ -347,5 +347,28 @@ module.exports = {Filtros, Resposta,
             const nomeB = b[campo].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
             return nomeA.localeCompare(nomeB);
         };
+    },
+    formatarReal(valorEmCentavos) {
+        // Aceita número ou string; converte para inteiro em centavos
+        if (typeof valorEmCentavos === 'string') {
+            // Remove tudo exceto dígitos e converte para número inteiro de centavos
+            const limpo = valorEmCentavos.replace(/\D/g, '');
+            valorEmCentavos = limpo ? parseInt(limpo, 10) : 0;
+        } else if (typeof valorEmCentavos !== 'number' || isNaN(valorEmCentavos)) {
+            valorEmCentavos = 0;
+        }
+
+        const sinal = valorEmCentavos < 0 ? '-' : '';
+        const abs = Math.abs(valorEmCentavos);
+        const inteiros = Math.floor(abs / 100);
+        const centavos = (abs % 100).toString().padStart(2, '0');
+
+        // Formata parte inteira com separador de milhar (.)
+        let inteirosFmt = inteiros.toString();
+        if (inteirosFmt.length > 3) {
+            inteirosFmt = inteirosFmt.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        }
+
+        return `${sinal}${inteirosFmt},${centavos}`;
     }
 }

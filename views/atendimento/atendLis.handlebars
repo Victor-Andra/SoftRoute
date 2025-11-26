@@ -4,31 +4,51 @@
 		<meta charset="utf-8">
 		<title>Lista de Atendimentos</title>
 		<style>
-			/* Tooltip personalizado */
-			.custom-tooltip .tooltip-text {
-				visibility: hidden; /* Inicialmente oculto */
-				width: auto; /* Ajusta automaticamente ao conteúdo */
-				background-color: rgb(243, 223, 223); /* Fundo escuro para contraste */
-				color: red; /* Cor do texto vermelha */
-				font-size: 6px; /* Tamanho da fonte pequena */
-				text-align: center;
-				padding: 2px 5px; /* Espaçamento interno */
-				border-radius: 4px; /* Borda arredondada */
+        	/*Tooltip personalizado */
+            .custom-tooltip {
+                position: relative;
+                display: inline-block;
+                cursor: pointer;
+            }
 
-				/* Posicionamento do tooltip */
-				position: absolute;
-				top: -20px; /* Acima do ícone */
-				left: 50%; /* Centralizado horizontalmente */
-				transform: translateX(-50%); /* Ajuste fino para centralizar */
-				z-index: 1; /* Garante que o tooltip fique acima de outros elementos */
-				white-space: nowrap; /* Evita que o texto quebre linha */
-			}
+            .tooltip-text {
+                visibility: hidden;
+                width: max-content;
+                background-color: #f3dfdf;
+                color: red;
+                font-size: 8px;
+                text-align: left;
+                border-radius: 4px;
+                padding: 8px 12px;
+                position: absolute;
+                z-index: 9999;
+                bottom: 125%; /* Acima do ícone */
+                left: 50%;
+                transform: translateX(-50%);
+                opacity: 0.9;
+                white-space: normal;
+                min-width: 150px;
+                max-width: 300px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: opacity 0.3s;
+            }
 
-			/* Mostra o tooltip quando o mouse passa sobre o link */
-			.custom-tooltip:hover .tooltip-text {
-				visibility: visible;
-			}
-		</style>
+            .tooltip-text::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #f3dfdf transparent transparent transparent;
+            }
+
+            /* Mostra o tooltip quando o mouse passa sobre o link */
+            .custom-tooltip:hover .tooltip-text {
+                visibility: visible;
+            }
+    	</style>
 		
 		<script type="text/javascript">
 			function ajustaData(){
@@ -114,9 +134,15 @@
 				if(fillTipopessoa == "Geral"){
 					document.getElementById("divAtendBeneficiario").hidden = true;
 					document.getElementById("divAtendTerapeuta").hidden = true;
+					document.getElementById("divAtendConv").hidden = true
 				} else if(fillTipopessoa == "Beneficiario"){
 					document.getElementById("divAtendBeneficiario").hidden = false;
 					document.getElementById("divAtendTerapeuta").hidden = true;
+					document.getElementById("divAtendConv").hidden = true
+				} else if(fillTipopessoa == "Convenio"){
+					document.getElementById("divAtendBeneficiario").hidden = true;
+					document.getElementById("divAtendTerapeuta").hidden = true;
+					document.getElementById("divAtendConv").hidden = false
 				} else {
 					document.getElementById("divAtendBeneficiario").hidden = true;
 					document.getElementById("divAtendTerapeuta").hidden = false;
@@ -139,11 +165,12 @@
 
 					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
 					if (document.getElementById("atendTipoPessoa").value == "Geral"){
-
 					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
 						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value
 					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
 						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
+					} else if (document.getElementById("atendTipoPessoa").value == "Convenio"){
+						document.getElementById("atendConv").value = document.getElementById("atendConvFil").value;
 					}
 				}
 				document.getElementById("atualizaValores").value = "false";
@@ -280,6 +307,7 @@
 						<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
 						<input id="atendTerapeutaFil" value="{{atendTerapeuta.atendTerapeuta}}" />
 						<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
+						<input id="atendConvFil" value="{{atendConv.atendConv}}" />
 						<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
 						<input id="mesAtendFil" value="{{mesAtend.mesAtend}}" />
 						<input id="anoAtendFil" value="{{anoAtend.anoAtend}}" />
@@ -309,11 +337,9 @@
 										<div class="input-group">
 											<label> Filial:&nbsp;</label>
 											<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
-												<option value="Matriz">Matriz</option>
-												<option value="Filial 1">Filial 1</option>
-												<option value="Filial 2">Filial 2</option>
-												<option value="Filial 3">Filial 3</option>
-												<option value="Filial 4">Filial 4</option>
+												<option value="Matriz">Route</option>
+												<option value="Filial 1">Fazendinha</option>
+												
 											</select>
 										</div>
 									</div>
@@ -366,6 +392,7 @@
 												<option value="Geral">Geral</option>
 												<option value="Beneficiario">Beneficiário</option>
 												<option value="Terapeuta">Terapeuta</option>
+												<option value="Convenio">Convênio</option>
 											</select>
 										</div>
 									</div>
@@ -389,6 +416,18 @@
 											<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
 												{{#each terapeutas}}
 													<option value="{{_id}}">{{usuario_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divAtendConv" class="col-sm-4">
+									<div class="row">
+										<div class="input-group">
+											<label>Convênio:&nbsp;</label>
+											<select name="atendConv" id="atendConv" class="chosen-select" data-placeholder="Escolha..." value="">
+												{{#each convs}}
+													<option value="{{_id}}">{{conv_nome}}</option>
 												{{/each}}
 											</select>
 										</div>
@@ -730,13 +769,39 @@
 																</a>
 																<a class="orange custom-tooltip" name="acaoVerquemalterou" id="acaoVerquemalterou">
 																	<i class="ace-icon fa fa-eye bigger-130"></i>
-																	<span class="tooltip-text">
-																		{{#each ../usuarios}}
-																			{{#ifEqual this._id ../atend_usuidedi}}
-																				{{usuario_nome}}
-																			{{/ifEqual}}
-																		{{/each}}
-																	</span>
+																		<span class="tooltip-text">
+																			<strong>Atendimento:</strong><br>
+																			• Data Criação: {{#if atend_datacad}}{{formatDate atend_datacad}}{{else}}—{{/if}}<br>
+																			• Criado por: 
+																			{{#if atend_usuid}}
+																			{{#each ../usuarios}}
+																				{{#ifEqual this._id ../atend_usuid}}{{usuario_nome}}{{/ifEqual}}
+																			{{/each}}
+																			{{else}}—{{/if}}<br>
+																			• Data Edição: {{#if atend_dataedi}}{{formatDate atend_dataedi}}{{else}}—{{/if}}<br>
+																			• Editado por: 
+																			{{#if atend_usuidedi}}
+																			{{#each ../usuarios}}
+																				{{#ifEqual this._id ../atend_usuidedi}}{{usuario_nome}}{{/ifEqual}}
+																			{{/each}}
+																			{{else}}—{{/if}}<br><br>
+
+																			<strong>Agendamento:</strong><br>
+																			• Data Criação: {{#if atend_agenda_datacad}}{{formatDate atend_agenda_datacad}}{{else}}—{{/if}}<br>
+																			• Criado por: 
+																			{{#if atend_agenda_usuid}}
+																			{{#each ../usuarios}}
+																				{{#ifEqual this._id ../atend_agenda_usuid}}{{usuario_nome}}{{/ifEqual}}
+																			{{/each}}
+																			{{else}}—{{/if}}<br>
+																			• Data Edição: {{#if atend_agenda_dataedi}}{{formatDate atend_agenda_dataedi}}{{else}}—{{/if}}<br>
+																			• Editado por: 
+																			{{#if atend_agenda_usuidedi}}
+																			{{#each ../usuarios}}
+																				{{#ifEqual this._id ../atend_agenda_usuidedi}}{{usuario_nome}}{{/ifEqual}}
+																			{{/each}}
+																			{{else}}—{{/if}}
+																		</span>
 																</a>
 															</div>
 															<div class="hidden-md hidden-lg">

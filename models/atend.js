@@ -74,8 +74,14 @@ class Atend{
         atend_fixovalordeb,
         atend_evolucao,
         atend_obs,
+        //Informações Validadas pelo fechamento
+        atend_terapiaidval,
+        atend_terapeutaidval,
+        atend_usuarioval,
         atend_valorcreval,//Valor a crédito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
         atend_valordebval,//Valor a Débito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
+        atend_dataval,
+        atend_valbloqueio,
         atend_num,
         atend_numnf,
         atend_extraid,//Armazena o extraid para gestão, Wagner Cintra, 14/04/2025 
@@ -104,8 +110,13 @@ class Atend{
         this.atend_fixo = atend_fixo,
         this.atend_fixoterapeutaid = atend_fixoterapeutaid,
         this.atend_fixoterapiaid = atend_fixoterapiaid,
+        this.atend_terapiaidval = atend_terapiaidval,
+        this.atend_terapeutaidval = atend_terapeutaidval,
+        this.atend_usuarioval = atend_usuarioval,
         this.atend_fixovalorcre = atend_fixovalorcre, //Valor a Crédito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
         this.atend_fixovalordeb = atend_fixovalordeb, //Valor a Débito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
+        this.atend_dataval = atend_dataval,
+        this.atend_valbloqueio = atend_valbloqueio,
         this.atend_evolucao = atend_evolucao,
         this.atend_obs = atend_obs,
         this.atend_valorcreval = atend_valorcreval,

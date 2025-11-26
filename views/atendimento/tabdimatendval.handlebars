@@ -5,246 +5,213 @@
   <meta charset="utf-8">
   <title>Relatório Detalhado por Convênio</title>
   
-  <style>
-    .custom-tooltip {
-      position: relative;
-      display: inline-block;
-      cursor: pointer;
-    }
-    .tooltip-text {
-      visibility: hidden;
-      width: max-content;
-      background-color: #f3dfdf;
-      color: red;
-      font-size: 8px;
-      padding: 8px 12px;
-      position: absolute;
-      z-index: 9999;
-      bottom: 125%;
-      left: 50%;
-      transform: translateX(-50%);
-      opacity: 0.9;
-      border-radius: 4px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    .tooltip-text::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      margin-left: -5px;
-      border-width: 5px;
-      border-style: solid;
-      border-color: #f3dfdf transparent transparent transparent;
-    }
-    .custom-tooltip:hover .tooltip-text {
-      visibility: visible;
-    }
-
-    .detalhe-linha {
-      background-color: #fafafa;
-      display: none;
-    }
-    .detalhe-conteudo {
-      padding: 12px 24px;
-    }
-    .linha-anomalia {
-      background-color: #fff8e1 !important;
-    }
-    .btn-expand {
-      cursor: pointer;
-      color: #428bca;
-      font-size: 16px;
-    }
-  </style>
+	<style>
+		.detalhe-linha { background-color: #fafafa; display: none; }
+		.detalhe-conteudo { padding: 12px 24px; }
+		.linha-anomalia { background-color: #fff8e1 !important; }
+		.btn-expand {
+		cursor: pointer;
+		color: #428bca;
+		font-size: 16px;
+		}
+	
+		/* DataTables + aceAdmin */
+		.dataTables_wrapper .dataTables_length select,
+		.dataTables_wrapper .dataTables_filter input {
+			height: 30px;
+			padding: 3px 6px;
+			font-size: 12px;
+		}
+		.dataTables_wrapper .dataTables_info,
+		.dataTables_wrapper .dataTables_paginate {
+			font-size: 12px;
+		}
+		
+		
+	</style>
 </head>
 
 <body onload="javascript:controlaNave(); carregaBody();" class="no-skin">
-  	<div class="main-container ace-save-state" id="main-container">
-		<div class="main-content">
-			<div class="main-content-inner">
-				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-				<ul class="breadcrumb">
-					<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
-					<li class="active">Relatório Detalhado por Convênio</li>
-				</ul>
-				</div>
+  <div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+      <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+          <ul class="breadcrumb">
+            <li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
+            <li class="active">Relatório Detalhado por Convênio</li>
+          </ul>
+        </div>
+		<div class="page-content"><!-- .page-content -->
+			<form role="form" action="/menu/atendimento/tabdimAtendimentoValFiltro" method="POST" onsubmit="atualizaDataIni(); atualizaDataFin();">
+			<div class="row">
+				<div class="col-sm-12">
+				<br>
+				<label>Período de:</label>
+				<input style="height: 30px; width: 140px;" id="dataFilDe" name="dataFilDe" type="date" onchange="atualizaDataIni()">
+				<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}">
 
-				<!-- ✅ Formulário (mesmo que já funciona) -->
-				<form role="form" action="/menu/atendimento/tabdimAtendimentoValFiltro" method="POST" onsubmit="atualizaDataIni(); atualizaDataFin();">
-				<div class="row" style="margin: 0 12px 20px;">
-					<div class="col-sm-12">
-					<label>Período de:</label>
-					<input style="height: 30px; width: 140px;" id="dataFilDe" name="dataFilDe" type="date" onchange="atualizaDataIni()">
-					<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}">
+				<label>até:</label>
+				<input style="height: 30px; width: 140px;" id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
+				<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}">
 
-					<label>até:</label>
-					<input style="height: 30px; width: 140px;" id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
-					<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}">
+				<label>Convênio:</label>
+				<select style="height: 30px; width: 250px;" name="relConvid" id="relConvid" class="chosen-select">
+					<option value="766f69643132333435366964">—</option>
+					{{#each convs}}
+					<option value="{{_id}}">{{conv_nome}}</option>
+					{{/each}}
+				</select>
+				<input class="hidden" id="relConvIdFiltro" name="relConvIdFiltro" value="{{filtro.convId}}">
 
-					<label>Convênio:</label>
-					<select style="height: 30px; width: 250px;" name="relConvid" id="relConvid" class="chosen-select">
-						<option value="766f69643132333435366964">—</option>
-						{{#each convs}}
-						<option value="{{_id}}">{{conv_nome}}</option>
-						{{/each}}
-					</select>
-					<input class="hidden" id="relConvIdFiltro" name="relConvIdFiltro" value="{{filtro.convId}}">
-
-					<button class="btn btn-info btn-sm" type="submit">
-						<i class="ace-icon fa fa-search bigger-110"></i> Pesquisar
-					</button>
-					</div>
-				</div>
-				</form>
-
-				<!-- Cabeçalho -->
-				<div class="row">
-					<div class="col-sm-12"><!-- Widget Dados Básicos -->
-						<div class="widget-box">
-							<div class="widget-header">
-								<h4 class="widget-title">
-									<i class="ace-icon fa fa-bar-chart green"></i>
-									Tabela Dinâmica Consolidado por Convênio — {{conv_nome}}
-									<small class="text-muted">({{periodoDe}} a {{periodoAte}})</small>
-								</h4>
-								<span class="widget-toolbar">
-									<a href="#" data-action="reload">
-										<i class="ace-icon fa fa-refresh"></i>
-									</a>
-									<a href="#" data-action="collapse">
-										<i class="ace-icon fa fa-chevron-up"></i>
-									</a>
-
-								</span>
-							</div>
-
-							<div class="widget-body">
-								<div class="widget-main">
-									<div class="row">
-										<!-- Tabela principal -->
-										<div class="col-xs-12">
-											<table class="table table-striped table-bordered table-hover">
-											<thead>
-												<tr>
-												<th style="width: 30px;"></th>
-												<th>Terapia</th>
-												<th>Sessões</th>
-												<th>Valor Unitário</th>
-												<th>Valor Total</th>
-												<th>Ação</th>
-												</tr>
-											</thead>
-											<tbody>
-												{{#each rels}}
-												<tr 
-												{{#if temFaltaAbsoluta}}class="linha-anomalia"{{/if}}
-												{{#if temFaltaJustificada}}class="linha-anomalia"{{/if}}
-												{{#if temValorDivergente}}class="linha-anomalia"{{/if}}
-												>
-												<td class="center">
-													<i class="btn-expand ace-icon fa fa-plus-circle bigger-140"></i>
-												</td>
-												<td>{{terapiaNome}}</td>
-												<td>{{sessoes}}</td>
-												<td>{{valorUnitario}}</td>
-												<td>{{valorTotal}}</td>
-												<td class="center">
-													{{#if temFaltaAbsoluta}}
-													<span class="label label-danger label-sm">
-														<i class="ace-icon fa fa-ban"></i> Falta Absoluta
-													</span>
-													{{else if temFaltaJustificada}}
-													<span class="label label-warning label-sm">
-														<i class="ace-icon fa fa-exclamation-triangle"></i> Justificada
-													</span>
-													{{else if temValorDivergente}}
-													<span class="label label-orange label-sm">
-														<i class="ace-icon fa fa-money"></i> Valor divergente
-													</span>
-													{{/if}}
-												</td>
-												</tr>
-
-												<!-- Linha expandida -->
-												<tr class="detalhe-linha" id="detalhe-{{terapiaId}}">
-												<td colspan="6">
-													<div class="detalhe-conteudo">
-													<h5>
-														<i class="ace-icon fa fa-list"></i> 
-														Detalhes de "{{terapiaNome}}" ({{sessoes}} sessões)
-													</h5>
-													<table class="table table-condensed table-bordered">
-														<thead>
-														<tr>
-															<th>Data</th>
-															<th>Beneficiário</th>
-															<th>Categoria</th>
-															<th>Valor</th>
-															<th>Status</th>
-														</tr>
-														</thead>
-														<tbody>
-														{{#each atendimentos}}
-														<tr 
-															{{#if ehFaltaAbsoluta}}class="linha-anomalia"{{/if}}
-															{{#if ehFaltaJustificada}}class="linha-anomalia"{{/if}}
-															{{#if valorDivergente}}class="linha-anomalia"{{/if}}
-														>
-															<td>{{data}}</td>
-															<td>{{bene_nome}}</td>
-															<td>{{categoria}}</td>
-															<td>{{valorFormatado}}</td>
-															<td>
-															{{#if ehFaltaAbsoluta}}
-																<span class="label label-danger">
-																<i class="ace-icon fa fa-ban"></i> Falta Absoluta
-																</span>
-															{{else if ehFaltaJustificada}}
-																<span class="label label-warning">
-																<i class="ace-icon fa fa-exclamation-triangle"></i> Justificada
-																</span>
-															{{else if valorDivergente}}
-																<span class="label label-orange">
-																<i class="ace-icon fa fa-money"></i> Divergente
-																</span>
-															{{else}}
-																<span class="label label-success">
-																<i class="ace-icon fa fa-check"></i> OK
-																</span>
-															{{/if}}
-															</td>
-														</tr>
-														{{/each}}
-														</tbody>
-													</table>
-													</div>
-												</td>
-												</tr>
-												{{/each}}
-											</tbody>
-											<tfoot>
-												<tr>
-												<td colspan="2" class="text-right"><b>Total Geral:</b></td>
-												<td><b>{{total.sessoes}}</b></td>
-												<td>—</td>
-												<td><b>{{total.total}}</b></td>
-												<td></td>
-												</tr>
-											</tfoot>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+				<button class="btn btn-info btn-sm" type="submit">
+					<i class="ace-icon fa fa-search bigger-110"></i> Pesquisar
+				</button>
 				</div>
 			</div>
-		</div>
-	</div>
+			</form>
 
-  <!-- Scripts -->
+			<div class="row">
+			<div class="col-sm-12">
+				<div class="widget-box">
+				<div class="widget-header">
+					<h4 class="widget-title">
+					<i class="ace-icon fa fa-bar-chart green"></i>
+					Tabela Dinâmica Consolidado por Convênio — {{conv_nome}}
+					<small class="text-muted">({{periodoDe}} a {{periodoAte}})</small>
+					</h4>
+					<span class="widget-toolbar">
+					<a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+					<a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+					</span>
+				</div>
+
+				<div class="widget-body">
+					<div class="widget-main">
+					<div class="row">
+						<div class="col-xs-12">
+						<table id="tabela-consolidada" class="table table-striped table-bordered table-hover">
+							<thead>
+							<tr>
+								<th style="width: 30px;"></th>
+								<th>Terapia</th>
+								<th class="text-right">Sessões</th>
+								<th class="text-right">Valor Unitário</th>
+								<th class="text-right">Valor Total</th>
+								<th>Ação</th>
+							</tr>
+							</thead>
+							<tbody>
+							{{#each rels}}
+							<tr data-terapia-id="{{terapiaId}}">
+								<td class="center">
+								<i class="btn-expand ace-icon fa fa-plus-circle bigger-140"></i>
+								</td>
+								<td>{{terapiaNome}}</td>
+								<td class="text-right">{{sessoes}}</td>
+								<td class="text-right">{{valorUnitario}}</td>
+								<td class="text-right">{{valorTotal}}</td>
+								<td></td>
+							</tr>
+
+							<tr class="detalhe-linha">
+								<td colspan="6">
+								<div class="detalhe-conteudo">
+									<h5>
+									<i class="ace-icon fa fa-list"></i> 
+									Detalhes de "{{terapiaNome}}" ({{sessoes}} sessões)
+									</h5>
+
+									<table class="table table-condensed table-bordered" style="font-size:11px;">
+									<thead>
+										<tr>
+										<th>#</th>
+										<th>Data</th>
+										<th>Hora</th>
+										<th>Beneficiário</th>
+										<th>Convênio</th>
+										<th>Origem</th>
+										<th>Categoria</th>
+										<th>Evento</th>
+										<th>Terapia</th>
+										<th>Terapeuta</th>
+										<th>Cred</th>
+										<th>Deb</th>
+										<th>Terapia</th>
+										<th>Terapeuta</th>
+										<th>Cred</th>
+										<th>Deb</th>
+										<th>Terapia</th>
+										<th>Terapeuta</th>
+										<th>Cred</th>
+										<th>Deb</th>
+										<th class="center">Ação</th>
+										</tr>
+									</thead>
+									<tbody>
+										{{#each atendimentos}}
+										<tr>
+										<td class="center">{{ordem}}</td>
+										<td style="white-space: nowrap !important; min-width: 75px;">{{data}}</td>
+										<td>{{hora}}</td>
+										<td>{{beneNome}}</td>
+										<td>{{convNome}}</td>
+										<td>{{{origemLabel}}}</td>
+										<td>{{{categoriaLabel}}}</td>
+										<td>{{{eventoLabel}}}</td>
+
+										<td>{{terapiaOrig}}</td>
+										<td>{{terapeutaOrig}}</td>
+										<td>{{{credOrig}}}</td>
+										<td>{{{debOrig}}}</td>
+
+										<td>{{terapiaFixa}}</td>
+										<td>{{terapeutaFixo}}</td>
+										<td>{{credFixo}}</td>
+										<td>{{debFixo}}</td>
+
+										<td>{{terapiaSubst}}</td>
+										<td>{{terapeutaSubst}}</td>
+										<td>{{credSubst}}</td>
+										<td>{{debSubst}}</td>
+
+										<td class="center">
+											{{#if permiteEdicao}}
+											<a class="green" href="/menu/atendimento/atendadm/edi/{{_id}}">
+											<i class="ace-icon fa fa-pencil bigger-130"></i>
+											</a>
+											{{/if}}
+										</td>
+										</tr>
+										{{/each}}
+									</tbody>
+									</table>
+								</div>
+								</td>
+							</tr>
+							{{/each}}
+							</tbody>
+							<tfoot>
+							<tr>
+								<td colspan="2" class="text-right"><b>Total Geral:</b></td>
+								<td class="text-right"><b>{{total.sessoes}}</b></td>
+								<td class="text-right">—</td>
+								<td class="text-right"><b>{{total.total}}</b></td>
+								<td></td>
+							</tr>
+							</tfoot>
+						</table>
+						</div>
+					</div>
+					</div>
+				</div>
+				</div>
+			</div>
+			</div>
+		</div>
+      </div>
+    </div>
+  </div>
+
   <script>
     function atualizaDataIni() {
       const v = document.getElementById('dataFilDe').value;
@@ -268,38 +235,22 @@
       }
     }
 
+    // ✅ Toggle seguro — sem depender de ID, só de ordem
     document.addEventListener('DOMContentLoaded', function() {
       document.querySelectorAll('.btn-expand').forEach(btn => {
         btn.addEventListener('click', function() {
-          const row = this.closest('tr');
-          const id = row.querySelector('td').parentNode.dataset.terapiaId || 
-                     row.parentNode.querySelector('tr').dataset.terapiaId;
-          // Melhor: usar atributo no <tr>
-          const tr = row.closest('tr');
-          const terapiaId = tr.getAttribute('data-terapia-id');
-          if (!terapiaId) return;
+          const mainRow = this.closest('tr');
+          const detailRow = mainRow.nextElementSibling;
+          if (!detailRow || !detailRow.classList.contains('detalhe-linha')) return;
 
-          const detalhe = document.getElementById('detalhe-' + terapiaId);
-          if (detalhe.style.display === 'table-row') {
-            detalhe.style.display = 'none';
-            this.classList.replace('fa-minus-circle', 'fa-plus-circle');
-          } else {
-            detalhe.style.display = 'table-row';
-            this.classList.replace('fa-plus-circle', 'fa-minus-circle');
-          }
+          const isExpanded = detailRow.style.display === 'table-row';
+          detailRow.style.display = isExpanded ? 'none' : 'table-row';
+          this.classList.toggle('fa-plus-circle', isExpanded);
+          this.classList.toggle('fa-minus-circle', !isExpanded);
         });
       });
     });
   </script>
-
-  <!-- Adiciona atributo data-terapia-id nas linhas (necessário para o JS acima) -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('tbody > tr').forEach(tr => {
-        const terapiaId = tr.querySelector('td:nth-child(2)')?.parentNode?.dataset?.terapiaId;
-        // Nós vamos adicionar via backend → veja abaixo
-      });
-    });
-  </script>
+	
 </body>
 </html>
