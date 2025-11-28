@@ -1767,6 +1767,7 @@ router.post('/atendimento/atendreltera/relatendteraanas', fncGeral.IsAuthenticat
 router.post('/atendimento/atendreltera/relatendteraanasfiltrotodos', fncGeral.IsAuthenticated,(req,res) =>{
     fncAtend.relAtendteraanafiltrotodos(req,res)
 })
+
 // Rota GET: carrega formulário vazio
 router.get('/atendimento/atendreltera/relatendteraanatodos', fncGeral.IsAuthenticated, (req, res) => {
     fncAtend.relAtendteraanatodos(req, res);
@@ -1794,6 +1795,16 @@ router.get('/atendimento/atendreltera/gestao/relatendgestaocons', fncGeral.IsAut
 //Gestão - Consolidado dos Atendimentos por periodo
 router.get('/atendimento/atendreltera/gestao/relatendgestaoconsfechado', fncGeral.IsAuthenticated, (req, res) => {
     fncAtend.relatendgestaoconsfechado(req, res)
+});
+
+//Gestão - Consolidado dos Atendimentos e convenio periodo
+router.get('/atendimento/atendreltera/gestao/relterapiaconvfec', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.relterapiaconvfec(req, res)
+});
+
+//Gestão - Relatório de Faltas Por Beneficiário e Indice de Prejuízo no Tratamento
+router.get('/atendimento/atendreltera/gestao/relfaltasbene', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.relfaltasbene(req, res)
 });
 
 //Relatório Emissão NF.

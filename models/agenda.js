@@ -43,7 +43,11 @@ const AgendaSchema = mongoose.Schema({
     agenda_falta :{ type: String, require: false },
     agenda_usuedi :{ type: String, require: false }, //Usuário adm que alterou
     agenda_log :{ type: String, require: false }, //Log das alterações
-    agenda_usucad :{ type: String, require: false }
+    agenda_usucad :{ type: String, require: false },
+    //Guia e Senha para Pagamento Financeiro
+    agenda_Nguia :{ type: String, required: false },// Número Guia Pré Autorização Convênio
+    agenda_dataNguia :{ type: Date, required: false },// Data da Solicitação Guia
+    agenda_senhaconv :{ type: String, required: false }// Senha Autorização Convênio para Pagamento
     
 })
 
@@ -88,6 +92,9 @@ class Agenda{
         agenda_usuedi, //Usuário adm que alterou
         agenda_log, //Log das alterações
         agenda_usucad,
+        agenda_Nguia,// Número Guia Pré Autorização Convênio
+        agenda_dataNguia,// Data da Solicitação Guia
+        agenda_senhaconv,// Senha Autorização Convênio para Pagamento
         ){
         this.agenda_data = agenda_data,
         this.agenda_hora = agenda_hora,
@@ -123,7 +130,10 @@ class Agenda{
         this.agenda_falta = agenda_falta,
         this.agenda_usuedi = agenda_usuedi, //Usuário adm que alterou
         this.agenda_log = agenda_log, //Log das alterações
-        this.agenda_usucad = agenda_usucad
+        this.agenda_usucad = agenda_usucad,
+        this.agenda_Nguia = agenda_Nguia,// Número Guia Pré Autorização Convênio
+        this.agenda_dataNguia = agenda_dataNguia,// Data da Solicitação Guia
+        this.agenda_senhaconv = agenda_senhaconv// Senha Autorização Convênio para Pagamento
     }
 }
 

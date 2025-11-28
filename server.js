@@ -291,6 +291,7 @@ const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSc
                 json: function(context) {
                     return JSON.stringify(context);
                 },
+                
                 // Helper ifCond
                 /**
                  * Helper personalizado Handlebars: {{#ifCond}}
@@ -378,6 +379,46 @@ const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSc
                     }
                 },
                 /**
+                 * Helper multiply (multiplicar)
+                 * Data de criação: 28/11/2025
+                 * Finalidade: Multiplica dois valores numéricos e retorna o resultado arredondado para inteiro.
+                 *             Usado para converter proporções em porcentagens (ex: 0.85 → 85).
+                 *             Compatível com strings numéricas e valores decimais.
+                 * Exemplo: {{multiply indice_frequencia 100}} → retorna 85
+                 */
+                multiply: function (a, b) {
+                    console.log("[Helper multiply] a:", a, "| b:", b);
+                    const numA = parseFloat(a) || 0;
+                    const numB = parseFloat(b) || 0;
+                    const result = Math.round(numA * numB);
+                    console.log("[Helper multiply] resultado:", result);
+                    return result;
+                },
+
+                /**
+                 * Helper maiorQueDecimal
+                 * Data de criação: 28/11/2025
+                 * Finalidade: Compara se v1 > v2 convertendo ambos para número com casas decimais (parseFloat).
+                 *             Diferente de "maiorQue" (que usa parseInt), este suporta proporções como 0.85.
+                 *             Retorna o bloco {{#maiorQueDecimal a b}} se verdadeiro, ou {{else}} se falso.
+                 *             Ideal para índices de frequência, médias, taxas.
+                 * Exemplo de uso:
+                 *   {{#maiorQueDecimal indice_frequencia 0}}
+                 *     {{multiply indice_frequencia 100}}%
+                 *   {{else}}
+                 *     —
+                 *   {{/maiorQueDecimal}}
+                 */
+                maiorQueDecimal: function (v1, v2, options) {
+                    console.log("[Helper maiorQueDecimal] v1:", v1, "| v2:", v2);
+                    const num1 = parseFloat(v1) || 0;
+                    const num2 = parseFloat(v2) || 0;
+                    const result = num1 > num2;
+                    console.log("[Helper maiorQueDecimal] resultado:", result);
+                    return result ? options.fn(this) : options.inverse(this);
+                },
+                
+                /**
                  * Helper Handlebars: {{formatDate "formato" data}}
                  * Criado em 26/06/2025 às 11:25 por Wagner Cintra
                  * 
@@ -408,7 +449,7 @@ const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSc
                  *   {{formatDate "HH:mm" agenda_data}}       → 00:00
                  */
               formatDate: function (_, value) {
-                    const habilitarLog = true; // ⬅️ Use false para ocultar logs
+                    const habilitarLog = false; // ⬅️ Use false para ocultar logs
 
                     if (habilitarLog) {
                         console.log('📥 Valor recebido:', value);

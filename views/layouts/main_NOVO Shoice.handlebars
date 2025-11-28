@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<meta name="description" content="Sisroute" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<style>
+			/* === Chosen — Estilo Retangular, Sem Sombra, Alinhado à Esquerda === */
+
+			/* Container principal e dropdown */
+			.chosen-container-single .chosen-single,
+			.chosen-container-single .chosen-drop,
+			.chosen-container-multi .chosen-choices,
+			.chosen-container .chosen-search input[type="text"],
+			.chosen-container .chosen-results li {
+				border-radius: 0 !important;
+				box-shadow: none !important;
+				-webkit-box-shadow: none !important;
+				border-color: #d5d5d5 !important;
+			}
+
+			/* Botão de dropdown (seta) — remove fundo arredondado e hover preto */
+			.chosen-container-single .chosen-single {
+				background: #fff !important;
+				height: 30px !important;
+				
+			}
+			.chosen-container-single .chosen-single:hover,
+			.chosen-container-single.chosen-container-active .chosen-single {
+				border-color: #b5b5b5 !important;
+				background: #fff !important;
+			}
+			.chosen-container-single .chosen-single div {
+				background: none !important;
+				
+			}
+			.chosen-container-single .chosen-single div b {
+				background: none !important;
+			}
+			.chosen-container-single .chosen-single div b::after {
+				
+				font-size: 8px;
+				text-align: left;
+				right: 8px;
+				top: 50%;
+				
+				color: #888;
+			}
+			/* Campo de busca no dropdown */
+			.chosen-container .chosen-search input[type="text"] {
+				padding: 4px 6px !important;
+				border: 1px solid #d5d5d5 !important;
+				outline: none !important;
+				background: #fff !important;
+			}
+
+			/* Itens da lista — alinhamento à esquerda e padding mínimo */
+			.chosen-container .chosen-results li {
+				text-align: left !important;
+				padding-left: 6px !important;
+				padding-right: 6px !important;
+				color: #444 !important;
+			}
+			.chosen-container .chosen-results li.highlighted {
+				background: #f5f5f5 !important;
+				color: #000 !important;
+			}
+
+			/* Estilo múltiplo — caixas retangulares (não tags por padrão) */
+			.chosen-container-multi .chosen-choices {
+				background: #fff !important;
+				min-height: 30px !important;
+			}
+			.chosen-container-multi .chosen-choices li.search-choice {
+				border-radius: 0 !important;
+				background: #f0f0f0 !important;
+				border: 1px solid #ccc !important;
+				padding: 3px 22px 3px 6px !important;
+				margin: 2px 5px 2px 0 !important;
+				box-shadow: none !important;
+				color: #333 !important;
+			}
+
+			/* Botão de remover (×) — estilo limpo */
+			.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+				background: none !important;
+				top: 4px !important;
+				right: 4px !important;
+				width: 12px !important;
+				height: 12px !important;
+			}
+			.chosen-container-multi .chosen-choices li.search-choice .search-choice-close::before {
+				content: "×";
+				font-weight: bold;
+				color: #999;
+				position: absolute;
+				top: 0; left: 0;
+				width: 12px; height: 12px;
+				text-align: center;
+				line-height: 12px;
+			}
+
+			/* Placeholder */
+			.chosen-container .chosen-default {
+				color: #999 !important;
+			}
+		</style>
+		
+		<link rel="stylesheet" href="/css/chosen.min.css" />
+		<link rel="stylesheet" href="/css/jquery-ui.custom.min.css" />
+		<link rel="stylesheet" href="/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="/css/fonts.googleapis.com.css" />
+		<link rel="stylesheet" href="/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+		<link rel="stylesheet" href="/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="/css/ace-rtl.min.css" />
+
+		<!-- Carrega div Conteudo com paginas html -->
+		<script type = "text/javascript">
+ 			function carregar(pagina){ $("#conteudo").load(pagina);	}
+			function formatar(mask,doc){
+				var i = doc.value.length;
+				var saida = mask.substring(0,1);
+				var texto = mask.substring(i);
+
+				if(texto.substring(0,1) != saida){
+					doc.value += texto.substring(0,1);
+				}
+			}
+			function procuraBiscoito(name){//apenas se estiver desabilitado httpOnly
+				var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+				if (match) {
+					console.log(match[2]);
+					return match[2];
+				} else {
+					console.log('not found');
+					return "";
+				}
+			}
+			function controlaNave(){
+				let biscoito = procuraBiscoito("lvlUsu");
+				let naveAtual;
+				console.log("biscoito:"+biscoito);
+				if (biscoito == "62421801a12aa557219a0fb9"){//Root
+					//console.log("1: "+(biscoito== "62421801a12aa557219a0fb9")+"biscoito == 62421801a12aa557219a0fb9")
+					document.getElementById("naveRoot").style.display = '';
+					naveAtual = "naveRoot";
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveTerapeuta");
+				} else if (biscoito == "62421857a12aa557219a0fc1"){//Socios
+					//console.log("2: "+(biscoito== "62421857a12aa557219a0fc1")+"biscoito == 62421857a12aa557219a0fc1")
+					document.getElementById("naveSocios").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "624218f5a12aa557219a0fd0"){//Financeiro (Anderson)
+					//console.log("3: "+(biscoito== "624218f5a12aa557219a0fd0")
+					document.getElementById("naveFinan").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "677704b1a358ba19d0c8eb51"){//Guias (Lucas e Mileide) Novo Perfil
+					//console.log("4: "+(biscoito== "677704b1a358ba19d0c8eb51"))
+					document.getElementById("naveGuia").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "677704b9a358ba19d0c8eb7a"){//Faturamento (Adriana, Thiago e Dani) Novo Perfil
+					//console.log("2: "+(biscoito== "677704b9a358ba19d0c8eb7a")+"biscoito == 624218f5a12aa557219a0fd0")
+					document.getElementById("naveFatura").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "677704a8a358ba19d0c8eb27"){//Agenda (Cibele, Elleny, Isabela) Novo Perfil
+					//console.log("2: "+(biscoito== "677704a8a358ba19d0c8eb27"))
+					document.getElementById("naveAge").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "67770413a358ba19d0c8ead4"){//Marketing (Carol) Novo Perfil somente acesso aos aniversariantes
+					//console.log("2: "+(biscoito== "67770413a358ba19d0c8ead4"))
+					document.getElementById("naveMkt").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "67bcce8b78d8740088c702d4"){//Evoluções (Supervisão apenas das evoluções) Rute
+					//console.log("2: "+(biscoito== "67bcce8b78d8740088c702d4"))
+					document.getElementById("naveEvo").style.display = '';
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "677e72110967e75764876577"){//Terapeutas Especialistas e ABA
+					//console.log("2: "+(biscoito== "677e72110967e75764876577"))
+					document.getElementById("naveTaba").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "62421903a12aa557219a0fd3"){//Técnico Especialista
+					//console.log("3: "+(biscoito== "62421903a12aa557219a0fd3"))
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").style.display = '';
+					//console.log("naveRoot");
+				} else if (biscoito == "6242190fa12aa557219a0fd6"){//Recepcionistas
+					//console.log("2: "+(biscoito== "6242190fa12aa557219a0fd6")+"biscoito == 6242190fa12aa557219a0fd6")
+					document.getElementById("naveRecepcionista").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "6242191fa12aa557219a0fd9"){//AT
+					//console.log("2: "+(biscoito== "6242191fa12aa557219a0fd9")+"biscoito == 6242191fa12aa557219a0fd9")
+					document.getElementById("naveAT").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "65578389a0b58a5faefac584"){//Home, aqueles que são Terapeutas e AT simultaneos
+					//console.log("2: "+(biscoito== "65578389a0b58a5faefac584")+"biscoito == 65578389a0b58a5faefac584")
+					document.getElementById("naveHo").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "6578ab5248bfdf9fe1b2c8d8"){//Híbrido, aqueles que são Terapeutas e Administrativos
+					//console.log("2: "+(biscoito== "65578389a0b58a5faefac584")+"biscoito == 65578389a0b58a5faefac584")
+					document.getElementById("naveHib").style.display = '';
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "644742e378166939169f82a1"){//Coordenador 644742e378166939169f82a1
+					//console.log("2: "+(biscoito== "644742e378166939169f82a1")+"biscoito == 644742e378166939169f82a1")
+					document.getElementById("naveCoordenador").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "644743aa78166939169f8486"){//Supervisor
+					//console.log("2: "+(biscoito== "644743aa78166939169f8486")+"biscoito == 644743aa78166939169f8486")
+					document.getElementById("naveSupervisor").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else if (biscoito == "67770273a358ba19d0c8ea52"){//Coordenador 644742e378166939169f82a1
+					//console.log("2: "+(biscoito== "644742e378166939169f82a1")+"biscoito == 644742e378166939169f82a1")
+					document.getElementById("naveAdministradorEFinanceiro").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveVazia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveRoot");
+				} else {
+					//console.log("3: "+(biscoito== "undefined")+"biscoito == undefined")
+					document.getElementById("naveVazia").style.display = '';
+					document.getElementById("naveRoot").remove();
+					document.getElementById("naveHib").remove();
+					document.getElementById("naveSocios").remove();
+					document.getElementById("naveAdministradorEFinanceiro").remove();
+					document.getElementById("naveTerapeuta").remove();
+					document.getElementById("naveRecepcionista").remove();
+					document.getElementById("naveAT").remove();
+					document.getElementById("naveHo").remove();
+					document.getElementById("naveCoordenador").remove();
+					document.getElementById("naveSupervisor").remove();
+					document.getElementById("naveGuia").remove();
+					document.getElementById("naveFinan").remove();
+					document.getElementById("naveFatura").remove();
+					document.getElementById("naveAge").remove();
+					document.getElementById("naveMkt").remove();
+					document.getElementById("naveTaba").remove();
+					document.getElementById("naveEvo").remove();
+					document.getElementById("naveT").remove();
+					//console.log("naveTerapeuta");
+				}
+			}
+			function getCookie(name) {
+				const value = `; ${document.cookie}`;
+				const parts = value.split(`; ${name}=`);
+				if (parts.length === 2) return parts.pop().split(';').shift();
+				return null;
+			}
+			function identifyDb(){
+				let db = ""; 
+				switch (getCookie("preferredDb")) {
+					case "SoftRoute":
+						db = "";
+						break;
+					case "SoftRouteFazendinha":
+						db = "Fazendinha";
+						break;
+					case "TESTE":
+						db = "AREA DE TESTE";
+						break;
+					default:
+						db = "";
+						break;
+				}
+				console.log("Cookie preferredDb:"+ db);
+
+				if (!db) {
+					db = ""; // valor padrão
+				}
+				document.getElementById("empresaFantasia").innerHTML = `<small><i class="fa fa-puzzle-piece white"></i> Soft Route ${db}</small>`;
+			}
+			document.addEventListener("DOMContentLoaded", function() {
+				const body = document.getElementById("main-body");
+				const preferredDb = getCookie("preferredDb");
+
+				if (preferredDb === "SoftRoute") {
+					// Remove qualquer skin → "no-skin"
+					body.className = "no-skin"; // ou body.removeAttribute("class");
+				} else if (preferredDb === "SoftRouteFazendinha") {
+					// Remove qualquer skin → "no-skin"
+					body.className = "skin-5"; // ou body.removeAttribute("class");
+				} else {
+					// Aplica skin-5 para qualquer outro valor
+					body.className = "skin-1";
+				}
+			});
+		</script>
+	</head>
+	<body id="main-body"><!-- Carrega a skin no addEventListener, logo acima, route (no-skin) e fazendinha (skin-5). -->
+		<div name="navbarPrincipalSelect" id="naveRoot" style="display: none;" class="noprint">
+		{{>_navbar}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveSocios" style="display: none;" class="noprint">
+		{{>_navbarSO}}
+		</div>
+
+		<div name="navbarPrincipalSelect" id="naveFinan" style="display: none;" class="noprint">
+		{{>_navbarFinan}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveGuia" style="display: none;" class="noprint">
+		{{>_navbarGuia}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveFatura" style="display: none;" class="noprint">
+		{{>_navbarFatura}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveAge" style="display: none;" class="noprint">
+		{{>_navbarAge}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveMkt" style="display: none;" class="noprint">
+		{{>_navbarMkt}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveEvo" style="display: none;" class="noprint">
+		{{>_navbarEvo}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveTaba" style="display: none;" class="noprint">
+		{{>_navbarTaba}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveAdministradorEFinanceiro" style="display: none;" class="noprint">
+		{{>_navbarTabaestagiario}}
+		</div>
+		
+		<div name="navbarPrincipalSelect" id="naveTerapeuta" style="display: none;" class="noprint">
+		{{>_navbarT}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveRecepcionista" style="display: none;" class="noprint">
+		{{>_navbarR}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveAT" style="display: none;" class="noprint">
+		{{>_navbarAT}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveHo" style="display: none;" class="noprint"><!--Para aqueles que são Terapeuta e AT simultaneo-->
+		{{>_navbarHo}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveHib" style="display: none;" class="noprint"><!--Para aqueles que são Terapeuta Administrativos simultaneo-->
+		{{>_navbarHib}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveCoordenador" style="display: none;" class="noprint">
+		{{>_navbarC}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveSupervisor" style="display: none;" class="noprint">
+		{{>_navbarSU}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveT" style="display: none;" class="noprint">
+		{{>_navbarT}}
+		</div>
+		<div name="navbarPrincipalSelect" id="naveVazia" style="display: none;" class="noprint">
+		{{>_navbarVazia}}
+		</div>
+		<!--DIV para espaçamento entre nav e body-->
+		<div style="margin-bottom: 75px;"></div>
+		<!--validação-->
+		{{#if success_msg}}
+			<div class="alert alert-danger">{{success_msg}}</div>
+		{{/if}}
+		{{{body}}}
+		
+	<!-- basic scripts -->
+	<!-- 1. jQuery (única versão moderna) -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<!-- 2. jQuery UI (CDN oficial, minificado) -->
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+	<!-- 3. Popper.js + Bootstrap 4 JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+	<!-- 4. Plugins locais (na ordem correta de dependência) -->
+	<script src="/js/ace-extra.min.js"></script>
+	<script src="/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="/js/chosen.jquery.min.js"></script>
+	<script src="/js/jquery.dataTables.min.js"></script>
+	<script src="/js/jquery.dataTables.bootstrap.min.js"></script>
+	<script src="/js/dataTables.buttons.min.js"></script>
+	<script src="/js/buttons.flash.min.js"></script>
+	<script src="/js/buttons.html5.min.js"></script>
+	<script src="/js/buttons.print.min.js"></script>
+	<script src="/js/buttons.colVis.min.js"></script>
+	<script src="/js/dataTables.select.min.js"></script>
+	<script src="/js/jQuery-Mask-Plugin-master/dist/jquery.mask.js"></script>
+	<script src="/js/bootstrap-datepicker.min.js"></script>
+	<script src="/js/bootstrap-timepicker.min.js"></script>
+	<script src="/js/moment.min.js"></script>
+	<script src="/js/daterangepicker.min.js"></script>
+	<script src="/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="/js/bootstrap-colorpicker.min.js"></script>
+	<script src="/js/jquery.knob.min.js"></script>
+	<script src="/js/autosize.min.js"></script>
+	<script src="/js/jquery.inputlimiter.min.js"></script>
+	<script src="/js/spinbox.min.js"></script>
+	<script src="/js/bootstrap-tag.min.js"></script>
+	<script src="/js/markdown.min.js"></script>
+	<script src="/js/bootstrap-markdown.min.js"></script>
+	<script src="/js/jquery.hotkeys.index.min.js"></script>
+	<script src="/js/bootstrap-wysiwyg.min.js"></script>
+	<script src="/js/bootbox.js"></script>
+	<script src="/js/ace-elements.min.js"></script>
+	<script src="/js/ace.min.js"></script>
+
+		<!-- 5. Seus scripts personalizados -->
+		<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			identifyDb();
+		});
+
+		$(document).ready(function() {
+			// ✅ Chosen (para conteúdo estático inicial)
+			if (!ace.vars?.['touch']) {
+				$('.chosen-select').chosen({ allow_single_deselect: true });
+				$(window).on('resize.chosen', function() {
+					$('.chosen-select').each(function() {
+						$(this).next().css('width', $(this).parent().width());
+					});
+				}).trigger('resize.chosen');
+
+				$(document).on('settings.ace.chosen', function(e, name, val) {
+					if (name === 'sidebar_collapsed') {
+						$('.chosen-select').each(function() {
+							$(this).next().css('width', $(this).parent().width());
+						});
+					}
+				});
+			}
+
+			// ✅ Tooltips / Popovers
+			$('[data-rel=tooltip]').tooltip({ container: 'body' });
+			$('[data-rel=popover]').popover({ container: 'body' });
+
+			// ✅ Autosize e input limiter
+			if (typeof autosize === 'function') {
+				autosize($('textarea[class*=autosize]'));
+			}
+			if ($.fn.inputlimiter) {
+				$('textarea.limited').inputlimiter({
+					remText: '%n character%s remaining...',
+					limitText: 'max allowed : %n.'
+				});
+			}
+		});
+
+		// ✅ Função de carregamento dinâmico com reinicialização do Chosen
+		function carregar(pagina) {
+			$("#conteudo").load(pagina, function(response, status, xhr) {
+				if (status === "error") {
+					console.error("Erro ao carregar:", xhr.statusText);
+					return;
+				}
+
+				// Reinicializa Chosen no novo conteúdo
+				if (!ace.vars?.['touch']) {
+					$('.chosen-select').chosen('destroy');
+					$('.chosen-select').chosen({ allow_single_deselect: true });
+					$('.chosen-select').each(function() {
+						$(this).next().css('width', $(this).parent().width());
+					});
+				}
+
+				// Re-inicialize outros plugins dinâmicos aqui, se necessário
+				// ex: datepickers, máscaras, etc.
+			});
+		}
+		</script>
+		<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			identifyDb();
+		});
+		</script>
+		<script>
+		$(document).ready(function() {
+			// ✅ Chosen + funcionalidades responsivas (do Ace Admin)
+			if (!ace.vars?.['touch']) {
+				$('.chosen-select').chosen({ allow_single_deselect: true });
+
+				// Resize responsivo (janela)
+				$(window)
+					.off('resize.chosen')
+					.on('resize.chosen', function() {
+						$('.chosen-select').each(function() {
+							var $this = $(this);
+							$this.next().css({ 'width': $this.parent().width() });
+						});
+					}).trigger('resize.chosen');
+
+				// Resize ao recolher/expandidir sidebar
+				$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
+					if (event_name !== 'sidebar_collapsed') return;
+					$('.chosen-select').each(function() {
+						var $this = $(this);
+						$this.next().css({ 'width': $this.parent().width() });
+					});
+				});
+
+				// Estilo múltiplo: tag-input-style vs padrão
+				$('#chosen-multiple-style .btn').on('click', function(e) {
+					var target = $(this).find('input[type=radio]');
+					var which = parseInt(target.val());
+					if (which === 2) {
+						$('.chosen-select[multiple]').addClass('tag-input-style');
+					} else {
+						$('.chosen-select[multiple]').removeClass('tag-input-style');
+					}
+				});
+			}
+			// ✅ Tooltip / Popover
+			$('[data-rel=tooltip]').tooltip({ container: 'body' });
+			$('[data-rel=popover]').popover({ container: 'body' });
+			// ✅ Autosize (textareas)
+			if (typeof autosize === 'function') {
+				autosize($('textarea[class*=autosize]'));
+			}
+
+			// ✅ Input limiter
+			if ($.fn.inputlimiter) {
+				$('textarea.limited').inputlimiter({
+					remText: '%n character%s remaining...',
+					limitText: 'max allowed : %n.'
+				});
+			}
+			// ⚠️ Máscaras do Ace (só se usar maskedinput, não jQuery-Mask-Plugin)
+			/*
+			$.mask.definitions['~'] = '[+-]';
+			$('.input-mask-date').mask('99/99/9999');
+			$('.input-mask-phone').mask('(999) 999-9999');
+			$('.input-mask-eyescript').mask('~9.99 ~9.99 999');
+			$('.input-mask-product').mask('a*-999-a999', {
+				placeholder: " ",
+				completed: function() { alert("You typed: " + this.val()); }
+			});
+			*/
+		});
+		</script>	
+	</body>
+	<!-- Footer-->
+	<div class="footer">
+		<input class="hidden" id="flashMain" value="{{flash.mensagem}}" >
+	</div>
+</html>

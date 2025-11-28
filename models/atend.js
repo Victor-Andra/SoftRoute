@@ -8,7 +8,10 @@ const AtendSchema = mongoose.Schema({
     atend_categoria :{ type: String, required: true },
     atend_beneid :{ type: ObjectId, required: false },//_id da tb_bene 
     atend_convid :{ type: ObjectId, required: true },//_id da tb_conv 
-    atend_senhaconv :{ type: String, required: false },// 
+    //Guia e Senha para Pagamento Financeiro
+    atend_Nguia :{ type: String, required: false },// Número Guia Pré Autorização Convênio
+    atend_dataNguia :{ type: Date, required: true },// Data da Solicitação Guia
+    atend_senhaconv :{ type: String, required: false },// Senha Autorização Convênio para Pagamento
     atend_usuid :{ type: String, required: true },//_id da tb_usuario
     atend_atenddata :{ type: Date, required: true },
     atend_atendhora :{ type: String, required: false },
@@ -39,8 +42,8 @@ const AtendSchema = mongoose.Schema({
 
     atend_num :{ type: Number, required: true },
     atend_rel :{ type: String, required: false },
-    atend_agenda_f_id_orig :{ type: ObjectId, required: false },
-    atend_agenda_s_id_orig :{ type: ObjectId, required: false },
+    atend_agenda_f_id_orig :{ type: ObjectId, required: false, unique: true },
+    atend_agenda_s_id_orig :{ type: ObjectId, required: false, unique: true },
     atend_numnf :{ type: String, required: false },
     atend_extraid:{ type: ObjectId, required: false },//Armazena o extraid para gestão, Wagner Cintra, 14/04/2025 
     atend_usuidcad :{ type: ObjectId, required: false },

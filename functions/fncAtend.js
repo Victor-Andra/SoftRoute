@@ -856,11 +856,11 @@ module.exports = {
                 break;
             case "Terapeuta":
                 busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_terapeutaid: req.body.atendTerapeuta };
-                console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
+                //console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
                 break;
             case "Convenio": // ← novo caso — note o acento no valor, pois vem da view como "Convenio" Wagner cintra 25/11/2025
                 busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, atend_convid: req.body.atendConv };
-                console.log("req.body.atendConv:"+req.body.atendConv);
+                //console.log("req.body.atendConv:"+req.body.atendConv);
                 break;
             default:
                 busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
@@ -4670,7 +4670,7 @@ module.exports = {
             console.log(err)
         })
     },
-    relAtendteraanaFiltro(req,res){
+    relAtendteraanaFiltroOLD3(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
         //Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
@@ -4916,6 +4916,198 @@ module.exports = {
         }).catch((err) =>{
             console.log(err)
         })
+    },
+
+    relAtendteraanaFiltro: function (req, res) {
+        let db = req.cookies['preferredDb'];
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
+        let rel = [];
+        let agendaFinal = [];
+        let terapeuta_nome = "Desconhecido";
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni); // yyyy-mm-dd → dd-mm-yyyy
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);
+        let pesquisa = {
+            dataIni: req.body.dataIni,
+            dataFim: req.body.dataFim,
+            terapeuta: req.body.relTeraid
+        };
+
+        // --- Ajuste das datas ---
+        let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
+        let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+        seg.setUTCHours(0, 0, 0, 0);
+        sex.setUTCHours(23, 59, 59, 999);
+
+        // --- Busca anos ---
+        Ano.find().exec(function (err, todosAnos) {
+            if (err) return res.status(500).send("Erro ao buscar anos.");
+
+            // --- Busca agendas fixas ---
+            let filtroFixo = {
+                agenda_data: { $gte: seg, $lte: sex },
+                agenda_temp: false,
+                agenda_usuid: req.body.relTeraid
+            };
+
+            Agenda.find(filtroFixo).exec(function (err, agendaFixa) {
+                if (err) return res.status(500).send("Erro ao buscar agendas fixas.");
+
+                let idsFixos = agendaFixa.map(af => af._id);
+
+                // --- Busca agendas semanais/temporárias ---
+                let filtroSemanal = {
+                    $or: [
+                        { agenda_tempId: { $in: idsFixos } },
+                        {
+                            agenda_data: { $gte: seg, $lte: sex },
+                            agenda_temp: true,
+                            agenda_usuid: req.body.relTeraid
+                        }
+                    ]
+                };
+
+                Agenda.find(filtroSemanal).exec(function (err, agendaSemanal) {
+                    if (err) return res.status(500).send("Erro ao buscar agendas semanais.");
+
+                    // --- Monta agendaFinal (fixas + não substituídas) ---
+                    agendaFinal = [...agendaSemanal];
+                    agendaFixa.forEach(af => {
+                        let jaExiste = agendaSemanal.some(as => String(as.agenda_tempId) === String(af._id));
+                        if (!jaExiste) {
+                            agendaFinal.push(af);
+                        }
+                    });
+
+                    // --- Ordena por data ---
+                    agendaFinal.sort((a, b) => new Date(a.agenda_data) - new Date(b.agenda_data));
+
+                    // --- Busca beneficiários ---
+                    Bene.find().exec(function (err, todosBenes) {
+                        if (err) return res.status(500).send("Erro ao buscar beneficiários.");
+
+                        todosBenes.sort((a, b) =>
+                            a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "").localeCompare(
+                                b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                            )
+                        );
+
+                        // --- Busca terapeutas ---
+                        Usuario.find({
+                            "usuario_status": "Ativo",
+                            $or: [
+                                { "usuario_funcaoid": "6241030bfbcc51f47c720a0b" },
+                                { "usuario_perfilid": { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                            ]
+                        }).exec(function (err, todosTerapeutas) {
+                            if (err) return res.status(500).send("Erro ao buscar terapeutas.");
+
+                            todosTerapeutas.sort((a, b) =>
+                                a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "").localeCompare(
+                                    b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                                )
+                            );
+
+                            // Identifica nome do terapeuta solicitado
+                            for (let t of todosTerapeutas) {
+                                if (String(t._id) === String(req.body.relTeraid)) {
+                                    terapeuta_nome = t.usuario_nome;
+                                    break;
+                                }
+                            }
+
+                            // --- Busca terapias ---
+                            Terapia.find().exec(function (err, todasTerapias) {
+                                if (err) return res.status(500).send("Erro ao buscar terapias.");
+
+                                todasTerapias.sort((a, b) => a.terapia_nome.localeCompare(b.terapia_nome));
+
+                                // --- Processa agendas e filtra categorias indesejadas ---
+                                const categoriasExcluidas = ["Falta Justificada", "Falta Absoluta", "Feriado", "Glosa"];
+
+                                agendaFinal.forEach(agenda => {
+                                    // Ajuste de timezone (caso necessário)
+                                    if (agenda.agenda_data.getTimezoneOffset() === 180) {
+                                        agenda.agenda_data.setHours(agenda.agenda_data.getHours() + 3);
+                                    }
+
+                                    let categoria = agenda.agenda_categoria;
+                                    if (categoriasExcluidas.includes(categoria)) {
+                                        return; // pula este item
+                                    }
+
+                                    // Horário formatado
+                                    let h = String(agenda.agenda_data.getHours()).padStart(2, '0');
+                                    let m = String(agenda.agenda_data.getMinutes()).padStart(2, '0');
+                                    let hora = `${h}:${m}`;
+
+                                    // Define terapia e terapeuta
+                                    let terapiaAtend = agenda.agenda_terapiaid;
+                                    let terapeutaAtend = agenda.agenda_usuid;
+
+                                    // Caso "Substituição": só inclui se for o terapeuta alvo
+                                    if (categoria === "Substituição" && String(agenda.agenda_usuid) !== String(req.body.relTeraid)) {
+                                        return;
+                                    }
+
+                                    // Adiciona ao relatório
+                                    rel.push({
+                                        dt: new Date(agenda.agenda_data),
+                                        hora: hora,
+                                        especialidade: terapiaAtend,
+                                        profissional: terapeutaAtend,
+                                        beneficiario: agenda.agenda_beneid
+                                    });
+                                });
+
+                                // Formata data para exibição (dd/mm/yyyy)
+                                rel.forEach(r => {
+                                    r.dt = fncGeral.getDataInvert(fncGeral.getDataFMT(r.dt));
+                                });
+
+                                // --- Agrupamento por terapia ---
+                                let somaPorTerapia = {};
+                                rel.forEach(item => {
+                                    let id = String(item.especialidade);
+                                    somaPorTerapia[id] = (somaPorTerapia[id] || 0) + 1;
+                                });
+
+                                let totaisTerapia = [];
+                                for (let id in somaPorTerapia) {
+                                    let terapia = todasTerapias.find(t => String(t._id) === id);
+                                    totaisTerapia.push({
+                                        terapiaId: id,
+                                        terapiaNome: terapia ? terapia.terapia_nome : "Desconhecida",
+                                        total: somaPorTerapia[id]
+                                    });
+                                }
+
+                                let totalGeral = totaisTerapia.reduce((soma, t) => soma + t.total, 0);
+
+                                // --- Renderiza view ---
+                                res.render("atendimento/atendreltera/relatendteraana", {
+                                    terapeutas: todosTerapeutas,
+                                    anos: todosAnos,
+                                    terapias: todasTerapias,
+                                    benes: todosBenes,
+                                    rels: rel,
+                                    periodoDe: periodoDe,
+                                    periodoAte: periodoAte,
+                                    terapeuta_nome: terapeuta_nome,
+                                    pesquisa: pesquisa,
+                                    totaisTerapia: totaisTerapia,
+                                    totalGeral: totalGeral
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
     },
     // Função chamada pela rota GET: carrega a view SEM relatório
     relAtendteraanatodos(req, res) {
@@ -6017,702 +6209,1138 @@ module.exports = {
     relatendgestaoconsfechadoNEO: async (req, res) => {
         a;
     },
-relatendgestaoconsfechadoOLD_ErroSubsfixo: async (req, res) => {
-    try {
-        const db = req.cookies['preferredDb'];
-        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
-        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+    relatendgestaoconsfechadoOLD_ErroSubsfixo: async (req, res) => {
+        try {
+            const db = req.cookies['preferredDb'];
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
 
-        const dataIniStr = Array.isArray(req.query.dataIni) ? req.query.dataIni[0] : (req.query.dataIni || req.body.dataIni);
-        const dataFimStr = Array.isArray(req.query.dataFim) ? req.query.dataFim[0] : (req.query.dataFim || req.body.dataFim);
+            const dataIniStr = Array.isArray(req.query.dataIni) ? req.query.dataIni[0] : (req.query.dataIni || req.body.dataIni);
+            const dataFimStr = Array.isArray(req.query.dataFim) ? req.query.dataFim[0] : (req.query.dataFim || req.body.dataFim);
 
-        if (!dataIniStr || !dataFimStr) {
-            console.log("[relatendgestaoconsfechado] Datas não fornecidas. Renderizando formulário vazio.");
-            return res.render("atendimento/atendreltera/gestao/relatendgestaocons", {
-                rels: [],
-                subtotaisPorConvenio: [],
-                periodoDe: '',
-                periodoAte: '',
-                pesquisa: { dataIni: '', dataFim: '' }
-            });
-        }
+            if (!dataIniStr || !dataFimStr) {
+                console.log("[relatendgestaoconsfechado] Datas não fornecidas. Renderizando formulário vazio.");
+                return res.render("atendimento/atendreltera/gestao/relatendgestaocons", {
+                    rels: [],
+                    subtotaisPorConvenio: [],
+                    periodoDe: '',
+                    periodoAte: '',
+                    pesquisa: { dataIni: '', dataFim: '' }
+                });
+            }
 
-        const dataIni = new Date(dataIniStr);
-        const dataFim = new Date(dataFimStr);
-        if (isNaN(dataIni.getTime()) || isNaN(dataFim.getTime())) {
-            console.error("[relatendgestaoconsfechado] Datas inválidas:", { dataIniStr, dataFimStr });
-            return res.status(400).send("Datas inválidas.");
-        }
-        dataFim.setUTCHours(23, 59, 59, 999);
+            const dataIni = new Date(dataIniStr);
+            const dataFim = new Date(dataFimStr);
+            if (isNaN(dataIni.getTime()) || isNaN(dataFim.getTime())) {
+                console.error("[relatendgestaoconsfechado] Datas inválidas:", { dataIniStr, dataFimStr });
+                return res.status(400).send("Datas inválidas.");
+            }
+            dataFim.setUTCHours(23, 59, 59, 999);
 
-        const diffDays = Math.ceil((dataFim - dataIni) / (1000 * 60 * 60 * 24));
-        if (diffDays > 31 || diffDays < 0) {
-            console.warn("[relatendgestaoconsfechado] Intervalo inválido:", diffDays, "dias");
-            return res.status(400).send("O intervalo máximo permitido é de 31 dias.");
-        }
+            const diffDays = Math.ceil((dataFim - dataIni) / (1000 * 60 * 60 * 24));
+            if (diffDays > 31 || diffDays < 0) {
+                console.warn("[relatendgestaoconsfechado] Intervalo inválido:", diffDays, "dias");
+                return res.status(400).send("O intervalo máximo permitido é de 31 dias.");
+            }
 
-        console.log(`[relatendgestaoconsfechado] Período: ${dataIni.toISOString()} → ${dataFim.toISOString()}`);
+            console.log(`[relatendgestaoconsfechado] Período: ${dataIni.toISOString()} → ${dataFim.toISOString()}`);
 
-        // === PIPELINE DE AGREGAÇÃO ===
-        const pipeline = [
-            // 1. Filtrar por data e EXCLUIR "Falta Absoluta"
-            {
-                $match: {
-                    atend_atenddata: { $gte: dataIni, $lte: dataFim }, // ✅ CORRIGIDO: estava faltando "data" no final
-                    atend_categoria: { $ne: "Falta Absoluta" }
-                }
-            },
+            // === PIPELINE DE AGREGAÇÃO ===
+            const pipeline = [
+                // 1. Filtrar por data e EXCLUIR "Falta Absoluta"
+                {
+                    $match: {
+                        atend_atenddata: { $gte: dataIni, $lte: dataFim }, // ✅ CORRIGIDO: estava faltando "data" no final
+                        atend_categoria: { $ne: "Falta Absoluta" }
+                    }
+                },
 
-            // 2. Definir valor CRE com regras por categoria
-            {
-                $addFields: {
-                    valorcre_correto: {
-                        $switch: {
-                            branches: [
-                                { case: { $eq: ["$atend_categoria", "Falta Justificada"] }, then: { $ifNull: ["$atend_mergevalorcre", "0"] } },
-                                { case: { $eq: ["$atend_categoria", "Feriado"] },           then: { $ifNull: ["$atend_mergevalorcre", "0"] } },
-                                { case: { $eq: ["$atend_categoria", "Substituição"] },      then: { $ifNull: ["$atend_mergevalorcre", "0"] } },
-                                { case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },    then: { $ifNull: ["$atend_mergevalorcre", "0"] } }
-                            ],
-                            default: { $ifNull: ["$atend_valorcre", "0"] }
-                        }
-                    },
-                    // 3. Débito: mantendo lógica antiga por enquanto (será atualizada depois)
-                    valordeb_correto: {
-                        $cond: {
-                            if: {
-                                $or: [
-                                    { $eq: ["$atend_categoria", "SubstitutoFixo"] },
-                                    { $eq: ["$atend_fixo", "true"] }
-                                ]
-                            },
-                            then: { $ifNull: ["$atend_fixovalordeb", "0"] },
-                            else: {
-                                $cond: {
-                                    if: {
-                                        $in: [
-                                            "$atend_categoria",
-                                            ["Substituição", "Falta Justificada", "Feriado", "Falta Absoluta"]
-                                        ]
-                                    },
-                                    then: { $ifNull: ["$atend_mergevalordeb", "0"] },
-                                    else: { $ifNull: ["$atend_valordeb", "0"] }
+                // 2. Definir valor CRE com regras por categoria
+                {
+                    $addFields: {
+                        valorcre_correto: {
+                            $switch: {
+                                branches: [
+                                    { case: { $eq: ["$atend_categoria", "Falta Justificada"] }, then: { $ifNull: ["$atend_mergevalorcre", "0"] } },
+                                    { case: { $eq: ["$atend_categoria", "Feriado"] },           then: { $ifNull: ["$atend_mergevalorcre", "0"] } },
+                                    { case: { $eq: ["$atend_categoria", "Substituição"] },      then: { $ifNull: ["$atend_mergevalorcre", "0"] } },
+                                    { case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },    then: { $ifNull: ["$atend_mergevalorcre", "0"] } }
+                                ],
+                                default: { $ifNull: ["$atend_valorcre", "0"] }
+                            }
+                        },
+                        // 3. Débito: mantendo lógica antiga por enquanto (será atualizada depois)
+                        valordeb_correto: {
+                            $cond: {
+                                if: {
+                                    $or: [
+                                        { $eq: ["$atend_categoria", "SubstitutoFixo"] },
+                                        { $eq: ["$atend_fixo", "true"] }
+                                    ]
+                                },
+                                then: { $ifNull: ["$atend_fixovalordeb", "0"] },
+                                else: {
+                                    $cond: {
+                                        if: {
+                                            $in: [
+                                                "$atend_categoria",
+                                                ["Substituição", "Falta Justificada", "Feriado", "Falta Absoluta"]
+                                            ]
+                                        },
+                                        then: { $ifNull: ["$atend_mergevalordeb", "0"] },
+                                        else: { $ifNull: ["$atend_valordeb", "0"] }
+                                    }
                                 }
                             }
                         }
                     }
-                }
-            },
+                },
 
-            // 4. Converter valores para número (tratar vírgulas)
-            {
-                $addFields: {
-                    _valorcre: {
-                        $cond: {
-                            if: { $or: [{ $eq: ["$valorcre_correto", ""] }, { $eq: ["$valorcre_correto", null] }] },
-                            then: 0,
-                            else: { $toDouble: { $replaceAll: { input: "$valorcre_correto", find: ",", replacement: "." } } }
-                        }
-                    },
-                    _valordeb: {
-                        $cond: {
-                            if: { $or: [{ $eq: ["$valordeb_correto", ""] }, { $eq: ["$valordeb_correto", null] }] },
-                            then: 0,
-                            else: { $toDouble: { $replaceAll: { input: "$valordeb_correto", find: ",", replacement: "." } } }
-                        }
-                    }
-                }
-            },
-
-            // 5. Lookup: Convênio
-            {
-                $lookup: {
-                    from: Conv.collection.name,
-                    localField: "atend_convid",
-                    foreignField: "_id",
-                    as: "conv"
-                }
-            },
-            { $unwind: { path: "$conv", preserveNullAndEmptyArrays: true } },
-
-            // 6. Lookup: Terapia
-            {
-                $lookup: {
-                    from: Terapia.collection.name,
-                    localField: "atend_terapiaid",
-                    foreignField: "_id",
-                    as: "terapia"
-                }
-            },
-            { $unwind: { path: "$terapia", preserveNullAndEmptyArrays: true } },
-
-            // 7. Agrupar por Convênio + Terapia
-            {
-                $group: {
-                    _id: {
-                        conv_nome: "$conv.conv_nome",
-                        terapia_nomecid: "$terapia.terapia_nomecid"
-                    },
-                    qtd: { $sum: 1 },
-                    total_valorcre: { $sum: "$_valorcre" },
-                    total_valordeb: { $sum: "$_valordeb" }
-                }
-            },
-            { $sort: { "_id.conv_nome": 1, "_id.terapia_nomecid": 1 } }
-        ];
-
-        console.log("[relatendgestaoconsfechado] Executando pipeline...");
-        const rels = await Atend.aggregate(pipeline).exec();
-        console.log(`[relatendgestaoconsfechado] Grupos retornados: ${rels.length}`);
-
-        // === FORMATAR DETALHES POR TERAPIA ===
-        const relsFormatado = rels.map(r => ({
-            conv_nome: r._id.conv_nome || "Sem convênio",
-            terapia_nomecid: r._id.terapia_nomecid || "Sem terapia",
-            qtd: r.qtd,
-            tempo: "40 min",
-            total_valorcre: fncGeral.mascaraValores(Math.round(r.total_valorcre * 100).toString()),
-            total_valordeb: fncGeral.mascaraValores(Math.round(r.total_valordeb * 100).toString()),
-            // Valores numéricos para cálculo de subtotais
-            _valorcre_num: r.total_valorcre,
-            _valordeb_num: r.total_valordeb
-        }));
-
-        // === CALCULAR SUBTOTAIS POR CONVÊNIO ===
-        const subtotaisMap = {};
-        relsFormatado.forEach(item => {
-            const key = item.conv_nome;
-            if (!subtotaisMap[key]) {
-                subtotaisMap[key] = {
-                    conv_nome: item.conv_nome,
-                    qtd: 0,
-                    total_valorcre: 0,
-                    total_valordeb: 0
-                };
-            }
-            subtotaisMap[key].qtd += item.qtd;
-            subtotaisMap[key].total_valorcre += item._valorcre_num;
-            subtotaisMap[key].total_valordeb += item._valordeb_num;
-        });
-
-        const subtotaisPorConvenio = Object.values(subtotaisMap).map(sub => ({
-            conv_nome: sub.conv_nome,
-            qtd: sub.qtd,
-            total_valorcre: fncGeral.mascaraValores(Math.round(sub.total_valorcre * 100).toString()),
-            total_valordeb: fncGeral.mascaraValores(Math.round(sub.total_valordeb * 100).toString())
-        }));
-
-        console.log("[relatendgestaoconsfechado] Subtotais calculados:", subtotaisPorConvenio);
-        // === CALCULAR GRAND TOTAL (todos os convênios) ===
-        let grandTotalQtd = 0;
-        let grandTotalCre = 0;
-        let grandTotalDeb = 0;
-
-        relsFormatado.forEach(item => {
-            grandTotalQtd += item.qtd;
-            grandTotalCre += item._valorcre_num;
-            grandTotalDeb += item._valordeb_num;
-        });
-
-        const grandTotal = {
-            qtd: grandTotalQtd,
-            total_valorcre: fncGeral.mascaraValores(Math.round(grandTotalCre * 100).toString()),
-            total_valordeb: fncGeral.mascaraValores(Math.round(grandTotalDeb * 100).toString())
-        };
-
-        console.log("[relatendgestaoconsfechado] Grand total:", grandTotal);
-
-        // === RENDERIZAR ===
-        const periodoDe = fncGeral.getDataInvert(dataIni.toISOString().substring(0, 10));
-        const periodoAte = fncGeral.getDataInvert(dataFim.toISOString().substring(0, 10));
-
-        res.render("atendimento/atendreltera/gestao/relatendgestaoconsfec", {
-            rels: relsFormatado,
-            subtotaisPorConvenio, // ainda usado para ordenar os convênios
-            grandTotal,
-            periodoDe,
-            periodoAte,
-            pesquisa: {
-                dataIni: dataIni.toISOString().substring(0, 10),
-                dataFim: dataFim.toISOString().substring(0, 10)
-            }
-        });
-
-    } catch (err) {
-        console.error("[relatendgestaoconsfechado] Erro crítico:", err);
-        res.status(500).send("Erro ao gerar relatório consolidado.");
-    }
-},
-relatendgestaoconsfechadoOLD_ErroSemDebs: async (req, res) => {
-    try {
-        const db = req.cookies['preferredDb'];
-        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
-        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-
-        // --- Normalização das datas (aceita query ou body, array ou string) ---
-        const dataIniStr = Array.isArray(req.query.dataIni) ? req.query.dataIni[0] : (req.query.dataIni || req.body.dataIni);
-        const dataFimStr = Array.isArray(req.query.dataFim) ? req.query.dataFim[0] : (req.query.dataFim || req.body.dataFim);
-
-        if (!dataIniStr || !dataFimStr) {
-            return res.render("atendimento/atendreltera/gestao/relatendgestaocons", {
-                rels: [], subtotaisPorConvenio: [], periodoDe: '', periodoAte: '',
-                pesquisa: { dataIni: '', dataFim: '' }
-            });
-        }
-
-        const dataIni = new Date(dataIniStr);
-        const dataFim = new Date(dataFimStr);
-        if (isNaN(dataIni.getTime()) || isNaN(dataFim.getTime())) {
-            return res.status(400).send("Datas inválidas.");
-        }
-        dataFim.setUTCHours(23, 59, 59, 999);
-
-        const diffDays = Math.ceil((dataFim - dataIni) / (1000 * 60 * 60 * 24));
-        if (diffDays > 31 || diffDays < 0) {
-            return res.status(400).send("O intervalo máximo permitido é de 31 dias.");
-        }
-
-        // --- PIPELINE DE AGREGAÇÃO CORRIGIDA ---
-        const pipeline = [
-            // 1. FILTRO INICIAL: período + EXCLUIR categorias indesejadas
-            {
-                $match: {
-                    atend_atenddata: { $gte: dataIni, $lte: dataFim },
-                    atend_categoria: { $nin: ["Falta Absoluta", "Feriado"] } // ✅ exclui ambos
-                }
-            },
-
-            // 2. DEFINIR TERAPIA EFETIVA e VALOR CRE EFETIVO
-            {
-                $addFields: {
-                    // 🔑 TERAPIA EFETIVA (para agrupamento correto)
-                    terapia_efetiva_id: {
-                        $switch: {
-                            branches: [
-                                {
-                                    case: {
-                                        $and: [
-                                            { $eq: ["$atend_fixo", "true"] },
-                                            { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta"]] } }
-                                        ]
-                                    },
-                                    then: "$atend_fixoterapiaid"
-                                },
-                                {
-                                    case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
-                                    then: "$atend_fixoterapiaid"  // ✅ usa terapia do fixo
-                                }
-                            ],
-                            default: "$atend_terapiaid" // terapia padrão
-                        }
-                    },
-
-                    // 💰 VALOR CRE EFETIVO (prioriza fixo quando aplicável)
-                    valorcre_correto: {
-                        $switch: {
-                            branches: [
-                                {
-                                    case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
-                                    then: { $ifNull: ["$atend_fixovalorcre", "0"] }
-                                },
-                                {
-                                    case: {
-                                        $and: [
-                                            { $eq: ["$atend_fixo", "true"] },
-                                            { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta", "Falta Justificada"]] } }
-                                        ]
-                                    },
-                                    then: { $ifNull: ["$atend_fixovalorcre", "0"] }
-                                },
-                                {
-                                    case: { $in: ["$atend_categoria", ["Falta Justificada"]] },
-                                    then: { $ifNull: ["$atend_mergevalorcre", "0"] }
-                                }
-                            ],
-                            default: { $ifNull: ["$atend_valorcre", "0"] }
-                        }
-                    }
-                }
-            },
-
-            // 3. CONVERTER VALORES PARA NÚMERO (substitui vírgula por ponto)
-            {
-                $addFields: {
-                    _valorcre: {
-                        $cond: {
-                            if: { $or: [{ $eq: ["$valorcre_correto", ""] }, { $eq: ["$valorcre_correto", null] }] },
-                            then: 0,
-                            else: {
-                                $toDouble: {
-                                    $replaceAll: { input: { $toString: "$valorcre_correto" }, find: ",", replacement: "." }
-                                }
+                // 4. Converter valores para número (tratar vírgulas)
+                {
+                    $addFields: {
+                        _valorcre: {
+                            $cond: {
+                                if: { $or: [{ $eq: ["$valorcre_correto", ""] }, { $eq: ["$valorcre_correto", null] }] },
+                                then: 0,
+                                else: { $toDouble: { $replaceAll: { input: "$valorcre_correto", find: ",", replacement: "." } } }
+                            }
+                        },
+                        _valordeb: {
+                            $cond: {
+                                if: { $or: [{ $eq: ["$valordeb_correto", ""] }, { $eq: ["$valordeb_correto", null] }] },
+                                then: 0,
+                                else: { $toDouble: { $replaceAll: { input: "$valordeb_correto", find: ",", replacement: "." } } }
                             }
                         }
                     }
-                }
-            },
+                },
 
-            // 4. LOOKUP: Convênio
-            {
-                $lookup: {
-                    from: Conv.collection.name,
-                    localField: "atend_convid",
-                    foreignField: "_id",
-                    as: "conv"
-                }
-            },
-            { $unwind: { path: "$conv", preserveNullAndEmptyArrays: true } },
+                // 5. Lookup: Convênio
+                {
+                    $lookup: {
+                        from: Conv.collection.name,
+                        localField: "atend_convid",
+                        foreignField: "_id",
+                        as: "conv"
+                    }
+                },
+                { $unwind: { path: "$conv", preserveNullAndEmptyArrays: true } },
 
-            // 5. LOOKUP: Terapia EFETIVA (não mais atend_terapiaid!)
-            {
-                $lookup: {
-                    from: Terapia.collection.name,
-                    localField: "terapia_efetiva_id",
-                    foreignField: "_id",
-                    as: "terapia"
-                }
-            },
-            { $unwind: { path: "$terapia", preserveNullAndEmptyArrays: true } },
+                // 6. Lookup: Terapia
+                {
+                    $lookup: {
+                        from: Terapia.collection.name,
+                        localField: "atend_terapiaid",
+                        foreignField: "_id",
+                        as: "terapia"
+                    }
+                },
+                { $unwind: { path: "$terapia", preserveNullAndEmptyArrays: true } },
 
-            // 6. AGRUPAR por Convênio + Terapia EFETIVA
-            {
-                $group: {
-                    _id: {
-                        conv_nome: { $ifNull: ["$conv.conv_nome", "Sem convênio"] },
-                        terapia_nomecid: { $ifNull: ["$terapia.terapia_nomecid", "Sem terapia"] }
-                    },
-                    qtd: { $sum: 1 },
-                    total_valorcre: { $sum: "$_valorcre" }
-                }
-            },
-            { $sort: { "_id.conv_nome": 1, "_id.terapia_nomecid": 1 } }
-        ];
+                // 7. Agrupar por Convênio + Terapia
+                {
+                    $group: {
+                        _id: {
+                            conv_nome: "$conv.conv_nome",
+                            terapia_nomecid: "$terapia.terapia_nomecid"
+                        },
+                        qtd: { $sum: 1 },
+                        total_valorcre: { $sum: "$_valorcre" },
+                        total_valordeb: { $sum: "$_valordeb" }
+                    }
+                },
+                { $sort: { "_id.conv_nome": 1, "_id.terapia_nomecid": 1 } }
+            ];
 
-        // --- EXECUÇÃO ---
-        const rels = await Atend.aggregate(pipeline).exec();
+            console.log("[relatendgestaoconsfechado] Executando pipeline...");
+            const rels = await Atend.aggregate(pipeline).exec();
+            console.log(`[relatendgestaoconsfechado] Grupos retornados: ${rels.length}`);
 
-        // --- FORMATAR RESULTADOS ---
-        const relsFormatado = rels.map(r => {
-            const valorcreNum = r.total_valorcre;
-            return {
-                conv_nome: r._id.conv_nome,
-                terapia_nomecid: r._id.terapia_nomecid,
+            // === FORMATAR DETALHES POR TERAPIA ===
+            const relsFormatado = rels.map(r => ({
+                conv_nome: r._id.conv_nome || "Sem convênio",
+                terapia_nomecid: r._id.terapia_nomecid || "Sem terapia",
                 qtd: r.qtd,
-                tempo: "40 min", // mantido conforme original
-                total_valorcre: fncGeral.mascaraValores(Math.round(valorcreNum * 100).toString()),
-                _valorcre_num: valorcreNum // auxiliar para cálculos
-            };
-        });
+                tempo: "40 min",
+                total_valorcre: fncGeral.mascaraValores(Math.round(r.total_valorcre * 100).toString()),
+                total_valordeb: fncGeral.mascaraValores(Math.round(r.total_valordeb * 100).toString()),
+                // Valores numéricos para cálculo de subtotais
+                _valorcre_num: r.total_valorcre,
+                _valordeb_num: r.total_valordeb
+            }));
 
-        // --- SUBTOTAIS POR CONVÊNIO ---
-        const subtotaisMap = {};
-        relsFormatado.forEach(item => {
-            const key = item.conv_nome;
-            if (!subtotaisMap[key]) {
-                subtotaisMap[key] = { conv_nome: key, qtd: 0, total_valorcre: 0 };
-            }
-            subtotaisMap[key].qtd += item.qtd;
-            subtotaisMap[key].total_valorcre += item._valorcre_num;
-        });
-
-        const subtotaisPorConvenio = Object.values(subtotaisMap).map(sub => ({
-            conv_nome: sub.conv_nome,
-            qtd: sub.qtd,
-            total_valorcre: fncGeral.mascaraValores(Math.round(sub.total_valorcre * 100).toString())
-        }));
-
-        // --- GRAND TOTAL ---
-        const grandTotal = relsFormatado.reduce((acc, item) => {
-            acc.qtd += item.qtd;
-            acc.total_valorcre += item._valorcre_num;
-            return acc;
-        }, { qtd: 0, total_valorcre: 0 });
-
-        grandTotal.total_valorcre = fncGeral.mascaraValores(Math.round(grandTotal.total_valorcre * 100).toString());
-
-        // --- RENDER ---
-        const periodoDe = fncGeral.getDataInvert(dataIni.toISOString().substring(0, 10));
-        const periodoAte = fncGeral.getDataInvert(dataFim.toISOString().substring(0, 10));
-
-        res.render("atendimento/atendreltera/gestao/relatendgestaoconsfec", {
-            rels: relsFormatado,
-            subtotaisPorConvenio,
-            grandTotal,
-            periodoDe,
-            periodoAte,
-            pesquisa: {
-                dataIni: dataIni.toISOString().substring(0, 10),
-                dataFim: dataFim.toISOString().substring(0, 10)
-            }
-        });
-
-    } catch (err) {
-        console.error("[relatendgestaoconsfechado] Erro:", err);
-        res.status(500).send("Erro ao gerar relatório consolidado.");
-    }
-},
-relatendgestaoconsfechado: async (req, res) => {
-    try {
-        const db = req.cookies['preferredDb'];
-        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
-        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-
-        // --- Normalização das datas (aceita query ou body, array ou string) ---
-        const dataIniStr = Array.isArray(req.query.dataIni) ? req.query.dataIni[0] : (req.query.dataIni || req.body.dataIni);
-        const dataFimStr = Array.isArray(req.query.dataFim) ? req.query.dataFim[0] : (req.query.dataFim || req.body.dataFim);
-
-        if (!dataIniStr || !dataFimStr) {
-            return res.render("atendimento/atendreltera/gestao/relatendgestaocons", {
-                rels: [], subtotaisPorConvenio: [], periodoDe: '', periodoAte: '',
-                pesquisa: { dataIni: '', dataFim: '' }
+            // === CALCULAR SUBTOTAIS POR CONVÊNIO ===
+            const subtotaisMap = {};
+            relsFormatado.forEach(item => {
+                const key = item.conv_nome;
+                if (!subtotaisMap[key]) {
+                    subtotaisMap[key] = {
+                        conv_nome: item.conv_nome,
+                        qtd: 0,
+                        total_valorcre: 0,
+                        total_valordeb: 0
+                    };
+                }
+                subtotaisMap[key].qtd += item.qtd;
+                subtotaisMap[key].total_valorcre += item._valorcre_num;
+                subtotaisMap[key].total_valordeb += item._valordeb_num;
             });
-        }
 
-        const dataIni = new Date(dataIniStr);
-        const dataFim = new Date(dataFimStr);
-        if (isNaN(dataIni.getTime()) || isNaN(dataFim.getTime())) {
-            return res.status(400).send("Datas inválidas.");
-        }
-        dataFim.setUTCHours(23, 59, 59, 999);
+            const subtotaisPorConvenio = Object.values(subtotaisMap).map(sub => ({
+                conv_nome: sub.conv_nome,
+                qtd: sub.qtd,
+                total_valorcre: fncGeral.mascaraValores(Math.round(sub.total_valorcre * 100).toString()),
+                total_valordeb: fncGeral.mascaraValores(Math.round(sub.total_valordeb * 100).toString())
+            }));
 
-        const diffDays = Math.ceil((dataFim - dataIni) / (1000 * 60 * 60 * 24));
-        if (diffDays > 31 || diffDays < 0) {
-            return res.status(400).send("O intervalo máximo permitido é de 31 dias.");
-        }
+            console.log("[relatendgestaoconsfechado] Subtotais calculados:", subtotaisPorConvenio);
+            // === CALCULAR GRAND TOTAL (todos os convênios) ===
+            let grandTotalQtd = 0;
+            let grandTotalCre = 0;
+            let grandTotalDeb = 0;
 
-        // --- PIPELINE DE AGREGAÇÃO ---
-        const pipeline = [
-            // 1. FILTRO INICIAL: período + EXCLUIR categorias indesejadas
-            {
-                $match: {
-                    atend_atenddata: { $gte: dataIni, $lte: dataFim },
-                    atend_categoria: { $nin: ["Falta Absoluta", "Feriado"] } // ✅ mantém exclusão
-                }
-            },
+            relsFormatado.forEach(item => {
+                grandTotalQtd += item.qtd;
+                grandTotalCre += item._valorcre_num;
+                grandTotalDeb += item._valordeb_num;
+            });
 
-            // 2. DEFINIR TERAPIA EFETIVA + VALORES EFETIVOS (CRE e DEB)
-            {
-                $addFields: {
-                    // 🔑 TERAPIA EFETIVA (para agrupamento correto)
-                    terapia_efetiva_id: {
-                        $switch: {
-                            branches: [
-                                {
-                                    case: {
-                                        $and: [
-                                            { $eq: ["$atend_fixo", "true"] },
-                                            { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta"]] } }
-                                        ]
-                                    },
-                                    then: "$atend_fixoterapiaid"
-                                },
-                                {
-                                    case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
-                                    then: "$atend_fixoterapiaid"  // ✅ usa terapia do fixo
-                                }
-                            ],
-                            default: "$atend_terapiaid"
-                        }
-                    },
-
-                    // 💰 VALOR CRE EFETIVO
-                    valorcre_correto: {
-                        $switch: {
-                            branches: [
-                                {
-                                    case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
-                                    then: { $ifNull: ["$atend_fixovalorcre", "0"] }
-                                },
-                                {
-                                    case: {
-                                        $and: [
-                                            { $eq: ["$atend_fixo", "true"] },
-                                            { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta", "Falta Justificada"]] } }
-                                        ]
-                                    },
-                                    then: { $ifNull: ["$atend_fixovalorcre", "0"] }
-                                },
-                                {
-                                    case: { $in: ["$atend_categoria", ["Falta Justificada"]] },
-                                    then: { $ifNull: ["$atend_mergevalorcre", "0"] }
-                                }
-                            ],
-                            default: { $ifNull: ["$atend_valorcre", "0"] }
-                        }
-                    },
-
-                    // 💳 VALOR DEB EFETIVO (espelhado do CRE, mesma lógica)
-                    valordeb_correto: {
-                        $switch: {
-                            branches: [
-                                {
-                                    case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
-                                    then: { $ifNull: ["$atend_fixovalordeb", "0"] }
-                                },
-                                {
-                                    case: {
-                                        $and: [
-                                            { $eq: ["$atend_fixo", "true"] },
-                                            { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta", "Falta Justificada"]] } }
-                                        ]
-                                    },
-                                    then: { $ifNull: ["$atend_fixovalordeb", "0"] }
-                                },
-                                {
-                                    case: { $in: ["$atend_categoria", ["Falta Justificada"]] },
-                                    then: { $ifNull: ["$atend_mergevalordeb", "0"] }
-                                }
-                            ],
-                            default: { $ifNull: ["$atend_valordeb", "0"] }
-                        }
-                    }
-                }
-            },
-
-            // 3. CONVERTER VALORES PARA NÚMERO (substitui vírgula por ponto)
-            {
-                $addFields: {
-                    _valorcre: {
-                        $cond: {
-                            if: { $or: [{ $eq: ["$valorcre_correto", ""] }, { $eq: ["$valorcre_correto", null] }] },
-                            then: 0,
-                            else: {
-                                $toDouble: {
-                                    $replaceAll: { input: { $toString: "$valorcre_correto" }, find: ",", replacement: "." }
-                                }
-                            }
-                        }
-                    },
-                    _valordeb: {
-                        $cond: {
-                            if: { $or: [{ $eq: ["$valordeb_correto", ""] }, { $eq: ["$valordeb_correto", null] }] },
-                            then: 0,
-                            else: {
-                                $toDouble: {
-                                    $replaceAll: { input: { $toString: "$valordeb_correto" }, find: ",", replacement: "." }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-
-            // 4. LOOKUP: Convênio
-            {
-                $lookup: {
-                    from: Conv.collection.name,
-                    localField: "atend_convid",
-                    foreignField: "_id",
-                    as: "conv"
-                }
-            },
-            { $unwind: { path: "$conv", preserveNullAndEmptyArrays: true } },
-
-            // 5. LOOKUP: Terapia EFETIVA
-            {
-                $lookup: {
-                    from: Terapia.collection.name,
-                    localField: "terapia_efetiva_id",
-                    foreignField: "_id",
-                    as: "terapia"
-                }
-            },
-            { $unwind: { path: "$terapia", preserveNullAndEmptyArrays: true } },
-
-            // 6. AGRUPAR por Convênio + Terapia EFETIVA (inclui débito)
-            {
-                $group: {
-                    _id: {
-                        conv_nome: { $ifNull: ["$conv.conv_nome", "Sem convênio"] },
-                        terapia_nomecid: { $ifNull: ["$terapia.terapia_nomecid", "Sem terapia"] }
-                    },
-                    qtd: { $sum: 1 },
-                    total_valorcre: { $sum: "$_valorcre" },
-                    total_valordeb: { $sum: "$_valordeb" } // ✅ débito incluído
-                }
-            },
-            { $sort: { "_id.conv_nome": 1, "_id.terapia_nomecid": 1 } }
-        ];
-
-        // --- EXECUÇÃO ---
-        const rels = await Atend.aggregate(pipeline).exec();
-
-        // --- FORMATAR RESULTADOS ---
-        const relsFormatado = rels.map(r => {
-            const valorcreNum = r.total_valorcre;
-            const valordebNum = r.total_valordeb;
-
-            return {
-                conv_nome: r._id.conv_nome,
-                terapia_nomecid: r._id.terapia_nomecid,
-                qtd: r.qtd,
-                tempo: "40 min", // mantido conforme original
-                total_valorcre: fncGeral.mascaraValores(Math.round(valorcreNum * 100).toString()),
-                total_valordeb: fncGeral.mascaraValores(Math.round(valordebNum * 100).toString()), // ✅
-                _valorcre_num: valorcreNum,
-                _valordeb_num: valordebNum // para cálculos posteriores
+            const grandTotal = {
+                qtd: grandTotalQtd,
+                total_valorcre: fncGeral.mascaraValores(Math.round(grandTotalCre * 100).toString()),
+                total_valordeb: fncGeral.mascaraValores(Math.round(grandTotalDeb * 100).toString())
             };
-        });
 
-        // --- SUBTOTAIS POR CONVÊNIO ---
-        const subtotaisMap = {};
-        relsFormatado.forEach(item => {
-            const key = item.conv_nome;
-            if (!subtotaisMap[key]) {
-                subtotaisMap[key] = {
-                    conv_nome: key,
-                    qtd: 0,
-                    total_valorcre: 0,
-                    total_valordeb: 0 // ✅
+            console.log("[relatendgestaoconsfechado] Grand total:", grandTotal);
+
+            // === RENDERIZAR ===
+            const periodoDe = fncGeral.getDataInvert(dataIni.toISOString().substring(0, 10));
+            const periodoAte = fncGeral.getDataInvert(dataFim.toISOString().substring(0, 10));
+
+            res.render("atendimento/atendreltera/gestao/relatendgestaoconsfec", {
+                rels: relsFormatado,
+                subtotaisPorConvenio, // ainda usado para ordenar os convênios
+                grandTotal,
+                periodoDe,
+                periodoAte,
+                pesquisa: {
+                    dataIni: dataIni.toISOString().substring(0, 10),
+                    dataFim: dataFim.toISOString().substring(0, 10)
+                }
+            });
+
+        } catch (err) {
+            console.error("[relatendgestaoconsfechado] Erro crítico:", err);
+            res.status(500).send("Erro ao gerar relatório consolidado.");
+        }
+    },
+    relatendgestaoconsfechadoOLD_ErroSemDebs: async (req, res) => {
+        try {
+            const db = req.cookies['preferredDb'];
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
+            // --- Normalização das datas (aceita query ou body, array ou string) ---
+            const dataIniStr = Array.isArray(req.query.dataIni) ? req.query.dataIni[0] : (req.query.dataIni || req.body.dataIni);
+            const dataFimStr = Array.isArray(req.query.dataFim) ? req.query.dataFim[0] : (req.query.dataFim || req.body.dataFim);
+
+            if (!dataIniStr || !dataFimStr) {
+                return res.render("atendimento/atendreltera/gestao/relatendgestaocons", {
+                    rels: [], subtotaisPorConvenio: [], periodoDe: '', periodoAte: '',
+                    pesquisa: { dataIni: '', dataFim: '' }
+                });
+            }
+
+            const dataIni = new Date(dataIniStr);
+            const dataFim = new Date(dataFimStr);
+            if (isNaN(dataIni.getTime()) || isNaN(dataFim.getTime())) {
+                return res.status(400).send("Datas inválidas.");
+            }
+            dataFim.setUTCHours(23, 59, 59, 999);
+
+            const diffDays = Math.ceil((dataFim - dataIni) / (1000 * 60 * 60 * 24));
+            if (diffDays > 31 || diffDays < 0) {
+                return res.status(400).send("O intervalo máximo permitido é de 31 dias.");
+            }
+
+            // --- PIPELINE DE AGREGAÇÃO CORRIGIDA ---
+            const pipeline = [
+                // 1. FILTRO INICIAL: período + EXCLUIR categorias indesejadas
+                {
+                    $match: {
+                        atend_atenddata: { $gte: dataIni, $lte: dataFim },
+                        atend_categoria: { $nin: ["Falta Absoluta", "Feriado"] } // ✅ exclui ambos
+                    }
+                },
+
+                // 2. DEFINIR TERAPIA EFETIVA e VALOR CRE EFETIVO
+                {
+                    $addFields: {
+                        // 🔑 TERAPIA EFETIVA (para agrupamento correto)
+                        terapia_efetiva_id: {
+                            $switch: {
+                                branches: [
+                                    {
+                                        case: {
+                                            $and: [
+                                                { $eq: ["$atend_fixo", "true"] },
+                                                { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta"]] } }
+                                            ]
+                                        },
+                                        then: "$atend_fixoterapiaid"
+                                    },
+                                    {
+                                        case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
+                                        then: "$atend_fixoterapiaid"  // ✅ usa terapia do fixo
+                                    }
+                                ],
+                                default: "$atend_terapiaid" // terapia padrão
+                            }
+                        },
+
+                        // 💰 VALOR CRE EFETIVO (prioriza fixo quando aplicável)
+                        valorcre_correto: {
+                            $switch: {
+                                branches: [
+                                    {
+                                        case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
+                                        then: { $ifNull: ["$atend_fixovalorcre", "0"] }
+                                    },
+                                    {
+                                        case: {
+                                            $and: [
+                                                { $eq: ["$atend_fixo", "true"] },
+                                                { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta", "Falta Justificada"]] } }
+                                            ]
+                                        },
+                                        then: { $ifNull: ["$atend_fixovalorcre", "0"] }
+                                    },
+                                    {
+                                        case: { $in: ["$atend_categoria", ["Falta Justificada"]] },
+                                        then: { $ifNull: ["$atend_mergevalorcre", "0"] }
+                                    }
+                                ],
+                                default: { $ifNull: ["$atend_valorcre", "0"] }
+                            }
+                        }
+                    }
+                },
+
+                // 3. CONVERTER VALORES PARA NÚMERO (substitui vírgula por ponto)
+                {
+                    $addFields: {
+                        _valorcre: {
+                            $cond: {
+                                if: { $or: [{ $eq: ["$valorcre_correto", ""] }, { $eq: ["$valorcre_correto", null] }] },
+                                then: 0,
+                                else: {
+                                    $toDouble: {
+                                        $replaceAll: { input: { $toString: "$valorcre_correto" }, find: ",", replacement: "." }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                // 4. LOOKUP: Convênio
+                {
+                    $lookup: {
+                        from: Conv.collection.name,
+                        localField: "atend_convid",
+                        foreignField: "_id",
+                        as: "conv"
+                    }
+                },
+                { $unwind: { path: "$conv", preserveNullAndEmptyArrays: true } },
+
+                // 5. LOOKUP: Terapia EFETIVA (não mais atend_terapiaid!)
+                {
+                    $lookup: {
+                        from: Terapia.collection.name,
+                        localField: "terapia_efetiva_id",
+                        foreignField: "_id",
+                        as: "terapia"
+                    }
+                },
+                { $unwind: { path: "$terapia", preserveNullAndEmptyArrays: true } },
+
+                // 6. AGRUPAR por Convênio + Terapia EFETIVA
+                {
+                    $group: {
+                        _id: {
+                            conv_nome: { $ifNull: ["$conv.conv_nome", "Sem convênio"] },
+                            terapia_nomecid: { $ifNull: ["$terapia.terapia_nomecid", "Sem terapia"] }
+                        },
+                        qtd: { $sum: 1 },
+                        total_valorcre: { $sum: "$_valorcre" }
+                    }
+                },
+                { $sort: { "_id.conv_nome": 1, "_id.terapia_nomecid": 1 } }
+            ];
+
+            // --- EXECUÇÃO ---
+            const rels = await Atend.aggregate(pipeline).exec();
+
+            // --- FORMATAR RESULTADOS ---
+            const relsFormatado = rels.map(r => {
+                const valorcreNum = r.total_valorcre;
+                return {
+                    conv_nome: r._id.conv_nome,
+                    terapia_nomecid: r._id.terapia_nomecid,
+                    qtd: r.qtd,
+                    tempo: "40 min", // mantido conforme original
+                    total_valorcre: fncGeral.mascaraValores(Math.round(valorcreNum * 100).toString()),
+                    _valorcre_num: valorcreNum // auxiliar para cálculos
                 };
+            });
+
+            // --- SUBTOTAIS POR CONVÊNIO ---
+            const subtotaisMap = {};
+            relsFormatado.forEach(item => {
+                const key = item.conv_nome;
+                if (!subtotaisMap[key]) {
+                    subtotaisMap[key] = { conv_nome: key, qtd: 0, total_valorcre: 0 };
+                }
+                subtotaisMap[key].qtd += item.qtd;
+                subtotaisMap[key].total_valorcre += item._valorcre_num;
+            });
+
+            const subtotaisPorConvenio = Object.values(subtotaisMap).map(sub => ({
+                conv_nome: sub.conv_nome,
+                qtd: sub.qtd,
+                total_valorcre: fncGeral.mascaraValores(Math.round(sub.total_valorcre * 100).toString())
+            }));
+
+            // --- GRAND TOTAL ---
+            const grandTotal = relsFormatado.reduce((acc, item) => {
+                acc.qtd += item.qtd;
+                acc.total_valorcre += item._valorcre_num;
+                return acc;
+            }, { qtd: 0, total_valorcre: 0 });
+
+            grandTotal.total_valorcre = fncGeral.mascaraValores(Math.round(grandTotal.total_valorcre * 100).toString());
+
+            // --- RENDER ---
+            const periodoDe = fncGeral.getDataInvert(dataIni.toISOString().substring(0, 10));
+            const periodoAte = fncGeral.getDataInvert(dataFim.toISOString().substring(0, 10));
+
+            res.render("atendimento/atendreltera/gestao/relatendgestaoconsfec", {
+                rels: relsFormatado,
+                subtotaisPorConvenio,
+                grandTotal,
+                periodoDe,
+                periodoAte,
+                pesquisa: {
+                    dataIni: dataIni.toISOString().substring(0, 10),
+                    dataFim: dataFim.toISOString().substring(0, 10)
+                }
+            });
+
+        } catch (err) {
+            console.error("[relatendgestaoconsfechado] Erro:", err);
+            res.status(500).send("Erro ao gerar relatório consolidado.");
+        }
+    },
+    relatendgestaoconsfechado: async (req, res) => {
+        try {
+            const db = req.cookies['preferredDb'];
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
+            // --- Normalização das datas (aceita query ou body, array ou string) ---
+            const dataIniStr = Array.isArray(req.query.dataIni) ? req.query.dataIni[0] : (req.query.dataIni || req.body.dataIni);
+            const dataFimStr = Array.isArray(req.query.dataFim) ? req.query.dataFim[0] : (req.query.dataFim || req.body.dataFim);
+
+            if (!dataIniStr || !dataFimStr) {
+                return res.render("atendimento/atendreltera/gestao/relatendgestaocons", {
+                    rels: [], subtotaisPorConvenio: [], periodoDe: '', periodoAte: '',
+                    pesquisa: { dataIni: '', dataFim: '' }
+                });
             }
-            subtotaisMap[key].qtd += item.qtd;
-            subtotaisMap[key].total_valorcre += item._valorcre_num;
-            subtotaisMap[key].total_valordeb += item._valordeb_num; // ✅
-        });
 
-        const subtotaisPorConvenio = Object.values(subtotaisMap).map(sub => ({
-            conv_nome: sub.conv_nome,
-            qtd: sub.qtd,
-            total_valorcre: fncGeral.mascaraValores(Math.round(sub.total_valorcre * 100).toString()),
-            total_valordeb: fncGeral.mascaraValores(Math.round(sub.total_valordeb * 100).toString()) // ✅
-        }));
-
-        // --- GRAND TOTAL ---
-        const grandTotal = relsFormatado.reduce((acc, item) => {
-            acc.qtd += item.qtd;
-            acc.total_valorcre += item._valorcre_num;
-            acc.total_valordeb += item._valordeb_num; // ✅
-            return acc;
-        }, { qtd: 0, total_valorcre: 0, total_valordeb: 0 }); // ✅
-
-        grandTotal.total_valorcre = fncGeral.mascaraValores(Math.round(grandTotal.total_valorcre * 100).toString());
-        grandTotal.total_valordeb = fncGeral.mascaraValores(Math.round(grandTotal.total_valordeb * 100).toString()); // ✅
-
-        // --- RENDER ---
-        const periodoDe = fncGeral.getDataInvert(dataIni.toISOString().substring(0, 10));
-        const periodoAte = fncGeral.getDataInvert(dataFim.toISOString().substring(0, 10));
-
-        res.render("atendimento/atendreltera/gestao/relatendgestaoconsfec", {
-            rels: relsFormatado,
-            subtotaisPorConvenio,
-            grandTotal,
-            periodoDe,
-            periodoAte,
-            pesquisa: {
-                dataIni: dataIni.toISOString().substring(0, 10),
-                dataFim: dataFim.toISOString().substring(0, 10)
+            const dataIni = new Date(dataIniStr);
+            const dataFim = new Date(dataFimStr);
+            if (isNaN(dataIni.getTime()) || isNaN(dataFim.getTime())) {
+                return res.status(400).send("Datas inválidas.");
             }
-        });
+            dataFim.setUTCHours(23, 59, 59, 999);
 
-    } catch (err) {
-        console.error("[relatendgestaoconsfechado] Erro:", err);
-        res.status(500).send("Erro ao gerar relatório consolidado.");
-    }
-},
+            const diffDays = Math.ceil((dataFim - dataIni) / (1000 * 60 * 60 * 24));
+            if (diffDays > 31 || diffDays < 0) {
+                return res.status(400).send("O intervalo máximo permitido é de 31 dias.");
+            }
+
+            // --- PIPELINE DE AGREGAÇÃO ---
+            const pipeline = [
+                // 1. FILTRO INICIAL: período + EXCLUIR categorias indesejadas
+                {
+                    $match: {
+                        atend_atenddata: { $gte: dataIni, $lte: dataFim },
+                        atend_categoria: { $nin: ["Falta Absoluta", "Feriado"] } // ✅ mantém exclusão
+                    }
+                },
+
+                // 2. DEFINIR TERAPIA EFETIVA + VALORES EFETIVOS (CRE e DEB)
+                {
+                    $addFields: {
+                        // 🔑 TERAPIA EFETIVA (para agrupamento correto)
+                        terapia_efetiva_id: {
+                            $switch: {
+                                branches: [
+                                    {
+                                        case: {
+                                            $and: [
+                                                { $eq: ["$atend_fixo", "true"] },
+                                                { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta"]] } }
+                                            ]
+                                        },
+                                        then: "$atend_fixoterapiaid"
+                                    },
+                                    {
+                                        case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
+                                        then: "$atend_fixoterapiaid"  // ✅ usa terapia do fixo
+                                    }
+                                ],
+                                default: "$atend_terapiaid"
+                            }
+                        },
+
+                        // 💰 VALOR CRE EFETIVO
+                        valorcre_correto: {
+                            $switch: {
+                                branches: [
+                                    {
+                                        case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
+                                        then: { $ifNull: ["$atend_fixovalorcre", "0"] }
+                                    },
+                                    {
+                                        case: {
+                                            $and: [
+                                                { $eq: ["$atend_fixo", "true"] },
+                                                { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta", "Falta Justificada"]] } }
+                                            ]
+                                        },
+                                        then: { $ifNull: ["$atend_fixovalorcre", "0"] }
+                                    },
+                                    {
+                                        case: { $in: ["$atend_categoria", ["Falta Justificada"]] },
+                                        then: { $ifNull: ["$atend_mergevalorcre", "0"] }
+                                    }
+                                ],
+                                default: { $ifNull: ["$atend_valorcre", "0"] }
+                            }
+                        },
+
+                        // 💳 VALOR DEB EFETIVO (espelhado do CRE, mesma lógica)
+                        valordeb_correto: {
+                            $switch: {
+                                branches: [
+                                    {
+                                        case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
+                                        then: { $ifNull: ["$atend_fixovalordeb", "0"] }
+                                    },
+                                    {
+                                        case: {
+                                            $and: [
+                                                { $eq: ["$atend_fixo", "true"] },
+                                                { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta", "Falta Justificada"]] } }
+                                            ]
+                                        },
+                                        then: { $ifNull: ["$atend_fixovalordeb", "0"] }
+                                    },
+                                    {
+                                        case: { $in: ["$atend_categoria", ["Falta Justificada"]] },
+                                        then: { $ifNull: ["$atend_mergevalordeb", "0"] }
+                                    }
+                                ],
+                                default: { $ifNull: ["$atend_valordeb", "0"] }
+                            }
+                        }
+                    }
+                },
+
+                // 3. CONVERTER VALORES PARA NÚMERO (substitui vírgula por ponto)
+                {
+                    $addFields: {
+                        _valorcre: {
+                            $cond: {
+                                if: { $or: [{ $eq: ["$valorcre_correto", ""] }, { $eq: ["$valorcre_correto", null] }] },
+                                then: 0,
+                                else: {
+                                    $toDouble: {
+                                        $replaceAll: { input: { $toString: "$valorcre_correto" }, find: ",", replacement: "." }
+                                    }
+                                }
+                            }
+                        },
+                        _valordeb: {
+                            $cond: {
+                                if: { $or: [{ $eq: ["$valordeb_correto", ""] }, { $eq: ["$valordeb_correto", null] }] },
+                                then: 0,
+                                else: {
+                                    $toDouble: {
+                                        $replaceAll: { input: { $toString: "$valordeb_correto" }, find: ",", replacement: "." }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                // 4. LOOKUP: Convênio
+                {
+                    $lookup: {
+                        from: Conv.collection.name,
+                        localField: "atend_convid",
+                        foreignField: "_id",
+                        as: "conv"
+                    }
+                },
+                { $unwind: { path: "$conv", preserveNullAndEmptyArrays: true } },
+
+                // 5. LOOKUP: Terapia EFETIVA
+                {
+                    $lookup: {
+                        from: Terapia.collection.name,
+                        localField: "terapia_efetiva_id",
+                        foreignField: "_id",
+                        as: "terapia"
+                    }
+                },
+                { $unwind: { path: "$terapia", preserveNullAndEmptyArrays: true } },
+
+                // 6. AGRUPAR por Convênio + Terapia EFETIVA (inclui débito)
+                {
+                    $group: {
+                        _id: {
+                            conv_nome: { $ifNull: ["$conv.conv_nome", "Sem convênio"] },
+                            terapia_nomecid: { $ifNull: ["$terapia.terapia_nomecid", "Sem terapia"] }
+                        },
+                        qtd: { $sum: 1 },
+                        total_valorcre: { $sum: "$_valorcre" },
+                        total_valordeb: { $sum: "$_valordeb" } // ✅ débito incluído
+                    }
+                },
+                { $sort: { "_id.conv_nome": 1, "_id.terapia_nomecid": 1 } }
+            ];
+
+            // --- EXECUÇÃO ---
+            const rels = await Atend.aggregate(pipeline).exec();
+
+            // --- FORMATAR RESULTADOS ---
+            const relsFormatado = rels.map(r => {
+                const valorcreNum = r.total_valorcre;
+                const valordebNum = r.total_valordeb;
+
+                return {
+                    conv_nome: r._id.conv_nome,
+                    terapia_nomecid: r._id.terapia_nomecid,
+                    qtd: r.qtd,
+                    tempo: "40 min", // mantido conforme original
+                    total_valorcre: fncGeral.mascaraValores(Math.round(valorcreNum * 100).toString()),
+                    total_valordeb: fncGeral.mascaraValores(Math.round(valordebNum * 100).toString()), // ✅
+                    _valorcre_num: valorcreNum,
+                    _valordeb_num: valordebNum // para cálculos posteriores
+                };
+            });
+
+            // --- SUBTOTAIS POR CONVÊNIO ---
+            const subtotaisMap = {};
+            relsFormatado.forEach(item => {
+                const key = item.conv_nome;
+                if (!subtotaisMap[key]) {
+                    subtotaisMap[key] = {
+                        conv_nome: key,
+                        qtd: 0,
+                        total_valorcre: 0,
+                        total_valordeb: 0 // ✅
+                    };
+                }
+                subtotaisMap[key].qtd += item.qtd;
+                subtotaisMap[key].total_valorcre += item._valorcre_num;
+                subtotaisMap[key].total_valordeb += item._valordeb_num; // ✅
+            });
+
+            const subtotaisPorConvenio = Object.values(subtotaisMap).map(sub => ({
+                conv_nome: sub.conv_nome,
+                qtd: sub.qtd,
+                total_valorcre: fncGeral.mascaraValores(Math.round(sub.total_valorcre * 100).toString()),
+                total_valordeb: fncGeral.mascaraValores(Math.round(sub.total_valordeb * 100).toString()) // ✅
+            }));
+
+            // --- GRAND TOTAL ---
+            const grandTotal = relsFormatado.reduce((acc, item) => {
+                acc.qtd += item.qtd;
+                acc.total_valorcre += item._valorcre_num;
+                acc.total_valordeb += item._valordeb_num; // ✅
+                return acc;
+            }, { qtd: 0, total_valorcre: 0, total_valordeb: 0 }); // ✅
+
+            grandTotal.total_valorcre = fncGeral.mascaraValores(Math.round(grandTotal.total_valorcre * 100).toString());
+            grandTotal.total_valordeb = fncGeral.mascaraValores(Math.round(grandTotal.total_valordeb * 100).toString()); // ✅
+
+            // --- RENDER ---
+            const periodoDe = fncGeral.getDataInvert(dataIni.toISOString().substring(0, 10));
+            const periodoAte = fncGeral.getDataInvert(dataFim.toISOString().substring(0, 10));
+
+            res.render("atendimento/atendreltera/gestao/relatendgestaoconsfec", {
+                rels: relsFormatado,
+                subtotaisPorConvenio,
+                grandTotal,
+                periodoDe,
+                periodoAte,
+                pesquisa: {
+                    dataIni: dataIni.toISOString().substring(0, 10),
+                    dataFim: dataFim.toISOString().substring(0, 10)
+                }
+            });
+
+        } catch (err) {
+            console.error("[relatendgestaoconsfechado] Erro:", err);
+            res.status(500).send("Erro ao gerar relatório consolidado.");
+        }
+    },
+    relterapiaconvfec: async (req, res) => {
+        try {
+            const db = req.cookies['preferredDb'];
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
+            // --- Normalização das datas (aceita query ou body, array ou string) ---
+            const dataIniStr = Array.isArray(req.query.dataIni) ? req.query.dataIni[0] : (req.query.dataIni || req.body.dataIni);
+            const dataFimStr = Array.isArray(req.query.dataFim) ? req.query.dataFim[0] : (req.query.dataFim || req.body.dataFim);
+
+            if (!dataIniStr || !dataFimStr) {
+                return res.render("atendimento/atendreltera/gestao/relatendgestaocons", {
+                    rels: [], subtotaisPorConvenio: [], periodoDe: '', periodoAte: '',
+                    pesquisa: { dataIni: '', dataFim: '' }
+                });
+            }
+
+            const dataIni = new Date(dataIniStr);
+            const dataFim = new Date(dataFimStr);
+            if (isNaN(dataIni.getTime()) || isNaN(dataFim.getTime())) {
+                return res.status(400).send("Datas inválidas.");
+            }
+            dataFim.setUTCHours(23, 59, 59, 999);
+
+            const diffDays = Math.ceil((dataFim - dataIni) / (1000 * 60 * 60 * 24));
+            if (diffDays > 31 || diffDays < 0) {
+                return res.status(400).send("O intervalo máximo permitido é de 31 dias.");
+            }
+
+            // --- PIPELINE DE AGREGAÇÃO ---
+            const pipeline = [
+                // 1. FILTRO INICIAL: período + EXCLUIR categorias indesejadas
+                {
+                    $match: {
+                        atend_atenddata: { $gte: dataIni, $lte: dataFim },
+                        atend_categoria: { $nin: ["Falta Absoluta", "Feriado"] } // ✅ mantém exclusão
+                    }
+                },
+
+                // 2. DEFINIR TERAPIA EFETIVA + VALORES EFETIVOS (CRE e DEB)
+                {
+                    $addFields: {
+                        // 🔑 TERAPIA EFETIVA (para agrupamento correto)
+                        terapia_efetiva_id: {
+                            $switch: {
+                                branches: [
+                                    {
+                                        case: {
+                                            $and: [
+                                                { $eq: ["$atend_fixo", "true"] },
+                                                { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta"]] } }
+                                            ]
+                                        },
+                                        then: "$atend_fixoterapiaid"
+                                    },
+                                    {
+                                        case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
+                                        then: "$atend_fixoterapiaid"  // ✅ usa terapia do fixo
+                                    }
+                                ],
+                                default: "$atend_terapiaid"
+                            }
+                        },
+
+                        // 💰 VALOR CRE EFETIVO
+                        valorcre_correto: {
+                            $switch: {
+                                branches: [
+                                    {
+                                        case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
+                                        then: { $ifNull: ["$atend_fixovalorcre", "0"] }
+                                    },
+                                    {
+                                        case: {
+                                            $and: [
+                                                { $eq: ["$atend_fixo", "true"] },
+                                                { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta", "Falta Justificada"]] } }
+                                            ]
+                                        },
+                                        then: { $ifNull: ["$atend_fixovalorcre", "0"] }
+                                    },
+                                    {
+                                        case: { $in: ["$atend_categoria", ["Falta Justificada"]] },
+                                        then: { $ifNull: ["$atend_mergevalorcre", "0"] }
+                                    }
+                                ],
+                                default: { $ifNull: ["$atend_valorcre", "0"] }
+                            }
+                        },
+
+                        // 💳 VALOR DEB EFETIVO
+                        valordeb_correto: {
+                            $switch: {
+                                branches: [
+                                    {
+                                        case: { $eq: ["$atend_categoria", "SubstitutoFixo"] },
+                                        then: { $ifNull: ["$atend_fixovalordeb", "0"] }
+                                    },
+                                    {
+                                        case: {
+                                            $and: [
+                                                { $eq: ["$atend_fixo", "true"] },
+                                                { $not: { $in: ["$atend_categoria", ["Feriado", "Falta Absoluta", "Falta Justificada"]] } }
+                                            ]
+                                        },
+                                        then: { $ifNull: ["$atend_fixovalordeb", "0"] }
+                                    },
+                                    {
+                                        case: { $in: ["$atend_categoria", ["Falta Justificada"]] },
+                                        then: { $ifNull: ["$atend_mergevalordeb", "0"] }
+                                    }
+                                ],
+                                default: { $ifNull: ["$atend_valordeb", "0"] }
+                            }
+                        }
+                    }
+                },
+
+                // 3. CONVERTER VALORES PARA NÚMERO (substitui vírgula por ponto)
+                {
+                    $addFields: {
+                        _valorcre: {
+                            $cond: {
+                                if: { $or: [{ $eq: ["$valorcre_correto", ""] }, { $eq: ["$valorcre_correto", null] }] },
+                                then: 0,
+                                else: {
+                                    $toDouble: {
+                                        $replaceAll: { input: { $toString: "$valorcre_correto" }, find: ",", replacement: "." }
+                                    }
+                                }
+                            }
+                        },
+                        _valordeb: {
+                            $cond: {
+                                if: { $or: [{ $eq: ["$valordeb_correto", ""] }, { $eq: ["$valordeb_correto", null] }] },
+                                then: 0,
+                                else: {
+                                    $toDouble: {
+                                        $replaceAll: { input: { $toString: "$valordeb_correto" }, find: ",", replacement: "." }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+
+                // 4. LOOKUP: Convênio
+                {
+                    $lookup: {
+                        from: Conv.collection.name,
+                        localField: "atend_convid",
+                        foreignField: "_id",
+                        as: "conv"
+                    }
+                },
+                { $unwind: { path: "$conv", preserveNullAndEmptyArrays: true } },
+
+                // 5. LOOKUP: Terapia EFETIVA — agora pegamos `terapia_nome` (não mais `terapia_nomecid`)
+                {
+                    $lookup: {
+                        from: Terapia.collection.name,
+                        localField: "terapia_efetiva_id",
+                        foreignField: "_id",
+                        as: "terapia"
+                    }
+                },
+                { $unwind: { path: "$terapia", preserveNullAndEmptyArrays: true } },
+
+                // 6. AGRUPAR por Convênio + terapia_nome (agora é terapia_nome, não nomecid)
+                {
+                    $group: {
+                        _id: {
+                            conv_nome: { $ifNull: ["$conv.conv_nome", "Sem convênio"] },
+                            terapia_nome: { $ifNull: ["$terapia.terapia_nome", "Sem terapia"] } // ✅ AQUI MUDA
+                        },
+                        qtd: { $sum: 1 },
+                        total_valorcre: { $sum: "$_valorcre" },
+                        total_valordeb: { $sum: "$_valordeb" }
+                    }
+                },
+                { $sort: { "_id.conv_nome": 1, "_id.terapia_nome": 1 } }
+            ];
+
+            // --- EXECUÇÃO ---
+            const rels = await Atend.aggregate(pipeline).exec();
+
+            // --- FORMATAR RESULTADOS (com tempo dinâmico) ---
+            const relsFormatado = rels.map(r => {
+                const valorcreNum = r.total_valorcre;
+                const valordebNum = r.total_valordeb;
+
+                // 🔍 Verifica se `terapia_nome` contém "ABA AT" (case-insensitive)
+                const nomeTerapia = (r._id.terapia_nome || "").trim();
+                const isABA_AT = /aba\s+at/i.test(nomeTerapia); // aceita "ABA AT", "Aba At", "aba at", etc.
+
+                return {
+                    conv_nome: r._id.conv_nome,
+                    terapia_nome: nomeTerapia,
+                    qtd: r.qtd,
+                    tempo: isABA_AT ? "60 min" : "40 min", // ✅ LÓGICA DINÂMICA DO TEMPO
+                    total_valorcre: fncGeral.mascaraValores(Math.round(valorcreNum * 100).toString()),
+                    total_valordeb: fncGeral.mascaraValores(Math.round(valordebNum * 100).toString()),
+                    _valorcre_num: valorcreNum,
+                    _valordeb_num: valordebNum
+                };
+            });
+
+            // --- SUBTOTAIS POR CONVÊNIO ---
+            const subtotaisMap = {};
+            relsFormatado.forEach(item => {
+                const key = item.conv_nome;
+                if (!subtotaisMap[key]) {
+                    subtotaisMap[key] = {
+                        conv_nome: key,
+                        qtd: 0,
+                        total_valorcre: 0,
+                        total_valordeb: 0
+                    };
+                }
+                subtotaisMap[key].qtd += item.qtd;
+                subtotaisMap[key].total_valorcre += item._valorcre_num;
+                subtotaisMap[key].total_valordeb += item._valordeb_num;
+            });
+
+            const subtotaisPorConvenio = Object.values(subtotaisMap).map(sub => ({
+                conv_nome: sub.conv_nome,
+                qtd: sub.qtd,
+                total_valorcre: fncGeral.mascaraValores(Math.round(sub.total_valorcre * 100).toString()),
+                total_valordeb: fncGeral.mascaraValores(Math.round(sub.total_valordeb * 100).toString())
+            }));
+
+            // --- GRAND TOTAL ---
+            const grandTotal = relsFormatado.reduce((acc, item) => {
+                acc.qtd += item.qtd;
+                acc.total_valorcre += item._valorcre_num;
+                acc.total_valordeb += item._valordeb_num;
+                return acc;
+            }, { qtd: 0, total_valorcre: 0, total_valordeb: 0 });
+
+            grandTotal.total_valorcre = fncGeral.mascaraValores(Math.round(grandTotal.total_valorcre * 100).toString());
+            grandTotal.total_valordeb = fncGeral.mascaraValores(Math.round(grandTotal.total_valordeb * 100).toString());
+
+            // --- RENDER ---
+            const periodoDe = fncGeral.getDataInvert(dataIni.toISOString().substring(0, 10));
+            const periodoAte = fncGeral.getDataInvert(dataFim.toISOString().substring(0, 10));
+
+            res.render("atendimento/atendreltera/gestao/relterapiaconvfec", {
+                rels: relsFormatado,
+                subtotaisPorConvenio,
+                grandTotal,
+                periodoDe,
+                periodoAte,
+                pesquisa: {
+                    dataIni: dataIni.toISOString().substring(0, 10),
+                    dataFim: dataFim.toISOString().substring(0, 10)
+                }
+            });
+
+        } catch (err) {
+            console.error("[relterapiaconvfec] Erro:", err);
+            res.status(500).send("Erro ao gerar relatório consolidado.");
+        }
+    },
+    relfaltasbene: async (req, res) => {
+        try {
+            console.log("\n======================");
+            console.log("🔍 INICIANDO relfaltasbene");
+            console.log("======================");
+
+            const db = req.cookies['preferredDb'];
+            if (!db) return res.status(400).send("Banco de dados não selecionado.");
+            console.log("📌 Banco selecionado:", db);
+
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Bene  = getModel(db, 'tb_bene', beneClass.BeneSchema);
+            const Conv  = getModel(db, 'tb_conv', convClass.ConvSchema);
+
+            // ------------------------ DATAS ------------------------
+            const dataIniStr = req.query.dataIni || req.body.dataIni;
+            const dataFimStr = req.query.dataFim || req.body.dataFim;
+
+            console.log("📅 Datas recebidas:", dataIniStr, "→", dataFimStr);
+
+            if (!dataIniStr || !dataFimStr) {
+                console.log("⚠️ Datas não enviadas.");
+                return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                    rels: [],
+                    periodoDe: '',
+                    periodoAte: '',
+                    pesquisa: { dataIni: '', dataFim: '' }
+                });
+            }
+
+            const dataIni = new Date(dataIniStr);
+            const dataFim = new Date(dataFimStr);
+            dataFim.setUTCHours(23, 59, 59, 999);
+
+            // ---------------------- BUSCA ATEND ----------------------
+            console.log("\n📥 Buscando atendimentos...");
+            const atendimentos = await Atend.find(
+                {
+                    atend_atend: { $gte: dataIni, $lte: dataFim },
+                    atend_beneid: { $ne: null },
+                    atend_convid: { $ne: null }
+                },
+                'atend_beneid atend_convid atend_categoria atend_atend atend_atendhora atend_terapia atend_terapeuta'
+            ).lean();
+
+            console.log("   → Encontrados:", atendimentos.length);
+
+            if (atendimentos.length === 0) {
+                console.log("⚠️ Nenhum registro encontrado.");
+                return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                    rels: [],
+                    periodoDe: dataIniStr,
+                    periodoAte: dataFimStr,
+                    pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr }
+                });
+            }
+
+            // ---------------------- BUSCAR NOMES ----------------------
+            const beneIds = [...new Set(atendimentos.map(a => String(a.atend_beneid)))];
+            const convIds = [...new Set(atendimentos.map(a => String(a.atend_convid)))];
+
+            console.log("\n📥 Buscando nomes dos beneficiários...");
+            const benes = await Bene.find({ _id: { $in: beneIds } }, 'bene_nome').lean();
+
+            console.log("📥 Buscando nomes dos convênios...");
+            const convs = await Conv.find({ _id: { $in: convIds } }, 'conv_nome').lean();
+
+            const beneMap = Object.fromEntries(benes.map(b => [String(b._id), b.bene_nome]));
+            const convMap = Object.fromEntries(convs.map(c => [String(c._id), c.conv_nome]));
+
+            // ---------------------- AGRUPAMENTO ----------------------
+            console.log("\n📊 AGRUPANDO registros...");
+            const mapa = {};
+
+            for (const at of atendimentos) {
+                const beneId = String(at.atend_beneid);
+                const convId = String(at.atend_convid);
+
+                if (!mapa[beneId]) {
+                    mapa[beneId] = {
+                        bene_id: beneId,
+                        bene_nome: beneMap[beneId] || "—",
+                        convenio: convMap[convId] || "—",   // 👈 agora sempre aplica
+                        total_registros: 0,
+                        qt_falta: 0,
+                        qt_falta_abs: 0,
+                        qt_falta_jus: 0,
+                        qt_feriado: 0,
+                        detalhes: []
+                    };
+                }
+
+                const item = mapa[beneId];
+                item.total_registros++;
+
+                // ----------- CONTAGEM DE CATEGORIAS -----------
+                switch (at.atend_categoria) {
+                    case "Falta":
+                        item.qt_falta++;
+                        break;
+                    case "Falta Absoluta":
+                        item.qt_falta_abs++;
+                        break;
+                    case "Falta Justificada":
+                        item.qt_falta_jus++;
+                        break;
+                    case "Feriado":
+                        item.qt_feriado++;
+                        break;
+                }
+
+                // ----------- DETALHES -----------
+                const dataBr = at.atend_atend
+                    ? new Date(at.atend_atend).toISOString().slice(0, 10).split("-").reverse().join("/")
+                    : "—";
+
+                item.detalhes.push({
+                    data: dataBr,
+                    hora: at.atend_atendhora || "—",
+                    terapia: at.atend_terapia || "—",
+                    terapeuta: at.atend_terapeuta || "—",
+                    categoria: at.atend_categoria || "—"
+                });
+            }
+
+            // ------------------------ RESULTADOS ------------------------
+            console.log("\n📌 RESULTADOS POR BENEFICIÁRIO:");
+            console.log("----------------------------------------------------");
+
+            let rels = Object.values(mapa).map(r => {
+                const totalFaltas = r.qt_falta + r.qt_falta_abs + r.qt_falta_jus;
+
+                const indice = r.total_registros > 0
+                    ? parseFloat((totalFaltas / r.total_registros).toFixed(4))
+                    : 0;
+
+                console.log(`
+    👤 BENEFICIÁRIO: ${r.bene_nome}
+    🏥 CONVÊNIO: ${r.convenio}
+    📌 Total registros: ${r.total_registros}
+    ❌ Falta: ${r.qt_falta}
+    ❌ Falta Absoluta: ${r.qt_falta_abs}
+    ❌ Falta Justificada: ${r.qt_falta_jus}
+    🟦 Feriado: ${r.qt_feriado}
+    📉 Índice: ${indice}
+    ----------------------------------------------------
+                `);
+
+                return {
+                    ...r,
+                    indice_faltas: (indice * 100).toFixed(2) // converte para porcentagem
+                };
+            });
+
+            // ------------------------ ORDENAR ------------------------
+            rels.sort((a, b) =>
+                a.bene_nome.localeCompare(b.bene_nome, "pt", { sensitivity: "base" })
+            );
+
+            // ------------------------ RENDER ------------------------
+            return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                rels,
+                periodoDe: dataIniStr.split("-").reverse().join("/"),
+                periodoAte: dataFimStr.split("-").reverse().join("/"),
+                pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr }
+            });
+
+        } catch (err) {
+            console.error("💥 Erro em relfaltasbene:", err);
+            return res.status(500).send("Erro ao gerar relatório de faltas.");
+        }
+    },
     relAtendteraconsFiltro(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
@@ -7672,8 +8300,8 @@ let dataIni2 = dataIni;
 
          Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
 
-        let inicioDia = new Date(2025, 8, 29, 0, 0, 0, 0);   // 29/09/2025
-        let fimDia    = new Date(2025, 9, 3, 23, 59, 59, 999); // 03/10/2025
+        let inicioDia = new Date(2025, 7, 1, 0, 0, 0, 0);   // 29/09/2025
+        let fimDia    = new Date(2025, 9, 31, 23, 59, 59, 999); // 03/10/2025
 
         console.log("inicioDia: " + inicioDia);
         console.log("fimDia: " + fimDia);
@@ -7745,8 +8373,8 @@ let dataIni2 = dataIni;
 
          Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
 
-        let inicioDia = new Date(2025, 8, 29, 0, 0, 0, 0);   // 29/09/2025
-        let fimDia    = new Date(2025, 9, 3, 23, 59, 59, 999); // 03/10/2025
+        let inicioDia = new Date(2025, 7, 1, 0, 0, 0, 0);   // 29/09/2025
+        let fimDia    = new Date(2025, 9, 31, 23, 59, 59, 999); // 03/10/2025
 
         console.log("inicioDia: " + inicioDia);
         console.log("fimDia: " + fimDia);
@@ -7805,3 +8433,58 @@ let dataIni2 = dataIni;
             console.log("❌ Erro: " + err);
         });
         */
+       /*
+       //DESTRUIÇÃO
+        let inicioDia = new Date(2024, 0, 1, 0, 0, 0, 0); // 29/09/2025
+        let fimDia    = new Date(2025, 11, 31, 23, 59, 59, 999); // 03/10/2025
+
+        console.log("inicioDia: " + inicioDia);
+        console.log("fimDia: " + fimDia);
+
+        Atend.aggregate([{
+    $match: {
+      atend_atenddata: { $gte: inicioDia, $lte: fimDia }
+    }
+  },{
+            $group: {
+            _id: {
+                atend_categoria: "$atend_categoria",
+                atend_org: "$atend_org",
+                atend_beneid: "$atend_beneid",
+                atend_convid: "$atend_convid",
+                atend_agenda_s_id_orig: "$atend_agenda_s_id_orig",
+                atend_atenddata: "$atend_atenddata",
+                atend_atendhora: "$atend_atendhora",
+                atend_terapeutaid: "$atend_terapeutaid",
+                atend_terapiaid: "$atend_terapiaid",
+                atend_salaid: "$atend_salaid"
+            },
+            count: { $sum: 1 },
+            docs: { $push: "$_id" }
+            }
+        },
+        { $match: { count: { $gt: 1 } } }
+        ])
+.then(async (dups) => {
+  console.log("TOTAL DE GRUPOS DUPLICADOS:", dups.length);
+
+  // PROCESSAR CADA GRUPO DE DUPLICADOS
+  for (const grupo of dups) {
+    // ordenar os documentos por data (mais antigo primeiro)
+    const ordenados = grupo.docs.sort((a, b) => new Date(a.atend_datacad) - new Date(b.atend_datacad));
+
+    const manter = ordenados[0]._id; // Mantém o mais antigo
+    const deletar = ordenados.slice(1).map(d => d._id); // apaga os demais
+
+    if (deletar.length > 0) {
+      await Atend.deleteMany({ _id: { $in: deletar } });
+      console.log(`Grupo removido -> manteve ${manter}, deletou:`, deletar);
+    }
+  }
+
+  console.log("FINALIZADO ✔");
+}).catch(err => {
+  console.error("ERRO:", err);
+});
+
+       */

@@ -1449,8 +1449,8 @@ module.exports = {
                                         let terapiaAgendaSubF;
                                         //let terapeutaAgendaSubF = terapeuta.filter((t)=>{(""+t._id+"") == (""+a.agenda_mergeterapeutaid+"")});
                                         //let terapiaAgendaSubF = terapia.filter((t)=>{(""+t._id+"") == (""+a.agenda_mergeterapiaid+"")});
-                                        console.log("a._id: "+a._id);
-                                        console.log("a.agenda_mergeterapeutaid: "+a.agenda_mergeterapeutaid)
+                                        //console.log("a._id: "+a._id);
+                                        //console.log("a.agenda_mergeterapeutaid: "+a.agenda_mergeterapeutaid)
                                         terapeuta.forEach((t)=>{
                                             if ((""+t._id+"") == (""+a.agenda_mergeterapeutaid+"")){
                                                 terapeutaAgendaSubF = t.usuario_nome;
