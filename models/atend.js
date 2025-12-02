@@ -223,6 +223,11 @@ module.exports = {
             atend_mergeterapiaid : req.body.atendMergeTerapiaid,
             atend_mergevalorcre : req.body.atendMergevalorcre,
             atend_mergevalordeb : req.body.atendMergevalordeb,
+            atend_fixo : req.body.atendFixo,
+            atend_fixoterapeutaid : req.body.atendFixoTerapeutaid,
+            atend_fixoterapiaid : req.body.atendFixoTerapiaid,
+            atend_fixovalorcre : req.body.atendFixovalorcre,
+            atend_fixovalordeb : req.body.atendFixovalordeb,
             atend_obs : req.body.atendObs,
             atend_valorcreval : req.body.atendValorcreval,//Valor a Crédito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
             atend_valordebval : req.body.atendValordebval,//Valor a Débito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
