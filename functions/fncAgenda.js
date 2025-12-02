@@ -7187,33 +7187,13 @@ module.exports = {
 
     // período de busca: transforma dataFil em semana (segunda..sexta) como no código original
     const baseDate = new Date(req.body.dataFil);
-    //let seg = new Date(baseDate);
-    //let sex = new Date(baseDate);
-    let seg = new Date(2025,6,1,0,0,0,0);
-    let sex = new Date(2025,8,30,23,59,59,0);
-    seg.setHours(0, 0, 0, 0);
-    sex.setHours(23, 59, 59, 999);
-
-    switch (seg.getUTCDay()) {
-      case 0: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
-      case 1: sex.setUTCDate(sex.getUTCDate() + 4); break;
-      case 2: seg.setUTCDate(seg.getUTCDate() - 1); sex.setUTCDate(sex.getUTCDate() + 3); break;
-      case 3: seg.setUTCDate(seg.getUTCDate() - 2); sex.setUTCDate(sex.getUTCDate() + 2); break;
-      case 4: seg.setUTCDate(seg.getUTCDate() - 3); sex.setUTCDate(sex.getUTCDate() + 1); break;
-      case 5: seg.setUTCDate(seg.getUTCDate() - 4); break;
-      case 6: seg.setUTCDate(seg.getUTCDate() - 5); sex.setUTCDate(sex.getUTCDate() - 1); break;
-      default: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
-    }
     
-    console.log("seg? "+seg)
-    console.log("sex? "+sex)
-    seg.setHours(seg.getHours()-3)
-    sex.setHours(sex.getHours()-3)
-    let dataIni = seg.toISOString();
-    let dataFim = sex.toISOString();
-    console.log("dataIni? "+dataIni)
-    console.log("dataFim? "+dataFim)
-
+    let dataIni = new Date(baseDate.getFullYear(), (baseDate.getUTCMonth()), 1, 0, 0, 0, 0);
+    let dataFim = new Date(baseDate.getFullYear(), (baseDate.getUTCMonth()+1), 1, 23, 59, 59, 0);
+    dataFim.setDate(dataFim.getDate()-1);
+    console.log("dataIni: "+dataIni);
+    console.log("dataFim: "+dataFim);
+    
     // carrega convcre e convdeb via as promessas existentes
     const convcre = await convcreClass.convcreCarregarTodos(req, res); // array
     const convdeb = await convdebClass.convdebCarregarTodos(req, res); // array
@@ -7224,6 +7204,7 @@ module.exports = {
     const mapConvDeb = new Map();
     convdeb.forEach(d => mapConvDeb.set(`${String(d.convdeb_convid)}${String(d.convdeb_terapiaid)}`, d.convdeb_valor));
 
+    
     // carrega agendas fixa e semanal no período
     const agendaFixa = await Agenda.find({
       agenda_data: { $gte: dataIni, $lte: dataFim },
@@ -7273,7 +7254,9 @@ module.exports = {
     for (const fixa of agendaFixa) {
       try {
         // Se já migrado, pula
-        if (fixa.agenda_migrado) continue;
+        //if (fixa.agenda_migrado) continue;
+        // Se é glosa, pula
+        if (fixa.agenda_categoria == "Glosa") continue;
 
         // pega semanais vinculadas (pode ser undefined)
         const semanais = semanaisPorTemp.get(String(fixa._id)) || [];
@@ -7336,7 +7319,7 @@ module.exports = {
             });
 
             // se a fixa tinha substituto fixo, copia os campos fixos para o atendimento
-            if (fixa.agenda_categoria === "SubstitutoFixo" || fixa.agenda_mergeterapeutaid) {
+            if (fixa.agenda_categoria === "SubstitutoFixo" && fixa.agenda_mergeterapeutaid) {
               newAtend.atend_fixoterapeutaid = fixa.agenda_mergeterapeutaid;
               newAtend.atend_fixoterapiaid = fixa.agenda_mergeterapiaid;
               newAtend.atend_fixovalorcre = convcrevalFixo;
@@ -7347,6 +7330,7 @@ module.exports = {
             // salva e marca agenda fixa como migrada (após sucesso)
             await newAtend.save();
             await Agenda.findByIdAndUpdate(fixa._id, { $set: { agenda_migrado: true } });
+            await Agenda.findByIdAndUpdate(semanaisPorTemp._id, { $set: { agenda_migrado: true } });
             totalGerados++;
             totalMesclados++;
           }
@@ -7374,13 +7358,14 @@ module.exports = {
             atend_valorcre: convcreval,
             atend_valordeb: convdebval,
             atend_agenda_f_id_orig: fixa._id,
+            atend_agenda_s_id_orig: new mongoose.mongo.ObjectId('766f69643132333435366964'),
             atend_fixo: "false",
             atend_num: nextNum++,
             atend_datacad: dataAtual.toISOString()
           });
 
           // caso fixa seja SubstitutoFixo aplica campos de fixo
-          if (fixa.agenda_categoria === "SubstitutoFixo" || fixa.agenda_mergeterapeutaid) {
+          if (fixa.agenda_categoria === "SubstitutoFixo" && fixa.agenda_mergeterapeutaid) {
             newAtend.atend_fixoterapeutaid = fixa.agenda_mergeterapeutaid;
             newAtend.atend_fixoterapiaid = fixa.agenda_mergeterapiaid;
             newAtend.atend_fixovalorcre = convcrevalFixo;

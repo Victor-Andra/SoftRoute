@@ -161,33 +161,62 @@ module.exports = {
         console.log(dataAgenda);
         let resultado;
         //Realiza Atualização - Atualização não faz alteração temporaria
-        await AgendaModel.findByIdAndUpdate(req.body.id, 
-            {$set: {
-                agenda_data : dataAgenda ,
-                agenda_beneid : req.body.agendaBeneid ,
-                agenda_convid : req.body.agendaConvid ,
-                agenda_salaid : req.body.agendaSalaid ,
-                agenda_terapiaid : req.body.agendaTerapiaid ,
-                agenda_usuid : req.body.agendaUsuid ,
-                agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,
-                agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,
-                agenda_categoria : req.body.agendaCateg ,
-                agenda_org : req.body.agendaOrg ,
-                agenda_obs : req.body.agendaObs ,
-                agenda_copia : req.body.agendaCopia,
-                agenda_usuedi: usuarioAtual , //Usuário adm que alterou
-                agenda_log: req.body.agendaLog , //Log das alterações
-                agenda_dataedi : dataAtual
-                }}
-        ).then((res) =>{
-            //console.log("Salvo")
-            resultado = true;
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
-            //res.redirect('admin/branco')
-        })
+        if (req.body.agendaCateg == "Padrão"){
+            await AgendaModel.findByIdAndUpdate(req.body.id, 
+                {$set: {
+                    agenda_data : dataAgenda ,
+                    agenda_beneid : req.body.agendaBeneid ,
+                    agenda_convid : req.body.agendaConvid ,
+                    agenda_salaid : req.body.agendaSalaid ,
+                    agenda_terapiaid : req.body.agendaTerapiaid ,
+                    agenda_usuid : req.body.agendaUsuid ,
+                    agenda_categoria : req.body.agendaCateg ,
+                    agenda_org : req.body.agendaOrg ,
+                    agenda_obs : req.body.agendaObs ,
+                    agenda_copia : req.body.agendaCopia,
+                    agenda_usuedi: usuarioAtual , //Usuário adm que alterou
+                    agenda_log: req.body.agendaLog , //Log das alterações
+                    agenda_dataedi : dataAtual
+                    }}
+            ).then((res) =>{
+                //console.log("Salvo")
+                resultado = true;
+            }).catch((err) =>{
+                console.log("erro mongo:")
+                console.log(err)
+                resultado = err;
+                //res.redirect('admin/branco')
+            })
+        } else {
+            await AgendaModel.findByIdAndUpdate(req.body.id, 
+                {$set: {
+                    agenda_data : dataAgenda ,
+                    agenda_beneid : req.body.agendaBeneid ,
+                    agenda_convid : req.body.agendaConvid ,
+                    agenda_salaid : req.body.agendaSalaid ,
+                    agenda_terapiaid : req.body.agendaTerapiaid ,
+                    agenda_usuid : req.body.agendaUsuid ,
+                    agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,
+                    agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,
+                    agenda_categoria : req.body.agendaCateg ,
+                    agenda_org : req.body.agendaOrg ,
+                    agenda_obs : req.body.agendaObs ,
+                    agenda_copia : req.body.agendaCopia,
+                    agenda_usuedi: usuarioAtual , //Usuário adm que alterou
+                    agenda_log: req.body.agendaLog , //Log das alterações
+                    agenda_dataedi : dataAtual
+                    }}
+            ).then((res) =>{
+                //console.log("Salvo")
+                resultado = true;
+            }).catch((err) =>{
+                console.log("erro mongo:")
+                console.log(err)
+                resultado = err;
+                //res.redirect('admin/branco')
+            })
+        }
+        
         return resultado;
     },
 

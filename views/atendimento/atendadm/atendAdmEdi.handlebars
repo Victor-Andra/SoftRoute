@@ -32,6 +32,7 @@
 						document.getElementById("tabilValordebit").value = "0,00";
 					}
 				}
+				atualizaSubFixo();
 			}
 			function carregaValoresMerge(){
 				let teraId = document.getElementById("atendMergeTerapiaid").value;
@@ -49,6 +50,16 @@
 						document.getElementById("atendMergevalorcre").value = "0,00";
 						document.getElementById("atendMergevalordeb").value = "0,00";
 					}
+				}
+				atualizaSubFixo();
+			}
+			function atualizaSubFixo(){
+				if (document.getElementById("atendCategoria").value == "SubstitutoFixo") {
+					document.getElementById("atendFixoCheck").checked = true;
+					document.getElementById("divSubFixo").style.display = "";
+				} else {
+					document.getElementById("atendFixoCheck").checked = false;
+					document.getElementById("divSubFixo").style.display = "none";
 				}
 			}
 			function carregaValoresFixo(){
@@ -268,7 +279,7 @@
 												<label>Categoria</label>
 												<div class="form-group">
 													<div class="col-sm-9">
-														<select id="atendCategoria" name="atendCategoria" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
+														<select id="atendCategoria" name="atendCategoria" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()" onchange="javascript:atualizaSubFixo();">
 															<option id="Apoio" value="Apoio">Apoio</option>
 															<option id="Extra" value="Extra">Extra</option>
 															<option id="Falta" value="Falta">Falta</option>
@@ -474,13 +485,13 @@
 																				<label class="blue"> Valor da Terapia pelo Plano</label>
 																				<div class="form-group">
 																					<div class="col-sm-6">
-																						<input type="text" id="atendFixovalorcre" name="atendFixovalorcre" placeholder="0,00" class="blue" class="form-control" value="0,00" />
+																						<input type="text" id="atendFixovalorcre" name="atendFixovalorcre" placeholder="0,00" class="blue" class="form-control"  />
 																					</div>
 																				</div>
 																				<label class="red"> Valor da Terapia para o Terapeuta</label>
 																				<div class="form-group">
 																					<div class="col-sm-6">
-																						<input type="text" id="atendFixovalordeb" name="atendFixovalordeb" placeholder="0,00" class="red" class="form-control"  value="0,00" />
+																						<input type="text" id="atendFixovalordeb" name="atendFixovalordeb" placeholder="0,00" class="red" class="form-control"  />
 																					</div>
 																				</div>
 																			</div><!-- /.widget-main -->
@@ -537,13 +548,13 @@
 																		<label class="blue"> Valor da Terapia pelo Plano</label>
 																		<div class="form-group">
 																			<div class="col-sm-6">
-																				<input type="text" id="atendMergevalorcre" name="atendMergevalorcre" placeholder="0,00" class="blue" class="form-control" value="0,00" />
+																				<input type="text" id="atendMergevalorcre" name="atendMergevalorcre" placeholder="0,00" class="blue" class="form-control" />
 																			</div>
 																		</div>
 																		<label class="red"> Valor da Terapia para o Terapeuta</label>
 																		<div class="form-group">
 																			<div class="col-sm-6">
-																				<input type="text" id="atendMergevalordeb" name="atendMergevalordeb" placeholder="0,00" class="red" class="form-control"  value="0,00" />
+																				<input type="text" id="atendMergevalordeb" name="atendMergevalordeb" placeholder="0,00" class="red" class="form-control"  />
 																			</div>
 																		</div>
 																			</div>
