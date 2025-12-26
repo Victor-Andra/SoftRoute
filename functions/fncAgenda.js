@@ -7188,8 +7188,8 @@ module.exports = {
     // período de busca: transforma dataFil em semana (segunda..sexta) como no código original
     const baseDate = new Date(req.body.dataFil);
     
-    let dataIni = new Date(baseDate.getFullYear(), 11, 22, 0, 0, 0, 0);
-    let dataFim = new Date(2026, 0, 2, 23, 59, 59, 0);
+    let dataIni = new Date(baseDate.getFullYear(), (baseDate.getUTCMonth()), 1, 0, 0, 0, 0);
+    let dataFim = new Date(baseDate.getFullYear(), (baseDate.getUTCMonth()+1), 1, 23, 59, 59, 0);
     dataFim.setDate(dataFim.getDate()-1);
     console.log("dataIni: "+dataIni);
     console.log("dataFim: "+dataFim);
