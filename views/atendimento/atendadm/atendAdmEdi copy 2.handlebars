@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Atendimentos</title>
+		<script type="text/javascript">
+			// ✅ Executa APÓS Chosen estar totalmente inicializado
+			document.addEventListener("DOMContentLoaded", function() {
+				// Aguarda Chosen carregar (seu main usa $(document).ready + initChosen)
+				// Esperamos um pouco mais para garantir (100ms é seguro com jQuery 2.1.4)
+				setTimeout(function() {
+					// Primeiro: carrega os valores brutos nos <select> reais
+					carregaBody();
+
+					// Segundo: força atualização do Chosen em TODOS os selects
+					$('.chosen-select').each(function() {
+						if ($(this).data('chosen')) {
+							$(this).trigger('chosen:updated');
+						}
+					});
+
+					// Terceiro: chama lógica dependente (ex: selectConv, carregaValores)
+					if (document.getElementById("atendBeneid").value) {
+						selectConv(); // atualiza convênio com base no beneficiário
+					}
+					if (document.getElementById("atendTerapiaid").value) {
+						carregaValores(); // atualiza valores com base na terapia
+					}
+				}, 200); // 200ms para garantir inicialização do Chosen
+			});
+			function selectConv(){
+				var v1 = document.getElementById(document.getElementById("atendBeneid").value).value.toString();
+				console.log(v1)
+				document.getElementById("atendConvid").value = v1;
+				let convId = document.getElementById("atendConvid").value;
+				console.log(convId)
+				document.getElementById("tabilConvid").value = convId;
+				console.log("feito!")
+			}
+			function carregaValores(){
+				let teraId = document.getElementById("atendTerapiaid").value;
+				document.getElementById("creditTerapiaid").value = teraId;
+				document.getElementById("debitTerapiaid").value = teraId;
+				if (document.getElementById("atendConvid").value == "X"){
+					alert("Convênio não selecionado!");
+				} else {
+					try{
+						let convId = document.getElementById("atendConvid").value
+						document.getElementById("atendValorcre").value = document.getElementById(convId+"/"+teraId+"/cre").value;
+						document.getElementById("atendValordeb").value = document.getElementById(convId+"/"+teraId+"/deb").value;
+						document.getElementById("tabilValorcredit").value = document.getElementById(convId+"/"+teraId+"/cre").value;
+						document.getElementById("tabilValordebit").value = document.getElementById(convId+"/"+teraId+"/deb").value;
+					} catch(err){
+						document.getElementById("atendValorcre").value = "0,00";
+						document.getElementById("atendValordeb").value = "0,00";
+						document.getElementById("tabilValorcredit").value = "0,00";
+						document.getElementById("tabilValordebit").value = "0,00";
+					}
+				}
+				atualizaSubFixo();
+			}
+			function carregaValoresMerge(){
+				let teraId = document.getElementById("atendMergeTerapiaid").value;
+				document.getElementById("creditMergeTerapiaid").value = teraId;
+				document.getElementById("debitMergeTerapiaid").value = teraId;
+				document.getElementById("tabilMergeTerapiaid").value = teraId;
+				if (document.getElementById("atendConvid").value == "X"){
+					alert("Convênio não selecionado!");
+				} else {
+					try{
+						let convId = document.getElementById("atendConvid").value
+						document.getElementById("atendMergevalorcre").value = document.getElementById(convId+"/"+teraId+"/cre").value;
+						document.getElementById("atendMergevalordeb").value = document.getElementById(convId+"/"+teraId+"/deb").value;
+					} catch(err){
+						document.getElementById("atendMergevalorcre").value = "0,00";
+						document.getElementById("atendMergevalordeb").value = "0,00";
+					}
+				}
+				atualizaSubFixo();
+			}
+			function atualizaSubFixo(){
+				if (document.getElementById("atendCategoria").value == "SubstitutoFixo") {
+					document.getElementById("atendFixoCheck").checked = true;
+					document.getElementById("divSubFixo").style.display = "";
+				} else {
+					document.getElementById("atendFixoCheck").checked = false;
+					document.getElementById("divSubFixo").style.display = "none";
+				}
+			}
+			function carregaValoresFixo(){
+				if (document.getElementById("atendFixo").value == "true"){
+					if (document.getElementById("atendConvid").value == "X"){
+						alert("Convênio não selecionado!");
+					} else {
+						try{
+							let convId = document.getElementById("atendConvid").value;
+							document.getElementById("atendFixovalorcre").value = document.getElementById(convId+"/"+document.getElementById("atendFixoTerapiaid").value+"/cre").value;
+							document.getElementById("atendFixovalordeb").value = document.getElementById(convId+"/"+document.getElementById("atendFixoTerapiaid").value+"/deb").value;
+						} catch(err){
+							document.getElementById("atendFixovalorcre").value = "0,00";
+							document.getElementById("atendFixovalordeb").value = "0,00";
+						}
+					}
+				}
+			}
+			function atualizaTerapeutaId(){
+				console.log("X");
+				console.log(document.getElementById("atendTerapeutaid").value);
+				let ati = document.getElementById("atendTerapeutaid").value;
+				console.log("C");
+				console.log(document.getElementById("tabilTerapeutaId").value);
+				document.getElementById("tabilTerapeutaId").value = ati;
+			}
+			function atualizaMergeTerapeutaId(){
+				console.log(document.getElementById("atendMergeTerapeutaid").value);
+				console.log("X");
+				let amti = document.getElementById("atendMergeTerapeutaid").value;
+			}
+			function controlaCategoria() {
+				const origem = document.getElementById("atendOrg").value;
+				const selectEl = document.getElementById("atendCategoria");
+
+				// Limpa todas as opções
+				selectEl.innerHTML = '';
+
+				let opcoes = [];
+				let valorPadrao = "Apoio";
+
+				if (origem === "Padrão") {
+					opcoes = [{ value: "Padrão", label: "Padrão" }];
+					valorPadrao = "Padrão";
+				} else {
+					opcoes = [
+						{ value: "Apoio", label: "Apoio" },
+						{ value: "Extra", label: "Extra" },
+						{ value: "Falta", label: "Falta" },
+						{ value: "Falta Justificada", label: "Falta Justificada" },
+						{ value: "Falta Absoluta", label: "Falta Absoluta" },
+						{ value: "Feriado", label: "Feriado" },
+						{ value: "Glosa", label: "Glosa" },
+						{ value: "Pais", label: "Pais" },
+						{ value: "Substituição", label: "Substituto" },
+						{ value: "SubstitutoFixo", label: "Substituto Fixo" },
+						{ value: "Supervisão", label: "Supervisão" }
+					];
+				}
+
+				// Adiciona opções ao <select>
+				opcoes.forEach(opt => {
+					const option = document.createElement("option");
+					option.value = opt.value;
+					option.textContent = opt.label;
+					selectEl.appendChild(option);
+				});
+
+				// Define valor padrão
+				selectEl.value = valorPadrao;
+				document.getElementById("tabilCategoria").value = valorPadrao;
+
+				// ✅ Atualiza o Chosen
+				if (typeof $(selectEl).trigger === 'function') {
+					$(selectEl).trigger("chosen:updated");
+				}
+
+				// ✅ Garante que atualizaSubFixo() roda com o novo valor
+				atualizaSubFixo();
+			}
+			function ajustaOption(){
+				document.getElementById("Padrão").style.display = "none";
+			}
+			function carregaBody() {
+				console.log("▶ carregaBody() iniciado");
+
+				// IDs
+				document.getElementById("atendId").value = document.getElementById("idEdi").value;
+				document.getElementById("nextNum").value = document.getElementById("nextNum").value;
+
+				// Data/Hora
+				atualizaDataEdi();
+				document.getElementById("atendHora").value = document.getElementById("atendHoraEdi").value;
+
+				// Beneficiário, Convênio, Sala
+				document.getElementById("atendBeneid").value = document.getElementById("atendBeneidEdi").value;
+				document.getElementById("atendConvid").value = document.getElementById("atendConvidEdi").value;
+				document.getElementById("atendSalaid").value = document.getElementById("atendSalaidEdi").value;
+
+				// Terapeutas e Terapias
+				document.getElementById("atendTerapeutaid").value = document.getElementById("atendTerapeutaidEdi").value;
+				document.getElementById("atendTerapiaid").value = document.getElementById("atendTerapiaidEdi").value;
+				document.getElementById("atendMergeTerapeutaid").value = document.getElementById("atendMergeTerapeutaidEdi").value;
+				document.getElementById("atendMergeTerapiaid").value = document.getElementById("atendMergeTerapiaidEdi").value;
+				document.getElementById("atendFixoTerapeutaid").value = document.getElementById("atendFixoTerapeutaidEdi").value || "";
+				document.getElementById("atendFixoTerapiaid").value = document.getElementById("atendFixoTerapiaidEdi").value || "";
+
+				// Valores monetários
+				document.getElementById("atendValorcre").value = document.getElementById("atendValorcreEdi").value;
+				document.getElementById("atendValordeb").value = document.getElementById("atendValordebEdi").value;
+				document.getElementById("atendMergevalorcre").value = document.getElementById("atendMergevalorcreEdi").value;
+				document.getElementById("atendMergevalordeb").value = document.getElementById("atendMergevalordebEdi").value;
+				document.getElementById("atendFixovalorcre").value = document.getElementById("atendFixovalorcreEdi").value || "0,00";
+				document.getElementById("atendFixovalordeb").value = document.getElementById("atendFixovalordebEdi").value || "0,00";
+
+				// Observação
+				document.getElementById("atendObs").value = document.getElementById("atendObsEdi").value;
+
+				// ✅ ATENÇÃO: ORDEM CRÍTICA ABAIXO
+
+				// 1️⃣ Define ORIGEM (dispara controlaCategoria, mas NÃO sobrescreve categoria ainda)
+				const orgEdi = document.getElementById("atendOrgEdi").value;
+				const categoriaEdi = document.getElementById("atendCategoriaEdi").value;
+
+				if (orgEdi) {
+					document.getElementById("atendOrg").value = orgEdi;
+				}
+
+				// 2️⃣ Define CATEGORIA (antes de qualquer chosen:updated)
+				document.getElementById("atendCategoria").value = categoriaEdi;
+				document.getElementById("tabilCategoria").value = categoriaEdi;
+
+				// 3️⃣ Define SUBSTITUTO FIXO (select Sim/Não)
+				const fixoEdi = (document.getElementById("atendFixoEdi")?.value || "").trim();
+				document.getElementById("atendFixo").value = fixoEdi; // "true", "false", ou ""
+
+				// 4️⃣ Atualiza TODOS os Chosen (incluindo atendOrg)
+				$('.chosen-select').trigger('chosen:updated');
+
+				// 5️⃣ Só AGORA executa controlaCategoria() — e restaura o valor da categoria
+				if (orgEdi) {
+					controlaCategoria(); // ← recria opções de categoria conforme origem
+					// ✅ RESTAURA o valor do banco após recriar as opções
+					document.getElementById("atendCategoria").value = categoriaEdi;
+					document.getElementById("tabilCategoria").value = categoriaEdi;
+					$('#atendCategoria').trigger('chosen:updated');
+				}
+
+				console.log("✅ carregaBody() concluído — categoria:", categoriaEdi, "fixo:", fixoEdi);
+			}
+			
+			function toggleDivSubFixo(){
+				if (document.getElementById("atendFixoCheck").checked == true) {
+					document.getElementById("divSubFixo").style.display = "";
+					document.getElementById("atendFixo").value = "true";
+				} else {
+					document.getElementById("divSubFixo").style.display = "none";
+					document.getElementById("atendFixo").value = "false";
+				}
+			}
+			function atualizaData(){
+				var data = document.getElementById("atenddata").value+"T"+document.getElementById("atendHora").value+":00.000Z";
+				console.log("data:"+data);
+				var datafmt = new Date(data);
+				console.log("datafmt:"+datafmt);
+				document.getElementById("atendAtenddata").value = datafmt.toISOString();
+				//
+				//var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
+				//var dataFmt = new Date(dataIso);
+				//console.log(dataIso);
+				//document.getElementById("agendaData").value = dataFmt;
+			}
+			function atualizaDataEdi(){
+				document.getElementById("atenddata").value = formataData(document.getElementById("atendAtenddataEdi").value);
+			}
+			function formataData(date) {//yyyy-MM-dd
+				var d = new Date(date);
+				if (d.getTimezoneOffset() == 180){
+					d.setHours(d.getHours()+3);
+				}
+				console.log("d:"+d);
+					month = '' + (d.getMonth() + 1);
+					day = '' + d.getDate();
+					year = d.getFullYear();
+
+				if (month.length == 1) {
+					month = '0' + month;
+				}
+					
+				if (day.length == 1) {
+					day = '0' + day;
+				}
+
+				return [year, month, day].join('-');
+			}
+		</script>
+	</head>
+	<body class="no-skin" onload="javascript:controlaNave();">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Atendimentos Edição</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/atendimento/atendadm/atualizar" method="POST">
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Atendimento</h4>
+											<div class="hidden">
+
+												<input id="nextNum" name="nextNum" type="number" value="{{atendEdi.atend_num}}" />
+												<input id="atendId" name="atendId" value="{{atendEdi._id}}" />
+											</div>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												
+												<label > Usuário </label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" id="atendUsuid" name="atendUsuid" class="form-control"  readonly="true" value="Usuário Atual"/>
+													</div>
+												</div>
+												<label for="id-date-picker-1">Data Atendimento</label>
+												<div class="row">
+													<div class="col-sm-4">
+														<div class="input-group">
+															<input name="atenddata" id="atenddata" type="date" onchange="javascript:atualizaData()" />
+														</div>
+													</div>
+												</div>
+												<label for="id-date-picker-1">Hora Atendimento</label>
+												<div class="row">
+													<div class="col-sm-8">
+														<select name="atendHora" id="atendHora" class="chosen-select" >
+															{{#each horaages}}
+																<option value="{{horaage_hora}}">{{horaage_hora}}</option>
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label>Origem Atendimento</label>
+												<div class="form-group">
+														<div class="col-sm-9">
+															<select id="atendOrg" name="atendOrg" class="chosen-select" >
+																<option value="Administrativo">Administrativo</option>
+																<option value="Padrão">Padrão</option>
+															</select>
+														</div>
+												</div>
+												<label>Categoria</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														
+														<select id="atendCategoria" name="atendCategoria" class="chosen-select" >
+															<!-- Opções serão preenchidas por controlaCategoria() -->
+														</select>
+														<input type="hidden" name="tabilCategoria" id="tabilCategoria"/>
+													</div>
+												</div>
+												
+												<label>Beneficiário</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<select id="atendBeneid" name="atendBeneid" class="chosen-select"  onchange="javascript:selectConv()">
+																<option value="766f69643132333435366964">-</option>
+																{{#each benes}}
+																<option value="{{_id}}">{{bene_nome}}</option>
+																{{/each}}
+														</select>
+													</div>
+												</div>
+												<div class="hidden">
+													{{#each benes}}
+														{{#each ../convs}}
+															{{#ifEqual ../bene_convid _id}}
+																<input value="{{../bene_convid}}" id="{{../_id}}" name="refBeneConv" />
+															{{/ifEqual}}
+														{{/each}}
+													{{/each}}
+													<input value="X" id="X" name="refBeneConv" />
+												</div>
+
+
+												
+												<label>Convênio</label>
+												<div class="hidden" id="divTabil">
+													<input class="hidden" id="tabilConvid" name="tabilConvid" value="" />
+												</div>
+												<div class="form-group">
+														<div class="col-sm-4">
+															<select id="atendConvid" name="atendConvid" class="chosen-select" >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each benes}}
+																		{{#each ../convs}}
+																			{{#ifEqual ../bene_convid _id}}
+																				<option value="{{../bene_convid}}">{{conv_nome}}</option>
+																			{{/ifEqual}}
+																		{{/each}}
+																	{{/each}}
+															</select>
+														</div>
+												</div>
+												<label>Sala</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select id="atendSalaid" name="atendSalaid" class="chosen-select" >
+																{{#each salas}}
+																	<option value="{{_id}}">{{sala_nome}}</option>
+																{{/each}}
+														</select>
+													</div>
+												</div>
+												<label>Substituto Fixo?</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<select id="atendFixo" name="atendFixo" class="chosen-select"  onchange="atualizaAtendFixo()">
+															<option value="">-</option>
+															<option value="true">Sim</option>
+															<option value="false">Não</option>
+														</select>
+													</div>
+													<i class="menu-icon fa fa-refresh red"></i>
+												</div>
+												
+												<div class="hidden">
+													<div class="col-sm-4">
+														<div class="checkbox">
+														<label>
+															<input type="checkbox" id="atendFixoCheck">
+															<span class="lbl"> Substituto Fixo</span>
+														</label>
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-xs-12">
+														<!-- PAGE CONTENT BEGINS -->
+														<div class="form-horizontal" role="form" method="POST">
+															<div class="row">
+																<div class="col-xs-12 col-sm-4">
+																	<div class="widget-box">
+																		<div class="widget-header">
+																			<h4 class="widget-title">Dados Básicos</h4>
+																			<div class="widget-toolbar">
+																				<a href="#" data-action="collapse">
+																					<i class="ace-icon fa fa-chevron-up"></i>
+																				</a>
+																			</div>
+																		</div>
+																		<div class="widget-body">
+																			<div class="widget-main">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																				<strong>Importante!</strong>
+																				Dados necessárias para os atendimentos
+																				administrativos quanto padrões.<br>
+																		</div>
+																		<label>Terapeuta</label>
+																		<div class="form-group">
+																			<div class="col-sm-6">
+																				<select id="atendTerapeutaid" name="atendTerapeutaid" class="chosen-select"  onchange="javascript:atualizaTerapeutaId()">
+																						<option value="766f69643132333435366964">-</option>
+																						{{#each usuarios}}
+																						<option value="{{_id}}">{{usuario_nome}}</option>
+																						{{/each}}
+																				</select>
+																			</div>
+																		</div>											
+																		<label>Terapia</label>
+																		<div class="hidden" id="TerapiasVal">
+																			{{#each terapias}}
+																				{{#each ../convcres}}
+																					{{#ifEqual convcre_terapiaid ../_id}}
+																						<input class="hidden" id="{{convcre_convid}}/{{../_id}}/cre" value="{{convcre_valor}}" />
+																					{{/ifEqual}}
+																				{{/each}}
+																			{{/each}}
+																			{{#each terapias}}
+																				{{#each ../convdebs}}
+																					{{#ifEqual convdeb_terapiaid ../_id}}
+																						<input class="hidden" id="{{convdeb_convid}}/{{../_id}}/deb" value="{{convdeb_valor}}" />
+																					{{/ifEqual}}
+																				{{/each}}
+																			{{/each}}
+																		</div>
+																		<div class="hidden" id="TerapiaFinan">
+																			<input class="hidden" id="creditTerapiaid" name="creditTerapiaid" value="" />
+																			<input class="hidden" id="debitTerapiaid" name="debitTerapiaid" value="" />
+																			
+																			<input class="hidden" id="debitTerapeutaid" name="debitTerapeutaid" value="" />
+
+
+																		</div>
+																		<div class="form-group">
+																			<div class="col-sm-6">
+																				<select id="atendTerapiaid" name="atendTerapiaid" class="chosen-select"  onchange="javascript:carregaValores()">
+																						<option value="766f69643132333435366964">-</option>
+																						{{#each terapias}}
+																						<option value="{{_id}}">{{terapia_nome}}</option>
+																						{{/each}}
+																				</select>
+																			</div>
+																		</div>
+																		<label class="blue"> Valor da Terapia pelo Plano</label>
+																		<div class="form-group">
+																			<div class="col-sm-6">
+																				<input type="text" id="atendValorcre" name="atendValorcre" placeholder="0,00"  class="blue" class="form-control" />
+																			</div>
+																		</div>
+																		<label class="red"> Valor da Terapia para o Terapeuta</label>
+																		<div class="form-group">
+																			<div class="col-sm-6">
+																				<input type="text" id="atendValordeb" name="atendValordeb" placeholder="0,00"  class="red" class="form-control" />
+																			</div>
+																		</div>
+																			</div>
+																		</div>
+																	</div>
+																</div><!-- /.span -->
+																<div class="col-xs-12 col-sm-4" id="divSubFixos" >
+																	<div class="widget-box">
+																		<div class="widget-header">
+																			<h4 class="widget-title">Dados de Sub Fixo</h4>
+																			<input hidden id="atendFixo" name="atendFixo" value="{{atendEdi.atend_fixo}}" />
+																			<span class="widget-toolbar">
+																				<a href="#" data-action="collapse">
+																					<i class="ace-icon fa fa-chevron-up"></i>
+																				</a>
+																			</span>
+																		</div>
+																		<div class="widget-body">
+																			<div class="widget-main">
+																				<div class="alert alert-danger">
+																					<button type="button" class="close" data-dismiss="alert">
+																						<i class="ace-icon fa fa-times"></i>
+																					</button>
+																					<strong>Alerta!</strong>
+																					Dados informados aqui irão suprimir os demais dados dos relatorios do beneficiario dada a natureza fixa destas informações.<br>
+																				</div>
+																				<label>Terapeuta Fixo</label>
+																				<div class="form-group">
+																					<div class="col-sm-6">
+																						<select id="atendFixoTerapeutaid" name="atendFixoTerapeutaid" class="chosen-select"  onchange="javascript:carregaValoresFixo()">
+																							<option value="766f69643132333435366964">-</option>
+																							{{#each usuarios}}
+																							<option value="{{_id}}">{{usuario_nome}}</option>
+																							{{/each}}
+																						</select>
+																					</div>
+																				</div>
+																				<label>Terapia Fixa</label>
+																				<div class="form-group">
+																					<div class="col-sm-6">
+																						<select id="atendFixoTerapiaid" name="atendFixoTerapiaid" class="chosen-select"  onchange="javascript:carregaValoresFixo()">
+																								<option value="766f69643132333435366964">-</option>
+																								{{#each terapias}}
+																								<option value="{{_id}}">{{terapia_nome}}</option>
+																								{{/each}}
+																						</select>
+																					</div>
+																				</div>
+																				<label class="blue"> Valor da Terapia pelo Plano</label>
+																				<div class="form-group">
+																					<div class="col-sm-6">
+																						<input type="text" id="atendFixovalorcre" name="atendFixovalorcre" placeholder="0,00" class="blue" class="form-control"  />
+																					</div>
+																				</div>
+																				<label class="red"> Valor da Terapia para o Terapeuta</label>
+																				<div class="form-group">
+																					<div class="col-sm-6">
+																						<input type="text" id="atendFixovalordeb" name="atendFixovalordeb" placeholder="0,00" class="red" class="form-control"  />
+																					</div>
+																				</div>
+																			</div><!-- /.widget-main -->
+																		</div><!-- /.widget-body -->
+																	</div><!-- /.widget-box -->
+																</div>
+																<div class="col-xs-12 col-sm-4">
+																	<div class="widget-box">
+																		<div class="widget-header">
+																			<h4 class="widget-title">Dados da Substituição (campos Merge)</h4>
+																			<span class="widget-toolbar">
+																				<a href="#" data-action="collapse">
+																					<i class="ace-icon fa fa-chevron-up"></i>
+																				</a>
+																			</span>
+																		</div>
+																		<div class="widget-body">
+																			<div class="widget-main">
+																		<div class="alert alert-warning">
+																			<button type="button" class="close" data-dismiss="alert">
+																				<i class="ace-icon fa fa-times"></i>
+																			</button>
+																			<strong>Importante!</strong>
+																			Dados necessárias para os atendimentos
+																			administrativos que requer informações adicionais nos casos de Subtituições.<br>
+																		</div>
+																		<label>Terapeuta</label>
+																		<div class="form-group">
+																			<div class="col-sm-6">
+																				<select id="atendMergeTerapeutaid" name="atendMergeTerapeutaid" class="chosen-select"  onchange="javascript:atualizaMergeTerapeutaId()">
+																						<option value="766f69643132333435366964">-</option>
+																						{{#each usuarios}}
+																						<option value="{{_id}}">{{usuario_nome}}</option>
+																						{{/each}}
+																				</select>
+																			</div>
+																		</div>												
+																		<label>Terapia</label>
+																		<div class="hidden" id="TerapiaMergeFinan">
+																			<input class="hidden" id="creditMergeTerapiaid" name="creditMergeTerapiaid" value="" />
+																			<input class="hidden" id="debitMergeTerapiaid" name="debitMergeTerapiaid" value="" />
+																			<input class="hidden" id="tabilMergeTerapiaid" name="tabilMergeTerapiaid" value="" />
+																		</div>
+																		<div class="form-group">
+																				<div class="col-sm-6">
+																					<select id="atendMergeTerapiaid" name="atendMergeTerapiaid" class="chosen-select"  onchange="javascript:carregaValoresMerge()">
+																							<option value="766f69643132333435366964">-</option>
+																							{{#each terapias}}
+																							<option value="{{_id}}">{{terapia_nome}}</option>
+																							{{/each}}
+																					</select>
+																				</div>
+																		</div>
+																		<label class="blue"> Valor da Terapia pelo Plano</label>
+																		<div class="form-group">
+																			<div class="col-sm-6">
+																				<input type="text" id="atendMergevalorcre" name="atendMergevalorcre" placeholder="0,00" class="blue" class="form-control" />
+																			</div>
+																		</div>
+																		<label class="red"> Valor da Terapia para o Terapeuta</label>
+																		<div class="form-group">
+																			<div class="col-sm-6">
+																				<input type="text" id="atendMergevalordeb" name="atendMergevalordeb" placeholder="0,00" class="red" class="form-control"  />
+																			</div>
+																		</div>
+																			</div>
+																		</div>
+																	</div>
+																</div><!-- /.span -->
+																
+															
+															</div><!-- /.row -->
+														
+															<label> Observação do atendimento</label>
+															<div class="form-group">
+																<div class="col-sm-12">
+																	<textarea type="text" id="atendObs" name="atendObs" placeholder="" class="form-control"rows="3" class="col-sm-12" data-iconlibrary="fa"></textarea>
+																</div>
+															</div>
+															<div id="divTabil" name="divTabil" class="hidden">
+																<div id="tabilTerapeutaId" name="tabilTerapeutaId" value=""></div>
+																<div id="tabilValorcredit" name="tabilValorcredit" value=""></div>
+																<div id="tabilValordebit" name="tabilValordebit" value=""></div>
+															</div>
+															<div id="divCarrega" name="divCarrega" class="hidden">
+																<input id="idEdi" name="idEdi" value="{{atendEdi._id}}"/>
+																<input id="atendAtenddataEdi" name="atendAtenddataEdi" value="{{atendEdi.atend_atenddata}}"/>
+																<input id="atendOrgEdi" name="atendOrgEdi" value="{{atendEdi.atend_org}}"/>
+																<input id="atendCategoriaEdi" name="atendCategoriaEdi" value="{{atendEdi.atend_categoria}}"/>
+																<input id="atendBeneidEdi" name="atendBeneidEdi" value="{{atendEdi.atend_beneid}}"/>
+																<input id="atendConvidEdi" name="atendConvidEdi" value="{{atendEdi.atend_convid}}"/>
+																<input id="atendTerapeutaidEdi" name="atendTerapeutaidEdi" value="{{atendEdi.atend_terapeutaid}}"/>
+																<input id="atendTerapiaidEdi" name="atendTerapiaidEdi" value="{{atendEdi.atend_terapiaid}}"/>
+																<input id="atendValorcreEdi" name="atendValorcreEdi" value="{{atendEdi.atend_valorcre}}"/>
+																<input id="atendValordebEdi" name="atendValordebEdi" value="{{atendEdi.atend_valordeb}}"/>
+																<input id="atendMergeTerapeutaidEdi" name="atendMergeTerapeutaidEdi" value="{{atendEdi.atend_mergeterapeutaid}}"/>
+																<input id="atendMergeTerapiaidEdi" name="atendMergeTerapiaidEdi" value="{{atendEdi.atend_mergeterapiaid}}"/>
+																<input id="atendMergevalorcreEdi" name="atendMergevalorcreEdi" value="{{atendEdi.atend_mergevalorcre}}"/>
+																<input id="atendMergevalordebEdi" name="atendMergevalordebEdi" value="{{atendEdi.atend_mergevalordeb}}"/>
+																<input id="atendFixoTerapeutaidEdi" name="atendFixoTerapeutaidEdi" value="{{atendEdi.atend_fixoterapeutaid}}"/>
+																<input id="atendFixoTerapiaidEdi" name="atendFixoTerapiaidEdi" value="{{atendEdi.atend_fixoterapiaid}}"/>
+																<input id="atendFixovalorcreEdi" name="atendFixovalorcreEdi" value="{{atendEdi.atend_fixovalorcre}}"/>
+																<input id="atendFixovalordebEdi" name="atendFixovalordebEdi" value="{{atendEdi.atend_fixovalordeb}}"/>
+																<input id="atendFixoEdi" name="atendFixoEdi" value="{{atendEdi.atend_fixo}}"/>
+																<input id="atendObsEdi" name="atendObsEdi" value="{{atendEdi.atend_obs}}"/>
+																<input id="atendSalaidEdi" name="atendSalaidEdi" value="{{atendEdi.atend_salaid}}"/>
+																<input id="atendHoraEdi" name="atendHoraEdi" value="{{atendEdi.atend_atendhora}}"/>
+																<input id="atendAtenddata"  name="atendAtenddata" value="{{atend.atend_atenddata}}" />
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											
+											<div class="form-actions">
+												<div class="col-xs-12" style="text-align: center;" >
+													<button class="btn btn-info" name="acao" type="submit">
+														<i class="ace-icon fa fa-check bigger-110"></i>
+														Salvar
+													</button>
+													&nbsp; &nbsp; &nbsp;
+													<button class="btn btn-warning"  href="/menu/financeiro/atendadm/lis">
+														<i class="ace-icon fa fa-undo bigger-110"></i>
+														Voltar
+													</button>
+												</div>
+											</div>
+										</div>
+										
+									</div><!-- /.col -->
+								</div><!-- /.row -->
+							</form>
+						</div><!-- /.main-content -->
+					</div><!-- /.main-container -->
+					<!-- basic scripts -->
+					<!-- Script do editor de texto -->
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

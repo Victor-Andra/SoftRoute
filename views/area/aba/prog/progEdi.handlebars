@@ -321,7 +321,7 @@
 			}
 
 
-			function atualizaProgressBars(selectedTextValues) {
+			function atualizaProgressBarsOLD(selectedTextValues) {
 				var selectedValues = selectedTextValues.split(", "); // Alteração aqui
 				var numSelected = selectedValues.length;
 
@@ -354,6 +354,46 @@
 			}
 		
 		
+			function atualizaProgressBars() {
+				// Lê diretamente os textos selecionados no <select multiple>
+				const selectedTexts = $('#progDicatiposelect option:selected')
+					.map((i, el) => $(el).text().trim())
+					.get()
+					.filter(text => text && text !== '-');
+
+				const numSelected = Math.min(selectedTexts.length, 5); // limite de 5 barras
+				const procdica = $('#progDicaproced').val() || $('#progDicaprocedEdi').val() || 'Errorless';
+
+				// Valores padrão (Most-to-Lead / Errorless)
+				let progressValues = [];
+				if (numSelected === 1) progressValues = [100];
+				else if (numSelected === 2) progressValues = [70, 30];
+				else if (numSelected === 3) progressValues = [50, 30, 20];
+				else if (numSelected === 4) progressValues = [40, 30, 20, 10];
+				else if (numSelected === 5) progressValues = [35, 25, 20, 15, 5];
+
+				// Inverte para Least-to-Most
+				if (procdica === 'Least-to-Most') {
+					progressValues = progressValues.reverse();
+				}
+
+				// Atualiza as 5 barras
+				for (let i = 0; i < 5; i++) {
+					const $bar = $('#porgress' + (i + 1));
+					if (i < numSelected) {
+					$bar.show()
+						.find('.progress-name').text(selectedTexts[i]).show().end()
+						.find('.progress-bar').css('width', progressValues[i] + '%');
+					} else {
+					$bar.hide();
+					}
+				}
+
+				// ✅ Opcional: atualiza campos ocultos (se ainda usados no backend)
+				$('#progDicatipo').val($('#progDicatiposelect').val()?.join(',') || '');
+				$('#progDicatipotext').val(selectedTexts.join(', ') || '');
+			}
+
 			function progressValue(){  
 				$('.progress-bar').each(function(){    
 					var positionProgressValue = $(this).children('.progress-value').css('left','auto');
@@ -436,15 +476,19 @@
 					}
 				});
 				document.getElementById("progMateriais").value = document.getElementById("progMateriaisEdi").value;
-				
+				// ✅ Atualiza TODOS os chosen-select com os novos valores (incluindo múltiplos)
+					$('.chosen-select').trigger('chosen:updated');
 
-				let progDicatipoEdiArr = [];
-				progDicatipoEdiArr = (document.getElementById("progDicatipoEdi").value.replaceAll(" ","")).split(",");
-				progDicatipoEdiArr.forEach((e)=>{
-					document.getElementById("progDicatiposelect").value = e;
-					addExcecaoDicaid();
-					//atualizaProgressBars();
-				});
+				// ✅ Carrega seleções múltiplas no Chosen
+				const idsSelecionados = (document.getElementById("progDicatipoEdi")?.value || "")
+				.split(",")
+				.map(id => id.trim())
+				.filter(id => id && id !== "766f69643132333435366964"); // remove vazio e placeholder
+
+				$('#progDicatiposelect')
+				.val(idsSelecionados)          // define valores
+				.trigger('chosen:updated')     // atualiza UI do Chosen
+				.trigger('change');            // dispara atualização do gráfico
 
 				switch (document.getElementById("progDicaprocedEdi").value) {
 					case "Errorless":
@@ -458,12 +502,27 @@
 						break;
 				}
 				document.getElementById("progDicaproced").value = document.getElementById("progDicaprocedEdi").value;
+				
+				// Ex: se progDicatipo vem como "id1,id2,id3"
+				const ids = "{{prog.progDicatipo}}".split(',').filter(id => id);
+				if (ids.length) {
+					$('#progDicatiposelect').val(ids).trigger('chosen:updated').trigger('change');
+				}
+
+				// ✅ Escuta mudanças no Chosen múltiplo
+				$('#progDicatiposelect').on('change', function() {
+				atualizaProgressBars();
+				});
+			
 			}
 			function loadText() {
 				const savedText = document.getElementById("progPontoChaveEdi").value;
 				document.getElementById('progPontoChave').innerHTML = savedText.replace(/\n/g, '<br>');
 			}
-		
+
+			function removeTudoDicas() {
+				$('#progDicatiposelect').val([]).trigger('chosen:updated').trigger('change');
+			}
 		</script>
 		<script>
 			function ImpedeSalvar(){
@@ -556,22 +615,36 @@
 												<p class="alert alert-info">
 													Indentifique o beneficiário, o tipo e nível do programa a ser aplicado, bem como a data  do presente programa e quando será iniciado pelos terapeutas.
 												</p>
-												
 												<div class="row">
-													<div class="col-xs-12">	
+													<div class="col-lg-6 col-md-12">
 														<label>Beneficiário</label>
-														<div class="input-group">
-															<div class="input-group">
-																<select name="progBeneid" id="progBeneid" class="chosen-select" value="Sem Info" onchange="" >
-																	<option value="766f69643132333435366964">-</option>
-																		{{#each benes}}
-																			<option value="{{_id}}">{{bene_nome}}</option>
-																		{{/each}}
-																</select>
+														<div class="form-group">
+															<div class="col-lg-6 col-md-12">
+																<!-- Campo visual, não editável -->
+																<input type="text"
+																	class="form-control"
+																	readonly
+																	id="progBeneNomeDisplay"
+																	value=""
+																	style="background-color: #f5f5f5; opacity: 1; cursor: not-allowed; border: 1px solid #d5d5d5;"
+																/>
+																<!-- Campo oculto para submissão do _id -->
+																<input type="hidden" name="progBeneid" id="progBeneid" value="{{idBene}}" />
+																<!-- Script inline leve para preencher o nome -->
+																<script>
+																	// Preenche o nome do beneficiário no input visual
+																	(function() {
+																		var idBene = "{{idBene}}";
+																		var benes = {{#if benes}}{{{json benes}}}{{else}}[]{{/if}};
+																		var nome = benes.find(b => b._id === idBene)?.bene_nome || '–';
+																		document.getElementById('progBeneNomeDisplay').value = nome;
+																	})();
+																</script>
 															</div>
 														</div>
 													</div>
-												</div>
+												</div>												
+												
 												<div class="row">
 													<div class="col-sm-3">
 														<label>Data do Programa</label>
@@ -612,40 +685,42 @@
 														</div>
 													</div>
 												</div>
-													
-													<div class="row">
-														<div class="col-sm-4">
-															<label>Tipo de Programa</label>
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="progTipo" id="progTipo" class="chosen-select" onchange="">
-																			<option value="766f69643132333435366964">-</option>
-																			{{#each progtipos}}
-																				<option value="{{_id}}">{{progtipo_nome}}</option>
-																			{{/each}}
-																	</select>
-																</div>
-															</div>
-														</div>
-														
-														<div class="col-sm-4">
-															<label>Nível do Programa</label>
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="progNivel" id="progNivel" class="chosen-select" onchange="">
-																			<option value="766f69643132333435366964">-</option>
-																			{{#each prognivels}}
-																				<option value="{{_id}}">{{prognivel_nome}}</option>
-																			{{/each}}
-																	</select>
-																</div>
+												<div class="row">
+													<!-- Tipo de Programa -->
+													<div class="col-lg-6 col-md-12">
+														<label>Tipo de Programa</label>
+														<div class="form-group">
+															<div class="col-lg-6 col-md-12">
+																<select name="progTipo" id="progTipo" class="chosen-select form-control">
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each progtipos}}
+																		<option value="{{_id}}">{{progtipo_nome}}</option>
+																	{{/each}}
+																</select>
 															</div>
 														</div>
 													</div>
+													<!-- Nível do Programa -->
+													<div class="col-lg-6 col-md-12">
+														<label>Nível do Programa</label>
+														<div class="form-group">
+															<div class="col-lg-6 col-md-12">
+																<select name="progNivel" id="progNivel" class="chosen-select form-control">
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each prognivels}}
+																		<option value="{{_id}}">{{prognivel_nome}}</option>
+																	{{/each}}
+																</select>
+															</div>
+														</div>
+													</div>
+
 												</div>
-												
+													
 											</div>
+												
 										</div>
+									</div>
 								</div>
 
 								<div class="col-xs-12 col-md-6 col-sm-6">
@@ -1025,25 +1100,19 @@
 										<div class="widget-body">
 											<div class="widget-main">
 												<p class="alert alert-danger">
-													Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 5 (cinco).
+													Escolha os tipos de dicas de forma hierárquica, com maior ênfase como primeiro e os outros com menor ênfase sucessivamente. <b>Atenção:</b>&nbsp; O número máximo de tipos de dicas que o gráfico comporta são 6 (Seis).
 												</p>
-												<div class="row">
-													<div class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
-														<select name="progDicatiposelect" id="progDicatiposelect" class="chosen-select" onchange="addExcecaoDicaid();atualizaProgressBars();">
-															<option value="766f69643132333435366964">-</option>
-															{{#each progdicas}}
-															<option value="{{_id}}">{{progdica_nome}}</option>
-															{{else}}
-															{{/each}}
-														</select>
-														<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="removeTudo('progDicatipo','Exce');">Remover</button>
-														<div class="row">
-															<div class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
-																<div id="divExcecaoDica" name="progDicatipotemp" style="display: block;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
-																	<span id="spanShowExceTera" class="spanAzul">Escolha a dica</span>
-																</div>
-															</div>
-														</div>
+												<select multiple="" class="chosen-select tag-input-style form-control" name="progDicatiposelect" id="progDicatiposelect" data-placeholder="Escolha..." >
+													<option value="766f69643132333435366964">-</option>
+													{{#each progdicas}}
+													<option value="{{_id}}">{{progdica_nome}}</option>
+													{{else}}
+													{{/each}}
+												</select>
+												<button type="button" class="btn btn-sm btn-danger" onclick="removeTudoDicas()">Remover tudo</button>
+												<div hidden class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
+													<div id="divExcecaoDica" name="progDicatipotemp" style="display: block;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
+														<span id="spanShowExceTera" class="spanAzul">Escolha a dica</span>
 													</div>
 												</div>
 											</div>

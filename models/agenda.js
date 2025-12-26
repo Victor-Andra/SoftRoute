@@ -44,6 +44,7 @@ const AgendaSchema = mongoose.Schema({
     agenda_usuedi :{ type: String, require: false }, //Usuário adm que alterou
     agenda_log :{ type: String, require: false }, //Log das alterações
     agenda_usucad :{ type: String, require: false },
+    agenda_fixo :{ type: String, require: false },
     //Guia e Senha para Pagamento Financeiro
     agenda_Nguia :{ type: String, required: false },// Número Guia Pré Autorização Convênio
     agenda_dataNguia :{ type: Date, required: false },// Data da Solicitação Guia
@@ -92,6 +93,7 @@ class Agenda{
         agenda_usuedi, //Usuário adm que alterou
         agenda_log, //Log das alterações
         agenda_usucad,
+        agenda_fixo,
         agenda_Nguia,// Número Guia Pré Autorização Convênio
         agenda_dataNguia,// Data da Solicitação Guia
         agenda_senhaconv,// Senha Autorização Convênio para Pagamento
@@ -131,6 +133,7 @@ class Agenda{
         this.agenda_usuedi = agenda_usuedi, //Usuário adm que alterou
         this.agenda_log = agenda_log, //Log das alterações
         this.agenda_usucad = agenda_usucad,
+        this.agenda_fixo = agenda_fixo,
         this.agenda_Nguia = agenda_Nguia,// Número Guia Pré Autorização Convênio
         this.agenda_dataNguia = agenda_dataNguia,// Data da Solicitação Guia
         this.agenda_senhaconv = agenda_senhaconv// Senha Autorização Convênio para Pagamento
@@ -173,6 +176,7 @@ module.exports = {
                     agenda_categoria : req.body.agendaCateg ,
                     agenda_org : req.body.agendaOrg ,
                     agenda_obs : req.body.agendaObs ,
+                    agenda_fixo : req.body.agendaFixo ,
                     agenda_copia : req.body.agendaCopia,
                     agenda_usuedi: usuarioAtual , //Usuário adm que alterou
                     agenda_log: req.body.agendaLog , //Log das alterações
@@ -202,6 +206,7 @@ module.exports = {
                     agenda_org : req.body.agendaOrg ,
                     agenda_obs : req.body.agendaObs ,
                     agenda_copia : req.body.agendaCopia,
+                    agenda_fixo : req.body.agendaFixo ,
                     agenda_usuedi: usuarioAtual , //Usuário adm que alterou
                     agenda_log: req.body.agendaLog , //Log das alterações
                     agenda_dataedi : dataAtual
@@ -265,6 +270,7 @@ module.exports = {
             agenda_cobrarextra : req.body.agendaCobrarextra  ,
             agenda_selo : false ,
             agenda_copia: false ,
+            agenda_fixo : req.body.agendaFixo ,
             agenda_log: req.body.agendaLog , //Log das alterações
             agenda_usucad : usuarioAtual,
             agenda_datacad : dataAtual
@@ -320,6 +326,7 @@ module.exports = {
             agenda_selo : false ,
             agenda_copia : false,
             agenda_turnoFalta : req.body.agendaTurnoFalta,
+            agenda_fixo : req.body.agendaFixo ,
             //agenda_faltaId : req.body.agendaFaltaId,
             //agenda_falta : req.body.agendaAlvoFalta,
             agenda_log: req.body.agendaLog , //Log das alterações
@@ -369,6 +376,7 @@ module.exports = {
                 agenda_categoria : req.body.agendaCateg ,
                 agenda_org : req.body.agendaOrg ,
                 agenda_obs : req.body.agendaObs ,
+                agenda_fixo : req.body.agendaFixo ,
                 agenda_temp : true ,
                 agenda_tempmotivo : req.body.agendaTempMotivo ,
                 agenda_copia : req.body.agendaCopia ,

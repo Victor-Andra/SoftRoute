@@ -167,6 +167,39 @@ module.exports = {
         })
 
     },
+    atualizarCampoTerapiaLixo: async (req, res) => {
+    try {
+        let db = req.cookies['preferredDb'];
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
+        console.log("▶️ Iniciando atualização do campo terapia_lixo...");
+
+        const filtro = {
+            $or: [
+                { terapia_lixo: { $exists: false } },
+                { terapia_lixo: null },
+                { terapia_lixo: "" }
+            ]
+        };
+
+        const atualizacao = {
+            $set: { terapia_lixo: "false" }
+        };
+
+        const resultado = await Terapia.updateMany(filtro, atualizacao);
+
+        console.log(`✔️ Atualização concluída. Registros afetados: ${resultado.modifiedCount}`);
+
+        req.flash("success_message", `Atualização concluída! ${resultado.modifiedCount} registros ajustados.`);
+        return res.redirect("/menu/ferramentas/terapia/terapiaLis");
+
+    } catch (err) {
+        console.error("❌ Erro ao atualizar terapias:", err);
+        req.flash("error_message", "Erro ao atualizar registros antigos.");
+        return res.redirect("/admin/erro");
+    }
+},
+
     atualizaTerapia(req, res){
         let db = req.cookies['preferredDb'];
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)

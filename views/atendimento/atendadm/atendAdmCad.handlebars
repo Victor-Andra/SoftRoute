@@ -1,522 +1,597 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
-		<title>Atendimentos</title>
-		<script type="text/javascript">
-			function selectConv(){
-				var v1 = document.getElementById(document.getElementById("atendBeneid").value).value.toString();
-				console.log(v1)
-				document.getElementById("atendConvid").value = v1;
+<head>
+	<title>Atendimentos</title>
+	<meta charset="utf-8" />
+	<!-- Select2 CSS (remova se já incluído globalmente) -->
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+	<!-- Se usar tema Bootstrap (aceAdmin), substitua pela versão compatível -->
+	<!-- <link href="/assets/css/select2-bootstrap4.min.css" rel="stylesheet" /> -->
+
+	<script type="text/javascript">
+			document.addEventListener("DOMContentLoaded", function() {
+			// Garante que listeners estão prontos
+			var org = document.getElementById("atendOrg");
+			var cat = document.getElementById("atendCategoria");
+
+			if (org) org.addEventListener("change", controlaCategoria);
+			if (cat) cat.addEventListener("change", function() {
+				document.getElementById("tabilCategoria").value = this.value;
+				atualizaSubFixo();
+			});
+
+			// Chama uma vez ao carregar (para estado inicial)
+			setTimeout(controlaCategoria, 50);
+		});
+		// Funções auxiliares
+		function selectConv(){
+			var v1 = document.getElementById(document.getElementById("atendBeneid").value).value.toString();
+			document.getElementById("atendConvid").value = v1;
+			let convId = document.getElementById("atendConvid").value;
+			document.getElementById("tabilConvid").value = convId;
+		}
+
+		function carregaValores(){
+			let teraId = document.getElementById("atendTerapiaid").value;
+			document.getElementById("creditTerapiaid").value = teraId;
+			document.getElementById("debitTerapiaid").value = teraId;
+			try{
 				let convId = document.getElementById("atendConvid").value;
-				console.log(convId)
-				document.getElementById("tabilConvid").value = convId;
-				console.log("feito!")
+				document.getElementById("atendValorcre").value = document.getElementById(convId+"/"+teraId+"/cre").value;
+				document.getElementById("atendValordeb").value = document.getElementById(convId+"/"+teraId+"/deb").value;
+				document.getElementById("tabilValorcredit").value = document.getElementById(convId+"/"+teraId+"/cre").value;
+				document.getElementById("tabilValordebit").value = document.getElementById(convId+"/"+teraId+"/deb").value;
+			} catch(err){
+				document.getElementById("atendValorcre").value = "0,00";
+				document.getElementById("atendValordeb").value = "0,00";
+				document.getElementById("tabilValorcredit").value = "0,00";
+				document.getElementById("tabilValordebit").value = "0,00";
 			}
-			function carregaValores(){
-				let teraId = document.getElementById("atendTerapiaid").value;
-				document.getElementById("creditTerapiaid").value = teraId;
-				document.getElementById("debitTerapiaid").value = teraId;
-				try{
-					let convId = document.getElementById("atendConvid").value
-					document.getElementById("atendValorcre").value = document.getElementById(convId+"/"+teraId+"/cre").value;
-					document.getElementById("atendValordeb").value = document.getElementById(convId+"/"+teraId+"/deb").value;
-					document.getElementById("tabilValorcredit").value = document.getElementById(convId+"/"+teraId+"/cre").value;
-					document.getElementById("tabilValordebit").value = document.getElementById(convId+"/"+teraId+"/deb").value;
-				} catch(err){
-					document.getElementById("atendValorcre").value = "0,00";
-					document.getElementById("atendValordeb").value = "0,00";
-					document.getElementById("tabilValorcredit").value = "0,00";
-					document.getElementById("tabilValordebit").value = "0,00";
-				}
-				atualizaSubFixo();
+			atualizaSubFixo();
+		}
+
+		function carregaValoresFixo(){
+			let teraId = document.getElementById("atendFixoTerapiaid").value;
+			document.getElementById("creditFixoTerapiaid").value = teraId;
+			document.getElementById("debitFixoTerapiaid").value = teraId;
+			try{
+				let convId = document.getElementById("atendConvid").value;
+				document.getElementById("atendFixovalorcre").value = document.getElementById(convId+"/"+teraId+"/cre").value;
+				document.getElementById("atendFixovalordeb").value = document.getElementById(convId+"/"+teraId+"/deb").value;
+				document.getElementById("tabilValorcredit").value = document.getElementById(convId+"/"+teraId+"/cre").value;
+				document.getElementById("tabilValordebit").value = document.getElementById(convId+"/"+teraId+"/deb").value;
+			} catch(err){
+				document.getElementById("atendFixovalorcre").value = "0,00";
+				document.getElementById("atendFixovalordeb").value = "0,00";
+				document.getElementById("tabilValorcredit").value = "0,00";
+				document.getElementById("tabilValordebit").value = "0,00";
 			}
-			function carregaValoresMerge(){
-				let teraId = document.getElementById("atendMergeTerapiaid").value;
-				document.getElementById("creditMergeTerapiaid").value = teraId;
-				document.getElementById("debitMergeTerapiaid").value = teraId;
-				document.getElementById("tabilMergeTerapiaid").value = teraId;
-				
-				try{
-					let convId = document.getElementById("atendConvid").value
-					document.getElementById("atendMergevalorcre").value = document.getElementById(convId+"/"+teraId+"/cre").value;
-					document.getElementById("atendMergevalordeb").value = document.getElementById(convId+"/"+teraId+"/deb").value;
-				} catch(err){
-					document.getElementById("atendMergevalorcre").value = "0,00";
-					document.getElementById("atendMergevalordeb").value = "0,00";
-				}
-				atualizaSubFixo();
+			atualizaSubFixo();
+		}
+
+		function carregaValoresMerge(){
+			let teraId = document.getElementById("atendMergeTerapiaid").value;
+			document.getElementById("creditMergeTerapiaid").value = teraId;
+			document.getElementById("debitMergeTerapiaid").value = teraId;
+			document.getElementById("tabilMergeTerapiaid").value = teraId;
+			
+			try{
+				let convId = document.getElementById("atendConvid").value;
+				document.getElementById("atendMergevalorcre").value = document.getElementById(convId+"/"+teraId+"/cre").value;
+				document.getElementById("atendMergevalordeb").value = document.getElementById(convId+"/"+teraId+"/deb").value;
+			} catch(err){
+				document.getElementById("atendMergevalorcre").value = "0,00";
+				document.getElementById("atendMergevalordeb").value = "0,00";
 			}
-			function atualizaSubFixo(){
-				if (document.getElementById("atendCategoria").value == "SubstitutoFixo") {
-					document.getElementById("atendFixoCheck").checked = true;
-					document.getElementById("divSubFixo").style.display = "";
-				} else {
-					document.getElementById("atendFixoCheck").checked = false;
-					document.getElementById("divSubFixo").style.display = "none";
-				}
+			atualizaSubFixo();
+		}
+
+		function atualizaSubFixo(){
+			if (document.getElementById("atendCategoria").value === "SubstitutoFixo") {
+				document.getElementById("atendFixoCheck").checked = true;
+				document.getElementById("divSubFixo").style.display = "";
+			} else {
+				document.getElementById("atendFixoCheck").checked = false;
+				document.getElementById("divSubFixo").style.display = "none";
 			}
-			function atualizaTerapeutaId(){
-				console.log("X");
-				console.log(document.getElementById("atendTerapeutaid").value);
-				let ati = document.getElementById("atendTerapeutaid").value;
-				console.log("C");
-				console.log(document.getElementById("tabilTerapeutaId").value);
-				document.getElementById("tabilTerapeutaId").value = ati;
+		}
+
+		function atualizaTerapeutaId(){
+			let ati = document.getElementById("atendTerapeutaid").value;
+			document.getElementById("tabilTerapeutaId").value = ati;
+		}
+
+		function atualizaData(){
+			var hora = document.getElementById("atendHora").value;
+			var data = document.getElementById("atenddata").value + "T" + hora + ":00.000Z";
+			var datafmt = new Date(data);
+			document.getElementById("atendAtenddata").value = datafmt.toISOString();
+		}
+
+		function toggleDivSubFixo(){
+			if (document.getElementById("atendFixoCheck").checked) {
+				document.getElementById("divSubFixo").style.display = "";
+				document.getElementById("atendFixo").value = "true";
+			} else {
+				document.getElementById("divSubFixo").style.display = "none";
+				document.getElementById("atendFixo").value = "false";
 			}
-			function atualizaMergeTerapeutaId(){
-				console.log(document.getElementById("atendMergeTerapeutaid").value);
-				console.log("X");
-				let amti = document.getElementById("atendMergeTerapeutaid").value;
+		}
+
+		function carregaBody(){
+			carregaValores();
+			// Garante que o estado inicial da categoria esteja correto
+			controlaCategoria();
+		}
+
+		// ✅ FUNÇÃO ATUALIZADA PARA SELECT2 ✅
+		function controlaCategoria() {
+			const origem = document.getElementById("atendOrg").value;
+			const selectEl = document.getElementById("atendCategoria");
+
+			// ✅ Passo 1: Remove TODAS as opções atuais (antes de atualizar Chosen)
+			selectEl.innerHTML = '';
+
+			let opcoes = [];
+			let valorPadrao = "Apoio";
+
+			if (origem === "Padrão") {
+				opcoes = [{ value: "Padrão", label: "Padrão" }];
+				valorPadrao = "Padrão";
+			} else {
+				opcoes = [
+					{ value: "Apoio", label: "Apoio" },
+					{ value: "Extra", label: "Extra" },
+					{ value: "Falta", label: "Falta" },
+					{ value: "Falta Justificada", label: "Falta Justificada" },
+					{ value: "Falta Absoluta", label: "Falta Absoluta" },
+					{ value: "Feriado", label: "Feriado" },
+					{ value: "Glosa", label: "Glosa" },
+					{ value: "Pais", label: "Pais" },
+					{ value: "Substituto", label: "Substituto" },
+					{ value: "SubstitutoFixo", label: "Substituto Fixo" },
+					{ value: "Supervisão", label: "Supervisão" }
+				];
 			}
-			function controlaCategoria(){
-				let origem = document.getElementById("atendOrg").value;
-				if(origem == "Padrão"){
-					document.getElementById("atendCategoria").value = "Padrão";
-					document.getElementById("Padrão").style.display = "";
-					document.getElementById("Falta").style.display = "none";
-					document.getElementById("Falta Justificada").style.display = "none";
-					document.getElementById("Falta Absoluta").style.display = "none";
-					document.getElementById("Feriado").style.display = "none";
-					document.getElementById("Apoio").style.display = "none";
-					document.getElementById("Supervisão").style.display = "none";
-					document.getElementById("Pais").style.display = "none";
-					document.getElementById("Substituto").style.display = "none";
-					document.getElementById("SubstitutoFixo").style.display = "none"
-					document.getElementById("Glosa").style.display = "none";
-					document.getElementById("Extra").style.display = "none";
-				} else {
-					document.getElementById("atendCategoria").value = "Apoio";
-					document.getElementById("Padrão").style.display = "none";
-					document.getElementById("Falta").style.display = "";
-					document.getElementById("Falta Justificada").style.display = "";
-					document.getElementById("Falta Absoluta").style.display = "";
-					document.getElementById("Feriado").style.display = "";
-					document.getElementById("Apoio").style.display = "";
-					document.getElementById("Supervisão").style.display = "";
-					document.getElementById("Pais").style.display = "";
-					document.getElementById("Substituto").style.display = "";
-					document.getElementById("SubstitutoFixo").style.display = ""
-					document.getElementById("Glosa").style.display = "";
-					document.getElementById("Extra").style.display = "";
-				}
+
+			// ✅ Passo 2: Adiciona novas opções ao <select> REAL
+			opcoes.forEach(opt => {
+				const option = document.createElement("option");
+				option.value = opt.value;
+				option.textContent = opt.label;
+				selectEl.appendChild(option);
+			});
+
+			// ✅ Passo 3: Define valor e campo oculto
+			selectEl.value = valorPadrao;
+			document.getElementById("tabilCategoria").value = valorPadrao;
+
+			// ✅ Passo 4: Atualiza o Chosen (sem destruir/recriar — use .trigger("chosen:updated"))
+			// Isso é o equivalente ao 'destroy + init' do Select2, mas para Chosen
+			if (typeof $(selectEl).trigger === 'function') {
+				$(selectEl).trigger("chosen:updated");
 			}
-			function ajustaOption(){
-				document.getElementById("Padrão").style.display = "none";
-				atualizaSubFixo();
-			}
-			function atualizaData(){
-				var hora = document.getElementById("atendHora").value;//se tirar da erro ao listar atendimento e relatorio, não pode ser fora do alcance do horaage;
-				var data = document.getElementById("atenddata").value+"T"+hora+":00.000Z";
-				var datafmt = new Date(data);
-				document.getElementById("atendAtenddata").value = datafmt.toISOString();
-			}
-			function toggleDivSubFixo(){
-				if (document.getElementById("atendFixoCheck").checked == true) {
-					document.getElementById("divSubFixo").style.display = "";
-					document.getElementById("atendFixo").value = "true";
-				} else {
-					document.getElementById("divSubFixo").style.display = "none";
-					document.getElementById("atendFixo").value = "false";
-				}
-			}
-			function carregaBody(){
-				this.carregaValores();
-			}
-		</script>
-	</head>
-	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
-		<div class="main-container ace-save-state" id="main-container">
-			<div class="main-content">
-				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-						<ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Home</a>
-							</li>
-							<li class="active">Atendimentos Cadastro</li>
-						</ul><!-- /.breadcrumb -->
-					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/atendimento/add" method="POST">
-								<div class="col-sm-12"><!-- Widget Dados Básicos -->
-									<div class="widget-box">
-										<div class="widget-header">
-											<h4 class="widget-title">Atendimento</h4>
-											<div class="hidden">
-												<input id="nextNum" name="nextNum" type="number"  value="{{atend.atend_num}}" />
-											</div>
-											<span class="widget-toolbar">
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
-											</span>
+
+			// ✅ Passo 5: Dispara lógica dependente
+			atualizaSubFixo();
+
+			// ✅ Passo 6: Força disparo de 'change' para garantir que `atualizaSubFixo()` rode com valor correto
+			// (útil se `atualizaSubFixo` depender do valor do select)
+			selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+		}	
+	</script>
+
+	<!-- Se já tem Select2 global, remova os links/scripts abaixo -->
+	
+</head>
+<body onload="carregaBody();controlaNave();" class="no-skin">
+	<div class="main-container ace-save-state" id="main-container">
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
+						<li class="active">Atendimentos Cadastro</li>
+					</ul>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<form class="form-horizontal" role="form" action="/menu/atendimento/add" method="POST">
+							<div class="col-sm-12">
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">Atendimento</h4>
+										<div class="hidden">
+											<input id="nextNum" name="nextNum" type="number" value="{{atend.atend_num}}" />
 										</div>
-										<div class="widget-body">
-											<div class="widget-main">
-												<label > Usuário </label>
-												<div class="form-group">
-													<div class="col-sm-6">
-														<input type="text" id="atendUsuid" name="atendUsuid" class="form-control"  readonly="true" value="Usuário Atual"/>
+										<span class="widget-toolbar">
+											<a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+											<a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+										</span>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											<label>Usuário</label>
+											<div class="form-group">
+												<div class="col-sm-6">
+													<input type="text" id="atendUsuid" name="atendUsuid" class="form-control" readonly value="Usuário Atual"/>
+												</div>
+											</div>
+
+											<label>Data atendimento</label>
+											<div class="row">
+												<div class="col-sm-4">
+													<div class="input-group">
+														<input name="atenddata" id="atenddata" type="date" onchange="atualizaData()" />
 													</div>
 												</div>
-									
-												<label for="id-date-picker-1">Data atendimento</label>
-												<div class="row">
-													<div class="col-sm-4">
-														<div class="input-group">
-															<input name="atenddata" id="atenddata" type="date" onchange="javascript:atualizaData()" />
-														</div>
-													</div>
-												</div>
-												<label for="id-date-picker-1">Hora atendimento</label>
-												<div class="row">
-													<div class="col-sm-8">
-														<select name="atendHora" id="atendHora" class="chosen-select" data-placeholder="Escolha..." >
-															{{#each horaages}}
-																<option value="{{horaage_hora}}">{{horaage_hora}}</option>
-															{{/each}}
-														</select>
-													</div>
-												</div>
-												<label>Origem atendimento</label>
-												<div class="form-group">
-													<div class="col-sm-9">
-														<select id="atendOrg" name="atendOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
-															<option value="Administrativo">Administrativo</option>
-															<option value="Padrão">Padrão</option>
-														</select>
-													</div>
-												</div>
-												<label>Categoria</label>
-												<div class="form-group">
-													<div class="col-sm-9">
-														<select id="atendCategoria" name="atendCategoria" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption();" onchange="javascript:atualizaSubFixo();">
-															<option id="Apoio" value="Apoio">Apoio</option>
-															<option id="Extra" value="Extra">Extra</option>
-															<option id="Falta" value="Falta">Falta</option>
-															<option id="Falta Justificada" value="Falta Justificada">Falta Justificada</option>
-															<option id="Falta Absoluta" value="Falta Absoluta">Falta Absoluta</option>
-															<option id="Feriado" value="Feriado">Feriado</option>
-															<option id="Glosa" value="Glosa">Glosa</option>
-															<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
-															<option id="Pais" value="Pais">Pais</option>
-															<option id="Substituto" value="Substituto">Substituto</option>
-															<option id="SubstitutoFixo" value="SubstitutoFixo">Substituto Fixo</option>
-															<option id="Supervisão" value="Supervisão">Supervisão</option>
-														</select>
-													</div>
-													<input type="text" name="tabilCategoria" id="tabilCategoria" class="hidden" value="Padrão"/>
-												</div>
-												
-												<label>Beneficiário</label>
-												<div class="hidden">
-													{{#each benes}}
-														{{#each ../convs}}
-															{{#ifEqual ../bene_convid _id}}
-																<input value="{{../bene_convid}}" id="{{../_id}}" name="refBeneConv" />
-															{{/ifEqual}}
+											</div>
+
+											<label>Hora atendimento</label>
+											<div class="row">
+												<div class="col-sm-8">
+													<select name="atendHora" id="atendHora" class="chosen-select" data-placeholder="Escolha...">
+														{{#each horaages}}
+														<option value="{{horaage_hora}}">{{horaage_hora}}</option>
 														{{/each}}
+													</select>
+												</div>
+											</div>
+
+											<label>Origem atendimento</label>
+											<div class="form-group">
+												<div class="col-sm-9">
+													<select id="atendOrg" name="atendOrg" class="chosen-select" data-placeholder="Escolha..."  onchange="controlaCategoria()">
+														<option value="Administrativo">Administrativo</option>
+														<option value="Padrão">Padrão</option>
+													</select>
+												</div>
+											</div>
+
+											<label>Categoria</label>
+											<div class="form-group">
+												<div class="col-sm-9">
+													<select id="atendCategoria" name="atendCategoria" class="chosen-select" data-placeholder="Escolha...">
+														<!-- Opções serão preenchidas por controlaCategoria() -->
+													</select>
+													<input type="hidden" name="tabilCategoria" id="tabilCategoria" value="Padrão"/>
+												</div>
+											</div>
+
+											<div class="hidden">
+												{{#each benes}}
+													{{#each ../convs}}
+														{{#ifEqual ../bene_convid _id}}
+															<input value="{{../bene_convid}}" id="{{../_id}}" name="refBeneConv" />
+														{{/ifEqual}}
 													{{/each}}
-												</div>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<select id="atendBeneid" name="atendBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
-																<option value="766f69643132333435366964">-</option>
-																{{#each benes}}
-																<option value="{{_id}}">{{bene_nome}}</option>
-																{{/each}}
-														</select>
-													</div>
-												</div>
-												<label>Convênio</label>
-												<div class="hidden" id="divTabil">
-													<input class="hidden" id="tabilConvid" name="tabilConvid" value="" />
-												</div>
-												<div class="form-group">
-														<div class="col-sm-4">
-															<select id="atendConvid" name="atendConvid" class="chosen-select" data-placeholder="Escolha...">{{#compareThis lvlUsu "624218f5a12aa557219a0fd0"}}<!--style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true"-->{{/compareThis}}
-																	{{#each benes}}
-																		{{#each ../convs}}
-																			{{#ifEqual ../bene_convid _id}}
-																				<option value="{{../bene_convid}}">{{conv_nome}}</option>
-																			{{/ifEqual}}
-																		{{/each}}
-																	{{/each}}
-															</select>
-														</div>
-												</div>
-												<label>Sala</label>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<select id="atendSalaid" name="atendSalaid" class="chosen-select" data-placeholder="Escolha...">
-																<option value="766f69643132333435366964">-</option>
-																{{#each salas}}
-																	<option value="{{_id}}">{{sala_nome}}</option>
-																{{/each}}
-														</select>
-													</div>
-												</div>
-												<label {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}} >Substituto Fixo <input id="atendFixoCheck" id="atendFixoCheck" type="checkbox" onchange="javascript:toggleDivSubFixo()"></label>
-												<div class="row">
-													<div class="col-xs-12">
-														<!-- PAGE CONTENT BEGINS -->
-														<div class="form-horizontal" role="form" method="POST">
-															<div class="row">
-																<div class="col-xs-12 col-sm-4">
-																	<div class="widget-box">
-																		<div class="widget-header">
-																			<h4 class="widget-title">Dados Básicos</h4>
-																			<div class="widget-toolbar">
-																				<a href="#" data-action="collapse">
-																					<i class="ace-icon fa fa-chevron-up"></i>
-																				</a>
-																			</div>
-																		</div>
-																		<div class="widget-body">
-																			<div class="widget-main">
-																				<div class="alert alert-warning">
-																					<button type="button" class="close" data-dismiss="alert">
-																						<i class="ace-icon fa fa-times"></i>
-																					</button>
-																						<strong>Importante!</strong>
-																						Dados necessários para os atendimentos
-																						administrativos quando a origem do atendimento for padrão.<br>
-																				</div>
-																				<label>Terapeuta</label>
-																				<div class="form-group">
-																					<div class="col-sm-4">
-																						<select id="atendTerapeutaid" name="atendTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
-																							<option value="766f69643132333435366964">-</option>
-																							{{#each usuarios}}
-																								<option value="{{_id}}">{{usuario_nome}}</option>
-																							{{/each}}
-																						</select>
-																					</div>
-																				</div>											
-																				<label>Terapia</label>
-																				<div class="hidden" id="TerapiasVal">
-																						{{#each terapias}}
-																							{{#each ../convcres}}
-																								{{#ifEqual convcre_terapiaid ../_id}}
-																									<input class="hidden" id="{{convcre_convid}}/{{../_id}}/cre" value="{{convcre_valor}}" />
-																								{{/ifEqual}}
-																						{{/each}}
-																					{{/each}}
-																					{{#each terapias}}
-																						{{#each ../convdebs}}
-																							{{#ifEqual convdeb_terapiaid ../_id}}
-																								<input class="hidden" id="{{convdeb_convid}}/{{../_id}}/deb" value="{{convdeb_valor}}" />
-																							{{/ifEqual}}
-																						{{/each}}
-																					{{/each}}
-																				</div>
-																				<div class="hidden" id="TerapiaFinan">
-																					<input class="hidden" id="creditTerapiaid" name="creditTerapiaid" value="" />
-																					<input class="hidden" id="debitTerapiaid" name="debitTerapiaid" value="" />
-																					
-																					<input class="hidden" id="debitTerapeutaid" name="debitTerapeutaid" value="" />
+												{{/each}}
+											</div>
 
+											<label>Beneficiário</label>
+											<div class="form-group">
+												<div class="col-sm-4">
+													<select id="atendBeneid" name="atendBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="selectConv()">
+														<option value="766f69643132333435366964">-</option>
+														{{#each benes}}
+														<option value="{{_id}}">{{bene_nome}}</option>
+														{{/each}}
+													</select>
+												</div>
+											</div>
 
-																				</div>
-																				<div class="form-group">
-																					<div class="col-sm-4">
-																						<select id="atendTerapiaid" name="atendTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores();">
-																								<option value="766f69643132333435366964">-</option>
-																								{{#each terapias}}
-																								<option value="{{_id}}">{{terapia_nome}}</option>
-																								{{/each}}
-																						</select>
-																					</div>
-																				</div>
-																				<label class="blue"> Valor da terapia pelo plano</label>
-																				<div class="form-group">
-																					<div class="col-sm-6">
-																						<input type="text" id="atendValorcre" name="atendValorcre" placeholder="0,00"  class="blue" class="form-control" />
-																					</div>
-																				</div>
-																				<label class="red"> Valor da terapia para o terapeuta</label>
-																				<div class="form-group">
-																					<div class="col-sm-6">
-																						<input type="text" id="atendValordeb" name="atendValordeb" placeholder="0,00"  class="red" class="form-control" />
-																					</div>
-																				</div>
-																			</div>
+											<label>Convênio</label>
+											<div class="hidden" id="divTabil">
+												<input class="hidden" id="tabilConvid" name="tabilConvid" value="" />
+											</div>
+											<div class="form-group">
+												<div class="col-sm-4">
+													<select id="atendConvid" name="atendConvid" class="chosen-select" data-placeholder="Escolha...">
+														{{#each benes}}
+															{{#each ../convs}}
+																{{#ifEqual ../bene_convid _id}}
+																	<option value="{{../bene_convid}}">{{conv_nome}}</option>
+																{{/ifEqual}}
+															{{/each}}
+														{{/each}}
+													</select>
+												</div>
+											</div>
+
+											<label>Sala</label>
+											<div class="form-group">
+												<div class="col-sm-4">
+													<select id="atendSalaid" name="atendSalaid" class="chosen-select" data-placeholder="Escolha...">
+														<option value="766f69643132333435366964">-</option>
+														{{#each salas}}
+														<option value="{{_id}}">{{sala_nome}}</option>
+														{{/each}}
+													</select>
+												</div>
+											</div>
+
+											<label {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}}>
+												Substituto Fixo <input id="atendFixoCheck" type="checkbox" onchange="toggleDivSubFixo()">
+											</label>
+
+											<div class="row">
+												<div class="col-xs-12">
+													<div class="form-horizontal" role="form">
+														<div class="row">
+															<div class="col-xs-12 col-sm-4">
+																<div class="widget-box">
+																	<div class="widget-header">
+																		<h4 class="widget-title">Dados Básicos</h4>
+																		<div class="widget-toolbar">
+																			<a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
 																		</div>
 																	</div>
-																</div><!-- /.span -->
-																<div class="col-xs-12 col-sm-4" id="divSubFixo" {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}}>
-																	<div class="widget-box">
-																		<div class="widget-header">
-																			<h4 class="widget-title">Dados de Sub Fixo</h4>
-																			<input hidden id="atendFixo" name="atendFixo" value="{{atendEdi.atend_fixo}}" />
-																			<span class="widget-toolbar">
-																				<a href="#" data-action="collapse">
-																					<i class="ace-icon fa fa-chevron-up"></i>
-																				</a>
-																			</span>
-																		</div>
-																		<div class="widget-body">
-																			<div class="widget-main">
-																				<div class="alert alert-danger">
-																					<button type="button" class="close" data-dismiss="alert">
-																						<i class="ace-icon fa fa-times"></i>
-																					</button>
-																					<strong>Alerta!</strong>
-																					Dados informados aqui irão suprimir os demais dados dos relatorios do beneficiario dada a natureza fixa destas informações.<br>
-																				</div>
-																				<label>Terapeuta Fixo</label>
-																				<div class="form-group">
-																					<div class="col-sm-4">
-																						<select id="atendFixoTerapeutaid" name="atendFixoTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValoresFixo()">
-																								<option value="766f69643132333435366964"></option>
-																								{{#each usuarios}}
-																								<option value="{{_id}}">{{usuario_nome}}</option>
-																								{{/each}}
-																						</select>
-																					</div>
-																				</div>
-																				<label>Terapia Fixa</label>
-																				<div class="form-group">
-																					<div class="col-sm-4">
-																						<select id="atendFixoTerapiaid" name="atendFixoTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresFixo()">
-																								<option value="766f69643132333435366964"></option>
-																								{{#each terapias}}
-																								<option value="{{_id}}">{{terapia_nome}}</option>
-																								{{/each}}
-																						</select>
-																					</div>
-																				</div>
-																				<label class="blue"> Valor da Terapia pelo Plano</label>
-																				<div class="form-group">
-																					<div class="col-sm-6">
-																						<input type="text" id="atendFixovalorcre" name="atendFixovalorcre" placeholder="0,00" class="blue" class="form-control" value="0,00" />
-																					</div>
-																				</div>
-																				<label class="red"> Valor da Terapia para o Terapeuta</label>
-																				<div class="form-group">
-																					<div class="col-sm-6">
-																						<input type="text" id="atendFixovalordeb" name="atendFixovalordeb" placeholder="0,00" class="red" class="form-control"  value="0,00" />
-																					</div>
-																				</div>
+																	<div class="widget-body">
+																		<div class="widget-main">
+																			<div class="alert alert-warning">
+																				<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>
+																				<strong>Importante!</strong> Dados necessários para os atendimentos administrativos quando a origem do atendimento for padrão.
 																			</div>
-																		</div><!-- /.widget-body -->
-																	</div><!-- /.widget-box -->
-																</div>
-																<div class="col-xs-12 col-sm-4">
-																	<div class="widget-box">
-																		<div class="widget-header">
-																			<h4 class="widget-title">Dados de merge</h4>
-																			<span class="widget-toolbar">
-																				<a href="#" data-action="collapse">
-																					<i class="ace-icon fa fa-chevron-up"></i>
-																				</a>
-																			</span>
-																		</div>
-																		<div class="widget-body">
-																			<div class="widget-main">
-																		<div class="alert alert-warning">
-																			<button type="button" class="close" data-dismiss="alert">
-																				<i class="ace-icon fa fa-times"></i>
-																			</button>
-																			<strong>Importante!</strong>
-																			Dados necessários para os atendimentos
-																			administrativos que requer informações adicionais.<br>
-																		</div>
-																		<label>Terapeuta</label>
-																		<div class="form-group">
-																			<div class="col-sm-4">
-																				<select id="atendMergeTerapeutaid" name="atendMergeTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
+
+																			<label>Terapeuta</label>
+																			<div class="form-group">
+																				<div class="col-sm-6">
+																					<select id="atendTerapeutaid" name="atendTerapeutaid" class="chosen-select" onchange="atualizaTerapeutaId()">
 																						<option value="766f69643132333435366964">-</option>
 																						{{#each usuarios}}
 																						<option value="{{_id}}">{{usuario_nome}}</option>
 																						{{/each}}
-																				</select>
-																			</div>
-																		</div>												
-																		<label>Terapia</label>
-																		<div class="hidden" id="TerapiaMergeFinan">
-																			<input class="hidden" id="creditMergeTerapiaid" name="creditMergeTerapiaid" value="" />
-																			<input class="hidden" id="debitMergeTerapiaid" name="debitMergeTerapiaid" value="" />
-																			<input class="hidden" id="tabilMergeTerapiaid" name="tabilMergeTerapiaid" value="" />
-																		</div>
-																		<div class="form-group">
-																				<div class="col-sm-4">
-																					<select id="atendMergeTerapiaid" name="atendMergeTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
-																							<option value="766f69643132333435366964">-</option>
-																							{{#each terapias}}
-																							<option value="{{_id}}">{{terapia_nome}}</option>
-																							{{/each}}
 																					</select>
 																				</div>
-																		</div>
-																		<label class="blue"> Valor da terapia pelo plano</label>
-																		<div class="form-group">
-																			<div class="col-sm-6">
-																				<input type="text" id="atendMergevalorcre" name="atendMergevalorcre" placeholder="0,00" class="blue" class="form-control" />
 																			</div>
-																		</div>
-																		<label class="red"> Valor da terapia para o terapeuta</label>
-																		<div class="form-group">
-																			<div class="col-sm-6">
-																				<input type="text" id="atendMergevalordeb" name="atendMergevalordeb" placeholder="0,00" class="red" class="form-control" />
+
+																			<div class="hidden" id="TerapiasVal">
+																				{{#each terapias}}
+																					{{#each ../convcres}}
+																						{{#ifEqual convcre_terapiaid ../_id}}
+																							<input class="hidden" id="{{convcre_convid}}/{{../_id}}/cre" value="{{convcre_valor}}" />
+																						{{/ifEqual}}
+																					{{/each}}
+																				{{/each}}
+																				{{#each terapias}}
+																					{{#each ../convdebs}}
+																						{{#ifEqual convdeb_terapiaid ../_id}}
+																							<input class="hidden" id="{{convdeb_convid}}/{{../_id}}/deb" value="{{convdeb_valor}}" />
+																						{{/ifEqual}}
+																					{{/each}}
+																				{{/each}}
 																			</div>
-																		</div>
+
+																			<div class="hidden" id="TerapiaFinan">
+																				<input class="hidden" id="creditTerapiaid" name="creditTerapiaid" value="" />
+																				<input class="hidden" id="debitTerapiaid" name="debitTerapiaid" value="" />
+																				<input class="hidden" id="debitTerapeutaid" name="debitTerapeutaid" value="" />
+																			</div>
+
+																			<label>Terapia</label>
+																			<div class="form-group">
+																				<div class="col-sm-6">
+																					<select id="atendTerapiaid" name="atendTerapiaid" class="chosen-select" onchange="carregaValores()">
+																						<option value="766f69643132333435366964">-</option>
+																						{{#each terapias}}
+																						<option value="{{_id}}">{{terapia_nome}}</option>
+																						{{/each}}
+																					</select>
+																				</div>
+																			</div>
+
+																			<label class="blue">Valor da terapia pelo plano</label>
+																			<div class="form-group">
+																				<div class="col-sm-6">
+																					<input type="text" id="atendValorcre" name="atendValorcre" placeholder="0,00" class="form-control" style="color: blue;" />
+																				</div>
+																			</div>
+
+																			<label class="red">Valor da terapia para o terapeuta</label>
+																			<div class="form-group">
+																				<div class="col-sm-6">
+																					<input type="text" id="atendValordeb" name="atendValordeb" placeholder="0,00" class="form-control" style="color: red;" />
+																				</div>
 																			</div>
 																		</div>
 																	</div>
-																</div><!-- /.span -->
-																
-															</div><!-- /.row -->
-															<div class="row">
-																<label> Evolução do atendimento</label>
-																<div class="form-group">
-																	<div class="col-sm-12">
-																		<textarea type="text" id="atendObs" name="atendObs" placeholder="" class="form-control"rows="3" class="col-sm-12" data-iconlibrary="fa"></textarea>
+																</div>
+															</div>
+
+															<div class="col-xs-12 col-sm-4" id="divSubFixo" {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}}>
+																<div class="widget-box">
+																	<div class="widget-header">
+																		<h4 class="widget-title">Dados de Sub Fixo</h4>
+																		<input type="hidden" id="atendFixo" name="atendFixo" value="{{atendEdi.atend_fixo}}" />
+																		<span class="widget-toolbar">
+																			<a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+																		</span>
+																	</div>
+																	<div class="widget-body">
+																		<div class="widget-main">
+																			<div class="alert alert-danger">
+																				<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>
+																				<strong>Alerta!</strong> Dados informados aqui irão suprimir os demais dados dos relatórios do beneficiário.
+																			</div>
+
+																			<label>Terapeuta Fixo</label>
+																			<div class="form-group">
+																				<div class="col-sm-6">
+																					<select id="atendFixoTerapeutaid" name="atendFixoTerapeutaid" class="chosen-select"  onchange="carregaValoresFixo()">
+																						<option value="766f69643132333435366964">-</option>
+																						{{#each usuarios}}
+																						<option value="{{_id}}">{{usuario_nome}}</option>
+																						{{/each}}
+																					</select>
+																				</div>
+																			</div>
+
+																			<div class="hidden" id="TerapiaFixoFinan">
+																				<input class="hidden" id="creditFixoTerapiaid" name="creditFixoTerapiaid" value="" />
+																				<input class="hidden" id="debitFixoTerapiaid" name="debitFixoTerapiaid" value="" />
+																				<input class="hidden" id="tabilFixoTerapeutaid" name="tabilFixoTerapeutaid" value="" />
+																			</div>
+
+																			<label>Terapia Fixa</label>
+																			<div class="form-group">
+																				<div class="col-sm-6">
+																					<select id="atendFixoTerapiaid" name="atendFixoTerapiaid" class="chosen-select"  onchange="carregaValoresFixo()">
+																						<option value="766f69643132333435366964">-</option>
+																						{{#each terapias}}
+																						<option value="{{_id}}">{{terapia_nome}}</option>
+																						{{/each}}
+																					</select>
+																				</div>
+																			</div>
+
+																			<label class="blue">Valor da Terapia pelo Plano</label>
+																			<div class="form-group">
+																				<div class="col-sm-6">
+																					<input type="text" id="atendFixovalorcre" name="atendFixovalorcre" placeholder="0,00" class="form-control" style="color: blue;" />
+																				</div>
+																			</div>
+
+																			<label class="red">Valor da Terapia para o Terapeuta</label>
+																			<div class="form-group">
+																				<div class="col-sm-6">
+																					<input type="text" id="atendFixovalordeb" name="atendFixovalordeb" placeholder="0,00" class="form-control" style="color: red;" />
+																				</div>
+																			</div>
+																		</div>
 																	</div>
 																</div>
-																<div id="divTabil" name="divTabil" class="hidden">
-																	<div id="tabilTerapeutaId" name="tabilTerapeutaId" value=""></div>
-																	<div id="tabilValorcredit" name="tabilValorcredit" value=""></div>
-																	<div id="tabilValordebit" name="tabilValordebit" value=""></div>
+															</div>
+
+															<div class="col-xs-12 col-sm-4">
+																<div class="widget-box">
+																	<div class="widget-header">
+																		<h4 class="widget-title">Dados de merge</h4>
+																		<span class="widget-toolbar">
+																			<a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+																		</span>
+																	</div>
+																	<div class="widget-body">
+																		<div class="widget-main">
+																			<div class="alert alert-warning">
+																				<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>
+																				<strong>Importante!</strong> Dados necessários para os atendimentos administrativos que requerem informações adicionais.
+																			</div>
+
+																			<label>Terapeuta</label>
+																			<div class="form-group">
+																				<div class="col-sm-6">
+																					<select id="atendMergeTerapeutaid" name="atendMergeTerapeutaid" class="chosen-select"  onchange="atualizaMergeTerapeutaId()">
+																						<option value="766f69643132333435366964">-</option>
+																						{{#each usuarios}}
+																						<option value="{{_id}}">{{usuario_nome}}</option>
+																						{{/each}}
+																					</select>
+																				</div>
+																			</div>
+
+																			<div class="hidden" id="TerapiaMergeFinan">
+																				<input class="hidden" id="creditMergeTerapiaid" name="creditMergeTerapiaid" value="" />
+																				<input class="hidden" id="debitMergeTerapiaid" name="debitMergeTerapiaid" value="" />
+																				<input class="hidden" id="tabilMergeTerapiaid" name="tabilMergeTerapiaid" value="" />
+																			</div>
+
+																			<label>Terapia</label>
+																			<div class="form-group">
+																				<div class="col-sm-6">
+																					<select id="atendMergeTerapiaid" name="atendMergeTerapiaid" class="chosen-select" onchange="carregaValoresMerge()">
+																						<option value="766f69643132333435366964">-</option>
+																						{{#each terapias}}
+																						<option value="{{_id}}">{{terapia_nome}}</option>
+																						{{/each}}
+																					</select>
+																				</div>
+																			</div>
+
+																			<label class="blue">Valor da terapia pelo plano</label>
+																			<div class="form-group">
+																				<div class="col-sm-6">
+																					<input type="text" id="atendMergevalorcre" name="atendMergevalorcre" placeholder="0,00" class="form-control" style="color: blue;" />
+																				</div>
+																			</div>
+
+																			<label class="red">Valor da terapia para o terapeuta</label>
+																			<div class="form-group">
+																				<div class="col-sm-6">
+																					<input type="text" id="atendMergevalordeb" name="atendMergevalordeb" placeholder="0,00" class="form-control" style="color: red;" />
+																				</div>
+																			</div>
+																		</div>
+																	</div>
 																</div>
-															</div><!-- /.row -->
+															</div>
+														</div>
+
+														<div class="row">
+															<label>Evolução do atendimento</label>
+															<div class="form-group">
+																<div class="col-sm-12">
+																	<textarea id="atendObs" name="atendObs" placeholder="" class="form-control" rows="3"></textarea>
+																</div>
+															</div>
+															<div class="hidden">
+																<input type="hidden" id="tabilTerapeutaId" name="tabilTerapeutaId" value="" />
+																<input type="hidden" id="tabilValorcredit" name="tabilValorcredit" value="" />
+																<input type="hidden" id="tabilValordebit" name="tabilValordebit" value="" />
+															</div>
 														</div>
 													</div>
 												</div>
 											</div>
+
 											<br>
 											<div class="form-actions">
-												<div class="col-xs-12" style="text-align: center;" >
+												<div class="col-xs-12" style="text-align: center;">
 													<button class="btn btn-info" name="acao" type="submit">
-														<i class="ace-icon fa fa-check bigger-110"></i>
-														Salvar
+														<i class="ace-icon fa fa-check bigger-110"></i> Salvar
 													</button>
 													&nbsp; &nbsp; &nbsp;
-													<button class="btn btn-warning"  type="reset">
-														<i class="ace-icon fa fa-undo bigger-110"></i>
-														Voltar
+													<button class="btn btn-warning" type="reset">
+														<i class="ace-icon fa fa-undo bigger-110"></i> Voltar
 													</button>
 												</div>
 											</div>
-											<div>
-												<input class="hidden" id="atendAtenddata"  name="atendAtenddata" />
+
+											<div class="hidden">
+												<input type="hidden" id="atendAtenddata" name="atendAtenddata" />
 											</div>
 										</div>
 									</div>
 								</div>
-							</form>
-						</div><!-- /.col -->
-					</div><!-- /.row -->
+							</div>
+						</form>
+					</div>
 				</div>
-			</div><!-- /.main-content -->
-		</div><!-- /.main-container -->
-		<!-- basic scripts -->
-		<!-- Script do editor de texto -->
-	</body>
+			</div>
+		</div>
+	</div>
+
+	
+	<script>
+		$(document).ready(function() {
+			// Inicializar todos os selects com .select2
+			$('.select2').select2({
+				placeholder: function() {
+					return $(this).data('placeholder') || "Escolha...";
+				},
+				allowClear: $(this).find('option[value="766f69643132333435366964"]').length > 0,
+				theme: "default",
+				dropdownAutoWidth: true
+			});
+
+			// ✅ Vincular evento de mudança no select de origem
+			$('#atendOrg').on('change', controlaCategoria);
+
+			// Garantir que tabilCategoria esteja sincronizado após inicialização
+			$('#atendCategoria').on('change', function() {
+				document.getElementById('tabilCategoria').value = this.value;
+				atualizaSubFixo();
+			});
+		});
+	</script>
+</body>
 </html>

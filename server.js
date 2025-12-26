@@ -291,6 +291,110 @@ const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSc
                 json: function(context) {
                     return JSON.stringify(context);
                 },
+                /**
+                 * Helper Handlebars: {{eq a b}}
+                 * Criado por: Wagner Cintra
+                 * Data: 16/12/2025
+                 * 
+                 * Compara dois valores de forma segura, convertendo ambos para string antes da comparação.
+                 * Útil em expressões lógicas com `{{#if}}`, `{{#each}}`, ou dentro de `{{#with}}`.
+                 * Ideal para comparar ObjectId, números e strings misturados (ex: ObjectId vs String).
+                 * 
+                 * Exemplos:
+                 *   {{#if (eq prog_tipo "65a1b2c3d4e5f67890123456")}} ... {{/if}}
+                 *   {{#each benes}}{{#if (eq _id ../idBene)}} SELECIONADO {{/if}}{{/each}}
+                 *   {{#if (eq status "Ativo")}} ✅ {{/if}}
+                 * 
+                 * Regra:
+                 *   ("x" === "x") → true
+                 *   (null === undefined) → true (por conversão explícita para string)
+                 *   ("766f6964..." === "766f6964...") → true
+                 */
+                eq: function(v1, v2) {
+                    // Conversão segura: garante que null/undefined viram "null"/"undefined"
+                    const s1 = (v1 == null) ? 'null' : String(v1).trim();
+                    const s2 = (v2 == null) ? 'null' : String(v2).trim();
+                    return s1 === s2;
+                },
+                /**
+                 * Helper Handlebars: {{#find array _id="valor"}} ... {{/find}}
+                 * Criado por: Wagner
+                 * Data: 12/12/2025 às 16:30
+                 * 
+                 * Busca um objeto em um array pelo campo _id (ou id).
+                 * Útil para exibir dados de relacionamento sem aninhar {{#each}}.
+                 * Exemplo:
+                 *   {{#find progtipos _id=../prog_tipo}}
+                 *     {{progtipo_nome}}
+                 *   {{/find}}
+                 */
+                find: function(array, options) {
+                if (!Array.isArray(array)) {
+                    return options.inverse(this);
+                }
+                const key = options.hash._id || options.hash.id;
+                if (key == null || key === "") {
+                    return options.inverse(this);
+                }
+                const found = array.find(function(item) {
+                    return ("" + (item._id || item.id) + "") === ("" + key + "");
+                });
+                if (found) {
+                    return options.fn(found);
+                } else {
+                    return options.inverse(this);
+                }
+                },
+                /**
+                 * Helper Handlebars: {{#gte a b}} ... {{else}} ... {{/gte}}
+                 * Criado por: Wagner
+                 * Data: 12/12/2025 às 16:32
+                 * 
+                 * Verifica se o valor A é maior ou igual ao valor B (converte para inteiro).
+                 * Útil para exibir estímulos condicionalmente (ex: mostrar estímulo F se qtest >= 6).
+                 * Exemplo:
+                 *   {{#gte ../progset_qtest 6}}
+                 *     <span class="badge badge-purple">{{../progset_estf}}</span>
+                 *   {{/gte}}
+                 */
+                gte: function(v1, v2, options) {
+                const num1 = parseInt(v1, 10) || 0;
+                const num2 = parseInt(v2, 10) || 0;
+                if (num1 >= num2) {
+                    return options.fn(this);
+                } else {
+                    return options.inverse(this);
+                }
+                },
+
+                /**
+                 * Helper Handlebars: {{#and cond1 cond2}} ... {{else}} ... {{/and}}
+                 * Criado por: Wagner
+                 * Data: 12/12/2025 às 16:35
+                 * 
+                 * Retorna verdadeiro se TODAS as condições forem verdadeiras (truthy).
+                 * Aceita 2 ou mais condições. Útil para filtrar supervisões por múltiplos critérios.
+                 * Exemplo (filtrar supervisão do bene E do programa):
+                 *   {{#and (isEqual notasup_beneid ../../_id) (isEqual notasup_progid ../_id)}}
+                 *     <tr> ... </tr>
+                 *   {{/and}}
+                 */
+                and: function() {
+                // Argumentos: cond1, cond2, ..., options
+                const args = Array.prototype.slice.call(arguments);
+                const options = args[args.length - 1]; // último é sempre options
+                const conditions = args.slice(0, -1);   // todas as condições
+                
+                const allTrue = conditions.every(function(cond) {
+                    return cond && cond !== "false" && cond !== "" && cond !== null && cond !== undefined;
+                });
+                
+                if (allTrue) {
+                    return options.fn(this);
+                } else {
+                    return options.inverse(this);
+                }
+                },
                 
                 // Helper ifCond
                 /**

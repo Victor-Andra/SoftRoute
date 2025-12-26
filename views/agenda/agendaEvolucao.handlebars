@@ -36,29 +36,76 @@
 				document.getElementById("agendaData").value = dataFmt;
 			}
 			function carregaBody(){
-				document.getElementById("dataAg").value = document.getElementById("agendaDataEdi").value;
-				document.getElementById("agendaHora").value = document.getElementById("agendaHoraEdi").value;
-				document.getElementById("agendaOrg").value = document.getElementById("agendaOrgEdi").value;
-				document.getElementById("agendaCateg").value = document.getElementById("agendaCategEdi").value;
-				document.getElementById("agendaBeneid").value = document.getElementById("agendaBeneidEdi").value;
-				document.getElementById("agendaConvid").value = document.getElementById("agendaConvidEdi").value;
-				document.getElementById("agendaTerapiaid").value = document.getElementById("agendaTerapiaidEdi").value;
-				document.getElementById("agendaUsuid").value = document.getElementById("agendaUsuidEdi").value;
-				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value;
-				//document.getElementById("agendaTempMotivo").value = document.getElementById("agendaTempMotivoEdi").value;
-				atualizaData();
-				if (document.getElementById("agendaSelamento").value == 'false'){
-					document.getElementById("agendaSelo").checked = false;
-					document.getElementById("agendaSelo").style = '';
-				}
-				if (document.getElementById("isAgendaTerapeuta").value == 'true'){
-					document.getElementById("divEvolucao").style = '';
-				}
-				document.getElementById("agendaEvolucao").value = document.getElementById("agendaEvolucaoEdi").value;
-				document.getElementById('acaoCancelar').addEventListener('click', function() {
-					window.history.back();
-				});
-			}
+    // 1. Preenche os valores nos selects (DOM puro)
+    var dataEdi = document.getElementById("agendaDataEdi").value;
+    var horaEdi = document.getElementById("agendaHoraEdi").value;
+    var orgEdi = document.getElementById("agendaOrgEdi").value;
+    var categEdi = document.getElementById("agendaCategEdi").value;
+    var beneEdi = document.getElementById("agendaBeneidEdi").value;
+    var convEdi = document.getElementById("agendaConvidEdi").value;
+    var terapiaEdi = document.getElementById("agendaTerapiaidEdi").value;
+    var usuidEdi = document.getElementById("agendaUsuidEdi").value;
+    var salaidEdi = document.getElementById("agendaSalaidEdi").value;
+
+    if (dataEdi) document.getElementById("dataAg").value = dataEdi;
+    if (horaEdi) document.getElementById("agendaHora").value = horaEdi;
+    if (orgEdi) document.getElementById("agendaOrg").value = orgEdi;
+    if (categEdi) document.getElementById("agendaCateg").value = categEdi;
+    if (beneEdi) document.getElementById("agendaBeneid").value = beneEdi;
+    if (convEdi) document.getElementById("agendaConvid").value = convEdi;
+    if (terapiaEdi) document.getElementById("agendaTerapiaid").value = terapiaEdi;
+    if (usuidEdi) document.getElementById("agendaUsuid").value = usuidEdi;
+    if (salaidEdi) document.getElementById("agendaSalaid").value = salaidEdi;
+
+    // 2. Atualiza os Chosen (obrigatório após mudar .value de um select)
+    //    — Só executa se jQuery estiver disponível (como deve estar, por main.handlebars)
+    if (typeof jQuery !== 'undefined') {
+        try {
+            $("#agendaHora, #agendaOrg, #agendaCateg, #agendaBeneid, #agendaConvid, #agendaTerapiaid, #agendaUsuid, #agendaSalaid")
+                .trigger("chosen:updated");
+        } catch (e) {
+            console.warn("[carregaBody] chosen:updated falhou — verificar init do Chosen", e);
+        }
+    }
+
+    // 3. Atualiza data composta (ISO)
+    atualizaData();
+
+    // 4. Checkbox de selo
+    var selamentoEl = document.getElementById("agendaSelamento");
+    var seloCheckbox = document.getElementById("agendaSelo");
+    if (selamentoEl && seloCheckbox) {
+        if (selamentoEl.value === 'false') {
+            seloCheckbox.checked = false;
+            seloCheckbox.removeAttribute("disabled"); // mantém editável
+        } else {
+            seloCheckbox.checked = true;
+        }
+    }
+
+    // 5. Evolução (só mostra se for terapeuta/supervisor)
+    var isTerapeuta = document.getElementById("isAgendaTerapeuta");
+    var divEvolucao = document.getElementById("divEvolucao");
+    if (isTerapeuta && isTerapeuta.value === 'true' && divEvolucao) {
+        divEvolucao.style.display = "";
+    }
+
+    // 6. Campo de evolução (textarea)
+    var evolEdi = document.getElementById("agendaEvolucaoEdi");
+    var evolTxt = document.getElementById("agendaEvolucao");
+    if (evolEdi && evolTxt) {
+        evolTxt.value = evolEdi.value || "";
+    }
+
+    // 7. Botão Cancelar → volta
+    var btnCancelar = document.getElementById('acaoCancelar');
+    if (btnCancelar) {
+        btnCancelar.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.history.back();
+        });
+    }
+}
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
 				if(chck.checked){

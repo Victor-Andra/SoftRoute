@@ -6,36 +6,51 @@
 			
 		</style>
 		<script>
+			function carregaBody() {
+
+			// ✅ Campos chosen-select: use jQuery + trigger
+			$('#progsetBeneid').val($('#progBene').val()).trigger('chosen:updated');
 			
-			function carregaBody(){
-				document.getElementById("progsetBeneid").value = document.getElementById("progBene").value;
-				document.getElementById("progsetProgtipoid").value = document.getElementById("progTipo").value;
-				document.getElementById("progsetPrognivelid").value = document.getElementById("progNivel").value;
-				document.getElementById("progsetTeraid").value = document.getElementById("usuarioAtual").value;
-				document.getElementById("progsetDataset").value = new Date();
+			$('#progsetProgtipoid').val($('#progTipo').val()).trigger('chosen:updated');
+			
+			$('#progsetPrognivelid').val($('#progNivel').val()).trigger('chosen:updated');
+			
+			$('#progStatus').val($('#progStatusEdi').val()).trigger('chosen:updated');
+
 			}
-			document.addEventListener('DOMContentLoaded', function() {
-				function updateStimulusFields() {
-					var select = document.getElementById('progsetQtest');
-					var value = parseInt(select.value, 10);
+			// ✅ Função para atualizar campos de estímulo (reutilizável)
+			function updateStimulusFields() {
+			const select = $('#progsetQtest');
+			const value = parseInt(select.val(), 10) || 0;
 
-					// Hide all stimulus fields
-					var fields = document.querySelectorAll('.stimulus-field');
-					fields.forEach(function(field) {
-						field.style.display = 'none';
-					});
+			// Esconde todos
+			$('.stimulus-field').hide();
 
-					// Show only the number of fields selected
-					for (var i = 0; i < value; i++) {
-						document.getElementById('stimulus' + String.fromCharCode(65 + i)).style.display = 'block';
-					}
-				}
+			// Mostra só os necessários (A, B, C...)
+			for (let i = 0; i < value && i < 10; i++) {
+				$('#stimulus' + String.fromCharCode(65 + i)).show();
+			}
+			}
 
-				// Initialize fields on page load
-				updateStimulusFields();
+			// ✅ Função para mudar tipo de registro (exemplo — ajuste conforme sua lógica)
+			function mudaRegistro() {
+			const tipoReg = $('#progsetTiporeg').val();
+			// Exemplo: se for "Duplo", habilita campos extras...
+			console.log("Tipo de registro selecionado:", tipoReg);
+			// Sua lógica aqui...
+			}
 
-				// Add change event listener to the select element
-				document.getElementById('progsetQtest').addEventListener('change', updateStimulusFields);
+			// ✅ Inicializa ao carregar a página (após DOM pronto + Chosen)
+			$(document).ready(function() {
+			// Assegura que o Chosen já foi inicializado (você tem initChosen() no main)
+			initChosen(); // ← opcional, se ainda não rodou
+
+			// ✅ Conecta os eventos aos selects via jQuery (funciona com Chosen)
+			$('#progsetQtest').on('change', updateStimulusFields);
+			$('#progsetTiporeg').on('change', mudaRegistro);
+
+			// Inicializa visualmente
+			updateStimulusFields();
 			});
 		</script>
 	</head>
@@ -57,8 +72,8 @@
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/area/aba/progset/add" method="POST">
-								<div id="divCarrega" hidden>
-									<input name="progsetProgid" id="progsetProgid"value="{{prog._id}}" />
+								<div id="divCarrega" style="display: none;">
+									<input name="progsetProgid" id="progsetProgid" value="{{prog._id}}" />
 									<input name="progBene"  id="progBene" value="{{prog.prog_beneid}}" />
 									<input name="progTipo" id="progTipo" value="{{prog.prog_tipo}}" />
 									<input name="progNivel" id="progNivel" value="{{prog.prog_nivel}}" />
@@ -72,9 +87,7 @@
 												Cabeçalho do SET e Índices
 											</h4>
 											<span class="widget-toolbar">
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
+												
 												<a href="#" data-action="fullscreen" class="orange2">
 													<i class="ace-icon fa fa-expand"></i>
 												</a>
@@ -86,61 +99,69 @@
 										<div class="widget-body">
 											<div class="widget-main">
 												<div class="row">
-													<div class="col-xs-12">	
+													<div class="col-lg-6 col-md-12">
 														<label>Beneficiário</label>
-														<div class="input-group">
-															<div class="input-group">
-																<select name="progsetBeneid" id="progsetBeneid" class="chosen-select readonly" value="Sem Info" readonly onchange="" >
+														<div class="form-group">
+															<div class="col-lg-6 col-md-12">
+																<select name="progsetBeneid" id="progsetBeneid" class="chosen-select" >
 																	<option value="766f69643132333435366964">-</option>
-																		{{#each benes}}
-																			<option value="{{_id}}">{{bene_nome}}</option>
-																		{{/each}}
+																	{{#each benes}}
+																		<option value="{{_id}}">{{bene_nome}}</option>
+																	{{/each}}
 																</select>
 															</div>
 														</div>
 													</div>
 												</div>
+												
 												<div class="row">
-													<div class="col-sm-4">
+													<!-- Tipo de Programa -->
+													<div class="col-lg-4 col-md-12">
 														<label>Tipo de Programa</label>
-														<div class="input-group">
-															<div class="input-group">
-																<select name="progsetProgtipoid" id="progsetProgtipoid" class="chosen-select readonly"  onchange="">
-																		<option value="766f69643132333435366964">-</option>
-																		{{#each progtipos}}
-																			<option value="{{_id}}">{{progtipo_nome}}</option>
-																		{{/each}}
+														<div class="form-group">
+															<div class="col-lg-12 col-md-12">
+																<select name="progsetProgtipoid" id="progsetProgtipoid" class="chosen-select" >
+																	<option value="766f69643132333435366964">-</option>
+																	{{#each progtipos}}
+																		<option value="{{_id}}">{{progtipo_nome}}</option>
+																	{{/each}}
 																</select>
 															</div>
 														</div>
 													</div>
-													<div class="col-sm-4">
+
+													<!-- Nível do Programa -->
+													<div class="col-lg-4 col-md-12">
 														<label>Nível do Programa</label>
-														<div class="input-group">
-															<div class="input-group">
-																<select name="progsetPrognivelid" id="progsetPrognivelid" class="chosen-select readonly" onchange="">
+														<div class="form-group">
+															<div class="col-lg-12 col-md-12">
+																<select name="progsetPrognivelid" id="progsetPrognivelid" class="chosen-select"  >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each prognivels}}
-																	<option value="{{_id}}">{{prognivel_nome}}</option>
+																		<option value="{{_id}}">{{prognivel_nome}}</option>
 																	{{/each}}
 																</select>
 															</div>
 														</div>
 													</div>
-													<div class="col-sm-4">
-														<label>Terapeuta Resposável</label>
-														<div class="input-group">
-															<div class="input-group">
-																<select name="progsetTeraid" id="progsetTecid" class="chosen-select" onchange="">
+
+													<!-- Terapeuta Responsável -->
+													<div class="col-lg-4 col-md-12">
+														<label>Terapeuta Responsável</label>
+														<div class="form-group">
+															<div class="col-lg-12 col-md-12">
+																<select name="progsetTeraid" id="progsetTeraid" class="chosen-select">
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each usuarios}}
-																	<option value="{{_id}}">{{usuario_nome}}</option>
+																		<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
 																</select>
 															</div>
 														</div>
 													</div>
+
 												</div>
+
 												<label>Número do SET</label>
 												<div class="input-group">
 													<div class="input-group">
@@ -202,10 +223,10 @@
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-12 col-sm-2">
+													<div class="col-lg-4 col-md-12">
 														<label>Status do SET</label>
-														<div class="input-group">
-															<div class="input-group">
+														<div class="form-group">
+															<div class="col-lg-4 col-md-12">
 																<select name="progsetStatus" id="progsetStatus" class="chosen-select" onchange="">
 																	<option value="Agendado">Agendado</option>
 																	<option value="Andamento">Andamento</option>
@@ -215,11 +236,11 @@
 															</div>
 														</div>
 													</div>
-													<div class="col-xs-12 col-sm-2">
+													<div class="col-lg-4 col-md-12">
 														<label>Tipo do Registro para TODO o SET</label>
 														<div class="form-group">
-															<div class="col-sm-4">
-																<select name="progsetTiporeg" id="progsetTiporeg" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro()">
+															<div class="col-lg-4 col-md-12">
+																<select name="progsetTiporeg" id="progsetTiporeg" class="chosen-select" onchange="javascript:mudaRegistro()">
 																	<option value="Não Informado">Não Informado</option>
 																	<option value="Simples">Simples</option>
 																	<option value="Duplo">Duplo</option>
@@ -264,7 +285,7 @@
 														<label> Quantidade de Estímulos para esse SET </label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="progsetQtest" id="progsetQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields()">
+																<select name="progsetQtest" id="progsetQtest" class="chosen-select" data-placeholder="Escolha..." onchange="updateStimulusFields()">
 																	<option value="1">1</option>
 																	<option value="2">2</option>
 																	<option value="3">3</option>
@@ -459,19 +480,6 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container --><!-- basic scripts -->
-		<script>
-			//O script abaixo só roda após garantir que todos os elementos da página já estejam carregados e disponíveis para o script manipular, evitando problemas que podem ocorrer se o script tentar acessar elementos que ainda não foram carregados.
-			document.addEventListener("DOMContentLoaded", function() {
-				var selects = document.querySelectorAll('.readonly');
-				selects.forEach(function(select) {
-					select.addEventListener('mousedown', function(e) {
-						e.preventDefault();
-					});
-					select.addEventListener('keydown', function(e) {
-						e.preventDefault();
-					});
-				});
-			});
-		</script>
+		
 	</body>
 </html>

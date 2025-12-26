@@ -521,6 +521,7 @@ module.exports = {
         Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
         Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
         let usuarioAtual = req.cookies['idUsu'];
         Bordo.findById(req.params.id).then((bordo) =>{console.log("ID: "+bordo._id)
@@ -577,8 +578,26 @@ module.exports = {
                                             return;
                                         }
                                         
-                                        //console.log("Resultado da consulta Bene.aggregate:", colegio);    
-                                        res.render("area/bordo/bordoEdi", {colegios: colegio, bordo, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, benes: bene, usuarioAtual})
+                                        // Dentro do .then() final, logo antes do res.render:
+                                        let terapeutaNome = "";
+                                        const terapeutaEncontrado = terapeuta.find(t => t._id.toString() === bordo.bordo_terapeutaid?.toString());
+                                        if (terapeutaEncontrado) {
+                                            terapeutaNome = terapeutaEncontrado.usuario_nomecompleto || terapeutaEncontrado.usuario_nome || "Terapeuta não encontrado";
+                                        }
+
+                                        res.render("area/bordo/bordoEdi", {
+                                            colegios: colegio,
+                                            bordo,
+                                            convs: conv,
+                                            escolas: escola,
+                                            terapias: terapia,
+                                            terapeutas: terapeuta,
+                                            benes: bene,
+                                            usuarioAtual,
+                                            // 👇 Passa o nome resolvido diretamente
+                                            bordo_terapeutaid_nome: terapeutaNome
+                                        })
+                                        
         })})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")

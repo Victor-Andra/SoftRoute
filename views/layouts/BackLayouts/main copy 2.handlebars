@@ -1,154 +1,49 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<meta name="description" content="Sisroute" />
+		<meta name="description" content="overview &amp; stats" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		
+		<!-- ⚠️ Refina o ACE Admin para os chosen. -->
 		<style>
-		/* === Chosen — Estilo Retangular, Sem Sombra, Alinhado à Esquerda === */
-
-		/* Container principal e dropdown */
-		.chosen-container-single .chosen-single,
-		.chosen-container-single .chosen-drop,
-		.chosen-container-multi .chosen-choices,
-		.chosen-container .chosen-search input[type="text"],
-		.chosen-container .chosen-results li {
-			border-radius: 0 !important;
-			box-shadow: none !important;
-			-webkit-box-shadow: none !important;
-			border-color: #d5d5d5 !important;
-		}
-
-		/* Botão de dropdown (seta) — remove fundo arredondado e hover preto */
-		.chosen-container-single .chosen-single {
-			background: #fff !important;
-			height: 30px !important;
+			/* Impede quebra de linha nos itens do Chosen */
+			.chosen-container .chosen-results li {
+			white-space: nowrap !important;
+			overflow: hidden !important;
+			word-wrap: break-word;
+			}
+			/* Garante altura mínima para acomodar texto */
+			.chosen-container .chosen-results {
+			max-height: 250px;
+			}
 			
-		}
-		.chosen-container-single .chosen-single:hover,
-		.chosen-container-single.chosen-container-active .chosen-single {
-			border-color: #b5b5b5 !important;
-			background: #fff !important;
-		}
-		.chosen-container-single .chosen-single div {
-			background: none !important;
-			
-		}
-		.chosen-container-single .chosen-single div b {
-			background: none !important;
-		}
-		.chosen-container-single .chosen-single div b::after {
-			
-			font-size: 8px;
-			text-align: left;
-			right: 8px;
-			top: 50%;
-			
-			color: #888;
-		}
-		/* Campo de busca no dropdown */
-		.chosen-container .chosen-search input[type="text"] {
-			padding: 4px 6px !important;
-			border: 1px solid #d5d5d5 !important;
-			outline: none !important;
-			background: #fff !important;
-		}
-
-		/* Itens da lista — alinhamento à esquerda e padding mínimo */
-		.chosen-container .chosen-results li {
-			text-align: left !important;
-			padding-left: 6px !important;
-			padding-right: 6px !important;
-			color: #444 !important;
-		}
-		.chosen-container .chosen-results li.highlighted {
-			background: #f5f5f5 !important;
-			color: #000 !important;
-		}
-
-		/* Estilo múltiplo — caixas retangulares (não tags por padrão) */
-		.chosen-container-multi .chosen-choices {
-			background: #fff !important;
-			min-height: 30px !important;
-		}
-		.chosen-container-multi .chosen-choices li.search-choice {
-			border-radius: 0 !important;
-			background: #f0f0f0 !important;
-			border: 1px solid #ccc !important;
-			padding: 3px 22px 3px 6px !important;
-			margin: 2px 5px 2px 0 !important;
-			box-shadow: none !important;
-			color: #333 !important;
-		}
-
-		/* Botão de remover (×) — estilo limpo */
-		.chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
-			background: none !important;
-			top: 4px !important;
-			right: 4px !important;
-			width: 12px !important;
-			height: 12px !important;
-		}
-		.chosen-container-multi .chosen-choices li.search-choice .search-choice-close::before {
-			content: "×";
-			font-weight: bold;
-			color: #999;
-			position: absolute;
-			top: 0; left: 0;
-			width: 12px; height: 12px;
-			text-align: center;
-			line-height: 12px;
-		}
-
-		/* Placeholder */
-		.chosen-container .chosen-default {
-			color: #999 !important;
-		}
 		</style>
 		
-		<!--<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-		<!-- JQUERY UI -->
-  		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
-		<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> sugerido pelo chatGPT-->
-		<!-- page tabelas plugin scripts -->
-		<!--[if IE]>
-				<script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
-		<![endif]-->
-		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+		<!-- ⚠️ NÃO REMOVER: jQuery 2.1.4 necessário para plugins ACE Admin, Flot, chosen, tabs.
+       Carregado no final para sobrescrever $ e garantir compatibilidade com gráficos.
+       Remover quebra abas e visualizações. -->
+		<script src="/js/jquery-2.1.4.min.js"></script>
 		<script type="text/javascript" src="/js/jQuery-Mask-Plugin-master/dist/jquery.mask.js"></script>
-		<script type="text/javascript" src="/js/dataTables.buttons.min.js"></script>
-		<script type="text/javascript" src="/js/buttons.flash.min.js"></script>
-		<script type="text/javascript" src="/js/buttons.html5.min.js"></script>
-		<script type="text/javascript" src="/js/buttons.print.min.js"></script>
-		<script type="text/javascript" src="/js/buttons.colVis.min.js"></script>
-		<script type="text/javascript" src="/js/dataTables.select.min.js"></script>
 		<script type="text/javascript" src="/js/jquery.knob.min.js"></script>
-		<!-- page specific plugin scripts
-		<script src="/js/jquery-2.1.4.min.js"></script>-->
-		<!-- page specific plugin scripts -->
+
 		<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
 		</script>
 		<!-- ace settings handler -->
 		<script type="text/javascript" src="/js/ace-extra.min.js"></script>
-		<!-- Carrega estilo padrão para o shosen e multiple shosen Wagner Cintra 19/11/2025 -->
-		<link rel="stylesheet" href="/css/chosen.min.css" />
 		<!-- bootstrap & fontawesome -->
-		<link rel="stylesheet" href="/css/jquery-ui.custom.min.css" />
+		<!-- ace styles -->
 		<link rel="stylesheet" href="/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css" />
+		<link rel="stylesheet" href="/css/chosen.min.css" />
+		<link rel="stylesheet" href="/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+		<link rel="stylesheet" href="/css/ace-skins.min.css" />
 		<!-- page specific plugin styles -->
 		<!-- text fonts -->
 		<link rel="stylesheet" href="/css/fonts.googleapis.com.css" />
-		<!-- ace styles -->
-		<link rel="stylesheet" href="/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
-		<link rel="stylesheet" href="/css/ace-skins.min.css" />
 		<link rel="stylesheet" href="/css/ace-rtl.min.css" />
-		<link rel="stylesheet" href="/css/chosen.min.css" />
+		
 		<!-- Carrega div Conteudo com paginas html -->
 		<script type = "text/javascript">
  			function carregar(pagina){ $("#conteudo").load(pagina);	}
@@ -574,6 +469,8 @@
 					//console.log("naveTerapeuta");
 				}
 			}
+			
+					
 			function getCookie(name) {
 				const value = `; ${document.cookie}`;
 				const parts = value.split(`; ${name}=`);
@@ -603,6 +500,7 @@
 				}
 				document.getElementById("empresaFantasia").innerHTML = `<small><i class="fa fa-puzzle-piece white"></i> Soft Route ${db}</small>`;
 			}
+
 			document.addEventListener("DOMContentLoaded", function() {
 				const body = document.getElementById("main-body");
 				const preferredDb = getCookie("preferredDb");
@@ -618,6 +516,7 @@
 					body.className = "skin-1";
 				}
 			});
+
 		</script>
 	</head>
 	<body id="main-body"><!-- Carrega a skin no addEventListener, logo acima, route (no-skin) e fazendinha (skin-5). -->
@@ -688,132 +587,109 @@
 		{{/if}}
 		{{{body}}}
 		
-	<!-- basic scripts -->
-<!--[if !IE]> -->
-<script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
-<!-- <![endif]-->
-<!--[if IE]>
-<script src="/js/jquery-1.11.3.min.js"></script>
-<![endif]-->
-<script type="text/javascript">
-    if ('ontouchstart' in document.documentElement) {
-        document.write("<script src='/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
-    }
-</script>
-<script type="text/javascript" src="/js/bootstrap.min.js"></script>
-<!-- page specific plugin scripts -->
-<!--[if lte IE 8]>
-<script src="/js/excanvas.min.js"></script>
-<![endif]-->
-<script type="text/javascript" src="/js/jquery-ui.custom.min.js"></script>
-<script type="text/javascript" src="/js/jquery.ui.touch-punch.min.js"></script>
-<script type="text/javascript" src="/js/chosen.jquery.min.js"></script>
-<script type="text/javascript" src="/js/spinbox.min.js"></script>
-<!-- ⚠️ Se já tem esses plugins via CDN ou outro modo, comente abaixo -->
-<script type="text/javascript" src="/js/bootstrap-datepicker.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap-timepicker.min.js"></script>
-<script type="text/javascript" src="/js/moment.min.js"></script>
-<script type="text/javascript" src="/js/daterangepicker.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap-colorpicker.min.js"></script>
-<script type="text/javascript" src="/js/jquery.knob.min.js"></script>
-<script type="text/javascript" src="/js/autosize.min.js"></script>
-<script type="text/javascript" src="/js/jquery.inputlimiter.min.js"></script>
-<!-- ⚠️ jquery.maskedinput.min.js é redundante se usa jQuery-Mask-Plugin — mantido opcional -->
-<!-- <script type="text/javascript" src="/js/jquery.maskedinput.min.js"></script> -->
-<script type="text/javascript" src="/js/bootstrap-tag.min.js"></script>
-<!-- Seus scripts extras (DataTable, Mask, etc.) — preservados -->
-<script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="/js/jquery.dataTables.bootstrap.min.js"></script>
-<script type="text/javascript" src="/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" src="/js/buttons.flash.min.js"></script>
-<script type="text/javascript" src="/js/buttons.html5.min.js"></script>
-<script type="text/javascript" src="/js/buttons.print.min.js"></script>
-<script type="text/javascript" src="/js/buttons.colVis.min.js"></script>
-<script type="text/javascript" src="/js/dataTables.select.min.js"></script>
-<script type="text/javascript" src="/js/jQuery-Mask-Plugin-master/dist/jquery.mask.js"></script>
-<!-- Editor de Textos -->
-<script type="text/javascript" src="/js/markdown.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap-markdown.min.js"></script>
-<script type="text/javascript" src="/js/jquery.hotkeys.index.min.js"></script>
-<script type="text/javascript" src="/js/bootstrap-wysiwyg.min.js"></script>
-<script type="text/javascript" src="/js/bootbox.js"></script>
-<!-- ace scripts -->
-<script type="text/javascript" src="/js/ace-elements.min.js"></script>
-<script type="text/javascript" src="/js/ace.min.js"></script>
-<!-- inline scripts related to this page -->
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    identifyDb();
-});
-</script>
-<script>
-$(document).ready(function() {
-    // ✅ Chosen + funcionalidades responsivas (do Ace Admin)
-    if (!ace.vars?.['touch']) {
-        $('.chosen-select').chosen({ allow_single_deselect: true });
+		
 
-        // Resize responsivo (janela)
-        $(window)
-            .off('resize.chosen')
-            .on('resize.chosen', function() {
-                $('.chosen-select').each(function() {
-                    var $this = $(this);
-                    $this.next().css({ 'width': $this.parent().width() });
-                });
-            }).trigger('resize.chosen');
-
-        // Resize ao recolher/expandidir sidebar
-        $(document).on('settings.ace.chosen', function(e, event_name, event_val) {
-            if (event_name !== 'sidebar_collapsed') return;
-            $('.chosen-select').each(function() {
-                var $this = $(this);
-                $this.next().css({ 'width': $this.parent().width() });
-            });
-        });
-
-        // Estilo múltiplo: tag-input-style vs padrão
-        $('#chosen-multiple-style .btn').on('click', function(e) {
-            var target = $(this).find('input[type=radio]');
-            var which = parseInt(target.val());
-            if (which === 2) {
-                $('.chosen-select[multiple]').addClass('tag-input-style');
-            } else {
-                $('.chosen-select[multiple]').removeClass('tag-input-style');
-            }
-        });
-    }
-    // ✅ Tooltip / Popover
-    $('[data-rel=tooltip]').tooltip({ container: 'body' });
-    $('[data-rel=popover]').popover({ container: 'body' });
-    // ✅ Autosize (textareas)
-    if (typeof autosize === 'function') {
-        autosize($('textarea[class*=autosize]'));
-    }
-
-    // ✅ Input limiter
-    if ($.fn.inputlimiter) {
-        $('textarea.limited').inputlimiter({
-            remText: '%n character%s remaining...',
-            limitText: 'max allowed : %n.'
-        });
-    }
-    // ⚠️ Máscaras do Ace (só se usar maskedinput, não jQuery-Mask-Plugin)
-    /*
-    $.mask.definitions['~'] = '[+-]';
-    $('.input-mask-date').mask('99/99/9999');
-    $('.input-mask-phone').mask('(999) 999-9999');
-    $('.input-mask-eyescript').mask('~9.99 ~9.99 999');
-    $('.input-mask-product').mask('a*-999-a999', {
-        placeholder: " ",
-        completed: function() { alert("You typed: " + this.val()); }
-    });
-    */
-});
-</script>	
 	</body>
-	<!-- Footer-->
+	
+	<br>
+	<br>
+	<input class="hidden" id="flashMain" value="{{flash.mensagem}}" >
 	<div class="footer">
-		<input class="hidden" id="flashMain" value="{{flash.mensagem}}" >
+		
 	</div>
+
+    <!-- basic scripts -->
+ 
+	<!-- ⚠️ NÃO REMOVER: jQuery 2.1.4 necessário para plugins ACE Admin, Flot, chosen, tabs.
+       Carregado no final para sobrescrever $ e garantir compatibilidade com gráficos.
+       Remover quebra abas e visualizações. -->
+	<script src="/js/jquery-2.1.4.min.js"></script>
+  
+    <script type="text/javascript">
+        if('ontouchstart' in document.documentElement) document.write("<script src='/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+    </script>
+    <script type="text/javascript"  src="/js/bootstrap.min.js"></script>
+    <!-- page specific plugin scripts Tables-->
+		<script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="/js/jquery.dataTables.bootstrap.min.js"></script>
+		<script type="text/javascript" src="/js/dataTables.buttons.min.js"></script>
+		<script type="text/javascript" src="/js/buttons.flash.min.js"></script>
+		<script type="text/javascript" src="/js/buttons.html5.min.js"></script>
+		<script type="text/javascript" src="/js/buttons.print.min.js"></script>
+		<script type="text/javascript" src="/js/buttons.colVis.min.js"></script>
+		<script type="text/javascript" src="/js/dataTables.select.min.js"></script>
+    
+    <script type="text/javascript" src="/js/jquery-ui.custom.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.ui.touch-punch.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.easypiechart.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.sparkline.index.min.js"></script>
+	<script type="text/javascript" src="/js/spinbox.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.flot.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.flot.pie.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.flot.resize.min.js"></script>
+	<script type="text/javascript" src="/js/chosen.jquery.min.js"></script>
+    
+	<!-- Editor de Textos plugin scripts -->
+    <script type="text/javascript" src="/js/markdown.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-markdown.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.hotkeys.index.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap-wysiwyg.min.js"></script>
+    <script type="text/javascript" src="/js/bootbox.js"></script>
+    
+	<!-- ace scripts -->
+    <script type="text/javascript" src="/js/ace-elements.min.js"></script>
+    <script type="text/javascript" src="/js/ace.min.js"></script>
+    <script type="text/javascript">
+	// Inicializa Chosen em todos os selects com classe 'chosen-select'
+		function initChosen() {
+			if (typeof $.fn.chosen !== 'undefined') {
+				$('.chosen-select').not('.chosen-initialized').each(function() {
+				var $select = $(this);
+				
+				// ✅ Força estilo moderno (tags com ×) para selects múltiplos
+				if ($select.prop('multiple')) {
+					$select.addClass('tag-input-style');
+				}
+
+				$select
+					.addClass('chosen-initialized')
+					.chosen({
+					allow_single_deselect: true,
+					no_results_text: "Nenhum resultado encontrado",
+					placeholder_text_single: $select.data('placeholder') || "Selecione...",
+					placeholder_text_multiple: $select.data('placeholder') || "Selecione...",
+					search_contains: true,
+					width: "100%"
+					});
+
+				// ✅ Garante largura correta do dropdown (evita quebra em tablet)
+				var $container = $select.next('.chosen-container');
+				$container.css('width', $select.outerWidth() + 'px');
+				$select.on('chosen:showing_dropdown', function() {
+					$container.find('.chosen-drop').css('width', $container.outerWidth() + 'px');
+				});
+				});
+			}
+		}
+
+		// Inicializa ao carregar a página
+		$(document).ready(function() {
+		initChosen();
+		});
+
+		// Também inicializa após carregar conteúdo dinâmico
+		function carregar(pagina) {
+		$("#conteudo").load(pagina, function() {
+			// Re-inicializa plugins nas novas áreas
+			initChosen();
+			// ... outros init (DataTable, mask, etc.)
+		});
+		}
+	</script>
+	<!-- inline scripts related to this page -->
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			identifyDb();
+		});
+	</script>
 </html>

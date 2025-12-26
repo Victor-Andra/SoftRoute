@@ -23,14 +23,17 @@
 				
 				let funcaoId = document.getElementById("usuFuncaoId").value;
 				document.getElementById("usuarioFuncaoid").value = document.getElementById("usuFuncaoId").value;
+				
 				document.getElementById("usuarioEnduf").value = document.getElementById("usuUFId").value;
 				document.getElementById("usuarioFilhos").value = document.getElementById("usuFilhos").value;
+				
 				console.log("usuperfdilid:"+document.getElementById("usuPerfilId").value);
 				document.getElementById("usuarioPerfilid").value = document.getElementById("usuPerfilId").value;
 				document.getElementById("usuarioContaTipo").value = document.getElementById("usuContaTipo").value;
 				document.getElementById("usuarioTipoPix").value = document.getElementById("usuTipoPix").value;
 				document.getElementById("usuarioContrato").value = document.getElementById("usuContrato").value;
 				document.getElementById("usuarioEscolaridade").value = document.getElementById("usuEscolaridade").value;
+			
 				document.getElementById("usuarioFilhosQt").value = document.getElementById("usuFilhosQt").value;
 				document.getElementById("usuarioGraduacao").value = document.getElementById("usuGraduacao").value;
 				document.getElementById("usuarioEspecializacao").value = document.getElementById("usuEspecializacao").value;
@@ -38,7 +41,11 @@
 				document.getElementById("usuarioMetout").value = document.getElementById("usuMetout").value;
 				document.getElementById("usuarioEscolaridadeobs").value = document.getElementById("usuEscolaridadeobs").value;
 				document.getElementById("usuarioAba").value = document.getElementById("usuAba").value;
+				
 				document.getElementById("usuarioEmpresaid").value = document.getElementById("usuempresaids").value[0];
+				// ✅ Atualiza TODOS os chosen-select com os novos valores (incluindo múltiplos)
+				$('.chosen-select').trigger('chosen:updated');
+
 				console.log("termina");
 			}
 			
@@ -725,17 +732,19 @@
 																</div>
 																
 															</div><!-- /.span -->
+															
 															<div class="col-xs-12 col-sm-6">
 																<label>Empresa</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
-																		<select id="usuarioEmpresaid" name="usuarioEmpresaid" class="chosen-select" data-placeholder="Escolha...">
+																		<select multiple="" class="chosen-select form-control" name="usuarioEmpresaid" id="usuarioEmpresaid" data-placeholder="Escolha..." >
 																			<option value="766f69643132333435366964">-</option>
 																			{{#each empresas}}
-																			<option value="{{_id}}">{{empresa_nome}}</option>
+																			<option value="{{_id}}">{{empresa_unidade}}</option>
+																			{{else}}
 																			{{/each}}
-																			<option value="Total">Acesso total</option>
 																		</select>
+																		
 																	</div>
 																</div>
 															</div><!-- /.span -->

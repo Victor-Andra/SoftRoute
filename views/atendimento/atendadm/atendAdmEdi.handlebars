@@ -3,6 +3,30 @@
 	<head>
 		<title>Atendimentos</title>
 		<script type="text/javascript">
+			// ✅ Executa APÓS Chosen estar totalmente inicializado
+			document.addEventListener("DOMContentLoaded", function() {
+				// Aguarda Chosen carregar (seu main usa $(document).ready + initChosen)
+				// Esperamos um pouco mais para garantir (100ms é seguro com jQuery 2.1.4)
+				setTimeout(function() {
+					// Primeiro: carrega os valores brutos nos <select> reais
+					carregaBody();
+
+					// Segundo: força atualização do Chosen em TODOS os selects
+					$('.chosen-select').each(function() {
+						if ($(this).data('chosen')) {
+							$(this).trigger('chosen:updated');
+						}
+					});
+
+					// Terceiro: chama lógica dependente (ex: selectConv, carregaValores)
+					if (document.getElementById("atendBeneid").value) {
+						selectConv(); // atualiza convênio com base no beneficiário
+					}
+					if (document.getElementById("atendTerapiaid").value) {
+						carregaValores(); // atualiza valores com base na terapia
+					}
+				}, 200); // 200ms para garantir inicialização do Chosen
+			});
 			function selectConv(){
 				var v1 = document.getElementById(document.getElementById("atendBeneid").value).value.toString();
 				console.log(v1)
@@ -32,7 +56,7 @@
 						document.getElementById("tabilValordebit").value = "0,00";
 					}
 				}
-				atualizaSubFixo();
+				
 			}
 			function carregaValoresMerge(){
 				let teraId = document.getElementById("atendMergeTerapiaid").value;
@@ -51,17 +75,9 @@
 						document.getElementById("atendMergevalordeb").value = "0,00";
 					}
 				}
-				atualizaSubFixo();
+				
 			}
-			function atualizaSubFixo(){
-				if (document.getElementById("atendCategoria").value == "SubstitutoFixo") {
-					document.getElementById("atendFixoCheck").checked = true;
-					document.getElementById("divSubFixo").style.display = "";
-				} else {
-					document.getElementById("atendFixoCheck").checked = false;
-					document.getElementById("divSubFixo").style.display = "none";
-				}
-			}
+			
 			function carregaValoresFixo(){
 				if (document.getElementById("atendFixo").value == "true"){
 					if (document.getElementById("atendConvid").value == "X"){
@@ -91,83 +107,113 @@
 				console.log("X");
 				let amti = document.getElementById("atendMergeTerapeutaid").value;
 			}
-			function controlaCategoria(){
-				let origem = document.getElementById("atendOrg").value;
-				if(origem == "Padrão"){
-					document.getElementById("atendCategoria").value = "Padrão";
-					document.getElementById("Padrão").style.display = "";
-					document.getElementById("Falta").style.display = "none";
-					document.getElementById("Falta Justificada").style.display = "none";
-					document.getElementById("Falta Absoluta").style.display = "none";
-					document.getElementById("Feriado").style.display = "none";
-					document.getElementById("Apoio").style.display = "none";
-					document.getElementById("Supervisão").style.display = "none";
-					document.getElementById("Pais").style.display = "none";
-					document.getElementById("Substituição").style.display = "none";
-					document.getElementById("SubstitutoFixo").style.display = "none";
-					document.getElementById("Glosa").style.display = "none";
-					document.getElementById("Extra").style.display = "none";
-				} else {
-					document.getElementById("atendCategoria").value = "Apoio";
-					document.getElementById("Padrão").style.display = "none";
-					document.getElementById("Falta").style.display = "";
-					document.getElementById("Falta Justificada").style.display = "";
-					document.getElementById("Falta Absoluta").style.display = "";
-					document.getElementById("Feriado").style.display = "";
-					document.getElementById("Apoio").style.display = "";
-					document.getElementById("Supervisão").style.display = "";
-					document.getElementById("Pais").style.display = "";
-					document.getElementById("Substituição").style.display = "";
-					document.getElementById("SubstitutoFixo").style.display = "";
-					document.getElementById("Glosa").style.display = "";
-					document.getElementById("Extra").style.display = "";
-				}
-			}
+			
+			function controlaCategoria() {
+    const origem = document.getElementById("atendOrg").value;
+    const selectEl = document.getElementById("atendCategoria");
+    
+    // Limpa opções
+    selectEl.innerHTML = '';
+
+    let opcoes = [];
+    let valorPadrao = "Apoio";
+
+    if (origem === "Padrão") {
+        opcoes = [{ value: "Padrão", label: "Padrão" }];
+        valorPadrao = "Padrão";
+    } else {
+        opcoes = [
+            { value: "Apoio", label: "Apoio" },
+            { value: "Extra", label: "Extra" },
+            { value: "Falta", label: "Falta" },
+            { value: "Falta Justificada", label: "Falta Justificada" },
+            { value: "Falta Absoluta", label: "Falta Absoluta" },
+            { value: "Feriado", label: "Feriado" },
+            { value: "Glosa", label: "Glosa" },
+            { value: "Pais", label: "Pais" },
+            { value: "Substituição", label: "Substituto" },
+            { value: "SubstitutoFixo", label: "Substituto Fixo" },
+            { value: "Supervisão", label: "Supervisão" }
+        ];
+    }
+
+    // Adiciona opções
+    opcoes.forEach(opt => {
+        const option = document.createElement("option");
+        option.value = opt.value;
+        option.textContent = opt.label;
+        selectEl.appendChild(option);
+    });
+
+    // Define valor padrão (será sobrescrito por carregaBody se necessário)
+    selectEl.value = valorPadrao;
+    document.getElementById("tabilCategoria").value = valorPadrao;
+
+    // ✅ Atualiza Chosen
+    $(selectEl).trigger("chosen:updated");
+}
 			function ajustaOption(){
 				document.getElementById("Padrão").style.display = "none";
 			}
-			function carregaBody(){
-				console.log("START");
-				document.getElementById("atendId").value = document.getElementById("idEdi").value;
-				this.atualizaDataEdi();
-				this.atualizaData();
-				document.getElementById("atendHora").value = document.getElementById("atendHoraEdi").value;
-				document.getElementById("atendOrg").value = document.getElementById("atendOrgEdi").value;
-				document.getElementById("atendCategoria").value = document.getElementById("atendCategoriaEdi").value;
-				document.getElementById("atendBeneid").value = document.getElementById("atendBeneidEdi").value;
-				document.getElementById("atendConvid").value = document.getElementById("atendConvidEdi").value;
-				document.getElementById("atendTerapeutaid").value = document.getElementById("atendTerapeutaidEdi").value;
-				document.getElementById("atendTerapiaid").value = document.getElementById("atendTerapiaidEdi").value;
-				document.getElementById("atendValorcre").value = document.getElementById("atendValorcreEdi").value;
-				document.getElementById("atendValordeb").value = document.getElementById("atendValordebEdi").value;
-				document.getElementById("atendMergeTerapeutaid").value = document.getElementById("atendMergeTerapeutaidEdi").value;
-				//console.log("terapiametgeid: "+document.getElementById("atendMergeTerapiaidEdi").value);
-				document.getElementById("atendMergeTerapiaid").value = document.getElementById("atendMergeTerapiaidEdi").value;
-				document.getElementById("atendMergevalorcre").value = document.getElementById("atendMergevalorcreEdi").value;
-				document.getElementById("atendMergevalordeb").value = document.getElementById("atendMergevalordebEdi").value;
-				document.getElementById("atendSalaid").value = document.getElementById("atendSalaidEdi").value;
-				document.getElementById("atendObs").value = document.getElementById("atendObsEdi").value;
-				if (document.getElementById("atendFixoEdi").value == "true") {
-					document.getElementById("atendFixoCheck").checked = true;
-					document.getElementById("atendFixoTerapiaid").value = document.getElementById("atendFixoTerapiaidEdi").value;
-					document.getElementById("atendFixoTerapeutaid").value = document.getElementById("atendFixoTerapeutaidEdi").value;
-					document.getElementById("atendFixovalorcre").value = document.getElementById("atendFixovalorcreEdi").value;
-					document.getElementById("atendFixovalordeb").value = document.getElementById("atendFixovalordebEdi").value;
-				} else {
-					document.getElementById("atendFixoCheck").checked = false;
-					document.getElementById("divSubFixo").style.display = "none";
-				}
-				console.log("FINISH");
-			}
-			function toggleDivSubFixo(){
-				if (document.getElementById("atendFixoCheck").checked == true) {
-					document.getElementById("divSubFixo").style.display = "";
-					document.getElementById("atendFixo").value = "true";
-				} else {
-					document.getElementById("divSubFixo").style.display = "none";
-					document.getElementById("atendFixo").value = "false";
-				}
-			}
+			function carregaBody() {
+    // IDs
+    document.getElementById("atendId").value = document.getElementById("idEdi").value;
+    document.getElementById("nextNum").value = document.getElementById("nextNum").value;
+
+    // Data/Hora
+    atualizaDataEdi();
+    document.getElementById("atendHora").value = document.getElementById("atendHoraEdi").value;
+
+    // Beneficiário, Convênio, Sala
+    document.getElementById("atendBeneid").value = document.getElementById("atendBeneidEdi").value;
+    document.getElementById("atendConvid").value = document.getElementById("atendConvidEdi").value;
+    document.getElementById("atendSalaid").value = document.getElementById("atendSalaidEdi").value;
+
+    // Terapeutas e Terapias
+    document.getElementById("atendTerapeutaid").value = document.getElementById("atendTerapeutaidEdi").value;
+    document.getElementById("atendTerapiaid").value = document.getElementById("atendTerapiaidEdi").value;
+    document.getElementById("atendMergeTerapeutaid").value = document.getElementById("atendMergeTerapeutaidEdi").value;
+    document.getElementById("atendMergeTerapiaid").value = document.getElementById("atendMergeTerapiaidEdi").value;
+    document.getElementById("atendFixoTerapeutaid").value = document.getElementById("atendFixoTerapeutaidEdi").value || "";
+    document.getElementById("atendFixoTerapiaid").value = document.getElementById("atendFixoTerapiaidEdi").value || "";
+
+    // Valores
+    document.getElementById("atendValorcre").value = document.getElementById("atendValorcreEdi").value;
+    document.getElementById("atendValordeb").value = document.getElementById("atendValordebEdi").value;
+    document.getElementById("atendMergevalorcre").value = document.getElementById("atendMergevalorcreEdi").value;
+    document.getElementById("atendMergevalordeb").value = document.getElementById("atendMergevalordebEdi").value;
+    document.getElementById("atendFixovalorcre").value = document.getElementById("atendFixovalorcreEdi").value || "0,00";
+    document.getElementById("atendFixovalordeb").value = document.getElementById("atendFixovalordebEdi").value || "0,00";
+
+    // Observação
+    document.getElementById("atendObs").value = document.getElementById("atendObsEdi").value;
+
+    // ✅ Origem e Categoria — CRÍTICO
+    const orgEdi = document.getElementById("atendOrgEdi").value;
+    const categoriaEdi = document.getElementById("atendCategoriaEdi").value;
+
+    // 1. Define origem
+    document.getElementById("atendOrg").value = orgEdi;
+
+    // 2. Atualiza opções de categoria COM BASE NA ORIGEM
+    controlaCategoria(); // ← isso já popula as opções e define valor padrão
+
+    // 3. ✅ SOBREPÕE com o valor do banco (se ainda for válido)
+    const selectCat = document.getElementById("atendCategoria");
+    const opcaoValida = Array.from(selectCat.options).some(opt => opt.value === categoriaEdi);
+    if (opcaoValida) {
+        selectCat.value = categoriaEdi;
+    }
+    document.getElementById("tabilCategoria").value = selectCat.value;
+	// ✅ Carrega Substituto Fixo (Sim/Não)
+	const fixoEdi = (document.getElementById("atendFixoEdi")?.value || "").trim();
+	document.getElementById("atendFixo").value = fixoEdi; // "true", "false", ou ""
+	
+	// 4. Atualiza Chosen
+    $('.chosen-select').trigger('chosen:updated');
+
+    console.log("✅ carregaBody() — categoria:", selectCat.value);
+}
 			function atualizaData(){
 				var data = document.getElementById("atenddata").value+"T"+document.getElementById("atendHora").value+":00.000Z";
 				console.log("data:"+data);
@@ -205,7 +251,7 @@
 			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+	<body class="no-skin" onload="javascript:controlaNave();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -260,7 +306,7 @@
 												<label for="id-date-picker-1">Hora Atendimento</label>
 												<div class="row">
 													<div class="col-sm-8">
-														<select name="atendHora" id="atendHora" class="chosen-select" data-placeholder="Escolha..." >
+														<select name="atendHora" id="atendHora" class="chosen-select" >
 															{{#each horaages}}
 																<option value="{{horaage_hora}}">{{horaage_hora}}</option>
 															{{/each}}
@@ -270,7 +316,7 @@
 												<label>Origem Atendimento</label>
 												<div class="form-group">
 														<div class="col-sm-9">
-															<select id="atendOrg" name="atendOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+															<select id="atendOrg" name="atendOrg" class="chosen-select" >
 																<option value="Administrativo">Administrativo</option>
 																<option value="Padrão">Padrão</option>
 															</select>
@@ -279,24 +325,25 @@
 												<label>Categoria</label>
 												<div class="form-group">
 													<div class="col-sm-9">
-														<select id="atendCategoria" name="atendCategoria" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()" onchange="javascript:atualizaSubFixo();">
-															<option id="Apoio" value="Apoio">Apoio</option>
-															<option id="Extra" value="Extra">Extra</option>
-															<option id="Falta" value="Falta">Falta</option>
-															<option id="Falta Justificada" value="Falta Justificada">Falta Justificada</option>
-															<option id="Falta Absoluta" value="Falta Absoluta">Falta Absoluta</option>
-															<option id="Feriado" value="Feriado">Feriado</option>
-															<option id="Glosa" value="Glosa">Glosa</option>
-															<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
-															<option id="Pais" value="Pais">Pais</option>
-															<option id="Substituição" value="Substituição">Substituto</option>
-															<option id="SubstitutoFixo" value="SubstitutoFixo">Substituto Fixo</option>
-															<option id="Supervisão" value="Supervisão">Supervisão</option>
+														
+														<select id="atendCategoria" name="atendCategoria" class="chosen-select" >
+															<!-- Opções serão preenchidas por controlaCategoria() -->
+														</select>
+														<input type="hidden" name="tabilCategoria" id="tabilCategoria"/>
+													</div>
+												</div>
+												
+												<label>Beneficiário</label>
+												<div class="form-group">
+													<div class="col-sm-9">
+														<select id="atendBeneid" name="atendBeneid" class="chosen-select"  onchange="javascript:selectConv()">
+																<option value="766f69643132333435366964">-</option>
+																{{#each benes}}
+																<option value="{{_id}}">{{bene_nome}}</option>
+																{{/each}}
 														</select>
 													</div>
-													<input type="text" name="tabilCategoria" id="tabilCategoria" class="hidden" value="Padrão"/>
 												</div>
-												<label>Beneficiário</label>
 												<div class="hidden">
 													{{#each benes}}
 														{{#each ../convs}}
@@ -307,24 +354,17 @@
 													{{/each}}
 													<input value="X" id="X" name="refBeneConv" />
 												</div>
-												<div class="form-group">
-													<div class="col-sm-4">
-														<select id="atendBeneid" name="atendBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
-																<option value="766f69643132333435366964"></option>
-																{{#each benes}}
-																<option value="{{_id}}">{{bene_nome}}</option>
-																{{/each}}
-														</select>
-													</div>
-												</div>
+
+
+												
 												<label>Convênio</label>
 												<div class="hidden" id="divTabil">
 													<input class="hidden" id="tabilConvid" name="tabilConvid" value="" />
 												</div>
 												<div class="form-group">
 														<div class="col-sm-4">
-															<select id="atendConvid" name="atendConvid" class="chosen-select" data-placeholder="Escolha...">
-																	<option value="766f69643132333435366964"></option>
+															<select id="atendConvid" name="atendConvid" class="chosen-select" >
+																	<option value="766f69643132333435366964">-</option>
 																	{{#each benes}}
 																		{{#each ../convs}}
 																			{{#ifEqual ../bene_convid _id}}
@@ -338,21 +378,26 @@
 												<label>Sala</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select id="atendSalaid" name="atendSalaid" class="chosen-select" data-placeholder="Escolha...">
+														<select id="atendSalaid" name="atendSalaid" class="chosen-select" >
 																{{#each salas}}
 																	<option value="{{_id}}">{{sala_nome}}</option>
 																{{/each}}
 														</select>
 													</div>
 												</div>
-												<label class="block"
-												 {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}
-													{{else}}
-														hidden 
-												{{/ifIncludes}} >
-													Substituto Fixo&nbsp;&nbsp; 
-													<input id="atendFixoCheck" id="atendFixoCheck" type="checkbox"  onchange="javascript:toggleDivSubFixo()">
-												</label>
+												<label>Substituto Fixo?</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<select id="atendFixo" name="atendFixo" class="chosen-select"  onchange="atualizaAtendFixo()">
+															<option value="">-</option>
+															<option value="true">Sim</option>
+															<option value="false">Não</option>
+														</select>
+													</div>
+													<i class="menu-icon fa fa-refresh red"></i>
+												</div>
+												
+												
 												<div class="row">
 													<div class="col-xs-12">
 														<!-- PAGE CONTENT BEGINS -->
@@ -380,9 +425,9 @@
 																		</div>
 																		<label>Terapeuta</label>
 																		<div class="form-group">
-																			<div class="col-sm-4">
-																				<select id="atendTerapeutaid" name="atendTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
-																						<option value="766f69643132333435366964"></option>
+																			<div class="col-sm-6">
+																				<select id="atendTerapeutaid" name="atendTerapeutaid" class="chosen-select"  onchange="javascript:atualizaTerapeutaId()">
+																						<option value="766f69643132333435366964">-</option>
 																						{{#each usuarios}}
 																						<option value="{{_id}}">{{usuario_nome}}</option>
 																						{{/each}}
@@ -415,9 +460,9 @@
 
 																		</div>
 																		<div class="form-group">
-																			<div class="col-sm-4">
-																				<select id="atendTerapiaid" name="atendTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
-																						<option value="766f69643132333435366964"></option>
+																			<div class="col-sm-6">
+																				<select id="atendTerapiaid" name="atendTerapiaid" class="chosen-select"  onchange="javascript:carregaValores()">
+																						<option value="766f69643132333435366964">-</option>
 																						{{#each terapias}}
 																						<option value="{{_id}}">{{terapia_nome}}</option>
 																						{{/each}}
@@ -440,11 +485,10 @@
 																		</div>
 																	</div>
 																</div><!-- /.span -->
-																<div class="col-xs-12 col-sm-4" id="divSubFixo" {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}}>
+																<div class="col-xs-12 col-sm-4" id="divSubFixos" >
 																	<div class="widget-box">
 																		<div class="widget-header">
 																			<h4 class="widget-title">Dados de Sub Fixo</h4>
-																			<input hidden id="atendFixo" name="atendFixo" value="{{atendEdi.atend_fixo}}" />
 																			<span class="widget-toolbar">
 																				<a href="#" data-action="collapse">
 																					<i class="ace-icon fa fa-chevron-up"></i>
@@ -462,9 +506,9 @@
 																				</div>
 																				<label>Terapeuta Fixo</label>
 																				<div class="form-group">
-																					<div class="col-sm-4">
-																						<select id="atendFixoTerapeutaid" name="atendFixoTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValoresFixo()">
-																							<option value="766f69643132333435366964"></option>
+																					<div class="col-sm-6">
+																						<select id="atendFixoTerapeutaid" name="atendFixoTerapeutaid" class="chosen-select"  onchange="javascript:carregaValoresFixo()">
+																							<option value="766f69643132333435366964">-</option>
 																							{{#each usuarios}}
 																							<option value="{{_id}}">{{usuario_nome}}</option>
 																							{{/each}}
@@ -473,9 +517,9 @@
 																				</div>
 																				<label>Terapia Fixa</label>
 																				<div class="form-group">
-																					<div class="col-sm-4">
-																						<select id="atendFixoTerapiaid" name="atendFixoTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresFixo()">
-																								<option value="766f69643132333435366964"></option>
+																					<div class="col-sm-6">
+																						<select id="atendFixoTerapiaid" name="atendFixoTerapiaid" class="chosen-select"  onchange="javascript:carregaValoresFixo()">
+																								<option value="766f69643132333435366964">-</option>
 																								{{#each terapias}}
 																								<option value="{{_id}}">{{terapia_nome}}</option>
 																								{{/each}}
@@ -520,9 +564,9 @@
 																		</div>
 																		<label>Terapeuta</label>
 																		<div class="form-group">
-																			<div class="col-sm-4">
-																				<select id="atendMergeTerapeutaid" name="atendMergeTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
-																						<option value="766f69643132333435366964"></option>
+																			<div class="col-sm-6">
+																				<select id="atendMergeTerapeutaid" name="atendMergeTerapeutaid" class="chosen-select"  onchange="javascript:atualizaMergeTerapeutaId()">
+																						<option value="766f69643132333435366964">-</option>
 																						{{#each usuarios}}
 																						<option value="{{_id}}">{{usuario_nome}}</option>
 																						{{/each}}
@@ -536,9 +580,9 @@
 																			<input class="hidden" id="tabilMergeTerapiaid" name="tabilMergeTerapiaid" value="" />
 																		</div>
 																		<div class="form-group">
-																				<div class="col-sm-4">
-																					<select id="atendMergeTerapiaid" name="atendMergeTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
-																							<option value="766f69643132333435366964"></option>
+																				<div class="col-sm-6">
+																					<select id="atendMergeTerapiaid" name="atendMergeTerapiaid" class="chosen-select"  onchange="javascript:carregaValoresMerge()">
+																							<option value="766f69643132333435366964">-</option>
 																							{{#each terapias}}
 																							<option value="{{_id}}">{{terapia_nome}}</option>
 																							{{/each}}

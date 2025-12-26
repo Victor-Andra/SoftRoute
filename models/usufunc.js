@@ -7,6 +7,11 @@ const UsufuncSchema = mongoose.Schema({
     usufunc_nome: { type: String, required: true},
     usufunc_descricao: { type: String, required: true},
     usufunc_status: { type: String, required: false },
+     // ✅ Campos novos — opcionais, retrocompatíveis
+    usufunc_icone: { type: String, default: "fa-circle-o", required: false },
+    usufunc_cor: { type: String, default: "gray",required: false },
+    usufunc_ordem: { type: Number, default: 999, required: false },
+    usufunc_rota: { type: String, required: false },
     //controle CRUD
     usufunc_datacad: { type: Date, required: false  },
     usufunc_dataedi: { type: Date, required: false  },
@@ -24,6 +29,10 @@ class Usufunc{
         usufunc_nome,
         usufunc_descricao,
         usufunc_status,
+        usufunc_icone,
+        usufunc_cor,
+        usufunc_ordem,
+        usufunc_rota,
         //controle CRUD
         usufunc_datacad,
         usufunc_dataedi,
@@ -37,6 +46,10 @@ class Usufunc{
         this.usufunc_nome = usufunc_nome,
         this.usufunc_descricao = usufunc_descricao,
         this.usufunc_status = usufunc_status,
+        this.usufunc_icone = usufunc_icone,
+        this.usufunc_cor = usufunc_cor,
+        this.usufunc_ordem = usufunc_ordem,
+        this.usufunc_rota = usufunc_rota,
         //controle CRUD
         this.usufunc_datacad = usufunc_datacad,
         this.usufunc_dataedi = usufunc_dataedi,
@@ -71,6 +84,11 @@ module.exports = {
                 usufunc_nome: req.body.usufuncNome,
                 usufunc_descricao: req.body.usufuncDescricao,
                 usufunc_status: req.body.usufuncStatus,
+                // novos campos (se enviados)
+                usufunc_icone: req.body.usufuncIcone,
+                usufunc_cor: req.body.usufuncCor,
+                usufunc_ordem: req.body.usufuncOrdem,
+                usufunc_rota: req.body.usufuncRota,
                 usufunc_usuidedi : usuarioAtual, 
                 usufunc_dataedi: dataAtual,
                 usufunc_lixo : "false"
@@ -107,6 +125,11 @@ module.exports = {
                 usufunc_nome: req.body.usufuncNome,
                 usufunc_descricao: req.body.usufuncDescricao,
                 usufunc_status: "Ativo",
+                // novos campos (se enviados)
+                usufunc_icone: req.body.usufuncIcone || "fa-circle-o",
+                usufunc_cor: req.body.usufuncCor || "gray",
+                usufunc_ordem: req.body.usufuncOrdem ? parseInt(req.body.usufuncOrdem) : 999,
+                usufunc_rota: req.body.usufuncRota,
                 usufunc_datacad: dataAtual,
                 usufunc_usuidcad : usuarioAtual, 
             });

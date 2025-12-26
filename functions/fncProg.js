@@ -645,57 +645,68 @@ module.exports = {
         });
     },
 
-    listaProgfiltro : async(req, beneId, res, flash) =>{
+   
+    listaProgfiltro: async (req, beneId, res, flash) => {
         let db = req.cookies['preferredDb'];
-        Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
-        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
-        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
-        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema)
-        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema)
-        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
-        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
-        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
-        Notasupobs = getModel(db, 'tb_notasupobs', notasupobsClass.NotaSupObsSchema)
+
+        const Prog       = getModel(db, 'tb_prog',       progClass.ProgSchema);
+        const Bene       = getModel(db, 'tb_bene',       beneClass.BeneSchema);
+        const Progset    = getModel(db, 'tb_progset',    progsetClass.ProgsetSchema);
+        const Progdica   = getModel(db, 'tb_progdica',   progdicaClass.ProgdicaSchema);
+        const Prognivel  = getModel(db, 'tb_prognivel',  prognivelClass.PrognivelSchema);
+        const Progtipo   = getModel(db, 'tb_progtipo',   progtipoClass.ProgtipoSchema);
+        const Folreg     = getModel(db, 'tb_folreg',     folregClass.FolregSchema);
+        const Notasup    = getModel(db, 'tb_notasup',    notasupClass.NotasupSchema);
+        const Notasupobs = getModel(db, 'tb_notasupobs', notasupobsClass.NotaSupObsSchema);
+        const Usuario    = getModel(db, 'tb_usuario',    usuarioClass.UsuarioSchema);
+
         flash = flash || {};
         flash.sucesso = "true";
 
         const perfilAtual = req.cookies['lvlUsu'];
         const dataAtual = new Date();
         const idBene = beneId || req.params.id;
-console.log("beneId: "+beneId);
-console.log("idBene: "+idBene);
-console.log("flash: "+flash);
-console.log("res: "+res);
+
+        console.log("▶ listaProgfiltro chamada para beneId:", idBene);
 
         let dados = {};
 
         try {
-            console.log("Chamando listaProgfiltro para o ID:", idBene);
-
-            const bene = await Bene.findOne({ _id: idBene, bene_status: "Ativo", bene_aba: "Sim" });
+            const bene = await Bene.findOne({
+                _id: idBene,
+                bene_status: "Ativo",
+                bene_aba: "Sim"
+            }).lean();
 
             if (!bene) {
                 flash.sucesso = "false";
-                flash.texto = "Beneficiário não encontrado!";
-                return;
+                flash.texto = "Beneficiário não encontrado ou inativo no ABA.";
+                throw new Error("Beneficiário não encontrado");
             }
 
             const dn = new Date(bene.bene_datanasc);
             bene.datanasc = fncGeral.formatarData(dn);
             bene.idade = fncGeral.calcularIdade(dn);
 
+            // ✅ Busca em paralelo
             const [
-                prog, notasup, progdica, progtipo,
-                prognivel, progset, folreg, usuario
+                prog,
+                notasup,
+                progdica,
+                progtipo,
+                prognivel,
+                progset,
+                folreg,
+                usuario
             ] = await Promise.all([
-                Prog.find({ prog_beneid: bene._id, prog_status: { $ne: "Adquirido" }}),
-                Notasup.find({ notasup_beneid: bene._id }),
-                Progdica.find(),
-                Progtipo.find(),
-                Prognivel.find(),
-                Progset.find(),
-                Folreg.find(),
-                Usuario.find()
+                Prog.find({ prog_beneid: bene._id, prog_status: { $ne: "Adquirido" } }).lean(),
+                Notasup.find({ notasup_beneid: bene._id }).lean(),
+                Progdica.find().lean(),
+                Progtipo.find().lean(),
+                Prognivel.find().lean(),
+                Progset.find({ progset_beneid: bene._id }).lean(),
+                Folreg.find({ folreg_beneid: bene._id }).lean(),
+                Usuario.find().lean()
             ]);
 
             // Ordenações
@@ -704,33 +715,128 @@ console.log("res: "+res);
             prognivel.sort(fncGeral.ordenarPorNome('prognivel_nome'));
             usuario.sort(fncGeral.ordenarPorNome('usuario_nome'));
 
-            const notasupobs = await Notasupobs.find({
-                notaSupObs_notasupId: { $in: notasup.map(n => n._id) }
-            });
+            // ✅ Observações de supervisão
+            const notasupIds = notasup.map(n => n._id);
+            const notasupobs = notasupIds.length
+                ? await Notasupobs.find({ notaSupObs_notasupId: { $in: notasupIds } }).lean()
+                : [];
 
-            // Total de estímulos em cada programa
+            // ✅ Enriquece prog com data + total_estimulos
             prog.forEach(p => {
                 p.datacad = fncGeral.formatarData(new Date(p.prog_datacad));
                 p.dataedi = fncGeral.formatarData(new Date(p.prog_dataedi));
-
                 p.prog_total_estimulos = progset
-                    .filter(ps => ps.progset_progid.toString() === p._id.toString())
-                    .reduce((acc, ps) => acc + (parseInt(ps.progset_qtest) || 0), 0);
+                    .filter(ps => ps.progset_progid && ps.progset_progid.toString() === p._id.toString())
+                    .reduce((acc, ps) => acc + (parseInt(ps.progset_qtest, 10) || 0), 0);
             });
 
-            dados = { bene, prog, notasup, notasupobs, progdica, progtipo, prognivel, progset, folreg, usuario };
+            // ✅ ========== ANÁLISE POR BENEFICIÁRIO ==========
+            const analytics = {
+                progs: {
+                    total: prog.length,
+                    porStatus: {},
+                    detalhes: []
+                },
+                progsets: {
+                    total: progset.length,
+                    porStatus: {},
+                    porProg: {}
+                },
+                folregs: {
+                    total: folreg.length,
+                    porProg: {},
+                    porProgSet: {}
+                }
+            };
+
+            // --- Progs ---
+            prog.forEach(p => {
+                // Total por status
+                analytics.progs.porStatus[p.prog_status] = (analytics.progs.porStatus[p.prog_status] || 0) + 1;
+
+                // Map SETs por prog
+                const setsDoProg = progset.filter(ps => ps.progset_progid && ps.progset_progid.toString() === p._id.toString());
+                const folregsDoProg = folreg.filter(fr => fr.folreg_progid && fr.folreg_progid.toString() === p._id.toString());
+
+                analytics.progs.detalhes.push({
+                    _id: p._id,
+                    prog_nome: p.prog_nome || 'Sem nome',
+                    status: p.prog_status,
+                    sets: setsDoProg,
+                    folregs: folregsDoProg
+                });
+
+                analytics.progsets.porProg[p._id] = setsDoProg;
+                analytics.folregs.porProg[p._id] = folregsDoProg;
+            });
+
+            // --- SETs ---
+            progset.forEach(ps => {
+                analytics.progsets.porStatus[ps.progset_status] = (analytics.progsets.porStatus[ps.progset_status] || 0) + 1;
+
+                if (ps.progset_id) {
+                    analytics.folregs.porProgSet[ps.progset_id] = folreg.filter(fr =>
+                        fr.folreg_progsetid && fr.folreg_progsetid.toString() === ps.progset_id.toString()
+                    );
+                }
+            });
+
+            // --- Folregs ---
+            folreg.forEach(fr => {
+                if (fr.folreg_progsetid && !analytics.folregs.porProgSet[fr.folreg_progsetid]) {
+                    analytics.folregs.porProgSet[fr.folreg_progsetid] = [];
+                }
+                if (fr.folreg_progsetid) {
+                    analytics.folregs.porProgSet[fr.folreg_progsetid].push(fr);
+                }
+            });
+
+            // ✅ ========== LOG VISUAL (tabelinha no console) ==========
+            console.log('\n📊 ANÁLISE PARA BENEFICIÁRIO:', bene.bene_nome);
+            console.log('┌───────────────────────────────────────────────┐');
+            console.log(`│ Total de Programas    : ${String(analytics.progs.total).padStart(3)} │`);
+            Object.entries(analytics.progs.porStatus).forEach(([status, qtd]) => {
+                console.log(`│   → ${status.padEnd(15)} : ${String(qtd).padStart(3)} │`);
+            });
+            console.log(`│ Total de SETs         : ${String(analytics.progsets.total).padStart(3)} │`);
+            Object.entries(analytics.progsets.porStatus).forEach(([status, qtd]) => {
+                console.log(`│   → ${status.padEnd(15)} : ${String(qtd).padStart(3)} │`);
+            });
+            console.log(`│ Total de Folhas       : ${String(analytics.folregs.total).padStart(3)} │`);
+            console.log('└───────────────────────────────────────────────┘');
+
+            // ✅ Monta dados finais
+            dados = {
+                bene,
+                prog,
+                progset,
+                folreg,
+                notasup,
+                notasupobs,
+                progdica,
+                progtipo,
+                prognivel,
+                usuario,
+                countProgs: prog.length,
+                countProgsets: progset.length,
+                countFolregs: folreg.length,
+                countNotasups: notasup.length,
+                analytics // ← inclui tudo para views avançadas
+            };
 
         } catch (err) {
-            console.error("Erro no fluxo:", err);
+            console.error("❌ Erro em listaProgfiltro:", err);
             flash.sucesso = "false";
-            flash.texto = "Houve um erro ao listar!";
+            flash.texto = err.message || "Houve um erro ao listar os dados do beneficiário.";
         } finally {
             if (flash.sucesso === "true") {
-                res.render('area/aba/prog/progLisfiltrado', {
+                return res.render('area/aba/prog/progLisfiltrado', {
+                    bene: dados.bene,
                     progs: dados.prog,
+                    progsets: dados.progset,
+                    folregs: dados.folreg,
                     notasups: dados.notasup,
                     notasupobss: dados.notasupobs,
-                    progsets: dados.progset,
                     usuarios: dados.usuario,
                     benes: [dados.bene],
                     perfilAtual,
@@ -739,32 +845,39 @@ console.log("res: "+res);
                     progtipos: dados.progtipo,
                     prognivels: dados.prognivel,
                     dataAtual,
-                    folregs: dados.folreg
+                    countProgs: dados.countProgs,
+                    countProgsets: dados.countProgsets,
+                    countFolregs: dados.countFolregs,
+                    countNotasups: dados.countNotasups,
+                    // ✅ Inclui analytics na view (opcional — só se precisar de detalhe fino)
+                    analytics: dados.analytics
                 });
             } else {
-                //let abaUsu = req.cookies['abaUsu'];//Novo cookies novo campo no cadastro do usuário, para somente quem tiver "Sim" nesse campo para acessar o ABA
-                let dataAtual = new Date();
-                let perfilAtual = req.cookies['lvlUsu'];
-            
-                Bene.find({bene_status: "Ativo", bene_nome: { $not: /\./ }, bene_aba: "Sim" }).then((bene) => {
-                    bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
-        
-                    res.render('area/aba/prog/progLis', {
-                        benes: bene,
+                // Fallback: lista geral de bene
+                try {
+                    const benes = await Bene.find({
+                        bene_status: "Ativo",
+                        bene_nome: { $not: /\./ },
+                        bene_aba: "Sim"
+                    }).lean();
+                    benes.sort((a, b) =>
+                        a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "").localeCompare(
+                            b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                        )
+                    );
+                    return res.render('area/aba/prog/progLis', {
+                        benes,
                         perfilAtual,
                         flash,
-                        dataAtual,
+                        dataAtual
                     });
-                        
-                }).catch((err) => {
-                    console.log(err);
-                    req.flash("error_message", "houve um erro ao listar!");
-                    res.redirect('admin/erro');
-                });
+                } catch (err2) {
+                    console.error("❌ Erro no fallback:", err2);
+                    return res.redirect('/admin/erro');
+                }
             }
         }
     },
-
     listaProgfiltroManut(req, res, resposta) {//Lista ABA MANUTENÇÃO, Filtrada dos Programas por Beneficiário escolhido no form anterior 
         let db = req.cookies['preferredDb'];
         Prog = getModel(db, 'tb_prog', progClass.ProgSchema)

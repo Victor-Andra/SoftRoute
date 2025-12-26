@@ -227,6 +227,7 @@
 
 			function carregaBody() {
 				document.getElementById("ataBeneid").value = document.getElementById("ataBeneidEdi").value;
+				$("#ataBeneid").trigger("chosen:updated");
 				document.getElementById("ataBeneidade").value = document.getElementById("ataBeneidadeEdi").value;
 				document.getElementById("ataTerapeutaid").value = document.getElementById("ataTerapeutaidEdi").value;
 				document.getElementById("ataParem").value = document.getElementById("ataParemEdi").value;
@@ -237,6 +238,8 @@
 				document.getElementById("ataObs").value = document.getElementById("ataObsEdi").value;
 				// Atualiza o radio button
 				checkRadioAoCarregarFormulario();
+				// ✅ Atualiza TODOS os chosen-select com os novos valores (incluindo múltiplos)
+				$('.chosen-select').trigger('chosen:updated');
 				
 
 				// Lista de sufixos a serem removidos para obter os IDs originais

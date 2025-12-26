@@ -100,6 +100,10 @@
 														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Código</th>
 														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Nome</th>
 														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Descrição</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Ìcone</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Cor</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Ordem</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Rota</th>
 														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Status</th>
 														<th>Ação
 															<a class="blue" href="/menu/ferramentas/usufunc/cad">
@@ -123,6 +127,10 @@
 															<td>{{usufunc_codigo}}</td>
 															<td>{{usufunc_nome}}</td>
 															<td>{{usufunc_descricao}}</td>
+															<td>{{usufunc_icone}}</td>
+															<td>{{usufunc_cor}}</td>
+															<td>{{usufunc_ordem}}</td>
+															<td>{{usufunc_rota}}</td>
 															<td>
 																{{#ifEqual this.usufunc_status "Inativo"}}
 																	<span class="label label-sm label-danger">{{usufunc_status}}</span>
@@ -187,7 +195,7 @@
             "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
         },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null,{ "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null,null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [ 200, 300, 500],
 			"lengthChange": true,

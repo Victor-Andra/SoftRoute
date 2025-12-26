@@ -25,42 +25,7 @@
 
 		</style>
 		<script>
-			$(document).ready(function() {
-				 // Inicializa o Select2
-				const $select = $('#usuarioEmpresaselect').select2({
-					width: '100%',
-					placeholder: 'Escolha as empresas...',
-					allowClear: true,
-					closeOnSelect: false
-				});
-
-				// 👉 Evento: quando seleciona algo
-				$select.on('change', function(e) {
-					const valores = $(this).val() || [];
-
-					// Se "Acesso total" for selecionado
-					if (valores.includes('Total')) {
-						// Desmarca todas as outras opções e mantém só "Total"
-						$(this).val(['Total']).trigger('change.select2');
-					}
-				});
-
-				// 👉 Botão "Selecionar tudo"
-				$('#selectAllEmpresas').on('click', function() {
-					const allValues = [];
-					$('#usuarioEmpresaselect option').each(function() {
-						if ($(this).val() !== 'Total') {
-							allValues.push($(this).val());
-						}
-					});
-					$select.val(allValues).trigger('change.select2');
-				});
-
-				// 👉 Botão "Limpar"
-				$('#clearEmpresas').on('click', function() {
-					$select.val(null).trigger('change.select2');
-				});
-			});
+			
 			function exibenome() {
 				document.getElementById("usuarioNomeinfo").value = document.getElementById("usuarioNome").value;
 			}
@@ -210,74 +175,6 @@
 					form.action = "/menu/ferramentas/usuario/add";
 					form.submit();
 				}
-			}
-			function addEmpresaId() {
-				document.getElementById("spanShowEmpresaid").style = "display:none";
-
-				var id = document.getElementById("usuarioEmpresaselect").value;
-				var progSubid = document.getElementById("usuarioEmpresaselect");
-				var span = document.getElementById(id + "_spanExce").cloneNode(true);
-
-				// Obtendo o nome da opção selecionada
-				var selectedOptionText = $("#usuarioEmpresaselect option:selected").text();
-
-				span.id = "" + id + "_cloneExceTera";
-				document.getElementById("divExcecaoDica").append(span);
-
-				if (progSubid.value == "") {
-					progSubid.value = "" + id + "";
-				} else {
-					progSubid.value = "" + progSubid.value + "," + id + "";
-				}
-
-				// Adicionando o nome da opção à div usuarioEmpresatext
-				var usuarioEmpresatextInput = document.getElementById("usuarioEmpresatext");
-				if (usuarioEmpresatextInput.value == "") {
-					usuarioEmpresatextInput.value = selectedOptionText;
-				} else {
-					usuarioEmpresatextInput.value += ", " + selectedOptionText;
-				}
-
-				// Chamando atualizaProgressBars após adicionar uma seleção
-				var selectedTextValues = usuarioEmpresatextInput.value; // Alteração aqui
-				atualizaProgressBars(selectedTextValues); // Alteração aqui
-
-				// Resetando o valor do select
-				document.getElementById("usuarioEmpresaselect").value = "766f69643132333435366964";
-			}
-			function addEmpresaId() {
-				document.getElementById("spanShowExceTera").style = "display:none";
-
-				var id = document.getElementById("progDicatiposelect").value;
-				var progSubid = document.getElementById("progDicatipo");
-				var span = document.getElementById(id + "_spanExce").cloneNode(true);
-
-				// Obtendo o nome da opção selecionada
-				var selectedOptionText = $("#progDicatiposelect option:selected").text();
-
-				span.id = "" + id + "_cloneExceTera";
-				document.getElementById("divExcecaoDica").append(span);
-
-				if (progSubid.value == "") {
-					progSubid.value = "" + id + "";
-				} else {
-					progSubid.value = "" + progSubid.value + "," + id + "";
-				}
-
-				// Adicionando o nome da opção à div progDicatipotext
-				var progDicatipotextInput = document.getElementById("progDicatipotext");
-				if (progDicatipotextInput.value == "") {
-					progDicatipotextInput.value = selectedOptionText;
-				} else {
-					progDicatipotextInput.value += ", " + selectedOptionText;
-				}
-
-				// Chamando atualizaProgressBars após adicionar uma seleção
-				var selectedTextValues = progDicatipotextInput.value; // Alteração aqui
-				atualizaProgressBars(selectedTextValues); // Alteração aqui
-
-				// Resetando o valor do select
-				document.getElementById("progDicatiposelect").value = "766f69643132333435366964";
 			}
 
 			function carregaBody(){
@@ -928,70 +825,18 @@
 																	<label>Empresa</label>
 																	<div class="form-group">
 																		<div class="col-sm-4">
-																			<!--
-																			<select id="usuarioEmpresaselect" name="usuarioEmpresaselect" class="chosen-select" data-placeholder="Escolha...">
-																				<option value="766f69643132333435366964">-</option>
-																				{{#each empresas}}
-																				<option value="{{_id}}">{{empresa_nome}}</option>
-																				{{/each}}
-																				<option value="Total">Acesso total</option>
-																			</select>
 																			
-																			<select id="usuarioEmpresaselect" name="usuarioEmpresaselect[]" class="form-control select2" multiple="multiple" data-placeholder="Escolha as empresas...">
-																				{{#each empresas}}
-																					<option value="{{_id}}">{{empresa_nome}}</option>
-																				{{/each}}
-																				<option value="Total">Acesso total</option>
-																			</select>
-																			<div class="form-group">
-																			<label for="usuarioEmpresaselect">Empresas</label>
-
-																			<div class="d-flex gap-2 align-items-center mb-2">
-																				<button type="button" id="selectAllEmpresas" class="btn btn-sm btn-primary">Selecionar tudo</button>
-																				<button type="button" id="clearEmpresas" class="btn btn-sm btn-secondary">Limpar</button>
-																			</div>
-
-																			<select id="usuarioEmpresaselect"
-																					name="usuarioEmpresaselect[]"
-																					class="form-control select2"
-																					multiple="multiple"
-																					data-placeholder="Escolha as empresas...">
-																				{{#each empresas}}
-																					<option value="{{_id}}">{{empresa_nome}}</option>
-																				{{/each}}
-																				<option value="Total">Acesso total</option>
-																			</select>
-																			</div>
-																			<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="removeTudo('usuarioEmpresa','Exce');">Remover</button>
-																			<div class="row">
-																				<div class="col-xs-12">
-																					<div id="divEmpresa" name="empresaIdtemp" style="display: block;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
-																						<span id="spanShowEmpresaid" class="spanAzul">Escolha a empresa</span>
-																					</div>
-																				</div>
-																			</div>-->
-
-																			<div class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
-																				<select name="empresaIdSelect" id="empresaIdSelect" class="chosen-select" onchange="addEmpresaId();">
+																				<select multiple="" class="chosen-select form-control" name="empresaIdSelect" id="empresaIdSelect" data-placeholder="Escolha..." >
 																					<!--progDicatiposelect => empresaIdSelect // addExcecaoDicaid => addEmpresaId -->
 																					<option value="766f69643132333435366964">-</option>
-																					{{#each progdicas}}
-																					<option value="{{_id}}">{{progdica_nome}}</option>
+																					{{#each empresas}}
+																					<option value="{{_id}}">{{empresa_unidade}}</option>
 																					{{else}}
 																					{{/each}}
 																				</select>
-																				<button type="button" class="btn btn-sm btn-danger" data-toggle="button" onclick="removeTudo('progDicatipo','Exce');">Remover</button>
-																				<!-- progDicatipo => empresa -->
-																				<div class="row">
-																					<div class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
-																						<div id="divEmpresa" name="divEmpresa" style="display: block;min-height: 30px;max-height: 500px;text-align: left;padding: 4px;">
-																							<!--divExcecaoDica => divEmpresa // spanShowExceTera => spanShowEmpresa -->
-																							<span id="spanShowEmpresa" class="spanAzul">Escolha a dica</span>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																			<div class="col-xs-12">
+																				
+																			
+																			
 																				<div class="space space-8"></div>
 																				<label> Observação</label>
 																				<div class="form-group">
@@ -999,7 +844,7 @@
 																						<input style="width: 400px;" type="text" name="usuarioObs" id="usuarioObs" placeholder="" class="form-control"  value="{{usuario.usuario_obs}}" />
 																					</div>
 																				</div>
-																			</div>
+																			
 																		</div>
 																	</div>
 																</div><!-- /.span -->

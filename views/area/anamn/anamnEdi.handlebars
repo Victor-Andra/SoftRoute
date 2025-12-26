@@ -654,6 +654,8 @@
 						document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
 						
 					}
+					// ✅ Atualiza TODOS os chosen-select com os novos valores (incluindo múltiplos)
+					$('.chosen-select').trigger('chosen:updated');
 					carregarImagem();
 				}
 			</script>
@@ -1436,7 +1438,7 @@
 															<label for="id-date-picker-1">Data de nascimento</label><!--Data de nascimento beneficiário-->
 															<div class="row">
 																<div class="input-group">
-																	<div class="col-sm-4">
+																	<div class="col-xl-4">
 																		<input id="anamnBenedatanasc" name="anamnBenedatanasc" type="date"  readonly="true">
 																	</div>
 																</div>
@@ -1516,7 +1518,7 @@
 												<div class="row">
 													<div class="col-xs-6 col-sm-2">
 															<select name="anamnHouvetratengrav" id="anamnHouvetratengrav" class="chosen-select"  value="{{anamn.anamn_houvetratengrav}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1537,7 +1539,7 @@
 													<div class="col-xs-2"><!--Ok-->
 														<div class="input-group">
 															<select name="anamnHouveplanfami" id="anamnHouveplanfami" class="chosen-select"  value="{{anamn.anamn_houveplanfami}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1559,7 +1561,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAmeacatenaborto" id="anamnAmeacatenaborto" class="chosen-select"  value="{{anamn.anamn_ameacatenaborto}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1581,7 +1583,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnBebeoufumagesta" id="anamnBebeoufumagesta" class="chosen-select"  value="{{anamn.anamn_bebeoufumagesta}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1603,7 +1605,7 @@
 													<div class="col-xs-2">
 														<div class="input-group"><!--Ok-->
 															<select name="anamnTraumafispsiinfec" id="anamnTraumafispsiinfec" class="chosen-select"  value="{{anamn.anamn_traumafispsiinfec}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1625,7 +1627,7 @@
 													<div class="col-xs-2"><!--Ok-->
 														<div class="input-group">
 															<select name="anamnUsotranquil" id="anamnUsotranquil" class="chosen-select"  value="{{anamn.anamn_usotranquil}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1668,7 +1670,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnPartoqual" id="anamnPartoqual" class="chosen-select"  value="{{anamn.anamn_partoqual}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Normal">Normal</option>
 																	<option value="Cesárea">Cesárea</option>
 															</select>
@@ -1690,7 +1692,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnTempogestacional" id="anamnTempogestacional" class="chosen-select"  value="{{anamn.anamn_tempogestacional}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Prematuro">Prematuro</option>
 																	<option value="A Termo">A Termo</option>
 															</select>
@@ -1713,7 +1715,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAnorexiaperiparto" id="anamnAnorexiaperiparto" class="chosen-select"  value="{{anamn.anamn_anorexiaperiparto}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1735,7 +1737,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnChorounasc" id="anamnChorounasc" class="chosen-select"  >
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1760,7 +1762,7 @@
 													<div class="col-xs-2"><!--Ok-->
 														<div class="input-group">
 															<select name="anamnApgar" id="anamnApgar" class="chosen-select"  value="{{anamn.anamn_apgar}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1772,7 +1774,7 @@
 														
 														<span class="input-icon"><!--Ok-->
 															<select name="anamnApgargrau" id="anamnApgargrau" class="chosen-select"  >
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="1">1</option>
 																	<option value="2">2</option>
 																	<option value="3">3</option>
@@ -1802,7 +1804,7 @@
 													<div class="col-xs-2">
 														<div class="input-group"><!--Ok-->
 															<select name="anamnIctericia" id="anamnIctericia" class="chosen-select"  value="{{anamn.anamn_ictericia}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1824,7 +1826,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnFototerapia" id="anamnFototerapia" class="chosen-select"  value="{{anamn.anamn_fototerapia}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1846,7 +1848,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnUti" id="anamnUti" class="chosen-select"  value="{{anamn.anamn_uti}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1868,7 +1870,7 @@
 													<div class="col-xs-2">
 														<div class="input-group"><!--Ok-->
 															<select name="anamnComplica" id="anamnComplica" class="chosen-select"  value="{{anamn.anamn_complica}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1890,7 +1892,7 @@
 													<div class="col-xs-2">
 														<div class="input-group"><!--Ok-->
 															<select name="anamnPaipresentenasc" id="anamnPaipresentenasc" class="chosen-select"  value="{{anamn.anamn_paipresentenasc}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1958,7 +1960,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnMaetrab" id="anamnMaetrab" class="chosen-select"  value="{{anamn.anamn_maetrab}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -1995,7 +1997,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnPaisvivemjuntosbem" id="anamnPaisvivemjuntosbem" class="chosen-select"  value="{{anamn.anamn_paisvivemjuntosbem}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2017,7 +2019,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnDiscussoesfreq" id="anamnDiscussoesfreq" class="chosen-select"  value="{{anamn.anamn_discussoesfreq}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2051,7 +2053,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnQuemcedefacil" id="anamnQuemcedefacil" class="chosen-select"  value="{{anamn.anamn_quemcedefacil}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Pai">Pai</option>
 																	<option value="Mãe">Mãe</option>
 																	<option value="Indiferente">Indiferente</option>
@@ -2074,7 +2076,7 @@
 													<div class="col-xs-2">
 														<div class="input-group"><!--Ok-->
 															<select name="anamnCriancatratdif" id="anamnCriancatratdif" class="chosen-select" value="{{anamn.anamn_criancatratdif}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2124,7 +2126,7 @@
 													<div class="col-xs-2">
 														<div class="input-group"><!--Ok-->
 															<select name="anamnHaeducarelig" id="anamnHaeducarelig" class="chosen-select" placeholder="Escolha..."  value="{{anamn.anamn_haeducarelig}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2146,7 +2148,7 @@
 													<div class="col-xs-2"><!--Ok-->
 														<div class="input-group">
 															<select name="anamnDevpreccumpr" id="anamnDevpreccumpr" class="chosen-select" value="{{anamn.anamn_devpreccumpr}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2177,7 +2179,7 @@
 												<div class="col-xs-12">
 													<div class="row">
 
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Sarampo:</label><!--Ok-->
 															</div>
@@ -2185,7 +2187,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnSarampo" id="anamnSarampo" class="chosen-select" value="{{anamn.anamn_sarampo}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2193,7 +2195,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Catapora:</label><!--Ok-->
 															</div>
@@ -2201,7 +2203,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnCatapora" id="anamnCatapora" class="chosen-select" value="{{anamn.anamn_catapora}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2209,7 +2211,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2"><!--Ok-->
+														<div class="col-xl-4"><!--Ok-->
 															<div class="row">
 																<label>Rubéola:</label>
 															</div>
@@ -2217,7 +2219,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnRubeola" id="anamnRubeola" class="chosen-select" value="{{anamn.anamn_rubeola}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2225,7 +2227,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Coqueluche:</label><!--Ok-->
 															</div>
@@ -2233,7 +2235,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnCpqueluche" id="anamnCpqueluche" class="chosen-select" value="{{anamn.anamn_cpqueluche}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2241,7 +2243,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Meningite:</label><!--Ok-->
 															</div>
@@ -2249,7 +2251,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnMeningite" id="anamnMeningite" class="chosen-select" value="{{anamn.anamn_meningite}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2257,7 +2259,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Otite:</label><!--Ok-->
 															</div>
@@ -2265,7 +2267,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnOtite" id="anamnOtite" class="chosen-select" value="{{anamn.anamn_otite}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2280,7 +2282,7 @@
 												<div class="col-xs-12">
 													<div class="row">
 
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Caxumba:</label><!--Ok-->
 															</div>
@@ -2288,7 +2290,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnCaxumba" id="anamnCaxumba" class="chosen-select" value="{{anamn.anamn_caxumba}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2296,7 +2298,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Adenoide:</label><!--Ok-->
 															</div>
@@ -2304,7 +2306,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnAdenoide" id="anamnAdenoide" class="chosen-select" value="{{anamn.anamn_adenoide}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2312,7 +2314,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Amigdalite:</label><!--Ok-->
 															</div>
@@ -2320,7 +2322,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnAmigdalites" id="anamnAmigdalites" class="chosen-select"  value="{{anamn.anamn_amigdalites}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2328,7 +2330,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Alergia:</label><!--Ok-->
 															</div>
@@ -2336,7 +2338,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnAlergias" id="anamnAlergias" class="chosen-select" value="{{anamn.anamn_alergias}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2344,7 +2346,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Acidente:</label><!--Ok-->
 															</div>
@@ -2352,7 +2354,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnAcidentes" id="anamnAcidentes" class="chosen-select" value="{{anamn.anamn_acidentes}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2360,7 +2362,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Convulsão:</label><!--Ok-->
 															</div>
@@ -2368,7 +2370,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnConvulsoes" id="anamnConvulsoes" class="chosen-select" value="{{anamn.anamn_convulsoes}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2383,7 +2385,7 @@
 												<div class="col-xs-12">
 													<div class="row">
 
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Internação:</label><!--Ok-->
 															</div>
@@ -2391,7 +2393,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnInternacoes" id="anamnInternacoes" class="chosen-select" value="{{anamn.anamn_internacoes}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2399,7 +2401,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Cirurgia:</label><!--Ok-->
 															</div>
@@ -2407,7 +2409,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnCirurgia" id="anamnCirurgia" class="chosen-select" value="{{anamn.anamn_cirurgia}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2415,7 +2417,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Complicação com Vacina?</label><!--Ok-->
 															</div>
@@ -2423,7 +2425,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnComplicavacina" id="anamnComplicavacina" class="chosen-select" value="{{anamn.anamn_complicavacina}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2431,7 +2433,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Dengue:</label><!--Ok-->
 															</div>
@@ -2439,7 +2441,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnDengue" id="anamnDengue" class="chosen-select" value="{{anamn.anamn_dengue}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2447,7 +2449,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Zica:</label><!--Ok-->
 															</div>
@@ -2455,7 +2457,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnZica" id="anamnZica" class="chosen-select" value="{{anamn.anamn_zica}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2463,7 +2465,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Chikungunya:</label><!--Ok-->
 															</div>
@@ -2471,7 +2473,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnChikun" id="anamnChikun" class="chosen-select" value="{{anamn.anamn_chikun}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2486,7 +2488,7 @@
 												<div class="col-xs-12">
 													<div class="row">
 
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>COVID:</label><!--Ok-->
 															</div>
@@ -2494,7 +2496,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnCovid" id="anamnCovid" class="chosen-select" value="{{anamn.anamn_covid}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2502,7 +2504,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>TCE:</label><!--Ok-->
 															</div>
@@ -2510,7 +2512,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnTce" id="anamnTce" class="chosen-select" value="{{anamn.anamn_tce}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2554,10 +2556,10 @@
 															<div class="row">
 																<label>Acompanhado(a) por Neurologista?</label><!--Ok-->
 																<div class="row">
-																	<div class="col-sm-4">
+																	<div class="col-xl-4">
 																		<div class="input-group">
 																			<select name="anamnAvaliacaoneuro" id="anamnAvaliacaoneuro" class="chosen-select" value="{{anamn.anamn_avaliacaoneuro}}">
-																					<option value="-">-</option>
+																					<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																					<option value="Sim">Sim</option>
 																					<option value="Não">Não</option>
 																			</select>
@@ -2584,10 +2586,10 @@
 															<div class="row">
 																<label>Acompanhado(a) por Psiquiatra?</label><!--Ok-->
 																<div class="row">
-																	<div class="col-sm-4">
+																	<div class="col-xl-4">
 																		<div class="input-group">
 																			<select name="anamnAvaliacaopsico" id="anamnAvaliacaopsico" class="chosen-select" >
-																					<option value="-">-</option>
+																					<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																					<option value="Sim">Sim</option>
 																					<option value="Não">Não</option>
 																			</select>
@@ -2628,7 +2630,7 @@
 												</div>
 												<br>
 												<div class="row">
-													<div class="col-sm-2"><!--Ok-->
+													<div class="col-xl-4"><!--Ok-->
 														<label><b>Antecedente familiar com:</b></label>
 													</div>
 												</div>
@@ -2642,7 +2644,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnNervoso" id="anamnNervoso" class="chosen-select" >
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2664,7 +2666,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnDeficiente" id="anamnDeficiente" class="chosen-select">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2686,7 +2688,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnViciado" id="anamnViciado" class="chosen-select" >
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2708,7 +2710,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAtaques" id="anamnAtaques" class="chosen-select">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2730,7 +2732,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnTdah" id="anamnTdah" class="chosen-select">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2752,7 +2754,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnEsquizofrenia" id="anamnEsquizofrenia" class="chosen-select" value="{{anamn.anamn_esquizofrenia}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2774,7 +2776,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnOutros" id="anamnOutros" class="chosen-select" value="{{anamn.anamn_outros}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2826,7 +2828,7 @@
 														<div class="input-group">
 															<div class="input-group">
 																<select name="anamnLimguagemcompre" id="anamnLimguagemcompre" class="chosen-select" value="{{anamn.anamn_limguagemcompre}}">
-																		<option value="-">-</option>
+																		<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																</select>
@@ -2845,7 +2847,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnInicioufalaparou" id="anamnInicioufalaparou" class="chosen-select" value="{{anamn.anamn_inicioufalaparou}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2862,7 +2864,7 @@
 												<div class="col-xs-12">
 													<div class="row">
 
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Disfluência verbal / Gagueira?</label><!--Ok-->
 															</div>
@@ -2870,7 +2872,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnGdiscluverbalgagueira" id="anamnGdiscluverbalgagueira" class="chosen-select" value="{{anamn.anamn_gdiscluverbalgagueira}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2878,7 +2880,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Dislalia / Troca de letras?</label><!--Ok-->
 															</div>
@@ -2886,7 +2888,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnDislalia" id="anamnDislalia" class="chosen-select" value="{{anamn.anamn_dislalia}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -2894,7 +2896,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Quais?</label><!--Ok-->
 															</div>
@@ -2921,7 +2923,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnFalavocal" id="anamnFalavocal" class="chosen-select"  value="{{anamn.anamn_falavocal}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2943,7 +2945,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnCompreendeordem" id="anamnCompreendeordem" class="chosen-select" value="{{anamn.anamn_compreendeordem}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2965,7 +2967,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnCumpreordens" id="anamnCumpreordens" class="chosen-select"  value="{{anamn.anamn_cumpreordens}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -2987,7 +2989,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnEcolaliaimediata" id="anamnEcolaliaimediata" class="chosen-select" value="{{anamn.anamn_ecolaliaimediata}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3009,7 +3011,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnEcolaliatardia" id="anamnEcolaliatardia" class="chosen-select" value="{{anamn.anamn_ecolaliatardia}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3031,7 +3033,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAponta" id="anamnAponta" class="chosen-select" value="{{anamn.anamn_aponta}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3053,7 +3055,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnPede" id="anamnPede" class="chosen-select"  value="{{anamn.anamn_pede}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3075,7 +3077,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnNomeiadescenas" id="anamnNomeiadescenas" class="chosen-select" value="{{anamn.anamn_nomeiadescenas}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3097,7 +3099,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnPergunta" id="anamnPergunta" class="chosen-select" value="{{anamn.anamn_pergunta}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3119,7 +3121,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnRespondepergunta" id="anamnRespondepergunta" class="chosen-select"  value="{{anamn.anamn_respondepergunta}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3141,7 +3143,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnSolicitabrincar" id="anamnSolicitabrincar" class="chosen-select" value="{{anamn.anamn_solicitabrincar}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3163,7 +3165,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnSolicitairbanheiro" id="anamnSolicitairbanheiro" class="chosen-select"  value="{{anamn.anamn_solicitairbanheiro}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3185,7 +3187,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnSolicitabeber" id="anamnSolicitabeber" class="chosen-select"  value="{{anamn.anamn_solicitabeber}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3207,7 +3209,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnSolicitacomer" id="anamnSolicitacomer" class="chosen-select" value="{{anamn.anamn_solicitacomer}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3229,7 +3231,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnRouco" id="anamnRouco" class="chosen-select"  value="{{anamn.anamn_rouco}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3251,7 +3253,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnRealizasombocainativ" id="anamnRealizasombocainativ" class="chosen-select" value="{{anamn.anamn_realizasombocainativ}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3273,7 +3275,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnRealizasombocaativ" id="anamnRealizasombocaativ" class="chosen-select" value="{{anamn.anamn_realizasombocaativ}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3328,7 +3330,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnCuriosidadesex" id="anamnCuriosidadesex" class="chosen-select" value="{{anamn.anamn_curiosidadesex}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3350,7 +3352,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnMasturbase" id="anamnMasturbase" class="chosen-select" value="{{anamn.anamn_masturbase}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3372,7 +3374,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnPercebedifsex" id="anamnPercebedifsex" class="chosen-select" >
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3448,7 +3450,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAutolesivo" id="anamnAutolesivo" class="chosen-select" value="{{anamn.anamn_autolesivo}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3470,7 +3472,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAgressivo" id="anamnAgressivo" class="chosen-select" value="{{anamn.anamn_agressivo}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3492,7 +3494,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnDependente" id="anamnDependente" class="chosen-select" value="{{anamn.anamn_dependente}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3515,7 +3517,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnCarinho" id="anamnCarinho" class="chosen-select" value="{{anamn.anamn_carinho}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3538,7 +3540,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAutoritario" id="anamnAutoritario" class="chosen-select" value="{{anamn.anamn_autoritario}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3561,7 +3563,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnMalcriado" id="anamnMalcriado" class="chosen-select" value="{{anamn.anamn_malcriado}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3584,7 +3586,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnExibicionista" id="anamnExibicionista" class="chosen-select" value="{{anamn.anamn_exibicionista}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3607,7 +3609,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAnsioso" id="anamnAnsioso" class="chosen-select" value="{{anamn.anamn_ansioso}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3630,7 +3632,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnCalado" id="anamnCalado" class="chosen-select" value="{{anamn.anamn_calado}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3653,7 +3655,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnFalante" id="anamnFalante" class="chosen-select" value="{{anamn.anamn_falante}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3702,7 +3704,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnChupeta" id="anamnChupeta" class="chosen-select" value="{{anamn.anamn_chupeta}}">
-																<option value="-">-</option>
+																<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																<option value="Sim">Sim</option>
 																<option value="Não">Não</option>
 															</select>
@@ -3724,7 +3726,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnDedo" id="anamnDedo" class="chosen-select" value="{{anamn.anamn_dedo}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3746,7 +3748,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnRoeuouroiunhas" id="anamnRoeuouroiunhas" class="chosen-select" value="{{anamn.anamn_roeuouroiunhas}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3768,7 +3770,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnPuxaorelhascabelo" id="anamnPuxaorelhascabelo" class="chosen-select" value="{{anamn.anamn_puxaorelhascabelo}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3790,7 +3792,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnMordelabios" id="anamnMordelabios" class="chosen-select" value="{{anamn.anamn_mordelabios}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3812,7 +3814,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnBatepes" id="anamnBatepes" class="chosen-select" value="{{anamn.anamn_batepes}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3834,7 +3836,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnBatecabeca" id="anamnBatecabeca" class="chosen-select" value="{{anamn.anamn_batecabeca}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3856,7 +3858,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnTemmedos" id="anamnTemmedos" class="chosen-select" value="{{anamn.anamn_temmedos}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3878,7 +3880,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnMentejamentiu" id="anamnMentejamentiu" class="chosen-select" value="{{anamn.anamn_mentejamentiu}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3900,7 +3902,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAtiraobjetos" id="anamnAtiraobjetos" class="chosen-select" value="{{anamn.anamn_atiraobjetos}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3922,7 +3924,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnDesligase" id="anamnDesligase" class="chosen-select" value="{{anamn.anamn_desligase}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3944,7 +3946,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnObjetonuncalarga" id="anamnObjetonuncalarga" class="chosen-select" value="{{anamn.anamn_objetonuncalarga}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3966,7 +3968,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnRepeteacao" id="anamnRepeteacao" class="chosen-select" value="{{anamn.anamn_repeteacao}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -3988,7 +3990,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnTique" id="anamnTique" class="chosen-select" value="{{anamn.anamn_tique}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4032,7 +4034,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnVaissozinhocama" id="anamnVaissozinhocama" class="chosen-select" value="{{anamn.anamn_vaissozinhocama}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4060,7 +4062,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnVaiparacamapais" id="anamnVaiparacamapais" class="chosen-select" value="{{anamn.anamn_vaiparacamapais}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4092,7 +4094,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnChoranoite" id="anamnChoranoite" class="chosen-select"  value="{{anamn.anamn_choranoite}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4114,7 +4116,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnFalanoite" id="anamnFalanoite" class="chosen-select"  value="{{anamn.anamn_falanoite}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4136,7 +4138,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnGritanoite" id="anamnGritanoite" class="chosen-select" value="{{anamn.anamn_gritanoite}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4158,7 +4160,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnRangedenteanoite" id="anamnRangedenteanoite" class="chosen-select"  value="{{anamn.anamn_rangedenteanoite}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4180,7 +4182,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnInsonianoite" id="anamnInsonianoite" class="chosen-select" value="{{anamn.anamn_insonianoite}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4202,7 +4204,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnBabanoite" id="anamnBabanoite" class="chosen-select"  value="{{anamn.anamn_babanoite}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4224,7 +4226,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnPesadelo" id="anamnPesadelo" class="chosen-select" value="{{anamn.anamn_pesadelo}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4246,7 +4248,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnSudorese" id="anamnSudorese" class="chosen-select" value="{{anamn.anamn_sudorese}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4268,7 +4270,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnTerrornoturno" id="anamnTerrornoturno" class="chosen-select" value="{{anamn.anamn_terrornoturno}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4290,7 +4292,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnRonca" id="anamnRonca" class="chosen-select" value="{{anamn.anamn_ronca}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4312,7 +4314,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnRespiraoral" id="anamnRespiraoral" class="chosen-select" value="{{anamn.anamn_respiraoral}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Oral">Oral</option>
 																	<option value="Nasal">Nasal</option>
 															</select>
@@ -4334,7 +4336,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnProximoolhos" id="anamnProximoolhos" class="chosen-select" value="{{anamn.anamn_proximoolhos}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4363,7 +4365,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnSono" id="anamnSono" class="chosen-select" value="{{anamn.anamn_sono}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Tranquilo">Tranquilo</option>
 																	<option value="Entrecortado">Entrecortado</option>
 																	<option value="Agitado">Agitado</option>
@@ -4405,7 +4407,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAleitamaterno" id="anamnAleitamaterno" class="chosen-select" value="{{anamn.anamn_aleitamaterno}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4427,7 +4429,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnBoasuccaoamamenta" id="anamnBoasuccaoamamenta" class="chosen-select" value="{{anamn.anamn_boasuccaoamamenta}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4469,7 +4471,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnDurefeicao" id="anamnDurefeicao" class="chosen-select"  value="{{anamn.anamn_durefeicao}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Guloso">Guloso</option>
 																	<option value="Normal">Normal</option>
 																	<option value="Inapetente">Inapetente</option>
@@ -4498,7 +4500,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAliso" id="anamnAliso" class="chosen-select" value="{{anamn.anamn_aliso}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4520,7 +4522,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnUtilizatalher" id="anamnUtilizatalher" class="chosen-select" value="{{anamn.anamn_utilizatalher}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4542,7 +4544,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnUsacopo" id="anamnUsacopo" class="chosen-select" value="{{anamn.anamn_usacopo}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4564,7 +4566,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnMastiga" id="anamnMastiga" class="chosen-select"  value="{{anamn.anamn_mastiga}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Unilateral">Unilateral</option>
 																	<option value="Bilateral">Bilateral</option>
 															</select>
@@ -4593,7 +4595,7 @@
 															<div class="input-group">
 																<div class="input-group">
 																	<select name="anamnAlimentasesolido" id="anamnAlimentasesolido" class="chosen-select" value="{{anamn.anamn_alimentasesolido}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -4606,7 +4608,7 @@
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnAlimentaseliqui" id="anamnAlimentaseliqui" class="chosen-select" value="{{anamn.anamn_alimentaseliqui}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -4618,7 +4620,7 @@
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnAlimentasepasto" id="anamnAlimentasepasto" class="chosen-select" value="{{anamn.anamn_alimentasepasto}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -4646,7 +4648,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnDificuldadetipocheiro" id="anamnDificuldadetipocheiro" class="chosen-select" value="{{anamn.anamn_dificuldadetipocheiro}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4674,7 +4676,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnDegluticaoquadroengasgo" id="anamnDegluticaoquadroengasgo" class="chosen-select" value="{{anamn.anamn_degluticaoquadroengasgo}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4696,7 +4698,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnDificuldadetextura" id="anamnDificuldadetextura" class="chosen-select" value="{{anamn.anamn_dificuldadetextura}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -4741,7 +4743,7 @@
 															<div class="input-group">
 																<div class="input-group">
 																	<select name="anamnControlefezesdiurna" id="anamnControlefezesdiurna" class="chosen-select" value="{{anamn.anamn_controlefezesdiurna}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -4754,7 +4756,7 @@
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnControlefezesnoturna" id="anamnControlefezesnoturna" class="chosen-select" value="{{anamn.anamn_controlefezesnoturna}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -4782,7 +4784,7 @@
 															<div class="input-group">
 																<div class="input-group">
 																	<select name="anamnControleurinadiurna" id="anamnControleurinadiurna" class="chosen-select" value="{{anamn.anamn_controleurinadiurna}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -4795,7 +4797,7 @@
 														<div class="row">
 															<div class="input-group">
 																	<select name="anamnControleurinanoturna" id="anamnControleurinanoturna" class="chosen-select" value="{{anamn.anamn_controleurinanoturna}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -4828,7 +4830,7 @@
 												</div>
 												<div class="col-xs-12">
 													<div class="row">
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label> Usa vaso sanitário?</label><!--Ok-->
 															</div>
@@ -4836,7 +4838,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnUsovaso" id="anamnUsovaso" class="chosen-select" value="{{anamn.anamn_usovaso}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -4845,14 +4847,14 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label for="id-date-picker-1">Limpa</label><!--Ok-->
 															</div>
 															<div class="row">
 																<div class="input-group">
 																		<select name="anamnLimpaso" id="anamnLimpaso" class="chosen-select" value="{{anamn.anamn_limpaso}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -4860,14 +4862,14 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label for="id-date-picker-1">Toma banho</label><!--Ok-->
 															</div>
 															<div class="row">
 																<div class="input-group">
 																		<select name="anamnBanhoso" id="anamnBanhoso" class="chosen-select" value="{{anamn.anamn_banhoso}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -4875,14 +4877,14 @@
 																</div>
 															</div>
 														</div>												
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 															<label for="id-date-picker-1">Escova dentes</label><!--Ok-->
 															</div>
 															<div class="row">
 																<div class="input-group">
 																		<select name="anamnEscovaso" id="anamnEscovaso" class="chosen-select" value="{{anamn.anamn_escovaso}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -4890,14 +4892,14 @@
 																</div>
 															</div>
 														</div>												
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label for="id-date-picker-1">Lava as mãos</label><!--Ok-->
 															</div>
 															<div class="row">
 																<div class="input-group">
 																		<select name="anamnLavamaos" id="anamnLavamaos" class="chosen-select" value="{{anamn.anamn_lavamaos}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -4905,14 +4907,14 @@
 																</div>
 															</div>
 														</div>												
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Pentear</label><!--Ok-->
 															</div>
 															<div class="row">
 																<div class="input-group">
 																		<select name="anamnPenteaso" id="anamnPenteaso" class="chosen-select" value="{{anamn.anamn_penteaso}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -4920,7 +4922,7 @@
 																</div>
 															</div>
 														</div>												
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label> Despir</label><!--Ok-->
 															</div>
@@ -4928,7 +4930,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnDespesvestese" id="anamnDespesvestese" class="chosen-select" value="{{anamn.anamn_despesvestese}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -4937,14 +4939,14 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label for="id-date-picker-1">Vestir</label><!--Ok-->
 															</div>
 															<div class="row">
 																<div class="input-group">
 																		<select name="anamnVestese" id="anamnVestese" class="chosen-select" value="{{anamn.anamn_vestese}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -4952,14 +4954,14 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label for="id-date-picker-1">Abotoar</label><!--Ok-->
 															</div>
 															<div class="row">
 																<div class="input-group">
 																		<select name="anamnAbotoaso" id="anamnAbotoaso" class="chosen-select" value="{{anamn.anamn_abotoaso}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -4967,14 +4969,14 @@
 																</div>
 															</div>
 														</div>												
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label for="id-date-picker-1">Calçar</label><!--Ok-->
 															</div>
 															<div class="row">
 																<div class="input-group">
 																		<select name="anamnCalcar" id="anamnCalcar" class="chosen-select" value="{{anamn.anamn_calcar}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -4982,14 +4984,14 @@
 																</div>
 															</div>
 														</div>												
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label for="id-date-picker-1">Laçar</label><!--Ok-->
 															</div>
 															<div class="row">
 																<div class="input-group">
 																		<select name="anamnLacarso" id="anamnLacarso" class="chosen-select" value="{{anamn.anamn_lacarso}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -4997,14 +4999,14 @@
 																</div>
 															</div>
 														</div>												
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label for="id-date-picker-1">Deixa cortar unhas</label><!--Ok-->
 															</div>
 															<div class="row">
 																<div class="input-group">
 																		<select name="anamnDeixacortarunhas" id="anamnDeixacortarunhas" class="chosen-select" value="{{anamn.anamn_deixacortarunhas}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -5012,7 +5014,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label> Deixa cortar cabelos</label><!--Ok-->
 															</div>
@@ -5020,7 +5022,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnDeixacortarcabelo" id="anamnDeixacortarcabelo" class="chosen-select" value="{{anamn.anamn_deixacortarcabelo}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																				<option value="Com ajuda">Com ajuda</option>
@@ -5058,7 +5060,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnProblemavisao" id="anamnProblemavisao" class="chosen-select" value="{{anamn.anamn_problemavisao}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -5073,7 +5075,7 @@
 												</div>
 												
 												
-												<div class="col-sm-2">
+												<div class="col-xl-4">
 													<div class="row">
 														<label>Usa óculos</label><!--Ok-->
 													</div>
@@ -5081,7 +5083,7 @@
 														<div class="input-group">
 															<div class="input-group">
 																<select name="anamnUsaoculos" id="anamnUsaoculos" class="chosen-select" value="{{anamn.anamn_usaoculos}}">
-																		<option value="-">-</option>
+																		<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																</select>
@@ -5123,7 +5125,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnOlhaobjetivoatividade" id="anamnOlhaobjetivoatividade" class="chosen-select" value="{{anamn.anamn_olhaobjetivoatividade}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -5139,7 +5141,7 @@
 												
 												<div class="col-xs-12">
 													<div class="row">											
-														<div class="col-sm-4">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Prefere ambientes escuros?</label><!--Ok-->
 															</div>
@@ -5147,7 +5149,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnPrefereambienteescuro" id="anamnPrefereambienteescuro" class="chosen-select" value="{{anamn.anamn_prefereambienteescuro}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5155,7 +5157,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-4">
+														<div class="col-xl-4">
 															<div class="row"><!--Ok-->
 																<label>Se incomoda com muita luz ou cores vibrantes?</label>
 															</div>
@@ -5163,7 +5165,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnImcomodamuitaluzcor" id="anamnImcomodamuitaluzcor" class="chosen-select" value="{{anamn.anamn_imcomodamuitaluzcor}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5173,7 +5175,7 @@
 														</div>
 													</div>
 													<div class="row">
-														<div class="col-sm-4">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Faz contato visual?</label><!--Ok-->
 															</div>
@@ -5181,7 +5183,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnFazconatatovisual" id="anamnFazconatatovisual" class="chosen-select" value="{{anamn.anamn_fazconatatovisual}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5189,7 +5191,7 @@
 																</div>
 															</div>
 														</div>												
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Mantem contato visual?</label><!--Ok-->
 															</div>
@@ -5197,7 +5199,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnPermanececontatovisual" id="anamnPermanececontatovisual" class="chosen-select" value="{{anamn.anamn_permanececontatovisual}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5209,7 +5211,7 @@
 													</div>
 												</div>
 												
-												<div class="col-sm-2">
+												<div class="col-xl-4">
 													<div class="row">
 														<label>Observações </label><!--Ok-->
 													</div>
@@ -5242,7 +5244,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnDuvidacapaccitaauditiva" id="anamnDuvidacapaccitaauditiva" class="chosen-select" value="{{anamn.anamn_duvidacapaccitaauditiva}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -5264,7 +5266,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnJaexpostoruidoexplosao" id="anamnJaexpostoruidoexplosao" class="chosen-select" value="{{anamn.anamn_jaexpostoruidoexplosao}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -5290,7 +5292,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnVoz" id="anamnVoz" class="chosen-select"  value="{{anamn.anamn_voz}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Normal">Normal</option>																		
 																	<option value="Baixa">Baixa</option>
 																	<option value="Alta">Alta</option>
@@ -5313,7 +5315,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAudiometria" id="anamnAudiometria" class="chosen-select"  value="{{anamn.anamn_audiometria}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -5335,7 +5337,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnLocalizasons" id="anamnLocalizasons" class="chosen-select" value="{{anamn.anamn_localizasons}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -5357,7 +5359,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnTampaouvidosruido" id="anamnTampaouvidosruido" class="chosen-select" value="{{anamn.anamn_tampaouvidosruido}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -5379,7 +5381,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAproximaruidos" id="anamnAproximaruidos" class="chosen-select" value="{{anamn.anamn_aproximaruidos}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -5401,7 +5403,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAsustafacil" id="anamnAsustafacil" class="chosen-select" value="{{anamn.anamn_asustafacil}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -5431,7 +5433,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnSeicomodapessoasfalando" id="anamnSeicomodapessoasfalando" class="chosen-select" value="{{anamn.anamn_seicomodapessoasfalando}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -5453,7 +5455,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnEscutachamado" id="anamnEscutachamado" class="chosen-select" value="{{anamn.anamn_escutachamado}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -5467,7 +5469,7 @@
 													</div>
 												</div>
 											
-												<div class="col-sm-4">
+												<div class="col-xl-4">
 													<div class="row">
 														<hr>
 														<label>Observações</label><!--Ok-->
@@ -5496,7 +5498,7 @@
 												</div>												
 												<div class="col-xs-12">
 													<div class="row">											
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Controlar a cabeça?</label><!--Ok-->
 															</div>
@@ -5504,7 +5506,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnControlacabeca" id="anamnControlacabeca" class="chosen-select" value="{{anamn.anamn_controlacabeca}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5512,7 +5514,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Rolou?</label><!--Ok-->
 															</div>
@@ -5520,7 +5522,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnRolou" id="anamnRolou" class="chosen-select" value="{{anamn.anamn_rolou}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5528,7 +5530,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Engatinhou?</label><!--Ok-->
 															</div>
@@ -5536,7 +5538,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnEngatinhou" id="anamnEngatinhou" class="chosen-select" value="{{anamn.anamn_engatinhou}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5544,7 +5546,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Usou Andajar?</label><!--Ok-->
 															</div>
@@ -5552,7 +5554,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnUsouandaja" id="anamnUsouandaja" class="chosen-select" value="{{anamn.anamn_usouandaja}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5571,7 +5573,7 @@
 														<div class="col-xs-2">
 															<div class="input-group">
 																<select name="anamnAndou" id="anamnAndou" class="chosen-select" value="{{anamn.anamn_andou}}">
-																		<option value="-">-</option>
+																		<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																</select>
@@ -5586,7 +5588,7 @@
 													</div>
 													<br>
 													<div class="row">
-														<div class="col-sm-4">
+														<div class="col-xl-4">
 															<div class="row"><!--Ok-->
 																<label>Sobe e desce escada com um pé em cada degrau?</label>
 															</div>
@@ -5594,7 +5596,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnUsaescada" id="anamnUsaescada" class="chosen-select" value="{{anamn.anamn_usaescada}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5602,7 +5604,7 @@
 																</div>
 															</div>
 														</div>												
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row"><!--Ok-->
 																<label>Pula, corre, salta e gira?</label>
 															</div>
@@ -5610,7 +5612,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnPulacorre" id="anamnPulacorre" class="chosen-select" value="{{anamn.anamn_pulacorre}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5618,7 +5620,7 @@
 																</div>
 															</div>
 														</div>												
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Anda nas pontas dos pés?</label><!--Ok-->
 															</div>
@@ -5626,7 +5628,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnAndapontadope" id="anamnAndapontadope" class="chosen-select" value="{{anamn.anamn_andapontadope}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5642,7 +5644,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnDesastrado" id="anamnDesastrado" class="chosen-select" value="{{anamn.anamn_desastrado}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5650,7 +5652,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-4">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Se esconde debaixo de objetos?</label><!--Ok-->
 															</div>
@@ -5658,7 +5660,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnSeescondeembaixoobj" id="anamnSeescondeembaixoobj" class="chosen-select" value="{{anamn.anamn_seescondeembaixoobj}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5666,7 +5668,7 @@
 																</div>
 															</div>
 														</div>	
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Escala ou sobe objetos?</label><!--Ok-->
 															</div>
@@ -5674,7 +5676,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnEscalasobeobj" id="anamnEscalasobeobj" class="chosen-select" value="{{anamn.anamn_escalasobeobj}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5692,7 +5694,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnMedotirarpesdochao" id="anamnMedotirarpesdochao" class="chosen-select" value="{{anamn.anamn_medotirarpesdochao}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -5715,7 +5717,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnMostramedoexp" id="anamnMostramedoexp" class="chosen-select" value="{{anamn.anamn_mostramedoexp}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -5739,7 +5741,7 @@
 														<div class="col-xs-2">
 															<div class="input-group">
 																<select name="anamnEvitanovasposicoes" id="anamnEvitanovasposicoes" class="chosen-select" value="{{anamn.anamn_evitanovasposicoes}}">
-																		<option value="-">-</option>
+																		<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																</select>
@@ -5762,7 +5764,7 @@
 														<div class="col-xs-2">
 															<div class="input-group">
 																<select name="anamnReacaoemotivaexessi" id="anamnReacaoemotivaexessi" class="chosen-select" value="{{anamn.anamn_reacaoemotivaexessi}}">
-																		<option value="-">-</option>
+																		<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																</select>
@@ -5786,7 +5788,7 @@
 														<div class="col-xs-2">
 															<div class="input-group">
 																<select name="anamnMovisecuidado" id="anamnMovisecuidado" class="chosen-select" value="{{anamn.anamn_movisecuidado}}">
-																		<option value="-">-</option>
+																		<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																</select>
@@ -5810,7 +5812,7 @@
 														<div class="col-xs-2">
 															<div class="input-group">
 																<select name="anamnTemexpnegativamov" id="anamnTemexpnegativamov" class="chosen-select" value="{{anamn.anamn_temexpnegativamov}}">
-																		<option value="-">-</option>
+																		<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																</select>
@@ -5829,7 +5831,7 @@
 												</div>
 												</div>
 												
-												<div class="col-sm-2">
+												<div class="col-xl-4">
 													<div class="row">
 														<label>Observações</label><!--Ok-->
 													</div>
@@ -5858,7 +5860,7 @@
 														<label>Recusa a:</label>
 													</div>
 													<div class="row">
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Pisar ou tocar em grama?</label><!--Ok-->
 															</div>
@@ -5866,7 +5868,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnRecusapisargrama" id="anamnRecusapisargrama" class="chosen-select" value="{{anamn.anamn_recusapisargrama}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5874,7 +5876,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Ambiente molhado?</label><!--Ok-->
 															</div>
@@ -5882,7 +5884,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnRecusapisarmolhado" id="anamnRecusapisarmolhado" class="chosen-select" value="{{anamn.anamn_recusapisarmolhado}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5890,7 +5892,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Areia?</label><!--Ok-->
 															</div>
@@ -5898,7 +5900,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnRecusaareia" id="anamnRecusaareia" class="chosen-select"  value="{{anamn.anamn_recusaareia}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5906,7 +5908,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Tinta?</label><!--Ok-->
 															</div>
@@ -5914,7 +5916,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnRecusatinta" id="anamnRecusatinta" class="chosen-select"  value="{{anamn.anamn_recusatinta}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5922,7 +5924,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Massa de modelar?</label><!--Ok-->
 															</div>
@@ -5930,7 +5932,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnRecusaplastilina" id="anamnRecusaplastilina" class="chosen-select" value="{{anamn.anamn_recusaplastilina}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5938,7 +5940,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Amoeba?</label><!--Ok-->
 															</div>
@@ -5946,7 +5948,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnRecusaamoeba" id="anamnRecusaamoeba" class="chosen-select"  value="{{anamn.anamn_recusaamoeba}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5954,7 +5956,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Evita toque leve?</label><!--Ok-->
 															</div>
@@ -5962,7 +5964,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnEvitatoqueleve" id="anamnEvitatoqueleve" class="chosen-select" value="{{anamn.anamn_evitatoqueleve}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -5980,7 +5982,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnAceitaabreco" id="anamnAceitaabreco" class="chosen-select"  value="{{anamn.anamn_aceitaabreco}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -6005,7 +6007,7 @@
 														<div class="col-xs-2">
 															<div class="input-group">
 																<select name="anamnTocapessoasobjconsta" id="anamnTocapessoasobjconsta" class="chosen-select"  value="{{anamn.anamn_tocapessoasobjconsta}}">
-																		<option value="-">-</option>
+																		<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																</select>
@@ -6028,7 +6030,7 @@
 														<div class="col-xs-2">
 															<div class="input-group">
 																<select name="anamnBatecaisemnocao" id="anamnBatecaisemnocao" class="chosen-select"  value="{{anamn.anamn_batecaisemnocao}}">
-																		<option value="-">-</option>
+																		<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																</select>
@@ -6051,7 +6053,7 @@
 														<div class="col-xs-2">
 															<div class="input-group">
 																<select name="anamnSeguraobj" id="anamnSeguraobj" class="chosen-select"  value="{{anamn.anamn_seguraobj}}">
-																		<option value="-">-</option>
+																		<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																</select>
@@ -6075,7 +6077,7 @@
 														<div class="col-xs-2">
 															<div class="input-group">
 																<select name="anamnBuscaatvpuxaremp" id="anamnBuscaatvpuxaremp" class="chosen-select"  value="{{anamn.anamn_buscaatvpuxaremp}}">
-																		<option value="-">-</option>
+																		<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																</select>
@@ -6098,7 +6100,7 @@
 														<div class="col-xs-2">
 															<div class="input-group">
 																<select name="anamnMastigaobjroupa" id="anamnMastigaobjroupa" class="chosen-select"  value="{{anamn.anamn_mastigaobjroupa}}">
-																		<option value="-">-</option>
+																		<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
 																</select>
@@ -6115,7 +6117,7 @@
 													<hr>
 												</div>
 												
-												<div class="col-sm-2">
+												<div class="col-xl-4">
 													<div class="row">
 														<label>Observações</label><!--Ok-->
 													</div>
@@ -6142,7 +6144,7 @@
 												<div class="col-xs-12">
 													<div class="row">
 																								
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Prefere brinca com:</label><!--Ok-->
 															</div>
@@ -6150,7 +6152,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnPreferebrincarcom" id="anamnPreferebrincarcom" class="chosen-select"  value="{{anamn.anamn_preferebrincarcom}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -6158,7 +6160,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Idade?</label><!--Ok-->
 															</div>
@@ -6170,7 +6172,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label></label><!--Ok-->
 															</div>
@@ -6196,7 +6198,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnFazamigosfacil" id="anamnFazamigosfacil" class="chosen-select"  value="{{anamn.anamn_fazamigosfacil}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -6218,7 +6220,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnEmprestabrinquedos" id="anamnEmprestabrinquedos" class="chosen-select"  value="{{anamn.anamn_emprestabrinquedos}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -6240,7 +6242,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnBrincacooperado" id="anamnBrincacooperado" class="chosen-select" value="{{anamn.anamn_brincacooperado}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -6262,7 +6264,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnGostamandar" id="anamnGostamandar" class="chosen-select" value="{{anamn.anamn_gostamandar}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -6284,7 +6286,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnGostasubmeter" id="anamnGostasubmeter" class="chosen-select" value="{{anamn.anamn_gostasubmeter}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -6298,7 +6300,7 @@
 															</div>
 														</div>
 
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Gosta de música?</label><!--Ok-->
 															</div>
@@ -6306,7 +6308,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnGostamusica" id="anamnGostamusica" class="chosen-select" value="{{anamn.anamn_gostamusica}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -6339,7 +6341,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnSocializapares" id="anamnSocializapares" class="chosen-select" value="{{anamn.anamn_socializapares}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -6361,7 +6363,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnBrincaparque" id="anamnBrincaparque" class="chosen-select"  value="{{anamn.anamn_brincaparque}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -6383,7 +6385,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnBrincarfuncional" id="anamnBrincarfuncional" class="chosen-select" value="{{anamn.anamn_brincarfuncional}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -6405,7 +6407,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnCriabrincadeiras" id="anamnCriabrincadeiras" class="chosen-select" value="{{anamn.anamn_criabrincadeiras}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -6427,7 +6429,7 @@
 															<div class="col-xs-2">
 																<div class="input-group">
 																	<select name="anamnRecusaengajardemanda" id="anamnRecusaengajardemanda" class="chosen-select" value="{{anamn.anamn_recusaengajardemanda}}">
-																			<option value="-">-</option>
+																			<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
 																	</select>
@@ -6456,7 +6458,7 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-sm-2">
+												<div class="col-xl-4">
 													<div class="row">
 														<label>Observações</label><!--Ok-->
 													</div>
@@ -6562,7 +6564,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-4">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Quanto tempo estuda nessa escola?</label><!--Ok-->
 															</div>
@@ -6576,7 +6578,7 @@
 																</div>
 															</div>
 														</div>													
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Série?</label><!--Ok-->
 															</div>
@@ -6626,7 +6628,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnPaisestudamcomcrianca" id="anamnPaisestudamcomcrianca" class="chosen-select"  value="{{anamn.anamn_paisestudamcomcrianca}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -6642,7 +6644,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnLocaladequadoestudo" id="anamnLocaladequadoestudo" class="chosen-select"  value="{{anamn.anamn_localadequadoestudo}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -6650,7 +6652,7 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Executa tarefas caseiras?</label><!--Ok-->
 															</div>
@@ -6658,7 +6660,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnExecutatarefascaseiras" id="anamnExecutatarefascaseiras" class="chosen-select"  value="{{anamn.anamn_executatarefascaseiras}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -6675,7 +6677,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnTemautonomiaestuda" id="anamnTemautonomiaestuda" class="chosen-select"  value="{{anamn.anamn_temautonomiaestuda}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -6691,7 +6693,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnNecessitaorienta" id="anamnNecessitaorienta" class="chosen-select"  value="{{anamn.anamn_necessitaorienta}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -6707,7 +6709,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnUsamuitaborracha" id="anamnUsamuitaborracha" class="chosen-select"  value="{{anamn.anamn_usamuitaborracha}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -6723,7 +6725,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnRendimentoescolarbaixo" id="anamnRendimentoescolarbaixo" class="chosen-select"  value="{{anamn.anamn_rendimentoescolarbaixo}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -6739,7 +6741,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnReprovado" id="anamnReprovado" class="chosen-select"  value="{{anamn.anamn_reprovado}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -6755,7 +6757,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnPulouserie" id="anamnPulouserie" class="chosen-select"  value="{{anamn.anamn_pulouserie}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -6813,7 +6815,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnDificuldadeescolar" id="anamnDificuldadeescolar" class="chosen-select"  value="{{anamn.anamn_dificuldadeescolar}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -6846,7 +6848,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnLer" id="anamnLer" class="chosen-select"  value="{{anamn.anamn_ler}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 																	<option value="Com dificuldade">Com dificuldade</option>
@@ -6869,7 +6871,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnEscreve" id="anamnEscreve" class="chosen-select"  value="{{anamn.anamn_escreve}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 																	<option value="Com dificuldade">Com dificuldade</option>
@@ -6892,7 +6894,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnMotrici" id="anamnMotrici" class="chosen-select"  value="{{anamn.anamn_motrici}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 																	<option value="Com dificuldade">Com dificuldade</option>
@@ -6915,7 +6917,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnContar" id="anamnContar" class="chosen-select"  value="{{anamn.anamn_contar}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 																	<option value="Com dificuldade">Com dificuldade</option>
@@ -6938,7 +6940,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnCalcular" id="anamnCalcular" class="chosen-select"  value="{{anamn.anamn_calcular}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 																	<option value="Com dificuldade">Com dificuldade</option>
@@ -6961,7 +6963,7 @@
 													<div class="col-xs-2">
 														<div class="input-group">
 															<select name="anamnAtencao" id="anamnAtencao" class="chosen-select"  value="{{anamn.anamn_atencao}}">
-																	<option value="-">-</option>
+																	<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																	<option value="Sim">Sim</option>
 																	<option value="Não">Não</option>
 															</select>
@@ -6976,7 +6978,7 @@
 												</div>
 												<div class="col-xs-12">
 													<div class="row">
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Professor Particular?</label>
 															</div>
@@ -6984,7 +6986,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnProfparticular" id="anamnProfparticular" class="chosen-select"  value="{{anamn.anamn_profparticular}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -7008,7 +7010,7 @@
 														</div>
 													</div>
 													<div class="row">
-														<div class="col-sm-2">
+														<div class="col-xl-4">
 															<div class="row">
 																<label>Horário Extra?</label>
 															</div>
@@ -7016,7 +7018,7 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnAtiviextra" id="anamnAtiviextra" class="chosen-select"  value="{{anamn.anamn_ativiextra}}">
-																				<option value="-">-</option>
+																				<option value="-">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
 																		</select>
@@ -7040,7 +7042,7 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-sm-2">
+												<div class="col-xl-4">
 													<div class="row">
 														<label>Observações </label>
 													</div>
