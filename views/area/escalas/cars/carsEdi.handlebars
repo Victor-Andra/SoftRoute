@@ -23,27 +23,14 @@
 				document.getElementById("carsCarsdata").value = fulldate;
 				//Atributos básicos
 				document.getElementById("carsBeneid").value = document.getElementById("carsBeneidEdi").value;
-				$("#carsBeneid").trigger("chosen:updated");
 				document.getElementById("carsBenesexo").value = document.getElementById("carsBenesexoEdi").value;
-				$("#carsBenesexo").trigger("chosen:updated");
 				document.getElementById("carsBenedatanasc").value = document.getElementById("carsBenedatanascEdi").value;
 				document.getElementById("carsBeneidade").value = document.getElementById("carsBeneidadeEdi").value;
 				document.getElementById("carsPreechido").value = document.getElementById("carsPreechidoEdi").value;
 				document.getElementById("carsParentesco").value = document.getElementById("carsParentescoEdi").value;
 				
 				document.getElementById("carsTerapeutaid").value = document.getElementById("carsTerapeutaidEdi").value;
-				$("#carsTerapeutaid").trigger("chosen:updated");
 				document.getElementById("carsInfo").value = document.getElementById("carsInfoEdi").value;
-
-				
-				
-
-				
-				
-
-			
-				
-
 				//Atributos de pontuação
 				document.getElementById("carsTq01").value = document.getElementById("carsTq01Edi").value;
 				document.getElementById("carsTq02").value = document.getElementById("carsTq02Edi").value;
@@ -109,8 +96,6 @@
 				selecionarRadioComBaseNoValor("14");
 				selecionarRadioComBaseNoValor("15");
 				let divCarrega = document.getElementById("divCarrega");
-				// ✅ Atualiza TODOS os chosen-select com os novos valores (incluindo múltiplos)
-				$('.chosen-select').trigger('chosen:updated');
 				divCarrega.remove();
 			}
 			function selecionarRadioComBaseNoValor(campoNumero) {
@@ -219,9 +204,9 @@
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/area/escalas/cars/atualizar" method="POST">
-								<div id="divCarrega" class="col-xs-12"  >
+								<input class="hidden" id="carsId" name="carsId" value="{{cars._id}}" />
+								<div id="divCarrega" class="col-xs-12" hidden >
 									<!-- Atributos básicos-->
-									<input id="carsId" name="carsId" value="{{cars._id}}" />
 									<input type="text" id="carsBeneidEdi" name="carsBeneidEdi" value="{{cars.cars_beneid}}" />
 									<input type="text" id="carsBenesexoEdi" name="carsBenesexoEdi" value="{{cars.cars_benesexo}}" />
 									<input type="text" id="carsBenedatanascEdi" name="carsBenedatanascEdi" value="{{cars.cars_benedatanasc}}" />
@@ -296,21 +281,20 @@
 															</div>
 														</div>
 														<div class="row">
-															<div class="col-xs-4 col-sm-4">
-																<label>Sexo</label>
-																<div class="form-group">
-																	<div class="col-sm-4">
-																		<select name="carsBenesexo" id="carsBenesexo" class="chosen-select" datec-placeholder="Escolha..." >
-																			<option value="-">-</option>
-																			<option value="F">Feminino</option>
-																			<option value="M">Masculino</option>
-																		</select>
+															<div class="col-xs-4 col-sm-2">
+																<label> Sexo</label>
+																<div class="row">
+																	<div class="input-group">
+																		<div class="col-sm-2">
+																			<select name="carsBenesexo" id="carsBenesexo" class="chosen-select" dcars-placeholder="Escolha..."value="-" >
+																						<option value="-">-</option>
+																						<option value="F">Feminino</option>
+																						<option value="M">Masculino</option>
+																			</select>
+																		</div>
 																	</div>
 																</div>
 															</div>
-														</div>
-														<div class="row">
-														
 															<div class="col-xs-12 col-sm-4">
 																<label for="id-date-picker-1">Data de nascimento</label>
 																<div class="row">

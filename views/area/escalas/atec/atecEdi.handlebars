@@ -48,8 +48,6 @@
 				// Atualiza o radio button
 				checkBoxAoCarregarFormulario();
 				marcarRadioInputs();
-				// ✅ Atualiza TODOS os chosen-select com os novos valores (incluindo múltiplos)
-				$('.chosen-select').trigger('chosen:updated');
 
 				
 			}
@@ -281,21 +279,20 @@
 															</div>
 														</div>
 														<div class="row">
-															<div class="col-xs-4 col-sm-4">
-																<label>Sexo</label>
-																<div class="form-group">
-																	<div class="col-sm-4">
-																		<select name="atecBenesexo" id="atecBenesexo" class="chosen-select" datec-placeholder="Escolha..." >
-																			<option value="-">-</option>
+															<div class="col-xs-4 col-sm-2">
+																<label> Sexo</label>
+																<div class="row">
+																	<div class="input-group">
+																		<div class="col-sm-2">
+																			<select name="atecBenesexo" id="atecBenesexo" class="chosen-select" datec-placeholder="Escolha..."value="-" >
+																						<option value="-">-</option>
 																						<option value="F">Feminino</option>
 																						<option value="M">Masculino</option>
-																		</select>
+																			</select>
+																		</div>
 																	</div>
 																</div>
 															</div>
-														</div>
-														<div class="row">
-															
 															<div class="col-xs-12 col-sm-4">
 																<label for="id-date-picker-1">Data de nascimento</label>
 																<div class="row">

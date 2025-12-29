@@ -10,8 +10,7 @@
 		<script>//Filtro para localizar
 				
 				function carregaBody(){
-					// ✅ Atualiza TODOS os chosen-select com os novos valores (incluindo múltiplos)
-					$('.chosen-select').trigger('chosen:updated');
+										
 				}
 		</script>
 		
@@ -106,52 +105,65 @@
 											<br />
 										</div>
 									</div>
-								<div class="row justify-content-center"> <!-- Centraliza os blocos -->
-								<!-- Beneficiário -->
-								<div class="col-xs-12 col-sm-4 mb-3 px-2">
-									<label for="pesquisaBeneid" class="block mb-1">Escolha o Beneficiário</label>
-									<select name="pesquisaBeneid" id="pesquisaBeneid" class="chosen-select form-control">
-									<option value="766f69643132333435366964">-</option>
-									{{#each benes}}
-										<option value="{{_id}}">{{bene_nome}}</option>
-									{{/each}}
-									</select>
-								</div>
-
-								<!-- ABA em Andamento -->
-								<div class="col-xs-12 col-sm-4 mb-3 px-2 text-center">
-									<div class="mb-1">
-									<span class="label label-sm label-warning">ABA em Andamento, Iniciados, Pausados</span>
+									<div class="row">
+										<div class="col-xs-12 col-sm-4">
+											<label for="id-date-picker-1">Escolha o Beneficiário</label><!--Data de nascimento beneficiário-->
+											<div class="row">
+												<div class="input-group">
+													<div class="col-sm-4">
+														<select name="pesquisaBeneid" id="pesquisaBeneid" class="chosen-select">
+															<option value="766f69643132333435366964">-</option>
+															{{#each benes}}
+															<option value="{{_id}}">{{bene_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-sm-4">
+											<span class="label label-sm label-warning  ">ABA em Andamento, Iniciados, Pausados</span><!--idade beneficiário-->
+											<div class="row">
+												<div class="input-group">
+													<div class="col-sm-4">
+														<button
+															name="acaoPesquisarF"
+															id="acaoPesquisarF"
+															type="submit"
+															class="btn btn-xs btn-info"
+															
+														>
+															<i class="ace-icon fa fa-search-plus"></i>
+															Localizar Container
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12 col-sm-4" >
+											<span class="label label-sm label-warning  ">ABA em Manutenção</span><!--info-->
+											<div class="row">
+												<div class="input-group">
+													
+													<div class="col-sm-4">
+														<button 
+															name="acaoPesquisarM"
+															id="acaoPesquisarM"
+															type="button"
+															class="btn btn-xs btn-danger"
+															
+														>
+															<i class="ace-icon fa fa-search-plus"></i>
+															Localizar Container em Manutenção
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xs-12">
+											<hr>
+										</div>
 									</div>
-									<button
-									name="acaoPesquisarF"
-									id="acaoPesquisarF"
-									type="submit"
-									class="btn btn-xs btn-info btn-block"
-									>
-									<i class="ace-icon fa fa-search-plus"></i>
-									Localizar Container
-									</button>
-								</div>
-
-								<!-- ABA em Manutenção -->
-								<div class="col-xs-12 col-sm-4 mb-3 px-2 text-center">
-									<div class="mb-1">
-									<span class="label label-sm label-warning">ABA em Manutenção</span>
-									</div>
-									<button
-									name="acaoPesquisarM"
-									id="acaoPesquisarM"
-									type="button"
-									class="btn btn-xs btn-danger btn-block"
-									>
-									<i class="ace-icon fa fa-search-plus"></i>
-									Localizar Container em Manutenção
-									</button>
-								</div>
-								</div>
-
-								<hr class="mt-2 mb-3">
 									
 								</form>
 

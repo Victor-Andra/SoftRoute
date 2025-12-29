@@ -81,48 +81,38 @@
 					<form style="font-size: 11px;" role="form" action="/menu/atendimento/relatendbenes" method="POST"><!-- /form -->
 						<div class="breadcrumbs" id="breadcrumbs" style="align-items: center; text-align: center;"><!-- /breadcrumbs -->
 							<ul class="breadcrumb">
-								<li>
-									<label>Período de:</label>
-									<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
-									<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}"/>
-								</li>
-								<li>
-									<label>até:</label>
-									<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
-									<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}"/>
-								</li>
-								<li>
-									<label>Beneficiário: </label>
-									<select style="height: 30px; width:300px;" name="relBeneid" id="relBeneid" class="chosen-select" data-placeholder="Escolha..." value="{{filtro.relConvid}}">
-										{{#each benes}}
-										<option value="{{_id}}">{{bene_nome}}</option>
-										{{/each}}
-									</select>
-								</li>
-								<li>
-									<label class="control-label bolder red">
-										<span class="lbl">&nbsp;Mostrar horas?</span>
+								<label>Período de:</label>
+								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
+								<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}"/>
+								<label>até:</label>
+								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
+								<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}"/>
+								<label>Beneficiário: </label>
+								<select style="height: 30px; width:300px;" name="relBeneid" id="relBeneid" class="chosen-select" data-placeholder="Escolha..." value="{{filtro.relConvid}}">
+									{{#each benes}}
+									<option value="{{_id}}">{{bene_nome}}</option>
+									{{/each}}
+								</select>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<label class="control-label bolder red">
 									<select name="porHoras" id="porHoras" class="chosen-select" value="">
 										<option value="sim">Sim</option>
 										<option value="nao">Não</option>
 									</select>
-									</label>
-								</li>
-								<li>
-									<label class="control-label bolder red">
-										<span class="lbl">&nbsp;Exibir Inativos?</span>
+									<span class="lbl">&nbsp;Mostrar horas?</span>
+								</label>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<label class="control-label bolder red">
 									<select name="exibeInativos" id="exibeInativos" class="chosen-select" value="">
 										<option value="nao">Não</option>
 										<option value="sim">Sim</option>
 									</select>
-									</label>
-								</li>
-								<li>
-									<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+									<span class="lbl">&nbsp;Exibir Inativos?</span>
+								</label>
+								<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
 									<i class="ace-icon fa fa-search bigger-110"></i>
 									Pesquisar
-									</button>
-								</li>
+								</button>
 							</ul>
 							<!-- /.breadcrumb -->
 						</div><!-- /.breadcrumbs -->

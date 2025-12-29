@@ -135,41 +135,16 @@
 																									{{/ifEqual}}
 																								{{/each}}
 																							</td>
-																							
 																							<td>
-																								{{#compareString agenda_categoria "Feriado"}}
-																									<div class="action-buttons">
-																										<a class="blue" href="#" title="Registro não editável: {{agenda_categoria}}">
-																											<i class="red ace-icon fa fa-ban bigger-130"></i>
-																										</a>
-																									</div>
+																								{{#ifEqual agenda_selo false}}
+																								<div class="action-buttons">
+																									<a class="blue" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
+																										<i class="ace-icon fa fa-pencil bigger-130"></i>
+																									</a>
+																								</div>
 																								{{else}}
-																									{{#compareString agenda_categoria "Falta Absoluta"}}
-																										<div class="action-buttons">
-																											<a class="blue" href="#" title="Registro não editável: {{agenda_categoria}}">
-																												<i class="red ace-icon fa fa-ban bigger-130"></i>
-																											</a>
-																										</div>
-																									{{else}}
-																										{{#compareString agenda_categoria "Falta Justificada"}}
-																											<div class="action-buttons">
-																												<a class="blue" href="#" title="Registro não editável: {{agenda_categoria}}">
-																													<i class="red ace-icon fa fa-ban bigger-130"></i>
-																												</a>
-																											</div>
-																										{{else}}
-																											{{#ifEqual agenda_selo false}}
-																												<div class="action-buttons">
-																													<a class="blue" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
-																														<i class="ace-icon fa fa-pencil bigger-130"></i>
-																													</a>
-																												</div>
-																											{{else}}
-																												<span class="badge badge-success">Ok</span>
-																											{{/ifEqual}}
-																										{{/compareString}}
-																									{{/compareString}}
-																								{{/compareString}}
+																								<span class="badge badge-success">Ok</span>
+																								{{/ifEqual}}
 																							</td>
 																						</tr>
 																					
@@ -248,11 +223,7 @@
 													Evoluções Ausentes:
 													</strong>
 													<div><hr></div>
-													{{#isNull agenda_obs}}
-														<label>{{agenda_data_semana}} : {{agenda_hora}} / {{#each ../salas}}{{#ifEqual ../agenda_salaid _id}}{{sala_nome}}{{/ifEqual}}{{/each}} / {{#each ../benes}}{{#ifEqual ../agenda_beneid _id}}{{bene_apelido}}{{/ifEqual}}{{/each}} - {{agenda_obs}}</label>
-														<br>
-													{{else}}
-													{{/isNull}}
+													
 													{{#each evolucaoFaltante}}
 													<div class="action-buttons"><label>{{formatDate "" agenda_data}}, {{agenda_hora}}, {{sala_nome}}, {{terapia_nomecid}}, {{bene_apelido}}</label><a class="blue" class="action-buttons" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');"><i class="ace-icon fa fa-pencil bigger-130"></i></a><br></div>
 													{{/each}}

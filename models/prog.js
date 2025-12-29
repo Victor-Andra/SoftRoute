@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 const { getModel } = require('../functions/fncGeral');
 
-const ProgSchema = mongoose.Schema({//Criar indice constraint Beneid, tipo, nivel, obs
+const ProgSchema = mongoose.Schema({
     prog_beneid :{ type: ObjectId, required: false },
     prog_tipo :{ type: ObjectId, required: false },
     prog_nivel :{ type: ObjectId, required: false },
@@ -34,15 +34,6 @@ const ProgSchema = mongoose.Schema({//Criar indice constraint Beneid, tipo, nive
     prog_dataedi :{ type: String, required: false },
     prog_lixo :{ type: String, required: false }
 })
-
-// ✅ Índice único lógico: impede duplicação de (bene + tipo + nível) *ativos*
-ProgSchema.index(
-  { prog_beneid: 1, prog_tipo: 1, prog_nivel: 1 },
-  {
-    unique: true,
-    name: "idx_prog_unique_active"
-  }
-);
 
 class Prog{
     constructor(

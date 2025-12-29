@@ -135,7 +135,6 @@ module.exports = {
             res.redirect("/admin/erro");
         }
     },
-    
     carregaUsuarioEdiOLD(req,res){
         let db = req.cookies['preferredDb'];
         Empresa = getModel("PortalDoUsuario", 'tb_empresa', empresaClass.EmpresaSchema)

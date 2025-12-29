@@ -12,23 +12,6 @@
 				function OcultaMsg(){
 					document.getElementById("alertMsgFlash").hidden = true;
 				}
-				function carregarImagem() {
-					var preview = document.getElementById('previewImage');
-					var fileInput = document.getElementById('usuarioCarimbo');
-
-					if (fileInput){
-						if (fileInput.files && fileInput.files[0]) {
-							var reader = new FileReader();
-
-							reader.onload = function (e) {
-								preview.src = e.target.result;
-								document.getElementById('previewCarimbo').style.display = 'block'; // Exibe a div
-							};
-
-							reader.readAsDataURL(fileInput.files[0]);
-						}
-					}
-				}
 				function atualizaDadosbene(){
 					
 					let beneid = document.getElementById("anamnBeneid").value;
@@ -40,7 +23,7 @@
 						var dataFmt = new Date(dataIso);
 						console.log("dataFmt:"+dataFmt)
 						document.getElementById("anamnBenedatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-						//document.getElementById("anamnBeneidade").value = calculaIdade(dataFmt);
+						document.getElementById("anamnBeneidade").value = calculaIdade(dataFmt);
 					}
 
 					if (pai_beneid != undefined && pai_beneid != "undefined" && pai_beneid != null){
@@ -53,29 +36,17 @@
 					document.getElementById("anamnBenenomeinfo").value = document.getElementById(beneid+"_beneNome").value;
 					document.getElementById("anamnBenenome").value = document.getElementById(beneid+"_beneNome").value;
 				}
-				function calculaIdade(dataFmt) {
-				// Data atual
-				const hoje = new Date();
-
-				// Data de aniversário
-				const aniversario = new Date(dataFmt);
-
-				// Cálculo da idade
-				let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
-				let idadeMeses = hoje.getMonth() - aniversario.getMonth();
-
-				// Ajuste caso o dia de aniversário ainda não tenha ocorrido este ano
-				if (hoje.getDate() < aniversario.getDate()) {
-					idadeMeses--;
-				}
-
-				// Se o mês do aniversário for maior que o mês atual, ajusta a idade
-				if (idadeMeses < 0) {
-					idadeAnos--;
-					idadeMeses += 12;
-				}
-				return (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
-				
+				function calculaIdade(dataFmt){
+					let dataAtual = new Date();
+					let ano = dataAtual.getFullYear() - dataFmt.getFullYear();
+					let mes = dataAtual.getUTCMonth() - dataFmt.getMonth();
+					console.log("dataAtual.getUTCDate(): "+dataAtual.getUTCDate());
+					console.log("dataFmt.getUTCDate(): "+dataFmt.getUTCDate());
+					let dias = dataAtual.getUTCDate() - dataFmt.getUTCDate();
+					if (dias < 0){
+						mes = mes-1;
+					}
+					return (ano + " anos e " + mes + " meses.");
 				}
 				function formataData(date) {//yyyy-MM-dd
 					var d = new Date(date);
@@ -97,18 +68,15 @@
 
 					return [year, month, day].join('-');
 				}
-				function submeterFormulario(){
-					document.getElementById("previewImage").remove();
-					let form = document.getElementById("formUsuarioAdd");
-					form.submit();
-				}
+
 				function carregaBody(){
 					//document.getElementById("anamnDatacad").value = new Date();
 					//Rotinas
 					document.getElementById("anamnBeneid").value = document.getElementById("anamnBeneidEdi").value;
+					
 					document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
 					//document.getElementById("anamnBenedatanasc").value = document.getElementById("anamnBenedatanascEdi").value;
-					//document.getElementById("anamnBeneidade").value = document.getElementById("anamnBeneidadeEdi").value;
+					document.getElementById("anamnBeneidade").value = document.getElementById("anamnBeneidadeEdi").value;
 					document.getElementById("anamnPainome").value = document.getElementById("anamnPainomeEdi").value;
 					document.getElementById("anamnMaenome").value = document.getElementById("anamnMaenomeEdi").value;
 					document.getElementById("anamnRespnome").value = document.getElementById("anamnRespnomeEdi").value;
@@ -537,16 +505,7 @@
 					
 					document.getElementById("anamnBrinquedopreferidosquais").value = document.getElementById("anamnBrinquedopreferidosquaisEdi").value;
 					document.getElementById("anamnObssocial").value = document.getElementById("anamnObssocialEdi").value;
-					//sonoridade
-					document.getElementById("anamnContinst").value = document.getElementById("anamnContinstEdi").value;
-					document.getElementById("anamnMusicainf").value = document.getElementById("anamnMusicainfEdi").value;
-					document.getElementById("anamnPrefinstrum").value = document.getElementById("anamnPrefmusicaEdi").value;
-					document.getElementById("anamnPrefmusica").value = document.getElementById("anamnPrefmusicaEdi").value;
-					document.getElementById("anamnAmbsonoinf").value = document.getElementById("anamnAmbsonoinfEdi").value;
-					document.getElementById("anamnPrefmusicapais").value = document.getElementById("anamnPrefmusicapaisEdi").value;
-					document.getElementById("anamnMusicarechaco").value = document.getElementById("anamnMusicarechacoEdi").value;
-					document.getElementById("anamnObsmusica").value = document.getElementById("anamnObsmusicaEdi").value;
-					//Escolaridade
+					//Grupo
 					//document.getElementById("anamnEscola").value = document.getElementById("anamnEscolaEdi").value;
 					//document.getElementById("anamnTempo").value = document.getElementById("anamnTempoEdi").value;
 					//document.getElementById("anamnTurno").value = document.getElementById("anamnTurnoEdi").value;
@@ -595,7 +554,7 @@
 
 					document.getElementById("anamnMaenome").value = document.getElementById("anamnMaenomeEdi").value;
 					document.getElementById("anamnPainome").value = document.getElementById("anamnPainomeEdi").value;
-									
+					document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;					
 					document.getElementById("anamnBenenomeinfo").value = document.getElementById("anamnBenenomeEdi").value;
 					//anamnDataanamnese
 					let beneid = document.getElementById("anamnBeneid").value;
@@ -611,15 +570,7 @@
 					let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
 					document.getElementById("anamnDataanamnese").value = fulldate;
 					//anamnBenedatanasc
-					console.log("document.getElementById(beneid+_beneDatanascEdi).value: "+document.getElementById(beneid+"_beneDatanascEdi").value)
 					dtnsc = new Date(document.getElementById(beneid+"_beneDatanascEdi").value);
-					console.log((""+dtnsc.toLocaleTimeString()+"").substring(0,2) != "00");
-					if ((""+dtnsc.toLocaleTimeString()+"").substring(0,2) != "00") {
-						let num = parseInt((""+dtnsc.toLocaleTimeString()+"").substring(0,2));
-						let dif = 24-num;
-						dtnsc = new Date(dtnsc.getTime() + dif * 60 * 60 * 1000)//add 3h ao gtm
-					}
-					console.log("dtnsc: "+dtnsc)
 					mes = (dtnsc.getMonth()+1).toString();
 					dia = (dtnsc.getUTCDate()).toString();
 					if (mes.length == 1){
@@ -629,14 +580,8 @@
 						dia = "0"+dia;
 					}
 					fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
-					console.log("fulldate: "+fulldate)
 					document.getElementById("anamnBenedatanasc").value = fulldate;
 					let dtnascbene = new Date(document.getElementById(beneid+"_beneDatanascEdi").value);
-					if ((""+dtnascbene.toLocaleTimeString()+"").substring(0,2) != "00") {
-						let num = parseInt((""+dtnascbene.toLocaleTimeString()+"").substring(0,2));
-						let dif = 24-num;
-						dtnascbene = new Date(dtnascbene.getTime() + dif * 60 * 60 * 1000)//add 3h ao gtm
-					}
 					console.log(document.getElementById(beneid+"_beneDatanascEdi").value);
 					mes = (dtnascbene.getMonth()+1).toString();
 					dia = (dtnascbene.getUTCDate()).toString();
@@ -649,12 +594,68 @@
 					fulldate=(dtnascbene.getFullYear()+"-"+mes+"-"+dia).toString();
 					console.log(fulldate)
 					document.getElementById("anamnBenedatanasc").value = fulldate;
-					//document.getElementById("anamnBeneidade").value = ((new Date()).getFullYear() - dtnascbene.getFullYear()).toString() + " anos e " + (dtnascbene.getMonth()+1).toString() + " meses.";
+					document.getElementById("anamnBeneidade").value = ((new Date()).getFullYear() - dtnascbene.getFullYear()).toString() + " anos e " + (dtnascbene.getMonth()+1).toString() + " meses.";
 					if (document.getElementById("anamnBenenomeEdi").value != ""){
 						document.getElementById("anamnBenenome").value = document.getElementById("anamnBenenomeEdi").value;
 						
 					}
-					carregarImagem();
+				}
+				function inputTrue() {
+					// Seleciona os elementos
+					var messagemPri = document.getElementById('messagemPri');
+					var messagemPre = document.getElementById('messagemPre');
+					var exibeSelect = document.getElementById('exibeSelect');
+					var exibetext = document.getElementById('exibetext');
+					var beneid = document.getElementById('anamnBeneid');
+					var benenome = document.getElementById('anamnBenenome');
+					var datanasc = document.getElementById('anamnBenedatanasc');
+					var idade = document.getElementById('anamnBeneidade');
+					var maenome = document.getElementById('anamnMaenome');
+					var painome = document.getElementById('anamnPainome');
+					var respnome = document.getElementById('anamnRespnome');
+
+					// Altera os atributos conforme a condição
+					messagemPri.hidden = false;
+					messagemPre.hidden = true;
+					exibeSelect.hidden = true;
+					exibetext.hidden = false;
+
+					beneid.removeAttribute('readonly');
+					benenome.removeAttribute('readonly');
+					datanasc.removeAttribute('readonly');
+					idade.removeAttribute('readonly');
+					maenome.removeAttribute('readonly');
+					painome.removeAttribute('readonly');
+					respnome.removeAttribute('readonly');
+				}
+
+				function inputFalse() {
+					// Seleciona os elementos
+					var messagemPri = document.getElementById('messagemPri');
+					var messagemPre = document.getElementById('messagemPre');
+					var exibeSelect = document.getElementById('exibeSelect');
+					var exibetext = document.getElementById('exibetext');
+					var beneid = document.getElementById('anamnBeneid');
+					var benenome = document.getElementById('anamnBenenome');
+					var datanasc = document.getElementById('anamnBenedatanasc');
+					var idade = document.getElementById('anamnBeneidade');
+					var maenome = document.getElementById('anamnMaenome');
+					var painome = document.getElementById('anamnPainome');
+					var respnome = document.getElementById('anamnRespnome');
+
+					// Altera os atributos conforme a condição
+					messagemPri.hidden = true;
+					messagemPre.hidden = false;
+					exibeSelect.hidden = false;
+					exibetext.hidden = true;
+
+					beneid.setAttribute('readonly', true);
+					benenome.setAttribute('readonly', true);
+					datanasc.setAttribute('readonly', true);
+					idade.setAttribute('readonly', true);
+					maenome.setAttribute('readonly', true);
+					painome.setAttribute('readonly', true);
+					respnome.setAttribute('readonly', true);
 				}
 			</script>
 	</head>
@@ -711,7 +712,7 @@
 
 						<!-- Dados carregados -->
 						<input id="anamnBeneidEdi" name="anamnBeneidEdi" value="{{anamn.anamn_beneid}}"/>
-						<input id="anamnBenenomeEdi" name="anamnBenenomeEdi" value="{{anamn.anamn_benenome}}"/>
+						<input id="anamnBenenomeEdi" name="anamnBenenomeEdi" value="{{anamn.bene_nome}}"/>
 						<input id="anamnBenedatanascEdi" name="anamnBenedatanascEdi" value="{{anamn.anamn_benedatanasc}}"/>
 						<input id="anamnBeneidadeEdi" name="anamnBeneidadeEdi" value="{{anamn.anamn_beneidade}}"/>
 						<input id="anamnPainomeEdi" name="anamnPainomeEdi" value="{{anamn.anamn_painome}}"/>
@@ -1164,16 +1165,7 @@
 
 						<input id="anamnBrinquedopreferidosquaisEdi" name="anamnBrinquedopreferidosquaisEdi" value="{{anamn.anamn_brinquedopreferidosquais}}"/>
 						<input id="anamnObssocialEdi" name="anamnObssocialEdi" value="{{anamn.anamn_obssocial}}"/>
-						<!--Sonoro - musical-->
-						<input id="anamnContinstEdi" name="anamnContinstEdi" value="{{anamn.anamn_continst}}"/>
-						<input id="anamnMusicainfEdi" name="anamnMusicainfEdi" value="{{anamn.anamn_musicainf}}"/>
-						<input id="anamnPrefinstrumEdi" name="anamnPrefinstrumEdi" value="{{anamn.anamn_prefinstrum}}"/>
-						<input id="anamnPrefmusicaEdi" name="anamnPrefmusicaEdi" value="{{anamn.anamn_prefmusica}}"/>
-						<input id="anamnAmbsonoinfEdi" name="anamnAmbsonoinfEdi" value="{{anamn.anamn_ambsonoinf}}"/>
-						<input id="anamnPrefmusicapaisEdi" name="anamnPrefmusicapaisEdi" value="{{anamn.anamn_prefmusicapais}}"/>
-						<input id="anamnMusicarechacoEdi" name="anamnMusicarechacoEdi" value="{{anamn.anamn_musicarechaco}}"/>
-						<input id="anamnObsmusicaEdi" name="anamnObsmusicaEdi" value="{{anamn.anamn_obsmusica}}"/>
-						<!--Escolaridade-->
+						<!--Grupo-->
 						<input id="anamnEscolaEdi" name="anamnEscolaEdi" value="{{anamn.anamn_escola}}"/>
 						<input id="anamnTempoEdi" name="anamnTempoEdi" value="{{anamn.anamn_tempo}}"/>
 						<input id="anamnTurnoEdi" name="anamnTurnoEdi" value="{{anamn.anamn_turno}}"/>
@@ -1375,12 +1367,6 @@
 												</a>
 											</li>
 											<li>
-												<a data-toggle="tab" href="#music">
-													<i class="red ace-icon fa fa-hashtag bigger-120"></i>
-													Sonoro - musical
-												</a>
-											</li>
-											<li>
 												<a data-toggle="tab" href="#esc">
 													<i class="brown ace-icon fa fa-graduation-cap bigger-120"></i>
 													Escolaridade
@@ -1412,11 +1398,35 @@
 													<!--OBSERVAÇÃO Não é necessário o beneficiário estar cadastrado previamente no sistema pois pode ser o primeiro contato-->
 													<br>
 												</div>
-												<div class="col-xs-12 col-sm-6">
+												<div class="col-xs-12">
+													<table>
+														<tr>
+															<td>
+																<label>
+																	<input name="contatoTipo" id="contatoTipo_primeiro" type="radio"  class="ace" onchange="javascript:inputTrue()">
+																	<span class="lbl"> Primeiro contato</span>
+																</label>
+															</td>
+															
+														</tr>
+														<tr>
+															<td>
+																<label>
+																	<input name="contatoTipo" id="contatoTipo_exist" type="radio" class="ace" onchange="javascript:inputFalse()">
+																	<span class="lbl"> Contato pré-existente informações básicas oriundas do cadastro do beneficiário.</span>
+																</label>
+															</td>
+														</tr>
+														<tr>
+															<td>&nbsp;</td>
+														</tr>
+													</table>
+												</div>
+												<div class="col-xs-6">
 													<label> Beneficiário</label>
-													<div class="form-group">
-														<div class="col-xs-12 col-sm-6">
-															<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" class="form-control" onchange="javascript:atualizaDadosbene();" >
+													<div class="form-group" name="exibeSelect" id="exibeSelect">
+														<div class="col-sm-6">
+															<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene();" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -1424,12 +1434,27 @@
 															</select>
 														</div>
 													</div>
-													<div class="form-group" >
-														<div class="col-xs-12 col-sm-6">
-															<input id="anamnBenenome" name="anamnBenenome" class="form-control" type="text" />
+													<div class="form-group" name="exibetext" id="exibetext" hidden>
+														<div class="col-sm-12">
+															<input id="anamnBenenome" name="anamnBenenome" type="text" type="text" style="width:100%;" />
 														</div>
 													</div>
-																										
+													<div class="alert alert-warning" name="messagemPre" id="messagemPre" hidden>
+														<button type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														<strong>Os dados de identificação abaixo, serão preenchidos automaticamente. </strong>
+														<!--OBSERVAÇÃO Não é necessário o beneficiário estar cadastrado previamente no sistema pois pode ser o primeiro contato-->
+														<br>
+													</div>
+													<div class="alert alert-danger" name="messagemPri" id="messagemPri" hidden>
+														<button type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														<strong>Os dados de identificação abaixo devem ser preenchidos obrigatoriamente. </strong>
+														
+														<br>
+													</div>													
 													<div class="row">
 														
 														<div class="col-xs-12 col-sm-6">
@@ -1437,13 +1462,13 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-4">
-																		<input id="anamnBenedatanasc" name="anamnBenedatanasc" type="date"  readonly="true">
+																		<input id="anamnBenedatanasc" name="anamnBenedatanasc" type="date" readonly="true">
 																	</div>
 																</div>
 															</div>
 														</div>
-														<div class="col-xs-12 col-sm-6">
-															<label> Idade:&nbsp;&nbsp;</label><span class="label label-sm label-warning arrowed arrowed-righ">Idade no dia da realização da anamnese.</span><!--idade beneficiário-->
+														<div class="col-xs-12 col-sm-3">
+															<label> Idade:</label><!--idade beneficiário-->
 															<div class="row">
 																<div class="input-group">
 																	<div class="col-sm-3">
@@ -6472,72 +6497,6 @@
 												</div>	
 										
 											</div>
-											<div id="music" class="tab-pane fade">
-												<div class="alert alert-warning">
-													<button type="button" class="close" data-dismiss="alert">
-														<i class="ace-icon fa fa-times"></i>
-													</button>
-													<strong>Sonoro - musical:</strong>
-													<br>
-												</div>
-												<div class="col-sm-12">
-													<table>
-														<thead>
-
-														</thead>
-														<tbody>
-															<tr>
-																<td><label>Contato anterior com instrumentos musicais:</label></td>
-															</tr>
-															<tr>
-																<td><input type="text" name="anamnContinst" id="anamnContinst" placeholder="" class="form-control" /></td>
-															</tr>
-															<tr>
-																<td><label>Músicas da infância:</label></td>
-															</tr>
-															<tr>
-																<td><input type="text" name="anamnMusicainf" id="anamnMusicainf" placeholder="" class="form-control" /></td>
-															</tr>
-															<tr>
-																<td><label>Preferências instrumentais:</label></td>
-															</tr>
-															<tr>
-																<td><input type="text" name="anamnPrefinstrum" id="anamnPrefinstrum" placeholder="" class="form-control" /></td>
-															</tr>
-															<tr>
-																<td><label>Preferências musicais (cantores/ bandas):</label></td>
-															</tr>
-															<tr>
-																<td><input type="text" name="anamnPrefmusica" id="anamnPrefmusica" placeholder="" class="form-control" /></td>
-															</tr>
-															<tr>
-																<td><label>Ambiente sonoro durante a infância:</label></td>
-															</tr>
-															<tr>
-																<td><input type="text" name="anamnAmbsonoinf" id="anamnAmbsonoinf" placeholder="" class="form-control" /></td>
-															</tr>
-															<tr>
-																<td><label>Preferência musical dos pais:</label></td>
-															</tr>
-															<tr>
-																<td><input type="text" name="anamnPrefmusicapais" id="anamnPrefmusicapais" placeholder="" class="form-control" /></td>
-															</tr>
-															<tr>
-																<td><label>Rechaços:</label></td>
-															</tr>
-															<tr>
-																<td><input type="text" name="anamnMusicarechaco" id="anamnMusicarechaco" placeholder="" class="form-control" /></td>
-															</tr>
-															<tr>
-																<td><label>Observações:</label></td>
-															</tr>
-															<tr>
-																<td><textarea type="text" name="anamnObsmusica" id="anamnObsmusica" placeholder="" class="form-control" style="width: 1000px; font-size:11px;"></textarea></td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-											</div>
 											<div id="esc" class="tab-pane fade">
 												<div class="alert alert-warning">
 													<button type="button" class="close" data-dismiss="alert">
@@ -7117,7 +7076,7 @@
 													<label>Terapeuta que realizou a anamnese</label>
 													<div class="form-group">
 														<div class="col-xs-8">
-															<select name="anamnTerapeutaid" id="anamnTerapeutaid" class="chosen-select" onchange="carregarImagem();" >
+															<select name="anamnTerapeutaid" id="anamnTerapeutaid" class="chosen-select"  >
 																{{#each usuarios}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
 																{{/each}}
@@ -7125,14 +7084,6 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-xs-12" id="carimbo" >
-													<label for="carimbo">Carimbo e Assinatura:</label>
-													<br>
-													<!-- Div para mostrar a imagem -->
-													<div id="previewCarimbo">
-														<img id="previewImage" src="data:image/png;base64, {{usuarios.usuario_img}}" alt="Visualização do carimbo e assinatura" style="max-width: 100%; max-height: 200px;">
-													</div>
-												</div>	
 																								
 												<div class="col-xs-12 " >
 													<label class="hidden" for="id-date-picker-1">Data de digitação no sistema</label>

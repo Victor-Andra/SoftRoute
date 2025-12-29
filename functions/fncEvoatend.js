@@ -364,7 +364,7 @@ module.exports = {FiltroEvoatend,
                 })
 
                 agendaS.forEach((s)=>{
-                    if (!(s.agenda_categoria == "Falta Justificada" || s.agenda_categoria == "Falta Absoluta")){
+                    if (!(s.agenda_categoria == "Falta Justificada")){
                         if (!(s.agenda_categoria == "Feriado")){
                             if ((""+s.agenda_usuid+"") == (""+idTerapeuta+"")){
                                 agendaFinal.push(s);

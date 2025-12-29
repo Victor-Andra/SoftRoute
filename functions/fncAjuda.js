@@ -59,11 +59,9 @@ module.exports = {
     carregaAjuda(req, res) {
         // Usa o modelo já configurado para PortalDoUsuario
         Ajuda.find({ ajuda_lixo: "false" }).then((ajudas) => {
-            Manual.find().then((manual)=>{
-                        manual.sort((a,b) => ((a.manual_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.manual_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.manual_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.manual_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o manual por nome
             console.log("Listagem Realizada de Ajudas de Uso!");
-            res.render("ferramentas/ajuda/ajudaCad", { ajudas, manuals: manual });
-        })}).catch((err) => {
+            res.render("ferramentas/ajuda/ajudaCad", { ajudas });
+        }).catch((err) => {
             console.error(err);
             req.flash("error_message", "Houve um erro ao listar Ajudas");
             res.redirect('/admin/erro');
