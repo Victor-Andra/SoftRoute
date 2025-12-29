@@ -2228,6 +2228,7 @@ module.exports = {
                                     }
                                     return false;
                                 })
+                                console.log("conv_id: "+conv_id) //Por algum motivo sem essa linha da erro ao tentar acessar o objeto conv_id.
                                 Conv.findOne({_id: conv_id}).then((conv)=>{
                                     conv_nome = conv.conv_nome || "";
                                     at.sort(function(a, b) {
