@@ -109,49 +109,49 @@
 			}
 			
 			function controlaCategoria() {
-    const origem = document.getElementById("atendOrg").value;
-    const selectEl = document.getElementById("atendCategoria");
-    
-    // Limpa opções
-    selectEl.innerHTML = '';
+				const origem = document.getElementById("atendOrg").value;
+				const selectEl = document.getElementById("atendCategoria");
+				
+				// Limpa opções
+				selectEl.innerHTML = '';
 
-    let opcoes = [];
-    let valorPadrao = "Apoio";
+				let opcoes = [];
+				let valorPadrao = "Apoio";
 
-    if (origem === "Padrão") {
-        opcoes = [{ value: "Padrão", label: "Padrão" }];
-        valorPadrao = "Padrão";
-    } else {
-        opcoes = [
-            { value: "Apoio", label: "Apoio" },
-            { value: "Extra", label: "Extra" },
-            { value: "Falta", label: "Falta" },
-            { value: "Falta Justificada", label: "Falta Justificada" },
-            { value: "Falta Absoluta", label: "Falta Absoluta" },
-            { value: "Feriado", label: "Feriado" },
-            { value: "Glosa", label: "Glosa" },
-            { value: "Pais", label: "Pais" },
-            { value: "Substituição", label: "Substituto" },
-            { value: "SubstitutoFixo", label: "Substituto Fixo" },
-            { value: "Supervisão", label: "Supervisão" }
-        ];
-    }
+				if (origem === "Padrão") {
+					opcoes = [{ value: "Padrão", label: "Padrão" }];
+					valorPadrao = "Padrão";
+				} else {
+					opcoes = [
+						{ value: "Apoio", label: "Apoio" },
+						{ value: "Extra", label: "Extra" },
+						{ value: "Falta", label: "Falta" },
+						{ value: "Falta Justificada", label: "Falta Justificada" },
+						{ value: "Falta Absoluta", label: "Falta Absoluta" },
+						{ value: "Feriado", label: "Feriado" },
+						{ value: "Glosa", label: "Glosa" },
+						{ value: "Pais", label: "Pais" },
+						{ value: "Substituição", label: "Substituto" },
+						{ value: "SubstitutoFixo", label: "Substituto Fixo" },
+						{ value: "Supervisão", label: "Supervisão" }
+					];
+				}
 
-    // Adiciona opções
-    opcoes.forEach(opt => {
-        const option = document.createElement("option");
-        option.value = opt.value;
-        option.textContent = opt.label;
-        selectEl.appendChild(option);
-    });
+				// Adiciona opções
+				opcoes.forEach(opt => {
+					const option = document.createElement("option");
+					option.value = opt.value;
+					option.textContent = opt.label;
+					selectEl.appendChild(option);
+				});
 
-    // Define valor padrão (será sobrescrito por carregaBody se necessário)
-    selectEl.value = valorPadrao;
-    document.getElementById("tabilCategoria").value = valorPadrao;
+				// Define valor padrão (será sobrescrito por carregaBody se necessário)
+				selectEl.value = valorPadrao;
+				document.getElementById("tabilCategoria").value = valorPadrao;
 
-    // ✅ Atualiza Chosen
-    $(selectEl).trigger("chosen:updated");
-}
+				// ✅ Atualiza Chosen
+				$(selectEl).trigger("chosen:updated");
+			}
 			function ajustaOption(){
 				document.getElementById("Padrão").style.display = "none";
 			}
@@ -316,7 +316,7 @@
 												<label>Origem Atendimento</label>
 												<div class="form-group">
 														<div class="col-sm-9">
-															<select id="atendOrg" name="atendOrg" class="chosen-select" >
+															<select id="atendOrg" name="atendOrg" class="chosen-select" onchange="controlaCategoria()">
 																<option value="Administrativo">Administrativo</option>
 																<option value="Padrão">Padrão</option>
 															</select>

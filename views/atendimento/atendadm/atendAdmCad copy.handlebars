@@ -30,23 +30,6 @@
 			let convId = document.getElementById("atendConvid").value;
 			document.getElementById("tabilConvid").value = convId;
 		}
-		function atualizaAtendFixo() {
-			const valor = document.getElementById("atendFixo")?.value;
-			const divSubFixo = document.getElementById("divSubFixo");
-			
-			if (valor === "true") {
-				divSubFixo.style.display = ""; // mostra
-			} else {
-				divSubFixo.style.display = "none"; // esconde
-			}
-			
-			// ✅ Opcional: disparar atualização do Chosen nos selects internos (caso estejam ocultos/escondidos)
-			setTimeout(() => {
-				if (valor === "true") {
-					$('#atendFixoTerapeutaid, #atendFixoTerapiaid').trigger('chosen:updated');
-				}
-			}, 100);
-		}
 
 		function carregaValores(){
 			let teraId = document.getElementById("atendTerapiaid").value;
@@ -139,7 +122,6 @@
 			carregaValores();
 			// Garante que o estado inicial da categoria esteja correto
 			controlaCategoria();
-			atualizaAtendFixo();
 		}
 
 		// ✅ FUNÇÃO ATUALIZADA PARA SELECT2 ✅
@@ -328,18 +310,9 @@
 												</div>
 											</div>
 
-											<label>Substituto Fixo?</label>
-											<div class="form-group">
-												<div class="col-sm-3">
-													<select id="atendFixo" name="atendFixo" class="chosen-select"  onchange="atualizaAtendFixo()">
-														<option value="">-</option>
-														<option value="true">Sim</option>
-														<option value="false">Não</option>
-													</select>
-												</div>
-												<i class="menu-icon fa fa-refresh red"></i>
-											</div>
-											
+											<label {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}}>
+												Substituto Fixo <input id="atendFixoCheck" type="checkbox" onchange="toggleDivSubFixo()">
+											</label>
 
 											<div class="row">
 												<div class="col-xs-12">
@@ -425,7 +398,7 @@
 																</div>
 															</div>
 
-															<div class="col-xs-12 col-sm-4" id="divSubFixo" style="display: none;">
+															<div class="col-xs-12 col-sm-4" id="divSubFixo" {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}}>
 																<div class="widget-box">
 																	<div class="widget-header">
 																		<h4 class="widget-title">Dados de Sub Fixo</h4>
@@ -552,19 +525,18 @@
 																</div>
 															</div>
 														</div>
-														<div class="col-xs-12 col-sm-4" hidden>
-															<div class="row">
-																<label>Evolução do atendimento</label>
-																<div class="form-group">
-																	<div class="col-sm-12">
-																		<textarea id="atendObs" name="atendObs" placeholder="" class="form-control" rows="3"></textarea>
-																	</div>
+
+														<div class="row">
+															<label>Evolução do atendimento</label>
+															<div class="form-group">
+																<div class="col-sm-12">
+																	<textarea id="atendObs" name="atendObs" placeholder="" class="form-control" rows="3"></textarea>
 																</div>
-																<div class="hidden">
-																	<input type="hidden" id="tabilTerapeutaId" name="tabilTerapeutaId" value="" />
-																	<input type="hidden" id="tabilValorcredit" name="tabilValorcredit" value="" />
-																	<input type="hidden" id="tabilValordebit" name="tabilValordebit" value="" />
-																</div>
+															</div>
+															<div class="hidden">
+																<input type="hidden" id="tabilTerapeutaId" name="tabilTerapeutaId" value="" />
+																<input type="hidden" id="tabilValorcredit" name="tabilValorcredit" value="" />
+																<input type="hidden" id="tabilValordebit" name="tabilValordebit" value="" />
 															</div>
 														</div>
 													</div>
