@@ -359,7 +359,7 @@ carregaDashadmininOLD4(req, res) {
     const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
     const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+    
     const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
 
     // === Definir período (filtro ou mês atual) ===
@@ -646,7 +646,7 @@ carregaDashadminin(req, res) {
     const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
     const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+    
     const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
 
     // === Definir período (filtro ou mês atual) ===

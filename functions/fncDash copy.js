@@ -359,7 +359,7 @@ module.exports = {
         const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
 
         // === Definir período: mês atual ou via query string ===
         let seg, sex;
@@ -609,7 +609,7 @@ module.exports = {
         const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
         const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
 
         // === Definir período: mês atual ou via query string ===
@@ -943,7 +943,7 @@ Bene.find().then((todosBeneEvolucao) => {
     const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
     const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+    
     const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
 
     // === Definir período: mês atual ou via query string ===
@@ -1192,7 +1192,7 @@ carregaDashadminin(req, res) {
     const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
     const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+    
     const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
 
     // === Definir período (filtro ou mês atual) ===

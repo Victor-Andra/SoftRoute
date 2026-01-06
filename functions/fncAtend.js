@@ -1285,7 +1285,7 @@ module.exports = {
         const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
         const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
 
         const rawIni = req.body.dataIni;
@@ -1970,9 +1970,6 @@ module.exports = {
                                             //console.log("rab.dt: "+rab.dt)
                                         }
                                         categorias = atend.atend_categoria;
-                                        console.log("categorias: " + categorias);
-                                        console.log("_id: " + atend._id);
-                                        console.log("Falta Absoluta" == categorias);
                                         if (atend.atend_fixo == "true"){
                                             terapiaAtend = atend.atend_fixoterapiaid;
                                             terapeutaAtend = atend.atend_fixoterapeutaid;
@@ -4923,7 +4920,7 @@ module.exports = {
         const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
         const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
 
         let rel = [];
@@ -5151,7 +5148,7 @@ module.exports = {
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
 
         const periodoDe = fncGeral.getDataInvert(req.body.dataIni);
         const periodoAte = fncGeral.getDataInvert(req.body.dataFim);
@@ -5600,7 +5597,7 @@ module.exports = {
             const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
             const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
             const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-            const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+            
             const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
             const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
 
