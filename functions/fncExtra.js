@@ -23,7 +23,7 @@ var Extra = getModel("SoftRoute", 'tb_extra', extraClass.ExtraSchema)
 
 //Tabelas Extrangeiras
 var Agenda = getModel("SoftRoute", 'tb_agenda', agendaClass.AgendaSchema)
-var Ano = getModel("SoftRoute", 'tb_ano', anoClass.AnoSchema)
+var Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
 var Atend = getModel("SoftRoute", 'tb_atend', atendClass.AtendSchema)
 var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
 var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)

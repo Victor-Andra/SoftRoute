@@ -29,7 +29,7 @@ const funcaoClass = require("../models/funcao")
 
 //Tabelas Extrangeiras
 var Agenda = getModel("SoftRoute", 'tb_agenda', agendaClass.AgendaSchema)
-var Ano = getModel("SoftRoute", 'tb_ano', anoClass.AnoSchema)
+var Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
 var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
 var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
 var Convcre = getModel("SoftRoute", 'tb_convcre', convcreClass.ConvcreSchema)

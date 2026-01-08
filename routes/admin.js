@@ -145,6 +145,11 @@ const evoatendClass = require("../models/evoatend")
 var Evoatend = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema);//getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
 const fncEvoatend = require("../functions/fncEvoatend")
 
+//Guias de Atendimento
+const guiaClass = require("../models/evoatend")
+var Guia = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema);//getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
+const fncGuia= require("../functions/fncGuia")
+
 //Agenda Técnicos
 const agendaTecClass = require("../models/agenda")
 var AgendaTec = getModel("softroute", 'tb_agenda', agendaTecClass.AgendaSchema);//getModel("softroute", 'tb_agenda', agendaTecClass.AgendaSchema)
@@ -2336,6 +2341,18 @@ router.post('/area/evol/evoatendrankingFil', fncGeral.IsAuthenticated, (req,res)
 })
 
 
+//Menu Guia ** Area Administrativa   
+//Carrega Cadastro de Mapp
+//------------------------------------------------------------------------------------------------
+router.get('/guia/guiaLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de evoluções.
+    fncGuia.listaGuia(req, res);
+})
+
+router.post('/guia/guiaLilfil', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
+    fncGuia.filtraGuialis(req, res);
+})
+
+//------------------------------------------------------------------------------------------------
 
 //Menu Minha Agenda Area Tecnicos
 router.get("/area/magenda/LisD", fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Agenda dos técnicos Do Dia.
