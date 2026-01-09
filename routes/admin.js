@@ -147,7 +147,7 @@ const fncEvoatend = require("../functions/fncEvoatend")
 
 //Guias de Atendimento
 const guiaClass = require("../models/evoatend")
-var Guia = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema);//getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
+var Evoatend = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema);//getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
 const fncGuia= require("../functions/fncGuia")
 
 //Agenda Técnicos
@@ -2352,6 +2352,9 @@ router.post('/guia/guiaLilfil', fncGeral.IsAuthenticated, (req,res) =>{//direcio
     fncGuia.filtraGuialis(req, res);
 })
 
+router.post('/guia/addguia', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
+    fncGuia.adicionarGuia(req, res);
+})
 //------------------------------------------------------------------------------------------------
 
 //Menu Minha Agenda Area Tecnicos

@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const fncGeral = require('../functions/fncGeral')
 const ObjectId = mongoose.Types.ObjectId
 const { getModel } = require('../functions/fncGeral');
-
+const { GuiaSchema } = require('../models/guia');//Isto é um objeto de Guia
 
 // Esquema Agenda
 // Criado por: Wagner Cintra
@@ -45,12 +45,7 @@ const AgendaSchema = mongoose.Schema({
     agenda_log :{ type: String, require: false }, //Log das alterações
     agenda_usucad :{ type: String, require: false },
     //Guia e Senha para Pagamento Financeiro
-    agenda_guianum :{ type: String, required: false },// Número Guia Pré Autorização Convênio
-    agenda_guiadatacad :{ type: Date, required: false },// Data da Solicitação Guia
-    agenda_guiasenha :{ type: String, required: false },// Senha Autorização Convênio para Pagamento
-    agenda_guiasenhadatacad :{ type: Date, required: false },// Senha Autorização Convênio para Pagamento
-    //Guia Controle CRUD
-    agenda_guialog :{ type: String, require: false }
+    agenda_guia :{ type: GuiaSchema, require: false }//Isto é um objeto de Guia
 })
 
 // Construtor Agenda
@@ -94,11 +89,7 @@ class Agenda{
         agenda_usuedi, //Usuário adm que alterou
         agenda_log, //Log das alterações
         agenda_usucad,
-        agenda_guianum,// Número Guia Pré Autorização Convênio
-        agenda_guiadatacad,// Data da Solicitação Guia
-        agenda_guiasenha,// Senha Autorização Convênio para Pagamento
-        agenda_guiasenhadatacad,// Data da Senha de Autorizacao
-        agenda_guialog,// Guia Log
+        agenda_guia
         ){
         this.agenda_data = agenda_data,
         this.agenda_hora = agenda_hora,
@@ -135,11 +126,7 @@ class Agenda{
         this.agenda_usuedi = agenda_usuedi, //Usuário adm que alterou
         this.agenda_log = agenda_log, //Log das alterações
         this.agenda_usucad = agenda_usucad,
-        this.agenda_guianum = agenda_guianum,// Número Guia Pré Autorização Convênio
-        this.agenda_guiadatacad = agenda_guiadatacad,// Data da Solicitação Guia
-        this.agenda_guiasenha = agenda_guiasenha,// Senha Autorização Convênio para Pagamento
-        this.agenda_guiasenhadatacad = agenda_guiasenhadatacad,// Data da Senha de Autorizacao
-        this.agenda_guialog = agenda_guialog// Guia Log
+        this.agenda_guia = agenda_guia//Isto é um objeto de Guia
     }
 }
 

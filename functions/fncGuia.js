@@ -56,308 +56,534 @@ class FiltroEvoatend{
 }
 
 module.exports = {FiltroEvoatend,
-    filtraGuialis(req, res){
+
+    filtraGuialisOLD(req, res, resposta) {
         let db = req.cookies['preferredDb'];
-        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
-        Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
-        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
-        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        // Certifique-se de que Usuario e Ano estão importados no topo do arquivo
+        // Ex: const Usuario = require('../models/Usuario'); const Ano = require('../models/Ano');
 
-        let filtros = new fncGeral.Filtros();
-        let lvlUsu = req.cookies['lvlUsu'];
-        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
-        arrayIds.forEach((id)=>{
-            if(id == lvlUsu){
-                isAgendaTerapeuta = true;
-            }
-        })
-        let idTerapeuta = req.cookies['idUsu'];
+        if (!resposta || typeof resposta !== 'object') {
+            resposta = { texto: '', sucesso: false };
+        }
         let flash = new Resposta();
-        let seg = new Date(req.body.dataFinal);
-        let sex = new Date(req.body.dataFinal);
-        seg.setHours(0);
-        seg.setMinutes(0);
-        seg.setSeconds(0);
-        sex.setHours(23);
-        sex.setMinutes(59);
-        sex.setSeconds(59);
-        let tipoPessoa = req.body.atendTipoPessoa;
-        let tipoData = req.body.tipoData;
+        flash.texto = resposta.texto;
+        flash.sucesso = resposta.sucesso;
 
-        switch (tipoData){
-            case "Ano/Mes":
-                dataIni = new Date();
-                let mesIni = parseInt(req.body.mesAtend);//UTCMonth = 0-11
-                let anoIni = parseInt(req.body.anoAtend);
-                
-                dataIni.setDate(01);
-                dataIni.setFullYear(anoIni);
-                dataIni.setUTCMonth(mesIni);
-                dataIni.setSeconds(00);
-                dataIni.setMinutes(00);
-                dataIni.setHours(00);
-                
-                dataFim = new Date();
-                dataFim.setFullYear(anoIni);
-                dataFim.setUTCMonth(mesIni+1);
-                dataFim.setDate(01);
-                dataFim.setDate(dataFim.getDate()-1);
-                dataFim.setHours(23);
-                dataFim.setMinutes(59);
-                dataFim.setSeconds(59);
+        // Receber dados do formulário
+        const tipoData = req.body.tipoData;
+        const anoAtend = req.body.anoAtend;
+        const mesAtend = req.body.mesAtend;
+        const dataFil = req.body.dataFil;
+        const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
+        const atendBeneficiario = req.body.atendBeneficiario;
 
-                break;
-            case "Semana":
-                data = req.body.dataFinal;
-                ano = data.substring(0,4);
-                mes = data.substring(5,7);
-                dia = data.substring(8,10);
+        console.log("🔍 [INPUTS DO FORMULÁRIO]");
+        console.log("→ tipoData:", tipoData);
+        console.log("→ anoAtend:", anoAtend);
+        console.log("→ mesAtend:", mesAtend);
+        console.log("→ dataFil:", dataFil);
+        console.log("→ atendTipoPessoa:", atendTipoPessoa);
+        console.log("→ atendBeneficiario:", atendBeneficiario);
 
-                seg = new Date();
-                seg.setFullYear(ano);
-                seg.setUTCMonth(mes);
-                seg.setUTCDate(dia);
-                seg.setHours(0);
-                seg.setMinutes(0);
-                seg.setSeconds(0);
+        let dataIni, dataFim;
 
-                sex = new Date();
-                sex.setFullYear(ano);
-                sex.setUTCMonth(mes);
-                sex.setUTCDate(dia);
-                sex.setHours(23);
-                sex.setMinutes(59);
-                sex.setSeconds(59);
+        if (tipoData === "Ano/Mes") {
+            const ano = parseInt(anoAtend);
+            const mes = parseInt(mesAtend);
+            if (isNaN(ano) || isNaN(mes)) {
+                console.log("❌ Ano ou mês inválido");
+                return res.render('admin/erro', { message: "Ano ou mês inválido." });
+            }
+            dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
+            dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
 
-                switch (seg.getUTCDay()){
-                    case 0://DOM
-                        seg.setUTCDate(seg.getUTCDate() + 1);
-                        sex.setUTCDate(sex.getUTCDate() + 5);
-                        break;
-                    case 1://SEG
-                        sex.setUTCDate(sex.getUTCDate() + 4);
-                        break;
-                    case 2://TER
-                        seg.setUTCDate(seg.getUTCDate() - 1);
-                        sex.setUTCDate(sex.getUTCDate() + 3);
-                        break;
-                    case 3://QUA
-                        seg.setUTCDate(seg.getUTCDate() - 2);
-                        sex.setUTCDate(sex.getUTCDate() + 2);
-                        break;
-                    case 4://QUI
-                        seg.setUTCDate(seg.getUTCDate() - 3);
-                        sex.setUTCDate(sex.getUTCDate() + 1);
-                        break;
-                    case 5://SEX
-                        seg.setUTCDate(seg.getUTCDate() - 4);
-                        break;
-                    case 6://SAB
-                        seg.setUTCDate(seg.getUTCDate() - 5);
-                        sex.setUTCDate(sex.getUTCDate() - 1);
-                        break;
-                    default:
-                        seg.setUTCDate(seg.getUTCDate() + 1);
-                        sex.setUTCDate(sex.getUTCDate() + 5);
-                        break;
+        } else if (tipoData === "Dia") {
+            if (!dataFil) {
+                console.log("❌ Data não informada para filtro 'Dia'");
+                return res.render('admin/erro', { message: "Data não informada." });
+            }
+            const [ano, mes, dia] = dataFil.split('-').map(Number);
+            dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
+            dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
+
+        } else if (tipoData === "Semana") {
+            console.log("❌ Filtro 'Semana' não implementado");
+            return res.render('admin/erro', { message: "Filtro por semana ainda não implementado." });
+        } else {
+            console.log("❌ Tipo de filtro desconhecido:", tipoData);
+            return res.render('admin/erro', { message: "Tipo de filtro inválido." });
+        }
+
+        console.log("📅 [INTERVALO DE DATAS GERADO]");
+        console.log("→ dataIni (ISO):", dataIni);
+        console.log("→ dataFim (ISO):", dataFim);
+
+        // Montar critérios de busca na Agenda
+        let agendaQuery = {
+            agenda_data: { $gte: dataIni, $lte: dataFim }
+        };
+
+        if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
+            agendaQuery.agenda_beneid = atendBeneficiario;
+            console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
+        }
+
+        console.log("🔎 [QUERY FINAL PARA AGENDA]");
+        console.log(agendaQuery);
+
+        // Buscar agendas
+        Agenda.find(agendaQuery)
+            .then((agendas) => {
+                console.log("✅ [RESULTADO DA AGENDA]");
+                console.log("→ Total de registros encontrados:", agendas.length);
+                if (agendas.length > 0) {
+                    console.log("→ Exemplo do primeiro registro:", agendas[0]);
                 }
-                dataIni = seg.toISOString();
-                dataFim = sex.toISOString();
 
-                //console.log("req.body.dataFinal:"+req.body.dataFinal)
-                //console.log("seg:"+seg);
-                //console.log("sex:"+sex);
-                
-                break;
-            case "Dia":
-                data = req.body.dataFinal;
-                ano = data.substring(0,4);
-                mes = data.substring(5,7);
-                dia = data.substring(8,10);
+                const extraIds = agendas.map(a => a._id);
+                console.log("→ IDs coletados (extraIds):", extraIds);
 
-                dataIni = new Date();
-                dataIni.setFullYear(ano);
-                dataIni.setUTCMonth(mes);
-                dataIni.setUTCDate(dia);
-                dataIni.setHours(0);
-                dataIni.setMinutes(0);
-                dataIni.setSeconds(0);
+                // Formatar campos de exibição
+                agendas.forEach((a) => {
+                    const data = new Date(a.agenda_data);
+                    let hor = data.getUTCHours().toString().padStart(2, '0');
+                    let min = data.getUTCMinutes().toString().padStart(2, '0');
+                    a.agenda_hora = `${hor}:${min}`;
+                    a.agenda_data_dia = fncGeral.getDataFMT(data);
+                });
 
-                dataFim = new Date();
-                dataFim.setFullYear(ano);
-                dataFim.setUTCMonth(mes);
-                dataFim.setUTCDate(dia);
-                dataFim.setHours(23);
-                dataFim.setMinutes(59);
-                dataFim.setSeconds(59);
+                // Carregar beneficiários
+                return Bene.find()
+                    .then((bene) => {
+                        bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
 
-                break;
-            default:
-                data = req.body.dataFinal;
-                ano = data.substring(0,4);
-                mes = data.substring(5,7);
-                dia = data.substring(8,10);
+                        // Carregar terapeutas
+                        return Usuario.find({
+                            usuario_status: "Ativo",
+                            $or: [
+                                { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                                { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                            ]
+                        })
+                        .then((terapeuta) => {
+                            terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
 
-                dataIni = new Date();
-                dataIni.setFullYear(ano);
-                dataIni.setUTCMonth(mes);
-                dataIni.setUTCDate(dia);
-                dataIni.setHours(0);
-                dataIni.setMinutes(0);
-                dataIni.setSeconds(0);
+                            // Carregar horários
+                            return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
+                                .then((horaage) => {
 
-                dataFim = new Date();
-                dataFim.setFullYear(ano);
-                dataFim.setUTCMonth(mes);
-                dataFim.setUTCDate(dia);
-                dataFim.setHours(23);
-                dataFim.setMinutes(59);
-                dataFim.setSeconds(59);
-                break;
-        }
+                                    // Carregar salas
+                                    return Sala.find()
+                                        .then((salas) => {
+                                            salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
 
-        switch (tipoPessoa){
-            case "Geral":
-                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: idTerapeuta, agenda_temp: false }
-                break;
-            case "Beneficiario":
-                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: idTerapeuta, agenda_temp: false, agenda_beneid: req.body.atendBeneficiario };
-                break;
-            default:
-                busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: idTerapeuta, agenda_temp: false }
-                break;
-        }
-        console.log("new Date(dataIni): "+new Date(dataIni))
-        console.log("new Date(dataFim): "+new Date(dataFim))
-        Agenda.find(busca).then((agenda) =>{
-            //console.log("agenda: "+agenda.length)
-            let agendaTempIds = [];
-            let agendaFinal = [];
-            agenda.forEach((as)=>{
-                agendaTempIds.push(as._id);
+                                            // Carregar terapias
+                                            return Terapia.find()
+                                                .then((terapias) => {
+
+                                                    // Carregar convênios
+                                                    return Conv.find()
+                                                        .then((convs) => {
+                                                            convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
+
+                                                            // Carregar anos
+                                                            return Ano.find()
+                                                                .then((anos) => {
+                                                                    // ✅ Tudo carregado — renderizar view SEM atendimentos
+                                                                    console.log("📤 [RENDERIZANDO VIEW]");
+                                                                    console.log("→ extras.length:", agendas.length);
+                                                                    console.log("→ benes.length:", bene.length);
+                                                                    console.log("→ terapeutas.length:", terapeuta.length);
+
+                                                                    res.render('guia/guiaLis', {
+                                                                        extras: agendas,
+                                                                        benes: bene,
+                                                                        terapeutas: terapeuta,
+                                                                        horaages: horaage,
+                                                                        salas: salas,
+                                                                        terapias: terapias,
+                                                                        convs: convs,
+                                                                        anos: anos,
+                                                                        atends: [], // opcional: remova se não usado na view
+                                                                        flash,
+
+                                                                        filtroTipo: tipoData,
+                                                                        filtroAno: anoAtend,
+                                                                        filtroMes: mesAtend,
+                                                                        filtroData: dataFil,
+                                                                        filtroTipoPessoa: atendTipoPessoa,
+                                                                        filtroBeneficiario: atendBeneficiario
+                                                                    });
+                                                                });
+                                                        });
+                                                });
+                                        });
+                                });
+                        });
+                    });
             })
+            .catch((err) => {
+                console.error("💥 ERRO EM filtraGuialis:", err);
+                req.flash("error_message", "Houve um erro ao listar os agendamentos.");
+                res.redirect('/admin/erro');
+            });
+    },
+    filtraGuialis(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        // Garanta que estas importações existem no topo do arquivo:
+        // const Usuario = require('../models/Usuario');
+        // const Ano = require('../models/Ano');
 
-            Agenda.find({ agenda_tempId: {$in: agendaTempIds} }).then((agendaS)=>{
-                let arrayExclusao = [];
-                agendaS.forEach((as)=>{
-                    arrayExclusao.push(as._id);
-                })
-                switch (tipoPessoa){
-                    case "Geral":
-                        busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: idTerapeuta, agenda_temp: true, _id: { $nin: arrayExclusao } }
-                        break;
-                    case "Beneficiario":
-                        busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: idTerapeuta, agenda_temp: true, _id: { $nin: arrayExclusao } };
-                        break;
-                    default:
-                        busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: idTerapeuta, agenda_temp: true, _id: { $nin: arrayExclusao } }
-                        break;
+        if (!resposta || typeof resposta !== 'object') {
+            resposta = { texto: '', sucesso: false };
+        }
+        let flash = new Resposta();
+        flash.texto = resposta.texto;
+        flash.sucesso = resposta.sucesso;
+
+        // Receber dados do formulário
+        const tipoData = req.body.tipoData;
+        const anoAtend = req.body.anoAtend;
+        const mesAtend = req.body.mesAtend;
+        const dataFil = req.body.dataFil;
+        const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
+        const atendBeneficiario = req.body.atendBeneficiario;
+
+        console.log("🔍 [INPUTS DO FORMULÁRIO]");
+        console.log("→ tipoData:", tipoData);
+        console.log("→ anoAtend:", anoAtend);
+        console.log("→ mesAtend:", mesAtend);
+        console.log("→ dataFil:", dataFil);
+        console.log("→ atendTipoPessoa:", atendTipoPessoa);
+        console.log("→ atendBeneficiario:", atendBeneficiario);
+
+        let dataIni, dataFim;
+
+        if (tipoData === "Ano/Mes") {
+            const ano = parseInt(anoAtend);
+            const mes = parseInt(mesAtend);
+            if (isNaN(ano) || isNaN(mes)) {
+                console.log("❌ Ano ou mês inválido");
+                return res.render('admin/erro', { message: "Ano ou mês inválido." });
+            }
+            dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
+            dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
+
+        } else if (tipoData === "Dia") {
+            if (!dataFil) {
+                console.log("❌ Data não informada para filtro 'Dia'");
+                return res.render('admin/erro', { message: "Data não informada." });
+            }
+            const [ano, mes, dia] = dataFil.split('-').map(Number);
+            dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
+            dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
+
+        } else if (tipoData === "Semana") {
+            console.log("❌ Filtro 'Semana' não implementado");
+            return res.render('admin/erro', { message: "Filtro por semana ainda não implementado." });
+        } else {
+            console.log("❌ Tipo de filtro desconhecido:", tipoData);
+            return res.render('admin/erro', { message: "Tipo de filtro inválido." });
+        }
+
+        console.log("📅 [INTERVALO DE DATAS GERADO]");
+        console.log("→ dataIni (ISO):", dataIni);
+        console.log("→ dataFim (ISO):", dataFim);
+
+        // Montar critérios de busca na Agenda
+        let agendaQuery = {
+            agenda_data: { $gte: dataIni, $lte: dataFim }
+        };
+
+        if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
+            agendaQuery.agenda_beneid = atendBeneficiario;
+            console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
+        }
+
+        console.log("🔎 [QUERY FINAL PARA AGENDA]");
+        console.log(agendaQuery);
+
+        // Buscar agendas
+        Agenda.find(agendaQuery)
+            .then((agendas) => {
+                console.log("✅ [RESULTADO DA AGENDA]");
+                console.log("→ Total de registros encontrados:", agendas.length);
+                if (agendas.length > 0) {
+                    console.log("→ Exemplo do primeiro registro:", agendas[0]);
                 }
-                Agenda.find(busca).then((agendaSubs)=>{
 
-                agenda.forEach((a)=>{
-                    let ok = "true";
-                    agendaS.forEach((s)=>{
-                        if (("-"+s.agenda_tempId+"-") == ("-"+a._id+"-")) {
-                            ok = "false";
-                        }
-                    })
-                    if (ok == "true"){
-                        agendaFinal.push(a);
-                    }
-                })
+                // Carregar beneficiários
+                return Bene.find()
+                    .then((bene) => {
+                        bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
 
-                agendaS.forEach((s)=>{
-                    if (!(s.agenda_categoria == "Falta Justificada")){
-                        if (!(s.agenda_categoria == "Feriado")){
-                            if ((""+s.agenda_usuid+"") == (""+idTerapeuta+"")){
-                                agendaFinal.push(s);
-                            }
-                        }
-                    }
-                });
+                        // Carregar terapeutas (usuários)
+                        return Usuario.find({
+                            usuario_status: "Ativo",
+                            $or: [
+                                { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                                { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                            ]
+                        })
+                        .then((terapeuta) => {
+                            terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
 
-                agendaSubs.forEach((s)=>{
-                    if (!(s.agenda_categoria == "Falta Justificada")){
-                        if (!(s.agenda_categoria == "Feriado")){
-                            agendaFinal.push(s);
-                        }
-                    }
-                });
-                agendaFinal.forEach((e)=>{
-                    let dat = new Date(e.agenda_data);
-                    e.agenda_data_dia = fncGeral.getDataFMT(dat);
-                    let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
-                    let min = ""+dat.getMinutes();
-                    if (hora.length == 1){hora = "0" + hora + "";}
-                    if (min.length == 1){min = "0" + min + "";}
-                    e.agenda_hora = hora+":"+min;
-                    //console.log("aux:"+aux)
-                    switch (dat.getUTCDay()){
-                        case 0:
-                            e.agenda_data_semana = "dom"
-                            break;
-                        case 1:
-                            e.agenda_data_semana = "seg"
-                            break;
-                        case 2:
-                            e.agenda_data_semana = "ter"
-                            break;
-                        case 3:
-                            e.agenda_data_semana = "qua"
-                            break;
-                        case 4:
-                            e.agenda_data_semana = "qui"
-                            break;
-                        case 5:
-                            e.agenda_data_semana = "sex"
-                            break;
-                        case 6:
-                            e.agenda_data_semana = "sab"
-                            break;
-                        default:
-                            console.log("erro");
-                            break;
-                    }
-                })
-                agendaFinal.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Guias Realizada!")
-                     Ano.find().then((ano)=>{
-                    Bene.find().then((bene)=>{
-                        bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                        bene.forEach((b)=>{b.bene_nome = b.bene_nome.replace(".","")});
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-                            res.render("guia/guiaLis", {agendas: agendaFinal, anos: ano, terapias: terapia,usuarios: usuario, benes: bene, flash, filtros})
-        })})})})})})}).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as listas!")
-            res.redirect('admin/erro')
-        })
+                            // Criar mapa de usuários por ID (para cadastro/edição)
+                            const usuarioMap = {};
+                            terapeuta.forEach(u => {
+                                usuarioMap[u._id.toString()] = u.usuario_nome;
+                            });
+
+                            // Enriquecer cada agenda com dados formatados
+                            agendas.forEach(a => {
+                                // Formatar data e hora da agenda
+                                const dataAgenda = new Date(a.agenda_data);
+                                const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                                const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+                                a.agenda_hora = `${hor}:${min}`;
+                                a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
+
+                                // Evolução: Sim / Não
+                                a.evolucaoSimNao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '') ? 'Sim' : 'Não';
+
+                                // Dados de cadastro
+                                a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
+                                a.usuarioCadNome = usuarioMap[a.agenda_usucad] || 'Desconhecido';
+
+                                // Dados de edição
+                                a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
+                                a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
+
+                                // Data da senha no formato YYYY-MM-DD (para input date)
+                                a.agenda_datasenha_input = a.agenda_datasenha
+                                    ? new Date(a.agenda_datasenha).toISOString().split('T')[0]
+                                    : '';
+                            });
+
+                            // Carregar demais dados complementares
+                            return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
+                                .then((horaage) => {
+                                    return Sala.find()
+                                        .then((salas) => {
+                                            salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
+                                            return Terapia.find()
+                                                .then((terapias) => {
+                                                    return Conv.find()
+                                                        .then((convs) => {
+                                                            convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
+                                                            return Ano.find()
+                                                                .then((anos) => {
+                                                                    // ✅ Renderizar view com todos os dados
+                                                                    console.log("📤 [RENDERIZANDO VIEW]");
+                                                                    console.log("→ extras.length:", agendas.length);
+                                                                    console.log("→ benes.length:", bene.length);
+                                                                    console.log("→ terapeutas.length:", terapeuta.length);
+
+                                                                    res.render('guia/guiaLis', {
+                                                                        extras: agendas,
+                                                                        benes: bene,
+                                                                        terapeutas: terapeuta,
+                                                                        horaages: horaage,
+                                                                        salas: salas,
+                                                                        terapias: terapias,
+                                                                        convs: convs,
+                                                                        anos: anos,
+                                                                        flash,
+
+                                                                        filtroTipo: tipoData,
+                                                                        filtroAno: anoAtend,
+                                                                        filtroMes: mesAtend,
+                                                                        filtroData: dataFil,
+                                                                        filtroTipoPessoa: atendTipoPessoa,
+                                                                        filtroBeneficiario: atendBeneficiario
+                                                                    });
+                                                                });
+                                                        });
+                                                });
+                                        });
+                                });
+                        });
+                    });
+            })
+            .catch((err) => {
+                console.error("💥 ERRO EM filtraGuialis:", err);
+                req.flash("error_message", "Houve um erro ao listar os agendamentos.");
+                res.redirect('/admin/erro');
+            });
     },
     listaGuia(req, res, resposta) {
         let db = req.cookies['preferredDb'];
-        Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
-        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
 
         let flash = new Resposta();
-    
         if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
             flash.texto = resposta.texto;
             flash.sucesso = resposta.sucesso;
         }
-    
-        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario) => {
-            usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0)); // Ordena o bene por nome
-            console.log("tamanho"+usuario.length)
-             Ano.find().then((ano)=>{
-            Bene.find({ bene_status: "Ativo" }).then((bene) => {
-                bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0)); // Ordena o bene por nome
-                res.render('guia/guiaLis', { terapeutas: usuario, anos: ano, benes: bene, flash });
-            })})}).catch((err) => {
-            console.log(err);
-            req.flash("error_message", "Houve um erro ao listar!");
-            res.redirect('admin/erro');
+
+        // Valores padrão para os filtros na primeira abertura
+        const hoje = new Date();
+        const anoAtual = hoje.getFullYear().toString();
+        const mesAtual = hoje.getMonth().toString(); // string, como no select
+
+        console.log("→ Carregando lista inicial de guias (sem filtro aplicado)");
+        console.log("→ Filtro padrão: Ano =", anoAtual, ", Mês =", mesAtual);
+
+        Usuario.find({
+            usuario_status: "Ativo",
+            $or: [
+                { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+            ]
+        })
+        .then((terapeutas) => {
+            terapeutas.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
+
+            Bene.find({ bene_status: "Ativo" })
+            .then((benes) => {
+                benes.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
+
+                Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
+                .then((horaages) => {
+                    Sala.find()
+                    .then((salas) => {
+                        salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
+                        Terapia.find()
+                        .then((terapias) => {
+                            Conv.find()
+                            .then((convs) => {
+                                convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
+                                Ano.find()
+                                .then((anos) => {
+                                    // Renderiza o formulário em branco (sem agendas)
+                                    res.render('guia/guiaLis', {
+                                        extras: [], // ← lista vazia de agendamentos
+                                        benes: benes,
+                                        terapeutas: terapeutas,
+                                        horaages: horaages,
+                                        salas: salas,
+                                        terapias: terapias,
+                                        convs: convs,
+                                        anos: anos,
+                                        atends: [],
+                                        flash,
+
+                                        // Valores iniciais dos filtros
+                                        filtroTipo: "Ano/Mes",
+                                        filtroAno: anoAtual,
+                                        filtroMes: mesAtual,
+                                        filtroData: "",
+                                        filtroTipoPessoa: "Geral",
+                                        filtroBeneficiario: ""
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        })
+        .catch((err) => {
+            console.error("Erro em listaGuia:", err);
+            req.flash("error_message", "Houve um erro ao carregar o formulário.");
+            res.redirect('/admin/erro');
         });
+    },
+    adicionarGuia: async (req, res, resposta) => {
+        let db = req.cookies['preferredDb'];
+        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        /*
+        await AgendaModel.findByIdAndUpdate(req.body.id, 
+            {$set: {
+                agenda_data : dataAgenda ,
+                agenda_beneid : req.body.agendaBeneid ,
+                agenda_convid : req.body.agendaConvid ,
+                agenda_salaid : req.body.agendaSalaid ,
+                agenda_terapiaid : req.body.agendaTerapiaid ,
+                agenda_usuid : req.body.agendaUsuid ,
+                agenda_categoria : req.body.agendaCateg ,
+                agenda_org : req.body.agendaOrg ,
+                agenda_obs : req.body.agendaObs ,
+                agenda_copia : req.body.agendaCopia,
+                agenda_usuedi: usuarioAtual , //Usuário adm que alterou
+                agenda_log: req.body.agendaLog , //Log das alterações
+                agenda_dataedi : dataAtual
+                }}
+        ).then((res) =>{
+            //console.log("Salvo")
+            resultado = true;
+        }).catch((err) =>{
+            console.log("erro mongo:")
+            console.log(err)
+            resultado = err;
+            //res.redirect('admin/branco')
+        }).finally(()=>{
+            this.filtraGuialis(req, res);
+        })
+        */
+        try {
+            const {
+                agendaId,
+                guia_num,
+                guia_numdatacad,
+                guia_senha,
+                guia_senhadatacad
+            } = req.body;
+
+            const agenda = await Agenda.findById(
+                agendaId,
+                {
+                    'agenda_guia.guia_datacad': 1,
+                    'agenda_guia.guia_usuedi': 1,
+                    'agenda_guia.guia_dataedi': 1
+                }
+            ).lean(); // só leitura
+
+            const agora = new Date().toISOString();
+            const idUsu = String(req.cookies['idUsu']);
+
+            const setObj = {
+                'agenda_guia.guia_num': guia_num,
+                'agenda_guia.guia_numdatacad': guia_numdatacad || null,
+                'agenda_guia.guia_senha': guia_senha,
+                'agenda_guia.guia_senhadatacad': guia_senhadatacad || null
+            };
+
+            if (!agenda || !agenda.agenda_guia?.guia_datacad) {
+                setObj['agenda_guia.guia_usucad'] = idUsu;
+                setObj['agenda_guia.guia_datacad'] = agora;
+            } else {
+                const usuediAtual = agenda.agenda_guia?.guia_usuedi || '';
+                const dataediAtual = agenda.agenda_guia?.guia_dataedi || '';
+
+                setObj['agenda_guia.guia_usuedi'] = usuediAtual ? `${usuediAtual},${idUsu}` : idUsu;
+                setObj['agenda_guia.guia_dataedi'] = dataediAtual ? `${dataediAtual},${agora}` : agora;
+            }
+
+            await Agenda.updateOne(
+                { _id: agendaId },
+                { $set: setObj },
+                { upsert: true } // 🔥 garante que não pare a operação
+            );
+
+            res.json({ ok: true });
+
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ ok: false, message: 'Erro ao salvar guia' });
+        }
     }
 }
