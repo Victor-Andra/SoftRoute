@@ -291,6 +291,11 @@ const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSc
                 json: function(context) {
                     return JSON.stringify(context);
                 },
+                dataISOToDate: function(date) {
+                    if (!date) return '';
+                    const d = new Date(date);
+                    return d.toISOString().slice(0, 10); // YYYY-MM-DD
+                },
                 /**
                  * Helper Handlebars: {{eq a b}}
                  * Criado por: Wagner Cintra

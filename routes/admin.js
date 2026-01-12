@@ -4,7 +4,7 @@ const multer = require('multer')
 const mongoose = require("mongoose")
 const $ = require('jquery')
 const {autenticador} = require("../helpers/autenticador")
-let application = require('./admin')
+let application = require('../routes/admin')
 const connections = require('../serverConnection');
 //funções gerais
 const fncGeral = require("../functions/fncGeral")
@@ -144,6 +144,11 @@ const upload = benefotoClass.upload; // ✅ Importa o upload do Multer
 const evoatendClass = require("../models/evoatend")
 var Evoatend = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema);//getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
 const fncEvoatend = require("../functions/fncEvoatend")
+
+//Guias de Atendimento
+const guiaClass = require("../models/evoatend")
+var Evoatend = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema);//getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
+const fncGuia= require("../functions/fncGuia")
 
 //Agenda Técnicos
 const agendaTecClass = require("../models/agenda")
@@ -1741,13 +1746,6 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
     router.post('/atendimento/relatendbenes', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoBeneFiltro(req,res);
     })
-//Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo e com sessões de terapia 05/12/2025.
-    router.get('/atendimento/relatendbenesec', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.relAtendimentoBenessec(req,res);
-    })
-    router.post('/atendimento/relatendbenesecs', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.relAtendimentoBenesecFiltro(req,res);
-    })
 //Relatório Individual de Atendimentos por Beneficiário.
 //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo 
 //com espaço para assinataura individual, tanto responsável quanto do terapeuta
@@ -2359,6 +2357,21 @@ router.post('/area/evol/evoatendrankingFil', fncGeral.IsAuthenticated, (req,res)
 })
 
 
+//Menu Guia ** Area Administrativa   
+//Carrega Cadastro de Mapp
+//------------------------------------------------------------------------------------------------
+router.get('/guia/guiaLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de evoluções.
+    fncGuia.listaGuia(req, res);
+})
+
+router.post('/guia/guiaLilfil', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
+    fncGuia.filtraGuialis(req, res);
+})
+
+router.post('/guia/addguia', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
+    fncGuia.adicionarGuia(req, res);
+})
+//------------------------------------------------------------------------------------------------
 
 //Menu Minha Agenda Area Tecnicos
 router.get("/area/magenda/LisD", fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Agenda dos técnicos Do Dia.

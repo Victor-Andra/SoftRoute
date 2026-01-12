@@ -7,6 +7,7 @@ const tratClass = require("../models/trat")
 
 
 //Classes Extrangeiras
+const anoClass = require("../models/ano")
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
 const usuarioClass = require("../models/usuario")
@@ -17,6 +18,7 @@ const laudoClass = require("../models/laudo")
 var Trat = getModel("SoftRoute", 'tb_trat', tratClass.TratSchema)
 
 //Tabelas Extrangeiras
+var Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
 var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
 var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
 var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
@@ -42,20 +44,21 @@ module.exports = {
         Bene.find().then((bene)=>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             //console.log("Listagem Realizada bene!")
-            Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-                Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{
-                    terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                    if(resposta.sucesso == ""){
-                        console.log(' objeto vazio');
-                        flash.texto = ""
-                        flash.sucesso = ""
-                    } else {
-                        console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
-                        flash.texto = resposta.texto
-                        flash.sucesso = resposta.sucesso
-                    }
-                    res.render('area/plano/tratLis', {terapeutas: terapeuta, usuarios: usuario, benes: bene, perfilAtual, flash})
-        })})}).catch((err) =>{
+            Ano.find().then((ano)=>{
+                Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
+                    Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                        if(resposta.sucesso == ""){
+                            console.log(' objeto vazio');
+                            flash.texto = ""
+                            flash.sucesso = ""
+                        } else {
+                            console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
+                            flash.texto = resposta.texto
+                            flash.sucesso = resposta.sucesso
+                        }
+                        res.render('area/plano/tratLis', {anos: ano, terapeutas: terapeuta, usuarios: usuario, benes: bene, perfilAtual, flash})
+        })})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')
@@ -289,26 +292,27 @@ module.exports = {
                 Bene.find({bene_nome: { $not: /\./ }}).then((bene) => {//bene_status: "Ativo", 
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     //console.log("Listagem Realizada bene!")
-                    Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{
-                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                        Usuario.find().then((usuario)=>{
-                            usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                        //console.log("Listagem Realizada Usuário!")
-                        /*
-                        if(resposta.sucesso == ""){
-                            console.log(' objeto vazio');
+                    Ano.find().then((ano)=>{
+                        Usuario.find({"usuario_status":{$in: ["Ativo","Inativo"]} , $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{
+                            terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                            Usuario.find().then((usuario)=>{
+                                usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                            //console.log("Listagem Realizada Usuário!")
+                            /*
+                            if(resposta.sucesso == ""){
+                                console.log(' objeto vazio');
+                                flash.texto = ""
+                                flash.sucesso = ""
+                            } else {
+                                console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
+                                flash.texto = resposta.texto
+                                flash.sucesso = resposta.sucesso
+                            }
+                            */
                             flash.texto = ""
-                            flash.sucesso = ""
-                        } else {
-                            console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
-                            flash.texto = resposta.texto
-                            flash.sucesso = resposta.sucesso
-                        }
-                        */
-                        flash.texto = ""
-                        flash.sucesso = "true"
-            res.render('area/plano/tratLis', {trats: trat, usuarios: usuario, terapeutas: terapeuta, benes: bene, perfilAtual, flash})
-        })})})}).catch((err) =>{
+                            flash.sucesso = "true"
+                            res.render('area/plano/tratLis', {anos: ano, trats: trat, usuarios: usuario, terapeutas: terapeuta, benes: bene, perfilAtual, flash})
+        })})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar!")
             res.redirect('admin/erro')

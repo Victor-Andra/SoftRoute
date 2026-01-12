@@ -23,7 +23,7 @@ module.exports = {
         const Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema);
         const Convdeb = getModel(db, 'tb_convdeb', convdebClass.ConvdebSchema);
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
 
         // Função auxiliar: formata data igual ao seu sistema
         const formatDateToBR = (date) => {

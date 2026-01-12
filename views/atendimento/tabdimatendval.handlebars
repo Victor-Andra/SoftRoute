@@ -43,31 +43,42 @@
         </div>
 		<div class="page-content"><!-- .page-content -->
 			<form role="form" action="/menu/atendimento/tabdimAtendimentoValFiltro" method="POST" onsubmit="atualizaDataIni(); atualizaDataFin();">
-			<div class="row">
-				<div class="col-sm-12">
-				<br>
-				<label>Período de:</label>
-				<input style="height: 30px; width: 140px;" id="dataFilDe" name="dataFilDe" type="date" onchange="atualizaDataIni()">
-				<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}">
-
-				<label>até:</label>
-				<input style="height: 30px; width: 140px;" id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
-				<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}">
-
-				<label>Convênio:</label>
-				<select style="height: 30px; width: 250px;" name="relConvid" id="relConvid" class="chosen-select">
-					<option value="766f69643132333435366964">—</option>
-					{{#each convs}}
-					<option value="{{_id}}">{{conv_nome}}</option>
-					{{/each}}
-				</select>
-				<input class="hidden" id="relConvIdFiltro" name="relConvIdFiltro" value="{{filtro.convId}}">
-
-				<button class="btn btn-info btn-sm" type="submit">
-					<i class="ace-icon fa fa-search bigger-110"></i> Pesquisar
-				</button>
-				</div>
-			</div>
+			<table>
+				<tbody>
+					<td>
+						<label>Período de:&nbsp;&nbsp;</label>
+					</td>
+					<td>
+						<input style="height: 30px; width: 140px;" id="dataFilDe" name="dataFilDe" type="date" onchange="atualizaDataIni()">
+						<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}">		
+					</td>
+					<td>
+						<label>&nbsp;&nbsp;até:&nbsp;&nbsp;</label>
+					</td>
+					<td>
+						<input style="height: 30px; width: 140px;" id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
+						<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}">
+					</td>
+					<td>
+						<label>&nbsp;&nbsp;Convênio:&nbsp;&nbsp;</label>
+					</td>
+					<td style="width: 400px;">
+						<select style="height: 30px; width: 250px;" name="relConvid" id="relConvid" class="chosen-select">
+							<option value="766f69643132333435366964">—</option>
+							{{#each convs}}
+							<option value="{{_id}}">{{conv_nome}}</option>
+							{{/each}}
+						</select>
+						<input class="hidden" id="relConvIdFiltro" name="relConvIdFiltro" value="{{filtro.convId}}">
+					</td>
+					<td>&nbsp;&nbsp;
+						<button class="btn btn-info btn-sm" type="submit">
+							<i class="ace-icon fa fa-search bigger-110"></i> Pesquisar
+						</button>
+					</td>
+				</tbody>
+			</table>
+			
 			</form>
 
 			<div class="row">

@@ -92,7 +92,7 @@ const fncEstado = require("../functions/fncEstado")
 
 //ano, cadastro dos Anos de Atividades 
 const anoClass = require("../models/ano")
-const Ano = getModel("softroute", 'tb_ano', anoClass.AnoSchema)
+const Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
 const fncAno = require("../functions/fncAno")
 
 //usuario, cadastro dos usuários

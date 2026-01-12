@@ -35,77 +35,122 @@
 				console.log(dataIso);
 				document.getElementById("agendaData").value = dataFmt;
 			}
+			function controlaCategoria() {
+				const origem = document.getElementById("agendaOrg").value;
+				const selectEl = document.getElementById("agendaCateg");
+				
+				// Limpa opções
+				selectEl.innerHTML = '';
+
+				let opcoes = [];
+				let valorPadrao = "Apoio";
+
+				if (origem === "Padrão") {
+					opcoes = [{ value: "Padrão", label: "Padrão" }];
+					valorPadrao = "Padrão";
+				} else {
+					opcoes = [
+						{ value: "Apoio", label: "Apoio" },
+						{ value: "Extra", label: "Extra" },//
+						{ value: "Falta", label: "Falta" },
+						{ value: "Falta Justificada", label: "Falta Justificada" },//Falta N evoluir
+						{ value: "Falta Absoluta", label: "Falta Absoluta" },//Falta N evoluir
+						{ value: "Feriado", label: "Feriado" },//
+						{ value: "Glosa", label: "Glosa" },//
+						{ value: "Pais", label: "Pais" },
+						{ value: "Substituição", label: "Substituto" },
+						{ value: "SubstitutoFixo", label: "Substituto Fixo" },//Padrao
+						{ value: "Supervisão", label: "Supervisão" }//
+					];
+				}
+
+				// Adiciona opções
+				opcoes.forEach(opt => {
+					const option = document.createElement("option");
+					option.value = opt.value;
+					option.textContent = opt.label;
+					selectEl.appendChild(option);
+				});
+
+				// Define valor padrão
+				selectEl.value = valorPadrao;
+
+				// ✅ Atualiza Chosen
+				if (typeof jQuery !== 'undefined') {
+					$(selectEl).trigger("chosen:updated");
+				}
+			}
 			function carregaBody(){
-    // 1. Preenche os valores nos selects (DOM puro)
-    var dataEdi = document.getElementById("agendaDataEdi").value;
-    var horaEdi = document.getElementById("agendaHoraEdi").value;
-    var orgEdi = document.getElementById("agendaOrgEdi").value;
-    var categEdi = document.getElementById("agendaCategEdi").value;
-    var beneEdi = document.getElementById("agendaBeneidEdi").value;
-    var convEdi = document.getElementById("agendaConvidEdi").value;
-    var terapiaEdi = document.getElementById("agendaTerapiaidEdi").value;
-    var usuidEdi = document.getElementById("agendaUsuidEdi").value;
-    var salaidEdi = document.getElementById("agendaSalaidEdi").value;
+				// 1. Preenche os valores nos selects (DOM puro)
+				var dataEdi = document.getElementById("agendaDataEdi").value;
+				var horaEdi = document.getElementById("agendaHoraEdi").value;
+				var orgEdi = document.getElementById("agendaOrgEdi").value;
+				var categEdi = document.getElementById("agendaCategEdi").value;
+				var beneEdi = document.getElementById("agendaBeneidEdi").value;
+				var convEdi = document.getElementById("agendaConvidEdi").value;
+				var terapiaEdi = document.getElementById("agendaTerapiaidEdi").value;
+				var usuidEdi = document.getElementById("agendaUsuidEdi").value;
+				var salaidEdi = document.getElementById("agendaSalaidEdi").value;
 
-    if (dataEdi) document.getElementById("dataAg").value = dataEdi;
-    if (horaEdi) document.getElementById("agendaHora").value = horaEdi;
-    if (orgEdi) document.getElementById("agendaOrg").value = orgEdi;
-    if (categEdi) document.getElementById("agendaCateg").value = categEdi;
-    if (beneEdi) document.getElementById("agendaBeneid").value = beneEdi;
-    if (convEdi) document.getElementById("agendaConvid").value = convEdi;
-    if (terapiaEdi) document.getElementById("agendaTerapiaid").value = terapiaEdi;
-    if (usuidEdi) document.getElementById("agendaUsuid").value = usuidEdi;
-    if (salaidEdi) document.getElementById("agendaSalaid").value = salaidEdi;
+				if (dataEdi) document.getElementById("dataAg").value = dataEdi;
+				if (horaEdi) document.getElementById("agendaHora").value = horaEdi;
+				if (orgEdi) document.getElementById("agendaOrg").value = orgEdi;
+				if (categEdi) document.getElementById("agendaCateg").value = categEdi;
+				if (beneEdi) document.getElementById("agendaBeneid").value = beneEdi;
+				if (convEdi) document.getElementById("agendaConvid").value = convEdi;
+				if (terapiaEdi) document.getElementById("agendaTerapiaid").value = terapiaEdi;
+				if (usuidEdi) document.getElementById("agendaUsuid").value = usuidEdi;
+				if (salaidEdi) document.getElementById("agendaSalaid").value = salaidEdi;
 
-    // 2. Atualiza os Chosen (obrigatório após mudar .value de um select)
-    //    — Só executa se jQuery estiver disponível (como deve estar, por main.handlebars)
-    if (typeof jQuery !== 'undefined') {
-        try {
-            $("#agendaHora, #agendaOrg, #agendaCateg, #agendaBeneid, #agendaConvid, #agendaTerapiaid, #agendaUsuid, #agendaSalaid")
-                .trigger("chosen:updated");
-        } catch (e) {
-            console.warn("[carregaBody] chosen:updated falhou — verificar init do Chosen", e);
-        }
-    }
+				// 2. Atualiza os Chosen (obrigatório após mudar .value de um select)
+				//    — Só executa se jQuery estiver disponível (como deve estar, por main.handlebars)
+				if (typeof jQuery !== 'undefined') {
+					try {
+						$("#agendaHora, #agendaOrg, #agendaCateg, #agendaBeneid, #agendaConvid, #agendaTerapiaid, #agendaUsuid, #agendaSalaid")
+							.trigger("chosen:updated");
+					} catch (e) {
+						console.warn("[carregaBody] chosen:updated falhou — verificar init do Chosen", e);
+					}
+				}
 
-    // 3. Atualiza data composta (ISO)
-    atualizaData();
+				// 3. Atualiza data composta (ISO)
+				atualizaData();
 
-    // 4. Checkbox de selo
-    var selamentoEl = document.getElementById("agendaSelamento");
-    var seloCheckbox = document.getElementById("agendaSelo");
-    if (selamentoEl && seloCheckbox) {
-        if (selamentoEl.value === 'false') {
-            seloCheckbox.checked = false;
-            seloCheckbox.removeAttribute("disabled"); // mantém editável
-        } else {
-            seloCheckbox.checked = true;
-        }
-    }
+				// 4. Checkbox de selo
+				var selamentoEl = document.getElementById("agendaSelamento");
+				var seloCheckbox = document.getElementById("agendaSelo");
+				if (selamentoEl && seloCheckbox) {
+					if (selamentoEl.value === 'false') {
+						seloCheckbox.checked = false;
+						seloCheckbox.removeAttribute("disabled"); // mantém editável
+					} else {
+						seloCheckbox.checked = true;
+					}
+				}
 
-    // 5. Evolução (só mostra se for terapeuta/supervisor)
-    var isTerapeuta = document.getElementById("isAgendaTerapeuta");
-    var divEvolucao = document.getElementById("divEvolucao");
-    if (isTerapeuta && isTerapeuta.value === 'true' && divEvolucao) {
-        divEvolucao.style.display = "";
-    }
+				// 5. Evolução (só mostra se for terapeuta/supervisor)
+				var isTerapeuta = document.getElementById("isAgendaTerapeuta");
+				var divEvolucao = document.getElementById("divEvolucao");
+				if (isTerapeuta && isTerapeuta.value === 'true' && divEvolucao) {
+					divEvolucao.style.display = "";
+				}
 
-    // 6. Campo de evolução (textarea)
-    var evolEdi = document.getElementById("agendaEvolucaoEdi");
-    var evolTxt = document.getElementById("agendaEvolucao");
-    if (evolEdi && evolTxt) {
-        evolTxt.value = evolEdi.value || "";
-    }
+				// 6. Campo de evolução (textarea)
+				var evolEdi = document.getElementById("agendaEvolucaoEdi");
+				var evolTxt = document.getElementById("agendaEvolucao");
+				if (evolEdi && evolTxt) {
+					evolTxt.value = evolEdi.value || "";
+				}
 
-    // 7. Botão Cancelar → volta
-    var btnCancelar = document.getElementById('acaoCancelar');
-    if (btnCancelar) {
-        btnCancelar.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.history.back();
-        });
-    }
-}
+				// 7. Botão Cancelar → volta
+				var btnCancelar = document.getElementById('acaoCancelar');
+				if (btnCancelar) {
+					btnCancelar.addEventListener('click', function(e) {
+						e.preventDefault();
+						window.history.back();
+					});
+				}
+			}
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
 				if(chck.checked){
@@ -501,7 +546,7 @@
 															<div class="row">
 																<div class="col-sm-4">
 																	<div class="input-group">
-																		<input style="pointer-events: none;touch-action: none;" name="dataAg" id="dataAg" type="date" style="width: 200px;" onchange="javascript:atualizaData()">
+																		<input name="dataAg" id="dataAg" type="date" style="width: 200px;" onchange="javascript:atualizaData()">
 																	</div>
 																</div>
 															</div>
@@ -510,7 +555,7 @@
 															<label for="id-date-picker-1">Hora Agendamento</label>
 															<div class="form-group">
 																<div class="col-sm-8">
-																	<select style="pointer-events: none;touch-action: none;" name="agendaHora" id="agendaHora" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
+																	<select name="agendaHora" id="agendaHora" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
 																		{{#each horaages}}
 																			<option value="{{horaage_hora}}">{{horaage_hora}}</option>
 																		{{/each}}
@@ -524,7 +569,7 @@
 															<label>Origem Agendamento</label>
 															<div class="form-group">
 																<div class="col-sm-9">
-																	<select style="pointer-events: none;touch-action: none;" id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																	<select id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
 																		<option value="Administrativo">Administrativo</option>
 																		<option value="Padrão">Padrão</option>
 																	</select>
@@ -535,7 +580,7 @@
 															<label>Categoria</label>
 															<div class="form-group">
 																<div class="col-sm-9">
-																	<select style="pointer-events: none;touch-action: none;" id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onchange="javascript:ajustaOption();">
+																	<select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onchange="javascript:ajustaOption();">
 																		<option id="Falta" value="Falta">Falta</option>
 																		<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
 																		<option id="Pais" value="Pais">Pais</option>
@@ -552,7 +597,7 @@
 																{{#each benes}}
 																	{{#each ../convs}}
 																		{{#ifEqual ../bene_convid _id}}
-																			<input style="pointer-events: none;touch-action: none;" value="{{../bene_convid}}" id="{{../_id}}" name="refAgendaConvid" />
+																			<input value="{{../bene_convid}}" id="{{../_id}}" name="refAgendaConvid" />
 																		{{/ifEqual}}
 																	{{/each}}
 																{{/each}}
@@ -561,7 +606,7 @@
 																<div class="col-sm-5">
 																	<select class="col-sm-5" name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..."  style="width: 400px;" onchange="javascript:selectConv()">
 																		{{#each benes}}
-																			<option style="pointer-events: none;touch-action: none;" value="{{_id}}">{{bene_nome}}</option>
+																			<option value="{{_id}}">{{bene_nome}}</option>
 																		{{/each}}
 																	</select>
 																</div>
@@ -571,7 +616,7 @@
 															<label>Convênio</label>
 															<div class="form-group"  >
 																<div class="col-sm-6" style="width: 500px;">
-																	<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid"  id="agendaConvid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select tabindex="-1" aria-disabled="true" name="agendaConvid"  id="agendaConvid" class="chosen-select" data-placeholder="Escolha..." >
 																		{{#each benes}}
 																			{{#each ../convs}}
 																				{{#ifEqual ../bene_convid _id}}
@@ -589,7 +634,7 @@
 															<label>Terapeuta</label>
 															<div class="form-group">
 																<div class="col-sm-4" style="width: 500px;">
-																	<select style="pointer-events: none;touch-action: none;" name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
 																		{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
 																		{{/each}}
@@ -601,7 +646,7 @@
 															<label>Terapia</label>
 															<div class="form-group">
 																<div class="col-sm-4" style="width: 600px;">
-																	<select style="pointer-events: none;touch-action: none;" name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																	<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 																		{{#each terapias}}
 																			<option value="{{_id}}">{{terapia_nome}}</option>
 																		{{/each}}
@@ -615,7 +660,7 @@
 															<label>Local</label>
 															<div class="form-group">
 																<div class="col-sm-4" style="width: 300px;">
-																	<select style="pointer-events: none;touch-action: none;" name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha...">
 																		{{#each salas}}
 																			<option value="{{_id}}">{{sala_nome}}</option>
 																		{{/each}}
@@ -646,7 +691,7 @@
 															<label> Notificação da agenda</label>
 															<div class="form-group">
 																<div class="col-sm-12">
-																	<textarea style="pointer-events: none;touch-action: none;" id="agendaObs" name="agendaObs" placeholder="" class="form-control">{{agenda.agenda_obs}}</textarea>
+																	<textarea id="agendaObs" name="agendaObs" placeholder="" class="form-control">{{agenda.agenda_obs}}</textarea>
 																</div>
 															</div>
 														</div>

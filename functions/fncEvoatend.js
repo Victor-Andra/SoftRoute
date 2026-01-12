@@ -25,7 +25,7 @@ var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSche
 var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 var Sala = getModel("SoftRoute", 'tb_sala', salaClass.SalaSchema)
 var Horaage = getModel("SoftRoute", 'tb_horaage', horaageClass.HoraageSchema)
-var Ano = getModel("SoftRoute", 'tb_ano', anoClass.AnoSchema)
+var Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
 //Funções auxiliares
 
 const fncAgenda = require("./fncAgenda")

@@ -19,7 +19,7 @@ const terapiaClass = require("../models/terapia")
 var Bordo = getModel("SoftRoute", 'tb_bordo', bordoClass.BordoSchema)
 
 //Tabelas Extrangeiras
-var Ano = getModel("SoftRoute", 'tb_ano', anoClass.AnoSchema)
+var Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
 var Atend = getModel("SoftRoute", 'tb_atend', atendClass.AtendSchema)
 var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
 var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)

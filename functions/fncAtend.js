@@ -29,7 +29,7 @@ const funcaoClass = require("../models/funcao")
 
 //Tabelas Extrangeiras
 var Agenda = getModel("SoftRoute", 'tb_agenda', agendaClass.AgendaSchema)
-var Ano = getModel("SoftRoute", 'tb_ano', anoClass.AnoSchema)
+var Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
 var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
 var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
 var Convcre = getModel("SoftRoute", 'tb_convcre', convcreClass.ConvcreSchema)
@@ -1287,7 +1287,7 @@ module.exports = {
         const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
         const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
 
         const rawIni = req.body.dataIni;
@@ -1357,11 +1357,11 @@ module.exports = {
                     : parseInt(clean.padStart(2, '0'), 10);
             };
 
-            // ✅ Filtra Feriado e Falta Absoluta aqui (garante que não entrem)
-            const atFiltrado = atRaw.filter(a => 
-                a.atend_categoria !== "Feriado" && 
-                a.atend_categoria !== "Falta Absoluta"
-            );
+            // ✅ Filtra apenas "Feriado" e "Falta Absoluta"; aceita null, vazio ou outros valores
+            const atFiltrado = atRaw.filter(a => {
+                const cat = (a.atend_categoria || '').trim();
+                return cat !== "Feriado" && cat !== "Falta Absoluta";
+            });
 
             const conv_nome = lookupConv[rawConv] || "(nenhum)";
             terapias.sort((a, b) => a.terapia_nome.localeCompare(b.terapia_nome));
@@ -1439,13 +1439,17 @@ module.exports = {
                     })();
 
                     const categoriaLabel = (() => {
-                        const c = at.atend_categoria;
-                        if (c === "Falta Justificada") return '<span class="label label-sm label-warning">Falta Justificada</span>';
-                        if (c === "Substituição" || c === "Substituto") return '<span class="label label-sm label-pink">Substituição</span>';
-                        if (c === "Extra") return '<span class="label label-sm label-purple">Extra</span>';
-                        if (c === "Falta") return '<span class="label label-sm label-yellow">Falta</span>';
-                        if (c === "Padrão" || c === "SubstitutoFixo") return '<span class="label label-sm label-success">Sem Evento</span>';
-                        return c || '—';
+                        // Normaliza a categoria: trata null, undefined, vazio e espaços como "Sem Evento"
+                        const catBruto = at.atend_categoria;
+                        const cat = (catBruto || '').trim() || "Sem Evento";
+
+                        if (cat === "Falta Justificada") return '<span class="label label-sm label-warning">Falta Justificada</span>';
+                        if (cat === "Substituição" || cat === "Substituto") return '<span class="label label-sm label-pink">Substituição</span>';
+                        if (cat === "Extra") return '<span class="label label-sm label-purple">Extra</span>';
+                        if (cat === "Falta") return '<span class="label label-sm label-yellow">Falta</span>';
+                        if (cat === "Padrão" || cat === "SubstitutoFixo" || cat === "Sem Evento") return '<span class="label label-sm label-success">Sem Evento</span>';
+                        // Caso raro: outro valor inesperado
+                        return `<span class="label label-sm label-default">${cat}</span>`;
                     })();
 
                     const eventoLabel = at.atend_fixo === "true"
@@ -4901,7 +4905,7 @@ module.exports = {
         const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
         const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
 
         let rel = [];
@@ -5129,7 +5133,7 @@ module.exports = {
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
 
         const periodoDe = fncGeral.getDataInvert(req.body.dataIni);
         const periodoAte = fncGeral.getDataInvert(req.body.dataFim);
@@ -5578,7 +5582,7 @@ module.exports = {
             const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
             const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
             const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-            const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+            
             const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
             const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
 
