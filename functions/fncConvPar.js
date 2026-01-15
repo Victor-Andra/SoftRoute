@@ -13,6 +13,8 @@ const usuarioClass = require("../models/usuario");
 const convcreClass = require("../models/convCre"); // ← schema crédito
 const convdebClass = require("../models/convDeb"); // ← schema débito
 
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+
 module.exports = {
     // ✅ LISTAGEM UNIFICADA — igual ao seu `listaConvcre`, `listaConvdeb`
     listaConvPar: (req, res) => {

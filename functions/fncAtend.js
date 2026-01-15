@@ -4973,9 +4973,27 @@ module.exports = {
 
                     // --- Monta agendaFinal (fixas + não substituídas) ---
                     agendaFinal = [...agendaSemanal];
+
                     agendaFixa.forEach(af => {
-                        let jaExiste = agendaSemanal.some(as => String(as.agenda_tempId) === String(af._id));
-                        if (!jaExiste) {
+                        // procura a semanal ligada a essa fixa
+                        const semanal = agendaSemanal.find(
+                            as => String(as.agenda_tempId) === String(af._id)
+                        );
+
+                        // se existe semanal E o terapeuta é diferente → exclui ambos
+                        if (
+                            semanal &&
+                            String(semanal.agenda_usuid) !== String(af.agenda_usuid)
+                        ) {
+                            // remove a semanal da agendaFinal
+                            agendaFinal = agendaFinal.filter(
+                                a => String(a._id) !== String(semanal._id)
+                            );
+                            return; // não adiciona a fixa
+                        }
+
+                        // se não existe semanal → adiciona a fixa
+                        if (!semanal) {
                             agendaFinal.push(af);
                         }
                     });
