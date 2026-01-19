@@ -8449,7 +8449,7 @@ module.exports = {
         dataIni.setSeconds(0);
         dataIni = (fncGeral.getDataFMT(dataIni)+"T00:00:00.000Z");
         let dataFim = new Date(req.body.dataFinal);
-        dataFim.setDate(dataFim.getDate()+4);
+        dataFim.setDate(dataFim.getDate()+5);
         dataFim.setHours(23);
         dataFim.setMinutes(59);
         dataFim.setSeconds(59);

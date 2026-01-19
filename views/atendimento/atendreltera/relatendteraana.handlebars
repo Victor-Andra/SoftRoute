@@ -182,6 +182,7 @@
 															<th class="center">#</th>
 															<th>Data do Atendimento</th>
 															<th>Hora do Atendimento</th>
+															<th>Especialidade Detalhada</th>
 															<th>Especialidade</th>
 															<th>Beneficiário</th>
 														</tr>
@@ -192,6 +193,11 @@
 																<th class="center">{{inc @index}}</th>
 																<td style="width:10%">{{dt}}</td>
 																<td style="width:10%">{{hora}}</td>
+																{{#each ../terapias}}
+																	{{#ifEqual this._id ../especialidade}}
+																		<td>{{terapia_nome}}</td>
+																	{{/ifEqual}}
+																{{/each}}
 																{{#each ../terapias}}
 																	{{#ifEqual this._id ../especialidade}}
 																		<td>{{terapia_nomecid}}</td>

@@ -1,13 +1,13 @@
 <body class="no-skin">
-<div id="navbar" class="navbar navbar-default    navbar-collapse       h-navbar ace-save-state navbar-fixed-top">
+<div id="navbar" class="navbar navbar-default navbar-collapse       h-navbar ace-save-state navbar-fixed-top">
 	<script type="text/javascript">
 		try{ace.settings.loadState('main-container')}catch(e){}
 	</script>
 	<div class="navbar-header pull-left">
-		<a class="navbar-brand">
+		<a class="navbar-brand" id="empresaFantasia">
 			<small>
 				<i class="fa fa-puzzle-piece white"></i>
-				Soft Route
+				Soft Route <label ></label>
 			</small>
 		</a>
 		<!--
@@ -25,18 +25,25 @@
 	</div>
 	<div class="navbar-buttons navbar-header pull-right  collapse navbar-collapse" role="navigation">
 		<ul class="nav ace-nav">
+
 			<li class="transparent dropdown-modal">
+				
 				<a data-toggle="dropdown" class="dropdown-toggle" href="#">
 					<i class="ace-icon fa fa-bell icon-animated-bell"></i>
+					
 				</a>
+				
 				<div class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
 					<div class="tabbable">
 						<ul class="nav nav-tabs">
 							<li class="active">
 								<a data-toggle="tab" href="#navbar-alerta">
-									Alertas
-									<span class="badge badge-danger">36</span>
+									Avisos e Alertas
+									<span class="badge badge-warning">36</span>
 								</a>
+								
+									
+								
 							</li>
 							
 						</ul><!-- .nav-tabs -->
@@ -48,7 +55,7 @@
 											<li>
 												<a href="#">
 													<div class="clearfix">
-														<span class="pull-left">Mudanças na agenda semanal</span>
+														<span class="pull-left">Geral</span>
 														<span class="pull-right">35</span>
 													</div>
 													<div class="progress progress-mini">
@@ -59,7 +66,7 @@
 											<li>
 												<a href="#">
 													<div class="clearfix">
-														<span class="pull-left">Mudanças na agenda Hoje</span>
+														<span class="pull-left">Pessoal</span>
 														<span class="pull-right">5</span>
 													</div>
 													<div class="progress progress-mini">
@@ -67,17 +74,7 @@
 													</div>
 												</a>
 											</li>
-											<li>
-												<a href="#">
-													<div class="clearfix">
-														<span class="pull-left">Correções de Relatórios</span>
-														<span class="pull-right">1</span>
-													</div>
-													<div class="progress progress-mini progress-striped active">
-														<div style="width:10%" class="progress-bar progress-bar-success"></div>
-													</div>
-												</a>
-											</li>
+											
 										</ul>
 									</div></li>
 									<li class="dropdown-footer">
@@ -94,25 +91,6 @@
 
 				</div><!-- /.dropdown-menu -->
 			</li>
-			<!--<li class="light-blue dropdown-modal user-min">
-				<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-					<img class="nav-user-photo" src="\images\avatars\user.jpg" alt="Jason's Photo">
-					<span class="user-info">
-						<small>Bem vindo,</small>
-						Usuário
-					</span>
-					<i class="ace-icon fa fa-caret-down"></i>
-				</a>
-				<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-					<li class="divider"></li>
-					<li>
-						<a href="#">
-							<i class="ace-icon fa fa-power-off"></i>
-							Sair
-						</a>
-					</li>
-				</ul>
-			</li>-->
 			
 		</ul>
 	</div>
@@ -120,11 +98,10 @@
 <div style="padding-bottom: 2px;" class="main-container ace-save-state" id="main-container">
 		<div id="sidebar" class="sidebar      h-sidebar                navbar-collapse collapse          ace-save-state sidebar-fixed"  data-sidebar="true" data-sidebar-scroll="true" data-sidebar-hover="false" style="margin-top: 0px;">
 			<ul class="nav nav-list">
-				
 				<li class="hover"><!-- /Menu DashBoard-->
 					<a href="#" class="dropdown-toggle">
-						<i class="menu-icon fa fa-tachometer purple"></i>
-							<label class="sidebar-label">Avisos</label>
+						<i class="menu-icon fa fa-line-chart red"></i>
+							<label class="sidebar-label">DashBoard</label>
 						<b class="arrow fa fa-angle-down"></b>
 					</a>
 					<b class="arrow"></b>
@@ -150,6 +127,35 @@
 							</a>
 							<b class="arrow"></b>
 						</li>
+						<hr>
+						
+					</ul>
+				</li>
+				<li class="hover"><!-- /Avisos-->
+					<a href="#" class="dropdown-toggle">
+						<i class="menu-icon fa fa-bell pink icon-animated-bell"></i>
+							<label class="sidebar-label">Avisos</label>
+						<b class="arrow fa fa-angle-down"></b>
+					</a>
+					<b class="arrow"></b>
+					<ul class="submenu">
+						<li class="hover">
+							<a href="">
+								<i class="menu-icon fa fa-line-chart green"></i>
+								<label class="sidebar-label">Meus Avisos</label>
+							</a>
+							<b class="arrow"></b>
+						</li>
+
+						<li class="hover">
+							<a href="/menu/dash/cad">
+								<i class="menu-icon fa fa-plus blue"></i>
+								<label class="sidebar-label">Novo</label>
+							</a>
+							<b class="arrow"></b>
+						</li>
+						<hr>
+						
 					</ul>
 				</li>
 				<li class="hover"> <!-- /Menu Agenda -->
@@ -260,6 +266,7 @@
 							</a>
 							<b class="arrow"></b>
 						</li>
+						
 					</ul>
 				</li>
 				<li class="hover"> <!-- /Menu MinhaAgenda 3 Níveis-->
@@ -367,6 +374,7 @@
 									</a>
 									<b class="arrow"></b>
 								</li>
+								
 							</ul>
 						</li>
 						<li class="hover">
@@ -419,7 +427,14 @@
 								<li class="hover">
 									<a href="/menu/atendimento/relatendval">
 										<i class="menu-icon fa fa-heartbeat pink"></i>
-										<label class="sidebar-label">Cons.Convênio</label>
+										<label class="sidebar-label">Cons. Convênio</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/atendimento/tabdimAtendval">
+										<i class="menu-icon fa fa-heartbeat blue"></i>
+										<label class="sidebar-label">Tab. Dinâmico Convênio</label>
 									</a>
 									<b class="arrow"></b>
 								</li>
@@ -508,278 +523,25 @@
 									</a>
 									<b class="arrow"></b>
 								</li>
+								
 								<li class="hover">
-									<a href="/menu/atendimento/atendreltera/gestao/relatendgestaocons">
-										<i class="menu-icon fa fa fa-search pink"></i>
-										<label class="sidebar-label">Consolidado Analítico </label>
+									<a href="/menu/atendimento/atendreltera/gestao/relterapiaconvfec">
+										<i class="menu-icon fa fa fa-money red"></i>
+										<label class="sidebar-label">Cons. Terapia (Detalhada)</label>
 									</a>
 									<b class="arrow"></b>
 								</li>
 								<li class="hover">
-									<a href="/menu/atendimento/atendreltera/gestao/relatendgestaoconsfechado">
-										<i class="menu-icon fa fa fa-money blue"></i>
-										<label class="sidebar-label">Fechamento Consolidado</label>
+									<a href="/menu/atendimento/atendreltera/gestao/relfaltasbene">
+										<i class="menu-icon fa fa fa-server blue"></i>
+										<label class="sidebar-label">Faltas por beneficiário</label>
 									</a>
 									<b class="arrow"></b>
 								</li>
+
 							</ul>
 						</li>
 
-					</ul>
-				</li>
-				<li class="hover"> <!-- /Menu Guias -->
-					<a href="#" class="dropdown-toggle">
-						<i class="menu-icon fa fa-newspaper-o blue"></i>
-						<label class="sidebar-label">Guias</label>
-						<b class="arrow fa fa-angle-down"></b>
-					</a>
-					<b class="arrow"></b>
-					<ul class="submenu">
-						<li class="hover">
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-calendar green"></i>
-								<label class="sidebar-label">Datas e Prazos</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a href="">
-										<i class="menu-icon fa fa-plus purple"></i>
-										<label class="sidebar-label">Lista</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								
-							</ul>
-						</li>
-						<li class="hover">
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-newspaper-o red"></i>
-								<label class="sidebar-label">Guias e Senhas</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								
-								<li class="hover">
-									<a href="">
-										<i class="menu-icon fa fa-list pink"></i>
-										<label class="sidebar-label">Lista</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								
-								
-							</ul>
-						</li>
-						<li class="hover">
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-archive red"></i>
-								<label class="sidebar-label">Lotes</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a href="">
-										<i class="menu-icon fa fa-plus blue"></i>
-										<label class="sidebar-label">Novo</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="">
-										<i class="menu-icon fa fa-list green"></i>
-										<label class="sidebar-label">Listar?</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								
-								
-							</ul>
-						</li>							
-						<li class="hover">
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-life-ring blue"></i>
-								<label class="sidebar-label">Recurso e Réplicas</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a href="">
-										<i class="menu-icon fa fa-plus pink"></i>
-										<label class="sidebar-label">Novos</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="">
-										<i class="menu-icon fa fa-list green"></i>
-										<label class="sidebar-label">Lista</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								
-							</ul>
-						</li>
-						<li class="hover">
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-file-o blue"></i>
-								<label class="sidebar-label">Relatórios</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a href="">
-										<i class="menu-icon fa fa-money green"></i>
-										<label class="sidebar-label">Faturamento</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="">
-										<i class="menu-icon fa fa-life-ring red"></i>
-										<label class="sidebar-label">Glosas</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-																
-							</ul>
-						</li>
-
-					</ul>
-				</li>
-				<li class="hover"> <!-- /Menu Beneficiário -->
-					<a href="#" class="dropdown-toggle">
-						<i class="menu-icon fa fa-child pink"></i>
-						<label class="sidebar-label">Beneficiário</label>
-						<b class="arrow fa fa-angle-down"></b>
-					</a>
-					<b class="arrow"></b>
-					<ul class="submenu">
-						<li class="hover">
-							<a href="/menu/beneficiario/cad">
-								<i class="menu-icon fa fa-plus green"></i>
-								<label class="sidebar-label">Novo</label>
-							</a>
-							<b class="arrow"></b>
-						</li>
-						<li class="hover">
-							<a href="/menu/beneficiario/lis">
-								<i class="menu-icon fa fa-list green"></i>
-								<label class="sidebar-label">Listar</label>
-							</a>
-							<b class="arrow"></b>
-						</li>
-						<li class="hover">
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-search orange"></i>
-								<label class="sidebar-label">Sessões</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a href="/menu/beneficiario/sessao/cad">
-										<i class="menu-icon fa fa-plus purple"></i>
-										<label class="sidebar-label">Novo</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="/menu/beneficiario/sessao/lis">
-										<i class="menu-icon fa fa-list pink"></i>
-										<label class="sidebar-label">Lista todos</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="/menu/beneficiario/sessao/lisind">
-										<i class="menu-icon fa fa-search orange"></i>
-										<label class="sidebar-label">Pesquisa individual</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-							</ul>
-						</li>
-						<li class="hover">
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-user-times blue"></i>
-								<label class="sidebar-label">Exceções de Terapeutas</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a href="/menu/beneficiario/excecaotera/cad">
-										<i class="menu-icon fa fa-plus purple"></i>
-										<label class="sidebar-label">Novo</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="/menu/beneficiario/excecaotera/lis">
-										<i class="menu-icon fa fa-list pink"></i>
-										<label class="sidebar-label">Listar</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-							</ul>
-						</li>
-						<li class="hover">
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-user-times blue"></i>
-								<label class="sidebar-label">Regras e Exceções</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a href="/menu/beneficiario/excecao/cad">
-										<i class="menu-icon fa fa-plus purple"></i>
-										<label class="sidebar-label">Novo</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="/menu/beneficiario/excecao/lis">
-										<i class="menu-icon fa fa-list pink"></i>
-										<label class="sidebar-label">Listar</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-							</ul>
-						</li>
-						
-						<li class="hover">
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-search orange"></i>
-								<label class="sidebar-label">Relatórios</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a  href="/menu/beneficiario/resplis">
-										<i class="menu-icon fa fa-bars purple"></i>
-										<label class="sidebar-label">Lista Responsáveis</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a  href="/menu/beneficiario/plansubsfixo">
-										<i class="menu-icon fa fa-random green"></i>
-										<label class="sidebar-label">Planilha SubsFixo</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								
-							</ul>
-							
-						</li>
 					</ul>
 				</li>
 				<li class="hover"> <!-- /Menu Guias -->
@@ -907,6 +669,138 @@
 
 					</ul>
 				</li>
+				<li class="hover"> <!-- /Menu Beneficiário -->
+					<a href="#" class="dropdown-toggle">
+						<i class="menu-icon fa fa-child pink"></i>
+						<label class="sidebar-label">Beneficiário</label>
+						<b class="arrow fa fa-angle-down"></b>
+					</a>
+					<b class="arrow"></b>
+					<ul class="submenu">
+						<li class="hover">
+							<a href="/menu/beneficiario/cad">
+								<i class="menu-icon fa fa-plus green"></i>
+								<label class="sidebar-label">Novo</label>
+							</a>
+							<b class="arrow"></b>
+						</li>
+						<li class="hover">
+							<a href="/menu/beneficiario/lis">
+								<i class="menu-icon fa fa-list green"></i>
+								<label class="sidebar-label">Listar</label>
+							</a>
+							<b class="arrow"></b>
+						</li>
+						
+						<li class="hover">
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-search orange"></i>
+								<label class="sidebar-label">Sessões</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a href="/menu/beneficiario/sessao/cad">
+										<i class="menu-icon fa fa-plus purple"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/beneficiario/sessao/lis">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Lista todos</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/beneficiario/sessao/lisind">
+										<i class="menu-icon fa fa-search orange"></i>
+										<label class="sidebar-label">Pesquisa individual</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+						<li class="hover">
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-user-times blue"></i>
+								<label class="sidebar-label">Exceções de Terapeutas</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a href="/menu/beneficiario/excecaotera/cad">
+										<i class="menu-icon fa fa-plus purple"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/beneficiario/excecaotera/lis">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Listar</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+						<li class="hover">
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-user-times blue"></i>
+								<label class="sidebar-label">Regras e Exceções</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a href="/menu/beneficiario/excecao/cad">
+										<i class="menu-icon fa fa-plus purple"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/beneficiario/excecao/lis">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Listar</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+						
+						<li class="hover">
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-search orange"></i>
+								<label class="sidebar-label">Relatórios</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a  href="/menu/beneficiario/resplis">
+										<i class="menu-icon fa fa-bars purple"></i>
+										<label class="sidebar-label">Lista Responsáveis</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a  href="/menu/beneficiario/plansubsfixo">
+										<i class="menu-icon fa fa-random green"></i>
+										<label class="sidebar-label">Planilha SubsFixo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+							
+								
+							
+						</li>
+					</ul>
+				</li>
 				<li class="hover"> <!-- /Menu Area Terapeutas-->
 					<a href="#" class="dropdown-toggle">
 						<i class="menu-icon fa fa-stethoscope blue"></i>
@@ -915,6 +809,7 @@
 					</a>
 					<b class="arrow"></b>
 					<ul class="submenu">
+						
 								<li class="hover">
 									<a href="/menu/area/busca">
 										<i class="menu-icon fa fa-search green"></i>
@@ -922,9 +817,10 @@
 									</a>
 									<b class="arrow"></b>
 								</li>
+						
 						<li class="hover">
 							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-id-card-o orange"></i>
+								<i class="menu-icon fa fa-street-view red"></i>
 								<label class="sidebar-label">Anamnese</label>
 								<b class="arrow fa fa fa-caret-right"></b>
 							</a>
@@ -1211,6 +1107,49 @@
 					</a>
 					<b class="arrow"></b>
 				</li>
+				<li class="hover"> <!-- /Menu AT's -->
+					<a href="#" class="dropdown-toggle">
+						<i class="menu-icon fa fa-car green"></i>
+						<label class="sidebar-label">AT's</label>
+						<b class="arrow fa fa-angle-down"></b>
+					</a>
+					<b class="arrow"></b>
+					<ul class="submenu">
+						<li class="hover">
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-ship orange"></i>
+								<label class="sidebar-label">Diário Bordo</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a href="/menu/area/bordo/cad">
+										<i class="menu-icon fa fa-plus blue"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/area/bordo/lis">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Listar</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/area/bordo/mapabordo">
+										<i class="menu-icon fa fa-map-o red"></i>
+										<label class="sidebar-label">Mapa</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+						
+						
+					</ul>
+				</li>
 				<li class="hover"> <!-- /Menu Supervisão -->
 					<a href="#" class="dropdown-toggle">
 						<i class="menu-icon fa fa-check-square-o orange"></i>
@@ -1260,10 +1199,10 @@
 								</ul>
 							</li>
 							
-							<li class="hover"><!-- .ABA -->
+							<li class="hover"><!-- .Configuração ABA -->
 								<a href="#" class="dropdown-toggle">
 									<i class="menu-icon fa fa-cube pink"></i>
-									<label class="sidebar-label">ABA</label>
+									<label class="sidebar-label">Configuração ABA</label>
 									<b class="arrow fa fa fa-caret-right"></b>
 								</a>
 								
@@ -1440,7 +1379,11 @@
 										</li>
 
 									</ul>
+										
+
+										
 									
+								
 							</li>
 							<li class="hover"><!-- .AT -->
 								<a href="#" class="dropdown-toggle">
@@ -1459,107 +1402,65 @@
 									</li>
 								</ul>
 							</li>
-							<li class="hover">
+							<li class="hover"><!-- .Lista de Evolução -->
 								<a href="#" class="dropdown-toggle">
 									<i class="menu-icon fa fa-coffee red"></i>
 									<label class="sidebar-label">Lista de Evolução</label>
 									<b class="arrow fa fa fa-caret-right"></b>
 								</a>
-								<b class="arrow"></b>
-								<ul class="submenu">
-									<li class="hover">
-										<a href="/menu/area/evol/evoatendgeralLis">
-											<i class="menu-icon fa fa-check-circle blue"></i>
-											<label class="sidebar-label">Todas</label>
-										</a>
-										<b class="arrow"></b>
-									</li>
-									<li class="hover">
-										<a href="/menu/area/evoatendfechadoLis">
-											<i class="menu-icon fa fa-check green"></i>
-											<label class="sidebar-label">Quem realizou?</label>
-										</a>
-										<b class="arrow"></b>
-									</li>
-									<li class="hover">
-										<a href="/menu/area/evoatendabertoLis">
-											<i class="menu-icon fa fa-exclamation red"></i>
-											<label class="sidebar-label">Quem não realizou?</label>
-										</a>
-										<b class="arrow"></b>
-									</li>
-									
-								</ul>
+									<b class="arrow"></b>
+									<ul class="submenu">
+										<li class="hover">
+											<a href="/menu/area/evol/evoatendgeralLis">
+												<i class="menu-icon fa fa-check-circle blue"></i>
+												<label class="sidebar-label">Todas</label>
+											</a>
+											<b class="arrow"></b>
+										</li>
+										<li class="hover">
+											<a href="/menu/area/evoatendfechadoLis">
+												<i class="menu-icon fa fa-check green"></i>
+												<label class="sidebar-label">Quem realizou?</label>
+											</a>
+											<b class="arrow"></b>
+										</li>
+										<li class="hover">
+											<a href="/menu/area/evoatendabertoLis">
+												<i class="menu-icon fa fa-exclamation red"></i>
+												<label class="sidebar-label">Quem não realizou?</label>
+											</a>
+											<b class="arrow"></b>
+										</li>
+										
+									</ul>
+								<li class="hover"><!-- .Padrões de Evolução -->
+									<a href="#" class="dropdown-toggle">
+										<i class="menu-icon fa fa fa-car red"></i>
+										<label class="sidebar-label">Padrões de Evolução</label>
+										<b class="arrow fa fa fa-caret-right"></b>
+									</a>
+									<b class="arrow"></b>
+									<ul class="submenu">
+										<li class="hover">
+											<a href="/menu/area/evolucaoconf/evolucaoconfcad">
+												<i class="menu-icon fa fa-plus blue"></i>
+												<label class="sidebar-label">Novo</label>
+											</a>
+											<b class="arrow"></b>
+										</li>
+										<li class="hover">
+											<a href="/menu/area/evolucaoconf/evolucaoconflis">
+												<i class="menu-icon fa fa-list pink"></i>
+												<label class="sidebar-label">Listar</label>
+											</a>
+											<b class="arrow"></b>
+										</li>
+									</ul>	
+								</li>
 							</li>
-							<li class="hover"><!-- .Padrões de Evolução -->
-								<a href="#" class="dropdown-toggle">
-									<i class="menu-icon fa fa fa-car red"></i>
-									<label class="sidebar-label">Padrões de Evolução</label>
-									<b class="arrow fa fa fa-caret-right"></b>
-								</a>
-								<b class="arrow"></b>
-								<ul class="submenu">
-									<li class="hover">
-										<a href="/menu/area/evolucaoconf/evolucaoconfcad">
-											<i class="menu-icon fa fa-plus blue"></i>
-											<label class="sidebar-label">Novo</label>
-										</a>
-										<b class="arrow"></b>
-									</li>
-									<li class="hover">
-										<a href="/menu/area/evolucaoconf/evolucaoconflis">
-											<i class="menu-icon fa fa-list pink"></i>
-											<label class="sidebar-label">Listar</label>
-										</a>
-										<b class="arrow"></b>
-									</li>
-								</ul>
-							</li>
-							
-						</ul>
 						
+						</ul>
 					
-				</li>
-				<li class="hover"> <!-- /Menu AT's -->
-					<a href="#" class="dropdown-toggle">
-						<i class="menu-icon fa fa-car green"></i>
-						<label class="sidebar-label">AT's</label>
-						<b class="arrow fa fa-angle-down"></b>
-					</a>
-					<b class="arrow"></b>
-					<ul class="submenu">
-						<li class="hover">
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-ship orange"></i>
-								<label class="sidebar-label">Diário Bordo</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a href="/menu/area/bordo/cad">
-										<i class="menu-icon fa fa-plus blue"></i>
-										<label class="sidebar-label">Novo</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="/menu/area/bordo/lis">
-										<i class="menu-icon fa fa-list pink"></i>
-										<label class="sidebar-label">Listar</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="/menu/area/bordo/mapabordo">
-										<i class="menu-icon fa fa-map-o red"></i>
-										<label class="sidebar-label">Mapa</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-							</ul>
-						</li>
-					</ul>
 				</li>
 				<li class="hover"> <!-- /Menu Convênios -->
 					<a href="#" class="dropdown-toggle">
@@ -1583,7 +1484,7 @@
 							</a>
 							<b class="arrow"></b>
 						</li>
-												<li class="hover">
+						<li class="hover">
 							<a href="#" class="dropdown-toggle">
 								<i class="menu-icon fa fa-balance-scale pink"></i>
 								<label class="sidebar-label">Pares Convênio (C/D)</label>
@@ -1713,6 +1614,30 @@
 					</a>
 					<b class="arrow"></b>
 					<ul class="submenu">
+						<li class="hover">
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-paw red"></i>
+								<label class="sidebar-label">Impostos</label>
+								<b class="arrow fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a href="/menu/financeiro/imposto/cad">
+										<i class="menu-icon fa fa-plus blue"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/financeiro/imposto/lis">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Listar</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
 						<li class="hover">
 							<a href="#" class="dropdown-toggle">
 								<i class="menu-icon fa fa-search orange"></i>
@@ -1904,6 +1829,7 @@
 						</li>
 					</ul>
 				</li>
+	
 				<li class="hover"> <!-- /Menu Ferramentas-->
 					<a href="#" class="dropdown-toggle">
 						<i class="menu-icon fa fa-cogs brown"></i>
@@ -1960,30 +1886,7 @@
 								</li>
 							</ul>
 						</li>
-						<li class="hover"><!-- /SubMenu Funcionalidades -->
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-cog pink"></i>
-								<label class="sidebar-label">Funcionalidade</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a href="/menu/ferramentas/usufunc/cad">
-										<i class="menu-icon fa fa-plus purple"></i>
-										<label class="sidebar-label">Novo</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="/menu/ferramentas/usufunc/lis">
-										<i class="menu-icon fa fa-list pink"></i>
-										<label class="sidebar-label">Listar</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-							</ul>
-						</li>
+					
 						<li class="hover"><!-- /SubMenu Horários Níveis-->
 							<a href="#" class="dropdown-toggle">
 								<i class="menu-icon fa fa-hourglass brown"></i>
@@ -2008,7 +1911,7 @@
 								</li>
 							</ul>
 						</li>
-						<li class="hover"><!-- /SubMenu Ferramentas Níveis-->
+						<li class="hover"><!-- /SubMenu Salas Níveis-->
 							<a href="#" class="dropdown-toggle">
 								<i class="menu-icon fa fa-building-o brown"></i>
 								<label class="sidebar-label">Salas</label>
@@ -2025,6 +1928,116 @@
 								</li>
 								<li class="hover">
 									<a href="/menu/ferramentas/sala/lis">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Listar</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+						<li class="hover"><!-- /SubMenu Manuais Níveis-->
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-book pink"></i>
+								<label class="sidebar-label">Manuais</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a href="/menu/ferramentas/manual/form">
+										<i class="menu-icon fa fa-plus purple"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/ferramentas/manual/lis">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Listar</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+						
+						<li class="hover"><!-- /SubMenu Estados-->
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-globe brown"></i>
+								<label class="sidebar-label">Estados</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a href="/menu/ferramentas/estado/cad">
+										<i class="menu-icon fa fa-plus purple"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/ferramentas/estado/lis">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Listar</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+						<li class="hover"><!-- /SubMenu Empresa Níveis-->
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-building-o brown"></i>
+								<label class="sidebar-label">Empresa</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a  href="/menu/ferramentas/empresa/cad">
+										<i class="menu-icon fa fa-plus purple"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+									<li class="hover">
+									<a href="/menu/ferramentas/empresa/lis">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Listar</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+						
+					</ul>
+				</li>
+
+				<li class="hover"> <!-- /Menu Perfis-->
+					<a href="#" class="dropdown-toggle">
+						<i class="menu-icon fa fa-key orange"></i>
+						<label class="sidebar-label">Perfis</label>
+						<b class="arrow fa fa-angle-down"></b>
+					</a>
+					<b class="arrow"></b>
+					<ul class="submenu">
+						
+						<li class="hover"><!-- /SubMenu Funcionalidades -->
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-cog pink"></i>
+								<label class="sidebar-label">Funcionalidade</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a href="/menu/ferramentas/usufunc/cad">
+										<i class="menu-icon fa fa-plus purple"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/ferramentas/usufunc/lis">
 										<i class="menu-icon fa fa-list pink"></i>
 										<label class="sidebar-label">Listar</label>
 									</a>
@@ -2139,7 +2152,7 @@
 								</li>
 							</ul>
 						</li>
-						<li class="hover"><!-- /SubMenu Funções Níveis-->
+						<li class="hover"><!-- /SubMenu Funções -->
 							<a href="#" class="dropdown-toggle">
 								<i class="menu-icon fa fa-gavel brown"></i>
 								<label class="sidebar-label">Funções</label>
@@ -2163,7 +2176,7 @@
 								</li>
 							</ul>
 						</li>
-						<li class="hover"><!-- /SubMenu Perfis Níveis-->
+						<li class="hover"><!-- /SubMenu Perfis -->
 							<a href="#" class="dropdown-toggle">
 								<i class="menu-icon fa fa-key brown"></i>
 								<label class="sidebar-label">Perfis</label>
@@ -2187,55 +2200,7 @@
 								</li>
 							</ul>
 						</li>
-						<li class="hover"><!-- /SubMenu Estados-->
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-globe brown"></i>
-								<label class="sidebar-label">Estados</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a href="/menu/ferramentas/estado/cad">
-										<i class="menu-icon fa fa-plus purple"></i>
-										<label class="sidebar-label">Novo</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-								<li class="hover">
-									<a href="/menu/ferramentas/estado/lis">
-										<i class="menu-icon fa fa-list pink"></i>
-										<label class="sidebar-label">Listar</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-							</ul>
-						</li>
-						<li class="hover"><!-- /SubMenu Empresa Níveis-->
-							<a href="#" class="dropdown-toggle">
-								<i class="menu-icon fa fa-building-o brown"></i>
-								<label class="sidebar-label">Empresa</label>
-								<b class="arrow fa fa fa-caret-right"></b>
-							</a>
-							<b class="arrow"></b>
-							<ul class="submenu">
-								<li class="hover">
-									<a  href="/menu/ferramentas/empresa/cad">
-										<i class="menu-icon fa fa-plus purple"></i>
-										<label class="sidebar-label">Novo</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-									<li class="hover">
-									<a href="/menu/ferramentas/empresa/lis">
-										<i class="menu-icon fa fa-list pink"></i>
-										<label class="sidebar-label">Listar</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
-							</ul>
-						</li>
-						<li class="hover"><!-- /SubMenu Aniversariantes Níveis-->
+						<li class="hover"><!-- /SubMenu Aniversariantes -->
 							<a href="#" class="dropdown-toggle">
 								<i class="menu-icon fa fa-birthday-cake pink"></i>
 								<label class="sidebar-label">Aniversariantes</label>
@@ -2251,6 +2216,13 @@
 									<b class="arrow"></b>
 								</li>
 								<li class="hover">
+									<a  href="/menu/area/relaniverdiaUsu">
+										<i class="menu-icon fa fa-stethoscope red"></i>
+										<label class="sidebar-label">Terapeutas e ADM no Hoje</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
 									<a  href="/menu/beneficiario/relaniverBene">
 										<i class="menu-icon fa fa-child orange"></i>
 										<label class="sidebar-label">Beneficiários</label>
@@ -2260,7 +2232,7 @@
 							</ul>
 							
 						</li>
-						<li class="hover"><!-- /SubMenu Usuários Níveis-->
+						<li class="hover"><!-- /SubMenu Usuários -->
 							<a href="#" class="dropdown-toggle">
 								<i class="menu-icon fa fa-users brown"></i>
 								<label class="sidebar-label">Usuários</label>
@@ -2306,7 +2278,31 @@
 							</ul>
 							
 						</li>
-					<li class="hover"><!-- /SubMenu Ficha de Saúde dos Usuários-->
+						<li class="hover"><!-- /SubMenu Usuário Acessos-->
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-key orange"></i>
+								<label class="sidebar-label">Usuários Acessos</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a href="/menu/ferramentas/usupermis/cad">
+										<i class="menu-icon fa fa-plus purple"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="/menu/ferramentas/usuario/lis">
+										<i class="menu-icon fa fa-list green"></i>
+										<label class="sidebar-label">Listar</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+						<li class="hover"><!-- /SubMenu Ficha de Saúde dos Usuários-->
 							<a href="#" class="dropdown-toggle">
 								<i class="menu-icon fa fa-heartbeat blue"></i>
 								<label class="sidebar-label">Ficha Médica</label>
@@ -2332,6 +2328,8 @@
 						</li>
 					</ul>
 				</li>
+
+				
 				<li class="hover"><!-- /Menu Ajuda -->
 					<a href="/menu/ferramentas/ajuda">
 						<i class="menu-icon fa fa-life-ring red"></i>

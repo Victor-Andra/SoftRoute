@@ -7108,25 +7108,23 @@ module.exports = {
             const rels = await Atend.aggregate(pipeline).exec();
 
             // --- FORMATAR RESULTADOS (com tempo dinâmico) ---
-           const relsFormatado = rels.map(r => {
+            const relsFormatado = rels.map(r => {
                 const valorcreNum = r.total_valorcre;
                 const valordebNum = r.total_valordeb;
-                const saldoNum = valorcreNum - valordebNum; // ✅ cálculo do saldo
 
+                // 🔍 Verifica se `terapia_nome` contém "ABA AT" (case-insensitive)
                 const nomeTerapia = (r._id.terapia_nome || "").trim();
-                const isABA_AT = /aba\s+at/i.test(nomeTerapia);
+                const isABA_AT = /aba\s+at/i.test(nomeTerapia); // aceita "ABA AT", "Aba At", "aba at", etc.
 
                 return {
                     conv_nome: r._id.conv_nome,
                     terapia_nome: nomeTerapia,
                     qtd: r.qtd,
-                    tempo: isABA_AT ? "60 min" : "40 min",
+                    tempo: isABA_AT ? "60 min" : "40 min", // ✅ LÓGICA DINÂMICA DO TEMPO
                     total_valorcre: fncGeral.mascaraValores(Math.round(valorcreNum * 100).toString()),
                     total_valordeb: fncGeral.mascaraValores(Math.round(valordebNum * 100).toString()),
-                    total_saldo: fncGeral.mascaraValores(Math.round(saldoNum * 100).toString()), // ✅ saldo formatado
                     _valorcre_num: valorcreNum,
-                    _valordeb_num: valordebNum,
-                    _saldo_num: saldoNum // opcional, se precisar reutilizar depois
+                    _valordeb_num: valordebNum
                 };
             });
 
@@ -7147,31 +7145,24 @@ module.exports = {
                 subtotaisMap[key].total_valordeb += item._valordeb_num;
             });
 
-           const subtotaisPorConvenio = Object.values(subtotaisMap).map(sub => {
-                const saldoNum = sub.total_valorcre - sub.total_valordeb; // ✅ saldo por convênio
-                return {
-                    conv_nome: sub.conv_nome,
-                    qtd: sub.qtd,
-                    total_valorcre: fncGeral.mascaraValores(Math.round(sub.total_valorcre * 100).toString()),
-                    total_valordeb: fncGeral.mascaraValores(Math.round(sub.total_valordeb * 100).toString()),
-                    total_saldo: fncGeral.mascaraValores(Math.round(saldoNum * 100).toString()) // ✅
-                };
-            });
+            const subtotaisPorConvenio = Object.values(subtotaisMap).map(sub => ({
+                conv_nome: sub.conv_nome,
+                qtd: sub.qtd,
+                total_valorcre: fncGeral.mascaraValores(Math.round(sub.total_valorcre * 100).toString()),
+                total_valordeb: fncGeral.mascaraValores(Math.round(sub.total_valordeb * 100).toString())
+            }));
 
             // --- GRAND TOTAL ---
-           const grandTotal = relsFormatado.reduce((acc, item) => {
+            const grandTotal = relsFormatado.reduce((acc, item) => {
                 acc.qtd += item.qtd;
                 acc.total_valorcre += item._valorcre_num;
                 acc.total_valordeb += item._valordeb_num;
                 return acc;
             }, { qtd: 0, total_valorcre: 0, total_valordeb: 0 });
 
-            const grandSaldo = grandTotal.total_valorcre - grandTotal.total_valordeb;
-
             grandTotal.total_valorcre = fncGeral.mascaraValores(Math.round(grandTotal.total_valorcre * 100).toString());
             grandTotal.total_valordeb = fncGeral.mascaraValores(Math.round(grandTotal.total_valordeb * 100).toString());
-            grandTotal.total_saldo = fncGeral.mascaraValores(Math.round(grandSaldo * 100).toString()); // ✅
-            
+
             // --- RENDER ---
             const periodoDe = fncGeral.getDataInvert(dataIni.toISOString().substring(0, 10));
             const periodoAte = fncGeral.getDataInvert(dataFim.toISOString().substring(0, 10));
