@@ -185,7 +185,7 @@ module.exports = {FiltroEvoatend,
             })
             agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
             Terapia.find().then((terapia)=>{
-                Ano.find().then((ano)=>{
+                Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                 console.log("Listagem Realizada de terapias")
                 Bene.find().then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
@@ -375,7 +375,7 @@ module.exports = {FiltroEvoatend,
 
                 agendaFinal.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
                 Terapia.find().then((terapia)=>{
-                     Ano.find().then((ano)=>{
+                     Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                     console.log("Listagem Realizada de terapias")
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
@@ -634,7 +634,7 @@ module.exports = {FiltroEvoatend,
                 //agendaFinal.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")
-                     Ano.find().then((ano)=>{
+                     Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         bene.forEach((b)=>{b.bene_nome = b.bene_nome.replace(".","")});
@@ -913,7 +913,7 @@ module.exports = {FiltroEvoatend,
                 agendaFinal.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")
-                     Ano.find().then((ano)=>{
+                     Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                         bene.forEach((b)=>{b.bene_nome = b.bene_nome.replace(".","")});
@@ -1181,7 +1181,7 @@ module.exports = {FiltroEvoatend,
                 */
                 agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
                 Terapia.find().then((terapia)=>{
-                     Ano.find().then((ano)=>{
+                     Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                     console.log("Listagem Realizada de terapias")
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
@@ -1205,7 +1205,7 @@ module.exports = {FiltroEvoatend,
             console.log("Listagem Realizada de terapias")
             Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                 console.log("Listagem Realizada de Usuário")
-                Ano.find().then((ano)=>{
+                Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                     Bene.find().sort({bene_nome: 1}).then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                         console.log("Listagem Realizada de beneficiarios")
@@ -1345,7 +1345,7 @@ module.exports = {FiltroEvoatend,
                             a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) ? -1 : 0);
 
                         // 🔥 Nova consulta adicionada: Ano.find()
-                        Ano.find().then((anos) => {
+                        Ano.find().sort({ ano_nome: 1 }).then((anos) => {
                             // Renderiza a view com os dados de usuario, bene e anos
                             res.render('area/evol/evoatendabertoLis', { 
                                 terapeutas: usuario, 
@@ -1589,7 +1589,7 @@ module.exports = {FiltroEvoatend,
                     }
                 }
             })
-             Ano.find().then((ano)=>{
+             Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
@@ -1618,13 +1618,13 @@ module.exports = {FiltroEvoatend,
             flash.texto = resposta.texto;
             flash.sucesso = resposta.sucesso;
         }
-        Ano.find().then((ano)=>{
+        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario) => {
             usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0)); // Ordena o bene por nome
     
             Bene.find({ bene_status: "Ativo" }).then((bene) => {
                 bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0)); // Ordena o bene por nome
-                     Ano.find().then((ano)=>{
+                     Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                 res.render('area/evol/evoatendfechadoLis', { terapeutas: usuario, anos: ano, benes: bene, flash, anos: ano});
             })})}).catch((err) => {
                 console.log(err);
@@ -1856,7 +1856,7 @@ module.exports = {FiltroEvoatend,
                 }
             })
             agenda.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
-             Ano.find().then((ano)=>{
+             Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
@@ -1889,7 +1889,7 @@ module.exports = {FiltroEvoatend,
         Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario) => {
             usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0)); // Ordena o bene por nome
             console.log("tamanho"+usuario.length)
-             Ano.find().then((ano)=>{
+             Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
             Bene.find({ bene_status: "Ativo" }).then((bene) => {
                 bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0)); // Ordena o bene por nome
                 res.render('area/evol/evoatendgeralLis', { terapeutas: usuario, anos: ano, benes: bene, flash });
@@ -2126,7 +2126,7 @@ module.exports = {FiltroEvoatend,
                         Sala.find().then((sala)=>{
                             sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena a sala por nome
                             Terapia.find().then((terapia)=>{
-                                Ano.find().then((ano)=>{
+                                Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                                     Conv.find().then((conv)=>{
                                         conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
                                         res.render('area/evol/evoatendgeralLis', {agendas: idsAgendasEx, anos: ano, terapeutas: usuario, benes: bene, salas: sala, terapias: terapia, convs: conv, horaages: horaage, filtroTela, flash})
@@ -2200,7 +2200,7 @@ module.exports = {FiltroEvoatend,
                             a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) ? -1 : 0);
 
                         // 🔥 Nova consulta adicionada: Ano.find()
-                        Ano.find().then((anos) => {
+                        Ano.find().sort({ ano_nome: 1 }).then((anos) => {
                             res.render('area/evol/evoatendrankingLis', {
                                 terapeutas: usuario,
                                 benes: bene,

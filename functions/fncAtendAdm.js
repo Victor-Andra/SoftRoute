@@ -844,7 +844,7 @@ module.exports = {
                     Terapia.find().then((terapia)=>{
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Terapia")
-                         Ano.find().then((ano)=>{
+                         Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                         res.render("atendimento/atendLis", {atends: atend, anos: ano, benes: bene, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro})
         })})})})}).catch((err) =>{
             console.log(err)

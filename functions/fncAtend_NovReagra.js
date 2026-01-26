@@ -168,7 +168,7 @@ module.exports = {
                                     //console.log("Listagem Realizada de Convenios")
                                     Sala.find().then((sala)=>{
                                         sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                            Ano.find().then((ano)=>{
+                                            Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                                         res.render("atendimento/atendCad", {atend, benes: bene, anos: ano, convs: conv, usuarios: usuario, terapias: terapia, convcres: convcre, convdebs: convdeb, salas: sala
                                         })
         })})})})})})})})}).catch((err) =>{
@@ -424,7 +424,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                             Atend.findById(req.params.id).then((atend) =>{
-                                Ano.find().then((ano)=>{
+                                Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                                     res.render('atendimento/atendEdi', { atend, benes: bene, anos: ano, convs: conv, usuarios: usuario, terapias: terapia, salas: sala})
         })})})})})})}).catch((err) =>{
             console.log(err)
@@ -465,7 +465,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                             //console.log("Listagem Realizada de Terapia")
-                              Ano.find().then((ano)=>{
+                              Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                             res.render("atendimento/atendLis", {atends: atend, benes: bene, anos: ano, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, usuarios: usuario, carregaFiltro})
         })})})})})}).catch((err) =>{
             console.log(err)
@@ -684,7 +684,7 @@ module.exports = {
                             Terapia.find().then((terapia)=>{
                                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
                                 //console.log("Listagem Realizada de Terapia")
-                                    Ano.find().then((ano)=>{
+                                    Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                                 res.render("atendimento/atendLis", {atends: atend, benes: bene, anos: ano, convs: conv, terapeutas: terapeuta, terapias: terapia, qtdAtends, carregaFiltro, tipoData, tipoPessoa, dataIni, dataFim, dataFinal, mesAtend, anoAtend, atendTerapeuta, atendBeneficiario})
         })})})})})}).catch((err) =>{
             console.log(err)
@@ -728,7 +728,7 @@ module.exports = {
                                 Terapia.find().then((terapia)=>{
                                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                                     //console.log("Listagem Realizada de Convenios")
-                                    Ano.find().then((ano)=>{
+                                    Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                                         res.render("atendimento/relatendInd", {atendimentos: atendimento, bene, anos: ano, convs: conv, terapeutas: terapeuta, terapias: terapia, convcres: convcre, convdebs: convdeb, data})
         })})})})})})})}).catch((err) =>{
             console.log(err)
@@ -754,7 +754,7 @@ module.exports = {
         Conv.findOne().then((conv)=>{
             Terapia.find().then((terapia)=>{
                 Conv.find().then((conv)=>{
-                    Ano.find().then((ano)=>{
+                    Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                         res.render("atendimento/relatendval", {terapias: terapia, convs: conv, anos: ano})
         })})})}).catch((err) =>{
             console.log(err)
@@ -953,7 +953,7 @@ module.exports = {
                             //console.log("r.valor: " + r.valor)
                         })
                         total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
-                        Ano.find().then((ano)=>{
+                        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                             res.render("atendimento/relatendval", {terapias: terapia, anos: ano, convs: conv, rels: rel, total, periodoDe, periodoAte, conv_nome, filtro})
                         })
                     })
@@ -983,7 +983,7 @@ module.exports = {
                 Terapia.find().then((terapia)=>{
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                            Ano.find().then((ano)=>{
+                            Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                         res.render("atendimento/relatendvalBene", {terapeutas: terapeuta, terapias: terapia, benes: bene, anos: ano})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -1045,7 +1045,7 @@ module.exports = {
                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
                 Terapia.find().then((terapia)=>{
                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                    Ano.find().then((ano)=>{
+                    Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                         Bene.find().then((bene)=>{
                             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                             bene.some((b)=>{
@@ -1250,7 +1250,7 @@ module.exports = {
                 Terapia.find().then((terapia)=>{
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                        Ano.find().then((ano)=>{
+                        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                             res.render("atendimento/relatendvalBeneassin", {terapeutas: terapeuta, anos: ano, terapias: terapia, benes: bene})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -1316,7 +1316,7 @@ module.exports = {
         Atend.find(filtroAtend).then((at)=>{console.log("at>"+at.length)
             at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
-                Ano.find().then((ano)=>{
+                Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                     terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
                     Terapia.find().then((terapia)=>{
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
@@ -1524,7 +1524,7 @@ module.exports = {
                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                 Bene.find().then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                        Ano.find().then((ano)=>{
+                        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                             Conv.find().then((conv)=>{
                     res.render("atendimento/relatendvalcons", {terapias: terapia, benes: bene, anos: ano, convs: conv})
         })})})})}).catch((err) =>{
@@ -1574,7 +1574,7 @@ module.exports = {
                     Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
                         bene_nome = b.bene_nome;
                         convid = b.bene_convid;
-                        Ano.find().then((ano)=>{
+                        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                             Terapia.find().then((terapia)=>{
                                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                                 terapia.forEach((t)=>{
@@ -1789,7 +1789,7 @@ module.exports = {
                 conv_nome = c.conv_nome;
                 console.log("nome convênio: "+conv_nome);
                 Convcre.find().then((cre)=>{
-                    Ano.find().then((ano)=>{
+                    Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                         Bene.find().then((bene)=>{
                             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                             Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
@@ -2214,7 +2214,7 @@ module.exports = {
         Atend.find({atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
             console.log("at:length: "+at.length);
             Convcre.find().then((cre)=>{
-                Ano.find().then((ano)=>{
+                Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                         Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
@@ -2403,7 +2403,7 @@ module.exports = {
                 terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                 Bene.find().then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                    Ano.find().then((ano)=>{
+                    Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                         res.render("atendimento/relatendvalnf", {terapias: terapia, benes: bene, anos: ano})
         })})})}).catch((err) =>{
             console.log(err)
@@ -2461,7 +2461,7 @@ module.exports = {
             })
             Convimp.find({convimp_convid: bene_convid}).then((convimp)=>{
                 Convcre.find().then((cre)=>{
-                    Ano.find().then((ano)=>{
+                    Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                         Bene.find().then((bene)=>{
                             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                             Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
@@ -2645,7 +2645,7 @@ module.exports = {
                     arrayconvid.push((""+aa.atend_convid+""));
                 }
             })
-            Ano.find().then((ano)=>{
+            Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                 Bene.find().then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
@@ -2912,7 +2912,7 @@ module.exports = {
 
         Atend.find({atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}).then((at)=>{
             console.log("at:length: "+at.length);
-            Ano.find().then((ano)=>{
+            Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Bene.findOne({_id: req.body.relBeneid}).then((b)=>{
@@ -3283,7 +3283,7 @@ module.exports = {
             filtroAgendaSemanal = { $or: [ {agenda_tempId: { $in: idsTemp }},{agenda_data: { $gte: seg, $lte: sex },agenda_temp: true} ] };
             Agenda.find(filtroAgendaSemanal).then((agendaSemanal)=>{
                 console.log("agendaSemanal: "+agendaSemanal.length)
-                Ano.find().then((ano)=>{
+                Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                 Bene.find().then((bene)=>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     Convcre.find().then((convcre) => {
@@ -3672,7 +3672,7 @@ module.exports = {
         pesquisa.dataIni = req.body.dataIni;
         pesquisa.dataFim = req.body.dataFim;
         pesquisa.terapeuta = req.body.relTeraid;
-        Ano.find().then((ano)=>{
+        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
             Agenda.find(filtroAgendaFixo).then((agendaFixa)=>{
                 console.log("agendaFixa: "+agendaFixa.length)
                 let idsTemp =[];
@@ -3890,7 +3890,7 @@ module.exports = {
         pesquisa.dataIni = req.body.dataIni;
         pesquisa.dataFim = req.body.dataFim;
         pesquisa.terapeuta = req.body.relTeraid;
-        Ano.find().then((ano)=>{
+        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
             Agenda.find(filtroAgendaFixo).then((agendaFixa)=>{
                 console.log("agendaFixa: "+agendaFixa.length)
                 let idsTemp =[];
@@ -4373,7 +4373,7 @@ module.exports = {
         } else {
             filtroAtend = {atend_terapeutaid: req.body.relTeraid, atend_atenddata: { $gte: seg, $lte: sex}, atend_categoria: {$ne: "Glosa"}}
         }
-        Ano.find().then((ano)=>{
+        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
         Atend.find(filtroAtend).then((at)=>{
             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
@@ -4585,7 +4585,7 @@ module.exports = {
                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena em Ordem Alfabética 
                     Bene.find().then((bene)=>{
                         bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                            Ano.find().then((ano)=>{
+                            Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                         res.render("atendimento/atendreltera/relatendteracons", {terapias: terapia, anos: ano, terapeutas: terapeuta, benes: bene})
         })})})})}).catch((err) =>{
             console.log(err)
@@ -5475,7 +5475,7 @@ relatendgestaoconsfechado: async (req, res) => {
         console.log("sex:"+sex)
         let filtroAtend = {atend_atenddata: { $gte: seg, $lte: sex }, $or: [{atend_terapeutaid: req.body.relTeraid},{atend_mergeterapeutaid: req.body.relTeraid}]}
 
-        Ano.find().then((ano)=>{
+        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
             Atend.find(filtroAtend).then((atend)=>{
                 console.log("Atend: "+atend.length)
                 Bene.find().then((bene)=>{
@@ -5651,7 +5651,7 @@ relatendgestaoconsfechado: async (req, res) => {
         console.log("sex:"+sex)
         let filtroAtend = {atend_atenddata: { $gte: seg, $lte: sex }, $or: [{atend_terapeutaid: req.body.relTeraid},{atend_mergeterapeutaid: req.body.relTeraid}]}
 
-        Ano.find().then((ano)=>{
+        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
             Atend.find(filtroAtend).then((atend)=>{
                 console.log("Atend: "+atend.length)
                 Bene.find().then((bene)=>{
@@ -5844,7 +5844,7 @@ const id = a._id;
         console.log("sex:"+sex)
         let filtroAtend = {atend_atenddata: { $gte: seg, $lte: sex }, $or: [{atend_terapeutaid: req.body.relTeraid},{atend_mergeterapeutaid: req.body.relTeraid}]}
 
-        Ano.find().then((ano)=>{
+        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
             Atend.find(filtroAtend).then((atend)=>{
                 console.log("Atend: "+atend.length)
                 Bene.find().then((bene)=>{
@@ -6079,7 +6079,7 @@ let dataIni2 = dataIni;
         pesquisa.dataFim = req.body.dataFim;
         pesquisa.terapeuta = req.body.relTeraid;
 
-        Ano.find().then((ano)=>{
+        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
         Agenda.find(filtroAgendaFixo).then((agendaFixa)=>{
             console.log("agendaFixa: "+agendaFixa.length)
             let idsTemp =[];

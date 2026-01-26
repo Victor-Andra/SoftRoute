@@ -1722,6 +1722,14 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
         fncAtend.tabdimAtendimentoValFiltro(req,res);
     })
 
+//Relatório de Atendimentos por Beneficiário. Tabela Dinamica expansivel
+    router.get('/atendimento/tabdimBeneTeraAtendval', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimBeneTeraAtendval(req,res);
+        })
+    router.post('/atendimento/tabdimAtendbeneteraValFiltro', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimAtendimentoBeneTeraValFiltro(req,res);
+        })
+
 //Relatório Individual de Atendimentos por Beneficiário.
 //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo.
     router.get('/atendimento/relatendbene', fncGeral.IsAuthenticated,(req,res) =>{

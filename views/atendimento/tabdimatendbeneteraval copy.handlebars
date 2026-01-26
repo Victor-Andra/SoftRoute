@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta charset="utf-8">
-  <title>Relatório Detalhado por Convênio</title>
+  <title>Relatório Detalhado por Beneficiário e Terapeuta</title>
   
 	<style>
 		.detalhe-linha { background-color: #fafafa; display: none; }
@@ -38,11 +38,11 @@
         <div class="breadcrumbs ace-save-state" id="breadcrumbs">
           <ul class="breadcrumb">
             <li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
-            <li class="active">Relatório Detalhado por Convênio</li>
+            <li class="active">Relatório Detalhado por Beneficiário e Terapeuta</li>
           </ul>
         </div>
 		<div class="page-content"><!-- .page-content -->
-			<form role="form" action="/menu/atendimento/tabdimAtendimentoValFiltro" method="POST" onsubmit="atualizaDataIni(); atualizaDataFin();">
+			<form role="form" action="/menu/atendimento/tabdimAtendbeneteraValFiltro" method="POST" onsubmit="atualizaDataIni(); atualizaDataFin();">
 			<div class="row">
 				<div class="col-sm-12">
 				<br>
@@ -54,11 +54,11 @@
 				<input style="height: 30px; width: 140px;" id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
 				<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}">
 
-				<label>Convênio:</label>
+				<label>Beneficiário:</label>
 				<select style="height: 30px; width: 250px;" name="relConvid" id="relConvid" class="chosen-select">
 					<option value="766f69643132333435366964">—</option>
-					{{#each convs}}
-					<option value="{{_id}}">{{conv_nome}}</option>
+					{{#each benes}}
+					<option value="{{_id}}">{{bene_nome}}</option>
 					{{/each}}
 				</select>
 				<input class="hidden" id="relConvIdFiltro" name="relConvIdFiltro" value="{{filtro.convId}}">
@@ -76,7 +76,7 @@
 				<div class="widget-header">
 					<h4 class="widget-title">
 					<i class="ace-icon fa fa-bar-chart green"></i>
-					Tabela Dinâmica Consolidado por Convênio — {{conv_nome}}
+					Tabela Dinâmica Consolidado por Beneficiário — {{bene_nome}}
 					<small class="text-muted">({{periodoDe}} a {{periodoAte}})</small>
 					</h4>
 					<span class="widget-toolbar">

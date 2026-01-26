@@ -320,10 +320,6 @@ module.exports = {FiltroEvoatend,
             .then((agendas) => {
                 console.log("✅ [RESULTADO DA AGENDA]");
                 console.log("→ Total de registros encontrados:", agendas.length);
-                if (agendas.length > 0) {
-                    console.log("→ Exemplo do primeiro registro:", agendas[0]);
-                }
-
                 // Carregar beneficiários
                 return Bene.find()
                     .then((bene) => {

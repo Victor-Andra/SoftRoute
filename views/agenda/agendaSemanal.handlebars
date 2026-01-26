@@ -37,7 +37,52 @@
 			.divisoria-meio-dia td {
 				border-bottom: 4px solid #999 !important; /* Borda grossa e cinza */
 			}
-		</style>
+		
+        	/*Tooltip personalizado */
+            .custom-tooltip {
+                position: relative;
+                display: inline-block;
+                cursor: pointer;
+            }
+
+            .tooltip-text {
+                visibility: hidden;
+                width: max-content;
+                background-color: #f3dfdf;
+                color: red;
+                font-size: 8px;
+                text-align: left;
+                border-radius: 4px;
+                padding: 8px 12px;
+                position: absolute;
+                z-index: 9999;
+                bottom: 125%; /* Acima do ícone */
+                left: 50%;
+                transform: translateX(-50%);
+                opacity: 0.9;
+                white-space: normal;
+                min-width: 150px;
+                max-width: 300px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: opacity 0.3s;
+            }
+
+            .tooltip-text::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #f3dfdf transparent transparent transparent;
+            }
+
+            /* Mostra o tooltip quando o mouse passa sobre o link */
+            .custom-tooltip:hover .tooltip-text {
+                visibility: visible;
+            }
+    	</style>
 
 		<script type="text/javascript">
 			function atualizaData(){

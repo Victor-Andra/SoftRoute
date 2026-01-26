@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta charset="utf-8">
-  <title>Relatório Detalhado por Convênio</title>
+  <title>Relatório Detalhado por Beneficiário</title>
   
 	<style>
 		.detalhe-linha { background-color: #fafafa; display: none; }
@@ -27,7 +27,8 @@
 			font-size: 12px;
 		}
 		
-		
+		.text-center { text-align: center; }
+		.text-right { text-align: right; }
 	</style>
 </head>
 
@@ -38,11 +39,11 @@
         <div class="breadcrumbs ace-save-state" id="breadcrumbs">
           <ul class="breadcrumb">
             <li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
-            <li class="active">Relatório Detalhado por Convênio</li>
+            <li class="active">Relatório Detalhado por Beneficiário</li>
           </ul>
         </div>
 		<div class="page-content"><!-- .page-content -->
-			<form role="form" action="/menu/atendimento/tabdimAtendimentoValFiltro" method="POST" onsubmit="atualizaDataIni(); atualizaDataFin();">
+			<form role="form" action="/menu/atendimento/tabdimAtendbeneteraValFiltro" method="POST" onsubmit="atualizaDataIni(); atualizaDataFin();">
 			<div class="row">
 				<div class="col-sm-12">
 				<br>
@@ -54,14 +55,14 @@
 				<input style="height: 30px; width: 140px;" id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
 				<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}">
 
-				<label>Convênio:</label>
-				<select style="height: 30px; width: 250px;" name="relConvid" id="relConvid" class="chosen-select">
-					<option value="766f69643132333435366964">—</option>
-					{{#each convs}}
-					<option value="{{_id}}">{{conv_nome}}</option>
+				<label>Beneficiário:</label>
+				<select style="height: 30px; width: 250px;" name="relBeneid" id="relBeneid" class="chosen-select">
+					<option value="766f69643132333435366964">-</option>
+					{{#each benes}}
+						<option value="{{_id}}">{{bene_nome}}</option>
 					{{/each}}
 				</select>
-				<input class="hidden" id="relConvIdFiltro" name="relConvIdFiltro" value="{{filtro.convId}}">
+				<input class="hidden" id="relBeneIdFiltro" name="relBeneIdFiltro" value="{{filtro.beneId}}">
 
 				<button class="btn btn-info btn-sm" type="submit">
 					<i class="ace-icon fa fa-search bigger-110"></i> Pesquisar
@@ -76,7 +77,7 @@
 				<div class="widget-header">
 					<h4 class="widget-title">
 					<i class="ace-icon fa fa-bar-chart green"></i>
-					Tabela Dinâmica Consolidado por Convênio — {{conv_nome}}
+					Tabela Dinâmica Consolidado por Beneficiário — {{bene_nome}}
 					<small class="text-muted">({{periodoDe}} a {{periodoAte}})</small>
 					</h4>
 					<span class="widget-toolbar">
@@ -93,32 +94,36 @@
 							<thead>
 							<tr>
 								<th style="width: 30px;"></th>
-								<th>Terapia</th>
+								<th>Terapeuta</th>
 								<th class="text-right">Sessões</th>
-								<th class="text-right">Valor Unitário</th>
-								<th class="text-right">Valor Total</th>
+								<th class="text-right">Vlr Unit Créd</th>
+								<th class="text-right">Vlr Total Créd</th>
+								<th class="text-right">Vlr Unit Déb</th>
+								<th class="text-right">Vlr Total Déb</th>
 								<th>Ação</th>
 							</tr>
 							</thead>
 							<tbody>
 							{{#each rels}}
-							<tr data-terapia-id="{{terapiaId}}">
-								<td class="center">
+							<tr data-terapeuta-id="{{terapeutaId}}">
+								<td class="text-center">
 								<i class="btn-expand ace-icon fa fa-plus-circle bigger-140"></i>
 								</td>
-								<td>{{terapiaNome}}</td>
+								<td>{{terapeutaNome}}</td>
 								<td class="text-right">{{sessoes}}</td>
-								<td class="text-right">{{valorUnitario}}</td>
-								<td class="text-right">{{valorTotal}}</td>
+								<td class="text-right">{{valorUnitarioCred}}</td>
+								<td class="text-right">{{valorTotalCred}}</td>
+								<td class="text-right">{{valorUnitarioDeb}}</td>
+								<td class="text-right">{{valorTotalDeb}}</td>
 								<td></td>
 							</tr>
 
 							<tr class="detalhe-linha">
-								<td colspan="6">
+								<td colspan="8">
 								<div class="detalhe-conteudo">
 									<h5>
 									<i class="ace-icon fa fa-list"></i> 
-									Detalhes de "{{terapiaNome}}" ({{sessoes}} sessões)
+									Detalhes de "{{terapeutaNome}}" ({{sessoes}} sessões)
 									</h5>
 
 									<table class="table table-condensed table-bordered" style="font-size:11px;">
@@ -144,13 +149,15 @@
 										<th>Terapeuta</th>
 										<th>Cred</th>
 										<th>Deb</th>
-										<th class="center">Ação</th>
+										<th class="text-center">Cred Usado</th>
+										<th class="text-center">Deb Usado</th>
+										<th class="text-center">Ação</th>
 										</tr>
 									</thead>
 									<tbody>
 										{{#each atendimentos}}
 										<tr>
-										<td class="center">{{ordem}}</td>
+										<td class="text-center">{{ordem}}</td>
 										<td style="white-space: nowrap !important; min-width: 75px;">{{data}}</td>
 										<td>{{hora}}</td>
 										<td>{{beneNome}}</td>
@@ -174,7 +181,10 @@
 										<td>{{{credSubst}}}</td>
 										<td>{{{debSubst}}}</td>
 
-										<td class="center">
+										<td class="text-center">{{{credUsado}}}</td>
+										<td class="text-center">{{{debUsado}}}</td>
+
+										<td class="text-center">
 											{{#if permiteEdicao}}
 											<a class="green" href="/menu/atendimento/atendadm/edi/{{_id}}">
 											<i class="ace-icon fa fa-pencil bigger-130"></i>
@@ -194,8 +204,10 @@
 							<tr>
 								<td colspan="2" class="text-right"><b>Total Geral:</b></td>
 								<td class="text-right"><b>{{total.sessoes}}</b></td>
-								<td class="text-right">—</td>
-								<td class="text-right"><b>{{total.total}}</b></td>
+								<td class="text-right">-</td>
+								<td class="text-right"><b>{{total.totalCred}}</b></td>
+								<td class="text-right">-</td>
+								<td class="text-right"><b>{{total.totalDeb}}</b></td>
 								<td></td>
 							</tr>
 							</tfoot>
@@ -227,8 +239,8 @@
       if (ini) document.getElementById('dataFilDe').value = ini.split(' ')[0];
       if (fim) document.getElementById('dataFilAte').value = fim.split(' ')[0];
       
-      const convId = document.getElementById('relConvIdFiltro').value || '766f69643132333435366964';
-      document.getElementById('relConvid').value = convId;
+      const beneId = document.getElementById('relBeneIdFiltro').value || '766f69643132333435366964';
+      document.getElementById('relBeneid').value = beneId;
       
       if (typeof $.fn.chosen === 'function') {
         $('.chosen-select').trigger('chosen:updated');

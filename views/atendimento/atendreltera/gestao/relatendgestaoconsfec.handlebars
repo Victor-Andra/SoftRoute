@@ -139,19 +139,27 @@
                                             <table class="table table-bordered table-sm">
                                                 <thead>
                                                     <tr>
-                                                        <th>Convênio</th>
-                                                        <th>Qt. Total</th>
-                                                        <th>Total Crédito (R$)</th>
-                                                        <th>Total Débito (R$)</th>
+                                                    
+                                                        <th width="300px;">Convênio</th>
+                                                        <th width="100px;">Qt. Total</th>
+                                                        <th width="300px;">Crédito Unitário</th>
+                                                        <th width="100px;">Total Crédito (R$)</th>
+                                                        <th width="300px;">Débito Unitário</th>
+                                                        <th width="100px;">Total Débito (R$)</th>
+                                                        <th width="100px;">Saldo Total (R$)</th>
+                                                   
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {{#each subtotaisPorConvenio}}
                                                     <tr class="subtotal-convenio">
-                                                        <td>{{conv_nome}}</td>
-                                                        <td class="center">{{qtd}}</td>
-                                                        <td style="text-align: right;">{{total_valorcre}}</td>
-                                                        <td style="text-align: right;">{{total_valordeb}}</td>
+                                                            <td>{{conv_nome}}</td>
+                                                            <td class="center">{{qtd}}</td>
+                                                            <td style="text-align: right;">{{valor_unitario_cred_ref}}</td>
+                                                            <td style="text-align: right;">{{total_valorcre}}</td>
+                                                            <td  style="text-align: right;">{{valor_unitario_deb_ref}}</td>
+                                                            <td style="text-align: right;">{{total_valordeb}}</td>
+                                                            <td style="text-align: right;">{{total_saldo}}</td>
                                                     </tr>
                                                     {{/each}}
                                                 </tbody>

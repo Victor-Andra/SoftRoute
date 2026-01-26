@@ -8443,7 +8443,7 @@ module.exports = {
 
         let dataaux;
         let dataIni = new Date(req.body.dataFinal);//deve retornar uma segunda-feira
-        dataIni.setHours(dataIni.getHours()+3)
+        dataIni.setHours(dataIni.getHours()+3);
         dataIni.setHours(0);
         dataIni.setMinutes(0);
         dataIni.setSeconds(0);

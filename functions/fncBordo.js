@@ -62,7 +62,7 @@ module.exports = {
         console.log('listando Diários de Bordo')
         Bene.find({bene_status: "Ativo", bene_nome: { $not: /\./ }}).then((bene) => {
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-            Ano.find().then((ano) =>{
+            Ano.find().sort({ ano_nome: 1 }).then((ano) =>{
                 Escola.find().then((escola) =>{
                     escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena a escola por nome
                     Usuario.findOne({"_id":usuarioAtual}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
@@ -254,7 +254,7 @@ module.exports = {
             bordo.forEach((c)=>{
                 c.bordo_ativ = fncGeral.getDataRevert(fncGeral.getData(c.bordo_dataativ))
             })
-            Ano.find().then((ano) =>{
+            Ano.find().sort({ ano_nome: 1 }).then((ano) =>{
                 Bene.find().then((bene) =>{
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     Escola.find().then((escola) =>{

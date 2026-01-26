@@ -132,7 +132,7 @@ module.exports = {
                         Sala.find()
                         .then((salas) => {
                             salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome));
-                            Ano.find().then((ano)=>{
+                            Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                             Terapia.find()
                             .then((terapias) => {
                                 Conv.find()
@@ -314,7 +314,7 @@ module.exports = {
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
 
         let flash = new Resposta();
-            Ano.find().then((ano)=>{
+            Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                 res.render('atendimento/extra/extraLisctrl', {
                     anos: ano, 
                     flash 
@@ -355,7 +355,7 @@ module.exports = {
 
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                Ano.find().then((ano)=>{
+                Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                     Atend.find().then((atend)=>{
                 Usuario.find().then((usuario)=>{
                     //console.log("Listagem Realizada Usuário!")
