@@ -956,7 +956,7 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
                 return value; // Já é um booleano, retorna como está
             }
             if (typeof value === "string") {
-                return value.toLowerCase() === "true"; 
+                return value.toLowerCase() === "true"; // Converte strings "true" ou "false" para booleano
             }
             return false; // Caso padrão (se for null, undefined ou outro tipo)
         }
@@ -997,26 +997,9 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
         const fimSemana = new Date(domingo);
         fimSemana.setDate(domingo.getDate() + 6);
 
-        const categoriasExcluidas = ["Feriado", "Falta Justificada", "Falta Absoluta"];
-
-        // Agendas do dia (com filtro)
-        const inicioDia = new Date();
-        inicioDia.setHours(0, 0, 0, 0);
-        const fimDia = new Date();
-        fimDia.setHours(23, 59, 59, 999);
-
-        let agendas = await Agenda.find({
-            agenda_data: { $gte: inicioDia, $lte: fimDia },
-            agenda_usuid: idUsu,
-            agenda_temp: false,
-            agenda_categoria: { $nin: categoriasExcluidas }
-        });
-
         const agendasSemanais = await Agenda.find({
             agenda_data: { $gte: inicioSemana, $lte: fimSemana },
-            agenda_usuid: idUsu,
-            agenda_temp: true,
-            agenda_categoria: { $nin: categoriasExcluidas }
+            agenda_usuid: idUsu
         });
 
         const evolucaoFaltante = agendasSemanais
@@ -1043,6 +1026,18 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
                 };
             }).sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
 
+        // Agendas do dia (com filtro)
+        const inicioDia = new Date();
+        inicioDia.setHours(0, 0, 0, 0);
+        const fimDia = new Date();
+        fimDia.setHours(23, 59, 59, 999);
+
+        let agendas = await Agenda.find({
+            agenda_data: { $gte: inicioDia, $lte: fimDia },
+            agenda_usuid: idUsu,
+            agenda_temp: false
+        });
+
         agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
 
         agendas.forEach(a => {
@@ -1055,18 +1050,7 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
             a.agenda_selo = normalizeBoolean(a.agenda_selo); // Normaliza o campo agenda_selo
         });
 
-        //const agendaFinal = agendas.sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
-        agendaFinal = agendasSemanais;
-        agendas.forEach(a => {
-            const existe = agendaFinal.some(as => 
-                a._id?.toString() === as.agenda_tempId?.toString()
-            );
-
-            if (!existe) {
-                agendaFinal.push(a);
-            }
-        });
-        
+        const agendaFinal = agendas.sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
 
         // Buscar dados adicionais
         const [terapias2, benes2, usuarios2] = await Promise.all([
