@@ -956,7 +956,7 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
                 return value; // Já é um booleano, retorna como está
             }
             if (typeof value === "string") {
-                return value.toLowerCase() === "true"; // Converte strings "true" ou "false" para booleano
+                return value.toLowerCase() === "true"; 
             }
             return false; // Caso padrão (se for null, undefined ou outro tipo)
         }
@@ -997,9 +997,26 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
         const fimSemana = new Date(domingo);
         fimSemana.setDate(domingo.getDate() + 6);
 
+        const categoriasExcluidas = ["Feriado", "Falta Justificada", "Falta Absoluta"];
+
+        // Agendas do dia (com filtro)
+        const inicioDia = new Date();
+        inicioDia.setHours(0, 0, 0, 0);
+        const fimDia = new Date();
+        fimDia.setHours(23, 59, 59, 999);
+
+        let agendas = await Agenda.find({
+            agenda_data: { $gte: inicioDia, $lte: fimDia },
+            agenda_usuid: idUsu,
+            agenda_temp: false,
+            agenda_categoria: { $nin: categoriasExcluidas }
+        });
+
         const agendasSemanais = await Agenda.find({
             agenda_data: { $gte: inicioSemana, $lte: fimSemana },
-            agenda_usuid: idUsu
+            agenda_usuid: idUsu,
+            agenda_temp: true,
+            agenda_categoria: { $nin: categoriasExcluidas }
         });
 
         const evolucaoFaltante = agendasSemanais
@@ -1026,18 +1043,6 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
                 };
             }).sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
 
-        // Agendas do dia (com filtro)
-        const inicioDia = new Date();
-        inicioDia.setHours(0, 0, 0, 0);
-        const fimDia = new Date();
-        fimDia.setHours(23, 59, 59, 999);
-
-        let agendas = await Agenda.find({
-            agenda_data: { $gte: inicioDia, $lte: fimDia },
-            agenda_usuid: idUsu,
-            agenda_temp: false
-        });
-
         agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
 
         agendas.forEach(a => {
@@ -1050,7 +1055,18 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
             a.agenda_selo = normalizeBoolean(a.agenda_selo); // Normaliza o campo agenda_selo
         });
 
-        const agendaFinal = agendas.sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
+        //const agendaFinal = agendas.sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
+        agendaFinal = agendasSemanais;
+        agendas.forEach(a => {
+            const existe = agendaFinal.some(as => 
+                a._id?.toString() === as.agenda_tempId?.toString()
+            );
+
+            if (!existe) {
+                agendaFinal.push(a);
+            }
+        });
+        
 
         // Buscar dados adicionais
         const [terapias2, benes2, usuarios2] = await Promise.all([
@@ -1728,6 +1744,28 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
         })
     router.post('/atendimento/tabdimAtendbeneteraValFiltro', fncGeral.IsAuthenticated,(req,res) =>{
             fncAtend.tabdimAtendimentoBeneTeraValFiltro(req,res);
+        })
+
+//Relatório de Atendimentos por Terapeuta. Tabela Dinamica expansivel
+    router.get('/atendimento/tabdimTeraBeneAtendval', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimTeraBeneAtendval(req,res);
+        })
+    router.post('/atendimento/tabdimAtendterabeneValFiltro', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimAtendimentoTeraBeneValFiltro(req,res);
+        })
+//Relatório de Atendimentos por Convênio e Beneficiário. Tabela Dinamica expansivel
+    router.get('/atendimento/tabdimConvBeneAtendval', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimConvBeneAtendval(req,res);
+        })
+    router.post('/atendimento/tabdimAtendconvbeneValFiltro', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimAtendimentoConvBeneValFiltro(req,res);
+        })
+//Relatório de Atendimentos por Convênio e Beneficiário. Tabela Dinamica expansivel
+    router.get('/atendimento/tabdimConvBeneTeraAtendval', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimConvBeneTeraAtendval(req,res);
+        })
+    router.post('/atendimento/tabdimAtendconvbeneteraValFiltro', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimAtendimentoConvBeneTeraValFiltro(req,res);
         })
 
 //Relatório Individual de Atendimentos por Beneficiário.
