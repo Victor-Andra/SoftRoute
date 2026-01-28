@@ -422,7 +422,16 @@ const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSc
                     console.log("[Helper maiorQueDecimal] resultado:", result);
                     return result ? options.fn(this) : options.inverse(this);
                 },
-                
+                // helpers/handlebars.js
+                formatarTextoBarra: function(texto) {
+                    if (!texto) return '';
+                    
+                    // Substituir "/" por " / " (com espaços)
+                    let textoFormatado = texto.replace(/\//g, ' / ');
+                    
+                    return textoFormatado;
+                },
+                                
                 /**
                  * Helper Handlebars: {{formatDate "formato" data}}
                  * Criado em 26/06/2025 às 11:25 por Wagner Cintra

@@ -1223,6 +1223,15 @@ router.post("/agenda/filSB", fncGeral.IsAuthenticated, (req,res) =>{//direciona 
     fncAgenda.carregaAgendaFilSB(req, res);
 })
 
+//Controle do Agendamento Fixo por Beneficiário com funcionalidades adicionais para equipe de Atendimento e Fechamento
+router.get("/agenda/lisSBFixo/", fncGeral.IsAuthenticated, (req,res) =>{// Abre Agedamento Semanal por Beneficiário Especial
+    fncAgenda.carregaAgendaSBFixo(req, res);
+})
+
+router.post("/agenda/filSBFixo", fncGeral.IsAuthenticated, (req,res) =>{// Filtra o Agedamento Semanal por Beneficiário Especial
+    fncAgenda.carregaAgendaFilSBFixo(req, res);
+})
+
 //nova
 router.get("/agenda/lisSemBM", fncGeral.IsAuthenticated, (req,res) =>{//Minha Agenda,Agenda semanal por beneficiário
     fncAgenda.carregaAgendaSBMinhaage(req, res);

@@ -27,8 +27,7 @@
 			font-size: 12px;
 		}
 		
-		.text-center { text-align: center; }
-		.text-right { text-align: right; }
+		
 	</style>
 </head>
 
@@ -57,7 +56,7 @@
 
 				<label>Convênio:</label>
 				<select style="height: 30px; width: 250px;" name="relConvid" id="relConvid" class="chosen-select">
-					<option value="766f69643132333435366964">-</option>
+					<option value="766f69643132333435366964">—</option>
 					{{#each convs}}
 					<option value="{{_id}}">{{conv_nome}}</option>
 					{{/each}}
@@ -104,7 +103,7 @@
 							<tbody>
 							{{#each rels}}
 							<tr data-terapia-id="{{terapiaId}}">
-								<td class="text-center">
+								<td class="center">
 								<i class="btn-expand ace-icon fa fa-plus-circle bigger-140"></i>
 								</td>
 								<td>{{terapiaNome}}</td>
@@ -145,16 +144,13 @@
 										<th>Terapeuta</th>
 										<th>Cred</th>
 										<th>Deb</th>
-										<th class="text-center">Cred Usado</th>
-										<th class="text-center">Deb Usado</th>
-										
-										<th class="text-center">Ação</th>
+										<th class="center">Ação</th>
 										</tr>
 									</thead>
 									<tbody>
 										{{#each atendimentos}}
 										<tr>
-										<td class="text-center">{{ordem}}</td>
+										<td class="center">{{ordem}}</td>
 										<td style="white-space: nowrap !important; min-width: 75px;">{{data}}</td>
 										<td>{{hora}}</td>
 										<td>{{beneNome}}</td>
@@ -178,11 +174,7 @@
 										<td>{{{credSubst}}}</td>
 										<td>{{{debSubst}}}</td>
 
-										<td class="text-center">{{{credUsado}}}</td>
-										<td class="text-center">{{{debUsado}}}</td>
-										
-
-										<td class="text-center">
+										<td class="center">
 											{{#if permiteEdicao}}
 											<a class="green" href="/menu/atendimento/atendadm/edi/{{_id}}">
 											<i class="ace-icon fa fa-pencil bigger-130"></i>
@@ -202,7 +194,7 @@
 							<tr>
 								<td colspan="2" class="text-right"><b>Total Geral:</b></td>
 								<td class="text-right"><b>{{total.sessoes}}</b></td>
-								<td class="text-right">-</td>
+								<td class="text-right">—</td>
 								<td class="text-right"><b>{{total.total}}</b></td>
 								<td></td>
 							</tr>

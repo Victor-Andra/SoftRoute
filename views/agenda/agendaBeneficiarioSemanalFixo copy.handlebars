@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Agenda Semanal - Beneficiário</title>
+    
+    <!-- Ace Admin CSS -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/ace.min.css">
+    <link rel="stylesheet" href="/assets/css/ace-skins.min.css">
+    <link rel="stylesheet" href="/assets/css/chosen.min.css">
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="/assets/css/jquery.dataTables.min.css">
+    
+   <style>
+	:root {
+    --cor-manha: #d4edda;  /* Verde claro */
+    --cor-tarde: #fff3cd;  /* Amarelo claro */
+    --cor-divisoria: #dee2e6;
+    --cor-header: #2c3e50;
+    --cor-acento: #3498db;
+}
+
+body {
+    background-color: #f8f9fa !important;
+    font-family: 'Open Sans', Arial, sans-serif;
+}
+
+.agenda-container {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 20px 15px;
+}
+
+.agenda-header {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.agenda-header h1 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.agenda-header h1 i {
+    font-size: 28px;
+}
+
+.beneficiario-badge {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+    display: inline-block;
+    margin: 15px 0;
+}
+
+/* ========== Filtro Estilizado ========== */
+.filtro-container {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border: 1px solid #e0e6ed;
+}
+
+.filtro-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.filtro-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    min-width: 350px;
+}
+
+.filtro-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    font-size: 14px;
+    white-space: nowrap;
+    min-width: 110px;
+    justify-content: flex-end;
+}
+
+.filtro-label i {
+    font-size: 16px;
+    color: #3498db;
+    min-width: 20px;
+    text-align: center;
+}
+
+.filtro-label span {
+    display: inline-block;
+}
+
+.filtro-select {
+    width: 280px !important;
+    height: 38px !important;
+    border: 2px solid #dce4ec !important;
+    border-radius: 6px !important;
+    font-size: 14px !important;
+    padding: 5px 10px !important;
+    transition: all 0.3s ease;
+}
+
+.filtro-select:focus {
+    border-color: #3498db !important;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15) !important;
+}
+
+.filtro-date {
+    width: 180px !important;
+    height: 38px !important;
+    border: 2px solid #dce4ec;
+    border-radius: 6px;
+    font-size: 14px;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+}
+
+.filtro-date:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+/* Chosen Select Customizado */
+.chosen-container {
+    width: 280px !important;
+}
+
+.chosen-container .chosen-single {
+    height: 38px !important;
+    padding: 6px 10px !important;
+    border: 2px solid #dce4ec !important;
+    border-radius: 6px !important;
+    box-shadow: none !important;
+    background: white !important;
+    font-size: 14px !important;
+    transition: all 0.3s ease;
+}
+
+.chosen-container .chosen-single div b {
+    background: none !important;
+}
+
+.chosen-container .chosen-single:hover,
+.chosen-container.chosen-container-active .chosen-single {
+    border-color: #3498db !important;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15) !important;
+}
+
+.chosen-container .chosen-drop {
+    border: 2px solid #3498db !important;
+    border-radius: 6px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    margin-top: 2px !important;
+}
+
+.chosen-container .chosen-results li {
+    padding: 8px 12px !important;
+    font-size: 14px !important;
+}
+
+.chosen-container .chosen-results li.highlighted {
+    background: #3498db !important;
+    color: white !important;
+}
+
+/* Botão Pesquisar */
+.btn-pesquisar {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    border: none;
+    padding: 10px 28px;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);
+    height: 38px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.btn-pesquisar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+}
+
+.btn-pesquisar i {
+    font-size: 16px;
+}
+
+/* ========== Tabela Agenda ========== */
+.agenda-table-container {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    border: 1px solid #e0e6ed;
+}
+
+.dia-badge {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-block;
+    min-width: 120px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(52, 152, 219, 0.3);
+}
+
+/* ========== Linhas por Período - Versão Definitiva ========== */
+.manha-row td {
+    background-color: var(--cor-manha) !important;
+}
+
+.tarde-row td {
+    background-color: var(--cor-tarde) !important;
+}
+
+/* Célula hora - sempre branca */
+.hora-cell {
+    background-color: #f8f9fa !important;
+    font-weight: 700;
+    color: #2c3e50;
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    font-size: 13px;
+    min-width: 70px;
+}
+
+/* Linha divisória - NÃO sobrescreve background */
+.divisoria-meio-dia td {
+    border-bottom: 4px solid var(--cor-divisoria) !important;
+}
+
+/* Forçar background na linha divisória */
+.divisoria-meio-dia td:not(.hora-cell) {
+    background-color: var(--cor-manha) !important;
+}
+
+/* ========== Cards de Terapia - Corrigido ========== */
+.terapia-card {
+    background: white;
+    border: 2px solid #e0e6ed;
+    border-radius: 6px;
+    padding: 6px 8px !important;
+    margin: 4px 0;
+    font-size: 11px;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    min-width: 85px;
+    text-align: center;
+    line-height: 1.3;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.terapia-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-color: #3498db;
+}
+
+/* Texto dentro do card */
+.terapia-nome,
+.terapeuta-nome {
+    display: block;
+    line-height: 1.3;
+    padding: 0 2px;
+   
+    text-overflow: ellipsis;
+}
+
+.terapia-nome {
+    font-weight: 500; /* Reduzido de 600 para 500 */
+    color: #2c3e50;
+    font-size: 11px; /* Reduzido de 12px para 11px */
+    margin-bottom: 2px;
+}
+
+.terapeuta-nome {
+    color: #2c3e50;
+    font-size: 11px; /* Reduzido de 11px para 10px */
+    font-style: italic;
+	margin-bottom: 2px;
+}
+
+/* Cores por categoria - SEM DUPLICATAS */
+.terapia-card.terapia-falta {
+    background-color: #fff3cd;
+    border-color: #ffc107;
+}
+
+.terapia-card.terapia-falta-justificada,
+.terapia-card.terapia-falta-absoluta {
+    background-color: #ffebcd;
+    border-color: #ff9800;
+}
+
+.terapia-card.terapia-substituicao {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+}
+
+.terapia-card.terapia-roberta-disponivel {
+    background-color: #ffebee;
+    border-color: #f44336;
+}
+
+.terapia-card.terapia-supervisor {
+    background-color: #fce4ec;
+    border-color: #e91e63;
+}
+
+.terapia-card.terapia-ordinario {
+    background-color: #e8f5e9;
+    border-color: #4caf50;
+}
+
+.terapia-card.terapia-sem-evento {
+    background-color: #f5f5f5;
+    border-color: #9e9e9e;
+}
+
+/* ========== Botões de Ação ========== */
+.acao-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.acao-btn.add {
+    background-color: #27ae60;
+    color: white;
+    box-shadow: 0 2px 4px rgba(39, 174, 96, 0.3);
+}
+
+.acao-btn.add:hover {
+    background-color: #229954;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(39, 174, 96, 0.4);
+}
+
+.acao-btn.edit {
+    background-color: #3498db;
+    color: white;
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.3);
+}
+
+.acao-btn.edit:hover {
+    background-color: #2980b9;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
+}
+
+.acao-btn.delete {
+    background-color: #e74c3c;
+    color: white;
+    box-shadow: 0 2px 4px rgba(231, 76, 60, 0.3);
+}
+
+.acao-btn.delete:hover {
+    background-color: #c0392b;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4);
+}
+
+/* ========== Legenda ========== */
+.legenda-container {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #e0e6ed;
+}
+
+.legenda-title {
+    margin-bottom: 12px;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.legenda-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+}
+
+.legenda-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #555;
+}
+
+.legenda-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+/* ========== Tooltip Subfix ========== */
+.custom-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: max-content;
+    background-color: #f3dfdf;
+    color: red;
+    font-size: 11px;
+    text-align: left;
+    border-radius: 4px;
+    padding: 8px 12px;
+    position: absolute;
+    z-index: 9999;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.9;
+    white-space: normal;
+    min-width: 180px;
+    max-width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: opacity 0.3s;
+    font-weight: 600;
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #f3dfdf transparent transparent transparent;
+}
+
+.custom-tooltip:hover .tooltip-text {
+    visibility: visible;
+}
+
+/* Botão Subfix */
+.acao-btn.subfix {
+    background-color: #e83e8c; /* Rosa/Pink */
+    color: white;
+    box-shadow: 0 2px 4px rgba(232, 62, 140, 0.3);
+}
+
+.acao-btn.subfix:hover {
+    background-color: #d92674;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(232, 62, 140, 0.4);
+}
+
+/* ========== Responsivo ========== */
+@media (max-width: 1400px) {
+    .agenda-table {
+        font-size: 11px;
+    }
+    .dia-badge {
+        min-width: 100px;
+        padding: 8px 14px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 992px) {
+    .agenda-table-container {
+        overflow-x: auto;
+    }
+    .filtro-container {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .filtro-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .filtro-item {
+        width: 100%;
+        min-width: auto;
+        justify-content: flex-start;
+    }
+    
+    .filtro-label {
+        min-width: auto;
+        justify-content: flex-start;
+        width: 100%;
+    }
+    
+    .filtro-select,
+    .chosen-container {
+        width: 100% !important;
+    }
+    
+    .filtro-date {
+        width: 100% !important;
+    }
+    
+    .btn-pesquisar {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+   </style>
+</head>
+
+<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="ace-icon fa fa-home home-icon"></i>
+                            <a href="#">Home</a>
+                        </li>
+                        <li class="active">Agenda Semanal por Beneficiário (Fixos)</li>
+                    </ul>
+                </div>
+
+                <div class="agenda-container">
+                    <!-- Header -->
+                    <div class="agenda-header">
+                        <h1>
+                            <i class="ace-icon fa fa-calendar"></i>
+                            Agenda Semanal - Beneficiário
+                        </h1>
+                    </div>
+
+                    <!-- Beneficiário -->
+                    <div style="text-align: center;">
+                        <span class="beneficiario-badge" id="beneficiario-nome">
+                            <i class="ace-icon fa fa-user"></i> {{benenomeconv}}
+                        </span>
+                    </div>
+
+                    <!-- Filtro -->
+                    <div class="filtro-container">
+                        <form class="form-horizontal" role="form" action="/menu/agenda/filSBFixo" method="POST">
+                            <div class="filtro-row">
+                                <div class="filtro-item">
+                                    <label><i class="ace-icon fa fa-user"></i> Beneficiário:</label>
+                                    <select id="agendaBeneid" name="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." style="width: 320px; height: 38px; padding: 5px;">
+                                        <option value="766f69643132333435366964">—</option>
+                                        {{#each benes}}
+                                        <option value="{{_id}}">{{bene_apelido}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+
+                                <div class="filtro-item">
+                                    <label><i class="ace-icon fa fa-calendar"></i> Data:</label>
+                                    <input type="date" id="dataFil" name="dataFil" class="form-control" style="width: 180px; height: 38px; padding: 5px;" onchange="javascript:formataData();">
+                                    <input type="hidden" id="dataFinal" name="dataFinal" />
+                                </div>
+
+                                <button type="submit" class="btn btn-pesquisar">
+                                    <i class="ace-icon fa fa-search"></i> Pesquisar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Tabela Agenda -->
+                    <div class="agenda-table-container">
+                        <table id="dynamic-table" class="table table-bordered table-hover" style="width: 100%; font-size: 12px;">
+                            <thead style="background-color: #2c3e50; color: white;">
+                                <tr role="row">
+                                    <th rowspan="2" style="width: 70px; vertical-align: middle; position: sticky; left: 0; z-index: 20; background-color: #2c3e50;">
+                                        <i class="ace-icon fa fa-clock-o"></i><br>Hora
+                                    </th>
+                                    <th colspan="3" class="text-center"><span class="dia-badge"><i class="ace-icon fa fa-calendar"></i> {{segunda}}</span></th>
+                                    <th colspan="3" class="text-center"><span class="dia-badge"><i class="ace-icon fa fa-calendar"></i> {{terca}}</span></th>
+                                    <th colspan="3" class="text-center"><span class="dia-badge"><i class="ace-icon fa fa-calendar"></i> {{quarta}}</span></th>
+                                    <th colspan="3" class="text-center"><span class="dia-badge"><i class="ace-icon fa fa-calendar"></i> {{quinta}}</span></th>
+                                    <th colspan="3" class="text-center"><span class="dia-badge"><i class="ace-icon fa fa-calendar"></i> {{sexta}}</span></th>
+                                </tr>
+                                <tr role="row">
+                                    <th style="width: 150px;">Terapeuta</th>
+                                    <th style="width: 150px;">Terapia</th>
+                                    <th style="width: 70px;"><i class="ace-icon fa fa-cog"></i></th>
+                                    <th>Terapeuta</th>
+                                    <th>Terapia</th>
+                                    <th><i class="ace-icon fa fa-cog"></i></th>
+                                    <th>Terapeuta</th>
+                                    <th>Terapia</th>
+                                    <th><i class="ace-icon fa fa-cog"></i></th>
+                                    <th>Terapeuta</th>
+                                    <th>Terapia</th>
+                                    <th><i class="ace-icon fa fa-cog"></i></th>
+                                    <th>Terapeuta</th>
+                                    <th>Terapia</th>
+                                    <th><i class="ace-icon fa fa-cog"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each horaages}}
+                                <tr role="row" class="{{#ifCond horaage_hora '>=' '12:00'}}tarde-row{{else}}manha-row{{/ifCond}}">
+                                    <td style="width: 70px;" class="hora-cell dia-semana"><b>{{horaage_hora}}</b></td>
+                                    <td id="horasegTeraId_{{horaage_hora}}"></td>
+                                    <td id="horasegTerapiaId_{{horaage_hora}}"></td>
+                                    <td id="horasegAcaoId_{{horaage_hora}}" class="dia-semana text-center"></td>
+                                    <td id="horaterTeraId_{{horaage_hora}}"></td>
+                                    <td id="horaterTerapiaId_{{horaage_hora}}"></td>
+                                    <td id="horaterAcaoId_{{horaage_hora}}" class="dia-semana text-center"></td>
+                                    <td id="horaquaTeraId_{{horaage_hora}}"></td>
+                                    <td id="horaquaTerapiaId_{{horaage_hora}}"></td>
+                                    <td id="horaquaAcaoId_{{horaage_hora}}" class="dia-semana text-center"></td>
+                                    <td id="horaquiTeraId_{{horaage_hora}}"></td>
+                                    <td id="horaquiTerapiaId_{{horaage_hora}}"></td>
+                                    <td id="horaquiAcaoId_{{horaage_hora}}" class="dia-semana text-center"></td>
+                                    <td id="horasexTeraId_{{horaage_hora}}"></td>
+                                    <td id="horasexTerapiaId_{{horaage_hora}}"></td>
+                                    <td id="horasexAcaoId_{{horaage_hora}}" class="dia-semana text-center"></td>										
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Legenda -->
+                    <div class="legenda-container">
+                        <div class="legenda-title">
+                            <i class="ace-icon fa fa-list"></i> Legenda
+                        </div>
+                        <div class="legenda-items">
+                            <div class="legenda-item">
+                                <span class="legenda-color" style="background-color: yellow;"></span>
+                                <span>Falta</span>
+                            </div>
+                            <div class="legenda-item">
+                                <span class="legenda-color" style="background-color: orange;"></span>
+                                <span>Falta Justificada / Absoluta</span>
+                            </div>
+                            <div class="legenda-item">
+                                <span class="legenda-color" style="background-color: cyan;"></span>
+                                <span>Substituição</span>
+                            </div>
+                            <div class="legenda-item">
+                                <span class="legenda-color" style="background-color: salmon;"></span>
+                                <span>Roberta Disponível</span>
+                            </div>
+                            <div class="legenda-item">
+                                <span class="legenda-color" style="background-color: lightpink;"></span>
+                                <span>Supervisor</span>
+                            </div>
+                            <div class="legenda-item">
+                                <span class="legenda-color" style="background-color: aquamarine;"></span>
+                                <span>Ordinário</span>
+                            </div>
+                            <div class="legenda-item">
+                                <span class="legenda-color" style="background-color: lightgreen;"></span>
+                                <span>Sem Evento</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden div para carregar dados -->
+    <div class="hidden" id="divCarrega" name="divCarrega">
+        <input id="766f69643132333435366964" value="&nbsp;" />
+        {{#each agendas}}
+            {{#compareThis agenda_terapiaid "766f69643132333435366964"}}
+            <!-- VOID -->
+            {{else}}
+            <input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
+            <input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
+            {{/compareThis}}
+            {{#isTrue agenda_temp}}
+                <input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}_{{agenda_terapiaid}}" value="{{agenda_categoria}}">
+                <input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_usuid}}" value="{{agenda_categoria}}">
+                <div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+                    <a class="blue" href="/menu/agenda/ediTemp/{{_id}}">
+                        <i class="ace-icon fa fa-pencil bigger-130"></i>
+                    </a>
+                    <a class="red" href="/menu/agenda/del/{{_id}}">
+                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                    </a>
+                </div>
+            {{else}}
+                <div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
+                    <a class="green" href="/menu/agenda/cadTemp/{{_id}}">
+                        <i class="ace-icon fa fa-plus bigger-130"></i>
+                    </a>
+                </div>
+            {{/isTrue}}
+            {{#isTrue agenda_extra}}
+                <input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}_{{agenda_terapiaid}}" value="Ordinario">
+                <input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_usuid}}" value="Ordinario">
+            {{else}}
+            {{/isTrue}}
+        {{/each}}
+        {{#each terapias}}
+            <label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{formatarTextoBarra terapia_nome}}</label>
+        {{/each}}
+        {{#each terapeutas}}
+            <label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{usuario_nome}}</label>
+        {{/each}}
+    </div>
+
+    <!-- Scripts -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.dataTables.min.js"></script>
+    <script src="/assets/js/chosen.jquery.min.js"></script>
+
+    <script type="text/javascript">
+        function formataData(){
+            let dt = document.getElementById('dataFil').value;
+            let dia = dt.substring(8,10);
+            let mes = dt.substring(5,7);
+            let ano = dt.substring(0,4);
+            let fulldate=(ano+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+            document.getElementById('dataFinal').value = fulldate;
+            console.log("dataFinal:"+document.getElementById('dataFinal').value);
+        }
+		
+		function carregaBody(){
+			let dias = ["seg","ter","qua","qui","sex"];
+			try{
+				dias.forEach((dia)=>{
+					console.log("dia:"+dia)
+					document.getElementsByName(dia).forEach((e)=>{
+						let id = "hora"+e.id;
+						let valor = e.value;
+						console.log("valor")
+						console.log(valor)
+						if(valor != "766f69643132333435366964"){
+							if(e.id.indexOf("TerapiaId_") != -1){
+								console.log("CLONE: " +valor)
+								let val = document.getElementById(valor).cloneNode(true);
+								val.id = val.id+"x";
+								
+								// Adicionar classe de estilo ao card - Terapia
+								val.className = 'terapia-card';
+								val.innerHTML = '<span class="terapia-nome">' + val.textContent.trim() + '</span>';
+								
+								document.getElementById(id).append(val);
+								let color = e.id + "_" + e.value;
+								let hav = document.getElementById(color)
+								if (hav != null){
+									let motivo = hav.value;
+									console.log("motivo:"+motivo)
+									switch (motivo) {
+										case "Falta" :
+											val.style.backgroundColor = "yellow";
+											val.className += ' terapia-falta';
+											break;
+										case "Falta Justificada":
+											val.style.backgroundColor = "orange";
+											val.className += ' terapia-falta-justificada';
+											break;
+										case "Falta Absoluta":
+											val.style.backgroundColor = "orange";
+											val.className += ' terapia-falta-absoluta';
+											break;
+										case "Substituição":
+											val.style.backgroundColor = "cyan";
+											val.className += ' terapia-substituicao';
+											break;
+										case "Roberta Disponpivel":
+											val.style.backgroundColor = "salmon";
+											val.className += ' terapia-roberta-disponivel';
+											break;
+										case "Supervisor":
+											val.style.backgroundColor = "lightpink";
+											val.className += ' terapia-supervisor';
+											break;
+										case "Ordinario":
+											val.style.backgroundColor = "aquamarine";
+											val.className += ' terapia-ordinario';
+											break;
+										case "Nenhuma Observação":
+											val.style.backgroundColor = "lightgreen";
+											val.className += ' terapia-sem-evento';
+											break;
+										default :
+											break;
+									}
+								}
+							} else if(e.id.indexOf("TeraId_") != -1){
+								console.log("clone: "+valor)
+								let val = document.getElementById(valor).cloneNode(true);
+								val.id = val.id+"x";
+								
+								// Adicionar classe de estilo ao card - Terapeuta
+								val.className = 'terapia-card';
+								val.innerHTML = '<span class="terapeuta-nome">' + val.textContent.trim() + '</span>';
+								
+								document.getElementById(id).append(val);
+								let color = e.id + "_" + e.value;
+								let hav = document.getElementById(color)
+								if (hav != null){
+									let motivo = hav.value;
+									console.log("motivo:"+motivo)
+									switch (motivo) {
+										case "Falta" :
+											val.style.backgroundColor = "yellow";
+											val.className += ' terapia-falta';
+											break;
+										case "Falta Justificada":
+											val.style.backgroundColor = "orange";
+											val.className += ' terapia-falta-justificada';
+											break;
+										case "Falta Absoluta":
+											val.style.backgroundColor = "orange";
+											val.className += ' terapia-falta-absoluta';
+											break;
+										case "Substituição":
+											val.style.backgroundColor = "cyan";
+											val.className += ' terapia-substituicao';
+											break;
+										case "Roberta Disponpivel":
+											val.style.backgroundColor = "salmon";
+											val.className += ' terapia-roberta-disponivel';
+											break;
+										case "Supervisor":
+											val.style.backgroundColor = "lightpink";
+											val.className += ' terapia-supervisor';
+											break;
+										case "Ordinario":
+											val.style.backgroundColor = "aquamarine";
+											val.className += ' terapia-ordinario';
+											break;
+										case "Nenhuma Observação":
+											val.style.backgroundColor = "lightgreen";
+											val.className += ' terapia-sem-evento';
+											break;
+										default :
+											break;
+									}
+								}
+							}
+						}
+					})
+					document.getElementsByName(dia).forEach((e)=>{
+						if(e.id.indexOf("AcaoId_") != -1){
+							let id = "hora"+e.id;
+							console.log("id:"+id)
+							let el = document.getElementById(e.id);
+							console.log("el:"+el)
+							document.getElementById(id).append(el);
+							
+							// Estilizar botões de ação
+							let botoes = document.getElementById(id).getElementsByTagName('a');
+							for(let i = 0; i < botoes.length; i++) {
+								if(botoes[i].className.includes('green')) {
+									botoes[i].className = 'acao-btn add';
+									botoes[i].innerHTML = '<i class="ace-icon fa fa-plus"></i>';
+								} else if(botoes[i].className.includes('blue')) {
+									botoes[i].className = 'acao-btn edit';
+									botoes[i].innerHTML = '<i class="ace-icon fa fa-pencil"></i>';
+								} else if(botoes[i].className.includes('red')) {
+									botoes[i].className = 'acao-btn delete';
+									botoes[i].innerHTML = '<i class="ace-icon fa fa-trash"></i>';
+								}
+							}
+						}
+					})
+				})
+			} catch(err){
+				console.log(err)
+			}
+			
+			// Aplicar estilo por hora após carregar
+			setTimeout(aplicarEstiloPorHora, 100);
+		}
+		function aplicarEstiloPorHora() {
+				$('tbody tr').each(function () {
+					const $linha = $(this);
+					const $horaCell = $linha.find('td:first-child');
+					const horaTexto = $horaCell.text().trim().replace(/<[^>]*>/g, '').replace(/&nbsp;/g, '');
+
+					if (!horaTexto) return;
+
+					// Remover classes existentes
+					$linha.removeClass('manha-row tarde-row divisoria-meio-dia');
+
+					// Definir horas da manhã (até 11:20)
+					const horasManha = ['08:00', '08:40', '09:20', '10:00', '10:40', '11:20'];
+					const horasTarde = ['13:20', '14:00', '14:40', '15:20', '16:00', '16:40', '17:20', '18:00'];
+
+					// Verificar se é manhã
+					if (horasManha.includes(horaTexto)) {
+						$linha.addClass('manha-row');
+						
+						// Se for exatamente 11:20, adicionar linha divisória
+						if (horaTexto === '11:20') {
+							$linha.addClass('divisoria-meio-dia');
+						}
+					} 
+					// Verificar se é tarde
+					else if (horasTarde.includes(horaTexto)) {
+						$linha.addClass('tarde-row');
+					}
+				});
+			}
+        $(document).ready(function () {
+            // Inicializa DataTable
+            var table = $('#dynamic-table').DataTable({
+                "language": { "url": "/js/lang/datatable-pt-br.json" },
+                "aaSorting": [],
+                "aoColumns": [null, null, null,null, null, null, null, null,null, null, null,null, null, null, null, null],
+                "responsive": true,
+                "autoWidth": false,
+                "paging": false,
+                "searching": false,
+                "ordering": true,
+                "info": false,
+                "scrollX": true,
+                select: {
+                    style: 'multi'
+                }
+            });
+
+            // Aplica estilo sempre que a tabela for redesenhada
+            table.on('draw.dt', function () {
+                aplicarEstiloPorHora();
+            });
+
+            // Inicializa Chosen Select
+            $(".chosen-select").chosen({
+                width: "100%",
+                no_results_text: "Nenhum beneficiário encontrado..."
+            });
+
+            // Primeira execução após carregar a página
+            aplicarEstiloPorHora();
+        });
+    </script>
+</body>
+</html>

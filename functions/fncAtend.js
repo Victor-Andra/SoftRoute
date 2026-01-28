@@ -1280,7 +1280,7 @@ module.exports = {
         })
     },
 
-    tabdimAtendimentoValFiltro(req, res) {
+    tabdimAtendimentoValFiltro_OLD(req, res) {
         const db = req.cookies['preferredDb'];
         const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
         const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
@@ -1549,7 +1549,327 @@ module.exports = {
             `);
         });
     },
+    tabdimAtendimentoValFiltro(req, res) {
+        const db = req.cookies['preferredDb'];
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); // ✅ Adicionado
 
+        const rawIni = req.body.dataIni;
+        const rawFim = req.body.dataFim;
+        const rawConv = req.body.relConvid;
+
+        const hojeStr = new Date().toISOString().replace('T', ' ').substring(0, 23) + 'Z';
+        const safeDataIni = (typeof rawIni === 'string' && rawIni.trim() !== '') ? rawIni : hojeStr;
+        const safeDataFim = (typeof rawFim === 'string' && rawFim.trim() !== '') ? rawFim : hojeStr;
+
+        let seg, sex;
+        try {
+            seg = fncGeral.getDateFromString(safeDataIni, "ini");
+            sex = fncGeral.getDateFromString(safeDataFim, "fim");
+            if (!seg || isNaN(seg.getTime())) throw new Error('Data inicial inválida');
+            if (!sex || isNaN(sex.getTime())) throw new Error('Data final inválida');
+        } catch (err) {
+            console.error('[ERRO data]', { rawIni, rawFim, error: err.message });
+            return res.status(400).send(`
+                <script>
+                    alert("Erro nas datas. Verifique o período selecionado.");
+                    history.back();
+                </script>
+            `);
+        }
+
+        const filtro = {
+            dataIni: safeDataIni,
+            dataFim: safeDataFim,
+            convId: rawConv || '766f69643132333435366964'
+        };
+
+        const periodoDe = fncGeral.getDataInvert(safeDataIni.split(' ')[0]);
+        const periodoAte = fncGeral.getDataInvert(safeDataFim.split(' ')[0]);
+
+        Promise.all([
+            Atend.find({
+                atend_convid: rawConv,
+                atend_atenddata: { $gte: seg, $lte: sex }
+            }).exec(),
+            Conv.find().exec(),
+            Conv.findById(rawConv).exec(),
+            Terapia.find().exec(),
+            Ano.find().exec(),
+            Usuario.find().exec(), // ✅ Adicionado
+            Bene.find().exec()
+        ])
+        .then(([atRaw, convs, convSelecionado, terapias, anos, usuarios, benes]) => {
+            const lookupTerapia = {};
+            terapias.forEach(t => { lookupTerapia[t._id] = t.terapia_nome; });
+
+            const lookupUsuario = {};
+            usuarios.forEach(u => { lookupUsuario[u._id] = u.usuario_nome; });
+
+            const lookupBene = {};
+            benes.forEach(b => { lookupBene[b._id] = b.bene_nome; });
+
+            const lookupConv = {};
+            convs.forEach(c => { lookupConv[c._id] = c.conv_nome; });
+
+            const toCentavos = (str) => {
+                if (!str || typeof str !== 'string') return 0;
+                const clean = str.replace(/\D/g, '');
+                return clean.length >= 2
+                    ? parseInt(clean.slice(0, -2) + clean.slice(-2), 10)
+                    : parseInt(clean.padStart(2, '0'), 10);
+            };
+
+            // ✅ Filtra categorias indesejadas
+            const atFiltrado = atRaw.filter(a => 
+                a.atend_categoria !== "Feriado" && 
+                a.atend_categoria !== "Falta Absoluta" && 
+                a.atend_categoria !== "Falta Justificada"
+            );
+
+            // ✅ Função para determinar quais valores usar baseado em atend_org
+            const getValoresAtendimento = (at) => {
+                const origem = (at.atend_org || '').trim();
+                const fixo = at.atend_fixo === "true";
+                const categoria = at.atend_categoria;
+
+                if (origem === "Padrão") {
+                    // Usa valores padrão
+                    return {
+                        cred: at.atend_valorcre || "0,00",
+                        deb: at.atend_valordeb || "0,00",
+                        tipo: "Padrão"
+                    };
+                } else if (origem === "Administrativo") {
+                    if (fixo) {
+                        // Substituto Fixo - usa valores fixos
+                        return {
+                            cred: at.atend_fixovalorcre || "0,00",
+                            deb: at.atend_fixovalordeb || "0,00",
+                            tipo: "Fixo"
+                        };
+                    } else if (categoria === "Substituição") {
+                        // Substituição - usa valores de merge
+                        return {
+                            cred: at.atend_mergevalorcre || "0,00",
+                            deb: at.atend_mergevalordeb || "0,00",
+                            tipo: "Substituição"
+                        };
+                    } else {
+                        // Outros casos administrativos - usa valores padrão
+                        return {
+                            cred: at.atend_valorcre || "0,00",
+                            deb: at.atend_valordeb || "0,00",
+                            tipo: "Administrativo"
+                        };
+                    }
+                } else {
+                    // Default - valores padrão
+                    return {
+                        cred: at.atend_valorcre || "0,00",
+                        deb: at.atend_valordeb || "0,00",
+                        tipo: "Outro"
+                    };
+                }
+            };
+
+            const conv_nome = lookupConv[rawConv] || "(nenhum)";
+            terapias.sort((a, b) => a.terapia_nome.localeCompare(b.terapia_nome));
+
+            const rel = [];
+            let sessaoTot = 0;
+            let valTotCentavos = 0;
+
+            // ✅ Ordena globalmente ANTES do agrupamento
+            const atOrdenado = atFiltrado
+                .filter(a => a.atend_atenddata)
+                .sort((a, b) => {
+                    const d1 = new Date(a.atend_atenddata).getTime();
+                    const d2 = new Date(b.atend_atenddata).getTime();
+                    if (d1 !== d2) return d1 - d2;
+                    return (a.atend_atendhora || '').localeCompare(b.atend_atendhora || '');
+                });
+
+            terapias.forEach(t => {
+                const detalhes = [];
+                let qtd = 0;
+                let valorCentavos = 0;
+
+                atOrdenado.forEach(at => {
+                    let terapiaId;
+                    switch (at.atend_categoria) {
+                        case "Substituição":
+                            terapiaId = at.atend_mergeterapiaid;
+                            break;
+                        case "SubstitutoFixo":
+                            terapiaId = at.atend_fixoterapiaid;
+                            break;
+                        default:
+                            terapiaId = at.atend_terapiaid;
+                            break;
+                    }
+
+                    const idIgual = (a, b) => ("" + (a || '')).trim() === ("" + (b || '')).trim();
+                    if (!idIgual(terapiaId, t._id)) return;
+
+                    // ✅ Determina quais valores usar
+                    const valores = getValoresAtendimento(at);
+                    
+                    const vCent = toCentavos(valores.cred);
+                    if (qtd === 0 && vCent > 0) valorCentavos = vCent;
+                    qtd++;
+
+                    let dataFmt = '-';
+                    if (at.atend_atenddata) {
+                        try {
+                            const d = new Date(at.atend_atenddata);
+                            if (!isNaN(d.getTime())) {
+                                dataFmt = fncGeral.getDataInvert(d.toISOString().split('T')[0]);
+                            }
+                        } catch (e) {
+                            dataFmt = '-';
+                        }
+                    }
+
+                    const origemLabel = (() => {
+                        const valor = (at.atend_org || '').trim();
+                        if (valor === "Administrativo") {
+                            return '<span class="label label-sm label-warning">ADM</span>';
+                        } else if (valor === "Padrão") {
+                            return '<span class="label label-sm label-info">PAD</span>';
+                        } else {
+                            return '<span class="label label-sm label-default">-</span>';
+                        }
+                    })();
+
+                    const categoriaLabel = (() => {
+                        const c = at.atend_categoria;
+                        if (c === "Nenhuma Observação") return '<span class="label label-sm label-warning">Sem Evento</span>';
+                        if (c === "Substituição" || c === "Substituto") return '<span class="label label-sm label-pink">Substituição</span>';
+                        if (c === "Extra") return '<span class="label label-sm label-purple">Extra</span>';
+                        if (c === "Falta") return '<span class="label label-sm label-yellow">Falta</span>';
+                        if (c === "Padrão" || c === "SubstitutoFixo") return '<span class="label label-sm label-success">Sem Evento</span>';
+                        return c || '-';
+                    })();
+
+                    const eventoLabel = at.atend_fixo === "true"
+                        ? '<span class="label label-sm label-danger">Substituto Fixo</span>'
+                        : '<span class="label label-sm label-success">Padrão</span>';
+
+                    const formatValor = (v) => {
+                        if (!v || v.trim() === '' || v === '0,00') {
+                            return '-';
+                        }
+                        return v;
+                    };
+
+                    const beneNome = lookupBene[at.atend_beneid] || '-';
+                    const convNome = lookupConv[at.atend_convid] || '-';
+                    const terapiaOrig = lookupTerapia[at.atend_terapiaid] || '-';
+                    const terapeutaOrig = lookupUsuario[at.atend_terapeutaid] || '-';
+
+                    const terapiaFixa = at.atend_fixoterapiaid && at.atend_fixoterapiaid !== '766f69643132333435366964'
+                        ? lookupTerapia[at.atend_fixoterapiaid] || '-'
+                        : '-';
+
+                    const terapeutaFixo = at.atend_fixoterapeutaid && at.atend_fixoterapeutaid !== '766f69643132333435366964'
+                        ? lookupUsuario[at.atend_fixoterapeutaid] || '-'
+                        : '-';
+
+                    const terapiaSubst = at.atend_mergeterapiaid && at.atend_mergeterapiaid !== '766f69643132333435366964'
+                        ? lookupTerapia[at.atend_mergeterapiaid] || '-'
+                        : '-';
+
+                    const terapeutaSubst = at.atend_mergeterapeutaid && at.atend_mergeterapeutaid !== '766f69643132333435366964'
+                        ? lookupUsuario[at.atend_mergeterapeutaid] || '-'
+                        : '-';
+
+                    detalhes.push({
+                        ordem: (detalhes.length + 1).toString(),
+                        _id: at._id,
+                        data: dataFmt,
+                        hora: at.atend_atendhora || '-',
+                        beneNome,
+                        convNome,
+                        origemLabel,
+                        categoriaLabel,
+                        eventoLabel,
+                        terapiaOrig,
+                        terapeutaOrig,
+                        credOrig: formatValor(at.atend_valorcre || "0,00"),
+                        debOrig: formatValor(at.atend_valordeb || "0,00"),
+                        terapiaFixa,
+                        terapeutaFixo,
+                        credFixo: at.atend_fixovalorcre ? formatValor(at.atend_fixovalorcre) : '-',
+                        debFixo: at.atend_fixovalordeb ? formatValor(at.atend_fixovalordeb) : '-',
+                        terapiaSubst,
+                        terapeutaSubst,
+                        credSubst: at.atend_mergevalorcre ? formatValor(at.atend_mergevalorcre) : '-',
+                        debSubst: at.atend_mergevalordeb ? formatValor(at.atend_mergevalordeb) : '-',
+                        credUsado: formatValor(valores.cred),  // ✅ Novo campo
+                        debUsado: formatValor(valores.deb),    // ✅ Novo campo
+                        tipoCalculo: valores.tipo,             // ✅ Novo campo
+                        permiteEdicao: true
+                    });
+                });
+
+                if (qtd === 0) return;
+
+                if (valorCentavos === 0 && detalhes.length > 0) {
+                    const soma = detalhes.reduce((s, d) => {
+                        const clean = d.credUsado.replace(/<.*?>/g, '').replace(/\D/g, '');
+                        return s + (clean ? parseInt(clean, 10) : 0);
+                    }, 0);
+                    valorCentavos = Math.round(soma / detalhes.length);
+                }
+
+                const totalCentavos = valorCentavos * qtd;
+
+                rel.push({
+                    terapiaId: t._id,
+                    terapiaNome: t.terapia_nome,
+                    sessoes: qtd,
+                    valorUnitario: fncGeral.formatarReal(valorCentavos),
+                    valorTotal: fncGeral.formatarReal(totalCentavos),
+                    atendimentos: detalhes
+                });
+
+                sessaoTot += qtd;
+                valTotCentavos += totalCentavos;
+            });
+
+            const total = {
+                sessoes: sessaoTot,
+                valor: fncGeral.formatarReal(valTotCentavos),
+                total: fncGeral.formatarReal(valTotCentavos)
+            };
+
+            res.render("atendimento/tabdimatendval", {
+                terapias,
+                anos,
+                convs,
+                rels: rel,
+                total,
+                periodoDe,
+                periodoAte,
+                conv_nome,
+                filtro
+            });
+        })
+        .catch(err => {
+            console.error('[ERRO tabdimAtendimentoValFiltro]', err);
+            res.status(500).send(`
+                <script>
+                    alert("Erro ao carregar relatório. Tente novamente.");
+                    history.back();
+                </script>
+            `);
+        });
+    },
     tabdimBeneTeraAtendval(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
