@@ -39,6 +39,7 @@ var Credit = getModel("SoftRoute", 'tb_credit', creditClass.CreditSchema)
 var Debit = getModel("SoftRoute", 'tb_debit', debitClass.DebitSchema)
 var Tabil = getModel("SoftRoute", 'tb_tabil', tabilClass.TabilSchema)
 var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+
 var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 var Sala = getModel("SoftRoute", 'tb_sala', salaClass.SalaSchema)
 
@@ -1556,7 +1557,6 @@ module.exports = {
         const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); // ✅ Adicionado
 
         const rawIni = req.body.dataIni;
         const rawFim = req.body.dataFim;
@@ -1902,7 +1902,6 @@ module.exports = {
         const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-        const Usuario = getModel(PortalDoUsuario, 'tb_usuario', usuarioClass.UsuarioSchema);
 
         const rawIni = req.body.dataIni;
         const rawFim = req.body.dataFim;
@@ -2239,7 +2238,6 @@ module.exports = {
         Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
-        Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
         let seg = new Date();
         let sex = new Date();
@@ -2269,8 +2267,6 @@ module.exports = {
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
         // ✅ Correção: Usar o banco PortalDoUsuario para terapeutas
-        const UsuarioPortal = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
-        const UsuarioLocal = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
         const rawIni = req.body.dataIni;
         const rawFim = req.body.dataFim;
@@ -2314,11 +2310,11 @@ module.exports = {
                 }
             }).exec(),
             Conv.find().exec(),
-            UsuarioPortal.findById(rawTera).exec(),
+            Usuario.findById(rawTera).exec(),
             Terapia.find().exec(),
             Ano.find().exec(),
             // ✅ Correção: Buscar apenas terapeutas do PortalDoUsuario
-            UsuarioPortal.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).exec(),
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).exec(),
             Bene.find().exec()
         ])
         .then(([atRaw, convs, terapeutaSelecionado, terapias, anos, terapeutas, benes]) => {
@@ -2651,7 +2647,6 @@ module.exports = {
         const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-        const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
 
         const rawIni = req.body.dataIni;
         const rawFim = req.body.dataFim;
@@ -3018,7 +3013,6 @@ module.exports = {
         const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-        const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
 
         const rawIni = req.body.dataIni;
         const rawFim = req.body.dataFim;
@@ -5950,7 +5944,6 @@ module.exports = {
             const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
             const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
             const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-            const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
             const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
 
             // Verifica se há filtro (via POST ou query)
@@ -6996,7 +6989,6 @@ module.exports = {
             const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
             const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
             const Atend = getModel(db, 'tb_atends', atendClass.AtendSchema)
-            const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema)
 
             let periodoDe = fncGeral.getDataInvert(req.body.dataIni)
             let periodoAte = fncGeral.getDataInvert(req.body.dataFim)
