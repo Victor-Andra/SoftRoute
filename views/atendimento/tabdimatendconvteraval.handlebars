@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta charset="utf-8">
-  <title>Relatório Detalhado por Convênio</title>
+  <title>Relatório Detalhado por Convênio e Terapia</title>
   
 	<style>
 		.detalhe-linha { background-color: #fafafa; display: none; }
@@ -30,6 +30,30 @@
 		.text-center { text-align: center; }
 		.text-right { text-align: right; }
 	</style>
+	<style>
+		/* Estilo Minimalista */
+		.chosen-container .chosen-single {
+			border: 1px solid #ced4da !important;
+			border-radius: 0 !important;
+			box-shadow: none !important;
+			background: #f8f9fa !important;
+		}
+
+		.chosen-container .chosen-single:hover {
+			border-color: #868e96 !important;
+		}
+
+		.chosen-container-active.chosen-with-drop .chosen-single {
+			border-color: #868e96 !important;
+			background: white !important;
+		}
+
+		.chosen-container .chosen-drop {
+			border: 1px solid #ced4da !important;
+			border-top: none !important;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+		}
+	</style>
 </head>
 
 <body onload="javascript:controlaNave(); carregaBody();" class="no-skin">
@@ -39,7 +63,7 @@
         <div class="breadcrumbs ace-save-state" id="breadcrumbs">
           <ul class="breadcrumb">
             <li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
-            <li class="active">Relatório Detalhado por Convênio</li>
+            <li class="active">Relatório Detalhado por Convênio e Terapia</li>
           </ul>
         </div>
 		<div class="page-content"><!-- .page-content -->
@@ -59,10 +83,10 @@
 				<select style="height: 30px; width: 250px;" name="relConvid" id="relConvid" class="chosen-select">
 					<option value="766f69643132333435366964">-</option>
 					{{#each convs}}
-					<option value="{{_id}}">{{conv_nome}}</option>
+						<option value="{{_id}}">{{conv_nome}}</option>
 					{{/each}}
 				</select>
-				<input class="hidden" id="relConvIdFiltro" name="relConvIdFiltro" value="{{filtro.convId}}">
+				<input class="hidden" id="relConvIdFiltro" name="relConvIdFiltro" value="{{filtro.convid}}">
 
 				<button class="btn btn-info btn-sm" type="submit">
 					<i class="ace-icon fa fa-search bigger-110"></i> Pesquisar
@@ -77,7 +101,7 @@
 				<div class="widget-header">
 					<h4 class="widget-title">
 					<i class="ace-icon fa fa-bar-chart green"></i>
-					Tabela Dinâmica Consolidado por Convênio — {{conv_nome}}
+					Tabela Dinâmica Consolidado por Terapia — {{conv_nome}}
 					<small class="text-muted">({{periodoDe}} a {{periodoAte}})</small>
 					</h4>
 					<span class="widget-toolbar">
@@ -96,8 +120,10 @@
 								<th style="width: 30px;"></th>
 								<th>Terapia</th>
 								<th class="text-right">Sessões</th>
-								<th class="text-right">Valor Unitário</th>
-								<th class="text-right">Valor Total</th>
+								<th class="text-right">Vlr Unit Créd</th>
+								<th class="text-right">Vlr Total Créd</th>
+								<th class="text-right">Vlr Unit Déb</th>
+								<th class="text-right">Vlr Total Déb</th>
 								<th>Ação</th>
 							</tr>
 							</thead>
@@ -109,13 +135,15 @@
 								</td>
 								<td>{{terapiaNome}}</td>
 								<td class="text-right">{{sessoes}}</td>
-								<td class="text-right">{{valorUnitario}}</td>
-								<td class="text-right">{{valorTotal}}</td>
+								<td class="text-right">{{valorUnitarioCred}}</td>
+								<td class="text-right">{{valorTotalCred}}</td>
+								<td class="text-right">{{valorUnitarioDeb}}</td>
+								<td class="text-right">{{valorTotalDeb}}</td>
 								<td></td>
 							</tr>
 
 							<tr class="detalhe-linha">
-								<td colspan="6">
+								<td colspan="8">
 								<div class="detalhe-conteudo">
 									<h5>
 									<i class="ace-icon fa fa-list"></i> 
@@ -147,7 +175,6 @@
 										<th>Deb</th>
 										<th class="text-center">Cred Usado</th>
 										<th class="text-center">Deb Usado</th>
-										
 										<th class="text-center">Ação</th>
 										</tr>
 									</thead>
@@ -180,7 +207,6 @@
 
 										<td class="text-center">{{{credUsado}}}</td>
 										<td class="text-center">{{{debUsado}}}</td>
-										
 
 										<td class="text-center">
 											{{#if permiteEdicao}}
@@ -203,7 +229,9 @@
 								<td colspan="2" class="text-right"><b>Total Geral:</b></td>
 								<td class="text-right"><b>{{total.sessoes}}</b></td>
 								<td class="text-right">-</td>
-								<td class="text-right"><b>{{total.total}}</b></td>
+								<td class="text-right"><b>{{total.totalCred}}</b></td>
+								<td class="text-right">-</td>
+								<td class="text-right"><b>{{total.totalDeb}}</b></td>
 								<td></td>
 							</tr>
 							</tfoot>
@@ -258,6 +286,14 @@
         });
       });
     });
+	$(document).ready(function () {
+    // Inicializa Chosen Select
+    $(".chosen-select").chosen({
+        no_results_text: "Não encontrado...",
+        search_contains: true,
+        disable_search_threshold: 10
+    });
+});
   </script>
 	
 </body>

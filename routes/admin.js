@@ -1232,6 +1232,17 @@ router.post("/agenda/filSBFixo", fncGeral.IsAuthenticated, (req,res) =>{// Filtr
     fncAgenda.carregaAgendaFilSBFixo(req, res);
 })
 
+//--------------------------------------------------------------------
+//Controle do Agendamento Semanal com Fixos 
+router.get("/agenda/lisSFixo/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Semanal com Fixos.
+    fncAgenda.carregaAgendaSFixo(req, res);
+})
+router.post("/agenda/filSFixo/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Semanal filtrada com Fixos.
+    fncAgenda.carregaAgendaFilSFixo(req, res);
+})
+
+//--------------------------------------------------------------------
+
 //nova
 router.get("/agenda/lisSemBM", fncGeral.IsAuthenticated, (req,res) =>{//Minha Agenda,Agenda semanal por beneficiário
     fncAgenda.carregaAgendaSBMinhaage(req, res);

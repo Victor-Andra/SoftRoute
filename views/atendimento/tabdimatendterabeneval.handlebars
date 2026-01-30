@@ -30,6 +30,30 @@
 		.text-center { text-align: center; }
 		.text-right { text-align: right; }
 	</style>
+	<style>
+		/* Estilo Minimalista */
+		.chosen-container .chosen-single {
+			border: 1px solid #ced4da !important; /* Borda mais fina */
+			border-radius: 0 !important;
+			box-shadow: none !important;
+			background: #f8f9fa !important; /* Fundo cinza claro */
+		}
+
+		.chosen-container .chosen-single:hover {
+			border-color: #868e96 !important; /* Cinza mais escuro ao hover */
+		}
+
+		.chosen-container-active.chosen-with-drop .chosen-single {
+			border-color: #868e96 !important;
+			background: white !important;
+		}
+
+		.chosen-container .chosen-drop {
+			border: 1px solid #ced4da !important;
+			border-top: none !important;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+		}
+	</style>
 </head>
 
 <body onload="javascript:controlaNave(); carregaBody();" class="no-skin">
@@ -45,7 +69,7 @@
 		<div class="page-content"><!-- .page-content -->
 			<form role="form" action="/menu/atendimento/tabdimAtendTeraBeneValFiltro" method="POST" onsubmit="atualizaDataIni(); atualizaDataFin();">
 			<div class="row">
-				<div class="col-sm-12">
+			<div class="col-sm-12">
 				<br>
 				<label>Período de:</label>
 				<input style="height: 30px; width: 140px;" id="dataFilDe" name="dataFilDe" type="date" onchange="atualizaDataIni()">
@@ -56,7 +80,7 @@
 				<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}">
 
 				<label>Terapeuta:</label>
-				<select style="height: 30px; width: 250px;" name="relTerapeutaid" id="relTerapeutaid" class="chosen-select">
+				<select style="height: 30px; width: 300px;" name="relTerapeutaid" id="relTerapeutaid" class="chosen-select">
 					<option value="766f69643132333435366964">-</option>
 					{{#each terapeutas}}
 						<option value="{{_id}}">{{usuario_nome}}</option>
@@ -68,7 +92,7 @@
 					<i class="ace-icon fa fa-search bigger-110"></i> Pesquisar
 				</button>
 				</div>
-			</div>
+			</>
 			</form>
 
 			<div class="row">
@@ -262,6 +286,19 @@
         });
       });
     });
+	$(document).ready(function () {
+		// Inicializa Chosen Select
+		$(".chosen-select").chosen({
+			no_results_text: "Não encontrado...",
+			search_contains: true, // Permite buscar em qualquer parte do texto
+			disable_search_threshold: 10 // Desativa busca se tiver menos de 10 opções
+		});
+
+		// Atualiza Chosen quando necessário
+		function atualizarChosen() {
+			$(".chosen-select").trigger("chosen:updated");
+		}
+	});
   </script>
 	
 </body>

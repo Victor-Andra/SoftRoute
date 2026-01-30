@@ -48,7 +48,7 @@ body {
 .agenda-header h1 {
     margin: 0;
     font-weight: 600;
-    font-size: 24px;
+    font-size: 18px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -61,7 +61,7 @@ body {
 .beneficiario-badge {
     background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
     color: white;
-    padding: 12px 24px;
+    padding: 12px 18px;
     border-radius: 20px;
     font-size: 16px;
     font-weight: 600;
@@ -617,7 +617,7 @@ body {
                                 <div class="filtro-item">
                                     <label><i class="ace-icon fa fa-user"></i> Beneficiário:</label>
                                     <select id="agendaBeneid" name="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." style="width: 320px; height: 38px; padding: 5px;">
-                                        <option value="766f69643132333435366964">—</option>
+                                        <option value="766f69643132333435366964">-</option>
                                         {{#each benes}}
                                         <option value="{{_id}}">{{bene_apelido}}</option>
                                         {{/each}}
@@ -1021,7 +1021,7 @@ body {
             // Inicializa Chosen Select
             $(".chosen-select").chosen({
                 width: "100%",
-                no_results_text: "Nenhum beneficiário encontrado..."
+                no_results_text: "Não encontrado..."
             });
 
             // Primeira execução após carregar a página

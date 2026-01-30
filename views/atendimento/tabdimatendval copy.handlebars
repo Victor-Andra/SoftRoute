@@ -27,7 +27,32 @@
 			font-size: 12px;
 		}
 		
-		
+		.text-center { text-align: center; }
+		.text-right { text-align: right; }
+	</style>
+	<style>
+		/* Estilo Minimalista */
+		.chosen-container .chosen-single {
+			border: 1px solid #ced4da !important; /* Borda mais fina */
+			border-radius: 0 !important;
+			box-shadow: none !important;
+			background: #f8f9fa !important; /* Fundo cinza claro */
+		}
+
+		.chosen-container .chosen-single:hover {
+			border-color: #868e96 !important; /* Cinza mais escuro ao hover */
+		}
+
+		.chosen-container-active.chosen-with-drop .chosen-single {
+			border-color: #868e96 !important;
+			background: white !important;
+		}
+
+		.chosen-container .chosen-drop {
+			border: 1px solid #ced4da !important;
+			border-top: none !important;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+		}
 	</style>
 </head>
 
@@ -56,7 +81,7 @@
 
 				<label>Convênio:</label>
 				<select style="height: 30px; width: 250px;" name="relConvid" id="relConvid" class="chosen-select">
-					<option value="766f69643132333435366964">—</option>
+					<option value="766f69643132333435366964">-</option>
 					{{#each convs}}
 					<option value="{{_id}}">{{conv_nome}}</option>
 					{{/each}}
@@ -103,7 +128,7 @@
 							<tbody>
 							{{#each rels}}
 							<tr data-terapia-id="{{terapiaId}}">
-								<td class="center">
+								<td class="text-center">
 								<i class="btn-expand ace-icon fa fa-plus-circle bigger-140"></i>
 								</td>
 								<td>{{terapiaNome}}</td>
@@ -144,13 +169,16 @@
 										<th>Terapeuta</th>
 										<th>Cred</th>
 										<th>Deb</th>
-										<th class="center">Ação</th>
+										<th class="text-center">Cred Usado</th>
+										<th class="text-center">Deb Usado</th>
+										
+										<th class="text-center">Ação</th>
 										</tr>
 									</thead>
 									<tbody>
 										{{#each atendimentos}}
 										<tr>
-										<td class="center">{{ordem}}</td>
+										<td class="text-center">{{ordem}}</td>
 										<td style="white-space: nowrap !important; min-width: 75px;">{{data}}</td>
 										<td>{{hora}}</td>
 										<td>{{beneNome}}</td>
@@ -174,7 +202,11 @@
 										<td>{{{credSubst}}}</td>
 										<td>{{{debSubst}}}</td>
 
-										<td class="center">
+										<td class="text-center">{{{credUsado}}}</td>
+										<td class="text-center">{{{debUsado}}}</td>
+										
+
+										<td class="text-center">
 											{{#if permiteEdicao}}
 											<a class="green" href="/menu/atendimento/atendadm/edi/{{_id}}">
 											<i class="ace-icon fa fa-pencil bigger-130"></i>
@@ -194,7 +226,7 @@
 							<tr>
 								<td colspan="2" class="text-right"><b>Total Geral:</b></td>
 								<td class="text-right"><b>{{total.sessoes}}</b></td>
-								<td class="text-right">—</td>
+								<td class="text-right">-</td>
 								<td class="text-right"><b>{{total.total}}</b></td>
 								<td></td>
 							</tr>
@@ -250,6 +282,20 @@
         });
       });
     });
+	$(document).ready(function () {
+    // Inicializa Chosen Select
+    $(".chosen-select").chosen({
+     
+        no_results_text: "Não encontrado...",
+        search_contains: true, // Permite buscar em qualquer parte do texto
+        disable_search_threshold: 10 // Desativa busca se tiver menos de 10 opções
+    });
+
+    // Atualiza Chosen quando necessário
+    function atualizarChosen() {
+        $(".chosen-select").trigger("chosen:updated");
+    }
+});
   </script>
 	
 </body>
