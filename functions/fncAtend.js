@@ -3929,10 +3929,7 @@ module.exports = {
                                                 terapiaAtend = atend.atend_terapiaid;
                                                 terapeutaAtend = atend.atend_terapeutaid;
                                                 break;
-                                            case "Substituição":
-                                                terapiaAtend = atend.atend_mergeterapiaid;
-                                                terapeutaAtend = atend.atend_mergeterapeutaid;
-                                                break;
+                                            
                                             case "Supervisão":
                                                 terapiaAtend = atend.atend_terapiaid;
                                                 terapeutaAtend = atend.atend_terapeutaid;
@@ -3953,6 +3950,10 @@ module.exports = {
                                             case "SubstitutoFixo":
                                                 terapiaAtend = atend.atend_fixoterapiaid;
                                                 terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                break;
+                                            case "Substituição":
+                                                terapiaAtend = atend.atend_mergeterapiaid;
+                                                terapeutaAtend = atend.atend_mergeterapeutaid;
                                                 break;
                                             default:
                                                 terapiaAtend = atend.atend_terapiaid;
