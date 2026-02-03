@@ -116,58 +116,57 @@ module.exports = {
     SaudecolabModel,
     SaudecolabSchema,
 
-    saudecolabEditar: async (req, res) => {
-
-        // Pega data atual
-        let dataAtual = new Date();
-        // Pega Usuário Atual
-        let usuarioAtual = req.cookies['idUsu'];
-        let resultado;
-        // Realiza Atualização
-        await SaudecolabModel.findByIdAndUpdate(req.body.saudecolabId, 
-            {
-                saudecolab_saudecolabid: req.body.saudecolab_Saudecolabid,
-                saudecolab_saudecolabusuid: req.body.saudecolabSaudecolabusuid,
-                saudecolab_saudecolabdata: req.body.saudecolabSaudecolabdata,
-                saudecolab_tiposangue: req.body.saudecolabTiposangue,
-                saudecolab_planosaude: req.body.saudecolabPlanosaude,
-                saudecolab_planosaudequal: req.body.saudecolabPlanosaudequal,
-                saudecolab_hospitalqual: req.body.saudecolabHospitalqual,
-                saudecolab_alergia: req.body.saudecolabAlergia,
-                saudecolab_alergiaqual: req.body.saudecolabAlergiaqual,
-                saudecolab_medicamentonao: req.body.saudecolabMedicamentonao,
-                saudecolab_medicamentonaoqual: req.body.saudecolabMedicamentonaoqual,
-                saudecolab_medicamentosim: req.body.saudecolabMedicamentosim,
-                saudecolab_medicamentosimqual: req.body.saudecolabMedicamentosimqual,
-                saudecolab_hipertenso : req.body.saudecolabHipertenso,
-                saudecolab_cardiaco: req.body.saudecolabCardiaco,
-                saudecolab_diabetico: req.body.saudecolabDiabetico,
-                saudecolab_insulina: req.body.saudecolabInsulina,
-                saudecolab_condicaosaude: req.body.saudecolabCondicaosaude,
-                saudecolab_contato1: req.body.saudecolabContato1,
-                saudecolab_parentesco1: req.body.saudecolabParentesco1,
-                saudecolab_celular1: req.body.saudecolabCelular1,
-                saudecolab_contato2: req.body.saudecolabContato2,
-                saudecolab_parentesco2: req.body.saudecolabParentesco2,
-                saudecolab_celular2: req.body.saudecolabCelular2,
-                saudecolab_obs: req.body.saudecolabObs,
-                saudecolab_aceitartermos: req.body.saudecolabAceitartermos,
-                // Atributos de controle
-                saudecolab_usuidedi: usuarioAtual,
-                saudecolab_dataedi: dataAtual.toISOString(),
-                saudecolab_lixo: "false"
-            }
-        ).then((res) => {
-            console.log("Salvo")
-            resultado = true;
-        }).catch((err) => {
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
-            //res.redirect('admin/branco')
-        })
-        return resultado;
-    },
+  saudecolabEditar: async (req, res) => {
+    // Pega data atual
+    let dataAtual = new Date();
+    // Pega Usuário Atual
+    let usuarioAtual = req.cookies['idUsu'];
+    let resultado;
+    
+    // Realiza Atualização
+    await SaudecolabModel.findByIdAndUpdate(req.body.saudecolabId, 
+        {
+            saudecolab_saudecolabid: req.body.saudecolabId,  // ✅ Corrigido
+            saudecolab_saudecolabusuid: req.body.saudecolabSaudecolabusuid,
+            saudecolab_saudecolabdata: req.body.saudecolabSaudecolabdata,
+            saudecolab_tiposangue: req.body.saudecolabTiposangue,
+            saudecolab_planosaude: req.body.saudecolabPlanosaude,
+            saudecolab_planosaudequal: req.body.saudecolabPlanosaudequal,
+            saudecolab_hospitalqual: req.body.saudecolabHospitalqual,
+            saudecolab_alergia: req.body.saudecolabAlergia,
+            saudecolab_alergiaqual: req.body.saudecolabAlergiaqual,
+            saudecolab_medicamentonao: req.body.saudecolabMedicamentonao,
+            saudecolab_medicamentonaoqual: req.body.saudecolabMedicamentonaoqual,
+            saudecolab_medicamentosim: req.body.saudecolabMedicamentosim,
+            saudecolab_medicamentosimqual: req.body.saudecolabMedicamentosimqual,
+            saudecolab_hipertenso: req.body.saudecolabHipertenso,
+            saudecolab_cardiaco: req.body.saudecolabCardiaco,
+            saudecolab_diabetico: req.body.saudecolabDiabetico,
+            saudecolab_insulina: req.body.saudecolabInsulina,
+            saudecolab_condicaosaude: req.body.saudecolabCondicaosaude,
+            saudecolab_contato1: req.body.saudecolabContato1,
+            saudecolab_parentesco1: req.body.saudecolabParentesco1,
+            saudecolab_celular1: req.body.saudecolabCelular1,
+            saudecolab_contato2: req.body.saudecolabContato2,
+            saudecolab_parentesco2: req.body.saudecolabParentesco2,
+            saudecolab_celular2: req.body.saudecolabCelular2,
+            saudecolab_obs: req.body.saudecolabObs,
+            saudecolab_aceitartermos: req.body.saudecolabAceitartermos,
+            // Atributos de controle
+            saudecolab_usuidedi: usuarioAtual,
+            saudecolab_dataedi: dataAtual.toISOString(),
+            saudecolab_lixo: "false"
+        }
+    ).then((res) => {
+        console.log("Salvo")
+        resultado = true;
+    }).catch((err) => {
+        console.log("erro mongo:")
+        console.log(err)
+        resultado = err;
+    })
+    return resultado;
+},
 
     saudecolabAdicionar: async (req, res) => {
         // Dados

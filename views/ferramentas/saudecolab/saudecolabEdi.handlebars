@@ -2,26 +2,96 @@
 <html lang="pt-br">
 	<head>
 		<title>Ficha Médica</title>
+			<style>
+			/* Remove sombra, bordas arredondadas e deixa retangular */
+			.chosen-container {
+				box-shadow: none !important;
+				border-radius: 0 !important;
+				width: 100% !important;
+			}
+			
+			/* Remove sombra e bordas arredondadas do dropdown */
+			.chosen-container .chosen-drop {
+				box-shadow: none !important;
+				border-radius: 0 !important;
+				border-color: #ddd !important;
+			}
+			
+			/* Remove sombra e bordas arredondadas do search field */
+			.chosen-container .chosen-search input[type="text"] {
+				box-shadow: none !important;
+				border-radius: 0 !important;
+				border-color: #ddd !important;
+			}
+			
+			/* Remove bordas arredondadas dos resultados */
+			.chosen-container .chosen-results {
+				border-radius: 0 !important;
+			}
+			
+			/* Remove efeito hover preto e muda para cinza claro */
+			.chosen-container .chosen-results li.highlighted {
+				background-color: #f5f5f5 !important;
+				color: #333 !important;
+			}
+			
+			/* Muda cor da borda de preto para cinza */
+			.chosen-container .chosen-single {
+				border-color: #ddd !important;
+				border-radius: 0 !important;
+				box-shadow: none !important;
+				height: 34px !important;
+				line-height: 34px !important;
+			}
+			
+			/* Remove borda arredondada do múltiplo select */
+			.chosen-container-multi .chosen-choices {
+				border-radius: 0 !important;
+				border-color: #ddd !important;
+				box-shadow: none !important;
+			}
+			
+			/* Alinha texto à esquerda */
+			.chosen-container .chosen-single span {
+				text-align: left !important;
+			}
+			
+			.chosen-container .chosen-results li {
+				text-align: left !important;
+			}
+			
+			/* Remove borda arredondada dos choices no múltiplo */
+			.chosen-container-multi .chosen-choices li.search-choice {
+				border-radius: 0 !important;
+			}
+			
+			/* Remove efeito de foco preto */
+			.chosen-container-active .chosen-single {
+				border-color: #66afe9 !important;
+				box-shadow: none !important;
+			}
+			
+			/* Remove borda arredondada do dropdown arrow */
+			.chosen-container .chosen-single div b {
+				background-position: 0 2px !important;
+			}
+			
+			/* Remove borda arredondada do search field no dropdown */
+			.chosen-container .chosen-search input[type="text"]:focus {
+				border-color: #66afe9 !important;
+				box-shadow: none !important;
+			}
+		</style>
+		
 		<script>
 			function carregaBody(){
-				
-				document.getElementById("saudecolabSaudecolabusuid").value = document.getElementById("saudecolabSaudecolabusuidEdi").value;
+				// Campos de texto - funcionam normalmente
 				document.getElementById("saudecolabSaudecolabdata").value = document.getElementById("saudecolabSaudecolabdataEdi").value;
- 
-				document.getElementById("saudecolabTiposangue").value = document.getElementById("saudecolabTiposangueEdi").value;
-				document.getElementById("saudecolabPlanosaude").value = document.getElementById("saudecolabPlanosaudeEdi").value;
 				document.getElementById("saudecolabPlanosaudequal").value = document.getElementById("saudecolabPlanosaudequalEdi").value;
 				document.getElementById("saudecolabHospitalqual").value = document.getElementById("saudecolabHospitalqualEdi").value;
-				document.getElementById("saudecolabAlergia").value = document.getElementById("saudecolabAlergiaEdi").value;
 				document.getElementById("saudecolabAlergiaqual").value = document.getElementById("saudecolabAlergiaqualEdi").value;
-				document.getElementById("saudecolabMedicamentonao").value = document.getElementById("saudecolabMedicamentonaoEdi").value;
 				document.getElementById("saudecolabMedicamentonaoqual").value = document.getElementById("saudecolabMedicamentonaoqualEdi").value;
-				document.getElementById("saudecolabMedicamentosim").value = document.getElementById("saudecolabMedicamentosimEdi").value;
 				document.getElementById("saudecolabMedicamentosimqual").value = document.getElementById("saudecolabMedicamentosimqualEdi").value;
-				document.getElementById("saudecolabHipertenso").value = document.getElementById("saudecolabHipertensoEdi").value;
-				document.getElementById("saudecolabCardiaco").value = document.getElementById("saudecolabCardiacoEdi").value;
-				document.getElementById("saudecolabDiabetico").value = document.getElementById("saudecolabDiabeticoEdi").value;
-				document.getElementById("saudecolabInsulina").value = document.getElementById("saudecolabInsulinaEdi").value;
 				document.getElementById("saudecolabCondicaosaude").value = document.getElementById("saudecolabCondicaosaudeEdi").value;
 				document.getElementById("saudecolabContato1").value = document.getElementById("saudecolabContato1Edi").value;
 				document.getElementById("saudecolabParentesco1").value = document.getElementById("saudecolabParentesco1Edi").value;
@@ -30,24 +100,48 @@
 				document.getElementById("saudecolabParentesco2").value = document.getElementById("saudecolabParentesco2Edi").value;
 				document.getElementById("saudecolabCelular2").value = document.getElementById("saudecolabCelular2Edi").value;
 				document.getElementById("saudecolabObs").value = document.getElementById("saudecolabObsEdi").value;
-				document.getElementById("saudecolabAceitartermos").value = document.getElementById("saudecolabAceitartermosEdi").value
 
+				// Campos SELECT - precisam selecionar a opção correta
+				setSelectedValue("saudecolabSaudecolabusuid", document.getElementById("saudecolabSaudecolabusuidEdi").value);
+				setSelectedValue("saudecolabTiposangue", document.getElementById("saudecolabTiposangueEdi").value);
+				setSelectedValue("saudecolabPlanosaude", document.getElementById("saudecolabPlanosaudeEdi").value);
+				setSelectedValue("saudecolabAlergia", document.getElementById("saudecolabAlergiaEdi").value);
+				setSelectedValue("saudecolabMedicamentonao", document.getElementById("saudecolabMedicamentonaoEdi").value);
+				setSelectedValue("saudecolabMedicamentosim", document.getElementById("saudecolabMedicamentosimEdi").value);
+				setSelectedValue("saudecolabHipertenso", document.getElementById("saudecolabHipertensoEdi").value);
+				setSelectedValue("saudecolabCardiaco", document.getElementById("saudecolabCardiacoEdi").value);
+				setSelectedValue("saudecolabDiabetico", document.getElementById("saudecolabDiabeticoEdi").value);
+				setSelectedValue("saudecolabInsulina", document.getElementById("saudecolabInsulinaEdi").value);
+				setSelectedValue("saudecolabAceitartermos", document.getElementById("saudecolabAceitartermosEdi").value);
+				
+				// ATUALIZA O CHOSEN APÓS CARREGAR OS VALORES
+				if (typeof $.fn.chosen !== 'undefined') {
+					$(".chosen-select").trigger("chosen:updated");
+				}
 			}
-		</script>
-		<script>
+
+			// Função auxiliar para selecionar valor em SELECT
+			function setSelectedValue(selectId, value) {
+				var select = document.getElementById(selectId);
+				if (select) {
+					for (var i = 0; i < select.options.length; i++) {
+						if (select.options[i].value === value) {
+							select.selectedIndex = i;
+							break;
+						}
+					}
+				}
+			}
+
 			function aceitaTermo() {
 				let aceita = document.getElementById("saudecolabAceitartermos").value;
-				console.log(aceita);
-
-				if (aceita === "-") {
+				if (aceita === "-" || aceita === "Não") {
 					document.getElementById('btnSalvar').style.display = 'none';
-				} else if (aceita === "Não") {
-					document.getElementById('btnSalvar').style.display = 'none';
-				}else{
+				} else {
 					document.getElementById('btnSalvar').style.display = 'block';
 				}
 			}
-		</script>
+	</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody(); aceitaTermo();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -99,8 +193,8 @@
 														<input type="text" id="saudecolabAlergiaqualEdi" name="saudecolabAlergiaqualEdi" value="{{saudecolab.saudecolab_alergiaqual}}"/>
 														<input type="text" id="saudecolabMedicamentonaoEdi" name="saudecolabMedicamentonaoEdi" value="{{saudecolab.saudecolab_medicamentonao}}"/>
 														<input type="text" id="saudecolabMedicamentonaoqualEdi" name="saudecolabMedicamentonaoqualEdi" value="{{saudecolab.saudecolab_medicamentonaoqual}}"/>
-														<input type="text" id="saudecolabMedicamentosimEdi" name="saudecolabMedicamentosimEdi" value="{{saudecolab.saudecolab_medicamentonao}}"/>
-														<input type="text" id="saudecolabMedicamentosimqualEdi" name="saudecolabMedicamentosimqualEdi" value="{{saudecolab.saudecolab_medicamentonaoqual}}"/>
+														<input type="text" id="saudecolabMedicamentosimEdi" name="saudecolabMedicamentosimEdi" value="{{saudecolab.saudecolab_medicamentosim}}"/>
+														<input type="text" id="saudecolabMedicamentosimqualEdi" name="saudecolabMedicamentosimqualEdi" value="{{saudecolab.saudecolab_medicamentosimqual}}"/>
 														<input type="text" id="saudecolabHipertensoEdi" name="saudecolabHipertensoEdi" value="{{saudecolab.saudecolab_hipertenso}}"/>
 														<input type="text" id="saudecolabCardiacoEdi" name="saudecolabCardiacoEdi" value="{{saudecolab.saudecolab_cardiaco}}"/>
 														<input type="text" id="saudecolabDiabeticoEdi" name="saudecolabDiabeticoEdi" value="{{saudecolab.saudecolab_diabetico}}"/>
@@ -114,7 +208,6 @@
 														<input type="text" id="saudecolabCelular2Edi" name="saudecolabCelular2Edi" value="{{saudecolab.saudecolab_celular2}}"/>
 														<input type="text" id="saudecolabObsEdi" name="saudecolabObsEdi" value="{{saudecolab.saudecolab_obs}}"/>
 														<input type="text" id="saudecolabAceitartermosEdi" name="saudecolabAceitartermosEdi" value="{{saudecolab.saudecolab_aceitartermos}}"/>
-
 													</div>
 													
 													<label>Nome completo:</label>
@@ -410,5 +503,17 @@
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
 		<!-- basic scripts -->
+		<script>
+    		// Inicializa o Chosen ANTES de carregar os dados
+    			$(document).ready(function() {
+					if (typeof $.fn.chosen !== 'undefined') {
+						$(".chosen-select").chosen({
+							allow_single_deselect: true,
+							no_results_text: "Nada encontrado!",
+							width: "100%"
+						});
+					}
+				});
+		</script>
 	</body>
 </html>

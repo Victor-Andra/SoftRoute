@@ -79,14 +79,18 @@
 				<input style="height: 30px; width: 140px;" id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
 				<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}">
 
-				<label>Convênio:</label>
-				<select style="height: 30px; width: 250px;" name="relConvid" id="relConvid" class="chosen-select">
-					<option value="766f69643132333435366964">-</option>
-					{{#each convs}}
-						<option value="{{_id}}">{{conv_nome}}</option>
-					{{/each}}
-				</select>
-				<input class="hidden" id="relConvIdFiltro" name="relConvIdFiltro" value="{{filtro.convid}}">
+				
+                        <label>Convênio:</label>
+                        <!-- ✅ CORRIGIDO: Adicionado name="relConvid" -->
+                        <select style="height: 30px; width: 250px;" class="form-control chosen-select" id="relConvid" name="relConvid">
+                            <option value="todos">📊 TODOS OS CONVÊNIOS</option>
+                            {{#each convs}}
+                                <option value="{{_id}}">{{conv_nome}}</option>
+                            {{/each}}
+                        </select>
+                   
+				<!-- ✅ REMOVIDO: input hidden desnecessário -->
+				<!-- <input class="hidden" id="relConvIdFiltro" name="relConvIdFiltro" value="{{filtro.relConvid}}"> -->
 
 				<button class="btn btn-info btn-sm" type="submit">
 					<i class="ace-icon fa fa-search bigger-110"></i> Pesquisar
@@ -263,7 +267,8 @@
       if (ini) document.getElementById('dataFilDe').value = ini.split(' ')[0];
       if (fim) document.getElementById('dataFilAte').value = fim.split(' ')[0];
       
-      const convId = document.getElementById('relConvIdFiltro').value || '766f69643132333435366964';
+      // ✅ CORRIGIDO: Usa filtro.convid diretamente
+      const convId = "{{filtro.convid}}" || 'todos';
       document.getElementById('relConvid').value = convId;
       
       if (typeof $.fn.chosen === 'function') {

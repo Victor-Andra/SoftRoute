@@ -2,17 +2,15 @@
 const mongoose = require("mongoose")
 const { getModel } = require('../functions/fncGeral');
 
-
-//saudecolabs
+//saudecolabs - CARREGA DIRETAMENTE DO SCHEMA QUE JÁ USA PORTALDOUSUARIO
 const saudecolabClass = require("../models/saudecolab")
-var Saudecolab = getModel("SoftRoute", 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
-
+const SaudecolabModel = saudecolabClass.SaudecolabModel  // ✅ Usa o modelo já configurado para PortalDoUsuario
 
 //Classes Extrangeiras
 const estadoClass = require("../models/estado")
 const usuarioClass = require("../models/usuario")
 
-//Tabelas Extrangeiras
+//Tabelas Extrangeiras - PortalDoUsuario
 var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
 var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 
@@ -21,12 +19,9 @@ const Resposta = fncGeral.Resposta;
 
 module.exports = {
     listaSaudecolab(req,res, resposta){
-        let db = req.cookies['preferredDb'];
-        Saudecolab = getModel(db, 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
-
         let flash = new Resposta();
         flash = resposta;
-        console.log('listando saudecolabs')
+        console.log('listando saudecolabs do PortalDoUsuario')
         let filtraUsuario;
         let usuarioAtual = req.cookies['idUsu'];
         let lvlUsu = req.cookies['lvlUsu'];
@@ -35,41 +30,34 @@ module.exports = {
         } else {
             filtraUsuario = {saudecolab_saudecolabusuid : usuarioAtual};
         }
-        Saudecolab.find(filtraUsuario).then((saudecolab) =>{
+        SaudecolabModel.find(filtraUsuario).then((saudecolab) =>{
             Usuario.find().then((usuario)=>{
-                console.log("Listagem Realizada!")
+                console.log("Listagem Realizada! - PortalDoUsuario")
                 res.render('ferramentas/saudecolab/saudecolabLis', {saudecolabs: saudecolab, usuarios: usuario, flash})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Saudecolabs")
             res.redirect('admin/erro')
         })
-
     },
+    
     carregaSaudecolab(req,res){
-        let db = req.cookies['preferredDb'];
-        Saudecolab = getModel(db, 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
-
         let usuarioAtual = req.cookies['idUsu'];
-        Saudecolab.find().then((saudecolab)=>{
+        SaudecolabModel.find().then((saudecolab)=>{
             Usuario.find({"usuario_status":"Ativo"}).then((usuario)=>{//Usuário 
                 usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuario
-            console.log("Listagem Realizada!")
+            console.log("Listagem Realizada! - PortalDoUsuario")
             res.render("ferramentas/saudecolab/saudecolabCad", {saudecolabs: saudecolab, usuarios: usuario, usuarioAtual})
         })}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Saudecolabs")
             res.redirect('admin/erro')
         })
-
     },
+    
     carregaSaudecolabEdi(req,res){
-        let db = req.cookies['preferredDb'];
-        
-        Saudecolab = getModel(db, 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
-
         let usuarioAtual = req.cookies['idUsu'];
-        Saudecolab.findById(req.params.id).then((saudecolab) =>{
+        SaudecolabModel.findById(req.params.id).then((saudecolab) =>{
             console.log(saudecolab)
                 Estado.find().then((estado)=>{
                     Usuario.find({"usuario_status":"Ativo"}).then((usuario)=>{//Usuário 
@@ -81,16 +69,14 @@ module.exports = {
             res.render('admin/erro')
         })
     },
+    
     cadastraSaudecolab(req,res){
-        let db = req.cookies['preferredDb'];
-        Saudecolab = getModel(db, 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
-
         let resposta;
         let flash = new Resposta();
         let existe;
         let usuarioAtual = req.cookies['idUsu'];
         if ((""+usuarioAtual+"") == (""+req.body.saudecolabSaudecolabusuid+"")){
-            Saudecolab.find({saudecolab_saudecolabusuid: req.body.saudecolabSaudecolabusuid}).then((resultado)=>{
+            SaudecolabModel.find({saudecolab_saudecolabusuid: req.body.saudecolabSaudecolabusuid}).then((resultado)=>{
                 if (resultado.length == 0){
                     existe = "false";
                 } else {
@@ -123,11 +109,12 @@ module.exports = {
             })
         }
     },
+    
     atualizaSaudecolab(req,res){
         let resposta;
         try{
             saudecolabClass.saudecolabEditar(req,res).then((res)=>{
-                console.log("Atualização Realizada!")
+                console.log("Atualização Realizada! - PortalDoUsuario")
                 console.log(res)
                 resposta = res;
             }).catch((err) =>{
@@ -151,12 +138,10 @@ module.exports = {
             console.log(err1)
         }
     },
+    
     deletaSaudecolab(req,res){
-        let db = req.cookies['preferredDb'];
-        Saudecolab = getModel(db, 'tb_saudecolab', saudecolabClass.SaudecolabSchema)
-
-        Saudecolab.deleteOne({_id: req.params.id}).then(() =>{
-            Saudecolab.find().then((saudecolab) =>{
+        SaudecolabModel.deleteOne({_id: req.params.id}).then(() =>{
+            SaudecolabModel.find().then((saudecolab) =>{
                 req.flash("success_message", "Saudecolab deletada!")
                 res.render('ferramentas/saudecolab/saudecolabLis', {saudecolabs: saudecolab})
             }).catch((err) =>{

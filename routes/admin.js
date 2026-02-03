@@ -1764,7 +1764,8 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
     router.post('/atendimento/tabdimAtendconvbeneValFiltro', fncGeral.IsAuthenticated,(req,res) =>{
             fncAtend.tabdimAtendimentoConvBeneValFiltro(req,res);
         })
-//Relatório de Atendimentos por Convênio e Beneficiário. Tabela Dinamica expansivel
+
+        //Relatório de Atendimentos por Convênio e Beneficiário. Tabela Dinamica expansivel
     router.get('/atendimento/tabdimConvBeneTeraAtendval', fncGeral.IsAuthenticated,(req,res) =>{
             fncAtend.tabdimConvBeneTeraAtendval(req,res);
         })

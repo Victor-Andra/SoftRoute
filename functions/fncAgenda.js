@@ -4293,7 +4293,7 @@ module.exports = {
             res.render("agenda/agendaSemanalFixo", {segunda, terca, quarta, quinta, sexta})//, {salas: sala, horaages: horaage, agendas: agenda, benes: bene, terapeutas: terapeuta, semanas: semana, dtFill, segunda, terca, quarta, quinta, sexta})
     },
     //carrega Agenda Semanal com Fixos Filtrada
-    carregaAgendaFilSFixo(req,res){
+    carregaAgendaFilSFixo_oLD(req,res){
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -4470,7 +4470,205 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
+carregaAgendaFilSFixo(req,res){
+    let db = req.cookies['preferredDb'];
+    Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+    Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+    Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+    Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+    Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
+    Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema)
 
+    let aux = 1;
+    let segunda;
+    let terca;
+    let quarta;
+    let quinta;
+    let sexta;
+    let dtFill = new Date(req.body.dataFinal);
+    let seg = new Date(req.body.dataFinal);
+    let sex = new Date(req.body.dataFinal);
+    let idsAgendasEx = [];
+    seg.setHours(0);
+    seg.setMinutes(0);
+    seg.setSeconds(0);
+    sex.setHours(23);
+    sex.setMinutes(59);
+    sex.setSeconds(59);
+    switch (seg.getUTCDay()){
+        case 0://DOM
+            seg.setUTCDate(seg.getUTCDate() + 1);
+            dtFill = {dia: "seg"};
+            sex.setUTCDate(sex.getUTCDate() + 5);
+            break;
+        case 1://SEG
+            dtFill = {dia: "seg"};
+            sex.setUTCDate(sex.getUTCDate() + 4);
+            break;
+        case 2://TER
+            dtFill = {dia: this.getDiaSemana(seg)};
+            seg.setUTCDate(seg.getUTCDate() - 1);
+            sex.setUTCDate(sex.getUTCDate() + 3);
+            break;
+        case 3://QUA
+            dtFill = {dia: this.getDiaSemana(seg)};
+            seg.setUTCDate(seg.getUTCDate() - 2);
+            sex.setUTCDate(sex.getUTCDate() + 2);
+            break;
+        case 4://QUI
+            dtFill = {dia: this.getDiaSemana(seg)};
+            seg.setUTCDate(seg.getUTCDate() - 3);
+            sex.setUTCDate(sex.getUTCDate() + 1);
+            break;
+        case 5://SEX
+            dtFill = {dia: this.getDiaSemana(seg)};
+            seg.setUTCDate(seg.getUTCDate() - 4);
+            break;
+        case 6://SAB
+            seg.setUTCDate(seg.getUTCDate() - 5);
+            dtFill = {dia: "seg"};
+            sex.setUTCDate(sex.getUTCDate() - 1);
+            break;
+        default:
+            seg.setUTCDate(seg.getUTCDate() + 1);
+            dtFill = {dia: "seg"};
+            sex.setUTCDate(sex.getUTCDate() + 5);
+            break;
+    }
+    let agora = seg.toISOString();
+    let depois = sex.toISOString();
+    let diaSemana = seg;
+    let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+    {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+    
+    segunda = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()-4));
+    terca = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+    quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+    quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+    sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
+
+    // Buscar TODAS as agendas (sem filtro de SubstitutoFixo)
+    Agenda.find({ agenda_data: { $gte : agora, $lte:  depois } }).sort({ agenda_data: -1 }).then((agenda) =>{
+        agenda.forEach((e)=>{
+            let dat = new Date(e.agenda_data);
+            e.agenda_data_dia = this.getDataFMT(dat);
+            let hora = ""+dat.getUTCHours();
+            let min = ""+dat.getMinutes();
+            if (hora.length == 1){hora = "0" + hora + "";}
+            if (min.length == 1){min = "0" + min + "";}
+            e.agenda_hora = hora+":"+min;
+            e.agenda_aux = aux;
+            aux++;
+
+            switch (dat.getUTCDay()){
+                case 0:
+                    e.agenda_data_semana = "dom"
+                    break;
+                case 1:
+                    e.agenda_data_semana = "seg"
+                    break;
+                case 2:
+                    e.agenda_data_semana = "ter"
+                    break;
+                case 3:
+                    e.agenda_data_semana = "qua"
+                    break;
+                case 4:
+                    e.agenda_data_semana = "qui"
+                    break;
+                case 5:
+                    e.agenda_data_semana = "sex"
+                    break;
+                case 6:
+                    e.agenda_data_semana = "sab"
+                    break;
+                default:
+                    break;
+            }
+
+            if(e.agenda_temp){
+                idsAgendasEx.push(e.agenda_tempId.toString());
+            }
+        })
+        
+        idsAgendasEx.forEach((i)=>{
+            agenda = agenda.filter(a => (""+a.id+"") != (""+i+""));
+        })
+        
+        // Carregar todos os dados necessários
+        Promise.all([
+            Bene.find().sort({bene_nome: 1}),
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).sort({usuario_nome: 1}),
+            Terapia.find().sort({terapia_nome: 1}),
+            Horaage.find().sort({horaage_turno: 1, horaage_ordem: 1}),
+            Sala.find().sort({sala_nome: 1})
+        ]).then(([bene, terapeuta, terapia, horaage, sala]) => {
+            
+            // Processar agendas SubstitutoFixo
+            agenda.forEach((a) => {
+                if (a.agenda_categoria === "SubstitutoFixo") {
+                    let terapeutaAgendaSubF = "";
+                    let terapiaAgendaSubF = "";
+                    
+                    // Buscar nome do terapeuta de merge
+                    terapeuta.forEach((t) => {
+                        if (""+t._id+"" === ""+a.agenda_mergeterapeutaid+"") {
+                            terapeutaAgendaSubF = t.usuario_nome;
+                        }
+                    });
+                    
+                    // Buscar nome da terapia de merge
+                    terapia.forEach((t) => {
+                        if (""+t._id+"" === ""+a.agenda_mergeterapiaid+"") {
+                            terapiaAgendaSubF = t.terapia_nome;
+                        }
+                    });
+                    
+                    // Montar observação com dados de SubFix
+                    if (terapeutaAgendaSubF && terapiaAgendaSubF) {
+                        a.agenda_obs = "SubFix: " + terapeutaAgendaSubF + " / " + terapiaAgendaSubF;
+                    } else {
+                        a.agenda_obs = "Erro ao carregar SubFix";
+                    }
+                }
+            });
+            
+            // Ordenar agenda por hora
+            agenda.sort(function(a, b) {
+                let h1 = a.agenda_hora.substring(0,2);
+                let m1 = a.agenda_hora.substring(3,5);
+                let h2 = b.agenda_hora.substring(0,2);
+                let m2 = b.agenda_hora.substring(3,5);
+                if(h1 == h2){
+                    return m1 < m2 ? -1 : 1;
+                } else {
+                    return h1 < h2 ? -1 : 1;
+                }
+            });
+            
+            // Renderizar view
+            res.render("agenda/agendaSemanalFixo", {
+                salas: sala, 
+                horaages: horaage, 
+                agendas: agenda, 
+                benes: bene, 
+                terapeutas: terapeuta, 
+                semanas: semana, 
+                dtFill, 
+                segunda, 
+                terca, 
+                quarta, 
+                quinta, 
+                sexta
+            });
+        });
+    }).catch((err) =>{
+        console.log(err);
+        req.flash("error_message", "houve um erro ao Realizar as listas!");
+        res.redirect('admin/erro');
+    });
+},
     carregaAgendaDTerapeuta(req,res){
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)

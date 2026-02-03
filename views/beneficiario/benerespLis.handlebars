@@ -113,14 +113,12 @@
 															<span class="lbl"></span>
 														</label>
 													</th>
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Nome</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Convênio</th>
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Apelido</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Responsável</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">CPF</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Parentesco</th>
-													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">WhatsApp</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Celular</th>
-													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">E-mail</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Convênio</th>													
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1"><span class="badge badge-success">Responsável</span></th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1"><span class="badge badge-info">Pai</span></th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1"><span class="badge badge-pink">Mãe</span></th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Status</th>
 													<th>Ação</th>
 												</tr>
@@ -136,19 +134,32 @@
 															</label>
 														</td>
 														
-														<td>{{bene_apelido}}</td>
-														<td>{{bene_out}}</td>
-														<td>{{bene_outcpf}}</td>
-														<td>{{bene_graupar}}</td>
-														<td>{{bene_outcel}}</td>
-														<td>{{bene_outcel2}}</td>
-														<td>{{bene_outemail}}</td>														
+														<td>{{bene_nome}}</td>
 														{{#each ../convs}}
 															{{#ifEqual this._id ../bene_convid}}
 																<td>{{conv_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														
+														<td>{{bene_apelido}}</td>
+														<td>
+															<span class="badge badge-success">{{bene_out}}</span><br>
+															CPF:&nbsp;{{bene_outcpf}}<br>
+															Parentesco:&nbsp;{{bene_graupar}}<br>
+															Cel:&nbsp;{{bene_outcel}}&nbsp;&nbsp;Cel:&nbsp;{{bene_outcel2}}<br>
+															E-mail:&nbsp;{{bene_outemail}}
+														</td>
+														<td>
+															<span class="badge badge-info">{{bene_pai}}</span><br>
+															CPF:&nbsp;{{bene_paicpf}}<br>
+															Cel:&nbsp;{{bene_paicel}}&nbsp;&nbsp;Cel:&nbsp;{{bene_paicel2}}<br>
+															E-mail:&nbsp;{{bene_paiemail}}
+														</td>					
+														<td>
+															<span class="badge badge-pink">{{bene_mae}}</span><br>
+															CPF:&nbsp;{{bene_maecpf}}<br>
+															Cel:&nbsp;{{bene_maecel}}&nbsp;&nbsp;Cel:&nbsp;{{bene_maecel2}}<br>
+															E-mail:&nbsp;{{bene_maeemail}}
+														</td>
 														{{#ifEqual this.bene_status "Inativo"}}
 															<td><span class="label label-sm label-danger">{{bene_status}}</span></td>
 															{{else}}
@@ -222,9 +233,9 @@
             "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
         },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, null, { "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, { "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [10, 25, 50, 100, 200],
+			"lengthMenu": [ 100, 200, 300],
 			"lengthChange": true,
 			"autoWidth": true,
 			"paging": true,
