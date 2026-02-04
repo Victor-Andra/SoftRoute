@@ -1749,70 +1749,36 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
         fncAtend.tabdimConvTeraAtendvalFiltro(req,res);
     })
 
-/**
- * TABDIM - Tabelas Dinâmicas de Atendimento
- * Criado por: Wagner Cintra
- * Data Criação: 04-02-2026
- * 
- * Padrão de nomenclatura:
- * - tabdim_{Agrupamento}Atendval → Carrega view (GET)
- * - tabdim_{Agrupamento}AtendvalFiltro → Processa filtro (POST)
- */
+//Relatório de Atendimentos por Beneficiário. Tabela Dinamica expansivel
+    router.get('/atendimento/tabdimBeneTeraAtendval', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimBeneTeraAtendval(req,res);
+        })
+    router.post('/atendimento/tabdimBeneTeraAtendvalFiltro', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimBeneTeraAtendvalFiltro(req,res);
+        })
 
-// ============================================
-// 1. Convênio e Terapia
-// ============================================
-router.get('/atendimento/tabdimConvTeraAtendval', fncGeral.IsAuthenticated, (req, res) => {
-    fncAtend.tabdimConvTeraAtendval(req, res);
-});
+//Relatório de Atendimentos por Terapeuta. Tabela Dinamica expansivel
+    router.get('/atendimento/tabdimTeraBeneAtendval', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimTeraBeneAtendval(req,res);
+        })
+    router.post('/atendimento/tabdimTeraBeneAtendvalFiltro', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimTeraBeneAtendvalFiltro(req,res);
+        })
+//Relatório de Atendimentos por Convênio e Beneficiário. Tabela Dinamica expansivel
+    router.get('/atendimento/tabdimConvBeneAtendval', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimConvBeneAtendval(req,res);
+        })
+    router.post('/atendimento/tabdimConvBeneTeraAtendvalFiltro', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimConvBeneTeraAtendvalFiltro(req,res);
+        })
 
-router.post('/atendimento/tabdimConvTeraAtendvalFiltro', fncGeral.IsAuthenticated, (req, res) => {
-    fncAtend.tabdimConvTeraAtendvalFiltro(req, res);
-});
-
-// ============================================
-// 2. Beneficiário e Terapeuta
-// ============================================
-router.get('/atendimento/tabdimBeneTeraAtendval', fncGeral.IsAuthenticated, (req, res) => {
-    fncAtend.tabdimBeneTeraAtendval(req, res);
-});
-
-router.post('/atendimento/tabdimBeneTeraAtendvalFiltro', fncGeral.IsAuthenticated, (req, res) => {
-    fncAtend.tabdimBeneTeraAtendvalFiltro(req, res);
-});
-
-// ============================================
-// 3. Terapeuta e Beneficiário
-// ============================================
-router.get('/atendimento/tabdimTeraBeneAtendval', fncGeral.IsAuthenticated, (req, res) => {
-    fncAtend.tabdimTeraBeneAtendval(req, res);
-});
-
-router.post('/atendimento/tabdimTeraBeneAtendvalFiltro', fncGeral.IsAuthenticated, (req, res) => {
-    fncAtend.tabdimTeraBeneAtendvalFiltro(req, res);
-});
-
-// ============================================
-// 4. Convênio e Beneficiário
-// ============================================
-router.get('/atendimento/tabdimConvBeneAtendval', fncGeral.IsAuthenticated, (req, res) => {
-    fncAtend.tabdimConvBeneAtendval(req, res);
-});
-
-router.post('/atendimento/tabdimConvBeneAtendvalFiltro', fncGeral.IsAuthenticated, (req, res) => {
-    fncAtend.tabdimConvBeneAtendvalFiltro(req, res);
-});
-
-// ============================================
-// 5. Convênio, Beneficiário e Terapeuta (3 níveis)
-// ============================================
-router.get('/atendimento/tabdimConvBeneTeraAtendval', fncGeral.IsAuthenticated, (req, res) => {
-    fncAtend.tabdimConvBeneTeraAtendval(req, res);
-});
-
-router.post('/atendimento/tabdimConvBeneTeraAtendvalFiltro', fncGeral.IsAuthenticated, (req, res) => {
-    fncAtend.tabdimConvBeneTeraAtendvalFiltro(req, res);
-});
+//Relatório de Atendimentos por Convênio e Beneficiário. Tabela Dinamica expansivel
+    router.get('/atendimento/tabdimConvBeneTeraAtendval', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimConvBeneTeraAtendval(req,res);
+        })
+    router.post('/atendimento/tabdimConvBeneTeraAtendvalFiltro', fncGeral.IsAuthenticated,(req,res) =>{
+            fncAtend.tabdimConvBeneTeraAtendvalFiltro(req,res);
+        })
 
 //Relatório Individual de Atendimentos por Beneficiário.
 //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo.
@@ -2447,13 +2413,6 @@ router.post('/guia/guiaLilfil', fncGeral.IsAuthenticated, (req,res) =>{//direcio
 router.post('/guia/addguia', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
     fncGuia.adicionarGuia(req, res);
 })
-
-// ✅ NOVA ROTA: SALVAR GUIA EM MASSA com segurança (evita sobrescrita de dados já cadastrados na base)
-// Criado por: Wagner Cintra
-// Data: 04-02-2026
-router.post('/guia/addguia/massa', fncGeral.IsAuthenticated, (req,res) => {
-    fncGuia.adicionarGuiaMassa(req, res);
-});
 //------------------------------------------------------------------------------------------------
 
 //Menu Minha Agenda Area Tecnicos

@@ -6,49 +6,340 @@
 	<title>Lista de Guias e Senhas</title>
 	<style>
         /*Tooltip personalizado */
-            .custom-tooltip {
-                position: relative;
-                display: inline-block;
-                cursor: pointer;
-            }
+        .custom-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
 
-            .tooltip-text {
-                visibility: hidden;
-                width: max-content;
-                background-color: #f3dfdf;
-                color: red;
-                font-size: 8px;
-                text-align: left;
-                border-radius: 4px;
-                padding: 8px 12px;
-                position: absolute;
-                z-index: 9999;
-                bottom: 125%; /* Acima do ícone */
-                left: 50%;
-                transform: translateX(-50%);
-                opacity: 0.9;
-                white-space: normal;
-                min-width: 150px;
-                max-width: 300px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-                transition: opacity 0.3s;
-            }
+        .tooltip-text {
+            visibility: hidden;
+            width: max-content;
+            background-color: #f3dfdf;
+            color: red;
+            font-size: 8px;
+            text-align: left;
+            border-radius: 4px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 9999;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.9;
+            white-space: normal;
+            min-width: 150px;
+            max-width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s;
+        }
 
-            .tooltip-text::after {
-                content: "";
-                position: absolute;
-                top: 100%;
-                left: 50%;
-                margin-left: -5px;
-                border-width: 5px;
-                border-style: solid;
-                border-color: #f3dfdf transparent transparent transparent;
-            }
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #f3dfdf transparent transparent transparent;
+        }
 
-            /* Mostra o tooltip quando o mouse passa sobre o link */
-            .custom-tooltip:hover .tooltip-text {
-                visibility: visible;
-            }
+        .custom-tooltip:hover .tooltip-text {
+            visibility: visible;
+        }
+
+        /* ============================================
+           BARRA DE PESQUISA - CLASSE SEPARADA
+           ============================================ */
+        .toolbar-pesquisa {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); /* Azul */
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #1976d2;
+        }
+
+        .toolbar-pesquisa h5 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-pesquisa h5 i {
+            font-size: 18px;
+        }
+
+        .toolbar-pesquisa .form-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .toolbar-pesquisa .form-group {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .toolbar-pesquisa label {
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #f8f9fa;
+            white-space: nowrap;
+        }
+
+        .toolbar-pesquisa input[type="text"],
+        .toolbar-pesquisa input[type="date"],
+        .toolbar-pesquisa select {
+            padding: 6px 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 12px;
+            width: 120px;
+            transition: all 0.3s;
+            background: white;
+            color: #333;
+        }
+
+        .toolbar-pesquisa input[type="text"]:focus,
+        .toolbar-pesquisa input[type="date"]:focus,
+        .toolbar-pesquisa select:focus {
+            border-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+        .toolbar-pesquisa .btn-toolbar {
+            background: #dc3545; /* Cor danger do AceAdmin */
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toolbar-pesquisa .btn-toolbar:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .toolbar-pesquisa .btn-toolbar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .toolbar-pesquisa .btn-toolbar i {
+            font-size: 14px;
+        }
+
+        /* ============================================
+           BARRA DE SALVAR EM MASSA - CLASSE SEPARADA
+           ============================================ */
+        .toolbar-massa {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #8000ff;
+        }
+
+        .toolbar-massa h5 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-massa h5 i {
+            font-size: 18px;
+        }
+
+        .toolbar-massa .form-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .toolbar-massa .form-group {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .toolbar-massa label {
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #f8f9fa;
+            white-space: nowrap;
+        }
+
+        .toolbar-massa input[type="text"],
+        .toolbar-massa input[type="date"],
+        .toolbar-massa select {
+            padding: 6px 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 12px;
+            width: 120px;
+            transition: all 0.3s;
+            background: white;
+            color: #333;
+        }
+
+        .toolbar-massa input[type="text"]:focus,
+        .toolbar-massa input[type="date"]:focus,
+        .toolbar-massa select:focus {
+            border-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+        .toolbar-massa .btn-toolbar {
+            background: #dc3545; /* Cor danger do AceAdmin */
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toolbar-massa .btn-toolbar:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .toolbar-massa .btn-toolbar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .toolbar-massa .btn-toolbar i {
+            font-size: 14px;
+        }
+
+        .toolbar-massa .info-selecao {
+            font-size: 11px;
+            color: #e2e8f0;
+            margin-left: 15px;
+            font-weight: 500;
+        }
+
+        .toolbar-massa .badge-selecionados {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Animação de sucesso */
+        @keyframes pulseSuccess {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .btn-success-pulse {
+            animation: pulseSuccess 0.5s ease;
+        }
+
+        /* Campos Guia e Senha maiores - APENAS na barra de massa */
+        .toolbar-massa input#guiaMassa,
+        .toolbar-massa input#senhaMassa {
+            width: 240px !important; /* Dobrado */
+            font-size: 14px !important;
+            text-align: center;
+        }
+
+        /* Estilo minimalista para chosen-select */
+        .chosen-container .chosen-single {
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+            box-shadow: none !important;
+            background: white !important;
+            height: 30px !important;
+            line-height: 30px !important;
+        }
+
+        .chosen-container .chosen-single:hover {
+            border-color: #868e96 !important;
+        }
+
+        .chosen-container-active.chosen-with-drop .chosen-single {
+            border-color: #868e96 !important;
+            background: white !important;
+        }
+
+        .chosen-container .chosen-drop {
+            border: 1px solid #ced4da !important;
+            border-top: none !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        }
+
+        .chosen-container .chosen-search input[type="text"] {
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+            margin: 4px !important;
+        }
+
+        /* ✅ CORREÇÃO CRÍTICA: Divs ocultas via CSS (não apenas atributo hidden) */
+        .hidden-div {
+            display: none !important;
+        }
+
+        /* ✅ Selects de Beneficiário e Terapeuta 3x maiores */
+        #divAtendBeneficiario select,
+        #divAtendTerapeuta select {
+            width: 360px !important;
+        }
+
+        .chosen-container#atendBeneficiario_chosen,
+        .chosen-container#atendTerapeuta_chosen {
+            width: 360px !important;
+        }
+
+        .chosen-container#atendBeneficiario_chosen .chosen-single,
+        .chosen-container#atendTerapeuta_chosen .chosen-single {
+            width: 358px !important; /* -2px para borda */
+        }
+
+        .chosen-container#atendBeneficiario_chosen .chosen-drop,
+        .chosen-container#atendTerapeuta_chosen .chosen-drop {
+            width: 358px !important;
+        }
     </style>
 	<script type="text/javascript">
 		function ajustaData(){
@@ -92,111 +383,342 @@
 			}
 		}
 
+		// ✅ CORRIGIDO: Usa style.display em vez de atributo hidden
 		function trocaFiltroData(){
-			let fill = document.getElementById("tipoData").value;
-			if(fill == "Ano/Mes"){
-				document.getElementById("divAnoAtend").hidden = false;
-				document.getElementById("divMesAtend").hidden = false;
-				document.getElementById("divDataFil").hidden = true;
-			} else {
-				document.getElementById("divAnoAtend").hidden = true;
-				document.getElementById("divMesAtend").hidden = true;
-				document.getElementById("divDataFil").hidden = false;
+			const tipo = document.getElementById("tipoData").value;
+			
+			// Oculta tudo
+			document.getElementById("divAnoAtend").classList.add('hidden-div');
+			document.getElementById("divMesAtend").classList.add('hidden-div');
+			document.getElementById("divDataFil").classList.add('hidden-div');
+			
+			// Mostra conforme seleção
+			if(tipo == "Ano/Mes"){
+				document.getElementById("divAnoAtend").classList.remove('hidden-div');
+				document.getElementById("divMesAtend").classList.remove('hidden-div');
+			} else if (tipo == "Semana" || tipo == "Dia"){
+				document.getElementById("divDataFil").classList.remove('hidden-div');
 			}
+			
+			console.log('[DEBUG] Tipo Data:', tipo);
 		}
 
+		// ✅ CORRIGIDO: Usa style.display em vez de atributo hidden
 		function trocaFilpessoa() {
-			let fillTipopessoa = document.getElementById("atendTipoPessoa").value;
-			if(fillTipopessoa == "Geral"){
-				document.getElementById("divAtendBeneficiario").hidden = true;
-			} else if(fillTipopessoa == "Beneficiario"){
-				document.getElementById("divAtendBeneficiario").hidden = false;
+			const tipo = document.getElementById("atendTipoPessoa").value;
+			
+			// Oculta tudo
+			document.getElementById("divAtendBeneficiario").classList.add('hidden-div');
+			document.getElementById("divAtendTerapeuta").classList.add('hidden-div');
+			
+			// Mostra conforme seleção
+			if(tipo == "Beneficiario"){
+				document.getElementById("divAtendBeneficiario").classList.remove('hidden-div');
+			} else if(tipo == "Terapeuta"){
+				document.getElementById("divAtendTerapeuta").classList.remove('hidden-div');
+			}
+			
+			console.log('[DEBUG] Tipo Pessoa:', tipo);
+		}
+
+		// ✅ CORRIGIDO: Carrega estado inicial com visibilidade correta
+		function carregaBody(){
+			// Define valores padrão
+			if (!document.getElementById("tipoData").value) {
+				document.getElementById("tipoData").value = "Ano/Mes";
+			}
+			if (!document.getElementById("atendTipoPessoa").value) {
+				document.getElementById("atendTipoPessoa").value = "Geral";
+			}
+			
+			// Aplica visibilidade inicial
+			trocaFiltroData();
+			trocaFilpessoa();
+			
+			// Carrega valores do filtro se existirem
+			if (document.getElementById("carregaFiltro").value == "true"){
+				// Tipo Data
+				document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value || "Ano/Mes";
+				trocaFiltroData();
+				
+				if(document.getElementById("tipoData").value == "Ano/Mes"){
+					document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value || "";
+					document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value || "0";
+				} else if (document.getElementById("tipoData").value == "Semana" || document.getElementById("tipoData").value == "Dia"){
+					document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value.split('T')[0] || "";
+				}
+
+				// Tipo Pessoa
+				document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value || "Geral";
+				trocaFilpessoa();
+				
+				if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
+					document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value || "766f69643132333435366964";
+				} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
+					document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value || "766f69643132333435366964";
+				}
+			}
+			
+			// Carrega valores de edição se existirem
+			const tipoDataEdi = document.getElementById("tipoDataEdi").value;
+			const tipoPessoaEdi = document.getElementById("tipoPessoaEdi").value;
+			
+			if (tipoDataEdi == "Ano/Mes"){
+				document.getElementById("tipoData").value = tipoDataEdi;
+				trocaFiltroData();
+				document.getElementById("anoAtend").value = document.getElementById("anoAtendEdi").value || "";
+				document.getElementById("mesAtend").value = document.getElementById("mesAtendEdi").value || "0";
+			} else if (tipoDataEdi == "Semana" || tipoDataEdi == "Dia"){
+				document.getElementById("tipoData").value = tipoDataEdi;
+				trocaFiltroData();
+				const dataEdi = document.getElementById("dataFinalEdi").value;
+				if (dataEdi) {
+					const dat = new Date(dataEdi);
+					const mes = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
+					const dia = dat.getUTCDate().toString().padStart(2, '0');
+					document.getElementById("dataFil").value = `${dat.getUTCFullYear()}-${mes}-${dia}`;
+				}
+			}
+			
+			if (tipoPessoaEdi == "Beneficiario"){
+				document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
+				trocaFilpessoa();
+				document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioEdi").value || "766f69643132333435366964";
+			} else if (tipoPessoaEdi == "Terapeuta"){
+				document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
+				trocaFilpessoa();
+				document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaEdi").value || "766f69643132333435366964";
+			}
+			
+			// Atualiza Chosen após 100ms para garantir renderização
+			setTimeout(() => {
+				if (typeof $.fn.chosen !== 'undefined') {
+					$('.chosen-select').trigger('chosen:updated');
+				}
+			}, 100);
+		}
+		
+		// ============================================
+		// SALVAR EM MASSA - NOVA FUNCIONALIDADE
+		// ============================================
+		async function salvarEmMassa() {
+			const guiaMassa = document.getElementById('guiaMassa').value.trim();
+			const dataGuiaMassa = document.getElementById('dataGuiaMassa').value;
+			const senhaMassa = document.getElementById('senhaMassa').value.trim();
+			const dataSenhaMassa = document.getElementById('dataSenhaMassa').value;
+
+			// Validar se pelo menos um campo foi preenchido
+			if (!guiaMassa && !dataGuiaMassa && !senhaMassa && !dataSenhaMassa) {
+				alert('⚠️ Preencha pelo menos um campo (Guia, Data Guia, Senha ou Data Senha) para salvar em massa.');
+				return;
+			}
+
+			// Obter checkboxes selecionados
+			const checkboxes = document.querySelectorAll('#dynamic-table tbody input[type="checkbox"]:checked');
+			
+			if (checkboxes.length === 0) {
+				alert('⚠️ Selecione pelo menos um registro para salvar em massa.');
+				return;
+			}
+
+			// ✅ Substitui "localhost" por "SoftRoute" na mensagem de confirmação
+			if (!confirm(`SoftRoute\n\nDeseja salvar os dados em massa para ${checkboxes.length} registro(s) selecionado(s)?\n\n⚠️ ATENÇÃO: Registros que já possuem dados NÃO serão atualizados para evitar sobrescrita.`)) {
+				return;
+			}
+
+			const btnSalvar = document.querySelector('.btn-toolbar');
+			btnSalvar.disabled = true;
+			btnSalvar.innerHTML = '<i class="ace-icon fa fa-spinner fa-spin"></i> Processando...';
+
+			try {
+				const updates = [];
+				
+				checkboxes.forEach(checkbox => {
+					const tr = checkbox.closest('tr');
+					const agendaId = tr.querySelector(`[name="agendaId"]`)?.value;
+					
+					if (agendaId) {
+						updates.push({
+							agendaId: agendaId,
+							guia_num: guiaMassa || null,
+							guia_numdatacad: dataGuiaMassa || null,
+							guia_senha: senhaMassa || null,
+							guia_senhadatacad: dataSenhaMassa || null
+						});
+					}
+				});
+
+				const resp = await fetch('/menu/guia/addguia/massa', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ updates })
+				});
+
+				const result = await resp.json();
+
+				if (result.ok) {
+					// Atualizar visualmente os campos nas linhas ATUALIZADAS
+					if (result.atualizados && result.atualizados.length > 0) {
+						result.atualizados.forEach(atualizado => {
+							const tr = document.querySelector(`[name="agendaId"][value="${atualizado.agendaId}"]`)?.closest('tr');
+							if (tr) {
+								tr.style.backgroundColor = '#d4edda';
+								tr.style.transition = 'background-color 0.5s';
+								
+								if (guiaMassa) {
+									const inputGuia = tr.querySelector(`[name="guia_num${atualizado.agendaId}"]`);
+									if (inputGuia) inputGuia.value = guiaMassa;
+								}
+								if (dataGuiaMassa) {
+									const inputDataGuia = tr.querySelector(`[name="dataguia_${atualizado.agendaId}"]`);
+									if (inputDataGuia) inputDataGuia.value = dataGuiaMassa;
+								}
+								if (senhaMassa) {
+									const inputSenha = tr.querySelector(`[name="senha_${atualizado.agendaId}"]`);
+									if (inputSenha) inputSenha.value = senhaMassa;
+								}
+								if (dataSenhaMassa) {
+									const inputDataSenha = tr.querySelector(`[name="datasenha_${atualizado.agendaId}"]`);
+									if (inputDataSenha) inputDataSenha.value = dataSenhaMassa;
+								}
+								
+								setTimeout(() => {
+									tr.style.backgroundColor = '';
+								}, 2000);
+							}
+						});
+					}
+
+					// Destacar linhas IGNORADAS (com dados existentes)
+					if (result.ignorados && result.ignorados.length > 0) {
+						result.ignorados.forEach(ignorado => {
+							const tr = document.querySelector(`[name="agendaId"][value="${ignorado.agendaId}"]`)?.closest('tr');
+							if (tr) {
+								tr.style.backgroundColor = '#fff3cd';
+								tr.style.transition = 'background-color 0.5s';
+								
+								const tooltipCell = tr.querySelector('td:last-child');
+								if (tooltipCell) {
+									tooltipCell.innerHTML = `
+										<div class="action-buttons">
+											<span class="label label-warning" title="Registro ignorado - já possui dados">
+												<i class="ace-icon fa fa-exclamation-triangle"></i> Ignorado
+											</span>
+											${tooltipCell.innerHTML}
+										</div>
+									`;
+								}
+								
+								setTimeout(() => {
+									tr.style.backgroundColor = '';
+								}, 3000);
+							}
+						});
+					}
+
+					// Feedback visual de sucesso
+					btnSalvar.classList.add('btn-success-pulse');
+					btnSalvar.innerHTML = '<i class="ace-icon fa fa-check"></i> Concluído!';
+					
+					setTimeout(() => {
+						btnSalvar.disabled = false;
+						btnSalvar.classList.remove('btn-success-pulse');
+						btnSalvar.innerHTML = '<i class="ace-icon fa fa-save"></i> Salvar em Massa';
+						
+						// Limpar campos após salvar
+						document.getElementById('guiaMassa').value = '';
+						document.getElementById('dataGuiaMassa').value = '';
+						document.getElementById('senhaMassa').value = '';
+						document.getElementById('dataSenhaMassa').value = '';
+						
+						// Atualizar contador
+						atualizarContadorSelecionados();
+						
+						// ✅ Substitui "localhost" por "SoftRoute" no alerta
+						mostrarRelatorioMassa(result);
+						
+					}, 1500);
+				} else {
+					throw new Error(result.message || 'Erro ao salvar em massa');
+				}
+			} catch (err) {
+				console.error('[ERRO salvarEmMassa]', err);
+				// ✅ Substitui "localhost" por "SoftRoute" no erro
+				alert(`❌ SoftRoute\n\nErro ao salvar em massa: ${err.message}`);
+				btnSalvar.disabled = false;
+				btnSalvar.innerHTML = '<i class="ace-icon fa fa-save"></i> Salvar em Massa';
 			}
 		}
 
-		function carregaBody(){
-				//formataData();
-				if (document.getElementById("carregaFiltro").value == "true"){
-					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
-					if(document.getElementById("tipoData").value == "Ano/Mes"){
-						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
-						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
-					} else if (document.getElementById("tipoData").value == "Semana"){
-						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
-					} else if (document.getElementById("tipoData").value == "Dia"){
-						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
-					}
-
-					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
-					if (document.getElementById("atendTipoPessoa").value == "Geral"){
-
-					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
-						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value
-					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
-						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
-					}
-
-				}
-				let tipoDataEdi = document.getElementById("tipoDataEdi").value;
-				let tipoPessoaEdi =document.getElementById("tipoPessoaEdi").value;
-				if (tipoDataEdi == "Ano/Mes"){
-					document.getElementById("tipoData").value = tipoDataEdi;
-					document.getElementById("anoAtend").value = document.getElementById("anoAtendEdi").value;
-					document.getElementById("mesAtend").value = document.getElementById("mesAtendEdi").value;
-				} else if (tipoDataEdi == "Semana"){
-					document.getElementById("tipoData").value = tipoDataEdi;
-					let dat = new Date(document.getElementById('dataFinalEdi').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia).toString();
-					document.getElementById("dataFil").value = fulldate;
-					document.getElementById("dataFinal").value = (fulldate+' 00:00:00.000Z');
-				} else if (tipoDataEdi == "Dia"){
-					document.getElementById("tipoData").value = tipoDataEdi;
-					let dat = new Date(document.getElementById('dataFinalEdi').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia).toString();
-					document.getElementById("dataFil").value = fulldate;
-					document.getElementById("dataFinal").value = (fulldate+' 00:00:00.000Z');
-				}
-				if (tipoPessoaEdi == "Geral"){
-					document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
-				} else if (tipoPessoaEdi == "Beneficiario"){
-					document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
-					document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioEdi").value;
-				} else if (tipoPessoaEdi == "Terapeuta"){
-					document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
-					document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaEdi").value;
-				}
-				trocaFiltroData();
-				trocaFilpessoa();
+		// Função para mostrar relatório detalhado em modal
+		function mostrarRelatorioMassa(result) {
+			const res = result.resumo;
+			
+			// ✅ Substitui "localhost" por "SoftRoute" na mensagem
+			let mensagem = `✅ SoftRoute\n\nSALVAMENTO EM MASSA CONCLUÍDO!\n\n`;
+			mensagem += `📊 Resumo:\n`;
+			mensagem += `   • Total selecionados: ${res.total}\n`;
+			mensagem += `   • Atualizados: ${res.atualizados} ✅\n`;
+			mensagem += `   • Ignorados (já possuem dados): ${res.ignorados} ⚠️\n`;
+			mensagem += `   • Erros: ${res.erros} ❌\n\n`;
+			
+			if (result.ignorados && result.ignorados.length > 0) {
+				mensagem += `⚠️ REGISTROS IGNORADOS:\n`;
+				result.ignorados.forEach((ignorado, index) => {
+					const campos = ignorado.camposComDados.join(', ');
+					mensagem += `   ${index + 1}. ID: ${ignorado.agendaId.substring(0, 8)}... - Campos com dados: ${campos}\n`;
+				});
+				mensagem += `\n💡 Dica: Para atualizar registros ignorados, edite-os individualmente.`;
 			}
-		
+			
+			alert(mensagem);
+		}
+
+		// Atualizar contador de selecionados
+		function atualizarContadorSelecionados() {
+			const count = document.querySelectorAll('#dynamic-table tbody input[type="checkbox"]:checked').length;
+			const contador = document.querySelector('.badge-selecionados');
+			if (contador) {
+				contador.textContent = count;
+			}
+		}
+
+		// Event listener para checkboxes
+		document.addEventListener('change', (e) => {
+			if (e.target.matches('#dynamic-table tbody input[type="checkbox"]')) {
+				atualizarContadorSelecionados();
+			}
+		});
+
+		// ✅ Checkbox de seleção em massa
+		function toggleAllCheckboxes(checked) {
+			const checkboxes = document.querySelectorAll('#dynamic-table tbody input[type="checkbox"]');
+			checkboxes.forEach(checkbox => {
+				checkbox.checked = checked;
+			});
+			atualizarContadorSelecionados();
+		}
+
+		// Listener para checkbox do cabeçalho
+		document.addEventListener('change', (e) => {
+			if (e.target.matches('#dynamic-table thead input[type="checkbox"]')) {
+				toggleAllCheckboxes(e.target.checked);
+			}
+		});
+
+		// Listener para botão individual (mantido)
 		document.addEventListener('click', async (e) => {
 			if (!e.target.classList.contains('btnSalvarGuia')) return;
 
 			e.preventDefault();
 
 			const tr = e.target.closest('tr');
-			//const agendaId = tr.dataset.agendaId;
 			const agendaId = tr.querySelector(`[name="agendaId"]`)?.value;
 			const guia_num = tr.querySelector(`[name="guia_num${agendaId}"]`)?.value;
 			const guia_numdatacad = tr.querySelector(`[name="dataguia_${agendaId}"]`)?.value;
 			const guia_senha = tr.querySelector(`[name="senha_${agendaId}"]`)?.value;
 			const guia_senhadatacad = tr.querySelector(`[name="datasenha_${agendaId}"]`)?.value;
+			
 			const payload = {
 				agendaId,
 				guia_num,
@@ -204,8 +726,7 @@
 				guia_senha,
 				guia_senhadatacad
 			};
-			console.log("payload: "+payload);
-			console.log("JSON.stringify(payload): "+JSON.stringify(payload));
+
 			try {
 				const resp = await fetch('/menu/guia/addguia', {
 					method: 'POST',
@@ -218,11 +739,13 @@
 					e.target.innerText = '✔';
 					setTimeout(() => e.target.innerText = '💾', 1000);
 				} else {
-					alert(result.message || 'Erro ao salvar');
+					// ✅ Substitui "localhost" por "SoftRoute" no erro
+					alert(`❌ SoftRoute\n\n${result.message || 'Erro ao salvar'}`);
 				}
 			} catch (err) {
 				console.error(err);
-				alert('Erro de comunicação');
+				// ✅ Substitui "localhost" por "SoftRoute" no erro
+				alert(`❌ SoftRoute\n\nErro de comunicação`);
 			}
 		});
 	</script>
@@ -246,139 +769,150 @@
 				{{/each}}
 
 				<div class="page-content">
-					<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/guia/guiaLilfil" method="POST">
-						<div class="col-xs-12" class="row">
-								<div class="hidden">
-									<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
-									<input id="atendTerapeutaFil" value="{{atendTerapeuta.atendTerapeuta}}" />
-									<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
-									<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
-									<input id="mesAtendFil" value="{{mesAtend.mesAtend}}" />
-									<input id="anoAtendFil" value="{{anoAtend.anoAtend}}" />
-									<input id="tipoPessoaFil" value="{{tipoPessoa.tipoPessoa}}" />
-									<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
-									<input id="dataIniFil" value="{{dataIni.dataIni}}" />
-									<input id="dataFimFil" value="{{dataFim.dataFim}}" />
-									<input id="idsChecked" value="" />
-								</div>
-								<div class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label>Tipo Filtro:&nbsp;</label>
-											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
-												<option value="Ano/Mes">Ano/Mês</option>
-												<option value="Semana">Semana</option>
-												<option value="Dia">Dia</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="hidden col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label> Filial:&nbsp;</label>
-											<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
-												<option value="Matriz">Matriz</option>
-												<option value="Filial 1">Filial 1</option>
-												<option value="Filial 2">Filial 2</option>
-												<option value="Filial 3">Filial 3</option>
-												<option value="Filial 4">Filial 4</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divAnoAtend" class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label for="id-date-picker-1">Ano:&nbsp;</label>
-											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:formataData();">
-												{{#each anos}}
-													<option value="{{ano_nome}}">{{ano_nome}}</option>
-												{{/each}}
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divMesAtend" class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label for="id-date-picker-1">Mês:&nbsp;</label>
-											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
-												<option value="0">Janeiro</option>
-												<option value="1">Fevereiro</option>
-												<option value="2">Março</option>
-												<option value="3">Abril</option>
-												<option value="4">Maio</option>
-												<option value="5">Junho</option>
-												<option value="6">Julho</option>
-												<option value="7">Agosto</option>
-												<option value="8">Setembro</option>
-												<option value="9">Outubro</option>
-												<option value="10">Novembro</option>
-												<option value="11">Dezembro</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divDataFil" class="col-sm-2">
-									<div class="input-group">
-										<label>Data:&nbsp;</label>
-										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-										<input class="hidden" id="dataFinal" name="dataFinal" />
-										<input class="hidden" id="idDeletar" name="idDeletar" />
-										<input class="hidden" id="tipoDataEdi" name="tipoDataEdi" value="{{filtroTela.tipoData}}" />
-										<input class="hidden" id="anoAtendEdi" name="anoAtendEdi" value="{{filtroTela.anoAtend}}" />
-										<input class="hidden" id="mesAtendEdi" name="mesAtendEdi" value="{{filtroTela.mesAtend}}" />
-										<input class="hidden" id="dataFinalEdi" name="dataFinalEdi" value="{{filtroTela.dataFinal}}" />
-										<input class="hidden" id="tipoPessoaEdi" name="tipoPessoaEdi" value="{{filtroTela.tipoPessoa}}" />
-										<input class="hidden" id="atendBeneficiarioEdi" name="atendBeneficiarioEdi" value="{{filtroTela.atendBeneficiario}}" />
-										<input class="hidden" id="atendTerapeutaEdi" name="atendTerapeutaEdi" value="{{filtroTela.atendTerapeuta}}" />
-										<input class="hidden" id="idEdi" name="idEdi" value="{{filtroTela.atendTerapeuta}}" />
-									</div>
-								</div>
-								<div id="divTipoFil" class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label>Tipo Filtro:&nbsp;</label>
-											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
-												<option value="Geral">Geral</option>
-												<option value="Beneficiario">Beneficiário</option>
-												<option value="Terapeuta">Terapeuta</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divAtendBeneficiario" class="col-sm-4">
-									<div class="row">
-										<div class="input-group">
-											<label>Beneficiário:&nbsp;</label>
-											<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha..." value="">
-												{{#each benes}}
-													<option value="{{_id}}">{{bene_nome}}</option>
-												{{/each}}
-											</select>
-										</div>
-									</div>
-								</div>
-								
-								<div class="row">
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
-										<i class="ace-icon fa fa-search-plus "></i>
-										Pesquisar
-									</button>
-									
-								</div>
-								<hr>
+					<!-- ============================================
+					     BARRA DE PESQUISA - CLASSE toolbar-pesquisa
+					     ============================================ -->
+					<div class="toolbar-pesquisa">
+						<h5>
+							<i class="ace-icon fa fa-search"></i>
+							<span>Filtros de Pesquisa</span>
+						</h5>
+						<form id="divFormPesquisa" class="form-inline" role="form" action="/menu/guia/guiaLilfil" method="POST">
+							<div class="hidden">
+								<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+								<input id="atendTerapeutaFil" value="{{atendTerapeuta.atendTerapeuta}}" />
+								<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
+								<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
+								<input id="mesAtendFil" value="{{mesAtend.mesAtend}}" />
+								<input id="anoAtendFil" value="{{anoAtend.anoAtend}}" />
+								<input id="tipoPessoaFil" value="{{tipoPessoa.tipoPessoa}}" />
+								<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
+								<input id="dataIniFil" value="{{dataIni.dataIni}}" />
+								<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+								<input id="idsChecked" value="" />
 							</div>
-					</form>
+							
+							<div class="form-group">
+								<label>Tipo Filtro</label>
+								<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha...">
+									<option value="Ano/Mes">Ano/Mês</option>
+									<option value="Semana">Semana</option>
+									<option value="Dia">Dia</option>
+								</select>
+							</div>
+							
+							<div id="divAnoAtend" class="form-group">
+								<label>Ano</label>
+								<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha...">
+									{{#each anos}}
+										<option value="{{ano_nome}}">{{ano_nome}}</option>
+									{{/each}}
+								</select>
+							</div>
+							
+							<div id="divMesAtend" class="form-group">
+								<label>Mês</label>
+								<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha...">
+									<option value="0">Janeiro</option>
+									<option value="1">Fevereiro</option>
+									<option value="2">Março</option>
+									<option value="3">Abril</option>
+									<option value="4">Maio</option>
+									<option value="5">Junho</option>
+									<option value="6">Julho</option>
+									<option value="7">Agosto</option>
+									<option value="8">Setembro</option>
+									<option value="9">Outubro</option>
+									<option value="10">Novembro</option>
+									<option value="11">Dezembro</option>
+								</select>
+							</div>
+							
+							<div id="divDataFil" class="form-group hidden-div">
+								<label>Data</label>
+								<input style="height: 30px;" id="dataFil" name="dataFil" type="date">
+								<input class="hidden" id="dataFinal" name="dataFinal" />
+								<input class="hidden" id="tipoDataEdi" name="tipoDataEdi" value="{{filtroTela.tipoData}}" />
+								<input class="hidden" id="anoAtendEdi" name="anoAtendEdi" value="{{filtroTela.anoAtend}}" />
+								<input class="hidden" id="mesAtendEdi" name="mesAtendEdi" value="{{filtroTela.mesAtend}}" />
+								<input class="hidden" id="dataFinalEdi" name="dataFinalEdi" value="{{filtroTela.dataFinal}}" />
+								<input class="hidden" id="tipoPessoaEdi" name="tipoPessoaEdi" value="{{filtroTela.tipoPessoa}}" />
+								<input class="hidden" id="atendBeneficiarioEdi" name="atendBeneficiarioEdi" value="{{filtroTela.atendBeneficiario}}" />
+								<input class="hidden" id="atendTerapeutaEdi" name="atendTerapeutaEdi" value="{{filtroTela.atendTerapeuta}}" />
+								<input class="hidden" id="idEdi" name="idEdi" value="{{filtroTela.atendTerapeuta}}" />
+							</div>
+							
+							<div class="form-group">
+								<label>Tipo</label>
+								<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha...">
+									<option value="Geral">Geral</option>
+									<option value="Beneficiario">Beneficiário</option>
+									<option value="Terapeuta">Terapeuta</option>
+								</select>
+							</div>
+							
+							<!-- ✅ Select de Beneficiário - 3x maior, oculto por padrão -->
+							<div id="divAtendBeneficiario" class="form-group hidden-div">
+								<label>Beneficiário</label>
+								<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha...">
+									{{#each benes}}
+										<option value="{{_id}}">{{bene_nome}}</option>
+									{{/each}}
+								</select>
+							</div>
+							
+							<!-- ✅ Select de Terapeuta - 3x maior, oculto por padrão -->
+							<div id="divAtendTerapeuta" class="form-group hidden-div">
+								<label>Terapeuta</label>
+								<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha...">
+									{{#each terapeutas}}
+										<option value="{{_id}}">{{usuario_nome}}</option>
+									{{/each}}
+								</select>
+							</div>
+							
+							<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn-toolbar">
+								<i class="ace-icon fa fa-search-plus"></i>
+								Pesquisar
+							</button>
+						</form>
+					</div>
 
 					<div class="row">
 						<div class="col-xs-12">
-							<div class="alert alert-warning">
-								<button type="button" class="close" data-dismiss="alert">
-									<i class="ace-icon fa fa-times"></i>
-								</button>
-								Aqui você localiza os agendamentos para inserir o número da guia e senha, essa é a primeira etapa para o nosso controle de guias. <br>
+							<!-- ============================================
+							     BARRA DE SALVAR EM MASSA - CLASSE toolbar-massa
+							     ============================================ -->
+							<div class="toolbar-massa">
+								<h5>
+									<i class="ace-icon fa fa-magic"></i>
+									<span>Salvar em Massa</span>
+									<span class="info-selecao">
+										Registros selecionados: <span class="badge-selecionados">0</span>
+									</span>
+								</h5>
+								<div class="form-inline">
+									<div class="form-group">
+										<label>Guia</label>
+										<input type="text" id="guiaMassa" placeholder="Número da Guia" />
+									</div>
+									<div class="form-group">
+										<label>Data Guia</label>
+										<input type="date" id="dataGuiaMassa" />
+									</div>
+									<div class="form-group">
+										<label>Senha</label>
+										<input type="text" id="senhaMassa" placeholder="Senha" />
+									</div>
+									<div class="form-group">
+										<label>Data Senha</label>
+										<input type="date" id="dataSenhaMassa" />
+									</div>
+									<button type="button" class="btn-toolbar" onclick="salvarEmMassa()">
+										<i class="ace-icon fa fa-save"></i>
+										Salvar em Massa
+									</button>
+								</div>
 							</div>
 
 							<div class="clearfix">
@@ -403,10 +937,10 @@
 										<th>Terapia</th>
 										<th width="70px;">Evolução</th>
 										<th>Guia</th>
-										<th  width="100px;">Data guia</th>
+										<th width="100px;">Data guia</th>
 										<th>Senha</th>
-										<th  width="90px;">Data Senha</th>
-										<th>Ação</th>
+										<th width="90px;">Data Senha</th>
+										<th width="90px;">Ação</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -420,31 +954,35 @@
 											</td>
 											<td>{{agenda_data_dia}}</td>
 											<td>{{agenda_hora}}</td>
-
+											
+											<td>
 											{{#each ../benes}}
 												{{#ifEqual this._id ../agenda_beneid}}
-													<td>{{bene_nome}}</td>
+													{{bene_nome}}
 												{{/ifEqual}}
 											{{/each}}
-
+											</td>
+											<td>
 											{{#each ../convs}}
 												{{#ifEqual this._id ../agenda_convid}}
-													<td>{{conv_nome}}</td>
+													{{conv_nome}}
 												{{/ifEqual}}
 											{{/each}}
-
+											</td>
+											<td>
 											{{#each ../terapeutas}}
 												{{#ifEqual this._id ../agenda_usuid}}
-													<td>{{usuario_nome}}</td>
+													{{usuario_nome}}
 												{{/ifEqual}}
 											{{/each}}
-
+											</td>
+											<td>
 											{{#each ../terapias}}
 												{{#ifEqual this._id ../agenda_terapiaid}}
-													<td>{{terapia_nomecid}}</td>
+													{{terapia_nomecid}}
 												{{/ifEqual}}
 											{{/each}}
-
+											</td>
 											<!-- 2. Evolução: Sim / Não -->
 											<td>{{evolucaoSimNao}}</td>
 
@@ -497,15 +1035,35 @@
 							</table>
 						</div>
 					</div>
+					<div class="alert alert-warning">
+						<button type="button" class="close" data-dismiss="alert">
+							<i class="ace-icon fa fa-times"></i>
+						</button>
+						Aqui você localiza os agendamentos para inserir o número da guia e senha, essa é a primeira etapa para o nosso controle de guias. <br>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-
-
 	<script type="text/javascript">
 		$(document).ready(function() {
+			// Inicializar Chosen Select
+			$(".chosen-select").chosen({
+				no_results_text: "Não encontrado...",
+				search_contains: true,
+				disable_search_threshold: 10
+			});
+
+			// ✅ Listeners para Chosen Select (crucial para funcionar)
+			$("#tipoData").on("change", function() {
+				trocaFiltroData();
+			});
+
+			$("#atendTipoPessoa").on("change", function() {
+				trocaFilpessoa();
+			});
+
 			$("#dynamic-table").DataTable({
 				"language": { "url": "/js/lang/datatable-pt-br.json" },
 				"aaSorting": [],
@@ -518,6 +1076,9 @@
 				"info": true,
 				select: { style: 'multi' }
 			});
+			
+			// Inicializar contador
+			atualizarContadorSelecionados();
 		});
 		
 	</script>

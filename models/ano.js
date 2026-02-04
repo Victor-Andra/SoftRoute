@@ -60,17 +60,12 @@ module.exports = {
     // Criado em: 2025/03/20
     // Editado em: 2025/10/03
     anoAdicionar: async (req,res) => {
-
-         //Estrutura Multiempresa não usa para essa Schema pois ele acessa direto 
-        //;
-
-        let anoExiste =  await AnoModel.findOne({ano_nome: req.body.anoNome});//quando não acha fica null
+        let anoExiste = await AnoModel.findOne({ano_nome: req.body.anoNome});
         let dataAtual = new Date();
         let usuarioAtual = req.cookies['idUsu'];
         
-        if(anoExiste){//se tiver null cai no else
+        if(anoExiste){
             return "O Ano atribuído já existe no Sistema!";
-            //programar alert
         } else {
             console.log("anomodel");
             const newAno = new AnoModel({
@@ -82,13 +77,15 @@ module.exports = {
                 ano_lixo: "false",
             });
             console.log("newAno save");
-            await newAno.save().then(()=>{
+            
+            try {
+                await newAno.save();
                 console.log("Cadastro realizado!");
-                return true;
-            }).catch((err) => {
-                console.log(err)
-                return err;
-            });
+                return true;  // ✅ Retorna corretamente agora
+            } catch (err) {
+                console.log(err);
+                return err;   // ✅ Retorna corretamente agora
+            }
         }
     },
     
