@@ -112,6 +112,11 @@ const agendaEventoClass = require("../models/agendaEvento")
 var AgendaEvento = getModel("softroute", 'tb_agendaEvento', agendaEventoClass.AgendaEventoSchema);//getModel("softroute", 'tb_agendaEvento', agendaEventoClass.AgendaEventoSchema)
 const fncAgendaEvento = require("../functions/fncAgendaevento")
 
+//AnotaAdm, cadastro dos Anotações administrativas de Atividades como festa route, tipos de relatórios, lembretes etc
+const anotaAdmClass = require("../models/anotaAdm")
+var AnotaAdm = getModel("softroute", 'tb_anotaAdm', anotaAdmClass.AnotaAdmSchema);//getModel("softroute", 'tb_agendaEvento', agendaEventoClass.AgendaEventoSchema)
+const fncAnotaAdm = require("../functions/fncAnotaadm")
+
 //Ajuda
 const ajudaClass = require("../models/ajuda")
 var Ajuda = getModel("PortalDoUsuario", 'tb_ajuda', ajudaClass.AjudaSchema);//Wagner cintra 16/11/2025
@@ -153,9 +158,16 @@ var Evoatend = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema
 const fncEvoatend = require("../functions/fncEvoatend")
 
 //Guias de Atendimento
+//Guias numeros e datas sao inseridas dentro do agendamento, semelhante a evolucao
 const guiaClass = require("../models/evoatend")
 var Evoatend = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema);//getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
 const fncGuia= require("../functions/fncGuia")
+
+//Lote de Guias de Atendimento
+//Lotes sao um cadastro a parte
+const guialoteClass = require("../models/guialote")
+var Guialote = getModel("softroute", 'tb_guialote', guialoteClass.GuialoteSchema);//getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
+const fncGuialote= require("../functions/fncGuialote")
 
 //Agenda Técnicos
 const agendaTecClass = require("../models/agenda")
@@ -1740,14 +1752,7 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
     router.post('/atendimento/relatendvals', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoValFiltro(req,res);
     })
-//Relatório de Atendimentos por Convênio. Tabela Dinamica expansivel
-    router.get('/atendimento/tabdimConvTeraAtendval', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.tabdimConvTeraAtendval(req,res);
-    })
 
-    router.post('/atendimento/tabdimConvTeraAtendvalFiltro', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.tabdimConvTeraAtendvalFiltro(req,res);
-    })
 
 /**
  * TABDIM - Tabelas Dinâmicas de Atendimento
@@ -1804,7 +1809,21 @@ router.post('/atendimento/tabdimConvBeneAtendvalFiltro', fncGeral.IsAuthenticate
 });
 
 // ============================================
-// 5. Convênio, Beneficiário e Terapeuta (3 níveis)
+// 4. Beneficiário e Terapia (semelhante ao Ana. Benefinciario)
+// ============================================
+router.get('/atendimento/tabdimBeneVal', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.tabdimBeneVal(req, res);
+});
+
+router.post('/atendimento/tabdimBeneValFiltro', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.tabdimBeneValFiltro(req, res);
+});
+
+
+
+
+// ============================================
+// 6. Convênio, Beneficiário e Terapeuta (3 níveis)
 // ============================================
 router.get('/atendimento/tabdimConvBeneTeraAtendval', fncGeral.IsAuthenticated, (req, res) => {
     fncAtend.tabdimConvBeneTeraAtendval(req, res);
@@ -1830,6 +1849,32 @@ router.post('/atendimento/tabdimConvBeneTeraAtendvalFiltro', fncGeral.IsAuthenti
     })
     router.post('/atendimento/relatendbeneassins', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoBeneassinFiltro(req,res);
+    })
+//Relatório Individual de Atendimentos por Beneficiário Atualizado para horario AT.
+//Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo.
+//Criado: 06/02/2026
+    router.get('/atendimento/relatendbeneAT', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneAT(req,res);
+    })
+    router.post('/atendimento/relatendbenesAT', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneFiltroAT(req,res);
+    })
+//Relatório Individual de Atendimentos por Beneficiário Atualizado para horario AT.
+//Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo 
+//com espaço para assinataura individual, tanto responsável quanto do terapeuta
+//Criado: 06/02/2026
+    router.get('/atendimento/relatendbeneassinAT', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneassinAT(req,res);
+    })
+    router.post('/atendimento/relatendbeneassinsAT', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneassinFiltroAT(req,res);
+    })
+    //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo e com sessões de terapia 05/12/2025.
+    router.get('/atendimento/relatendbenesec', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBenessec(req,res);
+    })
+    router.post('/atendimento/relatendbenesecs', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBenesecFiltro(req,res);
     })
 //Relatório Consolidado de Atendimentos por Beneficiário.
 //Emite uma consolidado de todos os atendimentos realizados com Valores pelo beneficiário num determinado período de tempo.
@@ -1903,6 +1948,15 @@ router.get('/atendimento/atendreltera/gestao/relterapiaconvfec', fncGeral.IsAuth
 router.get('/atendimento/atendreltera/gestao/relfaltasbene', fncGeral.IsAuthenticated, (req, res) => {
     fncAtend.relfaltasbene(req, res)
 });
+
+//Relatório Calendario Fixo para Auxilio de Fechamento
+router.get('/agenda/calendar/listaCalendarioMensal', fncGeral.IsAuthenticated,(req,res) =>{
+    res.render("agenda/calendar/listaCalendarioMensal");
+})
+
+router.post('/agenda/calendar/filtralistaCalendarioMensal', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.filtraCalendarioMensal(req,res);
+})
 
 //Relatório Emissão NF.
 //Emite uma consolidado consolidado por beneficiário com os valores com formatação para emissão de NF ba prefeitura de recife.
@@ -3880,6 +3934,40 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
 
     router.post('/ferramentas/agendaEvento/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Empresa
         fncAgendaEvento.atualizaAgendaEvento(req, res);
+    })
+//Menu Ferramentas
+    //AnotaAdm - Anotações Administraticas para Quadros de Adriana e Equipe
+    router.get('/ferramentas/AnotaAdm/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas empresas
+        fncAnotaAdm.listaAnotaAdm(req, res);
+    })
+    
+    router.get('/ferramentas/AnotaAdm/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de empresa.
+        fncAnotaAdm.carregaAnotaAdm(req, res);
+    })
+
+    router.post('/ferramentas/AnotaAdm/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona empresa
+        fncAnotaAdm.cadastraAnotaAdm(req, res);
+
+    })
+    
+    router.get('/ferramentas/AnotaAdm/del/:id', fncGeral.IsAuthenticated, async (req, res) => {
+        try {
+          const anotaAdmId = req.params.id;
+          await fncAnotaAdm.deletaAnotaAdm(anotaAdmId, req, res);
+          // Redireciona para a listagem após a deleção
+          res.redirect('/menu/ferramentas/AnotaAdm/lis'); // URL da listagem
+        } catch (err) {
+          console.error(err);
+          res.render('admin/erro');
+        }
+      })
+    
+    router.get('/ferramentas/AnotaAdm/edi/:id', fncGeral.IsAuthenticated, (req, res) =>{//direciona a edição de empresa
+        fncAnotaAdm.carregaAnotaAdmEdi(req, res);
+    })
+
+    router.post('/ferramentas/agendaEvento/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Empresa
+        fncAnotaAdm.atualizaAnotaAdm(req, res);
     })
 //Menu Ferramentas
     //Especialidade do Plano de tratamento

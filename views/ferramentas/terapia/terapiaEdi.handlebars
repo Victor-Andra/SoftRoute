@@ -2,9 +2,41 @@
 <html lang="pt-br">
 	<head>
 		<title>Terapias</title>
+		<style>
+		/* Estilo minimalista para chosen-select */
+        .chosen-container .chosen-single {
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+            box-shadow: none !important;
+            background: white !important;
+            height: 30px !important;
+            line-height: 30px !important;
+        }
+
+        .chosen-container .chosen-single:hover {
+            border-color: #868e96 !important;
+        }
+
+        .chosen-container-active.chosen-with-drop .chosen-single {
+            border-color: #868e96 !important;
+            background: white !important;
+        }
+
+        .chosen-container .chosen-drop {
+            border: 1px solid #ced4da !important;
+            border-top: none !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        }
+
+        .chosen-container .chosen-search input[type="text"] {
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+            margin: 4px !important;
+        }
+		</style>
 	</head>
 
-	<body onload="javascript:controlaNave();" class="no-skin">
+	<body onload="javascript:controlaNave(); carregaValoresForm();" class="no-skin">
 
 
 		<div class="main-container ace-save-state" id="main-container">
@@ -62,8 +94,8 @@
 												<label > Terapia Nome CID / Convênio</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="terapiaNomeCid" id="terapiaNomeCid" class="chosen-select" value="{{terapia.terapia_nomecid}}" >
-															<option value="{{terapia.terapia_nomecid}}">{{terapia.terapia_nomecid}}</option>
+														<select name="terapiaNomeCid" id="terapiaNomeCid" class="chosen-select form-control">
+															<option value="">Selecione...</option>
 															<option value="ARTETERAPIA">ARTETERAPIA</option>
 															<option value="ABA">ABA</option>
 															<option value="FISIOTERAPIA">FISIOTERAPIA</option>
@@ -101,16 +133,16 @@
 												<label>Status</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select name="terapiaStatus" id="terapiaStatus" class="chosen-select" >
-																<option value="-">Não informado</option>
-																<option value="Ativo">Ativo</option>
-																<option value="Inativo">Inativo</option>
+														<select name="terapiaStatus" id="terapiaStatus" class="chosen-select form-control">
+															<option value="">Selecione...</option>
+															<option value="Ativo">Ativo</option>
+															<option value="Inativo">Inativo</option>
 														</select>
 													</div>
 												</div>
 
 												<div class="hidden">
-													<input name="terapiaId"value="{{terapia._id}}" />
+													<input name="terapiaId" value="{{terapia._id}}" />
 												</div>
 
 											</div>
@@ -130,10 +162,10 @@
 									</button>
 
 									&nbsp; &nbsp; &nbsp;
-									<button class="btn btn-warning"   href="/menu/ferramentas/terapia/lis">
+									<a class="btn btn-warning" href="/menu/ferramentas/terapia/lis">
 										<i class="ace-icon fa fa-undo bigger-110"></i>
 										Voltar
-									</button>
+									</a>
 								</div>
 							</div>
 				
@@ -152,11 +184,57 @@
 
 		</div><!-- /.main-container -->
 
-
-
-
-
-		<!-- basic scripts -->
+		<!-- Variáveis para carregar valores do banco -->
+		<script>
+			// Valores vindos do banco de dados
+			var terapiaNomeCidBanco = "{{terapia.terapia_nomecid}}";
+			var terapiaStatusBanco = "{{terapia.terapia_status}}";
+			
+			// Função para carregar valores nos selects Chosen
+			function carregaValoresForm() {
+				console.log('[DEBUG] Carregando valores do banco...');
+				console.log('[DEBUG] terapia_nomecid:', terapiaNomeCidBanco);
+				console.log('[DEBUG] terapia_status:', terapiaStatusBanco);
+				
+				// Atualiza select de terapia_nomecid
+				if (terapiaNomeCidBanco && terapiaNomeCidBanco !== 'null' && terapiaNomeCidBanco !== 'undefined') {
+					$('#terapiaNomeCid').val(terapiaNomeCidBanco);
+					console.log('[DEBUG] Valor terapiaNomeCid definido:', terapiaNomeCidBanco);
+				}
+				
+				// Atualiza select de terapia_status
+				if (terapiaStatusBanco && terapiaStatusBanco !== 'null' && terapiaStatusBanco !== 'undefined') {
+					$('#terapiaStatus').val(terapiaStatusBanco);
+					console.log('[DEBUG] Valor terapiaStatus definido:', terapiaStatusBanco);
+				}
+				
+				// Atualiza os Chosen selects
+				if (typeof $.fn.chosen !== 'undefined') {
+					$('.chosen-select').trigger('chosen:updated');
+					console.log('[DEBUG] Chosen selects atualizados!');
+				} else {
+					console.log('[DEBUG] Chosen não carregado ainda');
+				}
+			}
+			
+			// Inicializa Chosen quando o documento estiver pronto
+			$(document).ready(function() {
+				console.log('[DEBUG] Inicializando Chosen...');
+				
+				// Inicializa todos os selects com classe chosen-select
+				$('.chosen-select').chosen({
+					no_results_text: "Não encontrado...",
+					search_contains: true, // Permite buscar em qualquer parte do texto
+					disable_search_threshold: 10, // Desativa busca se tiver menos de 10 opções
+					width: "100%" // Ocupa 100% da largura do container
+				});
+				
+				console.log('[DEBUG] Chosen inicializado!');
+				
+				// Chama a função para carregar valores do banco
+				carregaValoresForm();
+			});
+		</script>
 
 	</body>
 </html>

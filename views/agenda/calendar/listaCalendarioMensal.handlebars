@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta charset="utf-8">
+	<title>Calendário de Atendimentos</title>
+	<style>
+        /*Tooltip personalizado */
+        .custom-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: max-content;
+            background-color: #f3dfdf;
+            color: red;
+            font-size: 8px;
+            text-align: left;
+            border-radius: 4px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 9999;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.9;
+            white-space: normal;
+            min-width: 150px;
+            max-width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #f3dfdf transparent transparent transparent;
+        }
+
+        .custom-tooltip:hover .tooltip-text {
+            visibility: visible;
+        }
+
+        /* ============================================
+           BARRA DE PESQUISA SIMPLIFICADA
+           ============================================ */
+        .toolbar-pesquisa {
+            background: linear-gradient(135deg, #438EB9 0%, #222A2D 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #222A2D;
+        }
+
+        .toolbar-pesquisa h5 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-pesquisa h5 i {
+            font-size: 18px;
+        }
+
+        .toolbar-pesquisa .form-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .toolbar-pesquisa .form-group {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .toolbar-pesquisa label {
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #f8f9fa;
+            white-space: nowrap;
+        }
+
+        .toolbar-pesquisa select {
+            padding: 8px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 13px;
+            min-width: 150px;
+            transition: all 0.3s;
+            background: white;
+            color: #333;
+        }
+
+        .toolbar-pesquisa select:focus {
+            border-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+        .toolbar-pesquisa .btn-toolbar {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .toolbar-pesquisa .btn-toolbar:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .toolbar-pesquisa .btn-toolbar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .toolbar-pesquisa .btn-toolbar i {
+            font-size: 16px;
+        }
+
+        /* Estilo minimalista para chosen-select */
+        .chosen-container .chosen-single {
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+            box-shadow: none !important;
+            background: white !important;
+            height: 38px !important;
+            line-height: 38px !important;
+        }
+
+        .chosen-container .chosen-single:hover {
+            border-color: #438EB9 !important;
+        }
+
+        .chosen-container-active.chosen-with-drop .chosen-single {
+            border-color: #438EB9 !important;
+            background: white !important;
+        }
+
+        .chosen-container .chosen-drop {
+            border: 1px solid #ced4da !important;
+            border-top: none !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        }
+
+        .chosen-container .chosen-search input[type="text"] {
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+            margin: 4px !important;
+        }
+
+        /* ============================================
+           CALENDÁRIO MENSAL ACEADMIN STYLE
+           ============================================ */
+        .calendario-mensal {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .calendario-header {
+            background: linear-gradient(135deg, #438EB9 0%, #222A2D 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .calendario-header .btn-nav {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .calendario-header .btn-nav:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .calendario-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            padding: 10px;
+            background: #f5f5f5;
+        }
+
+        .calendario-grid .dia-semana {
+            text-align: center;
+            font-weight: bold;
+            color: #438EB9;
+            padding: 8px 0;
+            font-size: 13px;
+            background: #eef3f7;
+            border-radius: 4px;
+        }
+
+        .calendario-grid .dia {
+            min-height: 120px;
+            background: white;
+            border: 1px solid #e4e9ee;
+            border-radius: 4px;
+            padding: 6px;
+            position: relative;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .calendario-grid .dia:hover {
+            border-color: #438EB9;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .calendario-grid .dia .numero {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .calendario-grid .dia.hoje {
+            background: #f0f7ff;
+            border-color: #438EB9;
+            box-shadow: inset 0 0 0 2px #438EB9;
+        }
+
+        .calendario-grid .dia.vazio {
+            background: #f9f9f9;
+            border-color: #f0f0f0;
+            cursor: default;
+        }
+
+        .calendario-grid .dia.feriado {
+            background: #fff0f0;
+            border-color: #f44336;
+        }
+
+        /* Agendamento no calendário */
+        .agendamento {
+            display: block;
+            padding: 3px 5px;
+            margin-bottom: 3px;
+            border-radius: 3px;
+            font-size: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: default;
+            position: relative;
+            line-height: 1.3;
+        }
+
+        .agendamento .hora {
+            font-weight: bold;
+            margin-right: 4px;
+        }
+
+        .agendamento .terapia {
+            font-weight: bold;
+            display: block;
+            font-size: 10px;
+        }
+
+        .agendamento .terapeuta {
+            font-style: italic;
+            font-size: 9px;
+            display: block;
+            margin-top: 1px;
+        }
+
+        .agendamento .codigo {
+            display: inline-block;
+            margin-left: 4px;
+            font-size: 8px;
+            padding: 1px 3px;
+            border-radius: 2px;
+            background: rgba(0,0,0,0.08);
+            vertical-align: middle;
+        }
+
+        /* Cores por categoria - estilo AceAdmin */
+        .agendamento.padrao { background: #eef7ff; border-left: 3px solid #438EB9; }
+        .agendamento.falta { background: #ffebee; border-left: 3px solid #f44336; }
+        .agendamento.substituicao { background: #fff8e1; border-left: 3px solid #ffc107; }
+        .agendamento.subfixo { background: #e1f5fe; border-left: 3px solid #03a9f4; }
+        .agendamento.administrativo { background: #e8f5e9; border-left: 3px solid #4caf50; }
+
+        /* Tooltip personalizado para calendário */
+        .tooltip-cal {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-cal .tooltip-content {
+            visibility: hidden;
+            width: 320px;
+            background: white;
+            color: #333;
+            text-align: left;
+            border-radius: 6px;
+            padding: 12px;
+            position: absolute;
+            z-index: 9999;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+            font-size: 12px;
+            line-height: 1.5;
+            pointer-events: none;
+            border: 1px solid #ddd;
+        }
+
+        .tooltip-cal .tooltip-content::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: white transparent transparent transparent;
+        }
+
+        .tooltip-cal:hover .tooltip-content {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .tooltip-cal .tooltip-content strong {
+            color: #438EB9;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+
+        .tooltip-cal .tooltip-content .categoria {
+            background: #f8f9fa;
+            padding: 6px;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-size: 11px;
+        }
+
+        /* Legenda do calendário */
+        .legenda-cal {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 12px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e4e9ee;
+            font-size: 11px;
+        }
+
+        .legenda-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legenda-cor {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+        }
+    </style>
+	<script type="text/javascript">
+		// ✅ Função para navegar entre meses
+		function navegarMes(direcao) {
+			let mes = parseInt(document.getElementById('mesAtend').value);
+			let ano = parseInt(document.getElementById('anoAtend').value);
+			
+			if (direcao === 'anterior') {
+				mes--;
+				if (mes < 0) {
+					mes = 11;
+					ano--;
+				}
+			} else if (direcao === 'proximo') {
+				mes++;
+				if (mes > 11) {
+					mes = 0;
+					ano++;
+				}
+			}
+			
+			document.getElementById('mesAtend').value = mes;
+			document.getElementById('anoAtend').value = ano;
+			
+			// Atualizar Chosen
+			setTimeout(() => {
+				$('#mesAtend').trigger('chosen:updated');
+				$('#anoAtend').trigger('chosen:updated');
+				document.getElementById('acaoPesquisar').click();
+			}, 100);
+		}
+        // ✅ CORRIGIDO: Carrega estado inicial com visibilidade correta
+		function carregaBody(){
+						
+			// Atualiza Chosen após 100ms para garantir renderização
+			setTimeout(() => {
+				if (typeof $.fn.chosen !== 'undefined') {
+					$('.chosen-select').trigger('chosen:updated');
+				}
+			}, 100);
+		}
+	</script>
+</head>
+<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+	<div class="main-container ace-save-state" id="main-container">
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="breadcrumbs" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li>
+							<i class="ace-icon fa fa-home home-icon"></i>
+							<a href="#">Route</a>
+						</li>
+						<li class="active">Calendário de Atendimentos</li>
+					</ul>
+				</div>
+
+				{{#each error}}
+					<div class="alert alert-danger">{{texto}}{{error}}</div>
+				{{/each}}
+
+				<div class="page-content">
+                    					<!-- ============================================
+					     BARRA DE PESQUISA SIMPLIFICADA
+					     ============================================ -->
+					<div class="toolbar-pesquisa">
+						<h5>
+							<i class="ace-icon fa fa-filter"></i>
+							<span>Filtros</span>
+						</h5>
+						<form id="divFormPesquisa" class="form-inline" role="form" action="/menu/agenda/calendar/filtralistaCalendarioMensal" method="POST">
+							<div id="divDataFil" class="form-group hidden-div">
+							
+								
+								<input class="hidden" id="atendBeneficiarioEdi" name="atendBeneficiarioEdi" value="{{filtroTela.atendBeneficiario}}" />
+								<input class="hidden" id="idEdi" name="idEdi" value="{{filtroTela.atendTerapeuta}}" />
+							</div>
+							<div class="form-group">
+								<label>Data</label>
+									<input style="height: 30px;" id="dataFil" name="dataFil" type="date">
+							</div>
+							
+							
+							<div class="form-group">
+                                <label>Beneficiário</label>
+                                <!-- ✅ Remova temporariamente a classe chosen-select para testar -->
+                                <select name="atendBeneficiario" id="atendBeneficiario">
+                                    <option value="">Todos os Beneficiários</option>
+                                    {{#each benes}}
+                                        <option value="{{_id}}">{{bene_nome}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+							
+							<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn-toolbar">
+								<i class="ace-icon fa fa-search"></i>
+								Filtrar
+							</button>
+						</form>
+					</div>
+					<!-- ============================================
+					     CALENDÁRIO MENSAL
+					     ============================================ -->
+					<div class="calendario-mensal">
+						<div class="calendario-header">
+							<div>
+								<i class="ace-icon fa fa-calendar bigger-120"></i>
+								&nbsp;{{nomeMes}} {{anoAtend}}
+							</div>
+							<div>
+								<button class="btn-nav" onclick="navegarMes('anterior')">
+									<i class="ace-icon fa fa-chevron-left"></i> Anterior
+								</button>
+								&nbsp;
+								<button class="btn-nav" onclick="navegarMes('proximo')">
+									Próximo <i class="ace-icon fa fa-chevron-right"></i>
+								</button>
+							</div>
+						</div>
+						
+						<div class="calendario-grid">
+							<!-- Cabeçalho dos dias da semana -->
+							<div class="dia-semana">Dom</div>
+							<div class="dia-semana">Seg</div>
+							<div class="dia-semana">Ter</div>
+							<div class="dia-semana">Qua</div>
+							<div class="dia-semana">Qui</div>
+							<div class="dia-semana">Sex</div>
+							<div class="dia-semana">Sáb</div>
+							
+							<!-- Dias do mês - GERADOS PELO HANDLEBARS -->
+							{{#prepararDiasCalendario agendasCal mesAtend anoAtend beneSelecionado}}
+								{{#each dias}}
+									<div class="dia {{#if vazio}}vazio{{/if}} {{#if hoje}}hoje{{/if}} {{#if feriado}}feriado{{/if}}">
+										<div class="numero">{{dia}}</div>
+										
+										{{#each agendamentos}}
+											<div class="tooltip-cal">
+												<div class="agendamento {{classeCor}}">
+													<span class="hora">{{hora}}</span>
+													<span class="terapia">{{terapiaNome}}</span>
+													<span class="terapeuta">{{terapeutaNome}}</span>
+													<span class="codigo">{{codigo}}</span>
+												</div>
+												<div class="tooltip-content">
+													<strong>{{dataCompleta}}</strong><br>
+													<strong>Terapia:</strong> {{terapiaNome}}<br>
+													<strong>Terapeuta:</strong> {{terapeutaNome}}<br>
+													<strong>Beneficiário:</strong> {{beneNome}}<br>
+													<strong>Origem:</strong> {{origemTexto}}<br>
+													<strong>Categoria:</strong> {{categoria}}<br>
+													<strong>Código:</strong> {{codigo}}
+													{{#if temSubstitutoFixo}}
+														<div class="categoria">
+															<strong>Substituto Fixo:</strong><br>
+															Terapeuta: {{substitutoFixoTerapeuta}}<br>
+															Terapia: {{substitutoFixoTerapia}}
+														</div>
+													{{/if}}
+												</div>
+											</div>
+										{{/each}}
+									</div>
+								{{/each}}
+							{{/prepararDiasCalendario}}
+						</div>
+						
+						<div class="legenda-cal">
+							<div class="legenda-item">
+								<div class="legenda-cor" style="background:#eef7ff; border-left:3px solid #438EB9;"></div>
+								<span>Padrão</span>
+							</div>
+							<div class="legenda-item">
+								<div class="legenda-cor" style="background:#ffebee; border-left:3px solid #f44336;"></div>
+								<span>Falta</span>
+							</div>
+							<div class="legenda-item">
+								<div class="legenda-cor" style="background:#fff8e1; border-left:3px solid #ffc107;"></div>
+								<span>Substituição</span>
+							</div>
+							<div class="legenda-item">
+								<div class="legenda-cor" style="background:#e1f5fe; border-left:3px solid #03a9f4;"></div>
+								<span>Subst. Fixo</span>
+							</div>
+							<div class="legenda-item">
+								<div class="legenda-cor" style="background:#e8f5e9; border-left:3px solid #4caf50;"></div>
+								<span>Administrativo</span>
+							</div>
+						</div>
+					</div>
+					
+
+
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="clearfix">
+								<div class="pull-right tableTools-container"></div>
+							</div>
+
+							<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer"></div>
+							<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid">
+								<thead>
+									<tr role="row">
+										<th width="100px;">Data</th>
+										<th width="70px;">Hora</th>
+										<th>Beneficiário</th>
+										<th>Convênio</th>
+										<th>Terapeuta</th>
+										<th>Terapia</th>
+										<th width="70px;">Evolução</th>
+										<th>Guia</th>
+										<th width="100px;">Data Guia</th>
+										<th>Senha</th>
+										<th width="90px;">Data Senha</th>
+									</tr>
+								</thead>
+								<tbody>
+									{{#each extras}}
+										<tr role="row" class="odd">
+											<td>{{agenda_data_dia}}</td>
+											<td>{{agenda_hora}}</td>
+											
+											<td>
+											{{#each ../benes}}
+												{{#ifEqual this._id ../agenda_beneid}}
+													{{bene_nome}}
+												{{/ifEqual}}
+											{{/each}}
+											</td>
+											<td>
+											{{#each ../convs}}
+												{{#ifEqual this._id ../agenda_convid}}
+													{{conv_nome}}
+												{{/ifEqual}}
+											{{/each}}
+											</td>
+											<td>
+											{{#each ../terapeutas}}
+												{{#ifEqual this._id ../agenda_usuid}}
+													{{usuario_nome}}
+												{{/ifEqual}}
+											{{/each}}
+											</td>
+											<td>
+											{{#each ../terapias}}
+												{{#ifEqual this._id ../agenda_terapiaid}}
+													{{terapia_nomecid}}
+												{{/ifEqual}}
+											{{/each}}
+											</td>
+											<!-- Evolução: Sim / Não -->
+											<td>{{evolucaoSimNao}}</td>
+
+											<!-- Guia, Senha, Data Senha -->
+											<td>
+												<input type="text" name="agendaId" value="{{_id}}" hidden />
+												<input type="text" name="guia_num{{_id}}" value="{{agenda_guia.guia_num}}" style="width:100%; padding:2px; font-size:12px;" readonly />
+											</td>
+											<td>
+												<input type="date" name="dataguia_{{_id}}" 
+													{{#if agenda_guia.guia_numdatacad}}
+														value="{{#dataISOToDate agenda_guia.guia_numdatacad}}{{/dataISOToDate}}"
+													{{/if}}
+													style="width:100%; padding:2px; font-size:12px;" readonly />
+											</td>
+											<td>
+												<input type="text" name="senha_{{_id}}" value="{{agenda_guia.guia_senha}}" style="width:100%; padding:2px; font-size:12px;" readonly />
+											</td>
+											<td>
+												<input type="date" name="datasenha_{{_id}}" 
+													{{#if agenda_guia.guia_senhadatacad}}
+														value="{{#dataISOToDate agenda_guia.guia_senhadatacad}}{{/dataISOToDate}}"
+													{{/if}}
+													style="width:100%; padding:2px; font-size:12px;" readonly />
+											</td>
+										</tr>
+									{{/each}}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="alert alert-info">
+						<button type="button" class="close" data-dismiss="alert">
+							<i class="ace-icon fa fa-times"></i>
+						</button>
+						<strong>Informações:</strong> Selecione o mês/ano e o beneficiário para visualizar os atendimentos no calendário e na lista abaixo.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script type="text/javascript">
+    $(document).ready(function() {
+        console.log("Inicializando Chosen...");
+        console.log("Total de options:", $('#atendBeneficiario option').length);
+        
+        // Inicializar Chosen Select
+        $(".chosen-select").chosen({
+            no_results_text: "Não encontrado...",
+            search_contains: true,
+            disable_search_threshold: 10,
+            width: "100%"
+        });
+        
+        console.log("Chosen inicializado!");
+
+        // Resto do código...
+        $("#dynamic-table").DataTable({
+            "language": { "url": "/js/lang/datatable-pt-br.json" },
+            "aaSorting": [],
+            "aoColumns": [null, null, null, null, null, null, null, null, null, null, null],
+            "responsive": true,
+            "lengthMenu": [50, 100, 200],
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true
+        });
+    });
+    
+</script>
+		<script>
+    console.log('=== DEBUG BENEFICIÁRIOS ===');
+    console.log('Total de beneficiários:', {{benes.length}});
+    console.log('Primeiro beneficiário:', {{#if benes}}{{#with benes.[0]}}{{bene_nome}}{{/with}}{{/if}});
+    console.log('Benes completo:', {{json benes}});
+</script>
+
+	
+</body>
+</html>

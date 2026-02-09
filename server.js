@@ -506,8 +506,148 @@ const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSc
                     if (habilitarLog) console.log('📤 Resultado final:', result);
 
                     return result;
+                },
+                /**
+                 * Helper Handlebars: {{prepararDiasCalendario}}
+                 * Criado em 07/02/2026
+                 * Finalidade: Prepara os dados para renderizar o calendário mensal
+                 * Parâmetros:
+                 *   - agendas: Array de agendas formatadas
+                 *   - mesAtend: Mês selecionado (0-11)
+                 *   - anoAtend: Ano selecionado
+                 *   - beneSelecionado: ID do beneficiário ou 'todos'
+                 * 
+                 * Retorna um objeto com:
+                 *   - dias: Array de 42 dias (6 semanas)
+                 *   - nomeMes: Nome do mês por extenso
+                 *   - ano: Ano selecionado
+                 * 
+                 * Exemplo de uso na view:
+                 *   {{#prepararDiasCalendario agendasCal mesAtend anoAtend beneSelecionado}}
+                 *     {{#each dias}}
+                 *       <div class="dia {{#if vazio}}vazio{{/if}} {{#if hoje}}hoje{{/if}}">
+                 *         <div class="numero">{{dia}}</div>
+                 *         {{#each agendamentos}}
+                 *           <div class="agendamento {{classeCor}}">
+                 *             <span class="hora">{{hora}}</span>
+                 *             <span class="terapia">{{terapiaNome}}</span>
+                 *             <span class="terapeuta">{{terapeutaNome}}</span>
+                 *             <span class="codigo">{{codigo}}</span>
+                 *           </div>
+                 *         {{/each}}
+                 *       </div>
+                 *     {{/each}}
+                 *   {{/prepararDiasCalendario}}
+                 */
+                prepararDiasCalendario: function(agendas, mesAtend, anoAtend, beneSelecionado, options) {
+                    // Verificação inicial
+                    if (!agendas || !Array.isArray(agendas)) {
+                        console.warn('[Helper] agendas é undefined ou não é array');
+                        return options.fn({ dias: [], nomeMes: '', ano: anoAtend });
+                    }
+                    
+                    const nomesMeses = [
+                        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                    ];
+                    
+                    const hoje = new Date();
+                    const hojeDia = hoje.getDate();
+                    const hojeMes = hoje.getMonth();
+                    const hojeAno = hoje.getFullYear();
+                    
+                    // Converter mesAtend para número
+                    const mesNum = parseInt(mesAtend);
+                    const anoNum = parseInt(anoAtend);
+                    
+                    const primeiroDia = new Date(Date.UTC(anoNum, mesNum, 1));
+                    const offset = primeiroDia.getUTCDay();
+                    
+                    const ultimoDia = new Date(Date.UTC(anoNum, mesNum + 1, 0));
+                    const totalDiasMes = ultimoDia.getUTCDate();
+                    
+                    // Agrupar agendas por dia
+                    const agendasPorDia = {};
+                    for (let dia = 1; dia <= 31; dia++) {
+                        agendasPorDia[dia] = [];
+                    }
+                    
+                    agendas.forEach(agenda => {
+                        const data = new Date(agenda.agenda_data);
+                        const dia = data.getUTCDate();
+                        const mes = data.getUTCMonth();
+                        const ano = data.getUTCFullYear();
+                        
+                        if (mes === mesNum && ano === anoNum) {
+                            if (!beneSelecionado || beneSelecionado === 'todos' || agenda.agenda_beneid?.toString() === beneSelecionado) {
+                                let classeCor = 'padrao';
+                                const categoria = agenda.agenda_categoria || '';
+                                const ehAdministrativo = agenda.agenda_tipodia === 'Administrativo';
+                                
+                                if (categoria.includes('Falta')) {
+                                    classeCor = 'falta';
+                                } else if (categoria.includes('Substitui') && !categoria.includes('Fixo')) {
+                                    classeCor = 'substituicao';
+                                } else if (categoria.includes('Fixo') || categoria === 'SubstitutoFixo') {
+                                    classeCor = 'subfixo';
+                                } else if (ehAdministrativo) {
+                                    classeCor = 'administrativo';
+                                }
+                                
+                                const origem = ehAdministrativo ? 'A' : 'P';
+                                let tipoCat = 'P';
+                                if (categoria.includes('Falta')) tipoCat = 'F';
+                                else if (categoria.includes('Substitui') && !categoria.includes('Fixo')) tipoCat = 'S';
+                                else if (categoria.includes('Fixo') || categoria === 'SubstitutoFixo') tipoCat = 'F';
+                                
+                                const codigo = `[${origem}${tipoCat}]`;
+                                
+                                agendasPorDia[dia].push({
+                                    hora: agenda.agenda_hora || '08:00',
+                                    terapiaNome: agenda.terapiaNome || '—',
+                                    terapeutaNome: agenda.terapeutaNome || '—',
+                                    beneNome: agenda.beneNome || '—',
+                                    categoria: categoria || 'Padrão',
+                                    codigo: codigo,
+                                    classeCor: classeCor,
+                                    dataCompleta: `${('0' + dia).slice(-2)}/${('0' + (mes+1)).slice(-2)}/${ano} ${agenda.agenda_hora || ''}`,
+                                    origemTexto: ehAdministrativo ? 'Administrativo' : 'Padrão',
+                                    temSubstitutoFixo: !!agenda.agenda_fixoterapeutaid,
+                                    substitutoFixoTerapeuta: agenda.substitutoFixoTerapeuta || '',
+                                    substitutoFixoTerapia: agenda.substitutoFixoTerapia || ''
+                                });
+                            }
+                        }
+                    });
+                    
+                    // Construir array de dias
+                    const dias = [];
+                    
+                    for (let i = 0; i < offset; i++) {
+                        dias.push({ dia: '', vazio: true });
+                    }
+                    
+                    for (let dia = 1; dia <= totalDiasMes; dia++) {
+                        const ehHoje = (dia === hojeDia && mesNum == hojeMes && anoNum == hojeAno);
+                        dias.push({
+                            dia: dia,
+                            vazio: false,
+                            hoje: ehHoje,
+                            feriado: false,
+                            agendamentos: agendasPorDia[dia] || []
+                        });
+                    }
+                    
+                    while (dias.length < 42) {
+                        dias.push({ dia: '', vazio: true });
+                    }
+                    
+                    return options.fn({
+                        dias: dias,
+                        nomeMes: nomesMeses[mesNum] || '',
+                        ano: anoNum
+                    });
                 }
-
             }//fim dos helpers
         }));//fim do app.engine
                

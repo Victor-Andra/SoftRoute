@@ -589,7 +589,7 @@
 						});
 					}
 
-					// Destacar linhas IGNORADAS (com dados existentes)
+					// Destacar linhas IGNORADAS (com dados  existentes)
 					if (result.ignorados && result.ignorados.length > 0) {
 						result.ignorados.forEach(ignorado => {
 							const tr = document.querySelector(`[name="agendaId"][value="${ignorado.agendaId}"]`)?.closest('tr');
@@ -935,6 +935,7 @@
 										<th>Convênio</th>
 										<th>Terapeuta</th>
 										<th>Terapia</th>
+										<th>Evento</th>
 										<th width="70px;">Evolução</th>
 										<th>Guia</th>
 										<th width="100px;">Data guia</th>
@@ -983,8 +984,17 @@
 												{{/ifEqual}}
 											{{/each}}
 											</td>
+											<td>
+												{{agenda_categoria}}
+											</td>
 											<!-- 2. Evolução: Sim / Não -->
-											<td>{{evolucaoSimNao}}</td>
+											<td>
+												{{#ifEqual this.evolucaoSimNao "Sim"}}
+													<span class="badge badge-success">Sim</span>
+													{{else}}
+													<span class="badge badge-danger">Não</span>
+												{{/ifEqual}}
+											</td>
 
 											<!-- 3. Guia, Senha, Data Senha como inputs -->
 											<td>
@@ -1067,7 +1077,7 @@
 			$("#dynamic-table").DataTable({
 				"language": { "url": "/js/lang/datatable-pt-br.json" },
 				"aaSorting": [],
-				"aoColumns": [{ "bSortable": false } , null, null, null, null, null, null, null, null, null, null, null, { "bSortable": false } ],
+				"aoColumns": [{ "bSortable": false } , null, null,null, null, null, null, null, null, null, null, null, null, { "bSortable": false } ],
 				"responsive": true,
 				"lengthMenu": [ 200, 300, 500 ],
 				"paging": true,

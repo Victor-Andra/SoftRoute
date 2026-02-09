@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Editar Eventos de Agenda</title>
+		<title>Cadastrar Anotações Administrativas</title>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -16,10 +16,10 @@
 						<ul class="breadcrumb">
 							<li>
 								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Cadastro de Evento de Agenda</a>
+								<a href="#">Anotações Administrativas</a>
 							</li>
 
-							<li class="active">Cadastro Eventos de Agenda</li>
+							<li class="active">Cadastrar Anotações Administrativas</li>
 						</ul><!-- /.breadcrumb -->
 
 					</div>
@@ -27,12 +27,12 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/ferramentas/agendaEvento/add" method="POST">
+							<form class="form-horizontal" role="form"  action="/menu/ferramentas/anotaAdm/add" method="POST">
 								<div class="form-horizontal" role="form">
 									<div class="col-sm-12"><!-- Widget Dados Básicos -->
 										<div class="widget-box">
 											<div class="widget-header">
-												<h4 class="widget-title">AgendaEventos</h4>
+												<h4 class="widget-title">Anotações Administrativas</h4>
 
 												<span class="widget-toolbar">
 
@@ -49,17 +49,24 @@
 											<div class="widget-body">
 												<div class="widget-main">
 
-													<label> Nome da AgendaEvento</label>
+													<label> Tipo da Anotação ou Observação</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<input type="text" name="agendaEventoNome" id="agendaEventoNome" class="form-control" />
+															<input type="text" name="anotaAdmTipo" id="anotaAdmTipo" class="form-control" />
 														</div>
 													</div>
 													<div class="space space-8"></div>
-													<label> Descrição</label>
+													<label> Nome ou Captulação da Anotação</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<input type="text" name="agendaEventoDescricao" id="agendaEventoDescricao" class="form-control" />
+															<input type="text" name="anotaAdmNome" id="anotaAdmNome" class="form-control" />
+														</div>
+													</div>
+													<div class="space space-8"></div>
+													<label> Descrição ou Detalhamento da Anotação</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<input type="text" name="anotaAdmDescricao" id="anotaAdmDescricao" class="form-control" />
 														</div>
 													</div>
 												</div>

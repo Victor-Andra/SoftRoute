@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta charset="utf-8">
+  <title>Relatório Detalhado por Beneficiário e Terapia</title>
+  
+	<style>
+		.detalhe-linha { background-color: #fafafa; display: none; }
+		.detalhe-conteudo { padding: 12px 24px; }
+		.linha-anomalia { background-color: #fff8e1 !important; }
+		.btn-expand {
+		cursor: pointer;
+		color: #428bca;
+		font-size: 16px;
+		}
+	
+		/* DataTables + aceAdmin */
+		.dataTables_wrapper .dataTables_length select,
+		.dataTables_wrapper .dataTables_filter input {
+			height: 30px;
+			padding: 3px 6px;
+			font-size: 12px;
+		}
+		.dataTables_wrapper .dataTables_info,
+		.dataTables_wrapper .dataTables_paginate {
+			font-size: 12px;
+		}
+		
+		.text-center { text-align: center; }
+		.text-right { text-align: right; }
+	</style>
+	<style>
+		/* Estilo Minimalista */
+		.chosen-container .chosen-single {
+			border: 1px solid #ced4da !important; /* Borda mais fina */
+			border-radius: 0 !important;
+			box-shadow: none !important;
+			background: #f8f9fa !important; /* Fundo cinza claro */
+		}
+
+		.chosen-container .chosen-single:hover {
+			border-color: #868e96 !important; /* Cinza mais escuro ao hover */
+		}
+
+		.chosen-container-active.chosen-with-drop .chosen-single {
+			border-color: #868e96 !important;
+			background: white !important;
+		}
+
+		.chosen-container .chosen-drop {
+			border: 1px solid #ced4da !important;
+			border-top: none !important;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+		}
+	</style>
+</head>
+
+<body onload="javascript:controlaNave(); carregaBody();" class="no-skin">
+  <div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+      <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+          <ul class="breadcrumb">
+            <li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
+            <li class="active">Relatório Detalhado por Beneficiário e Terapia</li>
+          </ul>
+        </div>
+		<div class="page-content"><!-- .page-content -->
+			<form role="form" action="/menu/atendimento/tabdimBeneValFiltro" method="POST" onsubmit="atualizaDataIni(); atualizaDataFin();">
+			<div class="row">
+				<div class="col-sm-12">
+				<br>
+				<label>Período de:</label>
+				<input style="height: 30px; width: 140px;" id="dataFilDe" name="dataFilDe" type="date" onchange="atualizaDataIni()">
+				<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}">
+
+				<label>até:</label>
+				<input style="height: 30px; width: 140px;" id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
+				<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}">
+
+				<label>Beneficiário:</label>
+				<select style="height: 30px; width: 250px;" name="relBeneid" id="relBeneid" class="chosen-select">
+					<option value="766f69643132333435366964">-</option>
+					{{#each benes}}
+						<option value="{{_id}}">{{bene_nome}}</option>
+					{{/each}}
+				</select>
+				<input class="hidden" id="relBeneIdFiltro" name="relBeneIdFiltro" value="{{filtro.beneId}}">
+
+				<button class="btn btn-info btn-sm" type="submit">
+					<i class="ace-icon fa fa-search bigger-110"></i> Pesquisar
+				</button>
+				</div>
+			</div>
+			</form>
+
+			<div class="row">
+			<div class="col-sm-12">
+				<div class="widget-box">
+				<div class="widget-header">
+					<h4 class="widget-title">
+					<i class="ace-icon fa fa-bar-chart green"></i>
+					Tabela Dinâmica Consolidado por Beneficiário — {{bene_nome}}
+					<small class="text-muted">({{periodoDe}} a {{periodoAte}})</small>
+					</h4>
+					<span class="widget-toolbar">
+					<a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+					<a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+					</span>
+				</div>
+
+				<div class="widget-body">
+					<div class="widget-main">
+					<div class="row">
+						<div class="col-xs-12">
+						<table id="tabela-consolidada" class="table table-striped table-bordered table-hover">
+							<thead>
+							<tr>
+								<th style="width: 30px;"></th>
+								<th>Terapia</th>
+								<th class="text-right">Sessões</th>
+								<th class="text-right">Vlr Unit Créd</th>
+								<th class="text-right">Vlr Total Créd</th>
+								<th class="text-right">Vlr Unit Déb</th>
+								<th class="text-right">Vlr Total Déb</th>
+								<th>Ação</th>
+							</tr>
+							</thead>
+							<tbody>
+							{{#each rels}}
+							<tr data-terapia-id="{{terapiaId}}">
+								<td class="text-center">
+								<i class="btn-expand ace-icon fa fa-plus-circle bigger-140"></i>
+								</td>
+								<td>{{terapiaNome}}</td>
+								<td class="text-right">{{sessoes}}</td>
+								<td class="text-right">{{valorUnitarioCred}}</td>
+								<td class="text-right">{{valorTotalCred}}</td>
+								<td class="text-right">{{valorUnitarioDeb}}</td>
+								<td class="text-right">{{valorTotalDeb}}</td>
+								<td></td>
+							</tr>
+
+							<tr class="detalhe-linha">
+								<td colspan="8">
+								<div class="detalhe-conteudo">
+									<h5>
+									<i class="ace-icon fa fa-list"></i> 
+									Detalhes de "{{terapiaNome}}" ({{sessoes}} sessões)
+									</h5>
+
+									<table class="table table-condensed table-bordered" style="font-size:11px;">
+									<thead>
+										<tr>
+										<th>#</th>
+										<th>Data</th>
+										<th>Hora</th>
+										<th>Beneficiário</th>
+										<th>Convênio</th>
+										<th>Origem</th>
+										<th>Categoria</th>
+										<th>Evento</th>
+										<th>Terapia</th>
+										<th>Terapeuta</th>
+										<th>Cred</th>
+										<th>Deb</th>
+										<th>Terapia</th>
+										<th>Terapeuta</th>
+										<th>Cred</th>
+										<th>Deb</th>
+										<th>Terapia</th>
+										<th>Terapeuta</th>
+										<th>Cred</th>
+										<th>Deb</th>
+										<th class="text-center">Cred Usado</th>
+										<th class="text-center">Deb Usado</th>
+										<th class="text-center">Ação</th>
+										</tr>
+									</thead>
+									<tbody>
+										{{#each atendimentos}}
+										<tr>
+										<td class="text-center">{{ordem}}</td>
+										<td style="white-space: nowrap !important; min-width: 75px;">{{data}}</td>
+										<td>{{hora}}</td>
+										<td>{{beneNome}}</td>
+										<td>{{convNome}}</td>
+										<td>{{{origemLabel}}}</td>
+										<td>{{{categoriaLabel}}}</td>
+										<td>{{{eventoLabel}}}</td>
+
+										<td>{{terapiaOrig}}</td>
+										<td>{{terapeutaOrig}}</td>
+										<td>{{{credOrig}}}</td>
+										<td>{{{debOrig}}}</td>
+
+										<td>{{terapiaFixa}}</td>
+										<td>{{terapeutaFixo}}</td>
+										<td>{{{credFixo}}}</td>
+										<td>{{{debFixo}}}</td>
+
+										<td>{{terapiaSubst}}</td>
+										<td>{{terapeutaSubst}}</td>
+										<td>{{{credSubst}}}</td>
+										<td>{{{debSubst}}}</td>
+
+										<td class="text-center">{{{credUsado}}}</td>
+										<td class="text-center">{{{debUsado}}}</td>
+
+										<td class="text-center">
+											{{#if permiteEdicao}}
+											<a class="green" href="/menu/atendimento/atendadm/edi/{{_id}}">
+											<i class="ace-icon fa fa-pencil bigger-130"></i>
+											</a>
+											{{/if}}
+										</td>
+										</tr>
+										{{/each}}
+									</tbody>
+									</table>
+								</div>
+								</td>
+							</tr>
+							{{/each}}
+							</tbody>
+							<tfoot>
+							<tr>
+								<td colspan="2" class="text-right"><b>Total Geral:</b></td>
+								<td class="text-right"><b>{{total.sessoes}}</b></td>
+								<td class="text-right">-</td>
+								<td class="text-right"><b>{{total.totalCred}}</b></td>
+								<td class="text-right">-</td>
+								<td class="text-right"><b>{{total.totalDeb}}</b></td>
+								<td></td>
+							</tr>
+							</tfoot>
+						</table>
+						</div>
+					</div>
+					</div>
+				</div>
+				</div>
+			</div>
+			</div>
+		</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function atualizaDataIni() {
+      const v = document.getElementById('dataFilDe').value;
+      if (v) document.getElementById('dataIni').value = v + ' 00:00:00.000Z';
+    }
+    function atualizaDataFin() {
+      const v = document.getElementById('dataFilAte').value;
+      if (v) document.getElementById('dataFim').value = v + ' 00:00:00.000Z';
+    }
+    function carregaBody() {
+      const ini = document.getElementById('dataIni').value;
+      const fim = document.getElementById('dataFim').value;
+      if (ini) document.getElementById('dataFilDe').value = ini.split(' ')[0];
+      if (fim) document.getElementById('dataFilAte').value = fim.split(' ')[0];
+      
+      const beneId = document.getElementById('relBeneIdFiltro').value || '766f69643132333435366964';
+      document.getElementById('relBeneid').value = beneId;
+      
+      console.log('[DEBUG View] Beneficiário selecionado:', beneId);
+      console.log('[DEBUG View] Valor no select antes do Chosen:', document.getElementById('relBeneid').value);
+      
+      if (typeof $.fn.chosen === 'function') {
+        console.log('[DEBUG View] Inicializando Chosen...');
+        $('.chosen-select').trigger('chosen:updated');
+      } else {
+        console.log('[DEBUG View] Chosen não está carregado!');
+      }
+    }
+
+    // ✅ Toggle seguro — sem depender de ID, só de ordem
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.btn-expand').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const mainRow = this.closest('tr');
+          const detailRow = mainRow.nextElementSibling;
+          if (!detailRow || !detailRow.classList.contains('detalhe-linha')) return;
+
+          const isExpanded = detailRow.style.display === 'table-row';
+          detailRow.style.display = isExpanded ? 'none' : 'table-row';
+          this.classList.toggle('fa-plus-circle', isExpanded);
+          this.classList.toggle('fa-minus-circle', !isExpanded);
+        });
+      });
+    });
+	$(document).ready(function () {
+		console.log('[DEBUG jQuery Ready] Iniciando Chosen...');
+		console.log('[DEBUG jQuery Ready] Total de options no select:', $('#relBeneid option').length);
+		
+		// Inicializa Chosen Select
+		$(".chosen-select").chosen({
+			no_results_text: "Não encontrado...",
+			search_contains: true, // Permite buscar em qualquer parte do texto
+			disable_search_threshold: 10 // Desativa busca se tiver menos de 10 opções
+		});
+
+		console.log('[DEBUG jQuery Ready] Chosen inicializado com sucesso!');
+		
+		// Atualiza Chosen quando necessário
+		function atualizarChosen() {
+			$(".chosen-select").trigger("chosen:updated");
+		}
+	});
+  </script>
+	
+</body>
+</html>

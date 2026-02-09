@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-br"><head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta charset="utf-8">
+	<title>Lista de Anotações Administrativas</title>
+	<style>
+		/* Tooltip personalizado - REPLICAÇÃO COMPLETA DO BENE LIS */
+		.custom-tooltip {
+			position: relative;
+			display: inline-block;
+			cursor: pointer;
+		}
+
+		.tooltip-text {
+			visibility: hidden;
+			width: max-content;
+			background-color: #f3dfdf;
+			color: red;
+			font-size: 8px;
+			text-align: left;
+			border-radius: 4px;
+			padding: 8px 12px;
+			position: absolute;
+			z-index: 9999;
+			bottom: 125%;
+			left: 50%;
+			transform: translateX(-50%);
+			opacity: 0.9;
+			white-space: normal;
+			min-width: 150px;
+			max-width: 300px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+			transition: opacity 0.3s;
+		}
+
+		.tooltip-text::after {
+			content: "";
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			margin-left: -5px;
+			border-width: 5px;
+			border-style: solid;
+			border-color: #f3dfdf transparent transparent transparent;
+		}
+
+		.custom-tooltip:hover .tooltip-text {
+			visibility: visible;
+		}
+	</style>
+		
+	</head>
+
+	<body onload="javascript:controlaNave();" class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Lista de Anotações Administrativas</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					{{#each error}}
+						<div class="alert alert-danger">{{texto}}{{error}}</div>
+					{{else}}
+					{{/each}}
+					<div class="page-content"><!-- .page-content -->
+						<div class="row"><!--.row -->
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="col-xs-12">
+											<div class="clearfix" >
+												<div class="pull-right tableTools-container">
+
+
+												</div>
+											</div>
+
+											<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+											</div>
+											
+											<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+												
+												<thead>
+													<tr role="row">
+														<th class="center">
+															<label class="pos-rel">
+																<input type="checkbox" class="ace" />
+																<span class="lbl"></span>
+															</label>
+														</th>
+														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Nome</th>
+														<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Descrição</th>
+														<th>Ação
+															<a href="/menu/ferramentas/anotaAdm/cad">
+																<i class="menu-icon fa fa-plus purple"></i>
+															</a>
+														</th>
+
+													</tr>
+													
+												</thead>
+												
+												<tbody>
+													{{#each anotaAdm}}
+														<tr>
+															<th class="center">
+																<label class="pos-rel">
+																	<input type="checkbox" class="ace" />
+																	<span class="lbl"></span>
+																</label>
+															</th>
+															<td>{{anotaAdm_tipo}}</td>
+															<td>{{anotaAdm_nome}}</td>
+															<td>{{anotaAdm_descricao}}</td>
+														<td>
+															<div class="action-buttons">
+																<a class="green" href="/menu/ferramentas/anotaAdm/edi/{{_id}}" title="Editar">
+																	<i class="ace-icon fa fa-pencil bigger-130"></i>
+																</a>
+																<a class="red" href="/menu/ferramentas/AnotaAdm/del/{{_id}}" title="Deletar">
+																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																</a>
+																
+															<!-- TOOLTIP EYE - COM DADOS FORMATADOS -->
+																<a class="purple custom-tooltip" title="Informações">
+																	<i class="ace-icon fa fa-eye bigger-130"></i>
+																	<span class="tooltip-text">
+																		<strong>Última Edição:</strong>
+																		{{#if dataedi}}
+																			<p><b>{{dataedi}}</b></p>
+																		{{else}}
+																			<p>--/--/---- h--:--</p>
+																		{{/if}}
+																		
+																		{{#if usuarioEdiNome}}
+																			<p>Por: {{usuarioEdiNome}}</p>
+																		{{else}}
+																			<p>Por: Não informado</p>
+																		{{/if}}
+																		
+																		<strong>Cadastrado em:</strong>
+																		{{#if datacad}}
+																			<p><b>{{datacad}}</b></p>
+																		{{else}}
+																			<p>--/--/---- h--:--</p>
+																		{{/if}}
+																		
+																		{{#if usuarioCadNome}}
+																			<p>Por: {{usuarioCadNome}}</p>
+																		{{else}}
+																			<p>Por: Não informado</p>
+																		{{/if}}
+																	</span>
+																</a>
+															</div>
+														</td>
+														</tr>
+													{{/each}}
+												</tbody>
+
+											</table>
+
+
+										
+										
+										
+									</div>
+								</div>				
+							</div>
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content-inner -->
+			</div><!-- /.main-content -->
+
+		
+		</div><!-- /.main-container ace-save-state -->
+
+		
+		<!-- page specific plugin scripts -->
+		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+		
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$("#dynamic-table").DataTable({
+			"language": {
+            "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
+        },
+			"aaSorting": [],
+			"aoColumns": [{ "bSortable": false }, null, null, null, { "bSortable": false }],
+			"responsive": true,
+			"lengthMenu": [ 100, 200],
+			"lengthChange": true,
+			"autoWidth": true,
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			
+			select: {
+						style: 'multi'
+					}
+			});
+		});
+		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+		</script>
+	
+	
+
+	</body>
+
+</html>
