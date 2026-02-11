@@ -1,0 +1,23 @@
+/* Máscara para valores decimais */
+.form-control.valor-decimal {
+    text-align: right;
+    font-family: 'Courier New', monospace;
+    padding-right: 10px;
+}
+
+.form-control.valor-decimal:focus {
+    border-color: #4d90fe;
+    box-shadow: 0 0 0 0.2rem rgba(77, 144, 254, 0.25);
+}
+
+/* Estado de erro */
+.form-control.valor-invalido {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Estado válido */
+.form-control.valor-valido {
+    border-color: #28a745 !important;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
