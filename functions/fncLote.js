@@ -58,7 +58,7 @@ class FiltroEvoatend{
 module.exports = {FiltroEvoatend,
 
   
-    filtraGuialis(req, res, resposta) {
+    filtraLotelis(req, res, resposta) {
         let db = req.cookies['preferredDb'];
         const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
@@ -211,7 +211,7 @@ module.exports = {FiltroEvoatend,
                                                                     console.log("→ benes.length:", bene.length);
                                                                     console.log("→ terapeutas.length:", terapeuta.length);
 
-                                                                    res.render('guia/guiaLis', {
+                                                                    res.render('lote/loteLis', {
                                                                         extras: agendas,
                                                                         benes: bene,
                                                                         terapeutas: terapeuta,
@@ -238,12 +238,12 @@ module.exports = {FiltroEvoatend,
                     });
             })
             .catch((err) => {
-                console.error("💥 ERRO EM filtraGuialis:", err);
+                console.error("💥 ERRO EM filtraLotelis:", err);
                 req.flash("error_message", "Houve um erro ao listar os agendamentos.");
                 res.redirect('/admin/erro');
             });
     },
-    listaGuia(req, res, resposta) {
+    listaLote(req, res, resposta) {
         let db = req.cookies['preferredDb'];
         Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
@@ -259,7 +259,7 @@ module.exports = {FiltroEvoatend,
         const anoAtual = hoje.getFullYear().toString();
         const mesAtual = hoje.getMonth().toString(); // string, como no select
 
-        console.log("→ Carregando lista inicial de guias (sem filtro aplicado)");
+        console.log("→ Carregando lista inicial de lotes (sem filtro aplicado)");
         console.log("→ Filtro padrão: Ano =", anoAtual, ", Mês =", mesAtual);
 
         Usuario.find({
@@ -289,7 +289,7 @@ module.exports = {FiltroEvoatend,
                                 Ano.find()
                                 .then((anos) => {
                                     // Renderiza o formulário em branco (sem agendas)
-                                    res.render('guia/guiaLis', {
+                                    res.render('lote/loteLis', {
                                         extras: [], // ← lista vazia de agendamentos
                                         benes: benes,
                                         terapeutas: terapeutas,
@@ -317,12 +317,12 @@ module.exports = {FiltroEvoatend,
             });
         })
         .catch((err) => {
-            console.error("Erro em listaGuia:", err);
+            console.error("Erro em listaLote:", err);
             req.flash("error_message", "Houve um erro ao carregar o formulário.");
             res.redirect('/admin/erro');
         });
     },
-    adicionarGuia: async (req, res, resposta) => {
+    adicionarLote: async (req, res, resposta) => {
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         /*
@@ -351,24 +351,24 @@ module.exports = {FiltroEvoatend,
             resultado = err;
             //res.redirect('admin/branco')
         }).finally(()=>{
-            this.filtraGuialis(req, res);
+            this.filtraLotelis(req, res);
         })
         */
         try {
             const {
                 agendaId,
-                guia_num,
-                guia_numdatacad,
-                guia_senha,
-                guia_senhadatacad
+                lote_num,
+                lote_numdatacad,
+                lote_senha,
+                lote_senhadatacad
             } = req.body;
 
             const agenda = await Agenda.findById(
                 agendaId,
                 {
-                    'agenda_guia.guia_datacad': 1,
-                    'agenda_guia.guia_usuedi': 1,
-                    'agenda_guia.guia_dataedi': 1
+                    'agenda_lote.lote_datacad': 1,
+                    'agenda_lote.lote_usuedi': 1,
+                    'agenda_lote.lote_dataedi': 1
                 }
             ).lean(); // só leitura
 
@@ -376,21 +376,21 @@ module.exports = {FiltroEvoatend,
             const idUsu = String(req.cookies['idUsu']);
 
             const setObj = {
-                'agenda_guia.guia_num': guia_num,
-                'agenda_guia.guia_numdatacad': guia_numdatacad || null,
-                'agenda_guia.guia_senha': guia_senha,
-                'agenda_guia.guia_senhadatacad': guia_senhadatacad || null
+                'agenda_lote.lote_num': lote_num,
+                'agenda_lote.lote_numdatacad': lote_numdatacad || null,
+                'agenda_lote.lote_senha': lote_senha,
+                'agenda_lote.lote_senhadatacad': lote_senhadatacad || null
             };
 
-            if (!agenda || !agenda.agenda_guia?.guia_datacad) {
-                setObj['agenda_guia.guia_usucad'] = idUsu;
-                setObj['agenda_guia.guia_datacad'] = agora;
+            if (!agenda || !agenda.agenda_lote?.lote_datacad) {
+                setObj['agenda_lote.lote_usucad'] = idUsu;
+                setObj['agenda_lote.lote_datacad'] = agora;
             } else {
-                const usuediAtual = agenda.agenda_guia?.guia_usuedi || '';
-                const dataediAtual = agenda.agenda_guia?.guia_dataedi || '';
+                const usuediAtual = agenda.agenda_lote?.lote_usuedi || '';
+                const dataediAtual = agenda.agenda_lote?.lote_dataedi || '';
 
-                setObj['agenda_guia.guia_usuedi'] = usuediAtual ? `${usuediAtual},${idUsu}` : idUsu;
-                setObj['agenda_guia.guia_dataedi'] = dataediAtual ? `${dataediAtual},${agora}` : agora;
+                setObj['agenda_lote.lote_usuedi'] = usuediAtual ? `${usuediAtual},${idUsu}` : idUsu;
+                setObj['agenda_lote.lote_dataedi'] = dataediAtual ? `${dataediAtual},${agora}` : agora;
             }
 
             await Agenda.updateOne(
@@ -403,13 +403,13 @@ module.exports = {FiltroEvoatend,
 
         } catch (err) {
             console.error(err);
-            res.status(500).json({ ok: false, message: 'Erro ao salvar guia' });
+            res.status(500).json({ ok: false, message: 'Erro ao salvar lote' });
         }
     },
     // ============================================
 // SALVAR GUIA EM MASSA - COM SEGURANÇA
 // ============================================
-adicionarGuiaMassa: async (req, res) => {
+adicionarLoteMassa: async (req, res) => {
     let db = req.cookies['preferredDb'];
     const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
     
@@ -433,7 +433,7 @@ adicionarGuiaMassa: async (req, res) => {
         };
 
         for (const update of updates) {
-            const { agendaId, guia_num, guia_numdatacad, guia_senha, guia_senhadatacad } = update;
+            const { agendaId, lote_num, lote_numdatacad, lote_senha, lote_senhadatacad } = update;
 
             try {
                 // ✅ BUSCAR AGENDA ATUAL PARA VERIFICAR DADOS EXISTENTES
@@ -447,45 +447,45 @@ adicionarGuiaMassa: async (req, res) => {
                     continue;
                 }
 
-                const guiaAtual = agenda.agenda_guia || {};
+                const loteAtual = agenda.agenda_lote || {};
                 
                 // ✅ VERIFICAR SE JÁ EXISTEM DADOS NOS CAMPOS
                 const camposComDados = [];
                 const camposParaAtualizar = {};
 
-                // Verificar Guia Número
-                if (guia_num && guia_num.trim() !== '') {
-                    if (guiaAtual.guia_num && guiaAtual.guia_num.trim() !== '') {
-                        camposComDados.push('guia_num');
+                // Verificar Lote Número
+                if (lote_num && lote_num.trim() !== '') {
+                    if (loteAtual.lote_num && loteAtual.lote_num.trim() !== '') {
+                        camposComDados.push('lote_num');
                     } else {
-                        camposParaAtualizar['agenda_guia.guia_num'] = guia_num;
+                        camposParaAtualizar['agenda_lote.lote_num'] = lote_num;
                     }
                 }
 
-                // Verificar Data Guia
-                if (guia_numdatacad) {
-                    if (guiaAtual.guia_numdatacad) {
-                        camposComDados.push('guia_numdatacad');
+                // Verificar Data Lote
+                if (lote_numdatacad) {
+                    if (loteAtual.lote_numdatacad) {
+                        camposComDados.push('lote_numdatacad');
                     } else {
-                        camposParaAtualizar['agenda_guia.guia_numdatacad'] = guia_numdatacad;
+                        camposParaAtualizar['agenda_lote.lote_numdatacad'] = lote_numdatacad;
                     }
                 }
 
                 // Verificar Senha
-                if (guia_senha && guia_senha.trim() !== '') {
-                    if (guiaAtual.guia_senha && guiaAtual.guia_senha.trim() !== '') {
-                        camposComDados.push('guia_senha');
+                if (lote_senha && lote_senha.trim() !== '') {
+                    if (loteAtual.lote_senha && loteAtual.lote_senha.trim() !== '') {
+                        camposComDados.push('lote_senha');
                     } else {
-                        camposParaAtualizar['agenda_guia.guia_senha'] = guia_senha;
+                        camposParaAtualizar['agenda_lote.lote_senha'] = lote_senha;
                     }
                 }
 
                 // Verificar Data Senha
-                if (guia_senhadatacad) {
-                    if (guiaAtual.guia_senhadatacad) {
-                        camposComDados.push('guia_senhadatacad');
+                if (lote_senhadatacad) {
+                    if (loteAtual.lote_senhadatacad) {
+                        camposComDados.push('lote_senhadatacad');
                     } else {
-                        camposParaAtualizar['agenda_guia.guia_senhadatacad'] = guia_senhadatacad;
+                        camposParaAtualizar['agenda_lote.lote_senhadatacad'] = lote_senhadatacad;
                     }
                 }
 
@@ -495,10 +495,10 @@ adicionarGuiaMassa: async (req, res) => {
                         agendaId,
                         camposComDados,
                         dadosExistentes: {
-                            guia_num: guiaAtual.guia_num,
-                            guia_numdatacad: guiaAtual.guia_numdatacad,
-                            guia_senha: guiaAtual.guia_senha,
-                            guia_senhadatacad: guiaAtual.guia_senhadatacad
+                            lote_num: loteAtual.lote_num,
+                            lote_numdatacad: loteAtual.lote_numdatacad,
+                            lote_senha: loteAtual.lote_senha,
+                            lote_senhadatacad: loteAtual.lote_senhadatacad
                         }
                     });
                     continue;
@@ -509,17 +509,17 @@ adicionarGuiaMassa: async (req, res) => {
                     // Verificar se é primeiro cadastro ou edição
                     const setObj = { ...camposParaAtualizar };
 
-                    if (!guiaAtual.guia_datacad) {
+                    if (!loteAtual.lote_datacad) {
                         // Primeiro cadastro
-                        setObj['agenda_guia.guia_usucad'] = idUsu;
-                        setObj['agenda_guia.guia_datacad'] = agora;
+                        setObj['agenda_lote.lote_usucad'] = idUsu;
+                        setObj['agenda_lote.lote_datacad'] = agora;
                     } else {
                         // Edição - adicionar ao log
-                        const usuediAtual = guiaAtual.guia_usuedi || '';
-                        const dataediAtual = guiaAtual.guia_dataedi || '';
+                        const usuediAtual = loteAtual.lote_usuedi || '';
+                        const dataediAtual = loteAtual.lote_dataedi || '';
 
-                        setObj['agenda_guia.guia_usuedi'] = usuediAtual ? `${usuediAtual},${idUsu}` : idUsu;
-                        setObj['agenda_guia.guia_dataedi'] = dataediAtual ? `${dataediAtual},${agora}` : agora;
+                        setObj['agenda_lote.lote_usuedi'] = usuediAtual ? `${usuediAtual},${idUsu}` : idUsu;
+                        setObj['agenda_lote.lote_dataedi'] = dataediAtual ? `${dataediAtual},${agora}` : agora;
                     }
 
                     await Agenda.updateOne(
@@ -558,7 +558,7 @@ adicionarGuiaMassa: async (req, res) => {
         });
 
     } catch (err) {
-        console.error('[ERRO adicionarGuiaMassa]', err);
+        console.error('[ERRO adicionarLoteMassa]', err);
         return res.status(500).json({ 
             ok: false, 
             message: 'Erro ao processar atualização em massa',

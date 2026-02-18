@@ -1,6 +1,10 @@
 //Exports
 const mongoose = require("mongoose")
 const { getModel } = require('./fncGeral');
+
+// ✅ IMPORTAÇÃO ADICIONADA - CRÍTICO PARA FUNCIONAR
+const guialoteClass = require("../models/guialote")
+
 //Houve alteração na Estrutura e Banco da evolução de atendimentos, eles agora são vinculados à Agenda e Não ao Atendimento.
 //Classes Extrangeiras
 const evoatendClass = require("../models/agenda")
@@ -26,11 +30,9 @@ var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 var Sala = getModel("SoftRoute", 'tb_sala', salaClass.SalaSchema)
 var Horaage = getModel("SoftRoute", 'tb_horaage', horaageClass.HoraageSchema)
 var Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
-//Funções auxiliares
 
+//Funções auxiliares
 const fncAgenda = require("./fncAgenda")
-
-//Funções auxiliares
 const ObjectId = require('mongodb').ObjectId;
 const fncGeral = require("./fncGeral");
 const Resposta = fncGeral.Resposta;
@@ -57,8 +59,10 @@ class FiltroEvoatend{
 
 module.exports = {FiltroEvoatend,
 
-  
-    filtraGuialis(req, res, resposta) {
+    // ============================================
+    // FILTRAR LISTA DE AGENDAMENTOS PARA LOTE
+    // ============================================
+    filtraGuialotelis(req, res, resposta) {
         let db = req.cookies['preferredDb'];
         const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
@@ -66,9 +70,6 @@ module.exports = {FiltroEvoatend,
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
         const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        // Garanta que estas importações existem no topo do arquivo:
-        // const Usuario = require('../models/Usuario');
-        // const Ano = require('../models/Ano');
 
         if (!resposta || typeof resposta !== 'object') {
             resposta = { texto: '', sucesso: false };
@@ -142,8 +143,13 @@ module.exports = {FiltroEvoatend,
         // Buscar agendas
         Agenda.find(agendaQuery)
             .then((agendas) => {
+                    agendas.populate({
+                        path: 'agenda_loteid',
+                        select: 'guialote_num guialote_status guialote_dataenvio' // traz só o necessário
+                    })
                 console.log("✅ [RESULTADO DA AGENDA]");
                 console.log("→ Total de registros encontrados:", agendas.length);
+                
                 // Carregar beneficiários
                 return Bene.find()
                     .then((bene) => {
@@ -186,9 +192,24 @@ module.exports = {FiltroEvoatend,
                                 a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
                                 a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
 
-                                // Data da senha no formato YYYY-MM-DD (para input date)
-                                a.agenda_datasenha_input = a.agenda_datasenha
-                                    ? new Date(a.agenda_datasenha).toISOString().split('T')[0]
+                                // ✅ VERIFICAR SE TEM GUIA E SENHA (PARA FRONTEND BLOQUEAR CHECKBOX)
+                                const temGuia = a.agenda_guia && a.agenda_guia.guia_num && a.agenda_guia.guia_num.trim() !== '';
+                                const temSenha = a.agenda_guia && a.agenda_guia.guia_senha && a.agenda_guia.guia_senha.trim() !== '';
+                                const jaTemLote = a.agenda_loteid != null && a.agenda_loteid != undefined;
+                                
+                                a.podeLotear = (temGuia && temSenha && !jaTemLote);
+                                a.jaTemLote = jaTemLote;
+
+                                // ✅ ADICIONAR: facilitar acesso ao número do lote na view
+                                a.loteNumero = a.agenda_loteid?.guialote_num || null;
+                                a.loteStatus = a.agenda_loteid?.guialote_status || null;
+
+                                // Data da guia no formato YYYY-MM-DD (para input date)
+                                a.agenda_guia_numdatacad_input = a.agenda_guia?.guia_numdatacad
+                                    ? new Date(a.agenda_guia.guia_numdatacad).toISOString().split('T')[0]
+                                    : '';
+                                a.agenda_guia_senhadatacad_input = a.agenda_guia?.guia_senhadatacad
+                                    ? new Date(a.agenda_guia.guia_senhadatacad).toISOString().split('T')[0]
                                     : '';
                             });
 
@@ -211,7 +232,7 @@ module.exports = {FiltroEvoatend,
                                                                     console.log("→ benes.length:", bene.length);
                                                                     console.log("→ terapeutas.length:", terapeuta.length);
 
-                                                                    res.render('guia/guiaLis', {
+                                                                    res.render('guia/lote/guialoteLis', {
                                                                         extras: agendas,
                                                                         benes: bene,
                                                                         terapeutas: terapeuta,
@@ -238,12 +259,16 @@ module.exports = {FiltroEvoatend,
                     });
             })
             .catch((err) => {
-                console.error("💥 ERRO EM filtraGuialis:", err);
+                console.error("💥 ERRO EM filtraGuialotelis:", err);
                 req.flash("error_message", "Houve um erro ao listar os agendamentos.");
                 res.redirect('/admin/erro');
             });
     },
-    listaGuia(req, res, resposta) {
+
+    // ============================================
+    // LISTA INICIAL DE GUIALOTE (SEM FILTRO)
+    // ============================================
+    listaGuialote(req, res, resposta) {
         let db = req.cookies['preferredDb'];
         Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
@@ -257,9 +282,9 @@ module.exports = {FiltroEvoatend,
         // Valores padrão para os filtros na primeira abertura
         const hoje = new Date();
         const anoAtual = hoje.getFullYear().toString();
-        const mesAtual = hoje.getMonth().toString(); // string, como no select
+        const mesAtual = hoje.getMonth().toString();
 
-        console.log("→ Carregando lista inicial de guias (sem filtro aplicado)");
+        console.log("→ Carregando lista inicial de guialotes (sem filtro aplicado)");
         console.log("→ Filtro padrão: Ano =", anoAtual, ", Mês =", mesAtual);
 
         Usuario.find({
@@ -289,8 +314,8 @@ module.exports = {FiltroEvoatend,
                                 Ano.find()
                                 .then((anos) => {
                                     // Renderiza o formulário em branco (sem agendas)
-                                    res.render('guia/guiaLis', {
-                                        extras: [], // ← lista vazia de agendamentos
+                                    res.render('guia/lote/guialoteLis', {
+                                        extras: [],
                                         benes: benes,
                                         terapeutas: terapeutas,
                                         horaages: horaages,
@@ -301,7 +326,6 @@ module.exports = {FiltroEvoatend,
                                         atends: [],
                                         flash,
 
-                                        // Valores iniciais dos filtros
                                         filtroTipo: "Ano/Mes",
                                         filtroAno: anoAtual,
                                         filtroMes: mesAtual,
@@ -317,69 +341,39 @@ module.exports = {FiltroEvoatend,
             });
         })
         .catch((err) => {
-            console.error("Erro em listaGuia:", err);
+            console.error("Erro em listaGuialote:", err);
             req.flash("error_message", "Houve um erro ao carregar o formulário.");
             res.redirect('/admin/erro');
         });
     },
-    adicionarGuia: async (req, res, resposta) => {
+
+    // ============================================
+    // SALVAR GUIA INDIVIDUAL (TEMPO REAL)
+    // ============================================
+    adicionarGuialote: async (req, res, resposta) => {
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-        /*
-        await AgendaModel.findByIdAndUpdate(req.body.id, 
-            {$set: {
-                agenda_data : dataAgenda ,
-                agenda_beneid : req.body.agendaBeneid ,
-                agenda_convid : req.body.agendaConvid ,
-                agenda_salaid : req.body.agendaSalaid ,
-                agenda_terapiaid : req.body.agendaTerapiaid ,
-                agenda_usuid : req.body.agendaUsuid ,
-                agenda_categoria : req.body.agendaCateg ,
-                agenda_org : req.body.agendaOrg ,
-                agenda_obs : req.body.agendaObs ,
-                agenda_copia : req.body.agendaCopia,
-                agenda_usuedi: usuarioAtual , //Usuário adm que alterou
-                agenda_log: req.body.agendaLog , //Log das alterações
-                agenda_dataedi : dataAtual
-                }}
-        ).then((res) =>{
-            //console.log("Salvo")
-            resultado = true;
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
-            //res.redirect('admin/branco')
-        }).finally(()=>{
-            this.filtraGuialis(req, res);
-        })
-        */
+        
         try {
             const {
                 agendaId,
-                guia_num,
-                guia_numdatacad,
-                guia_senha,
-                guia_senhadatacad
+                guialote_num,
+                guialote_numdatacad,
+                guialote_senha,
+                guialote_senhadatacad
             } = req.body;
 
-            const agenda = await Agenda.findById(
-                agendaId,
-                {
-                    'agenda_guia.guia_datacad': 1,
-                    'agenda_guia.guia_usuedi': 1,
-                    'agenda_guia.guia_dataedi': 1
-                }
-            ).lean(); // só leitura
+            const agenda = await Agenda.findById(agendaId).lean();
 
             const agora = new Date().toISOString();
             const idUsu = String(req.cookies['idUsu']);
 
+            // ✅ CORREÇÃO: Usar agenda_guia.guia_* em vez de agenda_guialote.guialote_*
             const setObj = {
-                'agenda_guia.guia_num': guia_num,
-                'agenda_guia.guia_numdatacad': guia_numdatacad || null,
-                'agenda_guia.guia_senha': guia_senha,
-                'agenda_guia.guia_senhadatacad': guia_senhadatacad || null
+                'agenda_guia.guia_num': guialote_num,
+                'agenda_guia.guia_numdatacad': guialote_numdatacad || null,
+                'agenda_guia.guia_senha': guialote_senha,
+                'agenda_guia.guia_senhadatacad': guialote_senhadatacad || null
             };
 
             if (!agenda || !agenda.agenda_guia?.guia_datacad) {
@@ -396,7 +390,7 @@ module.exports = {FiltroEvoatend,
             await Agenda.updateOne(
                 { _id: agendaId },
                 { $set: setObj },
-                { upsert: true } // 🔥 garante que não pare a operação
+                { upsert: true }
             );
 
             res.json({ ok: true });
@@ -406,165 +400,232 @@ module.exports = {FiltroEvoatend,
             res.status(500).json({ ok: false, message: 'Erro ao salvar guia' });
         }
     },
+
     // ============================================
-// SALVAR GUIA EM MASSA - COM SEGURANÇA
-// ============================================
-adicionarGuiaMassa: async (req, res) => {
-    let db = req.cookies['preferredDb'];
-    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    
-    try {
-        const { updates } = req.body;
+    // SALVAR GUIA EM MASSA - COM SEGURANÇA
+    // ============================================
+    adicionarGuialoteMassa: async (req, res) => {
+        let db = req.cookies['preferredDb'];
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         
-        if (!Array.isArray(updates) || updates.length === 0) {
-            return res.json({ 
-                ok: false, 
-                message: 'Nenhum registro para atualizar' 
-            });
-        }
-
-        const agora = new Date().toISOString();
-        const idUsu = String(req.cookies['idUsu']);
-
-        const resultados = {
-            atualizados: [],
-            ignorados: [],
-            erros: []
-        };
-
-        for (const update of updates) {
-            const { agendaId, guia_num, guia_numdatacad, guia_senha, guia_senhadatacad } = update;
-
-            try {
-                // ✅ BUSCAR AGENDA ATUAL PARA VERIFICAR DADOS EXISTENTES
-                const agenda = await Agenda.findById(agendaId).lean();
-
-                if (!agenda) {
-                    resultados.erros.push({
-                        agendaId,
-                        motivo: 'Agenda não encontrada'
-                    });
-                    continue;
-                }
-
-                const guiaAtual = agenda.agenda_guia || {};
-                
-                // ✅ VERIFICAR SE JÁ EXISTEM DADOS NOS CAMPOS
-                const camposComDados = [];
-                const camposParaAtualizar = {};
-
-                // Verificar Guia Número
-                if (guia_num && guia_num.trim() !== '') {
-                    if (guiaAtual.guia_num && guiaAtual.guia_num.trim() !== '') {
-                        camposComDados.push('guia_num');
-                    } else {
-                        camposParaAtualizar['agenda_guia.guia_num'] = guia_num;
-                    }
-                }
-
-                // Verificar Data Guia
-                if (guia_numdatacad) {
-                    if (guiaAtual.guia_numdatacad) {
-                        camposComDados.push('guia_numdatacad');
-                    } else {
-                        camposParaAtualizar['agenda_guia.guia_numdatacad'] = guia_numdatacad;
-                    }
-                }
-
-                // Verificar Senha
-                if (guia_senha && guia_senha.trim() !== '') {
-                    if (guiaAtual.guia_senha && guiaAtual.guia_senha.trim() !== '') {
-                        camposComDados.push('guia_senha');
-                    } else {
-                        camposParaAtualizar['agenda_guia.guia_senha'] = guia_senha;
-                    }
-                }
-
-                // Verificar Data Senha
-                if (guia_senhadatacad) {
-                    if (guiaAtual.guia_senhadatacad) {
-                        camposComDados.push('guia_senhadatacad');
-                    } else {
-                        camposParaAtualizar['agenda_guia.guia_senhadatacad'] = guia_senhadatacad;
-                    }
-                }
-
-                // ✅ SE HOUVER CAMPOS COM DADOS EXISTENTES, IGNORAR ESTE REGISTRO
-                if (camposComDados.length > 0) {
-                    resultados.ignorados.push({
-                        agendaId,
-                        camposComDados,
-                        dadosExistentes: {
-                            guia_num: guiaAtual.guia_num,
-                            guia_numdatacad: guiaAtual.guia_numdatacad,
-                            guia_senha: guiaAtual.guia_senha,
-                            guia_senhadatacad: guiaAtual.guia_senhadatacad
-                        }
-                    });
-                    continue;
-                }
-
-                // ✅ SE NÃO HOUVER DADOS EXISTENTES, PROSSEGUIR COM A ATUALIZAÇÃO
-                if (Object.keys(camposParaAtualizar).length > 0) {
-                    // Verificar se é primeiro cadastro ou edição
-                    const setObj = { ...camposParaAtualizar };
-
-                    if (!guiaAtual.guia_datacad) {
-                        // Primeiro cadastro
-                        setObj['agenda_guia.guia_usucad'] = idUsu;
-                        setObj['agenda_guia.guia_datacad'] = agora;
-                    } else {
-                        // Edição - adicionar ao log
-                        const usuediAtual = guiaAtual.guia_usuedi || '';
-                        const dataediAtual = guiaAtual.guia_dataedi || '';
-
-                        setObj['agenda_guia.guia_usuedi'] = usuediAtual ? `${usuediAtual},${idUsu}` : idUsu;
-                        setObj['agenda_guia.guia_dataedi'] = dataediAtual ? `${dataediAtual},${agora}` : agora;
-                    }
-
-                    await Agenda.updateOne(
-                        { _id: agendaId },
-                        { $set: setObj }
-                    );
-
-                    resultados.atualizados.push({
-                        agendaId,
-                        camposAtualizados: Object.keys(camposParaAtualizar)
-                    });
-                }
-
-            } catch (err) {
-                console.error(`[ERRO ao processar agenda ${agendaId}]`, err);
-                resultados.erros.push({
-                    agendaId,
-                    motivo: err.message || 'Erro desconhecido'
+        try {
+            const { updates } = req.body;
+            
+            if (!Array.isArray(updates) || updates.length === 0) {
+                return res.json({ 
+                    ok: false, 
+                    message: 'Nenhum registro para atualizar' 
                 });
             }
-        }
 
-        // ✅ RETORNAR RESULTADOS DETALHADOS
-        return res.json({
-            ok: true,
-            count: resultados.atualizados.length,
-            atualizados: resultados.atualizados,
-            ignorados: resultados.ignorados,
-            erros: resultados.erros,
-            resumo: {
-                total: updates.length,
-                atualizados: resultados.atualizados.length,
-                ignorados: resultados.ignorados.length,
-                erros: resultados.erros.length
+            const agora = new Date().toISOString();
+            const idUsu = String(req.cookies['idUsu']);
+
+            const resultados = {
+                atualizados: [],
+                ignorados: [],
+                erros: []
+            };
+
+            for (const update of updates) {
+                const { agendaId, guialote_num, guialote_numdatacad, guialote_senha, guialote_senhadatacad } = update;
+
+                try {
+                    const agenda = await Agenda.findById(agendaId).lean();
+
+                    if (!agenda) {
+                        resultados.erros.push({
+                            agendaId,
+                            motivo: 'Agenda não encontrada'
+                        });
+                        continue;
+                    }
+
+                    const guiaAtual = agenda.agenda_guia || {};
+                    
+                    const camposComDados = [];
+                    const camposParaAtualizar = {};
+
+                    if (guialote_num && guialote_num.trim() !== '') {
+                        if (guiaAtual.guia_num && guiaAtual.guia_num.trim() !== '') {
+                            camposComDados.push('guia_num');
+                        } else {
+                            camposParaAtualizar['agenda_guia.guia_num'] = guialote_num;
+                        }
+                    }
+
+                    if (guialote_numdatacad) {
+                        if (guiaAtual.guia_numdatacad) {
+                            camposComDados.push('guia_numdatacad');
+                        } else {
+                            camposParaAtualizar['agenda_guia.guia_numdatacad'] = guialote_numdatacad;
+                        }
+                    }
+
+                    if (guialote_senha && guialote_senha.trim() !== '') {
+                        if (guiaAtual.guia_senha && guiaAtual.guia_senha.trim() !== '') {
+                            camposComDados.push('guia_senha');
+                        } else {
+                            camposParaAtualizar['agenda_guia.guia_senha'] = guialote_senha;
+                        }
+                    }
+
+                    if (guialote_senhadatacad) {
+                        if (guiaAtual.guia_senhadatacad) {
+                            camposComDados.push('guia_senhadatacad');
+                        } else {
+                            camposParaAtualizar['agenda_guia.guia_senhadatacad'] = guialote_senhadatacad;
+                        }
+                    }
+
+                    if (camposComDados.length > 0) {
+                        resultados.ignorados.push({
+                            agendaId,
+                            camposComDados,
+                            dadosExistentes: {
+                                guia_num: guiaAtual.guia_num,
+                                guia_numdatacad: guiaAtual.guia_numdatacad,
+                                guia_senha: guiaAtual.guia_senha,
+                                guia_senhadatacad: guiaAtual.guia_senhadatacad
+                            }
+                        });
+                        continue;
+                    }
+
+                    if (Object.keys(camposParaAtualizar).length > 0) {
+                        const setObj = { ...camposParaAtualizar };
+
+                        if (!guiaAtual.guia_datacad) {
+                            setObj['agenda_guia.guia_usucad'] = idUsu;
+                            setObj['agenda_guia.guia_datacad'] = agora;
+                        } else {
+                            const usuediAtual = guiaAtual.guia_usuedi || '';
+                            const dataediAtual = guiaAtual.guia_dataedi || '';
+
+                            setObj['agenda_guia.guia_usuedi'] = usuediAtual ? `${usuediAtual},${idUsu}` : idUsu;
+                            setObj['agenda_guia.guia_dataedi'] = dataediAtual ? `${dataediAtual},${agora}` : agora;
+                        }
+
+                        await Agenda.updateOne(
+                            { _id: agendaId },
+                            { $set: setObj }
+                        );
+
+                        resultados.atualizados.push({
+                            agendaId,
+                            camposAtualizados: Object.keys(camposParaAtualizar)
+                        });
+                    }
+
+                } catch (err) {
+                    console.error(`[ERRO ao processar agenda ${agendaId}]`, err);
+                    resultados.erros.push({
+                        agendaId,
+                        motivo: err.message || 'Erro desconhecido'
+                    });
+                }
             }
+
+            return res.json({
+                ok: true,
+                count: resultados.atualizados.length,
+                atualizados: resultados.atualizados,
+                ignorados: resultados.ignorados,
+                erros: resultados.erros,
+                resumo: {
+                    total: updates.length,
+                    atualizados: resultados.atualizados.length,
+                    ignorados: resultados.ignorados.length,
+                    erros: resultados.erros.length
+                }
+            });
+
+        } catch (err) {
+            console.error('[ERRO adicionarGuialoteMassa]', err);
+            return res.status(500).json({ 
+                ok: false, 
+                message: 'Erro ao processar atualização em massa',
+                error: err.message 
+            });
+        }
+    },
+
+ criarLote: async (req, res) => {
+    console.log('[BACKEND] >>> Recebida requisição criarLote');
+    
+    let db = req.cookies['preferredDb'];
+    console.log('[BACKEND] preferredDb:', db); // ✅ LOG CRÍTICO
+    
+    if (!db) {
+        return res.status(400).json({ ok: false, message: "Database não identificada nos cookies." });
+    }
+    
+    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+    const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
+    
+    console.log('[BACKEND] Modelos carregados');
+
+    try {
+        const { listaAgendaIds, guialote_valor, guialote_num_externo } = req.body;
+        const idUsu = req.cookies['idUsu'];
+        const agora = new Date();
+
+        if (!listaAgendaIds?.length) {
+            throw new Error("Nenhum agendamento selecionado.");
+        }
+        console.log(`[BACKEND] Validando ${listaAgendaIds.length} agendas...`);
+
+        // Validação
+        const agendasCandidatas = await Agenda.find({ _id: { $in: listaAgendaIds } });
+        console.log(`[BACKEND] Encontradas ${agendasCandidatas.length} agendas`);
+
+        const idsValidos = [];
+        for (const agenda of agendasCandidatas) {
+            const temGuia = agenda.agenda_guia?.guia_num?.trim();
+            const temSenha = agenda.agenda_guia?.guia_senha?.trim();
+            const jaTemLote = agenda.agenda_loteid != null;
+
+            if (!temGuia || !temSenha) {
+                throw new Error(`Agenda ${agenda._id}: Falta Guia ou Senha.`);
+            }
+            if (jaTemLote) {
+                throw new Error(`Agenda ${agenda._id}: Já pertence a outro lote.`);
+            }
+            idsValidos.push(agenda._id);
+        }
+        console.log(`[BACKEND] ${idsValidos.length} agendas válidas`);
+
+        // Criar Lote (SEM SESSION/TRANSACTION)
+        const novoLote = new Guialote({
+            guialote_num: guialote_num_externo || null,
+            guialote_numdatacad: guialote_num_externo ? agora : null,
+            guialote_guialotevalor: guialote_valor || 0,
+            guialote_qtatend: idsValidos.length,
+            guialote_agendas: idsValidos,
+            guialote_usucad: idUsu,
+            guialote_datacad: agora,
+            guialote_status: 'Aberto'
+        });
+
+        await novoLote.save();
+        console.log(`[BACKEND] Lote salvo: ${novoLote._id}`);
+
+        // Atualizar agendas
+        await Agenda.updateMany(
+            { _id: { $in: idsValidos } },
+            { $set: { agenda_loteid: novoLote._id, agenda_dataedi: agora, agenda_usuedi: idUsu } }
+        );
+        console.log('[BACKEND] Agendas vinculadas com sucesso');
+
+        return res.json({ 
+            ok: true, 
+            message: `Lote criado! ${idsValidos.length} agendamentos vinculados.`,
+            loteId: novoLote._id 
         });
 
     } catch (err) {
-        console.error('[ERRO adicionarGuiaMassa]', err);
-        return res.status(500).json({ 
-            ok: false, 
-            message: 'Erro ao processar atualização em massa',
-            error: err.message 
-        });
+        console.error("❌ [BACKEND] ERRO:", err);
+        return res.status(400).json({ ok: false, message: err.message });
     }
-},
-
+}
 }

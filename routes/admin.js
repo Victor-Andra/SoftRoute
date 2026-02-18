@@ -164,7 +164,7 @@ var Evoatend = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema
 const fncGuia= require("../functions/fncGuia")
 
 //Lote de Guias de Atendimento
-//Lotes sao um cadastro a parte
+//Lotes sao um cabecalho que contem inumeras guias (atreladas ao agendamento)
 const guialoteClass = require("../models/guialote")
 var Guialote = getModel("softroute", 'tb_guialote', guialoteClass.GuialoteSchema);//getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
 const fncGuialote= require("../functions/fncGuialote")
@@ -2488,9 +2488,9 @@ router.post('/area/evol/evoatendrankingFil', fncGeral.IsAuthenticated, (req,res)
 
 
 //Menu Guia ** Area Administrativa   
-//Carrega Cadastro de Mapp
+//Carrega Area de GUIA
 //------------------------------------------------------------------------------------------------
-router.get('/guia/guiaLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de evoluções.
+router.get('/guia/guiaLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de agendamentos para atrelar as guias.
     fncGuia.listaGuia(req, res);
 })
 
@@ -2507,7 +2507,33 @@ router.post('/guia/addguia', fncGeral.IsAuthenticated, (req,res) =>{//direciona 
 // Data: 04-02-2026
 router.post('/guia/addguia/massa', fncGeral.IsAuthenticated, (req,res) => {
     fncGuia.adicionarGuiaMassa(req, res);
-});
+})
+
+//Carrega Area de Guialote
+//------------------------------------------------------------------------------------------------
+router.get('/guia/lote/loteLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de Guialotes.
+    fncGuialote.listaGuialote(req, res);
+})
+
+router.post('/guia/lote/guialotefil', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
+    fncGuialote.filtraGuialotelis(req, res);
+})
+
+router.post('/guia/lote/addlote', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
+    fncGuialote.adicionarGuialote(req, res);
+})
+
+// ✅ NOVA ROTA: SALVAR GUIA EM MASSA com segurança (evita sobrescrita de dados já cadastrados na base)
+// Criado por: Wagner Cintra
+// Data: 16-02-2026
+router.post('/guia/lote/addlote/massa', fncGeral.IsAuthenticated, (req,res) => {
+    fncGuialote.adicionarGuialoteMassa(req, res);
+})
+
+// Cria o Lote efetivamente (vincula os agendamentos)
+router.post('/guia/lote/criarLote', fncGeral.IsAuthenticated, (req,res) => {
+    fncGuialote.criarLote(req, res);
+})
 //------------------------------------------------------------------------------------------------
 
 //Menu Minha Agenda Area Tecnicos

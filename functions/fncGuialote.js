@@ -1,6 +1,10 @@
 //Exports
 const mongoose = require("mongoose")
 const { getModel } = require('./fncGeral');
+
+// ✅ IMPORTAÇÃO ADICIONADA - CRÍTICO PARA FUNCIONAR
+const guialoteClass = require("../models/guialote")
+
 //Houve alteração na Estrutura e Banco da evolução de atendimentos, eles agora são vinculados à Agenda e Não ao Atendimento.
 //Classes Extrangeiras
 const evoatendClass = require("../models/agenda")
@@ -26,11 +30,9 @@ var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 var Sala = getModel("SoftRoute", 'tb_sala', salaClass.SalaSchema)
 var Horaage = getModel("SoftRoute", 'tb_horaage', horaageClass.HoraageSchema)
 var Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
-//Funções auxiliares
 
+//Funções auxiliares
 const fncAgenda = require("./fncAgenda")
-
-//Funções auxiliares
 const ObjectId = require('mongodb').ObjectId;
 const fncGeral = require("./fncGeral");
 const Resposta = fncGeral.Resposta;
@@ -57,369 +59,192 @@ class FiltroEvoatend{
 
 module.exports = {FiltroEvoatend,
 
-    filtraGuialisOLD(req, res, resposta) {
-        let db = req.cookies['preferredDb'];
-        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        // Certifique-se de que Usuario e Ano estão importados no topo do arquivo
-        // Ex: const Usuario = require('../models/Usuario'); const Ano = require('../models/Ano');
+    // ============================================
+    // FILTRAR LISTA DE AGENDAMENTOS PARA LOTE
+    // ============================================
+filtraGuialotelis(req, res, resposta) {
+    let db = req.cookies['preferredDb'];
+    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+    const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+    const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+    const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema); // ✅ ESSENCIAL PARA POPULATE
 
-        if (!resposta || typeof resposta !== 'object') {
-            resposta = { texto: '', sucesso: false };
+    if (!resposta || typeof resposta !== 'object') {
+        resposta = { texto: '', sucesso: false };
+    }
+    let flash = new Resposta();
+    flash.texto = resposta.texto;
+    flash.sucesso = resposta.sucesso;
+
+    const tipoData = req.body.tipoData;
+    const anoAtend = req.body.anoAtend;
+    const mesAtend = req.body.mesAtend;
+    const dataFil = req.body.dataFil;
+    const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
+    const atendBeneficiario = req.body.atendBeneficiario;
+
+    let dataIni, dataFim;
+
+    if (tipoData === "Ano/Mes") {
+        const ano = parseInt(anoAtend);
+        const mes = parseInt(mesAtend);
+        if (isNaN(ano) || isNaN(mes)) {
+            return res.render('admin/erro', { message: "Ano ou mês inválido." });
         }
-        let flash = new Resposta();
-        flash.texto = resposta.texto;
-        flash.sucesso = resposta.sucesso;
-
-        // Receber dados do formulário
-        const tipoData = req.body.tipoData;
-        const anoAtend = req.body.anoAtend;
-        const mesAtend = req.body.mesAtend;
-        const dataFil = req.body.dataFil;
-        const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
-        const atendBeneficiario = req.body.atendBeneficiario;
-
-        console.log("🔍 [INPUTS DO FORMULÁRIO]");
-        console.log("→ tipoData:", tipoData);
-        console.log("→ anoAtend:", anoAtend);
-        console.log("→ mesAtend:", mesAtend);
-        console.log("→ dataFil:", dataFil);
-        console.log("→ atendTipoPessoa:", atendTipoPessoa);
-        console.log("→ atendBeneficiario:", atendBeneficiario);
-
-        let dataIni, dataFim;
-
-        if (tipoData === "Ano/Mes") {
-            const ano = parseInt(anoAtend);
-            const mes = parseInt(mesAtend);
-            if (isNaN(ano) || isNaN(mes)) {
-                console.log("❌ Ano ou mês inválido");
-                return res.render('admin/erro', { message: "Ano ou mês inválido." });
-            }
-            dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
-            dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
-
-        } else if (tipoData === "Dia") {
-            if (!dataFil) {
-                console.log("❌ Data não informada para filtro 'Dia'");
-                return res.render('admin/erro', { message: "Data não informada." });
-            }
-            const [ano, mes, dia] = dataFil.split('-').map(Number);
-            dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
-            dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
-
-        } else if (tipoData === "Semana") {
-            console.log("❌ Filtro 'Semana' não implementado");
-            return res.render('admin/erro', { message: "Filtro por semana ainda não implementado." });
-        } else {
-            console.log("❌ Tipo de filtro desconhecido:", tipoData);
-            return res.render('admin/erro', { message: "Tipo de filtro inválido." });
+        dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
+        dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
+    } else if (tipoData === "Dia") {
+        if (!dataFil) {
+            return res.render('admin/erro', { message: "Data não informada." });
         }
+        const [ano, mes, dia] = dataFil.split('-').map(Number);
+        dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
+        dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
+    } else if (tipoData === "Semana") {
+        return res.render('admin/erro', { message: "Filtro por semana ainda não implementado." });
+    } else {
+        return res.render('admin/erro', { message: "Tipo de filtro inválido." });
+    }
 
-        console.log("📅 [INTERVALO DE DATAS GERADO]");
-        console.log("→ dataIni (ISO):", dataIni);
-        console.log("→ dataFim (ISO):", dataFim);
+    let agendaQuery = {
+        agenda_data: { $gte: dataIni, $lte: dataFim }
+    };
 
-        // Montar critérios de busca na Agenda
-        let agendaQuery = {
-            agenda_data: { $gte: dataIni, $lte: dataFim }
-        };
+    if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
+        agendaQuery.agenda_beneid = atendBeneficiario;
+    }
 
-        if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
-            agendaQuery.agenda_beneid = atendBeneficiario;
-            console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
-        }
+    // ✅ BUSCAR AGENDAS COM POPULATE DO LOTE (campos explícitos)
+    Agenda.find(agendaQuery)
+        .populate({
+            path: 'agenda_loteid',
+            select: 'guialote_num guialote_numdatacad guialote_dataenvio guialote_guialotevalor guialote_status guialote_usucad guialote_qtatend guialote_agendas',
+            strictPopulate: false // ✅ Funciona mesmo sem ref no schema
+        })
+        .then((agendas) => {
+            console.log("✅ [RESULTADO DA AGENDA]");
+            console.log("→ Total de registros encontrados:", agendas.length);
+            
+            return Bene.find().then((bene) => {
+                bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
 
-        console.log("🔎 [QUERY FINAL PARA AGENDA]");
-        console.log(agendaQuery);
+                return Usuario.find({
+                    usuario_status: "Ativo",
+                    $or: [
+                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                    ]
+                }).then((terapeuta) => {
+                    terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
 
-        // Buscar agendas
-        Agenda.find(agendaQuery)
-            .then((agendas) => {
-                console.log("✅ [RESULTADO DA AGENDA]");
-                console.log("→ Total de registros encontrados:", agendas.length);
-                if (agendas.length > 0) {
-                    console.log("→ Exemplo do primeiro registro:", agendas[0]);
-                }
+                    const usuarioMap = {};
+                    terapeuta.forEach(u => {
+                        usuarioMap[u._id.toString()] = u.usuario_nome;
+                    });
 
-                const extraIds = agendas.map(a => a._id);
-                console.log("→ IDs coletados (extraIds):", extraIds);
+                    // Enriquecer cada agenda
+                    agendas.forEach(a => {
+                        const dataAgenda = new Date(a.agenda_data);
+                        const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                        const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+                        a.agenda_hora = `${hor}:${min}`;
+                        a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
+                        a.evolucaoSimNao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '') ? 'Sim' : 'Não';
+                        a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
+                        a.usuarioCadNome = usuarioMap[a.agenda_usucad] || 'Desconhecido';
+                        a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
+                        a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
 
-                // Formatar campos de exibição
-                agendas.forEach((a) => {
-                    const data = new Date(a.agenda_data);
-                    let hor = data.getUTCHours().toString().padStart(2, '0');
-                    let min = data.getUTCMinutes().toString().padStart(2, '0');
-                    a.agenda_hora = `${hor}:${min}`;
-                    a.agenda_data_dia = fncGeral.getDataFMT(data);
+                        const temGuia = a.agenda_guia && a.agenda_guia.guia_num && a.agenda_guia.guia_num.trim() !== '';
+                        const temSenha = a.agenda_guia && a.agenda_guia.guia_senha && a.agenda_guia.guia_senha.trim() !== '';
+                        const jaTemLote = a.agenda_loteid != null && a.agenda_loteid != undefined;
+                        
+                        a.podeLotear = (temGuia && temSenha && !jaTemLote);
+                        a.jaTemLote = jaTemLote;
+
+                        // ✅ EXTRAÇÃO MANUAL DE CADA CAMPO DO LOTE (sem camelCase dinâmico)
+                        if (a.agenda_loteid && typeof a.agenda_loteid === 'object' && a.agenda_loteid._id) {
+                            a.lote = {
+                                guialoteNum: a.agenda_loteid.guialote_num || null,
+                                guialoteNumdatacad: a.agenda_loteid.guialote_numdatacad || null,
+                                guialoteDataenvio: a.agenda_loteid.guialote_dataenvio || null,
+                                guialoteGuialotevalor: a.agenda_loteid.guialote_guialotevalor || null,
+                                guialoteStatus: a.agenda_loteid.guialote_status || null,
+                                guialoteUsucad: a.agenda_loteid.guialote_usucad || null,
+                                guialoteQtatend: a.agenda_loteid.guialote_qtatend || null,
+                                guialoteAgendas: a.agenda_loteid.guialote_agendas || []
+                            };
+                        } else {
+                            a.lote = null;
+                        }
+
+                        a.agenda_guia_numdatacad_input = a.agenda_guia?.guia_numdatacad
+                            ? new Date(a.agenda_guia.guia_numdatacad).toISOString().split('T')[0] : '';
+                        a.agenda_guia_senhadatacad_input = a.agenda_guia?.guia_senhadatacad
+                            ? new Date(a.agenda_guia.guia_senhadatacad).toISOString().split('T')[0] : '';
+                    });
+
+                    // ✅ LOG DE DEBUG: verificar se os campos do lote estão sendo enviados
+                    if (agendas.length > 0) {
+                        const primeiraAgendaComLote = agendas.find(a => a.lote !== null);
+                        if (primeiraAgendaComLote) {
+                            console.log("🔍 [DEBUG] Campos do lote enviados para a view:");
+                            console.log("→ guialoteNum:", primeiraAgendaComLote.lote.guialoteNum);
+                            console.log("→ guialoteStatus:", primeiraAgendaComLote.lote.guialoteStatus);
+                            console.log("→ guialoteGuialotevalor:", primeiraAgendaComLote.lote.guialoteGuialotevalor);
+                            console.log("→ guialoteQtatend:", primeiraAgendaComLote.lote.guialoteQtatend);
+                            console.log("→ guialoteNumdatacad:", primeiraAgendaComLote.lote.guialoteNumdatacad);
+                            console.log("→ guialoteDataenvio:", primeiraAgendaComLote.lote.guialoteDataenvio);
+                            console.log("→ guialoteUsucad:", primeiraAgendaComLote.lote.guialoteUsucad);
+                            console.log("→ guialoteAgendas (count):", primeiraAgendaComLote.lote.guialoteAgendas?.length || 0);
+                        } else {
+                            console.log("⚠️ [DEBUG] Nenhuma agenda com lote encontrado nesta lista");
+                        }
+                    }
+
+                    return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
+                        .then((horaage) => Sala.find().then((salas) => {
+                            salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
+                            return Terapia.find().then((terapias) => Conv.find().then((convs) => {
+                                convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
+                                return Ano.find().then((anos) => {
+                                    console.log("📤 [RENDERIZANDO VIEW]");
+                                    res.render('guia/lote/guialoteLis', {
+                                        extras: agendas,
+                                        benes: bene,
+                                        terapeutas: terapeuta,
+                                        horaages: horaage,
+                                        salas: salas,
+                                        terapias: terapias,
+                                        convs: convs,
+                                        anos: anos,
+                                        flash,
+                                        filtroTipo: tipoData,
+                                        filtroAno: anoAtend,
+                                        filtroMes: mesAtend,
+                                        filtroData: dataFil,
+                                        filtroTipoPessoa: atendTipoPessoa,
+                                        filtroBeneficiario: atendBeneficiario
+                                    });
+                                });
+                            }));
+                        }));
                 });
-
-                // Carregar beneficiários
-                return Bene.find()
-                    .then((bene) => {
-                        bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
-
-                        // Carregar terapeutas
-                        return Usuario.find({
-                            usuario_status: "Ativo",
-                            $or: [
-                                { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                                { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                            ]
-                        })
-                        .then((terapeuta) => {
-                            terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
-
-                            // Carregar horários
-                            return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
-                                .then((horaage) => {
-
-                                    // Carregar salas
-                                    return Sala.find()
-                                        .then((salas) => {
-                                            salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
-
-                                            // Carregar terapias
-                                            return Terapia.find()
-                                                .then((terapias) => {
-
-                                                    // Carregar convênios
-                                                    return Conv.find()
-                                                        .then((convs) => {
-                                                            convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
-
-                                                            // Carregar anos
-                                                            return Ano.find()
-                                                                .then((anos) => {
-                                                                    // ✅ Tudo carregado — renderizar view SEM atendimentos
-                                                                    console.log("📤 [RENDERIZANDO VIEW]");
-                                                                    console.log("→ extras.length:", agendas.length);
-                                                                    console.log("→ benes.length:", bene.length);
-                                                                    console.log("→ terapeutas.length:", terapeuta.length);
-
-                                                                    res.render('guia/guiaLis', {
-                                                                        extras: agendas,
-                                                                        benes: bene,
-                                                                        terapeutas: terapeuta,
-                                                                        horaages: horaage,
-                                                                        salas: salas,
-                                                                        terapias: terapias,
-                                                                        convs: convs,
-                                                                        anos: anos,
-                                                                        atends: [], // opcional: remova se não usado na view
-                                                                        flash,
-
-                                                                        filtroTipo: tipoData,
-                                                                        filtroAno: anoAtend,
-                                                                        filtroMes: mesAtend,
-                                                                        filtroData: dataFil,
-                                                                        filtroTipoPessoa: atendTipoPessoa,
-                                                                        filtroBeneficiario: atendBeneficiario
-                                                                    });
-                                                                });
-                                                        });
-                                                });
-                                        });
-                                });
-                        });
-                    });
-            })
-            .catch((err) => {
-                console.error("💥 ERRO EM filtraGuialis:", err);
-                req.flash("error_message", "Houve um erro ao listar os agendamentos.");
-                res.redirect('/admin/erro');
             });
-    },
-    filtraGuialis(req, res, resposta) {
-        let db = req.cookies['preferredDb'];
-        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        // Garanta que estas importações existem no topo do arquivo:
-        // const Usuario = require('../models/Usuario');
-        // const Ano = require('../models/Ano');
-
-        if (!resposta || typeof resposta !== 'object') {
-            resposta = { texto: '', sucesso: false };
-        }
-        let flash = new Resposta();
-        flash.texto = resposta.texto;
-        flash.sucesso = resposta.sucesso;
-
-        // Receber dados do formulário
-        const tipoData = req.body.tipoData;
-        const anoAtend = req.body.anoAtend;
-        const mesAtend = req.body.mesAtend;
-        const dataFil = req.body.dataFil;
-        const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
-        const atendBeneficiario = req.body.atendBeneficiario;
-
-        console.log("🔍 [INPUTS DO FORMULÁRIO]");
-        console.log("→ tipoData:", tipoData);
-        console.log("→ anoAtend:", anoAtend);
-        console.log("→ mesAtend:", mesAtend);
-        console.log("→ dataFil:", dataFil);
-        console.log("→ atendTipoPessoa:", atendTipoPessoa);
-        console.log("→ atendBeneficiario:", atendBeneficiario);
-
-        let dataIni, dataFim;
-
-        if (tipoData === "Ano/Mes") {
-            const ano = parseInt(anoAtend);
-            const mes = parseInt(mesAtend);
-            if (isNaN(ano) || isNaN(mes)) {
-                console.log("❌ Ano ou mês inválido");
-                return res.render('admin/erro', { message: "Ano ou mês inválido." });
-            }
-            dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
-            dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
-
-        } else if (tipoData === "Dia") {
-            if (!dataFil) {
-                console.log("❌ Data não informada para filtro 'Dia'");
-                return res.render('admin/erro', { message: "Data não informada." });
-            }
-            const [ano, mes, dia] = dataFil.split('-').map(Number);
-            dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
-            dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
-
-        } else if (tipoData === "Semana") {
-            console.log("❌ Filtro 'Semana' não implementado");
-            return res.render('admin/erro', { message: "Filtro por semana ainda não implementado." });
-        } else {
-            console.log("❌ Tipo de filtro desconhecido:", tipoData);
-            return res.render('admin/erro', { message: "Tipo de filtro inválido." });
-        }
-
-        console.log("📅 [INTERVALO DE DATAS GERADO]");
-        console.log("→ dataIni (ISO):", dataIni);
-        console.log("→ dataFim (ISO):", dataFim);
-
-        // Montar critérios de busca na Agenda
-        let agendaQuery = {
-            agenda_data: { $gte: dataIni, $lte: dataFim }
-        };
-
-        if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
-            agendaQuery.agenda_beneid = atendBeneficiario;
-            console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
-        }
-
-        console.log("🔎 [QUERY FINAL PARA AGENDA]");
-        console.log(agendaQuery);
-
-        // Buscar agendas
-        Agenda.find(agendaQuery)
-            .then((agendas) => {
-                console.log("✅ [RESULTADO DA AGENDA]");
-                console.log("→ Total de registros encontrados:", agendas.length);
-                // Carregar beneficiários
-                return Bene.find()
-                    .then((bene) => {
-                        bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
-
-                        // Carregar terapeutas (usuários)
-                        return Usuario.find({
-                            usuario_status: "Ativo",
-                            $or: [
-                                { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                                { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                            ]
-                        })
-                        .then((terapeuta) => {
-                            terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
-
-                            // Criar mapa de usuários por ID (para cadastro/edição)
-                            const usuarioMap = {};
-                            terapeuta.forEach(u => {
-                                usuarioMap[u._id.toString()] = u.usuario_nome;
-                            });
-
-                            // Enriquecer cada agenda com dados formatados
-                            agendas.forEach(a => {
-                                // Formatar data e hora da agenda
-                                const dataAgenda = new Date(a.agenda_data);
-                                const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
-                                const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
-                                a.agenda_hora = `${hor}:${min}`;
-                                a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
-
-                                // Evolução: Sim / Não
-                                a.evolucaoSimNao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '') ? 'Sim' : 'Não';
-
-                                // Dados de cadastro
-                                a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
-                                a.usuarioCadNome = usuarioMap[a.agenda_usucad] || 'Desconhecido';
-
-                                // Dados de edição
-                                a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
-                                a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
-
-                                // Data da senha no formato YYYY-MM-DD (para input date)
-                                a.agenda_datasenha_input = a.agenda_datasenha
-                                    ? new Date(a.agenda_datasenha).toISOString().split('T')[0]
-                                    : '';
-                            });
-
-                            // Carregar demais dados complementares
-                            return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
-                                .then((horaage) => {
-                                    return Sala.find()
-                                        .then((salas) => {
-                                            salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
-                                            return Terapia.find()
-                                                .then((terapias) => {
-                                                    return Conv.find()
-                                                        .then((convs) => {
-                                                            convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
-                                                            return Ano.find()
-                                                                .then((anos) => {
-                                                                    // ✅ Renderizar view com todos os dados
-                                                                    console.log("📤 [RENDERIZANDO VIEW]");
-                                                                    console.log("→ extras.length:", agendas.length);
-                                                                    console.log("→ benes.length:", bene.length);
-                                                                    console.log("→ terapeutas.length:", terapeuta.length);
-
-                                                                    res.render('guia/guiaLis', {
-                                                                        extras: agendas,
-                                                                        benes: bene,
-                                                                        terapeutas: terapeuta,
-                                                                        horaages: horaage,
-                                                                        salas: salas,
-                                                                        terapias: terapias,
-                                                                        convs: convs,
-                                                                        anos: anos,
-                                                                        flash,
-
-                                                                        filtroTipo: tipoData,
-                                                                        filtroAno: anoAtend,
-                                                                        filtroMes: mesAtend,
-                                                                        filtroData: dataFil,
-                                                                        filtroTipoPessoa: atendTipoPessoa,
-                                                                        filtroBeneficiario: atendBeneficiario
-                                                                    });
-                                                                });
-                                                        });
-                                                });
-                                        });
-                                });
-                        });
-                    });
-            })
-            .catch((err) => {
-                console.error("💥 ERRO EM filtraGuialis:", err);
-                req.flash("error_message", "Houve um erro ao listar os agendamentos.");
-                res.redirect('/admin/erro');
-            });
-    },
-    listaGuia(req, res, resposta) {
+        })
+        .catch((err) => {
+            console.error("💥 ERRO EM filtraGuialotelis:", err);
+            req.flash("error_message", "Houve um erro ao listar os agendamentos.");
+            res.redirect('/admin/erro');
+        });
+},
+    // ============================================
+    // LISTA INICIAL DE GUIALOTE (SEM FILTRO)
+    // ============================================
+    listaGuialote(req, res, resposta) {
         let db = req.cookies['preferredDb'];
         Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
@@ -433,9 +258,9 @@ module.exports = {FiltroEvoatend,
         // Valores padrão para os filtros na primeira abertura
         const hoje = new Date();
         const anoAtual = hoje.getFullYear().toString();
-        const mesAtual = hoje.getMonth().toString(); // string, como no select
+        const mesAtual = hoje.getMonth().toString();
 
-        console.log("→ Carregando lista inicial de guias (sem filtro aplicado)");
+        console.log("→ Carregando lista inicial de guialotes (sem filtro aplicado)");
         console.log("→ Filtro padrão: Ano =", anoAtual, ", Mês =", mesAtual);
 
         Usuario.find({
@@ -465,8 +290,8 @@ module.exports = {FiltroEvoatend,
                                 Ano.find()
                                 .then((anos) => {
                                     // Renderiza o formulário em branco (sem agendas)
-                                    res.render('guia/guiaLis', {
-                                        extras: [], // ← lista vazia de agendamentos
+                                    res.render('guia/lote/guialoteLis', {
+                                        extras: [],
                                         benes: benes,
                                         terapeutas: terapeutas,
                                         horaages: horaages,
@@ -477,7 +302,6 @@ module.exports = {FiltroEvoatend,
                                         atends: [],
                                         flash,
 
-                                        // Valores iniciais dos filtros
                                         filtroTipo: "Ano/Mes",
                                         filtroAno: anoAtual,
                                         filtroMes: mesAtual,
@@ -493,69 +317,39 @@ module.exports = {FiltroEvoatend,
             });
         })
         .catch((err) => {
-            console.error("Erro em listaGuia:", err);
+            console.error("Erro em listaGuialote:", err);
             req.flash("error_message", "Houve um erro ao carregar o formulário.");
             res.redirect('/admin/erro');
         });
     },
-    adicionarGuia: async (req, res, resposta) => {
+
+    // ============================================
+    // SALVAR GUIA INDIVIDUAL (TEMPO REAL)
+    // ============================================
+    adicionarGuialote: async (req, res, resposta) => {
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-        /*
-        await AgendaModel.findByIdAndUpdate(req.body.id, 
-            {$set: {
-                agenda_data : dataAgenda ,
-                agenda_beneid : req.body.agendaBeneid ,
-                agenda_convid : req.body.agendaConvid ,
-                agenda_salaid : req.body.agendaSalaid ,
-                agenda_terapiaid : req.body.agendaTerapiaid ,
-                agenda_usuid : req.body.agendaUsuid ,
-                agenda_categoria : req.body.agendaCateg ,
-                agenda_org : req.body.agendaOrg ,
-                agenda_obs : req.body.agendaObs ,
-                agenda_copia : req.body.agendaCopia,
-                agenda_usuedi: usuarioAtual , //Usuário adm que alterou
-                agenda_log: req.body.agendaLog , //Log das alterações
-                agenda_dataedi : dataAtual
-                }}
-        ).then((res) =>{
-            //console.log("Salvo")
-            resultado = true;
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
-            //res.redirect('admin/branco')
-        }).finally(()=>{
-            this.filtraGuialis(req, res);
-        })
-        */
+        
         try {
             const {
                 agendaId,
-                guia_num,
-                guia_numdatacad,
-                guia_senha,
-                guia_senhadatacad
+                guialote_num,
+                guialote_numdatacad,
+                guialote_senha,
+                guialote_senhadatacad
             } = req.body;
 
-            const agenda = await Agenda.findById(
-                agendaId,
-                {
-                    'agenda_guia.guia_datacad': 1,
-                    'agenda_guia.guia_usuedi': 1,
-                    'agenda_guia.guia_dataedi': 1
-                }
-            ).lean(); // só leitura
+            const agenda = await Agenda.findById(agendaId).lean();
 
             const agora = new Date().toISOString();
             const idUsu = String(req.cookies['idUsu']);
 
+            // ✅ CORREÇÃO: Usar agenda_guia.guia_* em vez de agenda_guialote.guialote_*
             const setObj = {
-                'agenda_guia.guia_num': guia_num,
-                'agenda_guia.guia_numdatacad': guia_numdatacad || null,
-                'agenda_guia.guia_senha': guia_senha,
-                'agenda_guia.guia_senhadatacad': guia_senhadatacad || null
+                'agenda_guia.guia_num': guialote_num,
+                'agenda_guia.guia_numdatacad': guialote_numdatacad || null,
+                'agenda_guia.guia_senha': guialote_senha,
+                'agenda_guia.guia_senhadatacad': guialote_senhadatacad || null
             };
 
             if (!agenda || !agenda.agenda_guia?.guia_datacad) {
@@ -572,7 +366,7 @@ module.exports = {FiltroEvoatend,
             await Agenda.updateOne(
                 { _id: agendaId },
                 { $set: setObj },
-                { upsert: true } // 🔥 garante que não pare a operação
+                { upsert: true }
             );
 
             res.json({ ok: true });
@@ -582,165 +376,232 @@ module.exports = {FiltroEvoatend,
             res.status(500).json({ ok: false, message: 'Erro ao salvar guia' });
         }
     },
+
     // ============================================
-// SALVAR GUIA EM MASSA - COM SEGURANÇA
-// ============================================
-adicionarGuiaMassa: async (req, res) => {
-    let db = req.cookies['preferredDb'];
-    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    
-    try {
-        const { updates } = req.body;
+    // SALVAR GUIA EM MASSA - COM SEGURANÇA
+    // ============================================
+    adicionarGuialoteMassa: async (req, res) => {
+        let db = req.cookies['preferredDb'];
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         
-        if (!Array.isArray(updates) || updates.length === 0) {
-            return res.json({ 
-                ok: false, 
-                message: 'Nenhum registro para atualizar' 
-            });
-        }
-
-        const agora = new Date().toISOString();
-        const idUsu = String(req.cookies['idUsu']);
-
-        const resultados = {
-            atualizados: [],
-            ignorados: [],
-            erros: []
-        };
-
-        for (const update of updates) {
-            const { agendaId, guia_num, guia_numdatacad, guia_senha, guia_senhadatacad } = update;
-
-            try {
-                // ✅ BUSCAR AGENDA ATUAL PARA VERIFICAR DADOS EXISTENTES
-                const agenda = await Agenda.findById(agendaId).lean();
-
-                if (!agenda) {
-                    resultados.erros.push({
-                        agendaId,
-                        motivo: 'Agenda não encontrada'
-                    });
-                    continue;
-                }
-
-                const guiaAtual = agenda.agenda_guia || {};
-                
-                // ✅ VERIFICAR SE JÁ EXISTEM DADOS NOS CAMPOS
-                const camposComDados = [];
-                const camposParaAtualizar = {};
-
-                // Verificar Guia Número
-                if (guia_num && guia_num.trim() !== '') {
-                    if (guiaAtual.guia_num && guiaAtual.guia_num.trim() !== '') {
-                        camposComDados.push('guia_num');
-                    } else {
-                        camposParaAtualizar['agenda_guia.guia_num'] = guia_num;
-                    }
-                }
-
-                // Verificar Data Guia
-                if (guia_numdatacad) {
-                    if (guiaAtual.guia_numdatacad) {
-                        camposComDados.push('guia_numdatacad');
-                    } else {
-                        camposParaAtualizar['agenda_guia.guia_numdatacad'] = guia_numdatacad;
-                    }
-                }
-
-                // Verificar Senha
-                if (guia_senha && guia_senha.trim() !== '') {
-                    if (guiaAtual.guia_senha && guiaAtual.guia_senha.trim() !== '') {
-                        camposComDados.push('guia_senha');
-                    } else {
-                        camposParaAtualizar['agenda_guia.guia_senha'] = guia_senha;
-                    }
-                }
-
-                // Verificar Data Senha
-                if (guia_senhadatacad) {
-                    if (guiaAtual.guia_senhadatacad) {
-                        camposComDados.push('guia_senhadatacad');
-                    } else {
-                        camposParaAtualizar['agenda_guia.guia_senhadatacad'] = guia_senhadatacad;
-                    }
-                }
-
-                // ✅ SE HOUVER CAMPOS COM DADOS EXISTENTES, IGNORAR ESTE REGISTRO
-                if (camposComDados.length > 0) {
-                    resultados.ignorados.push({
-                        agendaId,
-                        camposComDados,
-                        dadosExistentes: {
-                            guia_num: guiaAtual.guia_num,
-                            guia_numdatacad: guiaAtual.guia_numdatacad,
-                            guia_senha: guiaAtual.guia_senha,
-                            guia_senhadatacad: guiaAtual.guia_senhadatacad
-                        }
-                    });
-                    continue;
-                }
-
-                // ✅ SE NÃO HOUVER DADOS EXISTENTES, PROSSEGUIR COM A ATUALIZAÇÃO
-                if (Object.keys(camposParaAtualizar).length > 0) {
-                    // Verificar se é primeiro cadastro ou edição
-                    const setObj = { ...camposParaAtualizar };
-
-                    if (!guiaAtual.guia_datacad) {
-                        // Primeiro cadastro
-                        setObj['agenda_guia.guia_usucad'] = idUsu;
-                        setObj['agenda_guia.guia_datacad'] = agora;
-                    } else {
-                        // Edição - adicionar ao log
-                        const usuediAtual = guiaAtual.guia_usuedi || '';
-                        const dataediAtual = guiaAtual.guia_dataedi || '';
-
-                        setObj['agenda_guia.guia_usuedi'] = usuediAtual ? `${usuediAtual},${idUsu}` : idUsu;
-                        setObj['agenda_guia.guia_dataedi'] = dataediAtual ? `${dataediAtual},${agora}` : agora;
-                    }
-
-                    await Agenda.updateOne(
-                        { _id: agendaId },
-                        { $set: setObj }
-                    );
-
-                    resultados.atualizados.push({
-                        agendaId,
-                        camposAtualizados: Object.keys(camposParaAtualizar)
-                    });
-                }
-
-            } catch (err) {
-                console.error(`[ERRO ao processar agenda ${agendaId}]`, err);
-                resultados.erros.push({
-                    agendaId,
-                    motivo: err.message || 'Erro desconhecido'
+        try {
+            const { updates } = req.body;
+            
+            if (!Array.isArray(updates) || updates.length === 0) {
+                return res.json({ 
+                    ok: false, 
+                    message: 'Nenhum registro para atualizar' 
                 });
             }
-        }
 
-        // ✅ RETORNAR RESULTADOS DETALHADOS
-        return res.json({
-            ok: true,
-            count: resultados.atualizados.length,
-            atualizados: resultados.atualizados,
-            ignorados: resultados.ignorados,
-            erros: resultados.erros,
-            resumo: {
-                total: updates.length,
-                atualizados: resultados.atualizados.length,
-                ignorados: resultados.ignorados.length,
-                erros: resultados.erros.length
+            const agora = new Date().toISOString();
+            const idUsu = String(req.cookies['idUsu']);
+
+            const resultados = {
+                atualizados: [],
+                ignorados: [],
+                erros: []
+            };
+
+            for (const update of updates) {
+                const { agendaId, guialote_num, guialote_numdatacad, guialote_senha, guialote_senhadatacad } = update;
+
+                try {
+                    const agenda = await Agenda.findById(agendaId).lean();
+
+                    if (!agenda) {
+                        resultados.erros.push({
+                            agendaId,
+                            motivo: 'Agenda não encontrada'
+                        });
+                        continue;
+                    }
+
+                    const guiaAtual = agenda.agenda_guia || {};
+                    
+                    const camposComDados = [];
+                    const camposParaAtualizar = {};
+
+                    if (guialote_num && guialote_num.trim() !== '') {
+                        if (guiaAtual.guia_num && guiaAtual.guia_num.trim() !== '') {
+                            camposComDados.push('guia_num');
+                        } else {
+                            camposParaAtualizar['agenda_guia.guia_num'] = guialote_num;
+                        }
+                    }
+
+                    if (guialote_numdatacad) {
+                        if (guiaAtual.guia_numdatacad) {
+                            camposComDados.push('guia_numdatacad');
+                        } else {
+                            camposParaAtualizar['agenda_guia.guia_numdatacad'] = guialote_numdatacad;
+                        }
+                    }
+
+                    if (guialote_senha && guialote_senha.trim() !== '') {
+                        if (guiaAtual.guia_senha && guiaAtual.guia_senha.trim() !== '') {
+                            camposComDados.push('guia_senha');
+                        } else {
+                            camposParaAtualizar['agenda_guia.guia_senha'] = guialote_senha;
+                        }
+                    }
+
+                    if (guialote_senhadatacad) {
+                        if (guiaAtual.guia_senhadatacad) {
+                            camposComDados.push('guia_senhadatacad');
+                        } else {
+                            camposParaAtualizar['agenda_guia.guia_senhadatacad'] = guialote_senhadatacad;
+                        }
+                    }
+
+                    if (camposComDados.length > 0) {
+                        resultados.ignorados.push({
+                            agendaId,
+                            camposComDados,
+                            dadosExistentes: {
+                                guia_num: guiaAtual.guia_num,
+                                guia_numdatacad: guiaAtual.guia_numdatacad,
+                                guia_senha: guiaAtual.guia_senha,
+                                guia_senhadatacad: guiaAtual.guia_senhadatacad
+                            }
+                        });
+                        continue;
+                    }
+
+                    if (Object.keys(camposParaAtualizar).length > 0) {
+                        const setObj = { ...camposParaAtualizar };
+
+                        if (!guiaAtual.guia_datacad) {
+                            setObj['agenda_guia.guia_usucad'] = idUsu;
+                            setObj['agenda_guia.guia_datacad'] = agora;
+                        } else {
+                            const usuediAtual = guiaAtual.guia_usuedi || '';
+                            const dataediAtual = guiaAtual.guia_dataedi || '';
+
+                            setObj['agenda_guia.guia_usuedi'] = usuediAtual ? `${usuediAtual},${idUsu}` : idUsu;
+                            setObj['agenda_guia.guia_dataedi'] = dataediAtual ? `${dataediAtual},${agora}` : agora;
+                        }
+
+                        await Agenda.updateOne(
+                            { _id: agendaId },
+                            { $set: setObj }
+                        );
+
+                        resultados.atualizados.push({
+                            agendaId,
+                            camposAtualizados: Object.keys(camposParaAtualizar)
+                        });
+                    }
+
+                } catch (err) {
+                    console.error(`[ERRO ao processar agenda ${agendaId}]`, err);
+                    resultados.erros.push({
+                        agendaId,
+                        motivo: err.message || 'Erro desconhecido'
+                    });
+                }
             }
+
+            return res.json({
+                ok: true,
+                count: resultados.atualizados.length,
+                atualizados: resultados.atualizados,
+                ignorados: resultados.ignorados,
+                erros: resultados.erros,
+                resumo: {
+                    total: updates.length,
+                    atualizados: resultados.atualizados.length,
+                    ignorados: resultados.ignorados.length,
+                    erros: resultados.erros.length
+                }
+            });
+
+        } catch (err) {
+            console.error('[ERRO adicionarGuialoteMassa]', err);
+            return res.status(500).json({ 
+                ok: false, 
+                message: 'Erro ao processar atualização em massa',
+                error: err.message 
+            });
+        }
+    },
+
+ criarLote: async (req, res) => {
+    console.log('[BACKEND] >>> Recebida requisição criarLote');
+    
+    let db = req.cookies['preferredDb'];
+    console.log('[BACKEND] preferredDb:', db); // ✅ LOG CRÍTICO
+    
+    if (!db) {
+        return res.status(400).json({ ok: false, message: "Database não identificada nos cookies." });
+    }
+    
+    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+    const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
+    
+    console.log('[BACKEND] Modelos carregados');
+
+    try {
+        const { listaAgendaIds, guialote_valor, guialote_num_externo } = req.body;
+        const idUsu = req.cookies['idUsu'];
+        const agora = new Date();
+
+        if (!listaAgendaIds?.length) {
+            throw new Error("Nenhum agendamento selecionado.");
+        }
+        console.log(`[BACKEND] Validando ${listaAgendaIds.length} agendas...`);
+
+        // Validação
+        const agendasCandidatas = await Agenda.find({ _id: { $in: listaAgendaIds } });
+        console.log(`[BACKEND] Encontradas ${agendasCandidatas.length} agendas`);
+
+        const idsValidos = [];
+        for (const agenda of agendasCandidatas) {
+            const temGuia = agenda.agenda_guia?.guia_num?.trim();
+            const temSenha = agenda.agenda_guia?.guia_senha?.trim();
+            const jaTemLote = agenda.agenda_loteid != null;
+
+            if (!temGuia || !temSenha) {
+                throw new Error(`Agenda ${agenda._id}: Falta Guia ou Senha.`);
+            }
+            if (jaTemLote) {
+                throw new Error(`Agenda ${agenda._id}: Já pertence a outro lote.`);
+            }
+            idsValidos.push(agenda._id);
+        }
+        console.log(`[BACKEND] ${idsValidos.length} agendas válidas`);
+
+        // Criar Lote (SEM SESSION/TRANSACTION)
+        const novoLote = new Guialote({
+            guialote_num: guialote_num_externo || null,
+            guialote_numdatacad: guialote_num_externo ? agora : null,
+            guialote_guialotevalor: guialote_valor || 0,
+            guialote_qtatend: idsValidos.length,
+            guialote_agendas: idsValidos,
+            guialote_usucad: idUsu,
+            guialote_datacad: agora,
+            guialote_status: 'Aberto'
+        });
+
+        await novoLote.save();
+        console.log(`[BACKEND] Lote salvo: ${novoLote._id}`);
+
+        // Atualizar agendas
+        await Agenda.updateMany(
+            { _id: { $in: idsValidos } },
+            { $set: { agenda_loteid: novoLote._id, agenda_dataedi: agora, agenda_usuedi: idUsu } }
+        );
+        console.log('[BACKEND] Agendas vinculadas com sucesso');
+
+        return res.json({ 
+            ok: true, 
+            message: `Lote criado! ${idsValidos.length} agendamentos vinculados.`,
+            loteId: novoLote._id 
         });
 
     } catch (err) {
-        console.error('[ERRO adicionarGuiaMassa]', err);
-        return res.status(500).json({ 
-            ok: false, 
-            message: 'Erro ao processar atualização em massa',
-            error: err.message 
-        });
+        console.error("❌ [BACKEND] ERRO:", err);
+        return res.status(400).json({ ok: false, message: err.message });
     }
-},
-
+}
 }

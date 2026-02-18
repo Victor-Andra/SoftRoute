@@ -3,6 +3,7 @@ const fncGeral = require('../functions/fncGeral')
 const ObjectId = mongoose.Types.ObjectId
 const { getModel } = require('../functions/fncGeral');
 const { GuiaSchema } = require('../models/guia');//Isto é um objeto de Guia
+const { GuialoteSchema } = require('../models/guialote');//Isto é um objeto de Guia
 
 // Esquema Agenda
 // Criado por: Wagner Cintra
@@ -45,7 +46,9 @@ const AgendaSchema = mongoose.Schema({
     agenda_log :{ type: String, require: false }, //Log das alterações
     agenda_usucad :{ type: String, require: false },
     //Guia e Senha para Pagamento Financeiro
-    agenda_guia :{ type: GuiaSchema, require: false }//Isto é um objeto de Guia
+    // ✅ DEPOIS (CORRETO)
+    agenda_guia :{ type: GuiaSchema, required: false },
+    agenda_loteid :{ type: mongoose.Schema.Types.ObjectId, ref: 'tb_guialote', required: false, default: null }
 })
 
 // Construtor Agenda
@@ -89,7 +92,8 @@ class Agenda{
         agenda_usuedi, //Usuário adm que alterou
         agenda_log, //Log das alterações
         agenda_usucad,
-        agenda_guia
+        agenda_guia,
+        agenda_loteid
         ){
         this.agenda_data = agenda_data,
         this.agenda_hora = agenda_hora,
@@ -126,7 +130,8 @@ class Agenda{
         this.agenda_usuedi = agenda_usuedi, //Usuário adm que alterou
         this.agenda_log = agenda_log, //Log das alterações
         this.agenda_usucad = agenda_usucad,
-        this.agenda_guia = agenda_guia//Isto é um objeto de Guia
+        this.agenda_guia = agenda_guia,//Isto é um objeto de Guia
+        this.agenda_loteid = agenda_loteid //Isto é um objeto de Lote
     }
 }
 

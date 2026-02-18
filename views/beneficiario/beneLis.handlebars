@@ -216,132 +216,134 @@
         }
     </style>
     
-    <script type="text/javascript">
-        function confirmeDeletar(id){
-            let confirmado = confirm("Quer mesmo deletar Este beneficiário?");
-            if(confirmado == true){
-                window.location.href=("/menu/beneficiario/del/"+id);
+ <script type="text/javascript">
+    function confirmeDeletar(id){
+        let confirmado = confirm("Quer mesmo deletar Este beneficiário?");
+        if(confirmado == true){
+            window.location.href=("/menu/beneficiario/del/"+id);
+        }
+    }
+    
+    // ===============================
+    // CONTROLE DE FILTROS COM REGEX EXATA
+    // ===============================
+    let filtros = {
+        status: [],
+        tipo: []
+    };
+
+    function aplicarFiltros() {
+        const table = $('#dynamic-table').DataTable();
+
+        // ✅ CORREÇÃO: STATUS → coluna 10 (era 8 antes das novas colunas)
+        if (filtros.status.length > 0) {
+            const regexStatus = '^(' + filtros.status.join('|') + ')$';
+            table.column(10).search(regexStatus, true, false);
+        } else {
+            table.column(10).search('');
+        }
+
+        // TIPO → coluna 7 (mantido)
+        if (filtros.tipo.length > 0) {
+            const regexTipo = '^(' + filtros.tipo.join('|') + ')$';
+            table.column(7).search(regexTipo, true, false);
+        } else {
+            table.column(7).search('');
+        }
+
+        table.draw();
+    }
+
+    // ===============================
+    // CLIQUES DOS BOTÕES EXISTENTES
+    // ===============================
+    function filtrarBeneficiarios(tipo) {
+        const btn = $('.filter-btn.' + tipo);
+
+        // RESET TOTAL (botão Todos)
+        if (tipo === 'todos') {
+            filtros.status = [];
+            filtros.tipo = [];
+            $('.filter-btn').removeClass('active');
+            aplicarFiltros();
+            return;
+        }
+
+        // STATUS
+        if (tipo === 'ativo' || tipo === 'inativo') {
+            const valor = (tipo === 'ativo') ? 'Ativo' : 'Inativo';
+
+            if (filtros.status.includes(valor)) {
+                filtros.status = filtros.status.filter(v => v !== valor);
+                btn.removeClass('active');
+            } else {
+                filtros.status.push(valor);
+                btn.addClass('active');
             }
         }
-        
-        // ===============================
-        // CONTROLE DE FILTROS COM REGEX EXATA
-        // ===============================
-        let filtros = {
-            status: [],
-            tipo: []
+
+        // TIPO
+        const mapa = {
+            particular: 'Particular',
+            liminar: 'Liminar',
+            convenio: 'Convênio'
         };
 
-        function aplicarFiltros() {
-            const table = $('#dynamic-table').DataTable();
+        if (mapa[tipo]) {
+            const valor = mapa[tipo];
 
-            // STATUS → coluna 8 (Ativo / Inativo) | regex exata
-            if (filtros.status.length > 0) {
-                const regexStatus = '^(' + filtros.status.join('|') + ')$';
-                table.column(8).search(regexStatus, true, false);
+            if (filtros.tipo.includes(valor)) {
+                filtros.tipo = filtros.tipo.filter(v => v !== valor);
+                btn.removeClass('active');
             } else {
-                table.column(8).search('');
+                filtros.tipo.push(valor);
+                btn.addClass('active');
             }
-
-            // TIPO → coluna 7 (Particular / Liminar / Convênio)
-            if (filtros.tipo.length > 0) {
-                const regexTipo = '^(' + filtros.tipo.join('|') + ')$';
-                table.column(7).search(regexTipo, true, false);
-            } else {
-                table.column(7).search('');
-            }
-
-            table.draw();
         }
 
-        // ===============================
-        // CLIQUES DOS BOTÕES EXISTENTES
-        // ===============================
-        function filtrarBeneficiarios(tipo) {
-            const btn = $('.filter-btn.' + tipo);
+        aplicarFiltros();
+    }
 
-            // RESET TOTAL (botão Todos)
-            if (tipo === 'todos') {
-                filtros.status = [];
-                filtros.tipo = [];
-                $('.filter-btn').removeClass('active');
-                aplicarFiltros();
-                return;
+    // ===============================
+    // INICIALIZAÇÃO ÚNICA DO DATATABLE
+    // ===============================
+    $(document).ready(function() {
+        // Inicializa DataTable APENAS UMA VEZ
+        const table = $("#dynamic-table").DataTable({
+            "language": { "url": "/js/lang/datatable-pt-br.json" },
+            "aaSorting": [[1, 'asc']],
+            "aoColumns": [
+                { "bSortable": false }, // 0 - Checkbox
+                null, // 1 - Beneficiário
+                null, // 2 - Apelido
+                null, // 3 - Data Nascimento
+                null, // 4 - Idade
+                null, // 5 - Convênio
+                null, // 6 - ABA?
+                null, // 7 - Tipo
+                null, // 8 - Data Inicio (NOVA)
+                null, // 9 - Data Fim (NOVA)
+                null, // 10 - Status (CORRIGIDO)
+                { "bSortable": false }  // 11 - Ação
+            ],
+            "responsive": true,
+            "lengthMenu": [[300, 500, -1], [300, 500, "Todos"]],
+            "autoWidth": false,
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            select: {
+                style: 'multi'
             }
-
-            // STATUS
-            if (tipo === 'ativo' || tipo === 'inativo') {
-                const valor = (tipo === 'ativo') ? 'Ativo' : 'Inativo';
-
-                if (filtros.status.includes(valor)) {
-                    filtros.status = filtros.status.filter(v => v !== valor);
-                    btn.removeClass('active');
-                } else {
-                    filtros.status.push(valor);
-                    btn.addClass('active');
-                }
-            }
-
-            // TIPO
-            const mapa = {
-                particular: 'Particular',
-                liminar: 'Liminar',
-                convenio: 'Convênio'
-            };
-
-            if (mapa[tipo]) {
-                const valor = mapa[tipo];
-
-                if (filtros.tipo.includes(valor)) {
-                    filtros.tipo = filtros.tipo.filter(v => v !== valor);
-                    btn.removeClass('active');
-                } else {
-                    filtros.tipo.push(valor);
-                    btn.addClass('active');
-                }
-            }
-
-            aplicarFiltros();
-        }
-
-        // ===============================
-        // INICIALIZAÇÃO ÚNICA DO DATATABLE
-        // ===============================
-        $(document).ready(function() {
-            // Inicializa DataTable APENAS UMA VEZ
-            const table = $("#dynamic-table").DataTable({
-                "language": { "url": "/js/lang/datatable-pt-br.json" },
-                "aaSorting": [[1, 'asc']], // Ordena por Beneficiário por padrão
-                "aoColumns": [
-                    { "bSortable": false }, // Checkbox
-                    null, // Beneficiário
-                    null, // Apelido
-                    null, // Data Nascimento
-                    null, // Idade
-                    null, // Convênio
-                    null, // ABA?
-                    null, // Tipo
-                    null, // Status
-                    { "bSortable": false }  // Ação
-                ],
-                "responsive": true,
-                "lengthMenu": [[300, 500, -1], [300, 500, "Todos"]],
-                "autoWidth": false,
-                "paging": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                select: {
-                    style: 'multi'
-                }
-            });
-            
-            // mantém comportamento atual: Ativos por padrão
-            filtros.status.push('Ativo');
-            $('.filter-btn.ativo').addClass('active');
-            aplicarFiltros();
         });
-    </script>
+        
+        // mantém comportamento atual: Ativos por padrão
+        filtros.status.push('Ativo');
+        $('.filter-btn.ativo').addClass('active');
+        aplicarFiltros();
+    });
+</script>
 </head>
 
 <body onload="javascript:controlaNave();" class="no-skin">
@@ -371,7 +373,7 @@
                                 <div class="widget-header">
                                     <h4 class="widget-title">
                                         <i class="ace-icon fa fa-users"></i>
-                                        Estatísticas de Beneficiários
+                                        Estatísticas dos Beneficiários
                                     </h4>
                                 </div>
                                 <div class="widget-body">
@@ -494,6 +496,8 @@
                                                     <th>Convênio</th>
                                                     <th>ABA?</th>
                                                     <th>Tipo</th>
+                                                    <th>Data Inicio</th>
+                                                    <th>Data Fim</th>
                                                     <th>Status</th>
                                                     <th>Ação</th>
                                                 </tr>
@@ -545,6 +549,8 @@
                                                                 {{/ifEqual}}
                                                             {{/ifEqual}}
                                                         </td>
+                                                        <td><span class="badge badge-success">{{bene_dtaini}}</span></td>
+                                                        <td><span class="badge badge-warning">{{bene_dtafim}}</span></td>
                                                         <td>
                                                             {{#ifEqual this.bene_status "Inativo"}}
                                                                 <span class="label label-sm label-danger">{{bene_status}}</span>
