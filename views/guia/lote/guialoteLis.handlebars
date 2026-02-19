@@ -778,105 +778,109 @@
 			}
 		});
 		async function criarLote() {
-    console.log('[DEBUG] Iniciando criarLote...');
-    
-    const guialoteNum = document.getElementById('guialoteNum').value.trim();
-    const guialoteNumdatacad = document.getElementById('guialoteNumdatacad').value;
-    const guialoteGuialotevalor = document.getElementById('guialoteGuialotevalor').value;
-    
-    // Validações iniciais
-    if (!guialoteNum) {
-        alert('⚠️ Informe o Número do Lote (Protocolo do Convênio).');
-        return;
-    }
-    
-    const checkboxes = document.querySelectorAll('#dynamic-table tbody input[type="checkbox"]:checked');
-    console.log('[DEBUG] Checkboxes selecionados:', checkboxes.length);
-    
-    if (checkboxes.length === 0) {
-        alert('⚠️ Selecione pelo menos um agendamento válido para criar o Lote.');
-        return;
-    }
+			console.log('[DEBUG] Iniciando criarLote...');
+			const guialoteNum = document.getElementById('guialoteNum').value.trim();
+			const guialoteNumdatacad = document.getElementById('guialoteNumdatacad').value;
+			const guialoteGuialotevalor = document.getElementById('guialoteGuialotevalor').value;
+			const guialoteNumprotocolo = document.getElementById('guialoteNumprotocolo').value;
+			const guialoteDataenvio = document.getElementById('guialoteDataenvio').value;
+			const guialoteStatus = document.getElementById('guialoteStatus').value;
+			
+			// Validações iniciais
+			if (!guialoteNum) {
+				alert('⚠️ Informe o Número do Lote (Protocolo do Convênio).');
+				return;
+			}
+			
+			const checkboxes = document.querySelectorAll('#dynamic-table tbody input[type="checkbox"]:checked');
+			console.log('[DEBUG] Checkboxes selecionados:', checkboxes.length);
+			
+			if (checkboxes.length === 0) {
+				alert('⚠️ Selecione pelo menos um agendamento válido para criar o Lote.');
+				return;
+			}
+			
+			// Coletar IDs com log
+			const listaAgendaIds = [];
+			checkboxes.forEach(checkbox => {
+				const tr = checkbox.closest('tr');
+				const agendaId = tr.querySelector('input[name="agendaId"]')?.value;
+				if (agendaId) listaAgendaIds.push(agendaId);
+			});
+			
+			console.log('[DEBUG] IDs para enviar:', listaAgendaIds);
+			
+			if (!confirm(`SoftRoute\nDeseja criar o Lote "${guialoteNum}" com ${checkboxes.length} agendamento(s)?`)) {
+				return;
+			}
+			
+			const btnSalvar = document.querySelector('.toolbar-lote .btn-toolbar');
+			const btnOriginalText = btnSalvar.innerHTML;
+			
+			// Trava o botão
+			btnSalvar.disabled = true;
+			btnSalvar.innerHTML = '<i class="ace-icon fa fa-spinner fa-spin"></i> Criando Lote...';
+			
+			try {
+				console.log('[DEBUG] Enviando fetch para /menu/guia/lote/criarLote');
+				
+				const controller = new AbortController();
+				const timeoutId = setTimeout(() => controller.abort(), 30000);
+				
+				console.log('[DEBUG] Status:', $('#guialoteStatus').val());
+				console.log('[DEBUG] Protocolo:', document.getElementById('guialoteNumprotocolo').value);
+				console.log('[DEBUG] Data Envio:', document.getElementById('guialoteDataenvio').value);
 
-    // Coletar IDs com log
-    const listaAgendaIds = [];
-    checkboxes.forEach(checkbox => {
-        const tr = checkbox.closest('tr');
-        const agendaId = tr.querySelector('input[name="agendaId"]')?.value;
-        if (agendaId) listaAgendaIds.push(agendaId);
-    });
-    console.log('[DEBUG] IDs para enviar:', listaAgendaIds);
-    
-    if (!confirm(`SoftRoute\nDeseja criar o Lote "${guialoteNum}" com ${checkboxes.length} agendamento(s)?`)) {
-        return;
-    }
-
-    const btnSalvar = document.querySelector('.toolbar-lote .btn-toolbar');
-    const btnOriginalText = btnSalvar.innerHTML;
-    
-    // Trava o botão
-    btnSalvar.disabled = true;
-    btnSalvar.innerHTML = '<i class="ace-icon fa fa-spinner fa-spin"></i> Criando Lote...';
-
-    try {
-        console.log('[DEBUG] Enviando fetch para /menu/guia/lote/criarLote');
-        
-        // ✅ ADICIONANDO TIMEOUT DE 30 SEGUNDOS
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000);
-
-        const resp = await fetch('/menu/guia/lote/criarLote', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                listaAgendaIds: listaAgendaIds,
-                guialote_num_externo: guialoteNum,
-                guialote_senha_externa: null,
-                guialote_valor: parseFloat(guialoteGuialotevalor.replace(',', '.')) || 0,
-				guialote_status: document.getElementById('guialoteStatus').value  // ✅ ADICIONAR ESTA LINHA
-            }),
-            signal: controller.signal // ✅ Usa o controller
-        });
-        
-        clearTimeout(timeoutId); // Cancela o timeout se a requisição completou
-        console.log('[DEBUG] Resposta recebida. Status:', resp.status);
-
-        // Verificação de segurança do JSON
-        const contentType = resp.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-            const text = await resp.text();
-            console.error('[ERRO] Resposta não é JSON:', text.substring(0, 200));
-            throw new Error('Resposta do servidor não é JSON. Verifique os logs do backend.');
-        }
-
-        const result = await resp.json();
-        console.log('[DEBUG] Resultado JSON:', result);
-
-        if (result.ok) {
-            btnSalvar.classList.add('btn-success-pulse');
-            btnSalvar.innerHTML = '<i class="ace-icon fa fa-check"></i> Lote Criado!';
-            alert(`✅ LOTE CRIADO COM SUCESSO!\n📦 Lote: ${guialoteNum}\n📋 Agendamentos vinculados: ${listaAgendaIds.length}`);
-            setTimeout(() => location.reload(), 2000);
-        } else {
-            throw new Error(result.message || 'Erro ao criar lote (backend retornou ok:false)');
-        }
-        
-    } catch (err) {
-        console.error('[ERRO CRÍTICO criarLote]', err);
-        if (err.name === 'AbortError') {
-            alert('❌ Timeout: A requisição demorou mais de 30s. Verifique a conexão com o banco ou se o backend travou.');
-        } else {
-            alert(`❌ Erro ao criar Lote: ${err.message}`);
-        }
-    } finally {
-        // ✅ GARANTIA: Sempre libera o botão, deu certo ou errado
-        console.log('[DEBUG] Entrou no finally - liberando botão');
-        btnSalvar.disabled = false;
-        btnSalvar.innerHTML = btnOriginalText;
-    }
-}
-		
-		</script>
+				const resp = await fetch('/menu/guia/lote/criarLote', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						listaAgendaIds: listaAgendaIds,
+						guialote_num_externo: guialoteNum,
+						guialote_numprotocolo: document.getElementById('guialoteNumprotocolo').value.trim() || null,  // ✅ ADICIONADO
+						guialote_dataenvio: document.getElementById('guialoteDataenvio').value || null,  // ✅ ADICIONADO
+						guialote_guialotevalor: parseFloat(guialoteGuialotevalor.replace(',', '.')) || 0,
+						guialote_status: $('#guialoteStatus').val()  // ✅ jQuery para Chosen!
+					}),
+					signal: controller.signal
+				});
+				
+				clearTimeout(timeoutId);
+				console.log('[DEBUG] Resposta recebida. Status:', resp.status);
+				
+				const contentType = resp.headers.get('content-type');
+				if (!contentType || !contentType.includes('application/json')) {
+					const text = await resp.text();
+					console.error('[ERRO] Resposta não é JSON:', text.substring(0, 200));
+					throw new Error('Resposta do servidor não é JSON. Verifique os logs do backend.');
+				}
+				
+				const result = await resp.json();
+				console.log('[DEBUG] Resultado JSON:', result);
+				
+				if (result.ok) {
+					btnSalvar.classList.add('btn-success-pulse');
+					btnSalvar.innerHTML = '<i class="ace-icon fa fa-check"></i> Lote Criado!';
+					alert(`✅ LOTE CRIADO COM SUCESSO!\n📦 Lote: ${guialoteNum}\n📋 Agendamentos vinculados: ${listaAgendaIds.length}`);
+					setTimeout(() => location.reload(), 2000);
+				} else {
+					throw new Error(result.message || 'Erro ao criar lote (backend retornou ok:false)');
+				}
+			} catch (err) {
+				console.error('[ERRO CRÍTICO criarLote]', err);
+				if (err.name === 'AbortError') {
+					alert('❌ Timeout: A requisição demorou mais de 30s. Verifique a conexão com o banco ou se o backend travou.');
+				} else {
+					alert(`❌ Erro ao criar Lote: ${err.message}`);
+				}
+			} finally {
+				console.log('[DEBUG] Entrou no finally - liberando botão');
+				btnSalvar.disabled = false;
+				btnSalvar.innerHTML = btnOriginalText;
+			}
+		}
+	
+	</script>
 </head>
 <body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 	<div class="main-container ace-save-state" id="main-container">
@@ -1022,11 +1026,11 @@
 								</h5>
 								<div class="form-inline">
 									<div class="form-group">
-										<label>Número do Lote (Protocolo)</label>
+										<label>Número do Lote</label>
 										<input type="text" id="guialoteNum" placeholder="Ex: 12345678" />
 									</div>
 									<div class="form-group">
-										<label>Data do Protocolo</label>
+										<label>Data do Lote</label>
 										<input type="date" id="guialoteNumdatacad" />
 									</div>
 									<div class="form-group">
@@ -1034,8 +1038,17 @@
 										<input type="text" id="guialoteGuialotevalor" placeholder="0,00" />
 									</div>
 									<div class="form-group">
+										<label>N.Protocolo / Remessa</label>
+										<input type="text" id="guialoteNumprotocolo" placeholder="Ex: 12345678" />
+									</div>
+									<div class="form-group">
+										<label>Data do Envio do Lote</label>
+										<input type="date" id="guialoteDataenvio" />
+									</div>
+									
+									<div class="form-group">
 										<label>Status</label>
-										<select id="guialoteStatus" class="chosen-select">
+										<select id="guialoteStatus" name="guialoteStatus" class="chosen-select">
 											<option value="Aberto">Aberto</option>
 											<option value="Enviado">Enviado</option>
 											<option value="Fechado">Fechado</option>
@@ -1079,7 +1092,7 @@
 															<span class="lbl"></span>
 														</label>
 													</th>
-													<th width="100px;">Data</th>
+													<th width="90px;">Data</th>
 													<th width="70px;">Hora</th>
 													<th>Beneficiário</th>
 													<th>Convênio</th>
@@ -1087,9 +1100,9 @@
 													<th>Terapia</th>
 													<th>Evento</th>
 													<th width="70px;">Evolução</th>
-													<th>Guia</th>
-													<th width="100px;">Data guia</th>
-													<th>Senha</th>
+													<th width="100px;">Guia</th>
+													<th width="90px;">Data guia</th>
+													<th width="100px;">Senha</th>
 													<th width="90px;">Data Senha</th>
 													<th width="90px;">Lote</th>
 													<th width="90px;">Ação</th>
@@ -1151,21 +1164,21 @@
 															<input type="text" name="guia_num{{_id}}" value="{{agenda_guia.guia_num}}" style="width:100%; padding:2px; font-size:12px;" />
 														</td>
 														<td>
-															<input type="date" name="dataguia_{{_id}}" 
+															<input type="date"  name="dataguia_{{_id}}" 
 																{{#if agenda_guia.guia_numdatacad}}
 																	value="{{#dataISOToDate agenda_guia.guia_numdatacad}}{{/dataISOToDate}}"
 																{{/if}}
-																style="width:100%; padding:2px; font-size:12px;" />
+																style="width:90px; padding:2px; font-size:11px;" />
 														</td>
 														<td>
 															<input type="text" name="senha_{{_id}}" value="{{agenda_guia.guia_senha}}" style="width:100%; padding:2px; font-size:12px;" />
 														</td>
-														<td>
+														<td >
 															<input type="date" name="datasenha_{{_id}}" 
 																{{#if agenda_guia.guia_senhadatacad}}
 																	value="{{#dataISOToDate agenda_guia.guia_senhadatacad}}{{/dataISOToDate}}"
 																{{/if}}
-																style="width:100%; padding:2px; font-size:12px;" />
+																style="width:90px; padding:2px; font-size:11px;" />
 														</td>
 														<td>
 															{{#if agenda_loteid}}
@@ -1191,6 +1204,7 @@
 																		<strong style="display: block; margin-bottom: 4px; color: #667eea;">📦 Dados do Lote</strong>
 																		{{#if lote.guialoteQtatend}}<div><strong>Qtd. Agend.:</strong> {{lote.guialoteQtatend}}</div>{{/if}}
 																		{{#if lote.guialoteNumdatacad}}<div><strong>Data Cad.:</strong> {{#dataISOToDate lote.guialoteNumdatacad}}{{/dataISOToDate}}</div>{{/if}}
+																		{{#if lote.guialoteNumprotocolo}}<div><strong>Cad. por:</strong> {{lote.guialoteNumprotocolo}}</div>{{/if}}
 																		{{#if lote.guialoteDataenvio}}<div><strong>Envio:</strong> {{#dataISOToDate lote.guialoteDataenvio}}{{/dataISOToDate}}</div>{{/if}}
 																		{{#if lote.guialoteUsucad}}<div><strong>Cad. por:</strong> {{lote.guialoteUsucad}}</div>{{/if}}
 																	</span>

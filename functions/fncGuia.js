@@ -407,164 +407,164 @@ module.exports = {FiltroEvoatend,
         }
     },
     // ============================================
-// SALVAR GUIA EM MASSA - COM SEGURANÇA
-// ============================================
-adicionarGuiaMassa: async (req, res) => {
-    let db = req.cookies['preferredDb'];
-    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    
-    try {
-        const { updates } = req.body;
+    // SALVAR GUIA EM MASSA - COM SEGURANÇA
+    // ============================================
+    adicionarGuiaMassa: async (req, res) => {
+        let db = req.cookies['preferredDb'];
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         
-        if (!Array.isArray(updates) || updates.length === 0) {
-            return res.json({ 
-                ok: false, 
-                message: 'Nenhum registro para atualizar' 
-            });
-        }
-
-        const agora = new Date().toISOString();
-        const idUsu = String(req.cookies['idUsu']);
-
-        const resultados = {
-            atualizados: [],
-            ignorados: [],
-            erros: []
-        };
-
-        for (const update of updates) {
-            const { agendaId, guia_num, guia_numdatacad, guia_senha, guia_senhadatacad } = update;
-
-            try {
-                // ✅ BUSCAR AGENDA ATUAL PARA VERIFICAR DADOS EXISTENTES
-                const agenda = await Agenda.findById(agendaId).lean();
-
-                if (!agenda) {
-                    resultados.erros.push({
-                        agendaId,
-                        motivo: 'Agenda não encontrada'
-                    });
-                    continue;
-                }
-
-                const guiaAtual = agenda.agenda_guia || {};
-                
-                // ✅ VERIFICAR SE JÁ EXISTEM DADOS NOS CAMPOS
-                const camposComDados = [];
-                const camposParaAtualizar = {};
-
-                // Verificar Guia Número
-                if (guia_num && guia_num.trim() !== '') {
-                    if (guiaAtual.guia_num && guiaAtual.guia_num.trim() !== '') {
-                        camposComDados.push('guia_num');
-                    } else {
-                        camposParaAtualizar['agenda_guia.guia_num'] = guia_num;
-                    }
-                }
-
-                // Verificar Data Guia
-                if (guia_numdatacad) {
-                    if (guiaAtual.guia_numdatacad) {
-                        camposComDados.push('guia_numdatacad');
-                    } else {
-                        camposParaAtualizar['agenda_guia.guia_numdatacad'] = guia_numdatacad;
-                    }
-                }
-
-                // Verificar Senha
-                if (guia_senha && guia_senha.trim() !== '') {
-                    if (guiaAtual.guia_senha && guiaAtual.guia_senha.trim() !== '') {
-                        camposComDados.push('guia_senha');
-                    } else {
-                        camposParaAtualizar['agenda_guia.guia_senha'] = guia_senha;
-                    }
-                }
-
-                // Verificar Data Senha
-                if (guia_senhadatacad) {
-                    if (guiaAtual.guia_senhadatacad) {
-                        camposComDados.push('guia_senhadatacad');
-                    } else {
-                        camposParaAtualizar['agenda_guia.guia_senhadatacad'] = guia_senhadatacad;
-                    }
-                }
-
-                // ✅ SE HOUVER CAMPOS COM DADOS EXISTENTES, IGNORAR ESTE REGISTRO
-                if (camposComDados.length > 0) {
-                    resultados.ignorados.push({
-                        agendaId,
-                        camposComDados,
-                        dadosExistentes: {
-                            guia_num: guiaAtual.guia_num,
-                            guia_numdatacad: guiaAtual.guia_numdatacad,
-                            guia_senha: guiaAtual.guia_senha,
-                            guia_senhadatacad: guiaAtual.guia_senhadatacad
-                        }
-                    });
-                    continue;
-                }
-
-                // ✅ SE NÃO HOUVER DADOS EXISTENTES, PROSSEGUIR COM A ATUALIZAÇÃO
-                if (Object.keys(camposParaAtualizar).length > 0) {
-                    // Verificar se é primeiro cadastro ou edição
-                    const setObj = { ...camposParaAtualizar };
-
-                    if (!guiaAtual.guia_datacad) {
-                        // Primeiro cadastro
-                        setObj['agenda_guia.guia_usucad'] = idUsu;
-                        setObj['agenda_guia.guia_datacad'] = agora;
-                    } else {
-                        // Edição - adicionar ao log
-                        const usuediAtual = guiaAtual.guia_usuedi || '';
-                        const dataediAtual = guiaAtual.guia_dataedi || '';
-
-                        setObj['agenda_guia.guia_usuedi'] = usuediAtual ? `${usuediAtual},${idUsu}` : idUsu;
-                        setObj['agenda_guia.guia_dataedi'] = dataediAtual ? `${dataediAtual},${agora}` : agora;
-                    }
-
-                    await Agenda.updateOne(
-                        { _id: agendaId },
-                        { $set: setObj }
-                    );
-
-                    resultados.atualizados.push({
-                        agendaId,
-                        camposAtualizados: Object.keys(camposParaAtualizar)
-                    });
-                }
-
-            } catch (err) {
-                console.error(`[ERRO ao processar agenda ${agendaId}]`, err);
-                resultados.erros.push({
-                    agendaId,
-                    motivo: err.message || 'Erro desconhecido'
+        try {
+            const { updates } = req.body;
+            
+            if (!Array.isArray(updates) || updates.length === 0) {
+                return res.json({ 
+                    ok: false, 
+                    message: 'Nenhum registro para atualizar' 
                 });
             }
-        }
 
-        // ✅ RETORNAR RESULTADOS DETALHADOS
-        return res.json({
-            ok: true,
-            count: resultados.atualizados.length,
-            atualizados: resultados.atualizados,
-            ignorados: resultados.ignorados,
-            erros: resultados.erros,
-            resumo: {
-                total: updates.length,
-                atualizados: resultados.atualizados.length,
-                ignorados: resultados.ignorados.length,
-                erros: resultados.erros.length
+            const agora = new Date().toISOString();
+            const idUsu = String(req.cookies['idUsu']);
+
+            const resultados = {
+                atualizados: [],
+                ignorados: [],
+                erros: []
+            };
+
+            for (const update of updates) {
+                const { agendaId, guia_num, guia_numdatacad, guia_senha, guia_senhadatacad } = update;
+
+                try {
+                    // ✅ BUSCAR AGENDA ATUAL PARA VERIFICAR DADOS EXISTENTES
+                    const agenda = await Agenda.findById(agendaId).lean();
+
+                    if (!agenda) {
+                        resultados.erros.push({
+                            agendaId,
+                            motivo: 'Agenda não encontrada'
+                        });
+                        continue;
+                    }
+
+                    const guiaAtual = agenda.agenda_guia || {};
+                    
+                    // ✅ VERIFICAR SE JÁ EXISTEM DADOS NOS CAMPOS
+                    const camposComDados = [];
+                    const camposParaAtualizar = {};
+
+                    // Verificar Guia Número
+                    if (guia_num && guia_num.trim() !== '') {
+                        if (guiaAtual.guia_num && guiaAtual.guia_num.trim() !== '') {
+                            camposComDados.push('guia_num');
+                        } else {
+                            camposParaAtualizar['agenda_guia.guia_num'] = guia_num;
+                        }
+                    }
+
+                    // Verificar Data Guia
+                    if (guia_numdatacad) {
+                        if (guiaAtual.guia_numdatacad) {
+                            camposComDados.push('guia_numdatacad');
+                        } else {
+                            camposParaAtualizar['agenda_guia.guia_numdatacad'] = guia_numdatacad;
+                        }
+                    }
+
+                    // Verificar Senha
+                    if (guia_senha && guia_senha.trim() !== '') {
+                        if (guiaAtual.guia_senha && guiaAtual.guia_senha.trim() !== '') {
+                            camposComDados.push('guia_senha');
+                        } else {
+                            camposParaAtualizar['agenda_guia.guia_senha'] = guia_senha;
+                        }
+                    }
+
+                    // Verificar Data Senha
+                    if (guia_senhadatacad) {
+                        if (guiaAtual.guia_senhadatacad) {
+                            camposComDados.push('guia_senhadatacad');
+                        } else {
+                            camposParaAtualizar['agenda_guia.guia_senhadatacad'] = guia_senhadatacad;
+                        }
+                    }
+
+                    // ✅ SE HOUVER CAMPOS COM DADOS EXISTENTES, IGNORAR ESTE REGISTRO
+                    if (camposComDados.length > 0) {
+                        resultados.ignorados.push({
+                            agendaId,
+                            camposComDados,
+                            dadosExistentes: {
+                                guia_num: guiaAtual.guia_num,
+                                guia_numdatacad: guiaAtual.guia_numdatacad,
+                                guia_senha: guiaAtual.guia_senha,
+                                guia_senhadatacad: guiaAtual.guia_senhadatacad
+                            }
+                        });
+                        continue;
+                    }
+
+                    // ✅ SE NÃO HOUVER DADOS EXISTENTES, PROSSEGUIR COM A ATUALIZAÇÃO
+                    if (Object.keys(camposParaAtualizar).length > 0) {
+                        // Verificar se é primeiro cadastro ou edição
+                        const setObj = { ...camposParaAtualizar };
+
+                        if (!guiaAtual.guia_datacad) {
+                            // Primeiro cadastro
+                            setObj['agenda_guia.guia_usucad'] = idUsu;
+                            setObj['agenda_guia.guia_datacad'] = agora;
+                        } else {
+                            // Edição - adicionar ao log
+                            const usuediAtual = guiaAtual.guia_usuedi || '';
+                            const dataediAtual = guiaAtual.guia_dataedi || '';
+
+                            setObj['agenda_guia.guia_usuedi'] = usuediAtual ? `${usuediAtual},${idUsu}` : idUsu;
+                            setObj['agenda_guia.guia_dataedi'] = dataediAtual ? `${dataediAtual},${agora}` : agora;
+                        }
+
+                        await Agenda.updateOne(
+                            { _id: agendaId },
+                            { $set: setObj }
+                        );
+
+                        resultados.atualizados.push({
+                            agendaId,
+                            camposAtualizados: Object.keys(camposParaAtualizar)
+                        });
+                    }
+
+                } catch (err) {
+                    console.error(`[ERRO ao processar agenda ${agendaId}]`, err);
+                    resultados.erros.push({
+                        agendaId,
+                        motivo: err.message || 'Erro desconhecido'
+                    });
+                }
             }
-        });
 
-    } catch (err) {
-        console.error('[ERRO adicionarGuiaMassa]', err);
-        return res.status(500).json({ 
-            ok: false, 
-            message: 'Erro ao processar atualização em massa',
-            error: err.message 
-        });
-    }
-},
+            // ✅ RETORNAR RESULTADOS DETALHADOS
+            return res.json({
+                ok: true,
+                count: resultados.atualizados.length,
+                atualizados: resultados.atualizados,
+                ignorados: resultados.ignorados,
+                erros: resultados.erros,
+                resumo: {
+                    total: updates.length,
+                    atualizados: resultados.atualizados.length,
+                    ignorados: resultados.ignorados.length,
+                    erros: resultados.erros.length
+                }
+            });
+
+        } catch (err) {
+            console.error('[ERRO adicionarGuiaMassa]', err);
+            return res.status(500).json({ 
+                ok: false, 
+                message: 'Erro ao processar atualização em massa',
+                error: err.message 
+            });
+        }
+    },
 
 }

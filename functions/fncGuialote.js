@@ -170,6 +170,7 @@ filtraGuialotelis(req, res, resposta) {
                             a.lote = {
                                 guialoteNum: a.agenda_loteid.guialote_num || null,
                                 guialoteNumdatacad: a.agenda_loteid.guialote_numdatacad || null,
+                                guialoteNumprotocolo: a.agenda_loteid.guialote_numprotocolo || null, // ✅ Alguns conv"enio tem data de protocolo de envio pois estao na base deles mas nao sao processados
                                 guialoteDataenvio: a.agenda_loteid.guialote_dataenvio || null,
                                 guialoteGuialotevalor: a.agenda_loteid.guialote_guialotevalor || null,
                                 guialoteStatus: a.agenda_loteid.guialote_status || null,
@@ -197,6 +198,7 @@ filtraGuialotelis(req, res, resposta) {
                             console.log("→ guialoteGuialotevalor:", primeiraAgendaComLote.lote.guialoteGuialotevalor);
                             console.log("→ guialoteQtatend:", primeiraAgendaComLote.lote.guialoteQtatend);
                             console.log("→ guialoteNumdatacad:", primeiraAgendaComLote.lote.guialoteNumdatacad);
+                            console.log("→ guialoteNumprotocolo:", primeiraAgendaComLote.lote.guialoteNumprotocolo);
                             console.log("→ guialoteDataenvio:", primeiraAgendaComLote.lote.guialoteDataenvio);
                             console.log("→ guialoteUsucad:", primeiraAgendaComLote.lote.guialoteUsucad);
                             console.log("→ guialoteAgendas (count):", primeiraAgendaComLote.lote.guialoteAgendas?.length || 0);
@@ -335,6 +337,10 @@ filtraGuialotelis(req, res, resposta) {
                 agendaId,
                 guialote_num,
                 guialote_numdatacad,
+                guialote_numprotocolo, // Alguns convênios emitem protocolo quando o lote é enviado
+                guialote_dataenvio, // Alguns convênios emitem protocolo quando o lote é enviado e a data sempre diferete da criação do lote no sistema deles
+                guialote_guialotevalor,
+                guialote_status,
                 guialote_senha,
                 guialote_senhadatacad
             } = req.body;
@@ -542,7 +548,14 @@ filtraGuialotelis(req, res, resposta) {
     console.log('[BACKEND] Modelos carregados');
 
     try {
-        const { listaAgendaIds, guialote_valor, guialote_num_externo } = req.body;
+       const { 
+            listaAgendaIds, 
+            guialote_valor, 
+            guialote_num_externo,
+            guialote_numprotocolo,    // ✅ ADICIONADO
+            guialote_dataenvio,       // ✅ ADICIONADO  
+            guialote_status           // ✅ ADICIONADO
+        } = req.body;
         const idUsu = req.cookies['idUsu'];
         const agora = new Date();
 
@@ -575,12 +588,19 @@ filtraGuialotelis(req, res, resposta) {
         const novoLote = new Guialote({
             guialote_num: guialote_num_externo || null,
             guialote_numdatacad: guialote_num_externo ? agora : null,
+            
+            // ✅ CAMPOS NOVOS - ADICIONAR:
+            guialote_numprotocolo: guialote_numprotocolo || null,
+            guialote_dataenvio: guialote_dataenvio ? new Date(guialote_dataenvio) : null,
+            
             guialote_guialotevalor: guialote_valor || 0,
             guialote_qtatend: idsValidos.length,
             guialote_agendas: idsValidos,
             guialote_usucad: idUsu,
             guialote_datacad: agora,
-            guialote_status: 'Aberto'
+            
+            // ✅ USAR STATUS DO REQ.BODY (não hardcodar):
+            guialote_status: guialote_status || 'Aberto'
         });
 
         await novoLote.save();
