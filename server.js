@@ -296,6 +296,70 @@ const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSc
                     const d = new Date(date);
                     return d.toISOString().slice(0, 10); // YYYY-MM-DD
                 },
+                /**
+                 * Helper Handlebars: {{formataContabil valor}}
+                 * Criado em 20/02/2026 às [HORÁRIO] por Wagner Cintra
+                 * 
+                 * Este helper formata números no padrão contábil brasileiro para exibição em views,
+                 * convertendo o formato decimal americano (ponto como separador decimal) para o
+                 * formato brasileiro (vírgula como separador decimal e ponto como separador de milhar).
+                 * 
+                 * Características:
+                 * - Não adiciona símbolo de moeda (R$), apenas formatação numérica pura
+                 * - Sempre exibe 2 casas decimais (ex: 100 → "100,00")
+                 * - Aplica separador de milhar com ponto (.) conforme padrão ABNT
+                 * - Retorna string vazia para valores nulos, indefinidos, vazios ou NaN
+                 * - Compatível com strings numéricas, números inteiros e decimais
+                 * 
+                 * Exemplos de uso na view:
+                 *   {{formataContabil 1326.79}}        → 1.326,79
+                 *   {{formataContabil lote.valor}}     → 1.326,79 (se valor = 1326.79)
+                 *   {{formataContabil "999.99"}}       → 999,99
+                 *   {{formataContabil null}}           → '' (string vazia)
+                 *   {{formataContabil 0}}              → 0,00
+                 *   {{formataContabil 1234567.89}}     → 1.234.567,89
+                 * 
+                 * Importante:
+                 * - O valor de entrada deve estar no formato decimal (ponto como separador)
+                 * - Para cálculos, use o valor original do banco; este helper é APENAS para exibição
+                 * - O retorno é uma string formatada, não um número (não usar em operações matemáticas)
+                 * - Ideal para tooltips, relatórios e exibição de valores financeiros sem símbolo
+                 */
+                formataContabil: function(valor) {
+                    const habilitarLog = false; // ⬅️ Use false para ocultar logs em produção
+
+                    if (habilitarLog) {
+                        console.log('[Helper formataContabil] Valor recebido:', valor, '| Tipo:', typeof valor);
+                    }
+
+                    // Tratamento de valores nulos, indefinidos ou vazios
+                    if (valor === null || valor === undefined || valor === '') {
+                        if (habilitarLog) console.log('[Helper formataContabil] Valor inválido, retornando string vazia');
+                        return '';
+                    }
+
+                    // Converter para número, tratando strings numéricas
+                    const numero = parseFloat(valor);
+
+                    // Verificar se a conversão resultou em número válido
+                    if (isNaN(numero)) {
+                        if (habilitarLog) console.warn('[Helper formataContabil] NaN após parseFloat, retornando string vazia');
+                        return '';
+                    }
+
+                    // Formatar no padrão brasileiro: 1326.79 → "1.326,79"
+                    // toLocaleString com pt-BR já aplica ponto para milhar e vírgula para decimal
+                    const formatado = numero.toLocaleString('pt-BR', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+
+                    if (habilitarLog) {
+                        console.log('[Helper formataContabil] Valor original:', numero, '| Formatado:', formatado);
+                    }
+
+                    return formatado;
+                },
                 
                 // Helper ifCond
                 /**
