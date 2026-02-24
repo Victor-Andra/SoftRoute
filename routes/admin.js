@@ -2534,6 +2534,26 @@ router.post('/guia/lote/addlote/massa', fncGeral.IsAuthenticated, (req,res) => {
 router.post('/guia/lote/criarLote', fncGeral.IsAuthenticated, (req,res) => {
     fncGuialote.criarLote(req, res);
 })
+
+// Buscar lote para edição
+router.get('/guia/lote/buscar/:id', fncGeral.IsAuthenticated, (req, res) => {
+    fncGuialote.buscarGuialotePorId(req, res);
+})
+
+// Editar lote
+router.post('/guia/lote/editar', fncGeral.IsAuthenticated, (req, res) => {
+    fncGuialote.editarGuialote(req, res);
+})
+
+// Gestão de Lotes - Tela inicial
+router.get('/guia/lote/gestao', fncGeral.IsAuthenticated, (req, res) => {
+    fncGuialote.gestaoGuialote(req, res);
+})
+
+// Gestão de Lotes - Filtrar
+router.post('/guia/lote/gestaofil', fncGeral.IsAuthenticated, (req, res) => {
+    fncGuialote.filtragestaoGuialote(req, res);
+})
 //------------------------------------------------------------------------------------------------
 
 //Menu Minha Agenda Area Tecnicos

@@ -5,6 +5,104 @@
 	<meta charset="utf-8">
 	<title>Lista de Agendamentos com Guias para inserir nos LOTES</title>
 	<style>
+		/* Estilo para badge clicável (duplo clique para editar) */
+		.badge-lote-editavel {
+		cursor: pointer;
+		transition: all 0.2s ease;
+		position: relative;
+		}
+		.badge-lote-editavel:hover {
+		transform: scale(1.05);
+		box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+		}
+		.badge-lote-editavel:active {
+		transform: scale(0.98);
+		}
+		.badge-lote-editavel::after {
+		content: "✎";
+		position: absolute;
+		top: -8px;
+		right: -8px;
+		font-size: 10px;
+		background: #3498db;
+		color: white;
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		opacity: 0;
+		transition: opacity 0.3s;
+		}
+		.badge-lote-editavel:hover::after {
+		opacity: 1;
+		}
+		/* ========== Estilo para os Cards de Estatísticas ========== */
+		.count-card {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			padding: 10px;
+			border-radius: 6px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+			cursor: default;
+			min-height: 60px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			text-align: center;
+		}
+		.count-card:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+		}
+		/* Cores específicas para cada métrica */
+		.count-card.total {        background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); }   /* Roxo - Total */
+		.count-card.convenio {     background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); }   /* Azul - Válidos */
+		.count-card.liminar {      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); }   /* Vermelho - Cancelados */
+		.count-card.particular {   background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); }   /* Verde - Validados */
+		.count-card.warning {      background: linear-gradient(135deg, #f39c12 0%, #d35400 100%); }   /* Laranja - Sem Evolução */
+		.count-card.danger {       background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); }   /* Laranja Escuro - Cancel c/ Evol */
+		.count-card.orphan {       background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%); }   /* Cinza - Órfãos */
+		.count-card.success {      background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%); }   /* Verde Água - Completo */
+		.count-header {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			margin-bottom: 5px;
+		}
+		.count-icon {
+			font-size: 18px;
+		}
+		.count-label {
+			font-size: 11px;
+			font-weight: 500;
+			opacity: 0.95;
+			white-space: nowrap;
+		}
+		.count-value {
+			font-size: 20px;
+			font-weight: 700;
+			line-height: 1.2;
+		}
+		/* Responsivo */
+		@media (max-width: 768px) {
+			.count-card {
+				min-height: 55px;
+				padding: 8px;
+			}
+			.count-value {
+				font-size: 18px;
+			}
+			.count-label {
+				font-size: 10px;
+			}
+			.count-icon {
+				font-size: 16px;
+			}
+		}
     /* Tooltip personalizado - CORRIGIDO */
 		.custom-tooltip {
 			position: relative;
@@ -1043,7 +1141,124 @@
 									</button>
 								</div>
 							</div>
-
+							<!-- ============================================
+							BARRA DE ESTATÍSTICAS DOS LOTES
+							============================================ -->
+							<div class="widget-box">
+								<div class="widget-header">
+									<h4 class="widget-title">
+										<i class="ace-icon fa fa-bar-chart"></i>
+										Estatísticas dos Lotes de Guias
+										<small class="text-muted">({{filtroTipo}}: {{#ifEqual filtroTipo "Ano/Mes"}}{{filtroAno}}/{{filtroMes}}{{else}}{{filtroData}}{{/ifEqual}})</small>
+									</h4>
+								</div>
+								<div class="widget-body">
+									<div class="widget-main">
+										<div class="row">
+											<!-- QA - Total Agendamentos -->
+											<div class="col-xs-6 col-sm-3">
+												<div class="count-card total" title="Total de Agendamentos no período">
+													<div class="count-header">
+														<i class="ace-icon fa fa-calendar count-icon"></i>
+														<span class="count-label">Agendamentos</span>
+													</div>
+													<div class="count-value">{{estatisticas.qa}}</div>
+												</div>
+											</div>
+											<!-- QT - Atendimentos Válidos -->
+											<div class="col-xs-6 col-sm-3">
+												<div class="count-card convenio" title="Atendimentos Válidos (exclui Feriado e Falta Absoluta)">
+													<div class="count-header">
+														<i class="ace-icon fa fa-check-circle count-icon"></i>
+														<span class="count-label">Atendimentos</span>
+													</div>
+													<div class="count-value">{{estatisticas.qt}}</div>
+												</div>
+											</div>
+											<!-- QAC - Cancelados -->
+											<div class="col-xs-6 col-sm-3">
+												<div class="count-card liminar" title="Agendamentos Cancelados (Feriado + Falta Absoluta)">
+													<div class="count-header">
+														<i class="ace-icon fa fa-times-circle count-icon"></i>
+														<span class="count-label">Cancelados</span>
+													</div>
+													<div class="count-value">{{estatisticas.qac}}</div>
+												</div>
+											</div>
+											<!-- QTV - Validados com Evolução -->
+											<div class="col-xs-6 col-sm-3">
+												<div class="count-card particular" title="Atendimentos com Evolução Preenchida">
+													<div class="count-header">
+														<i class="ace-icon fa fa-file-text count-icon"></i>
+														<span class="count-label">Validados</span>
+													</div>
+													<div class="count-value">{{estatisticas.qtv}}</div>
+												</div>
+											</div>
+											<!-- QTSE - Sem Evolução -->
+											<div class="col-xs-6 col-sm-3">
+												<div class="count-card warning" title="Atendimentos Válidos SEM Evolução">
+													<div class="count-header">
+														<i class="ace-icon fa fa-exclamation-triangle count-icon"></i>
+														<span class="count-label">Sem Evolução</span>
+													</div>
+													<div class="count-value">{{estatisticas.qtse}}</div>
+												</div>
+											</div>
+											<!-- QACE - Cancelados com Evolução -->
+											<div class="col-xs-6 col-sm-3">
+												<div class="count-card danger" title="Cancelados com Evolução (inconsistência)">
+													<div class="count-header">
+														<i class="ace-icon fa fa-ban count-icon"></i>
+														<span class="count-label">Cancel c/ Evol</span>
+													</div>
+													<div class="count-value">{{estatisticas.qace}}</div>
+												</div>
+											</div>
+											<!-- ATVO - Órfãos de Guia/Senha -->
+											<div class="col-xs-6 col-sm-3">
+												<div class="count-card orphan" title="Atendimentos Válidos Órfãos de Guia e/ou Senha">
+													<div class="count-header">
+														<i class="ace-icon fa fa-child count-icon"></i>
+														<span class="count-label">Órfãos G/S</span>
+													</div>
+													<div class="count-value">{{estatisticas.atvo}}</div>
+												</div>
+											</div>
+											<!-- QTVA - Com Guia e Senha -->
+											<div class="col-xs-6 col-sm-3">
+												<div class="count-card success" title="Atendimentos com Guia e Senha Cadastradas">
+													<div class="count-header">
+														<i class="ace-icon fa fa-key count-icon"></i>
+														<span class="count-label">Completo G+S</span>
+													</div>
+													<div class="count-value">{{estatisticas.qtva}}</div>
+												</div>
+											</div>
+											<!-- QTVL - Com Lote -->
+											<div class="col-xs-6 col-sm-3">
+												<div class="count-card lote" title="Atendimentos Válidos já vinculados a um Lote">
+													<div class="count-header">
+														<i class="ace-icon fa fa-archive count-icon"></i>
+														<span class="count-label">Com Lote</span>
+													</div>
+													<div class="count-value">{{estatisticas.qtvL}}</div>
+												</div>
+											</div>
+											<!-- QTVLO - Órfãos de Lote -->
+											<div class="col-xs-6 col-sm-3">
+												<div class="count-card lote-orfa" title="Atendimentos Válidos com Guia+Senha mas SEM Lote vinculado (prontos para lotear!)">
+													<div class="count-header">
+														<i class="ace-icon fa fa-ghost count-icon"></i>
+														<span class="count-label">Órfãos Lote</span>
+													</div>
+													<div class="count-value">{{estatisticas.qtvLo}}</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div class="clearfix">
 								<div class="pull-right tableTools-container"></div>
 							</div>
@@ -1167,7 +1382,9 @@
 														<td>
 															{{#if agenda_loteid}}
 																<div class="custom-tooltip">
-																	<span class="badge badge-info">
+																	<span class="badge badge-info badge-lote-editavel" 
+																		data-lote-id="{{agenda_loteid._id}}" 
+																		title="Duplo clique para editar este lote">
 																		<i class="ace-icon fa fa-link"></i> {{lote.guialoteNum}}
 																	</span>
 																	{{#ifEqual lote.guialoteStatus "Aberto"}}
@@ -1272,7 +1489,99 @@
 			</div>
 		</div>
 	</div>
-
+<!-- MODAL DE EDIÇÃO DE LOTE -->
+<div id="modalEditarLote" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title white">
+          <i class="ace-icon fa fa-edit"></i> Editar Lote <span id="modalLoteNum"></span>
+        </h4>
+      </div>
+      <div class="modal-body">
+        <form id="formEditarLote">
+          <input type="hidden" id="loteId" name="loteId">
+          
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Número do Lote</label>
+                <input type="text" id="guialote_num" name="guialote_num" class="form-control" placeholder="Ex: 12345678">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Data do Lote</label>
+                <input type="date" id="guialote_numdatacad" name="guialote_numdatacad" class="form-control">
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Número do Protocolo / Remessa</label>
+                <input type="text" id="guialote_numprotocolo" name="guialote_numprotocolo" class="form-control" placeholder="Ex: 87654321">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Data do Envio</label>
+                <input type="date" id="guialote_dataenvio" name="guialote_dataenvio" class="form-control">
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Valor Total do Lote (R$)</label>
+                <input type="text" id="guialote_guialotevalor" name="guialote_guialotevalor" class="form-control" placeholder="0,00">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label>Status</label>
+                <select id="guialote_status" name="guialote_status" class="form-control">
+                  <option value="Aberto">Aberto</option>
+                  <option value="Enviado">Enviado</option>
+                  <option value="Fechado">Fechado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Log / Observações</label>
+            <textarea id="guialote_log" name="guialote_log" class="form-control" rows="4" placeholder="Adicione observações sobre este lote..."></textarea>
+            <p class="help-block">
+              <strong>ℹ️ Dica:</strong> Use este campo para registrar eventos importantes do lote (ex: "Enviado via SEDEX #123456 em 15/02/2026")
+            </p>
+          </div>
+          
+          <div class="alert alert-info">
+            <strong>⚠️ Atenção:</strong> Ao salvar, o sistema registrará automaticamente:
+            <ul>
+              <li><strong>Usuário:</strong> {{usuarioLogado.usuario_nome}} (ID: {{usuarioLogado._id}})</li>
+              <li><strong>Data/Hora:</strong> Registro automático no momento da edição</li>
+            </ul>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          <i class="ace-icon fa fa-times"></i> Cancelar
+        </button>
+        <button type="button" class="btn btn-success" id="btnSalvarLote">
+          <i class="ace-icon fa fa-save"></i> Salvar Alterações
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			// Inicializar Chosen Select
@@ -1307,7 +1616,138 @@
 			// Inicializar contador
 			atualizarContadorSelecionados();
 		});
-		
+		// ============================================
+// MODAL DE EDIÇÃO DE LOTE
+// ============================================
+
+// ✅ Abrir modal ao clicar 2x no badge do lote
+$(document).on('dblclick', '.badge-lote-editavel', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    const loteId = $(this).data('lote-id');
+    if (loteId && loteId !== 'null' && loteId !== 'undefined') {
+        carregarLoteParaEdicao(loteId);
+    } else {
+        alert('⚠️ Este agendamento não possui um lote vinculado válido para edição.');
+    }
+});
+
+// ✅ Carregar dados do lote via AJAX
+function carregarLoteParaEdicao(loteId) {
+    console.log('[DEBUG] Carregando lote para edição:', loteId);
+    
+    $.ajax({
+        url: '/menu/guia/lote/buscar/' + loteId,
+        method: 'GET',
+        dataType: 'json',
+        success: function(response) {
+            if (response.ok && response.lote) {
+                const lote = response.lote;
+                
+                // Preencher formulário
+                $('#loteId').val(lote._id);
+                $('#guialote_num').val(lote.guialote_num || '');
+                $('#guialote_numdatacad').val(lote.guialote_numdatacad ? formatarDataISO(lote.guialote_numdatacad) : '');
+                $('#guialote_numprotocolo').val(lote.guialote_numprotocolo || '');
+                $('#guialote_dataenvio').val(lote.guialote_dataenvio ? formatarDataISO(lote.guialote_dataenvio) : '');
+                $('#guialote_guialotevalor').val(lote.guialote_guialotevalor ? formatarMoeda(lote.guialote_guialotevalor) : '');
+                $('#guialote_status').val(lote.guialote_status || 'Aberto');
+                $('#guialote_log').val(lote.guialote_log || '');
+                $('#modalLoteNum').text(lote.guialote_num ? `#${lote.guialote_num}` : '(sem número)');
+                
+                // Mostrar modal
+                $('#modalEditarLote').modal('show');
+            } else {
+                alert(`❌ Erro ao carregar dados do lote: ${response.message || 'Desconhecido'}`);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('[ERRO] buscarLote:', error);
+            alert('❌ Erro de comunicação ao carregar lote. Tente novamente.');
+        }
+    });
+}
+
+// ✅ Formatar data ISO para input date
+function formatarDataISO(data) {
+    if (!data) return '';
+    const d = new Date(data);
+    return d.toISOString().split('T')[0];
+}
+
+// ✅ Formatar moeda para exibição
+function formatarMoeda(valor) {
+    if (!valor && valor !== 0) return '';
+    return parseFloat(valor).toLocaleString('pt-BR', { 
+        minimumFractionDigits: 2, 
+        maximumFractionDigits: 2 
+    });
+}
+
+// ✅ Remover formatação para envio
+function removerFormatacaoMoeda(valor) {
+    if (!valor) return 0;
+    return parseFloat(valor.replace(/\./g, '').replace(',', '.')) || 0;
+}
+
+// ✅ Salvar alterações do lote
+$('#btnSalvarLote').on('click', function() {
+    const btn = $(this);
+    btn.prop('disabled', true).html('<i class="ace-icon fa fa-spinner fa-spin"></i> Salvando...');
+    
+    const dados = {
+        loteId: $('#loteId').val(),
+        guialote_num: $('#guialote_num').val().trim() || null,
+        guialote_numdatacad: $('#guialote_numdatacad').val() || null,
+        guialote_numprotocolo: $('#guialote_numprotocolo').val().trim() || null,
+        guialote_dataenvio: $('#guialote_dataenvio').val() || null,
+        guialote_guialotevalor: removerFormatacaoMoeda($('#guialote_guialotevalor').val()),
+        guialote_status: $('#guialote_status').val(),
+        guialote_log: $('#guialote_log').val().trim() || null
+    };
+    
+    // Validação básica
+    if (!dados.loteId) {
+        alert('❌ ID do lote não encontrado.');
+        btn.prop('disabled', false).html('<i class="ace-icon fa fa-save"></i> Salvar Alterações');
+        return;
+    }
+    
+    $.ajax({
+        url: '/menu/guia/lote/editar',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(dados),
+        success: function(response) {
+            if (response.ok) {
+                // ✅ Fechar modal
+                $('#modalEditarLote').modal('hide');
+                
+                // ✅ Feedback visual
+                alert('✅ Lote atualizado com sucesso!\n\nUsuário: ' + response.usuario + '\nData: ' + response.dataEdicao);
+                
+                // ✅ Recarregar página para atualizar dados
+                setTimeout(() => location.reload(), 500);
+            } else {
+                alert('❌ Erro ao salvar: ' + (response.message || 'Desconhecido'));
+                btn.prop('disabled', false).html('<i class="ace-icon fa fa-save"></i> Salvar Alterações');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('[ERRO] editarLote:', error);
+            alert('❌ Erro de comunicação ao salvar lote. Tente novamente.');
+            btn.prop('disabled', false).html('<i class="ace-icon fa fa-save"></i> Salvar Alterações');
+        }
+    });
+});
+
+// ✅ Fechar modal ao clicar fora ou pressionar ESC
+$('#modalEditarLote').on('hidden.bs.modal', function() {
+    // Limpar formulário ao fechar
+    $('#formEditarLote')[0].reset();
+    $('#loteId').val('');
+    $('#modalLoteNum').text('');
+});
 	</script>
 	
 </body>
