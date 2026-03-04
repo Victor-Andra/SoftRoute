@@ -3825,8 +3825,7 @@ tabdimBeneValFiltro(req, res) {
         let conv_nome;
         let conv_id;
         let bene_nome;
-        let terapiaAtend;
-        let terapeutaAtend;
+        let ultimoHorarioSala = {};
         
         //Filtro persistente
         let filtro = {
@@ -3903,114 +3902,75 @@ tabdimBeneValFiltro(req, res) {
                                 at.forEach((atend) => {
                                     // ▼▼▼ NORMALIZAR DADOS ▼▼▼
                                     const categorias = (atend.atend_categoria || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                                    const org = (atend.atend_org || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                                     const ehFixo = atend.atend_fixo === true || atend.atend_fixo === "true";
                                     const dataAtend = fncGeral.getData(atend.atend_atenddata); // Formato: DD/MM/YYYY
                                     
-                                    // ▼▼▼ IDENTIFICAR TERAPEUTA CORRETO ▼▼▼
-                                    let terapeutaIdUsado;
-                                    
-                                    if (ehFixo) {
-                                        terapeutaIdUsado = atend.atend_fixoterapeutaid;
-                                    } else {
-                                        switch (categorias) {
-                                            case "Substituicao":
-                                            case "Substituição":
-                                                terapeutaIdUsado = atend.atend_mergeterapeutaid;
-                                                break;
-                                            case "SubstitutoFixo":
-                                                terapeutaIdUsado = atend.atend_fixoterapeutaid;
-                                                break;
-                                            default:
-                                                terapeutaIdUsado = atend.atend_terapeutaid;
-                                                break;
-                                        }
-                                    }
-                                    
-                                    // ▼▼▼ VERIFICAR PERFIL DO TERAPEUTA (DOIS PERFIS AT) ▼▼▼
-                                    const perfilId = terapeutaIdUsado ? lookupPerfilTerapeuta[terapeutaIdUsado.toString()] : null;
-                                    const ehTerapeutaAT = perfilId === "6242191fa12aa557219a0fd9" || perfilId === "644742e378166939169f82a1" || perfilId === "62dea752ea444f5b7a02b449";
-                                    
-                                    // ▼▼▼ IDENTIFICAR TERAPIA CORRETA PARA VERIFICAR SE É "ABA AT" ▼▼▼
-                                    let terapiaIdParaVerificar;
-                                    
-                                    if (org === "Padrão") {
-                                        terapiaIdParaVerificar = atend.atend_terapiaid;
-                                    } else if (org === "Administrativo") {
-                                        if (categorias === "Substituicao" || categorias === "Substituição") {
-                                            terapiaIdParaVerificar = atend.atend_mergeterapiaid;
-                                        } else if (categorias === "SubstitutoFixo") {
-                                            terapiaIdParaVerificar = atend.atend_fixoterapiaid;
-                                        } else {
-                                            terapiaIdParaVerificar = atend.atend_terapiaid;
-                                        }
-                                    } else {
-                                        terapiaIdParaVerificar = atend.atend_terapiaid;
-                                    }
-                                    
-                                    // ▼▼▼ VERIFICAR SE A TERAPIA CONTÉM "ABA AT" NO NOME ▼▼▼
-                                    const ehTerapiaABAAT = terapiaIdParaVerificar ? lookupTerapiaABAAT[terapiaIdParaVerificar.toString()] : false;
-                                    
-                                    // ▼▼▼ AJUSTAR HORÁRIO PARA EXIBIÇÃO ▼▼▼
                                     if (porHoras === "sim") {
-                                        let horaIni = atend.atend_atendhora.substring(0,2);
-                                        let minutoIni = atend.atend_atendhora.substring(3,5);
-                                        
-                                        // ✅ VERIFICAR SE É AT + ABA AT PARA APLICAR AJUSTE
-                                        const aplicarAjusteAT = ehTerapeutaAT && ehTerapiaABAAT;
-                                        
-                                        // ✅ RESETAR CONTADOR QUANDO MUDAR DE DATA
-                                        if (aplicarAjusteAT) {
-                                            const chaveTerapeuta = terapeutaIdUsado.toString();
-                                            
-                                            // Se existe registro anterior E a data é diferente, resetar
-                                            if (ultimoHorarioTerapeuta[chaveTerapeuta] && 
-                                                ultimoHorarioTerapeuta[chaveTerapeuta].data !== dataAtend) {
-                                                // Mudou de data, resetar o contador
-                                                delete ultimoHorarioTerapeuta[chaveTerapeuta];
-                                            }
-                                            
-                                            // ✅ AJUSTE EM CASCATA (usar horário final anterior como início)
-                                            if (ultimoHorarioTerapeuta[chaveTerapeuta]) {
-                                                horaIni = ultimoHorarioTerapeuta[chaveTerapeuta].hora;
-                                                minutoIni = ultimoHorarioTerapeuta[chaveTerapeuta].minuto;
-                                            }
-                                        }
-                                        
-                                        // ✅ CALCULAR HORA FINAL (60min para AT+ABA AT, 40min para outros)
-                                        let duracao = aplicarAjusteAT ? 60 : 40;
-                                        let horaFim = parseInt(horaIni);
-                                        let minutoFim = parseInt(minutoIni) + duracao;
-                                        
-                                        // ✅ AJUSTAR OVERFLOW DE MINUTOS E HORAS
-                                        while (minutoFim >= 60) {
-                                            minutoFim -= 60;
-                                            horaFim += 1;
-                                        }
-                                        
-                                        // ✅ LIMITAR HORAS A 24
-                                        horaFim = horaFim % 24;
-                                        
-                                        // ✅ FORMATAR COM ZERO À ESQUERDA
-                                        horaIni = ("" + horaIni).padStart(2, '0');
-                                        minutoIni = ("" + minutoIni).padStart(2, '0');
-                                        horaFim = ("" + horaFim).padStart(2, '0');
-                                        minutoFim = ("" + minutoFim).padStart(2, '0');
-                                        
-                                        // ✅ SALVAR PARA PRÓXIMA SESSÃO DO MESMO TERAPEUTA (com data)
-                                        if (aplicarAjusteAT) {
-                                            ultimoHorarioTerapeuta[terapeutaIdUsado.toString()] = {
-                                                hora: horaFim,
-                                                minuto: minutoFim,
-                                                data: dataAtend // Armazenar data para resetar no próximo dia
-                                            };
-                                        }
-                                        
-                                        rab.dt = fncGeral.getData(atend.atend_atenddata) + " - " + horaIni + ":" + minutoIni + "/" + horaFim + ":" + minutoFim;
-                                        rab.hora = horaFim + ":" + minutoFim;
-                                        rab.horaIni = horaIni + ":" + minutoIni;
-                                        rab.horaFim = horaFim + ":" + minutoFim;
+
+                                    const SALA_ESCOLA = "6368fe35c2cdb92ac6d914be";
+                                    const ehSalaEscola = String(atend.atend_salaid) === SALA_ESCOLA;
+
+                                    const dataBase = new Date(atend.atend_atenddata);
+                                    let [horaIni, minutoIni] = atend.atend_atendhora.split(":").map(Number);
+
+                                    const chaveSala = atend.atend_salaid.toString();
+
+                                    // 🔁 RESET se mudou a data
+                                    if (
+                                        ehSalaEscola &&
+                                        ultimoHorarioSala[chaveSala] &&
+                                        ultimoHorarioSala[chaveSala].data !== dataAtend
+                                    ) {
+                                        delete ultimoHorarioSala[chaveSala];
+                                    }
+
+                                    // 🔁 Se for sala escola e já teve atendimento antes no dia
+                                    if (ehSalaEscola && ultimoHorarioSala[chaveSala]) {
+                                        horaIni = ultimoHorarioSala[chaveSala].hora;
+                                        minutoIni = ultimoHorarioSala[chaveSala].minuto;
+                                    }
+
+                                    const inicio = new Date(dataBase);
+                                    inicio.setHours(horaIni, minutoIni, 0, 0);
+
+                                    let fim;
+
+                                    if (ehSalaEscola) {
+                                        // 🔥 duração fixa 1 hora
+                                        fim = new Date(inicio);
+                                        fim.setMinutes(fim.getMinutes() + 60);
                                     } else {
+                                        // 🔹 NÃO ALTERA → usa duração padrão já existente (ex: 40 min)
+                                        fim = new Date(inicio);
+                                        fim.setMinutes(fim.getMinutes() + 40);
+                                    }
+
+                                    const horaIniFormat = inicio.getHours().toString().padStart(2, "0");
+                                    const minutoIniFormat = inicio.getMinutes().toString().padStart(2, "0");
+
+                                    const horaFim = fim.getHours().toString().padStart(2, "0");
+                                    const minutoFim = fim.getMinutes().toString().padStart(2, "0");
+
+                                    // 🔁 Salvar cascata SOMENTE para sala escola
+                                    if (ehSalaEscola) {
+                                        ultimoHorarioSala[chaveSala] = {
+                                            hora: fim.getHours(),
+                                            minuto: fim.getMinutes(),
+                                            data: dataAtend
+                                        };
+                                    }
+
+                                    rab.dt =
+                                        fncGeral.getData(atend.atend_atenddata) +
+                                        " - " +
+                                        horaIniFormat + ":" + minutoIniFormat +
+                                        "/" +
+                                        horaFim + ":" + minutoFim;
+
+                                    rab.hora = horaFim + ":" + minutoFim;
+                                    rab.horaIni = horaIniFormat + ":" + minutoIniFormat;
+                                    rab.horaFim = horaFim + ":" + minutoFim;
+                                } else {
                                         rab.dt = fncGeral.getData(atend.atend_atenddata);
                                     }
                                     rab.dataDia = fncGeral.getData(atend.atend_atenddata);
