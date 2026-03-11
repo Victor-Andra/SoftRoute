@@ -96,7 +96,21 @@
 				document.getElementById('dataFinal').value = fulldate;
 				console.log("dataFinal:"+document.getElementById('dataFinal').value);
 			}
+			function testeConfirmCopiaOLD(acao){
+				if(confirm("Tem certeza que quer copiar a semana?")){
+					alert("Aguarde alguns instantes, isso pode demorar um pouco");
+					this.mudaAcao(acao);
+					document.getElementById("acaoForm").submit();
+				}
+			}
 			function testeConfirmCopia(acao){
+				// Validação mínima do campo dataFil por Wagner 09-03-2026
+				var dataFil = document.getElementById("dataFil").value;
+				if (dataFil === '') {
+					alert("O campo de data é utilizado para determinar a semana e precisa ser preenchido!");
+					return;
+				}
+				
 				if(confirm("Tem certeza que quer copiar a semana?")){
 					alert("Aguarde alguns instantes, isso pode demorar um pouco");
 					this.mudaAcao(acao);

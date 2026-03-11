@@ -1528,6 +1528,15 @@ router.post('/agenda/filPessoalSemanal', fncGeral.IsAuthenticated, (req,res) =>{
     fncAgenda.filtraAgendaPessoalSemanal(req, res);
 })
 
+//Agenda em Lista 
+router.get('/agenda/agendaListaGeral', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.carregaAgendaListaGeral(req, res);
+})
+
+router.post('/agenda/filPessoalSemanal', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.filtraAgendaPessoalSemanal(req, res);
+})
+
 router.get('/agenda/evolucao/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let resposta = new Resposta()
     resposta.texto = ""

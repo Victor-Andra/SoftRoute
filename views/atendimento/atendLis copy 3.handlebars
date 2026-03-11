@@ -4,6 +4,37 @@
 		<meta charset="utf-8">
 		<title>Lista de Atendimentos</title>
 		<style>
+			/* Chosen Select minimalista - compatível com aceAdmin */
+			.chosen-container .chosen-single {
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				box-shadow: none !important;
+				background: white !important;
+				height: 30px !important;
+				line-height: 30px !important;
+				font-size: 12px !important;
+			}
+			.chosen-container .chosen-single:hover {
+				border-color: #868e96 !important;
+			}
+			.chosen-container-active.chosen-with-drop .chosen-single {
+				border-color: #868e96 !important;
+				background: white !important;
+			}
+			.chosen-container .chosen-drop {
+				border: 1px solid #ced4da !important;
+				border-top: none !important;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+			}
+			/* Selects de Beneficiário/Terapeuta mais largos */
+			#divAtendBeneficiario .chosen-container,
+			#divAtendTerapeuta .chosen-container {
+				width: 360px !important;
+			}
+			#divAtendBeneficiario .chosen-single,
+			#divAtendTerapeuta .chosen-single {
+				width: 358px !important;
+			}
         	/*Tooltip personalizado */
             .custom-tooltip {
                 position: relative;
@@ -131,21 +162,30 @@
 			}
 			function trocaFilpessoa() {
 				let fillTipopessoa = document.getElementById("atendTipoPessoa").value;
+				
+				// ✅ Esconde DIVs + containers Chosen
+				$('#divAtendBeneficiario').hide();
+				$('#divAtendTerapeuta').hide(); 
+				$('#divAtendConv').hide();
+				
+				if($('#atendBeneficiario_chosen').length) $('#atendBeneficiario_chosen').hide();
+				if($('#atendTerapeuta_chosen').length) $('#atendTerapeuta_chosen').hide();
+				if($('#atendConv_chosen').length) $('#atendConv_chosen').hide();
+				
 				if(fillTipopessoa == "Geral"){
-					document.getElementById("divAtendBeneficiario").hidden = true;
-					document.getElementById("divAtendTerapeuta").hidden = true;
-					document.getElementById("divAtendConv").hidden = true
-				} else if(fillTipopessoa == "Beneficiario"){
-					document.getElementById("divAtendBeneficiario").hidden = false;
-					document.getElementById("divAtendTerapeuta").hidden = true;
-					document.getElementById("divAtendConv").hidden = true
-				} else if(fillTipopessoa == "Convenio"){
-					document.getElementById("divAtendBeneficiario").hidden = true;
-					document.getElementById("divAtendTerapeuta").hidden = true;
-					document.getElementById("divAtendConv").hidden = false
-				} else {
-					document.getElementById("divAtendBeneficiario").hidden = true;
-					document.getElementById("divAtendTerapeuta").hidden = false;
+					// Nenhum campo específico
+				} 
+				else if(fillTipopessoa == "Beneficiario"){
+					$('#divAtendBeneficiario').show();
+					if($('#atendBeneficiario_chosen').length) $('#atendBeneficiario_chosen').show();
+				} 
+				else if(fillTipopessoa == "Convenio"){
+					$('#divAtendConv').show();
+					if($('#atendConv_chosen').length) $('#atendConv_chosen').show();
+				} 
+				else if(fillTipopessoa == "Terapeuta"){
+					$('#divAtendTerapeuta').show();
+					if($('#atendTerapeuta_chosen').length) $('#atendTerapeuta_chosen').show();
 				}
 			}
 			function carregaBody(){
@@ -397,11 +437,13 @@
 										</div>
 									</div>
 								</div>
-								<div id="divAtendBeneficiario" class="col-sm-4">
+								<!-- Beneficiário -->
+								<div id="divAtendBeneficiario" class="col-sm-4" style="display:none;">
 									<div class="row">
 										<div class="input-group">
 											<label>Beneficiário:&nbsp;</label>
-											<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha..." value="">
+											<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha...">
+												<option value=""></option> <!-- Opção vazia para Chosen -->
 												{{#each benes}}
 													<option value="{{_id}}">{{bene_nome}}</option>
 												{{/each}}
@@ -409,11 +451,14 @@
 										</div>
 									</div>
 								</div>
-								<div id="divAtendTerapeuta" class="col-sm-4">
+
+								<!-- Terapeuta -->
+								<div id="divAtendTerapeuta" class="col-sm-4" style="display:none;">
 									<div class="row">
 										<div class="input-group">
 											<label>Terapeuta:&nbsp;</label>
-											<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
+											<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha...">
+												<option value=""></option>
 												{{#each terapeutas}}
 													<option value="{{_id}}">{{usuario_nome}}</option>
 												{{/each}}
@@ -421,11 +466,14 @@
 										</div>
 									</div>
 								</div>
-								<div id="divAtendConv" class="col-sm-4">
+
+								<!-- Convênio -->
+								<div id="divAtendConv" class="col-sm-4" style="display:none;">
 									<div class="row">
 										<div class="input-group">
 											<label>Convênio:&nbsp;</label>
-											<select name="atendConv" id="atendConv" class="chosen-select" data-placeholder="Escolha..." value="">
+											<select name="atendConv" id="atendConv" class="chosen-select" data-placeholder="Escolha...">
+												<option value=""></option>
 												{{#each convs}}
 													<option value="{{_id}}">{{conv_nome}}</option>
 												{{/each}}
@@ -509,309 +557,323 @@
 											<div class="pull-right tableTools-container">
 											</div>
 										</div>
-										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
-										</div>
-										
-										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-											<thead style="font-size: 11px;">
-												<tr>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="5" style="width: 100px;" >Atendimento</th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="7" style="width: 100px;" ><span class="label label-sm label-success" style="font-size: 14px;" >Original</span></th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-danger" style="font-size: 14px;" >Substituto Fixo</span></th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-purple" style="font-size: 14px;" >Substituição</span></th>
-													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >&nbsp;</th>
-												</tr>
-												<tr role="row">
-													<th class="" class="center" tabindex="0">
-														<label class="pos-rel">
-															<input type="checkbox" id="marcar" name="marcar" class="ace" />
-															<span class="lbl"></span>
-														</label>
-													</th>
-													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >Data</th>
-													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 50px;" >Hora</th>
-													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Origem</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Categoria</th>
-													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evento</th>
-													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
-													<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
-													
-													<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
-													<th class="sorting" tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
+									    <div class="widget-box">
+											  <div class="widget-header widget-header-flat widget-header-small">
+													<h4 class="widget-title">
+														<i class="ace-icon fa fa-calendar"></i>
+														Lista de Atendimentos
+														<small class="text-muted">({{filtroTipo}}: {{#ifEqual filtroTipo "Ano/Mes"}}{{filtroAno}}/{{filtroMes}}{{else}}{{filtroData}}{{/ifEqual}})</small>
+													</h4>
+													<div class="widget-toolbar">
+														<a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+														<a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+													</div>
+												</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" style="font-size: 11px;">
+                                   						<thead style="background: #f5f5f5; font-size: 11px;">
+															<tr>
+																<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="5" style="width: 100px;" >Atendimento</th>
+																<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="7" style="width: 100px;" ><span class="label label-sm label-success" style="font-size: 14px;" >Original</span></th>
+																<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-danger" style="font-size: 14px;" >Substituto Fixo</span></th>
+																<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="4" style="width: 100px;" ><span class="label label-sm label-purple" style="font-size: 14px;" >Substituição</span></th>
+																<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >&nbsp;</th>
+															</tr>
+															<tr role="row">
+																<th class="" class="center" tabindex="0">
+																	<label class="pos-rel">
+																		<input type="checkbox" id="marcar" name="marcar" class="ace" />
+																		<span class="lbl"></span>
+																	</label>
+																</th>
+																<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;" >Data</th>
+																<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 50px;" >Hora</th>
+																<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+																<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
+																<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Origem</th>
+																<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Categoria</th>
+																<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Evento</th>
+																<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+																<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+																<th class="sorting" tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
+																<th class="sorting" tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
+																
+																<th class="sorting" tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+																<th class="sorting" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+																<th class="sorting" tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
+																<th class="sorting" tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
 
-													<th class="sorting" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-													<th class="sorting" tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th class="sorting" tabindex="16" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
-													<th class="sorting" tabindex="17" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
+																<th class="sorting" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
+																<th class="sorting" tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+																<th class="sorting" tabindex="16" aria-controls="dynamic-table" rowspan="1" colspan="1" >Cred</th>
+																<th class="sorting" tabindex="17" aria-controls="dynamic-table" rowspan="1" colspan="1" >Deb</th>
 
-													<th class="" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;">Ação</th>
-												</tr>
-											</thead>
-											<tbody style="font-size: 11px;">
-												{{#each atends}}
-													<tr role="row" class="odd">
-														<td class="center">
-															<label class="pos-rel" >
-																<input type="checkbox" class="ace" id="{{_id}}" name="chekId" onchange="javascript:alternarBotao()" />
-																<span class="lbl"></span>
-															</label>
-															<input hidden="true" style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{data}}" />
-															<input hidden="true" style="border: none; width: 35px;" readonly="true" id="atenddatahour{{_id}}" value="{{atend_atendhora}}" />
-														</td>
-														<td>
-															{{data}}
-														</td>	
-														<td>
-															{{atend_atendhora}}
-														</td>				
-														{{#each ../benes}}
-															{{#ifEqual this._id ../atend_beneid}}
-																<td>{{bene_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														{{#each ../convs}}<!-- Ok -->	
-															{{#ifEqual this._id ../atend_convid}}
-																<td>{{conv_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														
-														<td>
-														{{#ifEqual this.atend_org "ADM"}}
-															<span class="label label-sm label-warning">{{atend_org}}</span>
-														{{else}}
-															<span class="label label-sm label-success">{{atend_org}}</span>
-														{{/ifEqual}}
-														</td>
-														<td>
-															{{#ifEqual this.atend_fixo "true"}}
-																<span class="label label-sm label-danger">Substituto Fixo</span>
-																{{else}}
-																<span class="label label-sm label-success">Padrão</span>
-															{{/ifEqual}}
-														</td>
-
-														<td>
-														{{#ifEqual this.atend_categoria "Feriado"}}
-															<span class="label label-sm label-warning">Feriado</span>
-															{{else}}
-															{{#ifEqual this.atend_categoria "Extra"}}
-																<span class="label label-sm label-purple">Extra</span>
-																{{else}}
-																	{{#ifEqual this.atend_categoria "Substituto"}}
-																	<span class="label label-sm label-pink">Substituição</span>
+																<th class="" tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 100px;">Ação</th>
+															</tr>
+														</thead>
+														<tbody style="font-size: 11px;">
+															{{#each atends}}
+																<tr role="row" class="odd">
+																	<td class="center">
+																		<label class="pos-rel" >
+																			<input type="checkbox" class="ace" id="{{_id}}" name="chekId" onchange="javascript:alternarBotao()" />
+																			<span class="lbl"></span>
+																		</label>
+																		<input hidden="true" style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{data}}" />
+																		<input hidden="true" style="border: none; width: 35px;" readonly="true" id="atenddatahour{{_id}}" value="{{atend_atendhora}}" />
+																	</td>
+																	<td>
+																		{{data}}
+																	</td>	
+																	<td>
+																		{{atend_atendhora}}
+																	</td>				
+																	{{#each ../benes}}
+																		{{#ifEqual this._id ../atend_beneid}}
+																			<td>{{bene_nome}}</td>
+																		{{/ifEqual}}
+																	{{/each}}
+																	{{#each ../convs}}<!-- Ok -->	
+																		{{#ifEqual this._id ../atend_convid}}
+																			<td>{{conv_nome}}</td>
+																		{{/ifEqual}}
+																	{{/each}}
+																	
+																	<td>
+																	{{#ifEqual this.atend_org "ADM"}}
+																		<span class="label label-sm label-warning">{{atend_org}}</span>
 																	{{else}}
-																		{{#ifEqual this.atend_categoria "Substituição"}}
-																		<span class="label label-sm label-pink">Substituição</span>
-																		{{else}}
-																			{{#ifEqual this.atend_categoria "Falta"}}
-																			<span class="label label-sm label-yellow">Falta</span>
+																		<span class="label label-sm label-success">{{atend_org}}</span>
+																	{{/ifEqual}}
+																	</td>
+																	<td>
+																		{{#ifEqual this.atend_fixo "true"}}
+																			<span class="label label-sm label-danger">Substituto Fixo</span>
 																			{{else}}
-																				{{#ifEqual this.atend_categoria "Padrão"}}
-																				<span class="label label-sm label-success">Sem Evento</span>
+																			<span class="label label-sm label-success">Padrão</span>
+																		{{/ifEqual}}
+																	</td>
+
+																	<td>
+																	{{#ifEqual this.atend_categoria "Feriado"}}
+																		<span class="label label-sm label-warning">Feriado</span>
+																		{{else}}
+																		{{#ifEqual this.atend_categoria "Extra"}}
+																			<span class="label label-sm label-purple">Extra</span>
+																			{{else}}
+																				{{#ifEqual this.atend_categoria "Substituto"}}
+																				<span class="label label-sm label-pink">Substituição</span>
 																				{{else}}
-																					{{#ifEqual this.atend_categoria "SubstitutoFixo"}}
-																					<span class="label label-sm label-success">Sem Evento</span>
+																					{{#ifEqual this.atend_categoria "Substituição"}}
+																					<span class="label label-sm label-pink">Substituição</span>
 																					{{else}}
-																						{{#ifEqual this.atend_categoria "Falta Absoluta"}}
-																						<span class="label label-sm label-warning">Falta Absoluta</span>
+																						{{#ifEqual this.atend_categoria "Falta"}}
+																						<span class="label label-sm label-yellow">Falta</span>
 																						{{else}}
-																							{{#ifEqual this.atend_categoria "Falta Justificada"}}
-																							<span class="label label-sm label-warning">Falta Justificada</span>
+																							{{#ifEqual this.atend_categoria "Padrão"}}
+																							<span class="label label-sm label-success">Sem Evento</span>
 																							{{else}}
+																								{{#ifEqual this.atend_categoria "SubstitutoFixo"}}
+																								<span class="label label-sm label-success">Sem Evento</span>
+																								{{else}}
+																									{{#ifEqual this.atend_categoria "Falta Absoluta"}}
+																									<span class="label label-sm label-warning">Falta Absoluta</span>
+																									{{else}}
+																										{{#ifEqual this.atend_categoria "Falta Justificada"}}
+																										<span class="label label-sm label-warning">Falta Justificada</span>
+																										{{else}}
+																										{{/ifEqual}}
+																									{{/ifEqual}}
+																								{{/ifEqual}}
 																							{{/ifEqual}}
 																						{{/ifEqual}}
 																					{{/ifEqual}}
 																				{{/ifEqual}}
-																			{{/ifEqual}}
 																		{{/ifEqual}}
 																	{{/ifEqual}}
-															{{/ifEqual}}
-														{{/ifEqual}}
-														</td>
-														
+																	</td>
+																	
 
-														{{#each ../terapias}}<!-- Ok -->
-															{{#ifEqual this._id ../atend_terapiaid}}
-																<td>{{terapia_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														{{#each ../terapeutas}}<!-- Ok -->
-															{{#ifEqual this._id ../atend_terapeutaid}}
-																<td>{{usuario_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														
+																	{{#each ../terapias}}<!-- Ok -->
+																		{{#ifEqual this._id ../atend_terapiaid}}
+																			<td>{{terapia_nome}}</td>
+																		{{/ifEqual}}
+																	{{/each}}
+																	{{#each ../terapeutas}}<!-- Ok -->
+																		{{#ifEqual this._id ../atend_terapeutaid}}
+																			<td>{{usuario_nome}}</td>
+																		{{/ifEqual}}
+																	{{/each}}
+																	
 
-														{{#ifEqual this.atend_valorcre "0,00"}}
-															<td><span class="label label-sm label-warning arrowed">{{atend_valorcre}}</span></td>
-															{{else}}
-															<td>{{atend_valorcre}}</td>
-														{{/ifEqual}}
-														{{#ifEqual this.atend_valordeb "0,00"}}
-															<td ><span class="label label-sm label-warning arrowed">{{atend_valordeb}}</span></td>
-															{{else}}
-															<td>{{atend_valordeb}}</td>
-														{{/ifEqual}}
-
-														<!-- .Substitutos Fixos Dados -->
-														{{#if atend_fixoterapiaid}}
-															{{#compareThis atend_fixoterapiaid "766f69643132333435366964"}}
-																<td>-</td>
-															{{else}}
-																{{#each ../terapias}}<!-- Ok -->
-																	{{#ifEqual this._id ../atend_fixoterapiaid}}
-																		<td>{{terapia_nome}}</td>
+																	{{#ifEqual this.atend_valorcre "0,00"}}
+																		<td><span class="label label-sm label-warning arrowed">{{atend_valorcre}}</span></td>
+																		{{else}}
+																		<td>{{atend_valorcre}}</td>
 																	{{/ifEqual}}
-																{{/each}}
-															{{/compareThis}}
-														{{else}}
-															<td>-</td>
-														{{/if}}
-														{{#if atend_fixoterapeutaid}}
-															{{#compareThis atend_fixoterapiaid "766f69643132333435366964"}}
-																<td>-</td>
-															{{else}}
-																{{#each ../terapeutas}}<!-- Ok -->
-																	{{#ifEqual this._id ../atend_fixoterapeutaid}}
-																		<td>{{usuario_nome}}</td>
+																	{{#ifEqual this.atend_valordeb "0,00"}}
+																		<td ><span class="label label-sm label-warning arrowed">{{atend_valordeb}}</span></td>
+																		{{else}}
+																		<td>{{atend_valordeb}}</td>
 																	{{/ifEqual}}
-																{{/each}}
-															{{/compareThis}}
-														{{else}}
-															<td>-</td>
-														{{/if}}
 
-														{{#if atend_fixovalorcre}}
-															{{#ifEqual this.atend_fixovalorcre "0,00"}}
-																<td><span class="label label-sm label-warning arrowed">{{atend_fixovalorcre}}</span></td>
-																{{else}}
-																<td>{{atend_fixovalorcre}}</td>
-															{{/ifEqual}}
-														{{else}}
-															<td>-</td>
-														{{/if}}
-														
-														{{#if atend_fixovalordeb}}
-															{{#ifEqual this.atend_fixovalordeb "0,00"}}
-																<td ><span class="label label-sm label-warning arrowed">{{atend_fixovalordeb}}</span></td>
-																{{else}}
-																<td>-</td>
-															{{/ifEqual}}
-														{{else}}
-															<td>-</td>
-														{{/if}}
-														<!-- /.Substitutos Fixos Dados -->
-														
-														<!-- .Substituições -->
-														{{#if atend_mergeterapiaid}}
-															{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}
-																<td>-</td>
-															{{else}}
-																{{#each ../terapias}}<!-- Ok -->
-																	{{#ifEqual this._id ../atend_mergeterapiaid}}
-																		<td>{{terapia_nome}}</td>
-																	{{/ifEqual}}
-																{{/each}}
-															{{/compareThis}}
-														{{else}}
-															<td>-</td>
-														{{/if}}
-														{{#if atend_mergeterapeutaid}}
-															{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}
-																<td>-</td>
-															{{else}}
-																{{#each ../terapeutas}}<!-- Ok -->
-																	{{#ifEqual this._id ../atend_mergeterapeutaid}}
-																		<td>{{usuario_nome}}</td>
-																	{{/ifEqual}}
-																{{/each}}
-															{{/compareThis}}
-														{{else}}
-															<td>-</td>
-														{{/if}}
+																	<!-- .Substitutos Fixos Dados -->
+																	{{#if atend_fixoterapiaid}}
+																		{{#compareThis atend_fixoterapiaid "766f69643132333435366964"}}
+																			<td>-</td>
+																		{{else}}
+																			{{#each ../terapias}}<!-- Ok -->
+																				{{#ifEqual this._id ../atend_fixoterapiaid}}
+																					<td>{{terapia_nome}}</td>
+																				{{/ifEqual}}
+																			{{/each}}
+																		{{/compareThis}}
+																	{{else}}
+																		<td>-</td>
+																	{{/if}}
+																	{{#if atend_fixoterapeutaid}}
+																		{{#compareThis atend_fixoterapiaid "766f69643132333435366964"}}
+																			<td>-</td>
+																		{{else}}
+																			{{#each ../terapeutas}}<!-- Ok -->
+																				{{#ifEqual this._id ../atend_fixoterapeutaid}}
+																					<td>{{usuario_nome}}</td>
+																				{{/ifEqual}}
+																			{{/each}}
+																		{{/compareThis}}
+																	{{else}}
+																		<td>-</td>
+																	{{/if}}
 
-														{{#if atend_mergevalorcre}}
-															{{#ifEqual this.atend_mergevalorcre "0,00"}}
-																<td><span class="label label-sm label-warning arrowed">{{atend_mergevalorcre}}</span></td>
-																{{else}}
-																<td>{{atend_mergevalorcre}}</td>
-															{{/ifEqual}}
-														{{else}}
-															<td>-</td>
-														{{/if}}
-														
-														{{#if atend_mergevalordeb}}
-															{{#ifEqual this.atend_mergevalordeb "0,00"}}
-																<td ><span class="label label-sm label-warning arrowed">{{atend_mergevalordeb}}</span></td>
-																{{else}}
-																<td>-</td>
-															{{/ifEqual}}
-														{{else}}
-															<td>-</td>
-														{{/if}}
-														<!-- /.Substituições -->
-														<td>
-															<div class="action-buttons">
-																<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/atendimento/atendadm/edi/{{_id}}">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
-																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																</a>
-																<a class="blue" name="acaoCopiar" id="acaoCopiar" onclick="javascript:mostraDivCopia('{{_id}}');">
-																	<i class="ace-icon fa fa-clone bigger-130"></i>
-																</a>
-																<a class="orange custom-tooltip" name="acaoVerquemalterou" id="acaoVerquemalterou">
-																	<i class="ace-icon fa fa-eye bigger-130"></i>
-																		<span class="tooltip-text">
-																			<strong>Atendimento:</strong><br>
-																			• Data Criação: {{#if atend_datacad}}{{formatDate atend_datacad}}{{else}}—{{/if}}<br>
-																			• Criado por: 
-																			{{#if atend_usuid}}
-																			{{#each ../usuarios}}
-																				{{#ifEqual this._id ../atend_usuid}}{{usuario_nome}}{{/ifEqual}}
+																	{{#if atend_fixovalorcre}}
+																		{{#ifEqual this.atend_fixovalorcre "0,00"}}
+																			<td><span class="label label-sm label-warning arrowed">{{atend_fixovalorcre}}</span></td>
+																			{{else}}
+																			<td>{{atend_fixovalorcre}}</td>
+																		{{/ifEqual}}
+																	{{else}}
+																		<td>-</td>
+																	{{/if}}
+																	
+																	{{#if atend_fixovalordeb}}
+																		{{#ifEqual this.atend_fixovalordeb "0,00"}}
+																			<td ><span class="label label-sm label-warning arrowed">{{atend_fixovalordeb}}</span></td>
+																			{{else}}
+																			<td>-</td>
+																		{{/ifEqual}}
+																	{{else}}
+																		<td>-</td>
+																	{{/if}}
+																	<!-- /.Substitutos Fixos Dados -->
+																	
+																	<!-- .Substituições -->
+																	{{#if atend_mergeterapiaid}}
+																		{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}
+																			<td>-</td>
+																		{{else}}
+																			{{#each ../terapias}}<!-- Ok -->
+																				{{#ifEqual this._id ../atend_mergeterapiaid}}
+																					<td>{{terapia_nome}}</td>
+																				{{/ifEqual}}
 																			{{/each}}
-																			{{else}}—{{/if}}<br>
-																			• Data Edição: {{#if atend_dataedi}}{{formatDate atend_dataedi}}{{else}}—{{/if}}<br>
-																			• Editado por: 
-																			{{#if atend_usuidedi}}
-																			{{#each ../usuarios}}
-																				{{#ifEqual this._id ../atend_usuidedi}}{{usuario_nome}}{{/ifEqual}}
+																		{{/compareThis}}
+																	{{else}}
+																		<td>-</td>
+																	{{/if}}
+																	{{#if atend_mergeterapeutaid}}
+																		{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}
+																			<td>-</td>
+																		{{else}}
+																			{{#each ../terapeutas}}<!-- Ok -->
+																				{{#ifEqual this._id ../atend_mergeterapeutaid}}
+																					<td>{{usuario_nome}}</td>
+																				{{/ifEqual}}
 																			{{/each}}
-																			{{else}}—{{/if}}<br><br>
+																		{{/compareThis}}
+																	{{else}}
+																		<td>-</td>
+																	{{/if}}
 
-																			<strong>Agendamento:</strong><br>
-																			• Data Criação: {{#if atend_agenda_datacad}}{{formatDate atend_agenda_datacad}}{{else}}—{{/if}}<br>
-																			• Criado por: 
-																			{{#if atend_agenda_usuid}}
-																			{{#each ../usuarios}}
-																				{{#ifEqual this._id ../atend_agenda_usuid}}{{usuario_nome}}{{/ifEqual}}
-																			{{/each}}
-																			{{else}}—{{/if}}<br>
-																			• Data Edição: {{#if atend_agenda_dataedi}}{{formatDate atend_agenda_dataedi}}{{else}}—{{/if}}<br>
-																			• Editado por: 
-																			{{#if atend_agenda_usuidedi}}
-																			{{#each ../usuarios}}
-																				{{#ifEqual this._id ../atend_agenda_usuidedi}}{{usuario_nome}}{{/ifEqual}}
-																			{{/each}}
-																			{{else}}—{{/if}}
-																		</span>
-																</a>
-															</div>
-															<div class="hidden-md hidden-lg">
-																<input class="hidden" id="atendCategoria{{_id}}" value="{{atend_categoria}}" />
-															</div>
-														</td>
-													</tr>
-												{{/each}}
-											</tbody>
-										</table>
+																	{{#if atend_mergevalorcre}}
+																		{{#ifEqual this.atend_mergevalorcre "0,00"}}
+																			<td><span class="label label-sm label-warning arrowed">{{atend_mergevalorcre}}</span></td>
+																			{{else}}
+																			<td>{{atend_mergevalorcre}}</td>
+																		{{/ifEqual}}
+																	{{else}}
+																		<td>-</td>
+																	{{/if}}
+																	
+																	{{#if atend_mergevalordeb}}
+																		{{#ifEqual this.atend_mergevalordeb "0,00"}}
+																			<td ><span class="label label-sm label-warning arrowed">{{atend_mergevalordeb}}</span></td>
+																			{{else}}
+																			<td>-</td>
+																		{{/ifEqual}}
+																	{{else}}
+																		<td>-</td>
+																	{{/if}}
+																	<!-- /.Substituições -->
+																	<td>
+																		<div class="action-buttons">
+																			<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/atendimento/atendadm/edi/{{_id}}">
+																				<i class="ace-icon fa fa-pencil bigger-130"></i>
+																			</a>
+																			<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																				<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																			</a>
+																			<a class="blue" name="acaoCopiar" id="acaoCopiar" onclick="javascript:mostraDivCopia('{{_id}}');">
+																				<i class="ace-icon fa fa-clone bigger-130"></i>
+																			</a>
+																			<a class="orange custom-tooltip" name="acaoVerquemalterou" id="acaoVerquemalterou">
+																				<i class="ace-icon fa fa-eye bigger-130"></i>
+																					<span class="tooltip-text">
+																						<strong>Atendimento:</strong><br>
+																						• Data Criação: {{#if atend_datacad}}{{formatDate atend_datacad}}{{else}}—{{/if}}<br>
+																						• Criado por: 
+																						{{#if atend_usuid}}
+																						{{#each ../usuarios}}
+																							{{#ifEqual this._id ../atend_usuid}}{{usuario_nome}}{{/ifEqual}}
+																						{{/each}}
+																						{{else}}—{{/if}}<br>
+																						• Data Edição: {{#if atend_dataedi}}{{formatDate atend_dataedi}}{{else}}—{{/if}}<br>
+																						• Editado por: 
+																						{{#if atend_usuidedi}}
+																						{{#each ../usuarios}}
+																							{{#ifEqual this._id ../atend_usuidedi}}{{usuario_nome}}{{/ifEqual}}
+																						{{/each}}
+																						{{else}}—{{/if}}<br><br>
+
+																						<strong>Agendamento:</strong><br>
+																						• Data Criação: {{#if atend_agenda_datacad}}{{formatDate atend_agenda_datacad}}{{else}}—{{/if}}<br>
+																						• Criado por: 
+																						{{#if atend_agenda_usuid}}
+																						{{#each ../usuarios}}
+																							{{#ifEqual this._id ../atend_agenda_usuid}}{{usuario_nome}}{{/ifEqual}}
+																						{{/each}}
+																						{{else}}—{{/if}}<br>
+																						• Data Edição: {{#if atend_agenda_dataedi}}{{formatDate atend_agenda_dataedi}}{{else}}—{{/if}}<br>
+																						• Editado por: 
+																						{{#if atend_agenda_usuidedi}}
+																						{{#each ../usuarios}}
+																							{{#ifEqual this._id ../atend_agenda_usuidedi}}{{usuario_nome}}{{/ifEqual}}
+																						{{/each}}
+																						{{else}}—{{/if}}
+																					</span>
+																			</a>
+																		</div>
+																		<div class="hidden-md hidden-lg">
+																			<input class="hidden" id="atendCategoria{{_id}}" value="{{atend_categoria}}" />
+																		</div>
+																	</td>
+																</tr>
+															{{/each}}
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -851,7 +913,19 @@
 						style: 'multi'
 					}
 			});
+
+		// ✅ Inicializa Chosen Selects (apenas se a lib estiver carregada)
+		if($.fn.chosen){
+			$('.chosen-select').chosen({
+				width: '100%',
+				disable_search_threshold: 10,  // Esconde busca se < 10 opções
+				allow_single_deselect: true,   // Permite limpar seleção
+				no_results_text: 'Nenhum resultado encontrado'
+			});
+		}
+
 		});
+		
 		
 		</script>
 	</body>

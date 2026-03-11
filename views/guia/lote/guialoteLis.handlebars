@@ -1005,45 +1005,53 @@
 								<input id="idsChecked" value="" />
 							</div>
 							
+							<!-- 🔹 Tipo de Filtro -->
 							<div class="form-group">
 								<label>Tipo Filtro</label>
 								<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha...">
-									<option value="Ano/Mes">Ano/Mês</option>
-									<option value="Semana">Semana</option>
-									<option value="Dia">Dia</option>
+									<option value="Ano/Mes" {{#ifEqual filtroTipo "Ano/Mes"}}selected{{/ifEqual}}>Ano/Mês</option>
+									<option value="Semana" {{#ifEqual filtroTipo "Semana"}}selected{{/ifEqual}}>Semana</option>
+									<option value="Dia" {{#ifEqual filtroTipo "Dia"}}selected{{/ifEqual}}>Dia</option>
 								</select>
 							</div>
 							
+														<!-- 🔹 Ano -->
 							<div id="divAnoAtend" class="form-group">
 								<label>Ano</label>
 								<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha...">
+									<option value="">Selecione...</option>
 									{{#each anos}}
-										<option value="{{ano_nome}}">{{ano_nome}}</option>
+										<option value="{{this.ano_nome}}" 
+											{{#ifEqual ../filtroAno this.ano_nome}}selected{{/ifEqual}}>
+											{{this.ano_nome}}
+										</option>
 									{{/each}}
 								</select>
 							</div>
 							
+							 <!-- 🔹 Mês -->
 							<div id="divMesAtend" class="form-group">
 								<label>Mês</label>
 								<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha...">
-									<option value="0">Janeiro</option>
-									<option value="1">Fevereiro</option>
-									<option value="2">Março</option>
-									<option value="3">Abril</option>
-									<option value="4">Maio</option>
-									<option value="5">Junho</option>
-									<option value="6">Julho</option>
-									<option value="7">Agosto</option>
-									<option value="8">Setembro</option>
-									<option value="9">Outubro</option>
-									<option value="10">Novembro</option>
-									<option value="11">Dezembro</option>
+									<option value="0" {{#ifEqual filtroMes "0"}}selected{{/ifEqual}}>Janeiro</option>
+									<option value="1" {{#ifEqual filtroMes "1"}}selected{{/ifEqual}}>Fevereiro</option>
+									<option value="2" {{#ifEqual filtroMes "2"}}selected{{/ifEqual}}>Março</option>
+									<option value="3" {{#ifEqual filtroMes "3"}}selected{{/ifEqual}}>Abril</option>
+									<option value="4" {{#ifEqual filtroMes "4"}}selected{{/ifEqual}}>Maio</option>
+									<option value="5" {{#ifEqual filtroMes "5"}}selected{{/ifEqual}}>Junho</option>
+									<option value="6" {{#ifEqual filtroMes "6"}}selected{{/ifEqual}}>Julho</option>
+									<option value="7" {{#ifEqual filtroMes "7"}}selected{{/ifEqual}}>Agosto</option>
+									<option value="8" {{#ifEqual filtroMes "8"}}selected{{/ifEqual}}>Setembro</option>
+									<option value="9" {{#ifEqual filtroMes "9"}}selected{{/ifEqual}}>Outubro</option>
+									<option value="10" {{#ifEqual filtroMes "10"}}selected{{/ifEqual}}>Novembro</option>
+									<option value="11" {{#ifEqual filtroMes "11"}}selected{{/ifEqual}}>Dezembro</option>
 								</select>
 							</div>
 							
-							<div id="divDataFil" class="form-group hidden-div">
+							<!-- 🔹 Data (filtro Dia) - visível apenas quando tipoData = "Dia" -->
+							<div id="divDataFil" class="form-group{{#ifEqual filtroTipo "Dia"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Data</label>
-								<input style="height: 30px;" id="dataFil" name="dataFil" type="date">
+								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" value="{{filtroData}}">
 								<input class="hidden" id="dataFinal" name="dataFinal" />
 								<input class="hidden" id="tipoDataEdi" name="tipoDataEdi" value="{{filtroTela.tipoData}}" />
 								<input class="hidden" id="anoAtendEdi" name="anoAtendEdi" value="{{filtroTela.anoAtend}}" />
@@ -1055,35 +1063,45 @@
 								<input class="hidden" id="idEdi" name="idEdi" value="{{filtroTela.atendTerapeuta}}" />
 							</div>
 							
+							<!-- 🔹 Tipo de Pessoa -->
 							<div class="form-group">
 								<label>Tipo</label>
 								<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha...">
-									<option value="Geral">Geral</option>
-									<option value="Beneficiario">Beneficiário</option>
-									<option value="Terapeuta">Terapeuta</option>
+									<option value="Geral" {{#ifEqual filtroTipoPessoa "Geral"}}selected{{/ifEqual}}>Geral</option>
+									<option value="Beneficiario" {{#ifEqual filtroTipoPessoa "Beneficiario"}}selected{{/ifEqual}}>Beneficiário</option>
+									<option value="Terapeuta" {{#ifEqual filtroTipoPessoa "Terapeuta"}}selected{{/ifEqual}}>Terapeuta</option>
 								</select>
 							</div>
 							
-							<!-- ✅ Select de Beneficiário - 3x maior, oculto por padrão -->
-							<div id="divAtendBeneficiario" class="form-group hidden-div">
+							<!-- 🔹 Beneficiário - visível apenas quando tipoPessoa = "Beneficiario" -->
+							<div id="divAtendBeneficiario" class="form-group{{#ifEqual filtroTipoPessoa "Beneficiario"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Beneficiário</label>
 								<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha...">
+									<option value=""></option>
 									{{#each benes}}
-										<option value="{{_id}}">{{bene_nome}}</option>
+										<option value="{{this._id}}" 
+											{{#ifEqual ../filtroBeneficiario this._id}}selected{{/ifEqual}}>
+											{{this.bene_nome}}
+										</option>
 									{{/each}}
 								</select>
 							</div>
 							
-							<!-- ✅ Select de Terapeuta - 3x maior, oculto por padrão -->
-							<div id="divAtendTerapeuta" class="form-group hidden-div">
+							<!-- 🔹 Terapeuta - visível apenas quando tipoPessoa = "Terapeuta" -->
+							<div id="divAtendTerapeuta" class="form-group{{#ifEqual filtroTipoPessoa "Terapeuta"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Terapeuta</label>
 								<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha...">
+									<option value=""></option>
 									{{#each terapeutas}}
-										<option value="{{_id}}">{{usuario_nome}}</option>
+										<option value="{{this._id}}" 
+											{{#ifEqual ../filtroTerapeuta this._id}}selected{{/ifEqual}}>
+											{{this.usuario_nome}}
+										</option>
 									{{/each}}
 								</select>
 							</div>
 							
+							<!-- 🔹 Botão Pesquisar -->
 							<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn-toolbar">
 								<i class="ace-icon fa fa-search-plus"></i>
 								Pesquisar
