@@ -4,42 +4,96 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>Lista de Planos de Tratamentos</title>
-		<style>
-#dynamic-table {
-    table-layout: fixed;
-    width: 100%;
-}
+	<style>
+		#dynamic-table {
+			table-layout: fixed;
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 11px;
+		}
 
-/* Coluna 1 */
-#dynamic-table th:nth-child(1),
-#dynamic-table td:nth-child(1) {
-    width: 100px !important;
-}
+		/* === COLUNAS DE DATA - AINDA MAIS ESTREITAS === */
+		#dynamic-table th:nth-child(2), /* Data Plano */
+		#dynamic-table td:nth-child(2) {
+			width: 70px !important;
+			text-align: center;
+			white-space: normal;
+			word-wrap: break-word;
+		}
 
-/* Coluna 2 */
-#dynamic-table th:nth-child(2),
-#dynamic-table td:nth-child(2) {
-    width: 120px !important;
-}
+		#dynamic-table th:nth-child(10), /* Data cadastro */
+		#dynamic-table td:nth-child(10),
+		#dynamic-table th:nth-child(11), /* Data edição */
+		#dynamic-table td:nth-child(11) {
+			width: 70px !important;
+			text-align: center;
+			white-space: normal;
+			word-wrap: break-word;
+		}
 
-/* Coluna 3 */
-#dynamic-table th:nth-child(3),
-#dynamic-table td:nth-child(3) {
-    width: 250px !important;
-}
+		/* === COLUNA AÇÃO === */
+		#dynamic-table th:nth-child(12),
+		#dynamic-table td:nth-child(12) {
+			width: 80px !important;
+			text-align: center;
+			padding: 4px;
+		}
 
-/* Coluna 4 */
-#dynamic-table th:nth-child(4),
-#dynamic-table td:nth-child(4) {
-    width: 180px !important;
-}
+		/* === BENEFICIÁRIO - MAIOR ESPAÇO === */
+		#dynamic-table th:nth-child(3),
+		#dynamic-table td:nth-child(3) {
+			width: 180px !important;
+			word-wrap: break-word;
+			white-space: normal;
+			overflow: hidden;
+		}
 
-/* Coluna 5 */
-#dynamic-table th:nth-child(5),
-#dynamic-table td:nth-child(5) {
-    width: 200px !important;
-}
-</style>
+		/* === TERAPEUTAS (Padrão, IS, AVD) === */
+		#dynamic-table th:nth-child(4),
+		#dynamic-table td:nth-child(4),
+		#dynamic-table th:nth-child(6),
+		#dynamic-table td:nth-child(6),
+		#dynamic-table th:nth-child(8),
+		#dynamic-table td:nth-child(8) {
+			width: 120px !important;
+			word-wrap: break-word;
+			white-space: normal;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		/* === TERAPIAS (Padrão, IS, AVD) - QUEBRA FORÇADA MESMO SEM ESPAÇOS === */
+		#dynamic-table th:nth-child(5),
+		#dynamic-table td:nth-child(5),
+		#dynamic-table th:nth-child(7),
+		#dynamic-table td:nth-child(7),
+		#dynamic-table th:nth-child(9),
+		#dynamic-table td:nth-child(9) {
+			width: 130px !important;
+			word-break: break-all;        /* Quebra mesmo sem espaços */
+			white-space: normal;          /* Permite múltiplas linhas */
+			overflow: hidden;
+			text-overflow: ellipsis;
+			line-height: 1.3;
+			padding: 5px 4px;
+		}
+
+		/* === TIPO DE PLANO === */
+		#dynamic-table th:nth-child(1),
+		#dynamic-table td:nth-child(1) {
+			width: 90px !important;
+			text-align: center;
+		}
+
+		/* === AJUSTE GERAL DAS CÉLULAS === */
+		#dynamic-table td, 
+		#dynamic-table th {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			padding: 5px 4px;
+			line-height: 1.3;
+		}
+		</style>
 		<script type="text/javascript">
 			function ocultaEditar(){
 				let biscoito = procuraBiscoito("lvlUsu");
@@ -220,12 +274,11 @@
 								<div id="divAnoBordo" class="col-sm-2">
 									<div class="row">
 										<div class="input-group">
-											<label for="id-date-picker-1">Ano:&nbsp;</label>
+											<label>Ano:&nbsp;</label>
 											<select name="anoBordo" id="anoBordo" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
-												<option value="2022">2022</option>
-												<option value="2023">2023</option>
-												<option selected value="2024">2024</option>
-												<option value="2025">2025</option>
+												{{#each anos}}
+													<option value="{{ano_nome}}">{{ano_nome}}</option>
+												{{/each}}
 											</select>
 										</div>
 									</div>
@@ -321,18 +374,18 @@
 												</tr>
 												<tr role="row">
 													
-													<th style="width: 120px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo Plano:</th>
-													<th style="width: 100px;" class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Plano:</th>
-													<th style="width: 200px;" class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário:</th>
-													<th style="width: 200px;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta:</th>
-													<th style="width: 150px; overflow-wrap: break-word; white-space: normal;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Tipo Plano:</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data Plano:</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário:</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta:</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta IS:</th>
-													<th style="width: 150px; overflow-wrap: break-word; white-space: normal;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta AVD:</th>
-													<th style="width: 150px; overflow-wrap: break-word; white-space: normal;" class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
-													<th style="width: 100px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro:</th>
-													<th style="width: 100px;" class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data edição:</th>
-													<th style="width: 80px;">Ação</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia:</th>
+													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro:</th>
+													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data edição:</th>
+													<th >Ação</th>
 												</tr>
 											</thead>
 											<tbody style="font-size: 11px;">
@@ -400,22 +453,19 @@
 															{{/if}}
 															</td>
 															<td>
-																<div class="action-buttons">
-																	<div class="action-buttons">
-																	
-																	<a class="green" href="/menu/area/plano/edi/{{_id}}">
+																<div class="action-buttons" style="display: flex; justify-content: center; gap: 8px;">
+																	<a class="green" href="/menu/area/plano/edi/{{_id}}" title="Editar">
 																		<i class="ace-icon fa fa-search bigger-130"></i>
 																	</a>
-																	<a class="pink" href="/menu/area/plano/imp/{{_id}}">
+																	<!-- Botão de deletar com modal -->
+																	<a class="red cursor-pointer" title="Deletar" 
+																	onclick="abreModalDeletar('{{_id}}', '{{#each ../benes}}{{#ifEqual this._id ../trat_beneid}}{{bene_nome}}{{/ifEqual}}{{/each}}')">
+																		<i class="ace-icon fa fa-trash bigger-130"></i>
+																	</a>
+																	<a class="pink" href="/menu/area/plano/imp/{{_id}}" title="Imprimir">
 																		<i class="ace-icon fa fa-file-pdf-o bigger-130"></i>
 																	</a>
-																	<!-- 
-																	<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
-																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																	</a>
-																	-->
 																</div>
-																
 															</td>
 														</tr>
 													
@@ -433,7 +483,63 @@
 				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 			</a>
 		</div><!-- /.main-container ace-save-state -->
-		
+		<!-- MODAL DE CONFIRMAÇÃO DE EXCLUSÃO LÓGICA -->
+		<div id="modalDeletar" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<form id="formDeletarLogico" method="POST" action="/menu/area/plano/lixo/">
+						<div class="modal-header">
+							<h4 class="modal-title text-danger">
+								<i class="ace-icon fa fa-warning"></i> Confirmar Exclusão
+							</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<input type="hidden" id="tratIdDeletar" name="tratId" value="">
+							
+							<div class="alert alert-warning">
+								<strong>Atenção:</strong> Esta ação enviará o plano para a lixeira. 
+							</div>
+							
+							<div class="form-group">
+								<label><i class="ace-icon fa fa-user"></i> Beneficiário:</label>
+								<p class="form-control-static" id="modalBeneNome"></p>
+							</div>
+							
+							<div class="form-group">
+								<label><i class="ace-icon fa fa-clock-o"></i> Data/Hora da Exclusão:</label>
+								<p class="form-control-static" id="modalDataHora"></p>
+							</div>
+							
+							<div class="form-group">
+								<label><i class="ace-icon fa fa-user"></i> Usuário Responsável:</label>
+								<p class="form-control-static" id="modalUsuarioNome">{{usuarioNomeLogado}}</p>
+							</div>
+							
+							<div class="form-group has-feedback">
+								<label class="control-label" for="motivoDeletar">
+									<i class="ace-icon fa fa-exclamation-triangle text-orange"></i> 
+									Motivo da Exclusão <span class="text-danger">*</span>:
+								</label>
+								<textarea class="form-control" id="motivoDeletar" name="motivo" 
+										rows="3" placeholder="Descreva o motivo da exclusão..." required></textarea>
+								<span class="help-block">Campo obrigatório. Mínimo de 10 caracteres.</span>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">
+								<i class="ace-icon fa fa-times"></i> Cancelar
+							</button>
+							<button type="submit" class="btn btn-danger" id="btnConfirmarDeletar">
+								<i class="ace-icon fa fa-trash"></i> Confirmar Exclusão
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
 		<!-- basic scripts -->
 
 		<!-- page specific plugin scripts -->
@@ -464,7 +570,76 @@
 		});
 		
 		</script>
-	
+		<script type="text/javascript">
+			// === FUNÇÃO PARA ABRIR MODAL DE DELETAÇÃO ===
+			function abreModalDeletar(idTrat, nomeBeneficiario) {
+				// Preenche os dados do modal
+				document.getElementById('tratIdDeletar').value = idTrat;
+				document.getElementById('modalBeneNome').textContent = nomeBeneficiario || 'Não identificado';
+				
+				// Formata data/hora atual
+				const agora = new Date();
+				const dataFormatada = agora.toLocaleDateString('pt-BR') + ' ' + 
+									agora.toLocaleTimeString('pt-BR');
+				document.getElementById('modalDataHora').textContent = dataFormatada;
+				
+				// Limpa e foca no campo de motivo
+				const campoMotivo = document.getElementById('motivoDeletar');
+				campoMotivo.value = '';
+				campoMotivo.focus();
+				
+				// Atualiza action do form com o ID
+				document.getElementById('formDeletarLogico').action = 
+					'/menu/area/plano/lixo/' + idTrat;
+				
+				// Abre o modal (compatível com Bootstrap 3/4 e Ace Admin)
+				$('#modalDeletar').modal('show');
+			}
+			
+			// === VALIDAÇÃO DO FORMULÁRIO DE DELETAÇÃO ===
+			document.getElementById('formDeletarLogico')?.addEventListener('submit', function(e) {
+				const motivo = document.getElementById('motivoDeletar').value.trim();
+				
+				if (motivo.length < 10) {
+					e.preventDefault();
+					alert('⚠️ Por favor, descreva um motivo mais detalhado (mínimo 10 caracteres).');
+					document.getElementById('motivoDeletar').focus();
+					return false;
+				}
+				
+				// Desabilita botão para evitar duplo clique
+				const btn = document.getElementById('btnConfirmarDeletar');
+				btn.disabled = true;
+				btn.innerHTML = '<i class="ace-icon fa fa-spinner fa-spin"></i> Processando...';
+				
+				return true;
+			});
+			
+			// === RESETAR BOTÃO AO FECHAR MODAL ===
+			$('#modalDeletar').on('hidden.bs.modal', function () {
+				const btn = document.getElementById('btnConfirmarDeletar');
+				if(btn) {
+					btn.disabled = false;
+					btn.innerHTML = '<i class="ace-icon fa fa-trash"></i> Confirmar Exclusão';
+				}
+			});
+			
+			// === OCULTAR BOTÃO DE DELETE POR PERMISSÃO (mantendo sua lógica) ===
+			function ocultaDelete(){
+				let perfilAtual = document.getElementById("perfilAtual")?.value;
+				const idsPermitidos = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];
+				
+				if (perfilAtual && idsPermitidos.includes(perfilAtual)) {
+					console.log("✓ Permissão de exclusão concedida");
+				} else {
+					// Remove todos os botões de deletar da página
+					document.querySelectorAll('a[title="Deletar"]').forEach(el => {
+						el.style.display = 'none';
+					});
+					console.log("✗ Permissão de exclusão negada");
+				}
+			}
+		</script>
 
 	</body>
 

@@ -3819,8 +3819,9 @@ tabdimBeneValFiltro(req, res) {
             console.log(err)
         })
     },
-    relAtendimentoBeneFiltroAT(req,res){
-         let db = req.cookies['preferredDb'];
+
+relAtendimentoBeneFiltroAT(req, res) {
+    let db = req.cookies['preferredDb'];
     Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
     Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
     Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -3836,7 +3837,6 @@ tabdimBeneValFiltro(req, res) {
     let porHoras;
     let ultimoHorarioSala = {};
     
-    //Filtro persistente
     let filtro = {
         dataIni: req.body.dataIni || '',
         dataFim: req.body.dataFim || '',
@@ -3861,32 +3861,44 @@ tabdimBeneValFiltro(req, res) {
     
     let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
     
-    Atend.find(filtroAtend).then((at)=>{console.log("at? "+at)
+    Atend.find(filtroAtend).then((at) => {
+        console.log("at? "+at)
+        
+        // 1️⃣ FILTRAR Feriado
         at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
-        Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+        
+        // ✅ 2️⃣ ORDENAR IMEDIATAMENTE: data + hora NUMÉRICA
+        at.sort((a, b) => {
+            let d1 = new Date(a.atend_atenddata).getTime();
+            let d2 = new Date(b.atend_atenddata).getTime();
+            if (d1 !== d2) return d1 - d2;
+            let [h1, m1] = (a.atend_atendhora || "00:00").split(":").map(Number);
+            let [h2, m2] = (b.atend_atendhora || "00:00").split(":").map(Number);
+            return (h1 * 60 + m1) - (h2 * 60 + m2);
+        });
+        
+        Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta) => {
             terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
             
-            // ✅ CRIAR LOOKUP DE PERFIL POR TERAPEUTA
             const lookupPerfilTerapeuta = {};
             terapeuta.forEach(t => {
                 lookupPerfilTerapeuta[t._id.toString()] = t.usuario_perfilid ? t.usuario_perfilid.toString() : null;
             });
             
-            Terapia.find().then((terapias)=>{
+            Terapia.find().then((terapias) => {
                 terapias.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));
                 
-                // ✅ CRIAR LOOKUP DE TERAPIA PARA VERIFICAR SE CONTÉM "ABA AT" NO NOME
                 const lookupTerapiaABAAT = {};
                 terapias.forEach(t => {
                     const nomeNormalizado = (t.terapia_nome || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
                     lookupTerapiaABAAT[t._id.toString()] = nomeNormalizado.includes("ABA AT");
                 });
                 
-                Sala.find().then((sala)=>{
-                    Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
-                        Bene.find().then((bene)=>{
+                Sala.find().then((sala) => {
+                    Ano.find().sort({ ano_nome: 1 }).then((ano) => {
+                        Bene.find().then((bene) => {
                             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
-                            bene.some((b)=>{
+                            bene.some((b) => {
                                 if((""+b._id) === (""+req.body.relBeneid)){
                                     bene_nome = b.bene_nome;
                                     conv_id = b.bene_convid;
@@ -3894,32 +3906,42 @@ tabdimBeneValFiltro(req, res) {
                                 }
                                 return false;
                             })
-                            Conv.findOne({_id: conv_id}).then((conv)=>{
+                            Conv.findOne({_id: conv_id}).then((conv) => {
                                 conv_nome = conv.conv_nome;
                                 
-                                // ✅ ORDENAR ATENDIMENTOS POR DATA E HORA
-                                at.sort(function(a, b) {
-                                    let d1 = new Date(a.atend_atenddata);
-                                    let d2 = new Date(b.atend_atenddata);
-                                    if (d1.getTime() === d2.getTime()) {
-                                        return (a.atend_atendhora || '').localeCompare(b.atend_atendhora || '');
+                                // ✅ 3️⃣ PRÉ-ANÁLISE: Contar sessões por período/beneficiário/dia
+                                const SALA_ESCOLA = "6368fe35c2cdb92ac6d914be";
+                                const contadorSessoes = {};
+                                
+                                at.forEach(atend => {
+                                    if (String(atend.atend_salaid) === SALA_ESCOLA) {
+                                        const dataAtend = fncGeral.getData(atend.atend_atenddata);
+                                        const beneId = atend.atend_beneid.toString();
+                                        const [hora] = atend.atend_atendhora.split(":").map(Number);
+                                        
+                                        const periodo = hora < 13 ? 'manha' : 'tarde';
+                                        const chave = `${beneId}_${dataAtend}_${periodo}`;
+                                        
+                                        if (!contadorSessoes[chave]) {
+                                            contadorSessoes[chave] = 0;
+                                        }
+                                        contadorSessoes[chave]++;
                                     }
-                                    return d1 - d2;
                                 });
                                 
-                                // ✅ TRACKER DE ÚLTIMO HORÁRIO POR TERAPEUTA E DATA
-                                const ultimoHorarioTerapeuta = {};
+                                console.log("📊 Contador de sessões:", contadorSessoes);
                                 
+                                // ✅ 4️⃣ TRACKER DE ÍNDICE POR PERÍODO
+                                const indicePorPeriodo = {};
+                                
+                                // ✅ 5️⃣ PROCESSAR
                                 at.forEach((atend) => {
-                                    // ▼▼▼ NORMALIZAR DADOS ▼▼▼
                                     const categorias = (atend.atend_categoria || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                                     const org = (atend.atend_org || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                                     const ehFixo = atend.atend_fixo === true || atend.atend_fixo === "true";
-                                    const dataAtend = fncGeral.getData(atend.atend_atenddata); // Formato: DD/MM/YYYY
+                                    const dataAtend = fncGeral.getData(atend.atend_atenddata);
                                     
-                                    // ▼▼▼ IDENTIFICAR TERAPEUTA CORRETO ▼▼▼
                                     let terapeutaIdUsado;
-                                    
                                     if (ehFixo) {
                                         terapeutaIdUsado = atend.atend_fixoterapeutaid;
                                     } else {
@@ -3937,13 +3959,10 @@ tabdimBeneValFiltro(req, res) {
                                         }
                                     }
                                     
-                                    // ▼▼▼ VERIFICAR PERFIL DO TERAPEUTA (DOIS PERFIS AT) ▼▼▼
                                     const perfilId = terapeutaIdUsado ? lookupPerfilTerapeuta[terapeutaIdUsado.toString()] : null;
                                     const ehTerapeutaAT = perfilId === "6242191fa12aa557219a0fd9" || perfilId === "644742e378166939169f82a1" || perfilId === "62dea752ea444f5b7a02b449";
                                     
-                                    // ▼▼▼ IDENTIFICAR TERAPIA CORRETA PARA VERIFICAR SE É "ABA AT" ▼▼▼
                                     let terapiaIdParaVerificar;
-                                    
                                     if (org === "Padrão") {
                                         terapiaIdParaVerificar = atend.atend_terapiaid;
                                     } else if (org === "Administrativo") {
@@ -3958,66 +3977,94 @@ tabdimBeneValFiltro(req, res) {
                                         terapiaIdParaVerificar = atend.atend_terapiaid;
                                     }
                                     
-                                    // ▼▼▼ VERIFICAR SE A TERAPIA CONTÉM "ABA AT" NO NOME ▼▼▼
                                     const ehTerapiaABAAT = terapiaIdParaVerificar ? lookupTerapiaABAAT[terapiaIdParaVerificar.toString()] : false;
                                     
                                     // ▼▼▼ AJUSTAR HORÁRIO PARA EXIBIÇÃO ▼▼▼
                                     if (porHoras === "sim") {
-                                        const SALA_ESCOLA = "6368fe35c2cdb92ac6d914be";
                                         const ehSalaEscola = String(atend.atend_salaid) === SALA_ESCOLA;
-
                                         const dataBase = new Date(atend.atend_atenddata);
                                         let [horaIni, minutoIni] = atend.atend_atendhora.split(":").map(Number);
-
-                                        const chaveSala = atend.atend_salaid.toString();
-
-                                        // 🔁 RESET se mudou a data
-                                        if (
-                                            ehSalaEscola &&
-                                            ultimoHorarioSala[chaveSala] &&
-                                            ultimoHorarioSala[chaveSala].data !== dataAtend
-                                        ) {
-                                            delete ultimoHorarioSala[chaveSala];
+                                        
+                                        const beneId = atend.atend_beneid.toString();
+                                        const [horaCheck] = atend.atend_atendhora.split(":").map(Number);
+                                        const periodo = horaCheck < 13 ? 'manha' : 'tarde';
+                                        const chaveContador = `${beneId}_${dataAtend}_${periodo}`;
+                                        const totalSessoesPeriodo = contadorSessoes[chaveContador] || 0;
+                                        
+                                        if (ehSalaEscola) {
+                                            // 🔥 Inicializar índice do período se não existir
+                                            if (indicePorPeriodo[chaveContador] === undefined) {
+                                                indicePorPeriodo[chaveContador] = 0;
+                                            }
+                                            const indiceAtual = indicePorPeriodo[chaveContador];
+                                            
+                                            // 🔥 PADRONIZAÇÃO: Manhã = 4 sessões
+                                            if (periodo === 'manha' && totalSessoesPeriodo === 4) {
+                                                const horariosPadraoManha = [
+                                                    { ini: 8,  fim: 9  },
+                                                    { ini: 9,  fim: 10 },
+                                                    { ini: 10, fim: 11 },
+                                                    { ini: 11, fim: 12 }
+                                                ];
+                                                horaIni = horariosPadraoManha[indiceAtual].ini;
+                                                minutoIni = 0;
+                                            }
+                                            // 🔥 PADRONIZAÇÃO: Tarde = 4 ou 5 sessões
+                                            else if (periodo === 'tarde' && (totalSessoesPeriodo === 4 || totalSessoesPeriodo === 5)) {
+                                                const horariosPadraoTarde = [
+                                                    { ini: 13, fim: 14 },
+                                                    { ini: 14, fim: 15 },
+                                                    { ini: 15, fim: 16 },
+                                                    { ini: 16, fim: 17 },
+                                                    { ini: 17, fim: 18 }
+                                                ];
+                                                horaIni = horariosPadraoTarde[indiceAtual].ini;
+                                                minutoIni = 20;
+                                            }
+                                            // 🔥 EXCEÇÃO: Usa cascata com tolerância
+                                            else {
+                                                const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${periodo}`;
+                                                
+                                                if (ultimoHorarioSala[chaveSala]) {
+                                                    const ultimo = ultimoHorarioSala[chaveSala];
+                                                    const ultimoTotalMinutos = ultimo.hora * 60 + ultimo.minuto;
+                                                    const atualTotalMinutos = horaIni * 60 + minutoIni;
+                                                    const intervaloMinutos = atualTotalMinutos - ultimoTotalMinutos;
+                                                    
+                                                    if (Math.abs(intervaloMinutos) <= 50) {
+                                                        horaIni = ultimo.hora;
+                                                        minutoIni = ultimo.minuto;
+                                                    }
+                                                }
+                                                
+                                                ultimoHorarioSala[chaveSala] = {
+                                                    hora: horaIni,
+                                                    minuto: minutoIni
+                                                };
+                                            }
+                                            
+                                            // Incrementar índice do período
+                                            indicePorPeriodo[chaveContador]++;
                                         }
 
-                                        // 🔁 Se for sala escola e já teve atendimento antes no dia
-                                        if (ehSalaEscola && ultimoHorarioSala[chaveSala]) {
-                                            horaIni = ultimoHorarioSala[chaveSala].hora;
-                                            minutoIni = ultimoHorarioSala[chaveSala].minuto;
-                                        }
-
+                                        // ✅ CÁLCULO DO HORÁRIO DE FIM (DEPOIS de todas as modificações)
                                         const inicio = new Date(dataBase);
                                         inicio.setHours(horaIni, minutoIni, 0, 0);
 
                                         let fim;
-
                                         if (ehSalaEscola) {
-                                            // 🔥 duração fixa 1 hora
                                             fim = new Date(inicio);
                                             fim.setMinutes(fim.getMinutes() + 60);
                                         } else {
-                                            // 🔹 NÃO ALTERA → usa duração padrão já existente (ex: 40 min)
                                             fim = new Date(inicio);
                                             fim.setMinutes(fim.getMinutes() + 40);
                                         }
 
-                                        const horaFim = fim.getHours().toString().padStart(2, "0");
-                                        const minutoFim = fim.getMinutes().toString().padStart(2, "0");
-
-                                        // 🔁 Salvar cascata SOMENTE para sala escola
-                                        if (ehSalaEscola) {
-                                            ultimoHorarioSala[chaveSala] = {
-                                                hora: fim.getHours(),
-                                                minuto: fim.getMinutes(),
-                                                data: dataAtend
-                                            };
-                                        }
-
-                                        // ✅ FORMATAÇÃO COM ZERO À ESQUERDA (padStart)
+                                        // ✅ FORMATAÇÃO (garantido que todas as variáveis existem)
                                         const horaIniFmt = horaIni.toString().padStart(2, "0");
                                         const minutoIniFmt = minutoIni.toString().padStart(2, "0");
-                                        const horaFimFmt = horaFim.toString().padStart(2, "0");
-                                        const minutoFimFmt = minutoFim.toString().padStart(2, "0");
+                                        const horaFimFmt = fim.getHours().toString().padStart(2, "0");
+                                        const minutoFimFmt = fim.getMinutes().toString().padStart(2, "0");
 
                                         rab.dt = fncGeral.getData(atend.atend_atenddata) + " - " + 
                                                 horaIniFmt + ":" + minutoIniFmt + "/" + 
@@ -4082,11 +4129,10 @@ tabdimBeneValFiltro(req, res) {
 
                                     // ▼▼▼ INCLUSÃO NO RELATÓRIO ▼▼▼
                                     if (categorias !== "Feriado" && categorias !== "Falta Absoluta" && terapiaAtend !== "break") {
-                                        // ▼▼▼ ATRIBUIR SALA ▼▼▼
                                         if (porSala == "sim"){
-                                            sala.forEach((s)=>{
-                                                if ((""+atend.atend_salaid+"") == (""+s._id+"")){
-                                                    if ((""+s.sala_nome+"").includes("Escola")){
+                                            sala.forEach((s) => {
+                                                if (("" + atend.atend_salaid + "") == ("" + s._id + "")){
+                                                    if (("" + s.sala_nome + "").includes("Escola")){
                                                         rab.sala = "Escola ou Domicílio";
                                                     } else {
                                                         rab.sala = "Clínica";
@@ -4097,12 +4143,12 @@ tabdimBeneValFiltro(req, res) {
                                         
                                         rab.especialidade = terapiaAtend;
                                         rab.profissional = terapeutaAtend;
-                                        rel.push(rab);
+                                        
+                                        rel.push(Object.assign({}, rab));
                                         rab = new RelAtendBene();
                                     }
                                 });
                                 
-                                // ✅ ORDENAÇÃO FINAL
                                 rel.sort(function(a, b){
                                     let dataODiaA = a.dataDia || fncGeral.getData(a.dt);
                                     let dataODiaB = b.dataDia || fncGeral.getData(b.dt);
@@ -4117,7 +4163,6 @@ tabdimBeneValFiltro(req, res) {
                                         return dataA - dataB;
                                     }
                                     
-                                    // Ordenar por hora dentro do mesmo dia
                                     return (a.horaIni || '').localeCompare(b.horaIni || '');
                                 });
                                 
@@ -4142,11 +4187,12 @@ tabdimBeneValFiltro(req, res) {
                 });
             });
         });
-    }).catch((err) =>{
+    }).catch((err) => {
         console.error('[ERRO relAtendimentoBeneassinFiltroAT]', err);
         res.status(500).send("Erro ao gerar relatório");
     });
-    },
+},  
+                               
     relAtendimentoBeneassinAT(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
@@ -4175,8 +4221,339 @@ tabdimBeneValFiltro(req, res) {
             console.log(err)
         })
     },
-relAtendimentoBeneassinFiltroAT(req,res){
-    let db = req.cookies['preferredDb'];
+    relAtendimentoBeneassinFiltroAT_OLD(req,res){
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
+        let rel = [];
+        let conv_nome;
+        let conv_id;
+        let bene_nome;
+        let porSala;
+        let porHoras;
+        let ultimoHorarioSala = {};
+        
+        //Filtro persistente
+        let filtro = {
+            dataIni: req.body.dataIni || '',
+            dataFim: req.body.dataFim || '',
+            beneId: req.body.relBeneid || ''
+        };
+        
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);
+        
+        porSala = (req.body.porSala == "sim") ? "sim" : "nao";
+        porHoras = (req.body.porHoras == "sim") ? "sim" : "nao";
+        
+        let rab = new RelAtendBene();
+        let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
+        let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        
+        let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
+        
+        Atend.find(filtroAtend).then((at)=>{
+            at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+                
+                // ✅ CRIAR LOOKUP DE PERFIL POR TERAPEUTA
+                const lookupPerfilTerapeuta = {};
+                terapeuta.forEach(t => {
+                    lookupPerfilTerapeuta[t._id.toString()] = t.usuario_perfilid ? t.usuario_perfilid.toString() : null;
+                });
+                
+                Terapia.find().then((terapias)=>{
+                    terapias.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));
+                    
+                    // ✅ CRIAR LOOKUP DE TERAPIA PARA VERIFICAR SE CONTÉM "ABA AT" NO NOME
+                    const lookupTerapiaABAAT = {};
+                    terapias.forEach(t => {
+                        const nomeNormalizado = (t.terapia_nome || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+                        lookupTerapiaABAAT[t._id.toString()] = nomeNormalizado.includes("ABA AT");
+                    });
+                    
+                    Sala.find().then((sala)=>{
+                        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
+                            Bene.find().then((bene)=>{
+                                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+                                bene.some((b)=>{
+                                    if((""+b._id) === (""+req.body.relBeneid)){
+                                        bene_nome = b.bene_nome;
+                                        conv_id = b.bene_convid;
+                                        return true;
+                                    }
+                                    return false;
+                                })
+                                Conv.findOne({_id: conv_id}).then((conv)=>{
+                                    conv_nome = conv.conv_nome;
+                                    
+                                    // ✅ ORDENAR ATENDIMENTOS POR DATA E HORA
+                                    at.sort(function(a, b) {
+                                        let d1 = new Date(a.atend_atenddata);
+                                        let d2 = new Date(b.atend_atenddata);
+                                        if (d1.getTime() === d2.getTime()) {
+                                            return (a.atend_atendhora || '').localeCompare(b.atend_atendhora || '');
+                                        }
+                                        return d1 - d2;
+                                    });
+                                    
+                                    // ✅ TRACKER DE ÚLTIMO HORÁRIO POR TERAPEUTA E DATA
+                                    const ultimoHorarioTerapeuta = {};
+                                    
+                                    at.forEach((atend) => {
+                                        // ▼▼▼ NORMALIZAR DADOS ▼▼▼
+                                        const categorias = (atend.atend_categoria || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                        const org = (atend.atend_org || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                        const ehFixo = atend.atend_fixo === true || atend.atend_fixo === "true";
+                                        const dataAtend = fncGeral.getData(atend.atend_atenddata); // Formato: DD/MM/YYYY
+                                        
+                                        // ▼▼▼ IDENTIFICAR TERAPEUTA CORRETO ▼▼▼
+                                        let terapeutaIdUsado;
+                                        
+                                        if (ehFixo) {
+                                            terapeutaIdUsado = atend.atend_fixoterapeutaid;
+                                        } else {
+                                            switch (categorias) {
+                                                case "Substituicao":
+                                                case "Substituição":
+                                                    terapeutaIdUsado = atend.atend_mergeterapeutaid;
+                                                    break;
+                                                case "SubstitutoFixo":
+                                                    terapeutaIdUsado = atend.atend_fixoterapeutaid;
+                                                    break;
+                                                default:
+                                                    terapeutaIdUsado = atend.atend_terapeutaid;
+                                                    break;
+                                            }
+                                        }
+                                        
+                                        // ▼▼▼ VERIFICAR PERFIL DO TERAPEUTA (DOIS PERFIS AT) ▼▼▼
+                                        const perfilId = terapeutaIdUsado ? lookupPerfilTerapeuta[terapeutaIdUsado.toString()] : null;
+                                        const ehTerapeutaAT = perfilId === "6242191fa12aa557219a0fd9" || perfilId === "644742e378166939169f82a1" || perfilId === "62dea752ea444f5b7a02b449";
+                                        
+                                        // ▼▼▼ IDENTIFICAR TERAPIA CORRETA PARA VERIFICAR SE É "ABA AT" ▼▼▼
+                                        let terapiaIdParaVerificar;
+                                        
+                                        if (org === "Padrão") {
+                                            terapiaIdParaVerificar = atend.atend_terapiaid;
+                                        } else if (org === "Administrativo") {
+                                            if (categorias === "Substituicao" || categorias === "Substituição") {
+                                                terapiaIdParaVerificar = atend.atend_mergeterapiaid;
+                                            } else if (categorias === "SubstitutoFixo") {
+                                                terapiaIdParaVerificar = atend.atend_fixoterapiaid;
+                                            } else {
+                                                terapiaIdParaVerificar = atend.atend_terapiaid;
+                                            }
+                                        } else {
+                                            terapiaIdParaVerificar = atend.atend_terapiaid;
+                                        }
+                                        
+                                        // ▼▼▼ VERIFICAR SE A TERAPIA CONTÉM "ABA AT" NO NOME ▼▼▼
+                                        const ehTerapiaABAAT = terapiaIdParaVerificar ? lookupTerapiaABAAT[terapiaIdParaVerificar.toString()] : false;
+                                        
+                                        // ▼▼▼ AJUSTAR HORÁRIO PARA EXIBIÇÃO ▼▼▼
+                                        if (porHoras === "sim") {
+                                            const SALA_ESCOLA = "6368fe35c2cdb92ac6d914be";
+                                            const ehSalaEscola = String(atend.atend_salaid) === SALA_ESCOLA;
+
+                                            const dataBase = new Date(atend.atend_atenddata);
+                                            let [horaIni, minutoIni] = atend.atend_atendhora.split(":").map(Number);
+
+                                            const chaveSala = atend.atend_salaid.toString();
+
+                                            // 🔁 RESET se mudou a data
+                                            if (
+                                                ehSalaEscola &&
+                                                ultimoHorarioSala[chaveSala] &&
+                                                ultimoHorarioSala[chaveSala].data !== dataAtend
+                                            ) {
+                                                delete ultimoHorarioSala[chaveSala];
+                                            }
+
+                                            // 🔁 Se for sala escola e já teve atendimento antes no dia
+                                            if (ehSalaEscola && ultimoHorarioSala[chaveSala]) {
+                                                horaIni = ultimoHorarioSala[chaveSala].hora;
+                                                minutoIni = ultimoHorarioSala[chaveSala].minuto;
+                                            }
+
+                                            const inicio = new Date(dataBase);
+                                            inicio.setHours(horaIni, minutoIni, 0, 0);
+
+                                            let fim;
+
+                                            if (ehSalaEscola) {
+                                                // 🔥 duração fixa 1 hora
+                                                fim = new Date(inicio);
+                                                fim.setMinutes(fim.getMinutes() + 60);
+                                            } else {
+                                                // 🔹 NÃO ALTERA → usa duração padrão já existente (ex: 40 min)
+                                                fim = new Date(inicio);
+                                                fim.setMinutes(fim.getMinutes() + 40);
+                                            }
+
+                                            const horaIniFormat = inicio.getHours().toString().padStart(2, "0");
+                                            const minutoIniFormat = inicio.getMinutes().toString().padStart(2, "0");
+
+                                            const horaFim = fim.getHours().toString().padStart(2, "0");
+                                            const minutoFim = fim.getMinutes().toString().padStart(2, "0");
+
+                                            // 🔁 Salvar cascata SOMENTE para sala escola
+                                            if (ehSalaEscola) {
+                                                ultimoHorarioSala[chaveSala] = {
+                                                    hora: fim.getHours(),
+                                                    minuto: fim.getMinutes(),
+                                                    data: dataAtend
+                                                };
+                                            }
+
+                                            // ✅ FORMATAÇÃO COM ZERO À ESQUERDA (padStart)
+                                            const horaIniFmt = horaIni.toString().padStart(2, "0");
+                                            const minutoIniFmt = minutoIni.toString().padStart(2, "0");
+                                            const horaFimFmt = horaFim.toString().padStart(2, "0");
+                                            const minutoFimFmt = minutoFim.toString().padStart(2, "0");
+
+                                            rab.dt = fncGeral.getData(atend.atend_atenddata) + " - " + 
+                                                    horaIniFmt + ":" + minutoIniFmt + "/" + 
+                                                    horaFimFmt + ":" + minutoFimFmt;
+                                            rab.horaIni = horaIniFmt + ":" + minutoIniFmt;
+                                            rab.horaFim = horaFimFmt + ":" + minutoFimFmt;
+                                        } else {
+                                            rab.dt = fncGeral.getData(atend.atend_atenddata);
+                                        }
+                                        rab.dataDia = fncGeral.getData(atend.atend_atenddata);
+
+                                        // ▼▼▼ LÓGICA DE TERAPIA/TERAPEUTA ▼▼▼
+                                        let terapiaAtend, terapeutaAtend;
+
+                                        if (ehFixo) {
+                                            terapiaAtend = atend.atend_fixoterapiaid;
+                                            terapeutaAtend = atend.atend_fixoterapeutaid;
+                                            switch (categorias) {
+                                                case "SubstitutoFixo":
+                                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                    break;
+                                                case "Substituicao":
+                                                case "Substituição":
+                                                    terapiaAtend = atend.atend_fixoterapiaid || atend.atend_mergeterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid || atend.atend_mergeterapeutaid;
+                                                    break;
+                                                case "Feriado":
+                                                case "Falta Absoluta":
+                                                    terapiaAtend = "break";
+                                                    terapeutaAtend = "break";
+                                                    break;
+                                                default:
+                                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                    break;
+                                            }
+                                        } else {
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            terapeutaAtend = atend.atend_terapeutaid;
+                                            switch (categorias) {
+                                                case "Feriado":
+                                                case "Falta Absoluta":
+                                                    terapiaAtend = "break";
+                                                    terapeutaAtend = "break";
+                                                    break;
+                                                case "Substituicao":
+                                                case "Substituição":
+                                                    terapiaAtend = atend.atend_mergeterapiaid;
+                                                    terapeutaAtend = atend.atend_mergeterapeutaid;
+                                                    break;
+                                                case "SubstitutoFixo":
+                                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                    break;
+                                                default:
+                                                    terapiaAtend = atend.atend_terapiaid;
+                                                    terapeutaAtend = atend.atend_terapeutaid;
+                                                    break;
+                                            }
+                                        }
+
+                                        // ▼▼▼ INCLUSÃO NO RELATÓRIO ▼▼▼
+                                        if (categorias !== "Feriado" && categorias !== "Falta Absoluta" && terapiaAtend !== "break") {
+                                            // ▼▼▼ ATRIBUIR SALA ▼▼▼
+                                            if (porSala == "sim"){
+                                                sala.forEach((s)=>{
+                                                    if ((""+atend.atend_salaid+"") == (""+s._id+"")){
+                                                        if ((""+s.sala_nome+"").includes("Escola")){
+                                                            rab.sala = "Escola ou Domicílio";
+                                                        } else {
+                                                            rab.sala = "Clínica";
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                            
+                                            rab.especialidade = terapiaAtend;
+                                            rab.profissional = terapeutaAtend;
+                                            rel.push(rab);
+                                            rab = new RelAtendBene();
+                                        }
+                                    });
+                                    
+                                    // ✅ ORDENAÇÃO FINAL
+                                    rel.sort(function(a, b){
+                                        let dataODiaA = a.dataDia || fncGeral.getData(a.dt);
+                                        let dataODiaB = b.dataDia || fncGeral.getData(b.dt);
+                                        
+                                        const [diaA, mesA, anoA] = dataODiaA.split('/').map(Number);
+                                        const [diaB, mesB, anoB] = dataODiaB.split('/').map(Number);
+                                        
+                                        const dataA = new Date(anoA, mesA - 1, diaA);
+                                        const dataB = new Date(anoB, mesB - 1, diaB);
+                                        
+                                        if (dataA.getTime() !== dataB.getTime()) {
+                                            return dataA - dataB;
+                                        }
+                                        
+                                        // Ordenar por hora dentro do mesmo dia
+                                        return (a.horaIni || '').localeCompare(b.horaIni || '');
+                                    });
+                                    
+                                    res.render("atendimento/relatendvalBeneassinAT", {
+                                        benes: bene, 
+                                        anos: ano, 
+                                        terapeutas: terapeuta, 
+                                        salas: sala,
+                                        terapias: terapias, 
+                                        rels: rel, 
+                                        periodoDe, 
+                                        periodoAte, 
+                                        conv_nome, 
+                                        bene_nome, 
+                                        porHoras, 
+                                        porSala,
+                                        filtro
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        }).catch((err) =>{
+            console.error('[ERRO relAtendimentoBeneassinFiltroAT]', err);
+            res.status(500).send("Erro ao gerar relatório");
+        });
+    },
+    relAtendimentoBeneassinFiltroAT(req,res){
+            let db = req.cookies['preferredDb'];
     Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
     Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
     Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -4192,7 +4569,6 @@ relAtendimentoBeneassinFiltroAT(req,res){
     let porHoras;
     let ultimoHorarioSala = {};
     
-    //Filtro persistente
     let filtro = {
         dataIni: req.body.dataIni || '',
         dataFim: req.body.dataFim || '',
@@ -4217,32 +4593,44 @@ relAtendimentoBeneassinFiltroAT(req,res){
     
     let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
     
-    Atend.find(filtroAtend).then((at)=>{
+    Atend.find(filtroAtend).then((at) => {
+        console.log("at? "+at)
+        
+        // 1️⃣ FILTRAR Feriado
         at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
-        Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+        
+        // ✅ 2️⃣ ORDENAR IMEDIATAMENTE: data + hora NUMÉRICA
+        at.sort((a, b) => {
+            let d1 = new Date(a.atend_atenddata).getTime();
+            let d2 = new Date(b.atend_atenddata).getTime();
+            if (d1 !== d2) return d1 - d2;
+            let [h1, m1] = (a.atend_atendhora || "00:00").split(":").map(Number);
+            let [h2, m2] = (b.atend_atendhora || "00:00").split(":").map(Number);
+            return (h1 * 60 + m1) - (h2 * 60 + m2);
+        });
+        
+        Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta) => {
             terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
             
-            // ✅ CRIAR LOOKUP DE PERFIL POR TERAPEUTA
             const lookupPerfilTerapeuta = {};
             terapeuta.forEach(t => {
                 lookupPerfilTerapeuta[t._id.toString()] = t.usuario_perfilid ? t.usuario_perfilid.toString() : null;
             });
             
-            Terapia.find().then((terapias)=>{
+            Terapia.find().then((terapias) => {
                 terapias.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));
                 
-                // ✅ CRIAR LOOKUP DE TERAPIA PARA VERIFICAR SE CONTÉM "ABA AT" NO NOME
                 const lookupTerapiaABAAT = {};
                 terapias.forEach(t => {
                     const nomeNormalizado = (t.terapia_nome || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
                     lookupTerapiaABAAT[t._id.toString()] = nomeNormalizado.includes("ABA AT");
                 });
                 
-                Sala.find().then((sala)=>{
-                    Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
-                        Bene.find().then((bene)=>{
+                Sala.find().then((sala) => {
+                    Ano.find().sort({ ano_nome: 1 }).then((ano) => {
+                        Bene.find().then((bene) => {
                             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
-                            bene.some((b)=>{
+                            bene.some((b) => {
                                 if((""+b._id) === (""+req.body.relBeneid)){
                                     bene_nome = b.bene_nome;
                                     conv_id = b.bene_convid;
@@ -4250,32 +4638,42 @@ relAtendimentoBeneassinFiltroAT(req,res){
                                 }
                                 return false;
                             })
-                            Conv.findOne({_id: conv_id}).then((conv)=>{
+                            Conv.findOne({_id: conv_id}).then((conv) => {
                                 conv_nome = conv.conv_nome;
                                 
-                                // ✅ ORDENAR ATENDIMENTOS POR DATA E HORA
-                                at.sort(function(a, b) {
-                                    let d1 = new Date(a.atend_atenddata);
-                                    let d2 = new Date(b.atend_atenddata);
-                                    if (d1.getTime() === d2.getTime()) {
-                                        return (a.atend_atendhora || '').localeCompare(b.atend_atendhora || '');
+                                // ✅ 3️⃣ PRÉ-ANÁLISE: Contar sessões por período/beneficiário/dia
+                                const SALA_ESCOLA = "6368fe35c2cdb92ac6d914be";
+                                const contadorSessoes = {};
+                                
+                                at.forEach(atend => {
+                                    if (String(atend.atend_salaid) === SALA_ESCOLA) {
+                                        const dataAtend = fncGeral.getData(atend.atend_atenddata);
+                                        const beneId = atend.atend_beneid.toString();
+                                        const [hora] = atend.atend_atendhora.split(":").map(Number);
+                                        
+                                        const periodo = hora < 13 ? 'manha' : 'tarde';
+                                        const chave = `${beneId}_${dataAtend}_${periodo}`;
+                                        
+                                        if (!contadorSessoes[chave]) {
+                                            contadorSessoes[chave] = 0;
+                                        }
+                                        contadorSessoes[chave]++;
                                     }
-                                    return d1 - d2;
                                 });
                                 
-                                // ✅ TRACKER DE ÚLTIMO HORÁRIO POR TERAPEUTA E DATA
-                                const ultimoHorarioTerapeuta = {};
+                                console.log("📊 Contador de sessões:", contadorSessoes);
                                 
+                                // ✅ 4️⃣ TRACKER DE ÍNDICE POR PERÍODO
+                                const indicePorPeriodo = {};
+                                
+                                // ✅ 5️⃣ PROCESSAR
                                 at.forEach((atend) => {
-                                    // ▼▼▼ NORMALIZAR DADOS ▼▼▼
                                     const categorias = (atend.atend_categoria || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                                     const org = (atend.atend_org || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
                                     const ehFixo = atend.atend_fixo === true || atend.atend_fixo === "true";
-                                    const dataAtend = fncGeral.getData(atend.atend_atenddata); // Formato: DD/MM/YYYY
+                                    const dataAtend = fncGeral.getData(atend.atend_atenddata);
                                     
-                                    // ▼▼▼ IDENTIFICAR TERAPEUTA CORRETO ▼▼▼
                                     let terapeutaIdUsado;
-                                    
                                     if (ehFixo) {
                                         terapeutaIdUsado = atend.atend_fixoterapeutaid;
                                     } else {
@@ -4293,13 +4691,10 @@ relAtendimentoBeneassinFiltroAT(req,res){
                                         }
                                     }
                                     
-                                    // ▼▼▼ VERIFICAR PERFIL DO TERAPEUTA (DOIS PERFIS AT) ▼▼▼
                                     const perfilId = terapeutaIdUsado ? lookupPerfilTerapeuta[terapeutaIdUsado.toString()] : null;
                                     const ehTerapeutaAT = perfilId === "6242191fa12aa557219a0fd9" || perfilId === "644742e378166939169f82a1" || perfilId === "62dea752ea444f5b7a02b449";
                                     
-                                    // ▼▼▼ IDENTIFICAR TERAPIA CORRETA PARA VERIFICAR SE É "ABA AT" ▼▼▼
                                     let terapiaIdParaVerificar;
-                                    
                                     if (org === "Padrão") {
                                         terapiaIdParaVerificar = atend.atend_terapiaid;
                                     } else if (org === "Administrativo") {
@@ -4314,69 +4709,94 @@ relAtendimentoBeneassinFiltroAT(req,res){
                                         terapiaIdParaVerificar = atend.atend_terapiaid;
                                     }
                                     
-                                    // ▼▼▼ VERIFICAR SE A TERAPIA CONTÉM "ABA AT" NO NOME ▼▼▼
                                     const ehTerapiaABAAT = terapiaIdParaVerificar ? lookupTerapiaABAAT[terapiaIdParaVerificar.toString()] : false;
                                     
                                     // ▼▼▼ AJUSTAR HORÁRIO PARA EXIBIÇÃO ▼▼▼
                                     if (porHoras === "sim") {
-                                        const SALA_ESCOLA = "6368fe35c2cdb92ac6d914be";
                                         const ehSalaEscola = String(atend.atend_salaid) === SALA_ESCOLA;
-
                                         const dataBase = new Date(atend.atend_atenddata);
                                         let [horaIni, minutoIni] = atend.atend_atendhora.split(":").map(Number);
-
-                                        const chaveSala = atend.atend_salaid.toString();
-
-                                        // 🔁 RESET se mudou a data
-                                        if (
-                                            ehSalaEscola &&
-                                            ultimoHorarioSala[chaveSala] &&
-                                            ultimoHorarioSala[chaveSala].data !== dataAtend
-                                        ) {
-                                            delete ultimoHorarioSala[chaveSala];
+                                        
+                                        const beneId = atend.atend_beneid.toString();
+                                        const [horaCheck] = atend.atend_atendhora.split(":").map(Number);
+                                        const periodo = horaCheck < 13 ? 'manha' : 'tarde';
+                                        const chaveContador = `${beneId}_${dataAtend}_${periodo}`;
+                                        const totalSessoesPeriodo = contadorSessoes[chaveContador] || 0;
+                                        
+                                        if (ehSalaEscola) {
+                                            // 🔥 Inicializar índice do período se não existir
+                                            if (indicePorPeriodo[chaveContador] === undefined) {
+                                                indicePorPeriodo[chaveContador] = 0;
+                                            }
+                                            const indiceAtual = indicePorPeriodo[chaveContador];
+                                            
+                                            // 🔥 PADRONIZAÇÃO: Manhã = 4 sessões
+                                            if (periodo === 'manha' && totalSessoesPeriodo === 4) {
+                                                const horariosPadraoManha = [
+                                                    { ini: 8,  fim: 9  },
+                                                    { ini: 9,  fim: 10 },
+                                                    { ini: 10, fim: 11 },
+                                                    { ini: 11, fim: 12 }
+                                                ];
+                                                horaIni = horariosPadraoManha[indiceAtual].ini;
+                                                minutoIni = 0;
+                                            }
+                                            // 🔥 PADRONIZAÇÃO: Tarde = 4 ou 5 sessões
+                                            else if (periodo === 'tarde' && (totalSessoesPeriodo === 4 || totalSessoesPeriodo === 5)) {
+                                                const horariosPadraoTarde = [
+                                                    { ini: 13, fim: 14 },
+                                                    { ini: 14, fim: 15 },
+                                                    { ini: 15, fim: 16 },
+                                                    { ini: 16, fim: 17 },
+                                                    { ini: 17, fim: 18 }
+                                                ];
+                                                horaIni = horariosPadraoTarde[indiceAtual].ini;
+                                                minutoIni = 20;
+                                            }
+                                            // 🔥 EXCEÇÃO: Usa cascata com tolerância
+                                            else {
+                                                const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${periodo}`;
+                                                
+                                                if (ultimoHorarioSala[chaveSala]) {
+                                                    const ultimo = ultimoHorarioSala[chaveSala];
+                                                    const ultimoTotalMinutos = ultimo.hora * 60 + ultimo.minuto;
+                                                    const atualTotalMinutos = horaIni * 60 + minutoIni;
+                                                    const intervaloMinutos = atualTotalMinutos - ultimoTotalMinutos;
+                                                    
+                                                    if (Math.abs(intervaloMinutos) <= 50) {
+                                                        horaIni = ultimo.hora;
+                                                        minutoIni = ultimo.minuto;
+                                                    }
+                                                }
+                                                
+                                                ultimoHorarioSala[chaveSala] = {
+                                                    hora: horaIni,
+                                                    minuto: minutoIni
+                                                };
+                                            }
+                                            
+                                            // Incrementar índice do período
+                                            indicePorPeriodo[chaveContador]++;
                                         }
 
-                                        // 🔁 Se for sala escola e já teve atendimento antes no dia
-                                        if (ehSalaEscola && ultimoHorarioSala[chaveSala]) {
-                                            horaIni = ultimoHorarioSala[chaveSala].hora;
-                                            minutoIni = ultimoHorarioSala[chaveSala].minuto;
-                                        }
-
+                                        // ✅ CÁLCULO DO HORÁRIO DE FIM (DEPOIS de todas as modificações)
                                         const inicio = new Date(dataBase);
                                         inicio.setHours(horaIni, minutoIni, 0, 0);
 
                                         let fim;
-
                                         if (ehSalaEscola) {
-                                            // 🔥 duração fixa 1 hora
                                             fim = new Date(inicio);
                                             fim.setMinutes(fim.getMinutes() + 60);
                                         } else {
-                                            // 🔹 NÃO ALTERA → usa duração padrão já existente (ex: 40 min)
                                             fim = new Date(inicio);
                                             fim.setMinutes(fim.getMinutes() + 40);
                                         }
 
-                                        const horaIniFormat = inicio.getHours().toString().padStart(2, "0");
-                                        const minutoIniFormat = inicio.getMinutes().toString().padStart(2, "0");
-
-                                        const horaFim = fim.getHours().toString().padStart(2, "0");
-                                        const minutoFim = fim.getMinutes().toString().padStart(2, "0");
-
-                                        // 🔁 Salvar cascata SOMENTE para sala escola
-                                        if (ehSalaEscola) {
-                                            ultimoHorarioSala[chaveSala] = {
-                                                hora: fim.getHours(),
-                                                minuto: fim.getMinutes(),
-                                                data: dataAtend
-                                            };
-                                        }
-
-                                        // ✅ FORMATAÇÃO COM ZERO À ESQUERDA (padStart)
+                                        // ✅ FORMATAÇÃO (garantido que todas as variáveis existem)
                                         const horaIniFmt = horaIni.toString().padStart(2, "0");
                                         const minutoIniFmt = minutoIni.toString().padStart(2, "0");
-                                        const horaFimFmt = horaFim.toString().padStart(2, "0");
-                                        const minutoFimFmt = minutoFim.toString().padStart(2, "0");
+                                        const horaFimFmt = fim.getHours().toString().padStart(2, "0");
+                                        const minutoFimFmt = fim.getMinutes().toString().padStart(2, "0");
 
                                         rab.dt = fncGeral.getData(atend.atend_atenddata) + " - " + 
                                                 horaIniFmt + ":" + minutoIniFmt + "/" + 
@@ -4441,11 +4861,10 @@ relAtendimentoBeneassinFiltroAT(req,res){
 
                                     // ▼▼▼ INCLUSÃO NO RELATÓRIO ▼▼▼
                                     if (categorias !== "Feriado" && categorias !== "Falta Absoluta" && terapiaAtend !== "break") {
-                                        // ▼▼▼ ATRIBUIR SALA ▼▼▼
                                         if (porSala == "sim"){
-                                            sala.forEach((s)=>{
-                                                if ((""+atend.atend_salaid+"") == (""+s._id+"")){
-                                                    if ((""+s.sala_nome+"").includes("Escola")){
+                                            sala.forEach((s) => {
+                                                if (("" + atend.atend_salaid + "") == ("" + s._id + "")){
+                                                    if (("" + s.sala_nome + "").includes("Escola")){
                                                         rab.sala = "Escola ou Domicílio";
                                                     } else {
                                                         rab.sala = "Clínica";
@@ -4456,12 +4875,12 @@ relAtendimentoBeneassinFiltroAT(req,res){
                                         
                                         rab.especialidade = terapiaAtend;
                                         rab.profissional = terapeutaAtend;
-                                        rel.push(rab);
+                                        
+                                        rel.push(Object.assign({}, rab));
                                         rab = new RelAtendBene();
                                     }
                                 });
                                 
-                                // ✅ ORDENAÇÃO FINAL
                                 rel.sort(function(a, b){
                                     let dataODiaA = a.dataDia || fncGeral.getData(a.dt);
                                     let dataODiaB = b.dataDia || fncGeral.getData(b.dt);
@@ -4476,7 +4895,6 @@ relAtendimentoBeneassinFiltroAT(req,res){
                                         return dataA - dataB;
                                     }
                                     
-                                    // Ordenar por hora dentro do mesmo dia
                                     return (a.horaIni || '').localeCompare(b.horaIni || '');
                                 });
                                 
@@ -4501,12 +4919,11 @@ relAtendimentoBeneassinFiltroAT(req,res){
                 });
             });
         });
-    }).catch((err) =>{
+    }).catch((err) => {
         console.error('[ERRO relAtendimentoBeneassinFiltroAT]', err);
         res.status(500).send("Erro ao gerar relatório");
     });
-},
-    
+    },  
     relAtendimentoBeneCons(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)

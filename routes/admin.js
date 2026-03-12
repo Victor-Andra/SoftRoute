@@ -2677,14 +2677,22 @@ router.post('/area/plano/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//at
 router.get('/area/plano/imp/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona plano de tratamento
     fncTrat.tratImp(req,res);
 })
-//Deleta plano Selecionado
-router.get('/area/plano/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta plano de tratamento
-    fncTrat.deletaTrat(req, res);
-})
-//Envia para Lixeira o plano Selecionado
-router.get('/area/plano/lixo/:id', fncGeral.IsAuthenticated, (req,res) =>{//envia o plano de tratamento para lixeira
+
+// ✅ ROTA DE EXCLUSÃO LÓGICA - MÉTODO GET (como você prefere)
+router.get('/area/plano/lixo/:id', fncGeral.IsAuthenticated, (req,res) =>{
     fncTrat.lixoTrat(req, res);
 })
+
+// === NOVA ROTA: LISTAR LIXEIRA (apenas perfis autorizados) ===
+router.get('/area/plano/lixeira', fncGeral.IsAuthenticated, (req,res) =>{
+    fncTrat.listaLixeira(req, res);
+})
+
+// === NOVA ROTA: RESTAURAR DA LIXEIRA ===
+router.get('/area/plano/restaurar/:id', fncGeral.IsAuthenticated, (req,res) =>{
+    fncTrat.restaurarTrat(req, res);
+})
+
 
 //Menu Extras ** Area Atendimentos Extras   
 //Carrega Cadastro de Extra 

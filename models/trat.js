@@ -44,7 +44,11 @@ const TratSchema = mongoose.Schema({
     trat_usuidedi :{ type: ObjectId, required: false },
     trat_datacad :{ type: Date, required: false },
     trat_dataedi :{ type: Date, required: false },
-    trat_lixo :{ type: String, required: false }
+    //Dados para remocao logica do registro
+    trat_usuidlixo :{ type: ObjectId, required: false },  // ID do usuário que enviou pra lixeira
+    trat_datalixo :{ type: Date, required: false },        // Data/hora do envio pra lixeira
+    trat_lixomotivo :{ type: String, required: false },    // Motivo informado pelo usuário
+    trat_lixo :{ type: String, required: false, default: "false" } // "true" = na lixeira, "false" = ativo
 })
 
 class Trat{
@@ -90,6 +94,7 @@ class Trat{
         trat_datacad,
         trat_usuidedi,
         trat_dataedi,
+        trat_lixomotivo,
         trat_lixo,
 
         ){
@@ -134,6 +139,8 @@ class Trat{
         this.trat_datacad = trat_datacad,
         this.trat_usuidedi = trat_usuidedi,
         this.trat_dataedi = trat_dataedi,
+        
+        this.trat_lixomotivo = trat_lixomotivo,
         this.trat_lixo = trat_lixo
     }
 }
@@ -221,48 +228,6 @@ module.exports = {
         })
         return resultado;
     },
-    tratLixo: async (req, res) => {
-        
-        //Estrutura Multiempresa
-        let db = req.cookies['preferredDb'];
-        TratModel = getModel(db, 'tb_trat', TratSchema)
-        //;
-
-        let dataAtual = new Date();
-        let resultado;
-        let lvlUsu = req.cookies['lvlUsu'];
-        let usuarioAtual = req.cookies['idUsu'];
-        let idUsu;
-        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
-        arrayIds.forEach((id)=>{
-            if(id == lvlUsu){
-                idUsu = id;
-            }
-        })
-        let tratId = new ObjectId(req.body.id);
-        //Pega data atual
-        console.log("req.body.id:"+req.body.id)
-        console.log("tratId:"+tratId)
-        
-        //Realiza Atualização
-        await TratModel.findByIdAndUpdate(req.body.tratId, 
-            {$set: {
-        //Dados para o Sistema: quem fez, data criação ou alteração
-        trat_usuidedi: usuarioAtual,
-        trat_dataedi : dataAtual,
-        trat_lixo : "true"
-        
-        }}
-        ).then((res) =>{
-            console.log("Encaminhado para a Lixeira")
-            resultado = true;
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
-        })
-        return resultado;
-    },
     tratAdicionar: async (req,res) => {
 
         //Estrutura Multiempresa
@@ -331,5 +296,118 @@ module.exports = {
             console.log(err)
             return err;
         });
+    },
+    tratLixo: async (req, res) => {
+        console.log('🔍 [tratLixo] Iniciando função de exclusão lógica');
+        console.log('🔍 [tratLixo] req.params.id:', req.params.id);
+        console.log('🔍 [tratLixo] req.query.motivo:', req.query.motivo);
+        console.log('🔍 [tratLixo] req.cookies.idUsu:', req.cookies['idUsu']);
+        
+        try {
+            // Estrutura Multiempresa
+            let db = req.cookies['preferredDb'];
+            console.log('🔍 [tratLixo] Database selecionada:', db);
+            
+            // ✅ CORREÇÃO: usar TratSchema (variável local deste arquivo)
+            // NÃO usar tratClass.TratSchema aqui!
+            const TratModel = getModel(db, 'tb_trat', TratSchema);
+
+            const dataAtual = new Date();
+            const usuarioAtual = req.cookies['idUsu'];
+            const tratId = req.params.id;
+
+            console.log('🔍 [tratLixo] Dados para atualização:');
+            console.log('  - tratId:', tratId);
+            console.log('  - usuarioAtual:', usuarioAtual);
+            console.log('  - dataAtual:', dataAtual.toISOString());
+
+            const motivo = req.query.motivo || req.body.motivo || 'Motivo não informado';
+            console.log('🔍 [tratLixo] Motivo da exclusão:', motivo);
+
+            console.log('🔍 [tratLixo] Executando findByIdAndUpdate...');
+            
+            const resultado = await TratModel.findByIdAndUpdate(
+                tratId,
+                {
+                    $set: {
+                        trat_usuidlixo: usuarioAtual,
+                        trat_datalixo: dataAtual,
+                        trat_lixomotivo: motivo,
+                        trat_lixo: "true",
+                        trat_dataedi: dataAtual,
+                        trat_usuidedi: usuarioAtual
+                    }
+                },
+                { new: true }
+            );
+
+            console.log('🔍 [tratLixo] Resultado do update:', resultado ? 'OK' : 'NULO');
+
+            if (!resultado) {
+                console.error('❌ [tratLixo] Registro não encontrado para ID:', tratId);
+                throw new Error('Registro não encontrado');
+            }
+
+            console.log('✅ [tratLixo] Registro enviado para lixeira com sucesso!');
+            return { sucesso: true, dados: resultado };
+
+        } catch (err) {
+            console.error('❌ [tratLixo] ERRO ao enviar para lixeira:', err.message);
+            console.error('❌ [tratLixo] Stack:', err.stack);
+            return { sucesso: false, erro: err.message };
+        }
+    },
+
+    tratRestaurar: async (req, res) => {
+        console.log('🔍 [tratRestaurar] Iniciando função de restauração');
+        console.log('🔍 [tratRestaurar] req.params.id:', req.params.id);
+        
+        try {
+            let db = req.cookies['preferredDb'];
+            console.log('🔍 [tratRestaurar] Database:', db);
+            
+            // ✅ CORREÇÃO: usar TratSchema (variável local)
+            const TratModel = getModel(db, 'tb_trat', TratSchema);
+
+            const dataAtual = new Date();
+            const usuarioAtual = req.cookies['idUsu'];
+            const tratId = req.params.id || req.body.tratId;
+
+            console.log('🔍 [tratRestaurar] Dados para restauração:');
+            console.log('  - tratId:', tratId);
+            console.log('  - usuarioAtual:', usuarioAtual);
+
+            console.log('🔍 [tratRestaurar] Executando findByIdAndUpdate para restaurar...');
+            
+            const resultado = await TratModel.findByIdAndUpdate(
+                tratId,
+                {
+                    $set: {
+                        trat_lixo: "false",
+                        trat_usuidlixo: null,
+                        trat_datalixo: null,
+                        trat_lixomotivo: null,
+                        trat_dataedi: dataAtual,
+                        trat_usuidedi: usuarioAtual
+                    }
+                },
+                { new: true }
+            );
+
+            console.log('🔍 [tratRestaurar] Resultado do restore:', resultado ? 'OK' : 'NULO');
+
+            if (!resultado) {
+                console.error('❌ [tratRestaurar] Registro não encontrado para ID:', tratId);
+                throw new Error('Registro não encontrado');
+            }
+
+            console.log('✅ [tratRestaurar] Registro restaurado com sucesso!');
+            return { sucesso: true, dados: resultado };
+
+        } catch (err) {
+            console.error('❌ [tratRestaurar] ERRO ao restaurar:', err.message);
+            console.error('❌ [tratRestaurar] Stack:', err.stack);
+            return { sucesso: false, erro: err.message };
+        }
     }
 };

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<meta charset="utf-8">
+    	<title>Lixeira - Planos de Tratamento</title>
+   		<style>
+			.lixo-badge { background-color: #777 !important; }
+			.motivo-lixo { font-style: italic; color: #666; font-size: 10px; }
+			#dynamic-table {
+				table-layout: fixed;
+				width: 100%;
+			}
+
+			/* Coluna 1 */
+			#dynamic-table th:nth-child(1),
+			#dynamic-table td:nth-child(1) {
+				width: 100px !important;
+			}
+
+			/* Coluna 2 */
+			#dynamic-table th:nth-child(2),
+			#dynamic-table td:nth-child(2) {
+				width: 120px !important;
+			}
+
+			/* Coluna 3 */
+			#dynamic-table th:nth-child(3),
+			#dynamic-table td:nth-child(3) {
+				width: 250px !important;
+			}
+
+			/* Coluna 4 */
+			#dynamic-table th:nth-child(4),
+			#dynamic-table td:nth-child(4) {
+				width: 180px !important;
+			}
+
+			/* Coluna 5 */
+			#dynamic-table th:nth-child(5),
+			#dynamic-table td:nth-child(5) {
+				width: 200px !important;
+			}
+		</style>
+		<script type="text/javascript">
+			function ocultaEditar(){
+				let biscoito = procuraBiscoito("lvlUsu");
+				document.getElementById("botaoEditar").value;
+			}
+			function ajustaData(){
+				let fullDatas = document.getElementsByName("fullData");
+				fullDatas.forEach((elementox)=>{
+					let id = "tratdata"+elementox.id;
+					let dat = new Date(elementox.value);
+					let mes = (dat.getMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+
+					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
+				})
+			}
+			
+			function trocaFiltroData(){
+				let fill = document.getElementById("tipoData").value;
+				if(fill == "Ano"){
+					document.getElementById("divAnoBordo").hidden = false;
+					document.getElementById("divMesBordo").hidden = true;
+					document.getElementById("divDataFil").hidden = true;
+				} else if(fill == "Ano/Mes"){
+					document.getElementById("divAnoBordo").hidden = false;
+					document.getElementById("divMesBordo").hidden = false;
+					document.getElementById("divDataFil").hidden = true;
+				} else if (fill == "Semana"){
+					document.getElementById("divAnoBordo").hidden = true;
+					document.getElementById("divMesBordo").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				} else {
+					document.getElementById("divAnoBordo").hidden = true;
+					document.getElementById("divMesBordo").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				}
+			}
+			function trocaFilpessoa() {
+				let fillTipopessoa = document.getElementById("tratTipoPessoa").value;
+				if(fillTipopessoa == "Geral"){
+					document.getElementById("divBordoBeneficiario").hidden = true;
+					document.getElementById("divBordoTerapeuta").hidden = true;
+				} else if(fillTipopessoa == "Beneficiario"){
+					document.getElementById("divBordoBeneficiario").hidden = false;
+					document.getElementById("divBordoTerapeuta").hidden = true;
+				} else {
+					document.getElementById("divBordoBeneficiario").hidden = true;
+					document.getElementById("divBordoTerapeuta").hidden = false;
+				}
+			}
+			function carregaBody(){
+				trocaFiltroData();
+				trocaFilpessoa();
+				
+				
+				this.ocultaDelete();
+			}
+
+			function confirmeDeletar(id){
+				let confirmado = confirm("Quer mesmo deletar este plano de tratamento?");
+				if(confirmado == true){
+					window.location.href=("/menu/area/plano/del/"+id);
+				}
+			}
+
+			function ocultaDelete(){
+				let perfilAtual = document.getElementById("perfilAtual").value;
+				if (perfilAtual == '62421801a12aa557219a0fb9'){
+					console.log("Ok")
+				} else {
+					document.getElementById("acaoDel").remove();
+					console.log("NOT Ok")
+				}
+			}
+
+			function formataDataold(){
+				let dt = document.getElementById('dataFil').value;
+				let dia = dt.substring(8,10);
+				let mes = dt.substring(5,7);
+				let ano = dt.substring(0,4);
+				let fulldate=(ano+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+				document.getElementById('dataFinal').value = fulldate;
+				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+			}
+			function formataData(){//Melhorada se  haver campo com resultado vazio 05/08/2025 11:00
+				let dtInput = document.getElementById('dataFil');
+				let dt = dtInput.value;
+				if (!dt) return;
+				let [ano, mes, dia] = dt.split("-");
+				let fulldate = `${ano}-${mes}-${dia} 00:00:00.000Z`;
+				document.getElementById('dataFinal').value = fulldate;
+			}
+		</script>
+	</head>
+	<body onload="carregaBody();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="breadcrumbs">
+					<ul class="breadcrumb">
+						<li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Route</a></li>
+						<li><a href="/menu/area/plano/lis">Planos</a></li>
+						<li class="active">Lixeira</li>
+					</ul>
+				</div>
+
+				{{#compareString flash.sucesso "true"}}
+					<div class="alert alert-success">
+						<strong><i class="ace-icon fa fa-check"></i> {{flash.texto}}</strong>
+						<button type="button" class="close" onclick="OcultaMsg()"><i class="ace-icon fa fa-times"></i></button>
+					</div>
+				{{else}}
+					{{#compareString flash.sucesso "false"}}
+						<div class="alert alert-danger">
+							<strong><i class="ace-icon fa fa-times"></i> {{flash.texto}}</strong>
+							<button type="button" class="close" onclick="OcultaMsg()"><i class="ace-icon fa fa-times"></i></button>
+						</div>
+					{{/compareString}}
+				{{/compareString}}
+
+				<div class="page-content">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="alert alert-warning">
+								<i class="ace-icon fa fa-trash-o"></i> 
+								<strong>Lixeira:</strong> Registros excluídos logicamente. 
+								Use "Restaurar" para recuperar ou aguarde a limpeza automática.
+								<a href="/menu/area/plano/lis" class="btn btn-xs btn-primary pull-right">
+									<i class="ace-icon fa fa-arrow-left"></i> Voltar para Planos
+								</a>
+							</div>
+
+							<table id="table-lixo" class="table table-striped table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>Tipo</th>
+										<th>Data Plano</th>
+										<th>Beneficiário</th>
+										<th>Enviado por</th>
+										<th>Data Exclusão</th>
+										<th>Motivo</th>
+										<th>Ação</th>
+									</tr>
+								</thead>
+								<tbody>
+									{{#each trats}}
+									<tr>
+										<td>
+											{{#ifEqual this.trat_planotipo "Padrão"}}
+												<span class="label label-sm label-warning">{{trat_planotipo}}</span>
+											{{else}}
+												<span class="label label-sm label-danger">{{trat_planotipo}}</span>
+											{{/ifEqual}}
+										</td>
+										<td>{{formatDate trat_tratdata}}</td>
+										<td>
+											{{#each ../benes}}
+												{{#ifEqual this._id ../trat_beneid}}{{bene_nome}}{{/ifEqual}}
+											{{/each}}
+										</td>
+										<td>
+											{{#if trat_usuidlixo}}
+												{{trat_usuidlixo.usuario_nome}}
+											{{else}}
+												<small class="text-muted">Sistema</small>
+											{{/if}}
+										</td>
+										<td>{{formatDate trat_datalixo}}</td>
+										<td><span class="motivo-lixo">{{trat_lixomotivo}}</span></td>
+										<td>
+											<a class="green" href="/menu/area/plano/restaurar/{{_id}}" title="Restaurar"
+											onclick="return confirm('Deseja restaurar este plano?')">
+												<i class="ace-icon fa fa-undo bigger-130"></i>
+											</a>
+										</td>
+									</tr>
+									{{else}}
+									<tr>
+										<td colspan="7" class="text-center text-muted">
+											<i class="ace-icon fa fa-info-circle"></i> Nenhum registro na lixeira.
+										</td>
+									</tr>
+									{{/each}}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+		function carregaBody(){
+			// Oculta botão de deletar se não tiver permissão (mantém sua lógica)
+			ocultaDelete();
+		}
+		function ocultaDelete(){
+			let perfilAtual = document.getElementById("perfilAtual")?.value;
+			const idsPermitidos = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];
+			if (perfilAtual && idsPermitidos.includes(perfilAtual)) {
+				console.log("✓ Permissão OK");
+			} else {
+				document.querySelectorAll('a[title="Deletar"]').forEach(el => el.style.display = 'none');
+			}
+		}
+		function formatDate(dateString) {
+			if(!dateString) return '-';
+			const d = new Date(dateString);
+			return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+		}
+		</script>
+	</body>
+
+</html>
