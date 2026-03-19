@@ -576,7 +576,7 @@ module.exports = {
                             flash.sucesso = "true";
                             
                             console.log('🔍 [filtraTrat] Renderizando view com usuarioNomeLogado:', usuarioNomeLogado);
-                            
+                             console.log('🔍 [filtraTrat] Renderizando view com pérfil do Usuário:', perfilAtual);
                            // === 👇 NOVO: PASSAR VALORES DOS FILTROS PARA PERSISTÊNCIA 👇 ===
                             res.render('area/plano/tratLis', {
                                 anos: ano, 

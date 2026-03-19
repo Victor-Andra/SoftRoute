@@ -655,7 +655,7 @@ router.post('/login/backup', passport.authenticate('local', {
         const fimSemana = new Date(domingo);
         fimSemana.setDate(domingo.getDate() + 6);
 
-        const agendasSemanais = await Agenda.find({
+        const agendas = await Agenda.find({
             agenda_data: { $gte: inicioSemana, $lte: fimSemana },
             agenda_usuid: idUsu
         });
@@ -666,7 +666,24 @@ router.post('/login/backup', passport.authenticate('local', {
             Bene.find()
         ]);
 
-        const evolucaoFaltante = agendasSemanais
+        evolucaoFaltante.forEach((af)=>{
+            arrIdsAgendas.push(af._id);
+        })
+
+        const agendasSemanais = await Agenda.find({agenda_tempId: {$in: arrIdsAgendas}});
+
+        agendaFinal = agendas.filter(a => {
+            let match = agendasSemanais.find(s => 
+                s.agenda_tempId.toString() === a._id.toString()
+            );
+
+            if (!match) return true;
+
+            return a.agenda_usuid.toString() === match.agenda_usuid.toString();
+        });
+            
+
+        const evolucaoFaltante = agendaFinal
             .filter(a => !a.agenda_selo)
             .map(a => {
                 const dat = new Date(a.agenda_data);
@@ -696,24 +713,24 @@ router.post('/login/backup', passport.authenticate('local', {
         const fimDia = new Date();
         fimDia.setHours(23, 59, 59, 999);
 
-        let agendas = await Agenda.find({
-            agenda_data: { $gte: inicioDia, $lte: fimDia },
-            agenda_usuid: idUsu,
-            agenda_temp: false
-        });
+        // let agendas = await Agenda.find({
+        //     agenda_data: { $gte: inicioDia, $lte: fimDia },
+        //     agenda_usuid: idUsu,
+        //     agenda_temp: false
+        // });
 
-        agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
+        //agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
 
-        agendas.forEach(a => {
-            const dat = new Date(a.agenda_data);
-            a.agenda_data_dia = fncGeral.getDataFMT(dat);
-            a.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getUTCMinutes()).padStart(2, '0')}`;
-            a.agenda_aux = aux++;
-            a.dia_hora_ordenação = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${String(dat.getUTCHours()).padStart(2, '0')}${String(dat.getUTCMinutes()).padStart(2, '0')}`;
-            a.agenda_data_semana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()];
-        });
+        // agendas.forEach(a => {
+        //     const dat = new Date(a.agenda_data);
+        //     a.agenda_data_dia = fncGeral.getDataFMT(dat);
+        //     a.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getUTCMinutes()).padStart(2, '0')}`;
+        //     a.agenda_aux = aux++;
+        //     a.dia_hora_ordenação = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${String(dat.getUTCHours()).padStart(2, '0')}${String(dat.getUTCMinutes()).padStart(2, '0')}`;
+        //     a.agenda_data_semana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()];
+        // });
 
-        agendaFinal = agendas;
+        // agendaFinal = agendas;
 
         const [terapias2, benes2, usuarios2] = await Promise.all([
             Terapia.find(),
