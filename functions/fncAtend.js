@@ -12141,7 +12141,7 @@ const id = a._id;
                                         dt: item.dt,
                                         horaIni: item.horaIni,
                                         horaFim: item.horaFim,
-                                        profissional_nome: tEncontrado ? tEncontrado.usuario_nome : "—"
+                                        profissional_nome: tEncontrado ? tEncontrado.usuario_nomecompleto : "—"
                                     });
                                     grupo.qtd++;
                                 });
