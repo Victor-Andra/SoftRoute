@@ -2,207 +2,246 @@
 <html lang="pt-br">
 	<head>
 		<title>Atendimentos</title>
+		<style>
+			/* --- REGRA GERAL: mantém 200px para selects comuns (se houver) --- */
+			.chosen-container,
+			.chosen-container-single {
+				width: 200px !important;
+			}
+			
+			/* Garante que o dropdown acompanhe */
+			.chosen-drop,
+			.chosen-results {
+				width: 100% !important;
+			}
+			
+			/* --- EXCEÇÃO: campos de terapia e terapeuta com 100% do container --- */
+			/* Lista dos containers Chosen gerados para esses selects */
+			#atendTerapeutaid_chosen,
+			#atendBeneid_chosen,
+			#atendConvid_chosen,
+			#atendTerapiaid_chosen,
+			#atendFixoTerapeutaid_chosen,
+			#atendFixoTerapiaid_chosen,
+			#atendMergeTerapeutaid_chosen,
+			#atendMergeTerapiaid_chosen {
+				width: 100% !important;           /* Ocupa toda a largura do .col-sm-4 */
+				max-width: 100% !important;
+				min-width: 0 !important;          /* Remove restrições mínimas */
+			}
+
+			/* Dropdown acompanha 100% */
+			#atendTerapeutaid_chosen .chosen-drop,
+			#atendTerapiaid_chosen .chosen-drop,
+			#atendBeneid_chosen .chosen-drop,
+			#atendConvid_chosen .chosen-drop,
+			#atendFixoTerapeutaid_chosen .chosen-drop,
+			#atendFixoTerapiaid_chosen .chosen-drop,
+			#atendMergeTerapeutaid_chosen .chosen-drop,
+			#atendMergeTerapiaid_chosen .chosen-drop {
+				width: 100% !important;
+			}
+
+			/* Trunca texto longo nos selects personalizados */
+			#atendTerapeutaid_chosen .chosen-single span,
+			#atendTerapiaid_chosen .chosen-single span,
+			#atendBeneid_chosen .chosen-single span,
+			#atendConvid_chosen .chosen-single span,
+			#atendFixoTerapeutaid_chosen .chosen-single span,
+			#atendFixoTerapiaid_chosen .chosen-single span,
+			#atendMergeTerapeutaid_chosen .chosen-single span,
+			#atendMergeTerapiaid_chosen .chosen-single span {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: block;
+			}
+		</style>
 		<script type="text/javascript">
+			// ===== SELECT CONVÊNIO =====
 			function selectConv(){
-				var v1 = document.getElementById(document.getElementById("atendBeneid").value).value.toString();
-				console.log(v1)
-				document.getElementById("atendConvid").value = v1;
-				let convId = document.getElementById("atendConvid").value;
-				console.log(convId)
-				document.getElementById("tabilConvid").value = convId;
-				console.log("feito!")
+				var beneId = $('#atendBeneid').val();
+				console.log('Beneficiário:', beneId);
+				
+				var convId = $('input[name="refBeneConv"][value="' + beneId + '"]').val();
+				if (!convId) convId = 'X';
+				
+				console.log('Convênio:', convId);
+				$('#atendConvid').val(convId).trigger('chosen:updated');
+				$('#tabilConvid').val(convId);
+				
+				// Já carrega os valores financeiros automaticamente
+				if (convId !== 'X' && $('#atendTerapiaid').val()) {
+					carregaValores();
+				}
 			}
+
+			// ===== CARREGA VALORES PRINCIPAIS =====
 			function carregaValores(){
-				let teraId = document.getElementById("atendTerapiaid").value;
-				document.getElementById("creditTerapiaid").value = teraId;
-				document.getElementById("debitTerapiaid").value = teraId;
-				if (document.getElementById("atendConvid").value == "X"){
-					alert("Convênio não selecionado!");
-				} else {
-					try{
-						let convId = document.getElementById("atendConvid").value
-						document.getElementById("atendValorcre").value = document.getElementById(convId+"/"+teraId+"/cre").value;
-						document.getElementById("atendValordeb").value = document.getElementById(convId+"/"+teraId+"/deb").value;
-						document.getElementById("tabilValorcredit").value = document.getElementById(convId+"/"+teraId+"/cre").value;
-						document.getElementById("tabilValordebit").value = document.getElementById(convId+"/"+teraId+"/deb").value;
-					} catch(err){
-						document.getElementById("atendValorcre").value = "0,00";
-						document.getElementById("atendValordeb").value = "0,00";
-						document.getElementById("tabilValorcredit").value = "0,00";
-						document.getElementById("tabilValordebit").value = "0,00";
+				let teraId = $('#atendTerapiaid').val();
+				$('#creditTerapiaid').val(teraId);
+				$('#debitTerapiaid').val(teraId);
+				
+				let convId = $('#atendConvid').val();
+				if (convId && convId !== 'X' && teraId) {
+					try {
+						$('#atendValorcre').val($('#' + convId + '/' + teraId + '/cre').val() || '0,00');
+						$('#atendValordeb').val($('#' + convId + '/' + teraId + '/deb').val() || '0,00');
+						$('#tabilValorcredit').val($('#' + convId + '/' + teraId + '/cre').val() || '0,00');
+						$('#tabilValordebit').val($('#' + convId + '/' + teraId + '/deb').val() || '0,00');
+					} catch(err) {
+						$('#atendValorcre, #atendValordeb, #tabilValorcredit, #tabilValordebit').val('0,00');
 					}
 				}
-				atualizaSubFixo();
+				// Não chama mais atualizaSubFixo - tudo fica visível sempre
 			}
+
+			// ===== CARREGA VALORES MERGE =====
 			function carregaValoresMerge(){
-				let teraId = document.getElementById("atendMergeTerapiaid").value;
-				document.getElementById("creditMergeTerapiaid").value = teraId;
-				document.getElementById("debitMergeTerapiaid").value = teraId;
-				document.getElementById("tabilMergeTerapiaid").value = teraId;
-				if (document.getElementById("atendConvid").value == "X"){
-					alert("Convênio não selecionado!");
-				} else {
-					try{
-						let convId = document.getElementById("atendConvid").value
-						document.getElementById("atendMergevalorcre").value = document.getElementById(convId+"/"+teraId+"/cre").value;
-						document.getElementById("atendMergevalordeb").value = document.getElementById(convId+"/"+teraId+"/deb").value;
-					} catch(err){
-						document.getElementById("atendMergevalorcre").value = "0,00";
-						document.getElementById("atendMergevalordeb").value = "0,00";
+				let teraId = $('#atendMergeTerapiaid').val();
+				$('#creditMergeTerapiaid').val(teraId);
+				$('#debitMergeTerapiaid').val(teraId);
+				$('#tabilMergeTerapiaid').val(teraId);
+				
+				let convId = $('#atendConvid').val();
+				if (convId && convId !== 'X' && teraId) {
+					try {
+						$('#atendMergevalorcre').val($('#' + convId + '/' + teraId + '/cre').val() || '0,00');
+						$('#atendMergevalordeb').val($('#' + convId + '/' + teraId + '/deb').val() || '0,00');
+					} catch(err) {
+						$('#atendMergevalorcre, #atendMergevalordeb').val('0,00');
 					}
 				}
-				atualizaSubFixo();
 			}
-			function atualizaSubFixo(){
-				if (document.getElementById("atendCategoria").value == "SubstitutoFixo") {
-					document.getElementById("atendFixoCheck").checked = true;
-					document.getElementById("divSubFixo").style.display = "";
-				} else {
-					document.getElementById("atendFixoCheck").checked = false;
-					document.getElementById("divSubFixo").style.display = "none";
-				}
-			}
+
+			// ===== CARREGA VALORES FIXO (sempre executado, sem condicionais de exibição) =====
 			function carregaValoresFixo(){
-				if (document.getElementById("atendFixo").value == "true"){
-					if (document.getElementById("atendConvid").value == "X"){
-						alert("Convênio não selecionado!");
-					} else {
-						try{
-							let convId = document.getElementById("atendConvid").value;
-							document.getElementById("atendFixovalorcre").value = document.getElementById(convId+"/"+document.getElementById("atendFixoTerapiaid").value+"/cre").value;
-							document.getElementById("atendFixovalordeb").value = document.getElementById(convId+"/"+document.getElementById("atendFixoTerapiaid").value+"/deb").value;
-						} catch(err){
-							document.getElementById("atendFixovalorcre").value = "0,00";
-							document.getElementById("atendFixovalordeb").value = "0,00";
-						}
+				let teraId = $('#atendFixoTerapiaid').val();
+				let convId = $('#atendConvid').val();
+				
+				if (convId && convId !== 'X' && teraId) {
+					try {
+						$('#atendFixovalorcre').val($('#' + convId + '/' + teraId + '/cre').val() || '0,00');
+						$('#atendFixovalordeb').val($('#' + convId + '/' + teraId + '/deb').val() || '0,00');
+					} catch(err) {
+						$('#atendFixovalorcre, #atendFixovalordeb').val('0,00');
 					}
 				}
 			}
+
+			// ===== ATUALIZAÇÕES SIMPLES =====
 			function atualizaTerapeutaId(){
-				console.log("X");
-				console.log(document.getElementById("atendTerapeutaid").value);
-				let ati = document.getElementById("atendTerapeutaid").value;
-				console.log("C");
-				console.log(document.getElementById("tabilTerapeutaId").value);
-				document.getElementById("tabilTerapeutaId").value = ati;
+				$('#tabilTerapeutaId').val($('#atendTerapeutaid').val());
 			}
+			
 			function atualizaMergeTerapeutaId(){
-				console.log(document.getElementById("atendMergeTerapeutaid").value);
-				console.log("X");
-				let amti = document.getElementById("atendMergeTerapeutaid").value;
+				// Mantida por compatibilidade, mas sem lógica de exibição
+				console.log('Merge terapeuta:', $('#atendMergeTerapeutaid').val());
 			}
+
+			// ===== CATEGORIA - apenas define valor, NUNCA esconde opções =====
 			function controlaCategoria(){
-				let origem = document.getElementById("atendOrg").value;
-				if(origem == "Padrão"){
-					document.getElementById("atendCategoria").value = "Padrão";
-					document.getElementById("Padrão").style.display = "";
-					document.getElementById("Falta").style.display = "none";
-					document.getElementById("Falta Justificada").style.display = "none";
-					document.getElementById("Falta Absoluta").style.display = "none";
-					document.getElementById("Feriado").style.display = "none";
-					document.getElementById("Apoio").style.display = "none";
-					document.getElementById("Supervisão").style.display = "none";
-					document.getElementById("Pais").style.display = "none";
-					document.getElementById("Substituição").style.display = "none";
-					document.getElementById("SubstitutoFixo").style.display = "none";
-					document.getElementById("Glosa").style.display = "none";
-					document.getElementById("Extra").style.display = "none";
+				let origem = $('#atendOrg').val();
+				// Apenas define o valor, sem mexer em display de opções
+				if (origem == "Padrão") {
+					$('#atendCategoria').val("Padrão").trigger('chosen:updated');
 				} else {
-					document.getElementById("atendCategoria").value = "Apoio";
-					document.getElementById("Padrão").style.display = "none";
-					document.getElementById("Falta").style.display = "";
-					document.getElementById("Falta Justificada").style.display = "";
-					document.getElementById("Falta Absoluta").style.display = "";
-					document.getElementById("Feriado").style.display = "";
-					document.getElementById("Apoio").style.display = "";
-					document.getElementById("Supervisão").style.display = "";
-					document.getElementById("Pais").style.display = "";
-					document.getElementById("Substituição").style.display = "";
-					document.getElementById("SubstitutoFixo").style.display = "";
-					document.getElementById("Glosa").style.display = "";
-					document.getElementById("Extra").style.display = "";
+					$('#atendCategoria').val("Apoio").trigger('chosen:updated');
 				}
 			}
-			function ajustaOption(){
-				document.getElementById("Padrão").style.display = "none";
-			}
+
+			// ===== CARREGA BODY - POPULA TUDO, SEM CONDICIONAIS DE EXIBIÇÃO =====
 			function carregaBody(){
-				console.log("START");
-				document.getElementById("atendId").value = document.getElementById("idEdi").value;
-				this.atualizaDataEdi();
-				this.atualizaData();
-				document.getElementById("atendHora").value = document.getElementById("atendHoraEdi").value;
-				document.getElementById("atendOrg").value = document.getElementById("atendOrgEdi").value;
-				document.getElementById("atendCategoria").value = document.getElementById("atendCategoriaEdi").value;
-				document.getElementById("atendBeneid").value = document.getElementById("atendBeneidEdi").value;
-				document.getElementById("atendConvid").value = document.getElementById("atendConvidEdi").value;
-				document.getElementById("atendTerapeutaid").value = document.getElementById("atendTerapeutaidEdi").value;
-				document.getElementById("atendTerapiaid").value = document.getElementById("atendTerapiaidEdi").value;
-				document.getElementById("atendValorcre").value = document.getElementById("atendValorcreEdi").value;
-				document.getElementById("atendValordeb").value = document.getElementById("atendValordebEdi").value;
-				document.getElementById("atendMergeTerapeutaid").value = document.getElementById("atendMergeTerapeutaidEdi").value;
-				//console.log("terapiametgeid: "+document.getElementById("atendMergeTerapiaidEdi").value);
-				document.getElementById("atendMergeTerapiaid").value = document.getElementById("atendMergeTerapiaidEdi").value;
-				document.getElementById("atendMergevalorcre").value = document.getElementById("atendMergevalorcreEdi").value;
-				document.getElementById("atendMergevalordeb").value = document.getElementById("atendMergevalordebEdi").value;
-				document.getElementById("atendSalaid").value = document.getElementById("atendSalaidEdi").value;
-				document.getElementById("atendObs").value = document.getElementById("atendObsEdi").value;
-				if (document.getElementById("atendFixoEdi").value == "true") {
-					document.getElementById("atendFixoCheck").checked = true;
-					document.getElementById("atendFixoTerapiaid").value = document.getElementById("atendFixoTerapiaidEdi").value;
-					document.getElementById("atendFixoTerapeutaid").value = document.getElementById("atendFixoTerapeutaidEdi").value;
-					document.getElementById("atendFixovalorcre").value = document.getElementById("atendFixovalorcreEdi").value;
-					document.getElementById("atendFixovalordeb").value = document.getElementById("atendFixovalordebEdi").value;
-				} else {
-					document.getElementById("atendFixoCheck").checked = false;
-					document.getElementById("divSubFixo").style.display = "none";
+				console.log("=== START carregaBody (modo tudo visível) ===");
+				
+				// --- Campos básicos ---
+				$('#atendId').val($('#idEdi').val());
+				$('#atenddata').val(formataData($('#atendAtenddataEdi').val()));
+				$('#atendHora').val($('#atendHoraEdi').val()).trigger('chosen:updated');
+				$('#atendOrg').val($('#atendOrgEdi').val()).trigger('chosen:updated');
+				$('#atendCategoria').val($('#atendCategoriaEdi').val()).trigger('chosen:updated');
+				$('#atendBeneid').val($('#atendBeneidEdi').val()).trigger('chosen:updated');
+				$('#atendConvid').val($('#atendConvidEdi').val()).trigger('chosen:updated');
+				$('#atendTerapeutaid').val($('#atendTerapeutaidEdi').val()).trigger('chosen:updated');
+				$('#atendTerapiaid').val($('#atendTerapiaidEdi').val()).trigger('chosen:updated');
+				$('#atendValorcre').val($('#atendValorcreEdi').val());
+				$('#atendValordeb').val($('#atendValordebEdi').val());
+				$('#atendSalaid').val($('#atendSalaidEdi').val()).trigger('chosen:updated');
+				$('#atendObs').val($('#atendObsEdi').val());
+				
+				// --- Campos Merge (sempre visíveis) ---
+				$('#atendMergeTerapeutaid').val($('#atendMergeTerapeutaidEdi').val()).trigger('chosen:updated');
+				$('#atendMergeTerapiaid').val($('#atendMergeTerapiaidEdi').val()).trigger('chosen:updated');
+				$('#atendMergevalorcre').val($('#atendMergevalorcreEdi').val());
+				$('#atendMergevalordeb').val($('#atendMergevalordebEdi').val());
+				
+				// --- Campos Fixo (sempre visíveis, sem toggle) ---
+				// Apenas popula, independente do valor de atendFixo
+				$('#atendFixoTerapeutaid').val($('#atendFixoTerapeutaidEdi').val()).trigger('chosen:updated');
+				$('#atendFixoTerapiaid').val($('#atendFixoTerapiaidEdi').val()).trigger('chosen:updated');
+				$('#atendFixovalorcre').val($('#atendFixovalorcreEdi').val());
+				$('#atendFixovalordeb').val($('#atendFixovalordebEdi').val());
+				// Checkbox apenas como indicador, não controla exibição
+				$('#atendFixoCheck').prop('checked', $('#atendFixoEdi').val() === "true");
+				
+				// --- Sincroniza campos ocultos da tabela ---
+				$('#tabilTerapeutaId').val($('#atendTerapeutaid').val());
+				$('#tabilConvid').val($('#atendConvid').val());
+				$('#tabilCategoria').val($('#atendCategoria').val());
+				
+				// --- Data ISO ---
+				atualizaData();
+				
+				// --- Carrega valores financeiros automaticamente ---
+				if ($('#atendConvid').val() !== 'X' && $('#atendTerapiaid').val()) {
+					carregaValores();
 				}
-				console.log("FINISH");
+				// Sempre tenta carregar os valores fixos também
+				carregaValoresFixo();
+				
+				console.log("=== FINISH carregaBody ===");
 			}
-			function toggleDivSubFixo(){
-				if (document.getElementById("atendFixoCheck").checked == true) {
-					document.getElementById("divSubFixo").style.display = "";
-					document.getElementById("atendFixo").value = "true";
-				} else {
-					document.getElementById("divSubFixo").style.display = "none";
-					document.getElementById("atendFixo").value = "false";
-				}
-			}
+
+			// ===== FUNÇÕES DE DATA =====
 			function atualizaData(){
-				var data = document.getElementById("atenddata").value+"T"+document.getElementById("atendHora").value+":00.000Z";
-				console.log("data:"+data);
+				var data = $('#atenddata').val() + "T" + $('#atendHora').val() + ":00.000Z";
 				var datafmt = new Date(data);
-				console.log("datafmt:"+datafmt);
-				document.getElementById("atendAtenddata").value = datafmt.toISOString();
-				//
-				//var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
-				//var dataFmt = new Date(dataIso);
-				//console.log(dataIso);
-				//document.getElementById("agendaData").value = dataFmt;
+				$('#atendAtenddata').val(datafmt.toISOString());
 			}
+			
 			function atualizaDataEdi(){
-				document.getElementById("atenddata").value = formataData(document.getElementById("atendAtenddataEdi").value);
+				$('#atenddata').val(formataData($('#atendAtenddataEdi').val()));
 			}
-			function formataData(date) {//yyyy-MM-dd
+			
+			function formataData(date) {
 				var d = new Date(date);
-				if (d.getTimezoneOffset() == 180){
-					d.setHours(d.getHours()+3);
+				if (d.getTimezoneOffset() == 180) {
+					d.setHours(d.getHours() + 3);
 				}
-				console.log("d:"+d);
-					month = '' + (d.getMonth() + 1);
-					day = '' + d.getDate();
-					year = d.getFullYear();
-
-				if (month.length == 1) {
-					month = '0' + month;
-				}
-					
-				if (day.length == 1) {
-					day = '0' + day;
-				}
-
+				var month = '' + (d.getMonth() + 1);
+				var day = '' + d.getDate();
+				var year = d.getFullYear();
+				if (month.length == 1) month = '0' + month;
+				if (day.length == 1) day = '0' + day;
 				return [year, month, day].join('-');
 			}
+
+			// ===== INICIALIZAÇÃO DO CHOSEN + CARREGAMENTO =====
+			$(document).ready(function() {
+				// Inicializa todos os selects com Chosen
+				$(".chosen-select").chosen({
+					width: "100%",
+					allow_single_deselect: true,
+					no_results_text: "Nenhum resultado encontrado...",
+					single_backstroke_delete: false
+				});
+				
+				// Garante que a seção Fixo esteja SEMPRE visível (remove qualquer display:none)
+				$('#divSubFixo').show().css('display', '');
+				
+				// Se o body já carregou via onload, os campos já foram populados
+				// Caso contrário, carregaBody() será chamado pelo onload do body
+			});
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
@@ -345,13 +384,9 @@
 														</select>
 													</div>
 												</div>
-												<label class="block"
-												 {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}
-													{{else}}
-														hidden 
-												{{/ifIncludes}} >
+												<label class="block">
 													Substituto Fixo&nbsp;&nbsp; 
-													<input id="atendFixoCheck" id="atendFixoCheck" type="checkbox"  onchange="javascript:toggleDivSubFixo()">
+													<input id="atendFixoCheck" type="checkbox" onchange="javascript:toggleDivSubFixo()">
 												</label>
 												<div class="row">
 													<div class="col-xs-12">
@@ -380,7 +415,7 @@
 																		</div>
 																		<label>Terapeuta</label>
 																		<div class="form-group">
-																			<div class="col-sm-4">
+																			<div class="col-sm-8">
 																				<select id="atendTerapeutaid" name="atendTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
 																						<option value="766f69643132333435366964"></option>
 																						{{#each usuarios}}
@@ -415,7 +450,7 @@
 
 																		</div>
 																		<div class="form-group">
-																			<div class="col-sm-4">
+																			<div class="col-sm-8">
 																				<select id="atendTerapiaid" name="atendTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 																						<option value="766f69643132333435366964"></option>
 																						{{#each terapias}}
@@ -440,7 +475,7 @@
 																		</div>
 																	</div>
 																</div><!-- /.span -->
-																<div class="col-xs-12 col-sm-4" id="divSubFixo" {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}}>
+																<div class="col-xs-12 col-sm-4" id="divSubFixo">
 																	<div class="widget-box">
 																		<div class="widget-header">
 																			<h4 class="widget-title">Dados de Sub Fixo</h4>
@@ -462,7 +497,7 @@
 																				</div>
 																				<label>Terapeuta Fixo</label>
 																				<div class="form-group">
-																					<div class="col-sm-4">
+																					<div class="col-sm-8">
 																						<select id="atendFixoTerapeutaid" name="atendFixoTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValoresFixo()">
 																							<option value="766f69643132333435366964"></option>
 																							{{#each usuarios}}
@@ -473,7 +508,7 @@
 																				</div>
 																				<label>Terapia Fixa</label>
 																				<div class="form-group">
-																					<div class="col-sm-4">
+																					<div class="col-sm-8">
 																						<select id="atendFixoTerapiaid" name="atendFixoTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresFixo()">
 																								<option value="766f69643132333435366964"></option>
 																								{{#each terapias}}
@@ -520,7 +555,7 @@
 																		</div>
 																		<label>Terapeuta</label>
 																		<div class="form-group">
-																			<div class="col-sm-4">
+																			<div class="col-sm-8">
 																				<select id="atendMergeTerapeutaid" name="atendMergeTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
 																						<option value="766f69643132333435366964"></option>
 																						{{#each usuarios}}
@@ -536,7 +571,7 @@
 																			<input class="hidden" id="tabilMergeTerapiaid" name="tabilMergeTerapiaid" value="" />
 																		</div>
 																		<div class="form-group">
-																				<div class="col-sm-4">
+																				<div class="col-sm-8">
 																					<select id="atendMergeTerapiaid" name="atendMergeTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
 																							<option value="766f69643132333435366964"></option>
 																							{{#each terapias}}

@@ -4,8 +4,49 @@
 		<title>ATA</title>
 		
 		<script type="text/javascript">
-		
-		let radioRes = 0;
+			// 🔹 Helper para atualizar Chosen com fallback seguro
+			// 🔹 Atualiza Chosen com fallback + debug
+			function atualizaChosen(selectId, valor) {
+				// Debug: mostra o que está sendo atualizado
+				console.log(`[Chosen] ${selectId} = ${valor}`);
+				
+				const selectEl = document.getElementById(selectId);
+				if (!selectEl) {
+					console.warn(`[Chosen] Elemento #${selectId} não encontrado`);
+					return;
+				}
+				
+				// Verifica se o valor existe nas options
+				const optionExists = Array.from(selectEl.options).some(opt => opt.value === valor);
+				if (!optionExists && valor && valor !== "766f69643132333435366964") {
+					console.warn(`[Chosen] Valor "${valor}" não encontrado em #${selectId}`);
+				}
+				
+				// Atualiza via jQuery + Chosen
+				if (typeof jQuery !== 'undefined' && $.fn.chosen) {
+					const $select = $('#' + selectId);
+					
+					// Garante que o Chosen esteja inicializado
+					if (!$select.data('chosen')) {
+						console.log(`[Chosen] Inicializando #${selectId}...`);
+						$select.chosen({
+							width: '100%',
+							disable_search_threshold: 10,
+							allow_single_deselect: true,
+							no_results_text: 'Nenhum resultado encontrado'
+						});
+					}
+					
+					// Atualiza valor e dispara evento
+					$select.val(valor).trigger('chosen:updated');
+					console.log(`[Chosen] #${selectId} atualizado`);
+				} else {
+					// Fallback puro JS
+					selectEl.value = valor;
+					console.log(`[Chosen] Fallback JS para #${selectId}`);
+				}
+			}
+			let radioRes = 0;
 			function contafeitos(cg) {
 				let feitos;
 				if (cg == 1) {
@@ -226,49 +267,44 @@
 			}
 
 			function carregaBody() {
-				document.getElementById("ataBeneid").value = document.getElementById("ataBeneidEdi").value;
+				// 1️⃣ Campos NORMAIS (inputs/textareas)
 				document.getElementById("ataBeneidade").value = document.getElementById("ataBeneidadeEdi").value;
 				document.getElementById("ataTerapeutaid").value = document.getElementById("ataTerapeutaidEdi").value;
 				document.getElementById("ataParem").value = document.getElementById("ataParemEdi").value;
-				document.getElementById("ataAcompanhausuid").value = document.getElementById("ataAcompanhausuidEdi").value;
-				document.getElementById("ataCorrecusuid").value = document.getElementById("ataCorrecusuidEdi").value;
 				document.getElementById("ataCorrecdata").value = document.getElementById("ataCorrecdataEdi").value;
 				document.getElementById("ataCorrec").value = document.getElementById("ataCorrecEdi").value;
 				document.getElementById("ataObs").value = document.getElementById("ataObsEdi").value;
-				// Atualiza o radio button
+
+				// 2️⃣ ✅ Selects COM Chosen (agora atualizam a UI corretamente)
+				atualizaChosen('ataBeneid', document.getElementById("ataBeneidEdi").value);
+				atualizaChosen('ataAcompanhausuid', document.getElementById("ataAcompanhausuidEdi").value);
+				atualizaChosen('ataCorrecusuid', document.getElementById("ataCorrecusuidEdi").value);
+
+				// 3️⃣ Radio do grupo XXIII (mantido)
 				checkRadioAoCarregarFormulario();
-				
 
-				// Lista de sufixos a serem removidos para obter os IDs originais
+				// 4️⃣ Loop dos campos temporários e checkboxes (mantido exatamente como estava)
 				const sufixos = ["temp"];
-
-				// Loop para percorrer os sufixos
 				for (const sufixo of sufixos) {
-					// Seleciona todos os elementos que terminam com o sufixo
 					const elementosTemp = document.querySelectorAll(`[id$=${sufixo}]`);
-
-					// Preenche os campos correspondentes removendo o sufixo
 					elementosTemp.forEach(elementoTemp => {
 						const idOriginal = elementoTemp.id.replace(sufixo, "");
 						const elementoOriginal = document.getElementById(idOriginal);
-
 						if (elementoOriginal) {
 							if (elementoTemp.value === "true") {
 								if (elementoOriginal.type === "checkbox") {
-									elementoOriginal.checked = true; // Marca o checkbox se o valor for "true"
+									elementoOriginal.checked = true;
 								} else {
-									elementoOriginal.value = elementoTemp.value; // Preenche outros tipos de elementos
+									elementoOriginal.value = elementoTemp.value;
 								}
 							} else {
-								elementoOriginal.value = elementoTemp.value; // Preenche outros tipos de elementos
+								elementoOriginal.value = elementoTemp.value;
 							}
-						} else {
-							console.error('Elemento original não encontrado para o ID ' + idOriginal);
 						}
 					});
 				}
 			}
-			
+
 			function checkRadioAoCarregarFormulario() {
 				// Obtém o valor do campo ataXxiii01temp
 				const valorTemp = document.getElementById("ataXxiii01temp").value;
@@ -485,6 +521,7 @@
 										<div class="widget-body">
 											<div class="widget-main">
 												<div class="row">
+
 													<div class="col-xs-12 col-sm-6">
 														<label>Beneficiário</label>
 														<div class="form-group">
@@ -3687,18 +3724,25 @@
 							
 							
 								<div class="form-actions">
-									<div class="col-xs-12" style="text-align: center;" >
-										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-
-										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</button>
-									</div>
+									<!-- Inserir após o botão "Salvar", mantendo o estilo Ace Admin -->
+										<div class="col-xs-12" style="text-align: center; margin-top: 10px;">
+											<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+											&nbsp; &nbsp; &nbsp;
+											<!-- ✅ NOVO BOTÃO: Recuperar Rascunho -->
+											<button class="btn btn-danger" id="btnRecuperarRascunho" type="button" 
+													style="border: 1px solid #d43f3a;" onclick="loadDraftReportEdit();">
+												<i class="ace-icon fa fa-life-ring bigger-110"></i>
+												Recuperar Rascunho
+											</button>
+										</div>
 								</div>
 							</form>
 						</div><!-- /.col -->
@@ -3706,5 +3750,47 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
+		<script>
+			function loadDraftReportEdit() {
+				console.log("[Rascunho] Tentando recuperar para edição...");
+				
+				// 1️⃣ Verifica se há rascunho
+				const draft = localStorage.getItem('draftReport');
+				if (!draft || draft === "{}") {
+					alert('Nenhum rascunho encontrado.');
+					return;
+				}
+				
+				try {
+					const reportData = JSON.parse(draft);
+					
+					// 2️⃣ (Opcional) Filtra por beneficiário para evitar misturar rascunhos
+					const beneIdAtual = document.getElementById('ataBeneidEdi')?.value;
+					if (reportData.ataBeneid && beneIdAtual && reportData.ataBeneid !== beneIdAtual) {
+						if (!confirm(`Rascunho encontrado é de outro beneficiário. Deseja aplicar mesmo assim?`)) {
+							return;
+						}
+					}
+					
+					// 3️⃣ Reutiliza a lógica existente de preenchimento
+					// (handleCheckboxesAndInputs, handleRadioButtons, updateTempFields)
+					handleCheckboxesAndInputs(Object.keys(reportData).filter(k => k.endsWith('temp') || !k.endsWith('Edi')), reportData);
+					handleRadioButtons(reportData);
+					updateTempFields(reportData);
+					
+					// 4️⃣ Atualiza contagem e UI
+					if (typeof atualizarContagem === 'function') {
+						atualizarContagem();
+					}
+					
+					alert('✅ Rascunho recuperado com sucesso!');
+					console.log("[Rascunho] Dados aplicados:", reportData);
+					
+				} catch (error) {
+					console.error("[Rascunho] Erro ao recuperar:", error);
+					alert('❌ Falha ao recuperar o rascunho. Tente novamente.');
+				}
+			}
+		</script>
 	</body>
 </html>

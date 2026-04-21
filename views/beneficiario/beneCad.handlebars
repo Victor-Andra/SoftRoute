@@ -22,6 +22,27 @@
             box-sizing: border-box;
 			rows: 12px; /* Número de linhas padrão */
         }
+		
+			/* --- SEU CSS EXISTENTE --- */
+			/* Força todos os containers do Chosen para 200px */
+			.chosen-container,
+			.chosen-container-single {
+				width: 200px !important;
+			}
+			
+			/* ... outras regras ... */
+
+			/* --- NOVA REGRA: EXCEÇÃO PARA O BENEFICIÁRIO --- */
+			/* Força o container do select Beneficiário a ter 50% da largura da tela */
+			#beneConvid_chosen {
+				width: 30vw !important; /* 50vw = 50% da Viewport (tela) */
+			}
+
+			/* Garante que o dropdown (lista de opções) acompanhe a largura do container */
+			#beneConvid_chosen .chosen-drop,
+			#beneConvid_chosen .chosen-results {
+				width: 100% !important;
+			}
 		</style>
 		<script type="text/javascript">
 			function exibenome() {

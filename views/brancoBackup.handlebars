@@ -225,7 +225,11 @@
 													<div><hr></div>
 													
 													{{#each evolucaoFaltante}}
-													<div class="action-buttons"><label>{{formatDate "" agenda_data}}, {{agenda_hora}}, {{sala_nome}}, {{terapia_nomecid}}, {{bene_apelido}}</label><a class="blue" class="action-buttons" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');"><i class="ace-icon fa fa-pencil bigger-130"></i></a><br></div>
+													<div class="action-buttons"><label>{{formatDate "" agenda_data}}, {{agenda_hora}}, {{sala_nome}}, {{terapia_nomecid}}, {{bene_apelido}}</label>
+														<a class="blue" class="action-buttons" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
+															<i class="ace-icon fa fa-pencil bigger-130"></i>
+														</a><br>
+													</div>
 													{{/each}}
 
 												</div>
@@ -268,7 +272,7 @@
 														{{#each aniversariantesDaSemanaBene}}
 															<tr>
 																<td>{{this.diaNascimento}}/{{this.mesNascimento}}</td>
-																<td>{{this.bene_nome}}
+																<td>{{this.nome}}
 																	{{#if this.hoje}}
 																		<span class="badge badge-success">Hoje!</span>
 																	{{/if}}
@@ -299,10 +303,10 @@
 														{{#each aniversariantesDaSemanaUsuario}}
 															<tr>
 																<td>{{this.diaNascimento}}/{{this.mesNascimento}}</td>
-																<td>{{this.usuario_nome}}
-																	{{#if this.hoje}}
-																		<span class="badge badge-success">Hoje!</span>
-																	{{/if}}
+																<td>{{this.nome}}
+																{{#if this.hoje}}
+																	<span class="badge badge-success">Hoje!</span>
+																{{/if}}
 																</td>
 															</tr>
 														{{/each}}

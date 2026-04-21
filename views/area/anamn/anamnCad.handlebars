@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
+		<style>
+			/* --- SEU CSS EXISTENTE --- */
+			/* Força todos os containers do Chosen para 200px */
+			.chosen-container,
+			.chosen-container-single {
+				width: 200px !important;
+			}
+			
+			/* ... outras regras ... */
+
+			/* --- NOVA REGRA: EXCEÇÃO PARA O BENEFICIÁRIO --- */
+			/* Força o container do select Beneficiário a ter 50% da largura da tela */
+			#anamnBeneid_chosen {
+				width: 50vw !important; /* 50vw = 50% da Viewport (tela) */
+			}
+
+			/* Garante que o dropdown (lista de opções) acompanhe a largura do container */
+			#anamnBeneid_chosen .chosen-drop,
+			#anamnBeneid_chosen .chosen-results {
+				width: 100% !important;
+			}
+		</style>
 		<title>Anamnese</title>
 			<script type="text/javascript">
 				function atualizaData(){
@@ -323,6 +345,12 @@
 												</a>
 											</li>
 											<li>
+												<a data-toggle="tab" href="#aqua">
+													<i class="blue ace-icon fa fa-tint bigger-120"></i>
+													Aquática
+												</a>
+											</li>
+											<li>
 												<a data-toggle="tab" href="#music">
 													<i class="red ace-icon fa fa-hashtag bigger-120"></i>
 													Sonoro - musical
@@ -360,11 +388,12 @@
 													<!--OBSERVAÇÃO Não é necessário o beneficiário estar cadastrado previamente no sistema pois pode ser o primeiro contato-->
 													<br>
 												</div>
-												<div class="col-xs-12 col-sm-6">
+												<div class="col-xs-12 col-sm-12">
 													<label> Beneficiário</label>
 													<div class="form-group">
-														<div class="col-xs-12 col-sm-6">
-															<select name="anamnBeneid" id="anamnBeneid" class="chosen-select" class="form-control" onchange="javascript:atualizaDadosbene();" >
+														<div class="col-xs-12 col-sm-12">
+															<!-- ✅ Adicione 'chosen-bene' aqui -->
+															<select name="anamnBeneid" id="anamnBeneid" class="form-control chosen-select chosen-bene" onchange="javascript:atualizaDadosbene();">
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -1222,6 +1251,70 @@
 																<div class="input-group">
 																	<div class="input-group">
 																		<select name="anamnOtite" id="anamnOtite" class="chosen-select"  value="-">
+																				<option value="-">-</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Problema Cardíaco</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnProblcardiaco" id="anamnProblcardiaco" class="chosen-select"  value="-">
+																				<option value="-">-</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Asma / Bronquite</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnAsmabronquite" id="anamnAsmabronquite" class="chosen-select"  value="-">
+																				<option value="-">-</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Desmaio / Tontura</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnDesmaiotontura" id="anamnDesmaiotontura" class="chosen-select"  value="-">
+																				<option value="-">-</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Ferida / Infecção de pele</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnFeridainfectpele" id="anamnFeridainfectpele" class="chosen-select"  value="-">
 																				<option value="-">-</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -4630,6 +4723,22 @@
 																</div>
 															</div>
 														</div>	
+														<div class="col-sm-2">
+															<div class="row">
+																<label>Fraqueza Muscular?</label><!--Ok-->
+															</div>
+															<div class="row">
+																<div class="input-group">
+																	<div class="input-group">
+																		<select name="anamnFraquezamuscular" id="anamnFraquezamuscular" class="chosen-select"  value="-">
+																				<option value="-">-</option>
+																				<option value="Sim">Sim</option>
+																				<option value="Não">Não</option>
+																		</select>
+																	</div>
+																</div>
+															</div>
+														</div>	
 														
 														<div class="row">
 															<div class="col-xs-12"><!--Ok-->
@@ -5421,6 +5530,120 @@
 												</div>	
 										
 											</div>
+											<div id="aqua" class="tab-pane fade">
+												<div class="alert alert-warning">
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
+													<strong>Avaliação Aquática:</strong>
+												</div>
+
+												<label>Já teve contato com piscina?</label>
+												<div class="input-group">
+													<select name="anamnPiscina" id="anamnPiscina" class="chosen-select" style="width: 500px;">
+														<option value="-">-</option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+												</div>
+
+												<label>Apresenta medo da água?</label>
+												<div class="input-group">
+													<select name="anamnMedoagua" id="anamnMedoagua" class="chosen-select" style="width: 500px;">
+														<option value="-">-</option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+												</div>
+
+												<label>Aceita molhar o rosto?</label>
+												<div class="input-group">
+													<select name="anamnMolharrosto" id="anamnMolharrosto" class="chosen-select" style="width: 500px;">
+														<option value="-">-</option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+												</div>
+
+												<label>Já mergulha?</label>
+												<div class="input-group">
+													<select name="anamnMergulha" id="anamnMergulha" class="chosen-select" style="width: 500px;">
+														<option value="-">-</option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+												</div>
+
+												<label>Consegue prender a respiração?</label>
+												<div class="input-group">
+													<select name="anamnPrenderesp" id="anamnPrenderesp" class="chosen-select" style="width: 500px;">
+														<option value="-">-</option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+												</div>
+
+												<!-- CAMPO ESPECIAL: anamn_flutua com opções específicas -->
+												<label>Flutua:</label>
+												<div class="input-group">
+													<select name="anamnFlutua" id="anamnFlutua" class="chosen-select" style="width: 500px;">
+														<option value="-">-</option>
+														<option value="Sozinho">Sozinho</option>
+														<option value="Com ajuda">Com ajuda</option>
+														<option value="Não flutua">Não flutua</option>
+													</select>
+												</div>
+
+												<label>Demonstra busca excessiva pela água (impulsividade)?</label>
+												<div class="input-group">
+													<select name="anamnBuscaexeagua" id="anamnBuscaexeagua" class="chosen-select" style="width: 500px;">
+														<option value="-">-</option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+												</div>
+
+												<label>Já teve experiência de afogamento ou trauma com água?</label>
+												<div class="input-group">
+													<select name="anamnAfogoutrauma" id="anamnAfogoutrauma" class="chosen-select" style="width: 500px;">
+														<option value="-">-</option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+												</div>
+
+												<label>Apresenta sensibilidade ao toque da água?</label>
+												<div class="input-group">
+													<select name="anamnSensiagua" id="anamnSensiagua" class="chosen-select" style="width: 500px;">
+														<option value="-">-</option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+												</div>
+
+												<label>Reage mal à temperatura da água?</label>
+												<div class="input-group">
+													<select name="anamnAguatempmal" id="anamnAguatempmal" class="chosen-select" style="width: 500px;">
+														<option value="-">-</option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+												</div>
+
+												<label>Busca estímulos intensos (pular, mergulhar, bater na água)?</label>
+												<div class="input-group">
+													<select name="anamnEstintensosagua" id="anamnEstintensosagua" class="chosen-select" style="width: 500px;">
+														<option value="-">-</option>
+														<option value="Sim">Sim</option>
+														<option value="Não">Não</option>
+													</select>
+												</div>
+
+												<label>Observações:</label>
+												<div class="input-group">
+													<textarea name="anamnObsaqua" id="anamnObsaqua" placeholder="Campo aberto para escrever" class="form-control" style="width: 1000px; min-height: 80px;"></textarea>
+												</div>
+											</div>
 											<div id="music" class="tab-pane fade">
 												<div class="alert alert-warning">
 													<button type="button" class="close" data-dismiss="alert">
@@ -6131,15 +6354,18 @@
 								<div class="col-md-12">
 									<hr>
 								</div>								
-									<div class="col-xs-12" style="text-align: center;" >
+									<div class="col-xs-12" style="text-align: center;">
 										<button class="btn btn-info" name="acao" type="button" onclick="javascript:salvar();">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
+											<i class="ace-icon fa fa-check bigger-110"></i> Salvar
 										</button>
 										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning"  type="reset">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
+										<button class="btn btn-warning" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i> Voltar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<!-- ✅ NOVO BOTÃO -->
+										<button class="btn btn-danger" id="btnRecuperarAnamnese" type="button" onclick="loadDraftAnamnese();" style="border: 1px solid blue;">
+											<i class="ace-icon fa fa-life-ring bigger-110"></i> Recuperar Rascunho
 										</button>
 									</div>
 								</div>
@@ -6149,5 +6375,101 @@
 				</div><!-- /.main-container -->
 			</div>
 		</div>
+		<script>
+		(function() {
+			const DRAFT_KEY = 'setDraftReportAnamnese';
+
+			// 🔹 SALVA RASCUNHO AUTOMATICAMENTE
+			function autoSaveAnamnese() {
+				const form = document.getElementById('formAnamnese');
+				if (!form) return;
+
+				const data = {};
+				form.querySelectorAll('input, select, textarea').forEach(el => {
+					if (!el.name || el.type === 'file' || el.disabled) return;
+					
+					if (el.type === 'checkbox') {
+						data[el.name] = el.checked ? el.value : '';
+					} else if (el.type === 'radio') {
+						if (el.checked) data[el.name] = el.value;
+					} else {
+						data[el.name] = el.value;
+					}
+				});
+
+				// Salva qual aba está ativa
+				const activeTab = document.querySelector('.nav-tabs li.active a');
+				if (activeTab) data._activeTab = activeTab.getAttribute('href');
+
+				try {
+					localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+				} catch (e) { console.warn('[AutoSave] Falha ao salvar:', e); }
+			}
+
+			// 🔹 RECUPERA RASCUNHO MANUALMENTE
+			window.loadDraftAnamnese = function() {
+				const raw = localStorage.getItem(DRAFT_KEY);
+				if (!raw) {
+					if (typeof bootbox !== 'undefined') bootbox.alert('Nenhum rascunho encontrado.');
+					else alert('Nenhum rascunho encontrado.');
+					return;
+				}
+
+				try {
+					const data = JSON.parse(raw);
+					
+					Object.keys(data).forEach(key => {
+						if (key === '_activeTab') return;
+						const el = document.querySelector(`[name="${key}"]`);
+						if (!el) return;
+
+						if (el.type === 'checkbox') {
+							el.checked = (data[key] === el.value);
+						} else if (el.type === 'radio') {
+							if (data[key] === el.value) el.checked = true;
+						} else {
+							el.value = data[key];
+							// 🔧 Atualiza Chosen se for select
+							if (el.tagName === 'SELECT' && typeof jQuery !== 'undefined') {
+								$(el).trigger('chosen:updated');
+							}
+						}
+					});
+
+					// 🔄 Restaura a aba ativa
+					if (data._activeTab) {
+						const tabLink = document.querySelector(`.nav-tabs a[href="${data._activeTab}"]`);
+						if (tabLink && typeof jQuery !== 'undefined') {
+							$(tabLink).tab('show');
+						}
+					}
+
+					// ✅ Modal de confirmação
+					const msg = "✅ Rascunho recuperado com sucesso!";
+					if (typeof bootbox !== 'undefined') {
+						bootbox.alert({ message: msg, size: 'small', callback: () => {} });
+					} else {
+						alert(msg);
+					}
+				} catch (e) {
+					console.error('[Recupera] Erro:', e);
+					alert('❌ Falha ao recuperar o rascunho. Dados podem estar corrompidos.');
+				}
+			};
+
+			// ⚡ ATIVA O AUTO-SAVE AO CARREGAR A PÁGINA
+			document.addEventListener('DOMContentLoaded', () => {
+				// Salva a cada 2 minutos
+				setInterval(autoSaveAnamnese, 120000);
+
+				// Salva a cada interação do usuário
+				const form = document.getElementById('formAnamnese');
+				if (form) {
+					form.addEventListener('input', autoSaveAnamnese);
+					form.addEventListener('change', autoSaveAnamnese); // Para selects/radios
+				}
+			});
+		})();
+		</script>
 	</body>
 </html>

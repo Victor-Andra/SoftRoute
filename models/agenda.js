@@ -11,7 +11,8 @@ const { GuialoteSchema } = require('../models/guialote');//Isto é um objeto de 
 // Editado em: 2025/10/03
 const AgendaSchema = mongoose.Schema({
     agenda_data :{ type: Date, required: false },
-    agenda_hora :{ type: String, required: false },
+    agenda_hora :{ type: String, required: false },//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+    agenda_horafim :{ type: String, required: false },//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
     agenda_data_semana :{ type: String, required: false },
     agenda_data_dia :{ type: String, required: false },
     agenda_beneid :{ type: ObjectId, required: false },
@@ -58,7 +59,8 @@ const AgendaSchema = mongoose.Schema({
 class Agenda{
     constructor(
         agenda_data,
-        agenda_hora,
+        agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+        agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
         agenda_data_semana,
         agenda_data_dia,
         agenda_beneid,
@@ -96,7 +98,8 @@ class Agenda{
         agenda_loteid
         ){
         this.agenda_data = agenda_data,
-        this.agenda_hora = agenda_hora,
+        this.agenda_hora = agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+        this.agenda_horafim = agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
         this.agenda_data_semana = agenda_data_semana,
         this.agenda_data_dia = agenda_data_dia,
         this.agenda_beneid = agenda_beneid,
@@ -152,70 +155,93 @@ module.exports = {
         AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
         //;
 
-        let usuarioAtual = req.cookies['idUsu'];
-        let dataAtual = new Date();
-        let data = new Date(req.body.agendaData);
-        let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+data.getUTCHours()+':'+data.getMinutes()+':00.000Z');
-        console.log(dataAgenda);
-        let resultado;
-        //Realiza Atualização - Atualização não faz alteração temporaria
-        if (req.body.agendaCateg == "Padrão"){
-            await AgendaModel.findByIdAndUpdate(req.body.id, 
-                {$set: {
-                    agenda_data : dataAgenda ,
-                    agenda_beneid : req.body.agendaBeneid ,
-                    agenda_convid : req.body.agendaConvid ,
-                    agenda_salaid : req.body.agendaSalaid ,
-                    agenda_terapiaid : req.body.agendaTerapiaid ,
-                    agenda_usuid : req.body.agendaUsuid ,
-                    agenda_categoria : req.body.agendaCateg ,
-                    agenda_org : req.body.agendaOrg ,
-                    agenda_obs : req.body.agendaObs ,
-                    agenda_copia : req.body.agendaCopia,
-                    agenda_usuedi: usuarioAtual , //Usuário adm que alterou
-                    agenda_log: req.body.agendaLog , //Log das alterações
-                    agenda_dataedi : dataAtual
-                    }}
-            ).then((res) =>{
-                //console.log("Salvo")
-                resultado = true;
-            }).catch((err) =>{
-                console.log("erro mongo:")
-                console.log(err)
-                resultado = err;
-                //res.redirect('admin/branco')
-            })
+        let agendamento = await Agenda.findById(req.body.id);
+        if (!agendamento) {
+            console.log("Agendamento não encontrado");
+            return false;
+        }
+
+        let agora = new Date();
+        let doisMesesAtras = new Date();
+        doisMesesAtras.setMonth(agora.getMonth() - 2);
+        let agendaData = new Date(agendamento.agenda_data);
+        let bloqueio = agendaData < doisMesesAtras;
+
+        if (bloqueio){
+            console.log("Bloqueada a edição devido ao fechamento!");
+            return false;
         } else {
-            await AgendaModel.findByIdAndUpdate(req.body.id, 
-                {$set: {
-                    agenda_data : dataAgenda ,
-                    agenda_beneid : req.body.agendaBeneid ,
-                    agenda_convid : req.body.agendaConvid ,
-                    agenda_salaid : req.body.agendaSalaid ,
-                    agenda_terapiaid : req.body.agendaTerapiaid ,
-                    agenda_usuid : req.body.agendaUsuid ,
-                    agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,
-                    agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,
-                    agenda_categoria : req.body.agendaCateg ,
-                    agenda_org : req.body.agendaOrg ,
-                    agenda_obs : req.body.agendaObs ,
-                    agenda_copia : req.body.agendaCopia,
-                    agenda_usuedi: usuarioAtual , //Usuário adm que alterou
-                    agenda_log: req.body.agendaLog , //Log das alterações
-                    agenda_dataedi : dataAtual
-                    }}
-            ).then((res) =>{
-                //console.log("Salvo")
-                resultado = true;
-            }).catch((err) =>{
-                console.log("erro mongo:")
-                console.log(err)
-                resultado = err;
-                //res.redirect('admin/branco')
-            })
+            let usuarioAtual = req.cookies['idUsu'];
+            let dataAtual = new Date();
+            let data = new Date(req.body.agendaData);
+            let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+data.getUTCHours()+':'+data.getMinutes()+':00.000Z');
+            console.log(dataAgenda);
+            let resultado;
+
+            //Realiza Atualização - Atualização não faz alteração temporaria
+            if (req.body.agendaCateg == "Padrão"){
+                await AgendaModel.findByIdAndUpdate(req.body.id, 
+                    {$set: {
+                        agenda_data : dataAgenda ,
+                        agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                        agenda_horafim : agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                        agenda_beneid : req.body.agendaBeneid ,
+                        agenda_convid : req.body.agendaConvid ,
+                        agenda_salaid : req.body.agendaSalaid ,
+                        agenda_terapiaid : req.body.agendaTerapiaid ,
+                        agenda_usuid : req.body.agendaUsuid ,
+                        agenda_categoria : req.body.agendaCateg ,
+                        agenda_org : req.body.agendaOrg ,
+                        agenda_obs : req.body.agendaObs ,
+                        agenda_copia : req.body.agendaCopia,
+                        agenda_usuedi: usuarioAtual , //Usuário adm que alterou
+                        agenda_log: req.body.agendaLog , //Log das alterações
+                        agenda_dataedi : dataAtual
+                        }}
+                ).then((res) =>{
+                    //console.log("Salvo")
+                    resultado = true;
+                }).catch((err) =>{
+                    console.log("erro mongo:")
+                    console.log(err)
+                    resultado = err;
+                    //res.redirect('admin/branco')
+                })
+            } else {
+                await AgendaModel.findByIdAndUpdate(req.body.id, 
+                    {$set: {
+                        agenda_data : dataAgenda ,
+                        agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                        agenda_horafim : agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                        agenda_beneid : req.body.agendaBeneid ,
+                        agenda_convid : req.body.agendaConvid ,
+                        agenda_salaid : req.body.agendaSalaid ,
+                        agenda_terapiaid : req.body.agendaTerapiaid ,
+                        agenda_usuid : req.body.agendaUsuid ,
+                        agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,
+                        agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,
+                        agenda_categoria : req.body.agendaCateg ,
+                        agenda_org : req.body.agendaOrg ,
+                        agenda_obs : req.body.agendaObs ,
+                        agenda_copia : req.body.agendaCopia,
+                        agenda_usuedi: usuarioAtual , //Usuário adm que alterou
+                        agenda_log: req.body.agendaLog , //Log das alterações
+                        agenda_dataedi : dataAtual
+                        }}
+                ).then((res) =>{
+                    //console.log("Salvo")
+                    resultado = true;
+                }).catch((err) =>{
+                    console.log("erro mongo:")
+                    console.log(err)
+                    resultado = err;
+                    //res.redirect('admin/branco')
+                })
+            }
+            
+            return resultado;
         }
         
-        return resultado;
     },
 
     // Add Agenda
@@ -228,53 +254,63 @@ module.exports = {
         let db = req.cookies['preferredDb'];
         AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
         //;
-
-        let usuarioAtual = req.cookies['idUsu'];
-        let dataAtual = new Date();
-        let agenda_temp = false;
-        let extra = false;
-        //console.log("req.body.agendaData:"+req.body.agendaData)
-        console.log("req.body.agendaExtra:"+req.body.agendaExtra);
-        if (req.body.agendaExtra == true || req.body.agendaExtra == "true"){
-            extra = true;
-        }
-
-        let data = new Date(req.body.agendaData);
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+req.body.agendaHora+':00.000Z');
-        //console.log(dataAgenda);
-        //console.log("data:"+data);
-        //console.log("dataAgenda:"+dataAgenda);
-        //console.log("agendamodel");
-        const newAgenda = new AgendaModel({
-            agenda_data : dataAgenda ,
-            agenda_beneid : req.body.agendaBeneid ,
-            agenda_convid : req.body.agendaConvid ,
-            agenda_salaid : req.body.agendaSalaid ,
-            agenda_terapiaid : req.body.agendaTerapiaid ,
-            agenda_usuid : req.body.agendaUsuid ,
-            agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,
-            agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,
-            agenda_migrado : false ,
-            agenda_categoria : req.body.agendaCateg ,
-            agenda_org : req.body.agendaOrg ,
-            agenda_obs : req.body.agendaObs ,
-            agenda_temp : false ,
-            agenda_extra: extra ,
-            agenda_cobrarextra : req.body.agendaCobrarextra  ,
-            agenda_selo : false ,
-            agenda_copia: false ,
-            agenda_log: req.body.agendaLog , //Log das alterações
-            agenda_usucad : usuarioAtual,
-            agenda_datacad : dataAtual
-        });
-        //console.log("newAgenda save");
-        await newAgenda.save().then(()=>{
-            //console.log("Cadastro realizado!");
-            return true;
-        }).catch((err) => {
-            console.log(err)
-            return err;
-        });
+        let doisMesesAtras = new Date();
+        doisMesesAtras.setMonth(doisMesesAtras.getMonth() - 2);
+        let bloqueio = dataAgenda < doisMesesAtras;
+
+        if (bloqueio){
+            console.log("Bloqueada a criação devido ao fechamento!");
+            return false;
+        } else {
+            let usuarioAtual = req.cookies['idUsu'];
+            let dataAtual = new Date();
+            let agenda_temp = false;
+            let extra = false;
+            //console.log("req.body.agendaData:"+req.body.agendaData)
+            console.log("req.body.agendaExtra:"+req.body.agendaExtra);
+            if (req.body.agendaExtra == true || req.body.agendaExtra == "true"){
+                extra = true;
+            }
+
+            let data = new Date(req.body.agendaData);
+            //console.log(dataAgenda);
+            //console.log("data:"+data);
+            //console.log("dataAgenda:"+dataAgenda);
+            //console.log("agendamodel");
+            const newAgenda = new AgendaModel({
+                agenda_data : dataAgenda ,
+                agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                agenda_horafim : agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                agenda_beneid : req.body.agendaBeneid ,
+                agenda_convid : req.body.agendaConvid ,
+                agenda_salaid : req.body.agendaSalaid ,
+                agenda_terapiaid : req.body.agendaTerapiaid ,
+                agenda_usuid : req.body.agendaUsuid ,
+                agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,
+                agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,
+                agenda_migrado : false ,
+                agenda_categoria : req.body.agendaCateg ,
+                agenda_org : req.body.agendaOrg ,
+                agenda_obs : req.body.agendaObs ,
+                agenda_temp : false ,
+                agenda_extra: extra ,
+                agenda_cobrarextra : req.body.agendaCobrarextra  ,
+                agenda_selo : false ,
+                agenda_copia: false ,
+                agenda_log: req.body.agendaLog , //Log das alterações
+                agenda_usucad : usuarioAtual,
+                agenda_datacad : dataAtual
+            });
+            //console.log("newAgenda save");
+            await newAgenda.save().then(()=>{
+                //console.log("Cadastro realizado!");
+                return true;
+            }).catch((err) => {
+                console.log(err)
+                return err;
+            });
+        }
     },
 
     // Add Temp Agenda
@@ -287,51 +323,60 @@ module.exports = {
         let db = req.cookies['preferredDb'];
         AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
         //;
-
-        let usuarioAtual = req.cookies['idUsu'];
-        let dataAtual = new Date();
-        let agendaTempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
-        //console.log("agendaTempId:"+agendaTempId)
-        //console.log("req.body.agendaData:"+req.body.agendaData)
-        let data = new Date(req.body.agendaData);
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+req.body.agendaHora+':00.000Z');
-        //console.log(dataAgenda);
-        //console.log("data:"+data);
-        //console.log("dataAgenda:"+dataAgenda);
-        //console.log("agendamodel");
-        const newAgenda = new AgendaModel({
-            agenda_data : dataAgenda ,
-            agenda_beneid : req.body.agendaBeneid ,
-            agenda_convid : req.body.agendaConvid ,
-            agenda_salaid : req.body.agendaSalaid ,
-            agenda_terapiaid : req.body.agendaTerapiaid ,
-            agenda_usuid : req.body.agendaUsuid ,
-            agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,
-            agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,
-            agenda_migrado : false ,
-            agenda_categoria : req.body.agendaCateg ,
-            agenda_org : req.body.agendaOrg ,
-            agenda_obs : req.body.agendaObs ,
-            agenda_temp : true ,
-            agenda_tempId : agendaTempId ,
-            agenda_tempmotivo : req.body.agendaTempMotivo ,
-            agenda_selo : false ,
-            agenda_copia : false,
-            agenda_turnoFalta : req.body.agendaTurnoFalta,
-            //agenda_faltaId : req.body.agendaFaltaId,
-            //agenda_falta : req.body.agendaAlvoFalta,
-            agenda_log: req.body.agendaLog , //Log das alterações
-            agenda_usucad : usuarioAtual,
-            agenda_datacad : dataAtual
-        });
-        //console.log("newAgenda save");
-        await newAgenda.save().then(()=>{
-            //console.log("Cadastro realizado!");
-            return true;
-        }).catch((err) => {
-            console.log(err)
-            return err;
-        });
+        let doisMesesAtras = new Date();
+        doisMesesAtras.setMonth(doisMesesAtras.getMonth() - 2);
+        let bloqueio = dataAgenda < doisMesesAtras;
+
+        if (bloqueio){
+            console.log("Bloqueada a criação devido ao fechamento!");
+            return false;
+        } else {
+            let usuarioAtual = req.cookies['idUsu'];
+            let dataAtual = new Date();
+            let agendaTempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
+            //console.log("agendaTempId:"+agendaTempId)
+            //console.log("req.body.agendaData:"+req.body.agendaData)
+            //console.log(dataAgenda);
+            //console.log("data:"+data);
+            //console.log("dataAgenda:"+dataAgenda);
+            //console.log("agendamodel");
+            const newAgenda = new AgendaModel({
+                agenda_data : dataAgenda ,
+                agenda_hora : req.body.agendaHora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                agenda_horafim : req.body.agendaHoraFim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                agenda_beneid : req.body.agendaBeneid ,
+                agenda_convid : req.body.agendaConvid ,
+                agenda_salaid : req.body.agendaSalaid ,
+                agenda_terapiaid : req.body.agendaTerapiaid ,
+                agenda_usuid : req.body.agendaUsuid ,
+                agenda_mergeterapeutaid : req.body.agendaMergeterapeutaid ,
+                agenda_mergeterapiaid : req.body.agendaMergeterapiaid ,
+                agenda_migrado : false ,
+                agenda_categoria : req.body.agendaCateg ,
+                agenda_org : req.body.agendaOrg ,
+                agenda_obs : req.body.agendaObs ,
+                agenda_temp : true ,
+                agenda_tempId : agendaTempId ,
+                agenda_tempmotivo : req.body.agendaTempMotivo ,
+                agenda_selo : false ,
+                agenda_copia : false,
+                agenda_turnoFalta : req.body.agendaTurnoFalta,
+                //agenda_faltaId : req.body.agendaFaltaId,
+                //agenda_falta : req.body.agendaAlvoFalta,
+                agenda_log: req.body.agendaLog , //Log das alterações
+                agenda_usucad : usuarioAtual,
+                agenda_datacad : dataAtual
+            });
+            //console.log("newAgenda save");
+            await newAgenda.save().then(()=>{
+                //console.log("Cadastro realizado!");
+                return true;
+            }).catch((err) => {
+                console.log(err)
+                return err;
+            });
+        }
     },
 
     // Editar Temp Agenda
@@ -344,39 +389,57 @@ module.exports = {
         let db = req.cookies['preferredDb'];
         AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
         //;
+        let agendamento = await Agenda.findById(req.body.agendaId);
+        if (!agendamento) {
+            console.log("Agendamento não encontrado");
+            return false;
+        }
 
-        let usuarioAtual = req.cookies['idUsu'];
-        let dataAtual = new Date();
-        let data = new Date(req.body.agendaData);
-        let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+data.getUTCHours()+':'+data.getMinutes()+':00.000Z');
-        let resultado;
-        //Pega data atual
-        //Realiza Atualização - Atualização não faz alteração temporaria
-        await AgendaModel.findByIdAndUpdate(new ObjectId(req.body.agendaId), 
-            {$set: {
-                agenda_data : dataAgenda ,
-                agenda_beneid : req.body.agendaBeneid ,
-                agenda_convid : req.body.agendaConvid ,
-                agenda_salaid : req.body.agendaSalaid ,
-                agenda_usuid : req.body.agendaUsuid ,
-                agenda_terapiaid : req.body.novaAgendaTerapiaid ,
-                agenda_categoria : req.body.agendaCateg ,
-                agenda_org : req.body.agendaOrg ,
-                agenda_obs : req.body.agendaObs ,
-                agenda_temp : true ,
-                agenda_usuedi: usuarioAtual ,
-                agenda_dataedi : dataAtual
-                }}
-        ).then((res) =>{
-            console.log("Salvo")
-            resultado = true;
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
-            //res.redirect('admin/branco')
-        })
-        return resultado;
+        let agora = new Date();
+        let doisMesesAtras = new Date();
+        doisMesesAtras.setMonth(agora.getMonth() - 2);
+        let agendaData = new Date(agendamento.agenda_data);
+        let bloqueio = agendaData < doisMesesAtras;
+
+        if (bloqueio){
+            console.log("Bloqueada a edição devido ao fechamento!");
+            return false;
+        } else {
+            let usuarioAtual = req.cookies['idUsu'];
+            let dataAtual = new Date();
+            let data = new Date(req.body.agendaData);
+            let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+data.getUTCHours()+':'+data.getMinutes()+':00.000Z');
+            let resultado;
+            //Pega data atual
+            //Realiza Atualização - Atualização não faz alteração temporaria
+            await AgendaModel.findByIdAndUpdate(new ObjectId(req.body.agendaId), 
+                {$set: {
+                    agenda_data : dataAgenda ,
+                    agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                    agenda_horafim : agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                    agenda_beneid : req.body.agendaBeneid ,
+                    agenda_convid : req.body.agendaConvid ,
+                    agenda_salaid : req.body.agendaSalaid ,
+                    agenda_usuid : req.body.agendaUsuid ,
+                    agenda_terapiaid : req.body.novaAgendaTerapiaid ,
+                    agenda_categoria : req.body.agendaCateg ,
+                    agenda_org : req.body.agendaOrg ,
+                    agenda_obs : req.body.agendaObs ,
+                    agenda_temp : true ,
+                    agenda_usuedi: usuarioAtual ,
+                    agenda_dataedi : dataAtual
+                    }}
+            ).then((res) =>{
+                console.log("Salvo")
+                resultado = true;
+            }).catch((err) =>{
+                console.log("erro mongo:")
+                console.log(err)
+                resultado = err;
+                //res.redirect('admin/branco')
+            })
+            return resultado;
+        }
     },
 
     // Localizar um Temp Agenda
@@ -490,6 +553,11 @@ module.exports = {
         let teraidx = req.body.agendaMergeterapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
         //console.log("ini: "+fncGeral.getDateToIsostring(dataIni));
         //console.log("fim: "+fncGeral.getDateToIsostring(dataFim));
+        
+        //Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+        //Não podem mais ter horarios especificos o que determinara manha e tarde e hoprario completo 
+        //24:00 até 11:59 texto é manha, 12:00 ate 18:00 tarde, noite 18:01 ate 23:59
+        //Agenda_hora e agenda_horafim definem o intervalo
         let horasTurnoManha = ["08:00","08:40","09:20","10:00","10:40","11:20"];
         let horasTurnoTarde = ["13:20","14:00","14:40","15:20","16:00","16:40","17:20","18:00"];
         let horasTurnoCompleto = ["08:00","08:40","09:20","10:00","10:40","11:20","13:20","14:00","14:40","15:20","16:00","16:40","17:20","18:00"];
@@ -764,6 +832,8 @@ module.exports = {
                         if (a.agenda_mergeterapeutaid != undefined){
                             let newAgenda = new AgendaModel({
                                 agenda_data : a.agenda_data ,
+                                agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                                agenda_horafim : agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
                                 agenda_beneid : a.agenda_beneid ,
                                 agenda_convid : a.agenda_convid ,
                                 agenda_salaid : a.agenda_salaid ,
@@ -790,6 +860,8 @@ module.exports = {
                         } else {
                             let newAgenda = new AgendaModel({
                                 agenda_data : a.agenda_data ,
+                                agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                                agenda_horafim : agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
                                 agenda_beneid : a.agenda_beneid ,
                                 agenda_convid : a.agenda_convid ,
                                 agenda_salaid : a.agenda_salaid ,

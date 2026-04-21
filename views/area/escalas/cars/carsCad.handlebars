@@ -9,58 +9,129 @@
 			}
     	</style>
 		<script type="text/javascript">
-		function formatarNumero(valor) {
-				return valor.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-			}
+// 🔹 Helper reutilizável para atualizar Chosen (igual à view de créditos)
+function atualizaChosen(selectId, valor) {
+    if (typeof jQuery !== 'undefined' && jQuery.fn.chosen) {
+        $('#' + selectId).val(valor).trigger('chosen:updated');
+    } else {
+        // Fallback puro JS
+        document.getElementById(selectId).value = valor;
+    }
+}
 
-			// Função principal para atualizar totais
-			function atualizarTotais() {
-				// Lógica para calcular os totais
-				var totalQ01 = parseFloat($('input[name="carsQ01"]:checked').val()) || 0;
-				var totalQ02 = parseFloat($('input[name="carsQ02"]:checked').val()) || 0;
-				var totalQ03 = parseFloat($('input[name="carsQ03"]:checked').val()) || 0;
-				var totalQ04 = parseFloat($('input[name="carsQ04"]:checked').val()) || 0;
-				var totalQ05 = parseFloat($('input[name="carsQ05"]:checked').val()) || 0;
-				var totalQ06 = parseFloat($('input[name="carsQ06"]:checked').val()) || 0;
-				var totalQ07 = parseFloat($('input[name="carsQ07"]:checked').val()) || 0;
-				var totalQ08 = parseFloat($('input[name="carsQ08"]:checked').val()) || 0;
-				var totalQ09 = parseFloat($('input[name="carsQ09"]:checked').val()) || 0;
-				var totalQ10 = parseFloat($('input[name="carsQ10"]:checked').val()) || 0;
-				var totalQ11 = parseFloat($('input[name="carsQ11"]:checked').val()) || 0;
-				var totalQ12 = parseFloat($('input[name="carsQ12"]:checked').val()) || 0;
-				var totalQ13 = parseFloat($('input[name="carsQ13"]:checked').val()) || 0;
-				var totalQ14 = parseFloat($('input[name="carsQ14"]:checked').val()) || 0;
-				var totalQ15 = parseFloat($('input[name="carsQ15"]:checked').val()) || 0;
-				// Adicione mais linhas conforme necessário para cada pergunta
+// 🔹 Formatação de data (mantida)
+function atualizaData(){
+    let dataIso = document.getElementById("b").value + "T00:00:00.000Z";
+    let dataFmt = new Date(dataIso);
+    document.getElementById("a").value = dataFmt;
+}
 
-				// Calcular o total geral
-				var totalGeral = totalQ01 + totalQ02 + totalQ03 + totalQ04 + totalQ05
-							   + totalQ06 + totalQ07 + totalQ08 + totalQ09 + totalQ10
-							   + totalQ11 + totalQ12 + totalQ13 + totalQ14 + totalQ15; // Adicione mais totais conforme necessário
-				// Atualizar o campo totais viziveis e o total geral
-				
-				document.getElementById("carsTqt").value = formatarNumero(totalGeral);
+// 🔹 Cálculo de totais (mantida)
+function atualizarTotais(num) {
+    let campo = 'input[name="carsQ'+num+'"]:checked';
+    let pontos = $(campo).val();
+    if (!pontos) return;
+    
+    document.getElementById("carsTq"+num).value = (""+parseFloat(pontos.replace(",",".")).toFixed(1)+"").replace(".",",");
+    
+    let arrTot = Array.from(document.querySelectorAll('[name^="carsTq"]'));
+    let totalGeral = 0;
+    
+    arrTot.forEach((val) => {
+        if (val.id != "carsTqt" && val.value) {
+            totalGeral = parseFloat(totalGeral) + parseFloat(val.value.replace(",","."));
+        }
+    });
+    
+    document.getElementById("carsTqt").value = (""+totalGeral.toFixed(1)+"").replace(".",",");
+}
 
-				// Atualizar os campos totais
-				$('#carsTq01').val(formatarNumero(totalQ01));
-				$('#carsTq02').val(formatarNumero(totalQ02));
-				$('#carsTq03').val(formatarNumero(totalQ03));
-				$('#carsTq04').val(formatarNumero(totalQ04));
-				$('#carsTq05').val(formatarNumero(totalQ05));
-				$('#carsTq06').val(formatarNumero(totalQ06));
-				$('#carsTq07').val(formatarNumero(totalQ07));
-				$('#carsTq08').val(formatarNumero(totalQ08));
-				$('#carsTq09').val(formatarNumero(totalQ09));
-				$('#carsTq10').val(formatarNumero(totalQ10));
-				$('#carsTq11').val(formatarNumero(totalQ11));
-				$('#carsTq12').val(formatarNumero(totalQ12));
-				$('#carsTq13').val(formatarNumero(totalQ13));
-				$('#carsTq14').val(formatarNumero(totalQ14));
-				$('#carsTq15').val(formatarNumero(totalQ15));
-				
-			}
-			
-		</script>
+// 🔹 Seleção de radios (mantida, com pequeno ajuste)
+function selecionarRadioComBaseNoValor(campoNumero) {
+    let campoId = "carsTq" + campoNumero + "Edi";
+    let valorCampo = document.getElementById(campoId)?.value;
+    if (!valorCampo) return;
+    
+    let radioPrefixo = "cars" + campoNumero;
+    
+    for (let i = 1; i <= 7; i++) {
+        let radioId = radioPrefixo + i;
+        let radio = document.getElementById(radioId);
+        if (!radio) continue;
+        
+        switch (valorCampo) {
+            case "1,0": if (i == 1) radio.checked = true; break;
+            case "1,5": if (i == 2) radio.checked = true; break;
+            case "2,0": if (i == 3) radio.checked = true; break;
+            case "2,5": if (i == 4) radio.checked = true; break;
+            case "3,0": if (i == 5) radio.checked = true; break;
+            case "3,5": if (i == 6) radio.checked = true; break;
+            case "4,0": if (i == 7) radio.checked = true; break;
+        }
+    }
+}
+
+// 🔹 Função principal de carregamento (REFATORADA)
+function carregaBody() {
+    // 1️⃣ Formata data
+    let dtcarspre = new Date(document.getElementById("carsCarsdataEdi").value);
+    if (!isNaN(dtcarspre)) {
+        let mes = (dtcarspre.getMonth()+1).toString().padStart(2, '0');
+        let dia = (dtcarspre.getUTCDate()).toString().padStart(2, '0');
+        let fulldate = dtcarspre.getFullYear()+"-"+mes+"-"+dia;
+        document.getElementById("carsCarsdata").value = fulldate;
+    }
+
+    // 2️⃣ Atualiza campos NORMAIS (input, textarea)
+    const camposNormais = [
+        'carsBenedatanasc', 'carsBeneidade', 'carsPreechido', 
+        'carsParentesco', 'carsInfo', 'carsComentarios'
+    ];
+    camposNormais.forEach(campo => {
+        let el = document.getElementById(campo);
+        let elEdi = document.getElementById(campo + "Edi");
+        if (el && elEdi) el.value = elEdi.value;
+    });
+
+    // 3️⃣ Atualiza selects COM Chosen (usando helper)
+    const camposChosen = [
+        {id: 'carsBeneid', edi: 'carsBeneidEdi'},
+        {id: 'carsBenesexo', edi: 'carsBenesexoEdi'},
+        {id: 'carsTerapeutaid', edi: 'carsTerapeutaidEdi'}
+    ];
+    camposChosen.forEach(({id, edi}) => {
+        let val = document.getElementById(edi)?.value;
+        if (val) atualizaChosen(id, val);
+    });
+
+    // 4️⃣ Atualiza campos de pontuação (inputs normais)
+    for (let i = 1; i <= 15; i++) {
+        let num = i.toString().padStart(2, '0');
+        let el = document.getElementById("carsTq"+num);
+        let elEdi = document.getElementById("carsTq"+num+"Edi");
+        if (el && elEdi) el.value = elEdi.value;
+    }
+    
+    // Total geral
+    let tqtEdi = document.getElementById("carsTqtEdi")?.value;
+    if (tqtEdi) document.getElementById("carsTqt").value = tqtEdi;
+
+    // 5️⃣ Checkbox "Concluído"
+    let concluido = document.getElementById("carsConcluidoEdi")?.value;
+    let chk = document.getElementById("carsConcluido");
+    if (chk) chk.checked = (concluido === "on");
+
+    // 6️⃣ Seleciona radios das 15 questões
+    for (let i = 1; i <= 15; i++) {
+        let num = i.toString().padStart(2, '0');
+        selecionarRadioComBaseNoValor(num);
+    }
+
+    // 7️⃣ Remove div de carregamento
+    let divCarrega = document.getElementById("divCarrega");
+    if (divCarrega) divCarrega.remove();
+}
+</script>
 	</head>
 
 	<body onload="javascript:controlaNave();" class="no-skin">
@@ -125,17 +196,15 @@
 															</div>
 														</div>
 														<div class="row">
-															<div class="col-xs-4 col-sm-2">
+															<div class="col-xs-12 col-sm-4">
 																<label> Sexo</label>
-																<div class="row">
-																	<div class="input-group">
-																		<div class="col-sm-2">
-																			<select name="carsBenesexo" id="carsBenesexo" class="chosen-select" dcars-placeholder="Escolha..."value="-" >
-																						<option value="-">-</option>
-																						<option value="F">Feminino</option>
-																						<option value="M">Masculino</option>
-																			</select>
-																		</div>
+																<div class="form-group">
+																	<div class="col-sm-6">
+																		<select name="carsBenesexo" id="carsBenesexo" class="chosen-select" value="-" >
+																			<option value="-">-</option>
+																			<option value="F">Feminino</option>
+																			<option value="M">Masculino</option>
+																		</select>
 																	</div>
 																</div>
 															</div>
@@ -4001,6 +4070,32 @@
 				}
 			});
 
+		</script>
+		<script>
+			<!-- 🔹 INICIALIZAÇÃO SEGURA (igual à view de créditos) -->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				// 1. Inicializa Chosen em TODOS os selects da página
+				if (typeof $.fn.chosen === 'function') {
+					$('.chosen-select').chosen({
+						width: '100%',
+						disable_search_threshold: 10,
+						allow_single_deselect: true,
+						no_results_text: 'Nenhum resultado encontrado'
+					});
+				}
+				
+				// 2. Carrega os valores do formulário (APÓS Chosen estar pronto)
+				if (typeof carregaBody === 'function') {
+					setTimeout(carregaBody, 50); // Pequeno delay para garantir
+				}
+				
+				// 3. Inicializa navegação do Ace Admin
+				if (typeof controlaNave === 'function') {
+					controlaNave();
+				}
+			});
+		</script>
 		</script>
 	</body>
 </html>

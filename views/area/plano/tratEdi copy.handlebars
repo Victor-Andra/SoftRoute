@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Plano de Tratamentos</title>
+		<style>
+		.ocup {
+			width: 100%;
+			box-sizing: border-box;
+			font-size: 12px;
+		}
+		</style>
+		<script type="text/javascript">
+			
+			function defineplanopadrao(){
+				document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
+			}
+			function mudaPlano() {
+				let tipodoc = document.getElementById("tratPlanotipoEdi").value;
+				console.log(tipodoc)
+				if (tipodoc == "Padrão") {
+					document.getElementById('is').style.display = 'none';
+					document.getElementById('padrao').style.display = 'block';
+					document.getElementById('terato').style.display = 'none';
+					document.getElementById('tera').style.display = 'block';
+					
+				} else if (tipodoc == "Ocupacional") {
+					document.getElementById('is').style.display = 'block';
+					document.getElementById('padrao').style.display = 'none';
+					document.getElementById('terato').style.display = 'block';
+					document.getElementById('tera').style.display = 'none';
+					
+				} else {
+				document.getElementById('is').style.display = 'none';
+				document.getElementById('padrao').style.display = 'none';
+				document.getElementById('terato').style.display = 'none';
+
+				}
+				document.getElementById('tratPlanotipo').ReadOnly
+   			}
+			function atualizaTerapeutaId(){
+				document.getElementById("tabilTerapeutaId").value = document.getElementById("atendTerapeutaid").value
+			}
+			
+			function carregaBody() {
+				console.log("🟢 Iniciando carregaBody...");
+				
+				// 🔹 Helper: formata ISO → yyyy-mm-dd para input[date]
+				function formatarParaInputDate(iso) {
+					if (!iso) return "";
+					const d = new Date(iso);
+					if (isNaN(d)) return iso; // já vem formatado?
+					return d.toISOString().split('T')[0];
+				}
+
+				// 🔹 Helper: atualiza Chosen se existir
+				function atualizaCampo(id, valor) {
+					const el = document.getElementById(id);
+					if (!el) {
+						console.warn(`⚠️ Campo não encontrado: #${id}`);
+						return false;
+					}
+					
+					// Checkbox
+					if (el.type === "checkbox") {
+						el.checked = (valor === "true" || valor === "1" || valor === true);
+						console.log(`✅ Checkbox #${id} = ${el.checked}`);
+						return true;
+					}
+					
+					// Radio: marca pelo value dentro do mesmo name
+					if (el.type === "radio") {
+						document.querySelectorAll(`input[name="${el.name}"]`).forEach(r => {
+							r.checked = (r.value === valor);
+						});
+						console.log(`✅ Radio group "${el.name}" marcado com valor: ${valor}`);
+						return true;
+					}
+					
+					// Select com Chosen
+					if (el.tagName === "SELECT") {
+						el.value = valor;
+						if (typeof jQuery !== 'undefined' && jQuery.fn.chosen) {
+							jQuery(el).trigger('chosen:updated');
+							console.log(`✅ Select Chosen #${id} atualizado`);
+						}
+						return true;
+					}
+					
+					// Date input
+					if (el.type === "date" && valor) {
+						el.value = formatarParaInputDate(valor);
+						console.log(`✅ Date #${id} = ${el.value}`);
+						return true;
+					}
+					
+					// Text, textarea, number, etc.
+					el.value = valor ?? "";
+					console.log(`✅ Campo #${id} = "${el.value}"`);
+					return true;
+				}
+
+				// 🔹 Itera sobre todos os campos *Edi*
+				const inputsEdi = document.querySelectorAll('#divCarrega input[id$="Edi"]');
+				console.log(`📦 Encontrados ${inputsEdi.length} campos Edi para popular`);
+				
+				inputsEdi.forEach(inputEdi => {
+					try {
+						const idEdi = inputEdi.id; // ex: avafisiodataavaEdi
+						const valor = inputEdi.value;
+						const idBase = idEdi.replace(/Edi$/, ''); // remove "Edi" do final
+						
+						// Ignora campos que não devem ser populados diretamente
+						if (['id', 'avafisio_id'].includes(idBase)) return;
+						
+						atualizaCampo(idBase, valor);
+					} catch (err) {
+						console.error(`❌ Erro ao popular ${inputEdi?.id}:`, err);
+					}
+				});
+				
+				// 🔹 Após popular todos os campos Edi, popula dados do beneficiário
+					function populaDadosBeneficiarioEdicao() {
+						// Data de nascimento (formata para yyyy-MM-dd)
+						const beneDatanascEdi = document.getElementById("beneDatanascEdi")?.value;
+						if (beneDatanascEdi && beneDatanascEdi !== "undefined") {
+							const dataFmt = new Date(beneDatanascEdi);
+							if (!isNaN(dataFmt)) {
+								document.getElementById("beneDatanasc").value = formataData(dataFmt);
+								// Recalcula idade se necessário
+								document.getElementById("beneIdade").value = calculaIdade(dataFmt);
+							}
+						}
+						
+						// Idade (caso já venha calculada do backend)
+						const beneIdadeEdi = document.getElementById("beneIdadeEdi")?.value;
+						if (beneIdadeEdi && beneIdadeEdi !== "undefined") {
+							document.getElementById("beneIdade").value = beneIdadeEdi;
+						}
+						
+						// Diagnóstico
+						const laudoDiagEdi = document.getElementById("laudoDiagEdi")?.value;
+						if (laudoDiagEdi && laudoDiagEdi !== "undefined") {
+							document.getElementById("laudoDiag").value = laudoDiagEdi;
+						}
+						
+						console.log("✅ Dados do beneficiário populados na edição");
+					}
+
+					setTimeout(() => {
+						populaDadosBeneficiarioEdicao();
+					}, 50); // Pequeno delay para garantir que os campos já existem no DOM
+					
+				console.log("✅ carregaBody finalizado!");
+			}
+
+			function atualizaData(){
+				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataFmt.toISOString());
+				document.getElementById("a").value = dataFmt;
+			}
+			function formataData(date) {//yyyy-MM-dd
+				var d = new Date(date);
+				if (d.getTimezoneOffset() == 180){
+					d.setHours(d.getHours()+3);
+				}
+				console.log("d:"+d);
+					month = '' + (d.getMonth() + 1);
+					day = '' + d.getDate();
+					year = d.getFullYear();
+
+				if (month.length == 1) {
+					month = '0' + month;
+				}
+					
+				if (day.length == 1) {
+					day = '0' + day;
+				}
+
+				return [year, month, day].join('-');
+			}
+			function atualizaDadosbene(){
+				let beneid = document.getElementById("tratBeneid").value;
+
+				var dataIso = new Date(document.getElementById(beneid+"_beneDatanasc").value);
+				if ((""+dataIso.toLocaleTimeString()+"").substring(0,2) != "00") {
+					let num = parseInt((""+dataIso.toLocaleTimeString()+"").substring(0,2));
+					let dif = 24-num;
+					dataIso = new Date(dataIso.getTime() + dif * 60 * 60 * 1000)//add 3h ao gtm
+				}
+				if (dataIso != undefined && dataIso != "undefined"){
+					var dataFmt = new Date(dataIso);
+					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
+					document.getElementById("beneIdade").value = calculaIdade(dataFmt);
+				}
+				console.log("beneid:"+beneid)
+				console.log(document.getElementById(beneid+"_laudoDiagEdi"));
+				if (document.getElementById(beneid+"_laudoDiagEdi") != "undefined" && document.getElementById(beneid+"_laudoDiagEdi") != null){
+					document.getElementById("laudoDiag").value = document.getElementById(beneid+"_laudoDiagEdi").value;
+				}
+				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
+				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
+			}
+			function calculaIdade(dataFmt) {
+				// Data atual
+				const hoje = new Date();
+
+				// Data de aniversário
+				const aniversario = new Date(dataFmt);
+
+				// Cálculo da idade
+				let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
+				let idadeMeses = hoje.getMonth() - aniversario.getMonth();
+
+				// Ajuste caso o dia de aniversário ainda não tenha ocorrido este ano
+				if (hoje.getDate() < aniversario.getDate()) {
+					idadeMeses--;
+				}
+
+				// Se o mês do aniversário for maior que o mês atual, ajusta a idade
+				if (idadeMeses < 0) {
+					idadeAnos--;
+					idadeMeses += 12;
+				}
+				return (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
+				
+			}
+		</script>
+	</head>
+
+	<body onload="javascript:controlaNave();carregaBody();mudaPlano();" class="no-skin">
+		<div class="main-content ace-save-state" id="main-container">
+			<div class="main-content-inner">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="breadcrumbs" id="breadcrumbs">
+							<ul class="breadcrumb">
+								<li>
+									<i class="ace-icon fa fa-home home-icon"></i>
+									<a href="#">Route</a>
+								</li>
+
+								<li class="active">Plano de Tratamentos - Visualizar</li>
+							</ul><!-- /.breadcrumb -->
+							<div id="divCarrega" name="divCarrega" class="hidden">
+								<input id="tratPlanotipoEdi" name="tratPlanotipoEdi" value="{{trat.trat_planotipo}}"/>
+								<input id="tratBeneidEdi" name="tratBeneidEdi" value="{{trat.trat_beneid}}"/>
+								<input id="tratBeneidadeEdi" name="tratBeneidadeEdi" value="{{trat.trat_beneidade}}"/>
+								<input id="laudoDescEdi" name="laudoDescEdi" value="{{laudo.laudo_desc}}"/>
+								<input id="tratTratdataEdi" name="tratTratdataEdi" value="{{trat.trat_tratdata}}"/>
+								<input id="tratTratdatavigenciaEdi" name="tratTratdatavigenciaEdi" value="{{trat.trat_tratdatavigencia}}"/>
+								<!--<input id="tratDiagnosticoEdi" name="tratDiagnosticoEdi" value="{{trat.trat_diagnostico}}"/>-->
+								<input id="tratEspecialidadepadEdi" name="tratEspecialidadepadEdi" value="{{trat.trat_especialidadepad}}"/>
+								<input id="tratTerapeutaidpadEdi" name="tratTerapeutaidpadEdi" value="{{trat.trat_terapeutaidpad}}"/>
+								<input id="tratRegconselhopadEdi" name="tratRegconselhopadEdi" value="{{trat.trat_regconselhopad}}"/>
+								<input id="tratHistoricopadEdi" name="tratHistoricopadEdi" value="{{trat.trat_historicopad}}"/>
+								<input id="tratObjgeralpadEdi" name="tratObjgeralpadEdi" value="{{trat.trat_objgeralpad}}"/>
+								<input id="tratObjespecificopadEdi" name="tratObjespecificopadEdi" value="{{trat.trat_objespecificopad}}"/>
+								<input id="tratEstrategiapadEdi" name="tratEstrategiapadEdi" value="{{trat.trat_estrategiapad}}"/>
+								<input id="tratObspadEdi" name="tratObspadEdi" value="{{trat.trat_obspad}}"/>
+								<input id="tratDiagnosticoocupEdi" name="tratDiagnosticoocupEdi" value="{{trat.trat_diagnosticoocup}}"/>
+								<input id="tratEspecialidadeisEdi" name="tratEspecialidadeisEdi" value="{{trat.trat_especialidadeis}}"/>
+								<input id="tratTerapeutaidisEdi" name="tratTerapeutaidisEdi" value="{{trat.trat_terapeutaidis}}"/>
+								<input id="tratRegconselhoisEdi" name="tratRegconselhoisEdi" value="{{trat.trat_regconselhois}}"/>
+								<input id="tratMetacurtoisEdi" name="tratMetacurtoisEdi" value="{{trat.trat_metacurtois}}"/>
+								<input id="tratMetamedioisEdi" name="tratMetamedioisEdi" value="{{trat.trat_metamediois}}"/>
+								<input id="tratMetalongoisEdi" name="tratMetalongoisEdi" value="{{trat.trat_metalongois}}"/>
+								<input id="tratObjetivoisEdi" name="tratObjetivoisEdi" value="{{trat.trat_objetivois}}"/>
+								<input id="tratEspecialidadeavdEdi" name="tratEspecialidadeavdEdi" value="{{trat.trat_especialidadeavd}}"/>
+								<input id="tratTerapeutaidavdEdi" name="tratTerapeutaidavdEdi" value="{{trat.trat_terapeutaidavd}}"/>
+								<input id="tratRegconselhoavdEdi" name="tratRegconselhoavdEdi" value="{{trat.trat_regconselhoavd}}"/>
+								<input id="usuarioAtual" name="usuarioAtual" value="{{usuarioAtual}}"/>
+								<input id="perfilAtual" name="perfilAtual" value="{{perfilAtual}}"/>
+									<!-- Dados do beneficiário (para popular campos readonly na edição) -->
+									<input type="text" id="beneDatanascEdi" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
+									<input type="text" id="beneIdadeEdi" name="beneIdadeEdi" value="{{trat.trat_beneidade}}"/>
+									<input type="text" id="laudoDiagEdi" name="laudoDiagEdi" value="{{laudo_diag}}"/>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-12">
+						<!-- PAGE CONTENT BEGINS -->
+						<form class="form-horizontal" role="form" action="/menu/area/plano/atualizar" method="POST">
+							<input class="hidden" id="tratId" name="tratId" value="{{trat._id}}" />
+							<div class="col-sm-12" name="plan" id="plan"><!-- Widget Dados Básicos -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">
+											<i class="orange ace-icon fa fa-check-square bigger-110"></i>
+											Tipo plano de tratamento
+										</h4>
+										<div id="divCarrega" name="divCarrega" class="hidden">
+											<!-- /.importante Id de indice-->
+											<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
+											{{#each benes}}
+												<input type="text" id="{{_id}}_beneDatanasc" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
+											{{/each}}
+											{{#each laudos}}
+												<input type="text" id="{{laudo_beneid}}_laudoDiagEdi" name="{{laudo_beneid}}_laudoDiagEdi" value="{{laudo_diag}}"/>
+											{{/each}}
+										</div>
+										<span class="widget-toolbar">
+
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+
+										</span>
+									</div>
+
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<div class="row">
+												<div class="col-sm-4">
+													<label>Escolha o plano de tratamento:</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" value="{{trat.trat_planotipo}}">
+																<option value="-">-</option>
+																<option value="Padrão">Padrão</option>
+																<option value="Ocupacional">Ocupacional</option>
+															</select>
+														</div>
+													</div>	
+												</div>
+												
+												<div class="col-sm-4">
+													<label for="id-date-picker-1">Data do plano de tratamento:</label>
+													<div class="row">
+														<div class="col-sm-4">
+															<div class="input-group">
+																<input name="tratTratdata" id="tratTratdata" type="date" />
+															</div>
+														</div>
+													</div>
+												</div>
+												
+											</div>
+											
+										</div>	
+									</div>	
+								</div>
+							</div>
+							
+							<div class="col-sm-12" name="ident" id="ident"><!-- Widget Dados Básicos -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">
+											<i class="pink ace-icon fa fa-child bigger-110"></i>
+											Beneficiário
+										</h4>
+										
+										<span class="widget-toolbar">
+
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+
+										</span>
+									</div>
+
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<div class="row">
+																					
+												<div class="col-xs-12 col-sm-4">
+													<label>Beneficiário:</label>
+													<div class="form-group">
+														<div class="col-sm-8">
+															<select name="tratBeneid" id="tratBeneid" class="chosen-select" placeholder="Colocar nome completo." readonly="true" >
+																<option value="766f69643132333435366964">-</option>
+																{{#each benes}}
+																	<option value="{{_id}}">{{bene_nome}}</option>
+																{{/each}}
+															</select>
+														</div>
+													</div>
+												</div>												
+																						
+																							
+											</div>
+											<div class="row">
+												<div class="col-xs-12">
+													<div class="alert alert-warning">
+														<button type="button" class="close" data-dismiss="alert">
+															<i class="ace-icon fa fa-times"></i>
+														</button>
+														As informações adicionais são oriundas do cadastro do beneficiário e último laudo emitido e cadastrado no sistema.<br>
+                                                        Qualquer informação divergente contante aqui, deve ser reportado IMEDIATAMENTE ao administrativo.<br>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-4 col-sm-4">
+													<label>Data de nascimento:</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<div class="input-group">
+																<input name="beneDatanasc" id="beneDatanasc" type="date" readonly="true"  />
+															</div>
+														</div>
+													</div>
+												</div>												
+											
+												<div class="col-xs-4 col-sm-4">
+													<label >Idade:</label>
+													<div class="row">
+														<div class="col-sm-4">
+															<div class="input-group">
+																<input name="beneIdade" id="beneIdade" type="text" readonly="true"  />
+															</div>
+														</div>
+													</div>
+												</div>
+												
+											</div>
+											<div class="row">
+												<div class="col-sm-12">
+													<label>Diagnóstico:</label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea name="laudoDiag" id="laudoDiag" style="font-size: 12px" class="form-control" readonly="true"></textarea>
+														</div>
+													</div>	
+												</div>
+											</div>
+											
+										</div>	
+									</div>	
+								</div>
+							</div>
+
+							<div class="col-sm-12" name="tera" id="tera"><!-- Widget Dados Básicos -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">
+											<i class="green ace-icon fa fa-user bigger-110"></i>
+											Terapeuta
+										</h4>
+										
+										<span class="widget-toolbar">
+
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+
+										</span>
+									</div>
+
+									<div class="widget-body">
+										<div class="widget-main">
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Especialidade:</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<input type="text" name="tratEspecialidadepad" id="tratEspecialidadepad" placeholder="Colocar nome da sua terapia." class="form-control" />
+														</div>
+													</div>	
+												</div>
+												
+												<div class="col-sm-4">
+													<label>Terapeuta:</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<select name="tratTerapeutaidpad" id="tratTerapeutaidpad" class="chosen-select" placeholder="Escolha..." >
+																<option value="766f69643132333435366964">-</option>
+																{{#each usuarios}}
+																	<option value="{{_id}}">{{usuario_nomecompleto}}</option>
+																{{/each}}
+															</select>
+														</div>
+													</div>	
+												</div>
+
+												<div class="col-sm-3">
+													<label>Registro do conselho:</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<input type="text" name="tratRegconselhopad" id="tratRegconselhopad" placeholder="" class="form-control" />
+														</div>
+													</div>	
+												</div>
+											</div>
+											
+										</div>	
+									</div>	
+								</div>
+							</div>							
+							
+							<div class="col-sm-12" name="terato" id="terato"><!-- Widget Dados Básicos -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">
+											<i class="green ace-icon fa fa-user bigger-110"></i>
+											Terapeutas
+										</h4>
+										
+										<span class="widget-toolbar">
+
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+
+										</span>
+									</div>
+
+									<div class="widget-body">
+										<div class="widget-main">
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Especialidade:</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<input type="text" name="tratEspecialidadeis" id="tratEspecialidadeis" data-placeholder="TO - Terapia Ocupacional" class="form-control" class="readonly"/>
+														</div>
+													</div>	
+												</div>
+											</div>
+											<div class="row">	
+												<div class="col-sm-4">
+													<label>Terapeuta:</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<select name="tratTerapeutaidis" id="tratTerapeutaidis" class="chosen-select" placeholder="Escolha..." style="width:400px;">
+																<option value="766f69643132333435366964">-</option>
+																{{#each usuarios}}
+																<option value="{{_id}}">{{usuario_nomecompleto}}</option>
+																{{/each}}
+															</select>
+														</div>
+													</div>	
+												</div>
+
+												<div class="col-sm-3">
+													<label>Registro do conselho:</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<input type="text" name="tratRegconselhois" id="tratRegconselhois" placeholder="" class="form-control" />
+														</div>
+													</div>	
+												</div>
+											</div>
+											<hr>
+											<div class="row">
+												<div class="col-sm-6">
+													<label>Especialidade:</label>
+													<div class="form-group">
+														<div class="col-sm-6">
+															<input type="text" name="tratEspecialidadeavd" id="tratEspecialidadeavd" data-placeholder="TO - Terapia Ocupacional" class="form-control" class="readonly"/>
+														</div>
+													</div>	
+												</div>
+											</div>
+											<div class="row">	
+												<div class="col-sm-4">
+													<label>Terapeuta:</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<select name="tratTerapeutaidavd" id="tratTerapeutaidavd" class="chosen-select" placeholder="Escolha..." style="width:400px;">
+																<option value="766f69643132333435366964">-</option>
+																{{#each usuarios}}
+																<option value="{{_id}}">{{usuario_nomecompleto}}</option>
+																{{/each}}
+															</select>
+														</div>
+													</div>	
+												</div>
+
+												<div class="col-sm-3">
+													<label>Registro do conselho:</label>
+													<div class="form-group">
+														<div class="col-sm-4">
+															<input type="text" name="tratRegconselhoavd" id="tratRegconselhoavd" placeholder="" class="form-control" />
+														</div>
+													</div>	
+												</div>
+											</div>
+											
+										</div>	
+									</div>	
+								</div>
+							</div>		
+
+
+
+							<div class="col-sm-12" name="padrao" id="padrao" ><!-- Widget Padrão -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">
+											<i class="orange ace-icon fa fa-cubes bigger-110"></i>
+											Plano de Tratamento - Padrão</h4>
+
+										<span class="widget-toolbar">
+
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+									
+										</span>
+									</div>
+
+									<div class="widget-body">
+										<div class="widget-main">
+											<div class="row">
+												
+												<div class="col-sm-12">
+													<label>Histórico clínico:</label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea type="text" name="tratHistoricopad" id="tratHistoricopad"  style="font-size: 12px" placeholder="Com base na sua especialidade terapêutica." class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+														</div>
+													</div>	
+												</div>
+
+												<div class="col-sm-12">
+													<label>Objetivos gerais:</label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea type="text" name="tratObjgeralpad" id="tratObjgeralpad"  style="font-size: 12px" placeholder="Descreva os objetivos da sua intervenção terapêutica para os próximos 6 meses de forma geral, seguindo uma sequência de acontecimentos ou informando a sua organização / planejamento com o beneficiário." class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+														</div>
+													</div>	
+												</div>
+												
+												<div class="col-sm-12">
+													<label>Objetivos específicos:</label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea type="text" name="tratObjespecificopad" id="tratObjespecificopad"  style="font-size: 12px" placeholder="Descreva os objetivos específicos da sua intervenção terapêutica, detalhando métodos, técnicas e meios utilizados para a evolução do beneficiário." class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+														</div>
+													</div>	
+												</div>
+
+												<div class="col-sm-12">
+													<label>Estratégias:</label>
+													<div class="form-group">
+														<div class="col-sm-12">
+															<textarea type="text" name="tratEstrategiapad" id="tratEstrategiapad"  style="font-size: 12px" placeholder="Descreva suas estratégias para os próximos seis meses de intervenção terapêutica." class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+														</div>
+													</div>	
+												</div>
+
+												
+												
+											</div>
+										</div>										
+									</div>		
+								</div>
+							</div>
+							
+									
+							<div class="col-sm-12" name="is" id="is"><!-- Widget Dados TO IS e TO AVD -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">
+											<i class="purple ace-icon fa fa-rss bigger-110"></i>
+											Plano de Tratamento</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											
+											</span>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">												
+											
+											<label>Diagnóstico terapêutico ocupacional:</label>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<textarea type="text" name="tratDiagnosticoocup" id="tratDiagnosticoocup" placeholder="Com base na sua especialidade terapêutica." class="form-control" rows="5"  data-iconlibrary="fa"></textarea>
+												</div>
+											</div>	
+
+
+											<label>Metas à curto prazo:</label>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<textarea type="text" name="tratMetacurtois" id="tratMetacurtois" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+												</div>
+											</div>
+											
+
+
+											<label>Metas à médio prazo:</label>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<textarea type="text" name="tratMetamediois" id="tratMetamediois" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+												</div>
+											</div>
+											
+
+
+											<label>Metas à longo prazo:</label>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<textarea type="text" name="tratMetalongois" id="tratMetalongois" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+												</div>
+											</div>
+											
+
+
+											<label>Estratégias e objetivos:</label>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<textarea type="text" name="tratObjetivois" id="tratObjetivois"  placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+												</div>
+											</div>
+																							
+										
+											<div class="col-xs-12 ">
+												<label class="hidden" for="id-date-picker-1">Id do usuário que digitou no sistema</label>
+												<div class="row">
+													<div class="col-xs-4">
+														<div class="input-group">
+															<input class="hidden" name="tratUsuidcad" id="tratUsuidcad" type="text" />
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-xs-12 ">
+												<label class="hidden" for="id-date-picker-1">Data da alteração digitada no sistema</label>
+												<div class="row">
+													<div class="col-xs-4">
+														<div class="input-group">
+															<input class="hidden" name="tratDatacad" id="tratDatacad" type="date" onchange="javascript:atualizaData()" />
+														</div>
+													</div>
+												</div>
+											</div>
+													
+
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-sm-12" name="obs" id="obs"><!-- Widget Dados TO IS e TO AVD -->
+								<div class="widget-box">
+									
+									<div class="widget-body">
+										<div class="widget-main">												
+											
+												<label>Observações:</label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<textarea type="text" name="tratObspad" id="tratObspad"  style="font-size: 12px" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+													</div>
+												</div>	
+											
+										</div>
+									</div>
+								</div>
+							</div>							
+
+							<div class="space-4"></div>							
+							<div class="space-4"></div>
+
+							<div class="form-actions">
+								<div class="col-xs-12" style="text-align: center;" >
+									<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										Salvar
+									</button>
+
+									&nbsp; &nbsp; &nbsp;
+									<button class="hidden btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+										<i class="ace-icon fa fa-undo bigger-110"></i>
+										Voltar
+									</button>
+								</div>
+							</div><!-- /.form-actions -->
+
+						</form><!-- /.form -->
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div><!-- /.main-content-inner -->
+		</div><!-- /.main-content -->
+	</body><!-- /.<body -->
+</html>

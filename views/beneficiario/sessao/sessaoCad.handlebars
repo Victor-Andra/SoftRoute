@@ -4,6 +4,38 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<style>
+		/* --- SEU CSS EXISTENTE --- */
+			/* Força todos os containers do Chosen para 200px */
+			.chosen-container,
+			.chosen-container-single {
+				width: 200px !important;
+			}
+			
+			/* ... outras regras ... */
+
+			/* --- NOVA REGRA: EXCEÇÃO PARA O BENEFICIÁRIO --- */
+			/* Força o container do select Beneficiário a ter 50% da largura da tela */
+			#sessaoBeneid_chosen {
+				width: 30vw !important; /* 50vw = 50% da Viewport (tela) */
+			}
+
+			/* Garante que o dropdown (lista de opções) acompanhe a largura do container */
+			#sessaoBeneid_chosen .chosen-drop,
+			#sessaoBeneid_chosen .chosen-results {
+				width: 100% !important;
+			}
+			#sessaoConvid_chosen {
+				width: 30vw !important; /* 50vw = 50% da Viewport (tela) */
+			}
+
+			/* Garante que o dropdown (lista de opções) acompanhe a largura do container */
+			#sessaoConvid_chosen .chosen-drop,
+			#sessaoConvid_chosen .chosen-results {
+				width: 100% !important;
+			}
+
+		</style>
 		<title>Tabela de Sessões</title>
 		
 		<script type="text/javascript">

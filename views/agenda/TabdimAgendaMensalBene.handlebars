@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Tabela Dinâmica da Agenda Mensal de Substitutos Fixos</title>
+  <style>
+    @media print {
+      .noprint { display: none !important; }
+      .print-header {
+        position: fixed; top: 0; left: 0; right: 0;
+        text-align: center; font-size: 11px;
+        padding: 4px 0; background: white; z-index: 9999;
+      }
+      body { margin-top: 12mm; margin-bottom: 10mm; }
+      @page { margin: 1cm; }
+    
+    }
+    .toolbar-pesquisa {
+      background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
+      color: white; padding: 15px; border-radius: 8px;
+      margin: 0 12px 20px 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border: 1px solid #1976d2;
+    }
+    .toolbar-pesquisa h5 {
+      margin: 0 0 12px 0; font-size: 14px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toolbar-pesquisa .form-inline {
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+    }
+    .toolbar-pesquisa .form-group {
+      display: flex; flex-direction: column;
+      min-width: 140px; flex: 1; max-width: 220px;
+    }
+    .toolbar-pesquisa label {
+      font-size: 11px; font-weight: 500; margin-bottom: 4px;
+      color: #f8f9fa; white-space: nowrap;
+    }
+    .toolbar-pesquisa input[type="date"],
+    .toolbar-pesquisa select {
+      padding: 6px 10px; border: 2px solid #e2e8f0;
+      border-radius: 4px; font-size: 12px;
+      width: 100%; box-sizing: border-box;
+      background: white; color: #333; height: 30px;
+    }
+    .toolbar-pesquisa .btn-pesquisar {
+      background: #dc3545; color: white; border: none;
+      padding: 8px 24px; border-radius: 4px;
+      font-weight: 600; font-size: 13px; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      margin-left: auto;
+    }
+    .toolbar-pesquisa .btn-pesquisar:hover { background: #c82333; }
+    
+    /* Chosen minimalista */
+    .chosen-container .chosen-single {
+      border: 2px solid #e2e8f0 !important;
+      border-radius: 4px !important;
+      box-shadow: none !important;
+      background: white !important;
+      height: 30px !important;
+      line-height: 28px !important;
+      font-size: 12px !important;
+    }
+    .chosen-container .chosen-drop {
+      border: 1px solid #ced4da !important;
+      border-top: none !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    }
+
+    /* === Tabela Expansível === */
+    .btn-expand {
+      cursor: pointer;
+      color: #428bca;
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+    .btn-expand:hover { color: #2a6496; transform: scale(1.1); }
+    
+    .linha-detalhe { 
+      background-color: #fafafa; 
+      display: none;
+    }
+    .detalhe-conteudo { 
+      padding: 12px 24px; 
+      border-top: 1px solid #eee;
+    }
+    
+    /* Tabela interna de detalhes */
+    .tabela-detalhes {
+      font-size: 11px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .tabela-detalhes th,
+    .tabela-detalhes td {
+      padding: 6px 8px;
+      border: 1px solid #e2e8f0;
+      vertical-align: middle;
+    }
+    .tabela-detalhes th {
+      background: #f1f5f9;
+      font-weight: 600;
+      color: #1e293b;
+      white-space: nowrap;
+    }
+    .tabela-detalhes td {
+      background: white;
+    }
+    /* Colunas de substituição com destaque */
+    .col-sub {
+      background: #fffbeb !important;
+      border-left: 2px solid #f59e0b;
+    }
+    .badge-subfix {
+      background: #f59e0b;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .sem-registros {
+      text-align: center; padding: 40px;
+      color: #64748b; font-style: italic;
+    }
+    .text-right { text-align: right; }
+    .text-center { text-align: center; }
+  </style>
+</head>
+
+<body onload="javascript:controlaNave(); carregaBody();" class="no-skin">
+  <div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+      <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state">
+          <ul class="breadcrumb">
+            <li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
+            <li class="active">Tabela Dinâmica da Agenda Mensal de Substitutos Fixos</li>
+          </ul>
+        </div>
+
+        <div class="page-content">
+          <!-- 🔍 Filtros -->
+          <form role="form" action="/menu/agenda/filMensal" method="POST" onsubmit="atualizaDataIni();">
+            <div class="toolbar-pesquisa noprint">
+              <h5><i class="ace-icon fa fa-calendar"></i> Filtros da Agenda</h5>
+              <div class="form-inline">
+                <div class="form-row">
+                  
+                  <!-- Data -->
+                  <div class="form-group">
+                    <label>Data:</label>
+                    <input id="dataFilDe" name="dataFinal" type="date" onchange="atualizaDataIni()">
+                    <input type="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}">
+                  </div>
+
+                  <!-- Beneficiário -->
+                  <div class="form-group">
+                    <label>Beneficiário:</label>
+                    <select name="agendaBeneid" id="agendaBeneid" class="chosen-select">
+                      <option value="TODOS">TODOS os beneficiários</option>
+                      {{#each benes}}
+                        <option value="{{_id}}">{{bene_nome}}</option>
+                      {{/each}}
+                    </select>
+                    <input type="hidden" id="relBeneIdFiltro" name="relBeneIdFiltro" value="{{filtro.beneid}}">
+                  </div>
+
+                  <!-- Checkbox SubFix -->
+                  <div class="form-group">
+                    <label>&nbsp;</label>
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                      <input type="checkbox" name="soFixo" value="true" 
+                             {{#if filtro.soFixo}}checked{{/if}} 
+                             style="margin: 0; width: auto;">
+                      <span style="font-size: 11px; color: #f8f9fa;">Apenas Substitutos Fixos</span>
+                    </label>
+                  </div>
+
+                  <!-- Botão -->
+                  <button class="btn-pesquisar" type="submit">
+                    <i class="ace-icon fa fa-search"></i> Pesquisar
+                  </button>
+
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <!-- 📋 Tabela Expansível -->
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="widget-box">
+                <div class="widget-header">
+                  <h4 class="widget-title">
+                    <i class="ace-icon fa fa-list-alt green"></i>
+                    Substitutos Fixos - {{mesAno}}
+                    <small class="text-muted">({{periodoDe}} a {{periodoAte}})</small>
+                  </h4>
+                  <span class="widget-toolbar">
+                    <a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+                    <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+                  </span>
+                </div>
+
+                <div class="widget-body">
+                  <div class="widget-main">
+                    
+                    {{#if agendas.length}}
+                      <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                          <tr>
+                            <th style="width: 30px;"></th>
+                            <th>Beneficiário</th>
+                            <th class="text-right">Sessões</th>
+                            <th>Convênio</th>
+                            <th>Ação</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {{#each agendas}}
+                            <!-- 👤 Linha Principal: Beneficiário (com ícone +) -->
+                            <tr data-bene-name="{{beneNome}}">
+                              <td class="text-center">
+                                <i class="btn-expand ace-icon fa fa-plus-circle bigger-140"></i>
+                              </td>
+                              <td><strong>{{beneNome}}</strong></td>
+                              <td class="text-right"><span class="label label-info">{{sessoes}}</span></td>
+                              <td>{{convNome}}</td>
+                              <td></td>
+                            </tr>
+
+                            <!-- 👇 Linha de Detalhe: Tabela com colunas (oculta por padrão) -->
+                            <tr class="linha-detalhe">
+                              <td colspan="5">
+                                <div class="detalhe-conteudo">
+                                  <h5 style="margin:0 0 12px 0; font-size:13px;">
+                                    <i class="ace-icon fa fa-table"></i> 
+                                    Detalhamento de "{{beneNome}}"
+                                  </h5>
+
+                                  <table class="tabela-detalhes">
+                                    <thead>
+                                      <tr>
+                                        <th>Data</th>
+                                        <th>Hora</th>
+                                        <th>Sala</th>
+                                        <th>Beneficiário</th>
+                                        <th>Terapeuta</th>
+                                        <th>Terapia</th>
+                                        <th class="col-sub">Terapeuta Sub</th>
+                                        <th class="col-sub">Terapia Sub</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {{#each itens}}
+                                        <tr>
+                                          <td style="white-space:nowrap;">{{agenda_data_dia}}</td>
+                                          <td class="text-center" style="font-family:monospace;">{{agenda_hora}}</td>
+                                          <td>{{salaOrig}}</td>
+                                          <td>{{beneNome}}</td>
+                                          <td>{{terapeutaOrig}}</td>
+                                          <td>
+                                            {{terapiaOrig}}
+                                            {{#if isSubFix}}
+                                              <span class="badge-subfix">SubFix</span>
+                                            {{/if}}
+                                          </td>
+                                          <!-- Colunas de substituição (destacadas) -->
+                                          <td class="col-sub">{{terapeutaSub}}</td>
+                                          <td class="col-sub">{{terapiaSub}}</td>
+                                        </tr>
+                                      {{/each}}
+                                    </tbody>
+                                  </table>
+
+                                </div>
+                              </td>
+                            </tr>
+                          {{/each}}
+                        </tbody>
+                        <tfoot>
+                          <tr style="background: #f1f5f9; font-weight: 600;">
+                            <td colspan="2" class="text-right">Total Geral:</td>
+                            <td class="text-right"><span class="label label-lg label-info">{{totalGeralSessoes}}</span></td>
+                            <td colspan="4"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    {{else}}
+                      <div class="sem-registros">
+                        <i class="ace-icon fa fa-info-circle bigger-140 orange"></i><br><br>
+                        Nenhum agendamento com substituição fixa encontrado no período.
+                      </div>
+                    {{/if}}
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // === Funções de Data ===
+    function atualizaDataIni() {
+      const v = document.getElementById('dataFilDe').value;
+      if (v) document.getElementById('dataIni').value = v + ' 00:00:00.000Z';
+    }
+
+    function carregaBody() {
+      // Data
+      const ini = document.getElementById('dataIni')?.value;
+      if (ini && document.getElementById('dataFilDe')) {
+        document.getElementById('dataFilDe').value = ini.split(' ')[0];
+      }
+      
+      // Beneficiário (seleção via JS, sem helper)
+      const beneIdFiltro = document.getElementById('relBeneIdFiltro')?.value || 'TODOS';
+      const selectBene = document.getElementById('agendaBeneid');
+      if (selectBene) {
+        selectBene.value = 'TODOS';
+        if (beneIdFiltro && beneIdFiltro !== 'TODOS') {
+          for (let i = 0; i < selectBene.options.length; i++) {
+            if (selectBene.options[i].value === beneIdFiltro) {
+              selectBene.selectedIndex = i;
+              break;
+            }
+          }
+        }
+      }
+      
+      // Checkbox SubFix
+      const chkSubFix = document.querySelector('input[name="soFixo"]');
+      if (chkSubFix && '{{filtro.soFixo}}' === 'true') {
+        chkSubFix.checked = true;
+      }
+      
+      // Atualiza Chosen
+      if (typeof $.fn.chosen === 'function') {
+        $('.chosen-select').trigger('chosen:updated');
+      }
+    }
+
+    // === Toggle Expandir/Retrair ===
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.btn-expand').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const mainRow = this.closest('tr');
+          const detailRow = mainRow.nextElementSibling;
+          
+          if (!detailRow || !detailRow.classList.contains('linha-detalhe')) return;
+          
+          const isExpanded = detailRow.style.display === 'table-row';
+          detailRow.style.display = isExpanded ? 'none' : 'table-row';
+          
+          // Alterna ícone + / -
+          this.classList.toggle('fa-plus-circle', isExpanded);
+          this.classList.toggle('fa-minus-circle', !isExpanded);
+          
+          // Efeito visual suave
+          this.style.transform = isExpanded ? 'scale(1)' : 'scale(1.1)';
+          setTimeout(() => { this.style.transform = 'scale(1)'; }, 150);
+        });
+      });
+    });
+
+    // === Inicializa Chosen ===
+    $(document).ready(function () {
+      $(".chosen-select").chosen({
+        no_results_text: "Não encontrado...",
+        search_contains: true,
+        disable_search_threshold: 10
+      });
+    });
+  </script>
+</body>
+</html>

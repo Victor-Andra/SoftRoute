@@ -1,91 +1,59 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		
 		<title>Créditos de Convênios</title>
+		<!-- ⚠️ IMPORTANTE: Se o layout base já carrega o chosen.css, remova esta linha -->
+		<link rel="stylesheet" href="/assets/css/chosen.min.css" />
 	</head>
-
 	<body onload="javascript:controlaNave();" class="no-skin">
-
-
 		<div class="main-container ace-save-state" id="main-container">
-
-
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Home</a>
-							</li>
-
+							<li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
 							<li class="active">Créditos de Convênios Cadastro</li>
-						</ul><!-- /.breadcrumb -->
-
+						</ul>
 					</div>
 
 					<div class="row">
 						<div class="col-xs-12">
-							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/convenio/convcre/add" method="POST">
-
-
-								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+								<div class="col-sm-12">
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Crédito de Convênios</h4>
-
 											<span class="widget-toolbar">
-
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
-
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
-
+												<a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+												<a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
 											</span>
 										</div>
 
 										<div class="widget-body">
 											<div class="widget-main">
-
-
-				
-												<label>Convênio Id</label>
+												<label>Convênio</label>
 												<div class="form-group">
 													<div class="col-sm-4">
 														<select name="convcreConvid" id="convcreConvid" class="chosen-select" data-placeholder="Escolha...">
-																{{#each convs}}
+															{{#each convs}}
 																<option value="{{_id}}">{{conv_nome}}</option>
-																{{else}}
-																{{/each}}
+															{{else}}
+															{{/each}}
 														</select>
 													</div>
 												</div>
 
-<!--
-												<label> Convênio</label>
-												<div class="form-group" class="hidden">
-													<div class="col-sm-6">
-														<input type="text" name="convcreConvnome"  id="convcreConvnome" value="{{convcreConvid}}" class="form-control" />
-													</div>
-												</div>
--->
 												<label>Terapia</label>
 												<div class="form-group">
 													<div class="col-sm-4">
 														<select name="convcreTerapiaid" id="convcreTerapiaid" class="chosen-select" data-placeholder="Escolha...">
-																{{#each terapias}}
+															{{#each terapias}}
 																<option value="{{_id}}">{{terapia_nome}}</option>
-																{{else}}
-																{{/each}}
+															{{else}}
+															{{/each}}
 														</select>
 													</div>
 												</div>
-
 
 												<label for="id-date-picker-1">Data</label>
 												<div class="row">
@@ -100,13 +68,14 @@
 												<label> Valor de Crédito</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" id="convcreValor" name="convcreValor" placeholder="" class="money"   />
+														<input type="text" id="convcreValor" name="convcreValor" placeholder="0,00" class="form-control money" />
 													</div>
 												</div>
+
 												<label>Status</label>
 												<div class="form-group">
 													<div class="col-sm-2">
-														<select name="convcreStatus" id="convcreStatus" class="chosen-select" style="width: 100px;"	data-placeholder="Ativo">
+														<select name="convcreStatus" id="convcreStatus" class="chosen-select" data-placeholder="Selecione...">
 															<option value="Ativo">Ativo</option>
 															<option value="Inativo">Inativo</option>
 														</select>
@@ -120,51 +89,32 @@
 														<input type="text" id="convcreObs" name="convcreObs" placeholder="" class="form-control" />
 													</div>
 												</div>
-
 											</div>
 										</div>
 									</div>
 								</div>
-							
+
 								<div class="space-6"></div>
-
-									<div class="form-actions">
-										<div class="col-xs-12" style="text-align: center;" >
-											<button class="btn btn-info" name="acao" type="submit">
-												<i class="ace-icon fa fa-check bigger-110"></i>
-												Salvar
-											</button>
-
-											&nbsp; &nbsp; &nbsp;
-											<button class="btn btn-warning"  type="reset">
-												<i class="ace-icon fa fa-undo bigger-110"></i>
-												Voltar
-											</button>
-										</div>
+								<div class="form-actions">
+									<div class="col-xs-12" style="text-align: center;">
+										<button class="btn btn-info" name="acao" type="submit"><i class="ace-icon fa fa-check bigger-110"></i> Salvar</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning" type="reset"><i class="ace-icon fa fa-undo bigger-110"></i> Voltar</button>
 									</div>
-
+								</div>
 							</form>
-						</div><!-- /.col -->
-					</div><!-- /.row -->
-
-
-
-
+						</div>
+					</div>
 				</div>
-			</div><!-- /.main-content -->
+			</div>
+		</div>
 
+		<!-- 🔧 SCRIPTS NO FINAL (ORDEM CRÍTICA) -->
+		<!-- Se o layout já carrega jQuery/Chosen, remova as linhas de src abaixo -->
+		<script src="/assets/js/jquery-2.1.4.min.js"></script> <!-- Ajuste se já tiver no layout -->
+		<script src="/assets/js/jquery.mask.min.js"></script>
+		<script src="/assets/js/chosen.jquery.min.js"></script>
 
-		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
-		<script>
-			$(document).ready(function(){
-				$('#money').mask('#.##0,00', {reverse: true});
-			});
-		</script>
+		
 	</body>
 </html>

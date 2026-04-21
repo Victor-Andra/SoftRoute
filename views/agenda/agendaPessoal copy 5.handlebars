@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<style>
+		/* ========================================================================
+   TOOLTIP PERSONALIZADO - CORRIGIDO PARA TODOS OS ÍCONES
+   ======================================================================== */
+
+.custom-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+    z-index: 1;
+    vertical-align: middle;
+}
+
+.custom-tooltip a,
+.custom-tooltip i {
+    display: inline-block;
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: max-content;
+    max-width: 280px;
+    background-color: #f3dfdf;
+    color: #c00;
+    font-size: 9px;
+    text-align: left;
+    border-radius: 4px;
+    padding: 8px 10px;
+    position: absolute;
+    z-index: 10000 !important;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.95;
+    white-space: normal;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border: 1px solid #e0b0b0;
+    transition: opacity 0.2s, visibility 0.2s;
+    line-height: 1.4;
+    pointer-events: none !important;
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #f3dfdf transparent transparent transparent;
+    z-index: 10001;
+}
+
+/* 👉 HOVER: Garante que funcione para TODOS os ícones (com ou sem link) */
+.custom-tooltip:hover .tooltip-text,
+.custom-tooltip i:hover + .tooltip-text,
+.custom-tooltip a:hover + .tooltip-text {
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: none !important;
+    z-index: 10000 !important;
+}
+/* Garante que o hover funcione mesmo se o mouse estiver sobre o link */
+.custom-tooltip a:hover + .tooltip-text,
+.custom-tooltip:hover .tooltip-text {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+    /* Badge minimalista - mantém cores originais, só adiciona visual */
+    .badge-agenda {
+        display: inline-block;
+        padding: 2px 6px;
+        font-size: 9px;
+        font-weight: 500;
+        border-radius: 3px;
+        white-space: nowrap;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        transition: all 0.2s ease;
+        line-height: 1.3;
+    }
+    .badge-agenda:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+</style>
+		<title>Agenda Pessoal do Dia </title>
+		<script type="text/javascript">
+			function atualizaData(){
+				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataIso);
+				document.getElementById("agendaData").value = dataFmt;
+			}
+			
+			function carregaBody(){
+				console.log("🚀 [carregaBody] Iniciando (versão compatível)...");
+				let dias = ["seg","ter","qua","qui","sex"];
+				
+				try{
+					dias.forEach((dia)=>{
+						console.log(`📦 Processando dia: ${dia}`);
+						
+						document.getElementsByName(dia).forEach((e)=>{
+							let id = "hora" + e.id;        // ex: "horasegBeneId_08:00"
+							let valor = e.value;            // ex: "bene123"
+							let tempId = e.id + "_" + valor; // ex: "segBeneId_08:00_bene123"
+							
+							console.log(`   🔹 Input: id="${e.id}" | value="${valor}" | tempId="${tempId}"`);
+							
+							if(valor != "766f69643132333435366964"){
+								let val;
+								
+								// ✅ BENEFICIÁRIO
+								if(e.id.indexOf("BeneId_") != -1){
+									console.log(`   👤 Bene: buscando origem #${valor}`);
+									val = document.getElementById(valor).cloneNode(true);
+									
+									// 👈 MANTÉM A LÓGICA ORIGINAL DE ID (CRÍTICO!)
+									val.id = val.id + "x";
+									
+									// Busca motivo e aplica badge
+									document.getElementsByName(tempId).forEach((ti)=>{
+										console.log(`   🎨 Motivo encontrado: "${ti.value}"`);
+										pintaAgenda(val, ti.value);  // 👈 APLICA BADGE AQUI
+									});
+									
+									// Insere no cell de destino
+									let destino = document.getElementById(id);
+									if(destino){
+										destino.append(val);
+										console.log(`   ✅ Inserido em #${id}`);
+									} else {
+										console.warn(`   ❌ Destino #${id} NÃO ENCONTRADO`);
+									}
+									
+								// ✅ SALA
+								} else if(e.id.indexOf("SalaId_") != -1){
+									console.log(`   🏢 Sala: buscando origem #${valor}`);
+									val = document.getElementById(valor).cloneNode(true);
+									
+									// 👈 MANTÉM A LÓGICA ORIGINAL DE ID
+									val.id = val.id + "x";
+									
+									// 👉 SALA: também pode ter badge se quiser, ou não
+									document.getElementsByName(tempId).forEach((ti)=>{
+										console.log(`   🎨 Sala motivo: "${ti.value}"`);
+										// Se quiser pintar salas também, descomente:
+										// pintaAgenda(val, ti.value);
+									});
+									
+									let destino = document.getElementById(id);
+									if(destino){
+										destino.append(val);
+										console.log(`   ✅ Sala inserida em #${id}`);
+									}
+								}
+							}
+						});
+						
+						// ➕ Ações (mantém como estava)
+						document.getElementsByName(dia).forEach((e) => {
+							if (e.id.indexOf("AcaoId_") !== -1) {
+								let id = "hora" + e.id;
+								let targetCell = document.getElementById(id);
+								if (!targetCell) return;
+								let el = document.getElementById(e.id);
+								if (el) {
+									targetCell.appendChild(el.cloneNode(true));
+									console.log(`   🔧 Ação movida para #${id}`);
+								}
+							}
+						});
+					});
+					console.log("✅ [carregaBody] Finalizado");
+				} catch(err){
+					console.error("❌ ERRO CRÍTICO em carregaBody:", err);
+				}
+			}
+
+			function pintaAgenda(val, motivo){
+				// 🎨 CORES ORIGINAIS
+				const cores = {
+					"Falta": "yellow",
+					"Falta Justificada": "orange",
+					"Falta Absoluta": "orange", 
+					"Substituição": "cyan",
+					"Roberta Disponpivel": "salmon",
+					"Supervisor": "lightpink",
+					"Nenhuma Observação": "lightgreen"
+				};
+				const bordas = {
+					"yellow": "#e0a800",
+					"orange": "#e96b02", 
+					"cyan": "#00a3a3",
+					"salmon": "#e86b5d",
+					"lightpink": "#ffa3b2",
+					"lightgreen": "#218838"
+				};
+				
+				const motivoKey = motivo?.trim() || "";
+				const corFundo = cores[motivoKey] || "transparent";
+				const corBorda = bordas[corFundo] || "transparent";
+				const texto = val?.textContent?.trim() || val?.innerText?.trim() || "—";
+				
+				if (val) {
+					val.innerHTML = '';  // Limpa conteúdo anterior
+					val.style.backgroundColor = '';
+					
+					// 👉 CRIA O BADGE COM A CLASSE CSS
+					const badge = document.createElement('span');
+					badge.className = 'badge-agenda';
+					
+					badge.style.cssText = `
+						background-color: ${corFundo} !important;
+						border: 1px solid ${corBorda};
+						color: #212529;
+						display: inline-block;
+						padding: 2px 6px;
+						font-size: 9px;
+						font-weight: 500;
+						border-radius: 3px;
+						white-space: nowrap;
+						line-height: 1.3;
+					`;
+					
+					badge.textContent = texto;
+					val.appendChild(badge);
+				}
+				console.log(`🎨 Badge aplicado: "${motivoKey}" → ${corFundo}`);
+			}
+						
+			function formataData(){
+				let fulldate=(document.getElementById('dataFil').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataFinal').value = fulldate;
+				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+			}
+		</script>
+	</head>
+	</head>
+	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+
+				<div class="main-content-inner">
+
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Agenda Pessoal do Dia</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					{{#if error}}
+						<div class="alert alert-danger">{{error}}</div>
+					{{else}}
+					{{/if}}
+					<div class="hidden" id="divCarrega" name="divCarrega">
+						<input id="isSemanal" value="{{isSemanal}}" />
+						<input id="766f69643132333435366964" value="&nbsp;" />
+						{{#each agendas}}
+    {{#compareThis agenda_terapiaid "766f69643132333435366964"}}
+    {{else}}
+        <!-- Inputs de Bene/Sala -->
+        <input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_beneid}}" />
+        <input id="{{agenda_data_semana}}SalaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
+        
+        {{#isTrue agenda_temp}}
+            <!-- Inputs para pintaAgenda -->
+            <input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" 
+                   value="{{#if visual.temCadeia}}{{cadeia.ultimoCategoria}}{{else}}{{agenda_categoria}}{{/if}}">
+            <input name="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" 
+                   value="{{#if visual.temCadeia}}{{cadeia.ultimoCategoria}}{{else}}{{agenda_categoria}}{{/if}}">
+            
+            <!-- 👉 AÇÃO PARA FILHO: Tooltip como IRMÃO do ícone (não filho) -->
+            <div id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}" class="custom-tooltip">
+                <!-- Ícone -->
+                {{#ifEqual ui.icone "ban"}}
+                    <i class="red ace-icon fa fa-ban bigger-130"></i>
+                {{else}}
+                    {{#if ui.temLink}}
+                        <a class="blue" href="/menu/agenda/evolucaoTemp/{{_id}}" style="position:relative;z-index:2;">
+                            <i class="ace-icon fa fa-pencil bigger-130"></i>
+                        </a>
+                    {{else}}
+                        <i class="ace-icon fa fa-pencil bigger-130"></i>
+                    {{/if}}
+                {{/ifEqual}}
+                
+                <!-- Tooltip: IRMÃO do ícone, com pointer-events: none -->
+                <span class="tooltip-text">
+                    <strong style="color:#c00">{{ui.tooltipTitulo}}</strong><br>
+                    {{ui.tooltipTexto}}
+                </span>
+            </div>
+            
+        {{else}}
+            <!-- Inputs para pintaAgenda -->
+            <input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" 
+                   value="{{#if visual.temCadeia}}{{cadeia.ultimoCategoria}}{{else}}{{agenda_categoria}}{{/if}}">
+            <input name="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" 
+                   value="{{#if visual.temCadeia}}{{cadeia.ultimoCategoria}}{{else}}{{agenda_categoria}}{{/if}}">
+            
+            <!-- 👉 AÇÃO PARA PAI: Mesma estrutura -->
+            <div id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}" class="custom-tooltip">
+                <!-- Ícone -->
+                {{#ifEqual ui.icone "ban"}}
+                    <i class="red ace-icon fa fa-ban bigger-130"></i>
+                {{else}}
+                    {{#if ui.temLink}}
+                        <a class="blue" href="/menu/agenda/evolucao/{{_id}}" style="position:relative;z-index:2;">
+                            <i class="ace-icon fa fa-pencil bigger-130"></i>
+                        </a>
+                    {{else}}
+                        <i class="ace-icon fa fa-pencil bigger-130"></i>
+                    {{/if}}
+                {{/ifEqual}}
+                
+                <!-- Tooltip -->
+                <span class="tooltip-text">
+                    <strong style="color:#c00">{{ui.tooltipTitulo}}</strong><br>
+                    {{ui.tooltipTexto}}
+                </span>
+            </div>
+        {{/isTrue}}
+    {{/compareThis}}
+{{/each}}
+						{{#each benes}}
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{bene_apelido}}<br/></label>
+						{{/each}}
+						{{#each salas}}
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{sala_nome}}<br/></label>
+						{{/each}}
+					</div>
+					<!-- Substitua o form existente por: -->
+					<!-- Form de pesquisa com validação -->
+					<form class="form-horizontal" role="form" action="/menu/agenda/filPessoalDia" method="POST" onsubmit="return formataData()">
+						<div class="breadcrumbs" id="pesquisaAge">
+							<div style="text-align: center;">
+								<label style="margin-left: 25px;">Data:</label>
+								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
+								<input class="hidden" id="dataFinal" name="dataFinal" />
+								<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+									<i class="ace-icon fa fa-search-plus"></i>
+								</button>
+								<!-- Botão Voltar para Hoje -->
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<button type="button" class="btn btn-xs btn-warning" onclick="window.location.href='/menu/agenda/lisPessoal'" style="margin-left: 10px;">
+									<i class="ace-icon fa fa-calendar-day"></i> Hoje
+								</button>
+							</div>
+						</div>
+					</form>
+					<!-- ======================================================================= -->
+					<!-- 🔹 TABELA DA AGENDA - MODO DIÁRIO (4 COLUNAS) -->
+					<!-- ======================================================================= -->
+					<div class="tab-content">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12">
+								<div id="seg" class="tab-pane fade active in">
+									<table class="table table-sm table-bordered" style="font-size: 9px;" id="dynamic-table" role="grid">
+										<thead>
+											<!-- 📌 ALERTA INFO: Dia Filtrado (NOVO) -->
+											<tr role="row">
+												<th class="center" colspan="4" style="padding: 5px;">
+													<div id="divDiaFiltrado">
+														<div class="col-xs-12 col-sm-12" style="padding-top: 2px;">
+															<div class="alert alert-info" style="margin-bottom: 0;">
+															  <strong style="font-size: 13px;">
+																	📅 {{DataTexto}}
+																</strong>
+															</div>
+														</div>
+													</div>
+												</th>
+											</tr>
+											
+											<!-- 📌 ALERTA: Observações da Agenda -->
+											<tr role="row">
+												<th class="center" colspan="4" style="padding: 5px;">
+													<div id="divAlertas">
+														<div class="col-xs-12 col-sm-12" style="padding-top: 2px;">
+															<div class="alert alert-danger" style="margin-bottom: 0;">
+																<strong>Agenda</strong><br>
+																{{#each agendas}}
+																	{{#isNull agenda_obs}}
+																	{{else}}
+																		<label style="font-size: 9px;">
+																			{{agenda_data_dia}} {{agenda_hora}} / 
+																			{{#each ../salas}}
+																				{{#ifEqual ../agenda_salaid _id}}
+																					{{sala_nome}}
+																				{{/ifEqual}}
+																			{{/each}}
+																			/ {{#each ../benes}}
+																				{{#ifEqual ../agenda_beneid _id}}
+																					{{bene_apelido}}
+																				{{/ifEqual}}
+																			{{/each}}
+																			- {{agenda_obs}}
+																		</label><br>
+																	{{/isNull}}
+																{{/each}}
+																{{#if agendas.length}}
+																	{{else}}
+																		<label style="font-size: 9px;">Nenhum agendamento para este dia.</label>
+																{{/if}}
+															</div>
+														</div>
+													</div>
+												</th>
+											</tr>
+											
+											<!-- 📌 ALERTA: Observações do Terapeuta -->
+											<tr role="row">
+												<th class="center" colspan="4" style="padding: 5px;">
+													<div id="divAlertas">
+														<div class="col-xs-12 col-sm-12" style="padding-top: 2px;">
+															<div class="alert alert-warning" style="margin-bottom: 0;">
+																<strong>Terapeuta</strong><br>
+																{{usu.usuario_obs}}
+															</div>
+														</div>
+													</div>
+												</th>
+											</tr>
+											
+											<!-- 📌 CABEÇALHO DAS 4 COLUNAS -->
+											<tr role="row" style="background-color: #f5f5f5;">
+												<th style="width: 50px; text-align: center; vertical-align: middle;">
+													<b>Hora</b>
+												</th>
+												<th style="width: 100px; text-align: left; vertical-align: middle; padding-left: 8px;">
+													<b>Sala</b>
+												</th>
+												<th style="width: 120px; text-align: left; vertical-align: middle; padding-left: 8px;">
+													<b>Beneficiário</b>
+												</th>
+												<th style="width: 40px; text-align: center; vertical-align: middle;">
+													<b>Ação</b>
+												</th>
+											</tr>
+										</thead>
+										
+										<!-- 📌 CORPO DA TABELA: Linhas de Hora -->
+										<tbody>
+											{{#each horaages}}
+											<tr role="row" class="odd">
+												<!-- Coluna 1: Hora (fixa) -->
+												<td style="width: 50px; text-align: center; vertical-align: middle; font-weight: 500; background-color: #fafafa;">
+													{{horaage_hora}}
+												</td>
+												
+												<!-- Coluna 2: Sala (preenchida via JS) -->
+												<td name="tabela" 
+													id="hora{{../hoje}}SalaId_{{horaage_hora}}" 
+													style="width: 100px; text-align: left; vertical-align: middle; padding-left: 8px; min-height: 22px;">
+												</td>
+												
+												<!-- Coluna 3: Beneficiário (preenchida via JS com cor) -->
+												<td name="tabela" 
+													id="hora{{../hoje}}BeneId_{{horaage_hora}}" 
+													style="width: 120px; text-align: left; vertical-align: middle; padding-left: 8px; min-height: 22px;">
+												</td>
+												
+												<!-- Coluna 4: Ação (preenchida via JS - ícones) -->
+												<td name="tabela" 
+													id="hora{{../hoje}}AcaoId_{{horaage_hora}}" 
+													style="width: 40px; text-align: center; vertical-align: middle; min-height: 22px;">
+												</td>
+											</tr>
+											{{/each}}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Script para formatar nome do dia -->
+					
+				</div>
+
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+		<!-- basic scripts -->
+	</body>
+</html>

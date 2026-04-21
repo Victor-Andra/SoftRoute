@@ -1,8 +1,153 @@
 <!DOCTYPE html>
-<html lang="pt-br"><head>
+<html lang="pt-br">
+	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>agendamentos do Dia</title>
+		<style>
+			/* ============================================
+         BARRA DE PESQUISA - CLASSE SEPARADA
+         ============================================ */
+      .toolbar-pesquisa {
+        background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 0 12px 20px 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid #1976d2;
+      }
+      .toolbar-pesquisa h5 {
+        margin: 0 0 12px 0;
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .toolbar-pesquisa h5 i {
+        font-size: 18px;
+      }
+      .toolbar-pesquisa .form-inline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: flex-end;
+      }
+      .toolbar-pesquisa .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        width: 100%;
+        align-items: flex-end;
+      }
+      .toolbar-pesquisa .form-group {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        min-width: 140px;
+        flex: 1;
+        max-width: 220px;
+      }
+      .toolbar-pesquisa label {
+        font-size: 11px;
+        font-weight: 500;
+        margin-bottom: 4px;
+        color: #f8f9fa;
+        white-space: nowrap;
+      }
+      .toolbar-pesquisa input[type="date"],
+      .toolbar-pesquisa input[type="time"],
+      .toolbar-pesquisa select {
+        padding: 6px 10px;
+        border: 2px solid #e2e8f0;
+        border-radius: 4px;
+        font-size: 12px;
+        width: 100%;
+        box-sizing: border-box;
+        background: white;
+        color: #333;
+        transition: all 0.3s;
+        height: 30px;
+      }
+      .toolbar-pesquisa input[type="date"]:focus,
+      .toolbar-pesquisa input[type="time"]:focus,
+      .toolbar-pesquisa select:focus {
+        border-color: #fff;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+        outline: none;
+      }
+      .toolbar-pesquisa .btn-pesquisar {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 24px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        margin-left: auto;
+      }
+      .toolbar-pesquisa .btn-pesquisar:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+      
+      /* Grupo compacto para horário (turno + início + fim) */
+      .grupo-horario {
+        display: flex;
+        gap: 6px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+      }
+      .grupo-horario .form-group {
+        min-width: 70px;
+        max-width: 90px;
+        flex: none;
+      }
+      .grupo-horario label {
+        font-size: 10px;
+      }
+      .grupo-horario .info-sala {
+        font-size: 9px;
+        color: #e0e0e0;
+        margin-left: 4px;
+        white-space: nowrap;
+      }
+      .grupo-horario .info-sala i {
+        margin-right: 2px;
+      }
+
+      /* Chosen Select minimalista - compatível com aceAdmin */
+      .toolbar-pesquisa .chosen-container .chosen-single {
+        border: 2px solid #e2e8f0 !important;
+        border-radius: 4px !important;
+        box-shadow: none !important;
+        background: white !important;
+        height: 30px !important;
+        line-height: 28px !important;
+        font-size: 12px !important;
+      }
+      .toolbar-pesquisa .chosen-container .chosen-single:hover {
+        border-color: #fff !important;
+      }
+      .toolbar-pesquisa .chosen-container-active.chosen-with-drop .chosen-single {
+        border-color: #fff !important;
+        background: white !important;
+      }
+      .toolbar-pesquisa .chosen-container .chosen-drop {
+        border: 1px solid #ced4da !important;
+        border-top: none !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+      }
+		</style>
 		<script type="text/javascript">
 			function ajustaData(){
 				let fullDatas = document.getElementsByName("fullData");
@@ -259,7 +404,9 @@
 					{{/each}}
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/evoatendfil" method="POST">
-							<div class="col-xs-12" class="row">
+							<div class="toolbar-pesquisa noprint">
+								<div class="row">
+								<!-- 🔒 CAMPOS HIDDEN -->
 								<div class="hidden">
 									<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
 									<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
@@ -272,105 +419,121 @@
 									<input id="dataFimFil" value="{{dataFim.dataFim}}" />
 									<input id="idsChecked" value="" />
 								</div>
+
+								<!-- 🔹 TIPO DE FILTRO DATA -->
 								<div class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label>Tipo Filtro:&nbsp;</label>
-											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
-												<option value="Ano/Mes">Ano/Mês</option>
-												<option value="Semana">Semana</option>
-												<option value="Dia">Dia</option>
-											</select>
-										</div>
+									<div class="input-group">
+										<label>Tipo Filtro:&nbsp;</label>
+										<select name="tipoData" id="tipoData" class="chosen-select"
+											onchange="trocaFiltroData()">
+											<option value="Ano/Mes">Ano/Mês</option>
+											<option value="Semana">Semana</option>
+											<option value="Dia">Dia</option>
+										</select>
 									</div>
 								</div>
-								<div class="hidden col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label> Filial:&nbsp;</label>
-											<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
-												<option value="Matriz">Matriz</option>
-												<option value="Filial 1">Filial 1</option>
-												<option value="Filial 2">Filial 2</option>
-												<option value="Filial 3">Filial 3</option>
-												<option value="Filial 4">Filial 4</option>
-											</select>
-										</div>
+
+								<!-- 🔹 FILIAL (OCULTO) -->
+								<div class="col-sm-2 hidden">
+									<div class="input-group">
+										<label>Filial:&nbsp;</label>
+										<select name="empresaFilial" id="empresaFilial" class="chosen-select">
+											<option value="Matriz">Matriz</option>
+											<option value="Filial 1">Filial 1</option>
+											<option value="Filial 2">Filial 2</option>
+											<option value="Filial 3">Filial 3</option>
+											<option value="Filial 4">Filial 4</option>
+										</select>
 									</div>
 								</div>
+
+								<!-- 🔹 ANO -->
 								<div id="divAnoAtend" class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label for="id-date-picker-1">Ano:&nbsp;</label>
-											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:formataData();">
-												{{#each anos}}
-													<option value="{{ano_nome}}">{{ano_nome}}</option>
-												{{/each}}
-											</select>
-										</div>
+									<div class="input-group">
+										<label>Ano:&nbsp;</label>
+										<select name="anoAtend" id="anoAtend" class="chosen-select"
+											onchange="formataData();">
+											{{#each anos}}
+												<option value="{{ano_nome}}">{{ano_nome}}</option>
+											{{/each}}
+										</select>
 									</div>
 								</div>
+
+								<!-- 🔹 MÊS -->
 								<div id="divMesAtend" class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label for="id-date-picker-1">Mês:&nbsp;</label>
-											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
-												<option value="0">Janeiro</option>
-												<option value="1">Fevereiro</option>
-												<option value="2">Março</option>
-												<option value="3">Abril</option>
-												<option value="4">Maio</option>
-												<option value="5">Junho</option>
-												<option value="6">Julho</option>
-												<option value="7">Agosto</option>
-												<option value="8">Setembro</option>
-												<option value="9">Outubro</option>
-												<option value="10">Novembro</option>
-												<option value="11">Dezembro</option>
-											</select>
-										</div>
+									<div class="input-group">
+										<label>Mês:&nbsp;</label>
+										<select name="mesAtend" id="mesAtend" class="chosen-select"
+											onchange="formataData();">
+											<option value="0">Janeiro</option>
+											<option value="1">Fevereiro</option>
+											<option value="2">Março</option>
+											<option value="3">Abril</option>
+											<option value="4">Maio</option>
+											<option value="5">Junho</option>
+											<option value="6">Julho</option>
+											<option value="7">Agosto</option>
+											<option value="8">Setembro</option>
+											<option value="9">Outubro</option>
+											<option value="10">Novembro</option>
+											<option value="11">Dezembro</option>
+										</select>
 									</div>
 								</div>
+
+								<!-- 🔹 DATA (DIA) -->
 								<div id="divDataFil" class="col-sm-2">
 									<div class="input-group">
 										<label>Data:&nbsp;</label>
-										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-										<input class="hidden" id="dataFinal" name="dataFinal" />
+										<input type="date" id="dataFil" name="dataFil"
+											style="height: 30px;"
+											onchange="formataData();" />
+										<input type="hidden" id="dataFinal" name="dataFinal" />
 									</div>
 								</div>
+
+								<!-- 🔹 TIPO PESSOA -->
 								<div id="divTipoFil" class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label>Tipo Filtro:&nbsp;</label>
-											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
-												<option value="Geral">Geral</option>
-												<option value="Beneficiario">Beneficiário</option>
-												
-											</select>
-										</div>
+									<div class="input-group">
+										<label>Tipo:&nbsp;</label>
+										<select name="atendTipoPessoa" id="atendTipoPessoa"
+											class="chosen-select"
+											onchange="trocaFilpessoa()">
+											<option value="Geral">Geral</option>
+											<option value="Beneficiario">Beneficiário</option>
+										</select>
 									</div>
 								</div>
+
+								<!-- 🔹 BENEFICIÁRIO -->
 								<div id="divAtendBeneficiario" class="col-sm-4">
-									<div class="row">
-										<div class="input-group">
-											<label>Beneficiário:&nbsp;</label>
-											<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha..." value="">
-												{{#each benes}}
-													<option value="{{_id}}">{{bene_nome}}</option>
-												{{/each}}
-											</select>
-										</div>
+									<div class="input-group">
+										<label>Beneficiário:&nbsp;</label>
+										<select name="atendBeneficiario" id="atendBeneficiario"
+											class="chosen-select">
+											{{#each benes}}
+												<option value="{{_id}}">{{bene_nome}}</option>
+											{{/each}}
+										</select>
 									</div>
 								</div>
-								
-								<div class="row">
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
-										<i class="ace-icon fa fa-search-plus "></i>
+
+								<!-- 🔍 BOTÃO -->
+								<div class="col-sm-12" style="margin-top: 10px;">
+									<button id="acaoPesquisar" name="acaoPesquisar"
+										type="submit"
+										class="btn btn-xs btn-danger">
+										<i class="ace-icon fa fa-search-plus"></i>
 										Pesquisar
 									</button>
-									
 								</div>
-								<hr>
+
+								<div class="col-sm-12">
+									<hr>
+								</div>
+
+							</div>
 							</div>
 							
 						</form>

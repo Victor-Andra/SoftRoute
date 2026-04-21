@@ -1,7 +1,94 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Agenda Pessoal Semanal</title>
+		<style>
+		/* Tooltip personalizado - padrão aceAdmin */
+/* Tooltip personalizado - padrão aceAdmin (CORRIGIDO) */
+.custom-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+    /* Garante que o container receba o hover */
+    z-index: 1;
+}
+
+/* O link do lápis NÃO deve bloquear o hover do tooltip */
+.custom-tooltip a {
+    display: inline-block;
+    position: relative;
+    z-index: 2; /* link acima do tooltip para clique funcionar */
+    pointer-events: auto; /* permite clique no link */
+}
+
+/* Tooltip: sempre acima de tudo */
+.tooltip-text {
+    visibility: hidden;
+    width: max-content;
+    max-width: 280px;
+    background-color: #f3dfdf;
+    color: #c00;
+    font-size: 9px;
+    text-align: left;
+    border-radius: 4px;
+    padding: 8px 10px;
+    position: absolute;
+    z-index: 10000 !important; /* FORÇA acima de tudo */
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.95;
+    white-space: normal;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border: 1px solid #e0b0b0;
+    transition: opacity 0.2s, visibility 0.2s;
+    line-height: 1.4;
+    pointer-events: none !important; /* tooltip NÃO interfere no hover/clique */
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #f3dfdf transparent transparent transparent;
+    z-index: 10001; /* seta acima do tooltip */
+}
+
+/* Hover: força visibilidade mesmo sobre links */
+.custom-tooltip:hover .tooltip-text {
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: none !important;
+    z-index: 10000 !important;
+}
+
+/* Garante que o hover funcione mesmo se o mouse estiver sobre o link */
+.custom-tooltip a:hover + .tooltip-text,
+.custom-tooltip:hover .tooltip-text {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+    /* Badge minimalista - mantém cores originais, só adiciona visual */
+    .badge-agenda {
+        display: inline-block;
+        padding: 2px 6px;
+        font-size: 9px;
+        font-weight: 500;
+        border-radius: 3px;
+        white-space: nowrap;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        transition: all 0.2s ease;
+        line-height: 1.3;
+    }
+    .badge-agenda:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+</style>
+		<title>Agenda Pessoal Semanal </title>
 		<script type="text/javascript">
 			function atualizaData(){
 				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
@@ -9,117 +96,144 @@
 				console.log(dataIso);
 				document.getElementById("agendaData").value = dataFmt;
 			}
+			
 			function carregaBody(){
-				let dtHoje = new Date();
-				let dataDaSemana;
-				switch (dtHoje.getUTCDay()){ // 🔴 Corrigido: 'dat' → 'dtHoje'
-					case 0:
-						dataDaSemana = "dom"; break;
-					case 1:
-						dataDaSemana = "seg"; break;
-					case 2:
-						dataDaSemana = "ter"; break;
-					case 3:
-						dataDaSemana = "qua"; break;
-					case 4:
-						dataDaSemana = "qui"; break;
-					case 5:
-						dataDaSemana = "sex"; break;
-					case 6:
-						dataDaSemana = "sab"; break;
-					default:
-						dataDaSemana = "dom";
-				}
+				console.log("🚀 [carregaBody] Iniciando (versão compatível)...");
 				let dias = ["seg","ter","qua","qui","sex"];
+				
 				try{
 					dias.forEach((dia)=>{
-						document.getElementsByName(dia).forEach((e)=>{
-							let id = "hora"+e.id;
-							let valor = e.value;
-							let tempId = e.id+"_"+e.value;
+						console.log(`📦 Processando dia: ${dia}`);
+						
+						Array.from(document.getElementsByName(dia)).forEach((e)=>{
+							let id = "hora" + e.id;        // ex: "horasegBeneId_08:00"
+							let valor = e.value;            // ex: "bene123"
+							let tempId = e.id + "_" + valor; // ex: "segBeneId_08:00_bene123"
+							
+							console.log(`   🔹 Input: id="${e.id}" | value="${valor}" | tempId="${tempId}"`);
+							
 							if(valor != "766f69643132333435366964"){
 								let val;
+								
+								// ✅ BENEFICIÁRIO
 								if(e.id.indexOf("BeneId_") != -1){
+									console.log(`   👤 Bene: buscando origem #${valor}`);
 									val = document.getElementById(valor).cloneNode(true);
-									val.id = val.id+"x";
+									
+									// 👈 MANTÉM A LÓGICA ORIGINAL DE ID (CRÍTICO!)
+									val.id = val.id + "x";
+									
+									// Busca motivo e aplica badge
 									document.getElementsByName(tempId).forEach((ti)=>{
-										pintaAgenda(val, ti.value);
-									})
-									document.getElementById(id).append(val);
+										console.log(`   🎨 Motivo encontrado: "${ti.value}"`);
+										pintaAgenda(val, ti.value);  // 👈 APLICA BADGE AQUI
+									});
+									
+									// Insere no cell de destino
+									let destino = document.getElementById(id);
+									if(destino){
+										destino.append(val);
+										console.log(`   ✅ Inserido em #${id}`);
+									} else {
+										console.warn(`   ❌ Destino #${id} NÃO ENCONTRADO`);
+									}
+									
+								// ✅ SALA
 								} else if(e.id.indexOf("SalaId_") != -1){
+									console.log(`   🏢 Sala: buscando origem #${valor}`);
 									val = document.getElementById(valor).cloneNode(true);
-									val.id = val.id+"x";
+									
+									// 👈 MANTÉM A LÓGICA ORIGINAL DE ID
+									val.id = val.id + "x";
+									
+									// 👉 SALA: também pode ter badge se quiser, ou não
 									document.getElementsByName(tempId).forEach((ti)=>{
-										pintaAgenda(val, ti.value);
-									})
-									document.getElementById(id).append(val);
-								}
-								// ➕ NOVO: Tratamento especial para AcaoId_ (apenas para garantir que faltas não tenham lápis)
-								// Mas a lógica principal de substituição do ícone foi movida para o bloco abaixo ↓
-							}
-						});
-
-						// ➕ ADICIONADO: Processamento das ações (AcaoId_) com regra para faltas
-						document.getElementsByName(dia).forEach((e) => {
-							if (e.id.indexOf("AcaoId_") !== -1) {
-								let id = "hora" + e.id;
-								let targetCell = document.getElementById(id);
-								if (!targetCell) return;
-
-								let categoria = e.getAttribute('data-categoria');
-								// ✅ Garante que as duas faltas NUNCA tenham ícone de edição
-								if (categoria === "Falta Justificada" || categoria === "Falta Absoluta") {
-									targetCell.innerHTML = ''; // limpa qualquer conteúdo pré-existente
-									let banDiv = document.createElement('div');
-									banDiv.style.padding = '2px 0';
-									banDiv.innerHTML = `
-										<a class="blue" href="#" onclick="event.preventDefault();">
-											<i class="red ace-icon fa fa-ban bigger-130"></i>
-										</a>
-									`;
-									targetCell.appendChild(banDiv);
-								} else {
-									// Caso normal: clona e move a ação original (lápis)
-									let el = document.getElementById(e.id);
-									if (el) {
-										targetCell.appendChild(el.cloneNode(true));
+										console.log(`   🎨 Sala motivo: "${ti.value}"`);
+										// Se quiser pintar salas também, descomente:
+										// pintaAgenda(val, ti.value);
+									});
+									
+									let destino = document.getElementById(id);
+									if(destino){
+										destino.append(val);
+										console.log(`   ✅ Sala inserida em #${id}`);
 									}
 								}
 							}
 						});
-					})
+						
+						// ➕ Ações (mantém como estava)
+						Array.from(document.getElementsByName(dia)).forEach((e) => {
+							if (e.id.indexOf("AcaoId_") !== -1) {
+								let id = "hora" + e.id;
+								let targetCell = document.getElementById(id);
+								if (!targetCell) return;
+								let el = document.getElementById(e.id);
+								if (el) {
+									targetCell.appendChild(el.cloneNode(true));
+									console.log(`   🔧 Ação movida para #${id}`);
+								}
+							}
+						});
+					});
+					console.log("✅ [carregaBody] Finalizado");
 				} catch(err){
-					console.log(err);
+					console.error("❌ ERRO CRÍTICO em carregaBody:", err);
 				}
 			}
+
 			function pintaAgenda(val, motivo){
-				// ✅ Já está correto: ambas as faltas viram orange
-				switch (motivo) {
-					case "Falta" :
-						val.style.backgroundColor = "yellow";
-						break;
-					case "Falta Justificada":
-						val.style.backgroundColor = "orange";
-						break;
-					case "Falta Absoluta":
-						val.style.backgroundColor = "orange";
-						break;
-					case "Substituição":
-						val.style.backgroundColor = "cyan";
-						break;
-					case "Roberta Disponpivel":
-						val.style.backgroundColor = "salmon";
-						break;
-					case "Supervisor":
-						val.style.backgroundColor = "lightpink";
-						break;
-					case "Nenhuma Observação":
-						val.style.backgroundColor = "lightgreen";
-						break;
-					default :
-						break;
+				// 🎨 CORES ORIGINAIS
+				const cores = {
+					"Falta": "yellow",
+					"Falta Justificada": "orange",
+					"Falta Absoluta": "orange", 
+					"Substituição": "cyan",
+					"Roberta Disponpivel": "salmon",
+					"Supervisor": "lightpink",
+					"Nenhuma Observação": "lightgreen"
+				};
+				const bordas = {
+					"yellow": "#e0a800",
+					"orange": "#e96b02", 
+					"cyan": "#00a3a3",
+					"salmon": "#e86b5d",
+					"lightpink": "#ffa3b2",
+					"lightgreen": "#218838"
+				};
+				
+				const motivoKey = motivo?.trim() || "";
+				const corFundo = cores[motivoKey] || "transparent";
+				const corBorda = bordas[corFundo] || "transparent";
+				const texto = val?.textContent?.trim() || val?.innerText?.trim() || "—";
+				
+				if (val) {
+					val.innerHTML = '';  // Limpa conteúdo anterior
+					val.style.backgroundColor = '';
+					
+					// 👉 CRIA O BADGE COM A CLASSE CSS
+					const badge = document.createElement('span');
+					badge.className = 'badge-agenda';
+					
+					badge.style.cssText = `
+						background-color: ${corFundo} !important;
+						border: 1px solid ${corBorda};
+						color: #212529;
+						display: inline-block;
+						padding: 2px 6px;
+						font-size: 9px;
+						font-weight: 500;
+						border-radius: 3px;
+						white-space: nowrap;
+						line-height: 1.3;
+					`;
+					
+					badge.textContent = texto;
+					val.appendChild(badge);
 				}
+				console.log(`🎨 Badge aplicado: "${motivoKey}" → ${corFundo}`);
 			}
+						
 			function formataData(){
 				let fulldate=(document.getElementById('dataFil').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataFinal').value = fulldate;

@@ -887,6 +887,7 @@
 																	<div class="form-group">
 																		<div class="col-sm-4">
 																			<select id="usuarioFuncaoid" name="usuarioFuncaoid" class="chosen-select" data-placeholder="Escolha..." style="width: 200px;" >
+																				<option value="-">-</option>
 																				{{#each funcaos}}
 																				<option value="{{_id}}">{{funcao_nome}}</option>
 																				{{else}}
@@ -901,6 +902,7 @@
 																	<div class="form-group">
 																		<div class="col-sm-4">
 																			<select id="usuarioPerfilid" name="usuarioPerfilid" class="chosen-select" data-placeholder="Escolha...">
+																				<option value="-">-</option>
 																				{{#each perfils}}
 																				<option value="{{_id}}">{{perfil_nome}}-{{perfil_descricao}}</option>
 																				{{else}}

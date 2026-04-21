@@ -4,7 +4,7 @@ const multer = require('multer')
 const mongoose = require("mongoose")
 const $ = require('jquery')
 const {autenticador} = require("../helpers/autenticador")
-let application = require('../routes/admin')
+let application = require('./admin')
 const connections = require('../serverConnection');
 
 //funções gerais
@@ -596,6 +596,34 @@ router.post('/ferramentas/usuario/definirSenha', (req,res)=>{
     fncUsuario.definirSenha(req, res);
 })
 
+/**
+ * ============================================================================
+ * 🔄 ROTAS DE LOGIN - BACKUP
+ * Esta rota é chamada após autenticação bem-sucedida via Passport.
+ * VIEW DESTINO: "branco.handlebars" (container mestre que carrega _navbar dinâmico)
+ * CONTAINERS DA VIEW (3 widgets principais):
+ * ┌─────────────────────────────────────────────────────────────┐
+ * │ 1️⃣ Widget "Faltaevo" (id="Faltaevo")                        │
+ * │    → Tabela: "Evoluções Ausentes do dia"                    │
+ * │    → Dados: agendaFinal (agendas sem selo, ordenadas)       │
+ * │    → Ação: Link para evolucaoTemp/{{_id}}                   │
+ * ├─────────────────────────────────────────────────────────────┤
+ * │ 2️⃣ Widget "Pontage" (id="Pontage")                          │
+ * │    → Alert Vermelho: Observações da agenda (agenda_obs)     │
+ * │    → Alert Amarelo: Lista de evolucaoFaltante com ação      │
+ * │    → Dados: agendas (para obs) + evolucaoFaltante (lista)   │
+ * ├─────────────────────────────────────────────────────────────┤
+ * │ 3️⃣ Widget "percep" (id="percep")                            │
+ * │    → Tabela: Aniversariantes da Semana (Beneficiários)      │
+ * │    → Tabela: Aniversariantes da Semana (Colaboradores)      │
+ * │    → Dados: aniversariantesDaSemanaBene + Usuario           │
+ * └─────────────────────────────────────────────────────────────┘
+ * 
+ * DADOS GLOBAIS ENVIADOS:
+ * - flash: Mensagem de login (sucesso/erro)
+ * - terapias, benes, salas, usuarios: Para preenchimento de selects/labels
+ * - agendasSemanaiss: Alias de agendaFinal (compatibilidade com view)
+ */
 
 router.post('/login/backup', passport.authenticate('local', {
     failureRedirect: '/menu/login',
@@ -603,10 +631,14 @@ router.post('/login/backup', passport.authenticate('local', {
 }), async function (req, res) {
     let db = req.cookies['preferredDb'];
     Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+    Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+    Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+    Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
-    let lvl, idUsu, perfilId, ativo;
     let aux = 1;
     let agendaFinal = [];
+    let evolucaoFaltante = [];
 
     const hoje = new Date();
     const diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
@@ -614,9 +646,9 @@ router.post('/login/backup', passport.authenticate('local', {
 
     // Calcular domingo (início da semana)
     const domingo = new Date(hoje);
-    domingo.setDate(hoje.getDate() - hoje.getDay()); // 0 = domingo
+    domingo.setDate(hoje.getDate() - hoje.getDay());
 
-    // Construir dias da semana: domingo a sábado
+    // Construir dias da semana
     const semanaDias = Array.from({ length: 7 }).map((_, i) => {
         const d = new Date(domingo);
         d.setDate(domingo.getDate() + i);
@@ -626,112 +658,309 @@ router.post('/login/backup', passport.authenticate('local', {
         };
     });
 
-    // Função auxiliar: filtrar aniversariantes da semana
-
     try {
         const benesGeral = await Bene.find({ bene_status: "Ativo" });
-        const usu = await Usuario.findOne({ usuario_email: req.body.email, usuario_senha: req.body.senha });
+        const usu = await Usuario.findOne({ 
+            usuario_email: req.body.email, 
+            usuario_senha: req.body.senha 
+        });
 
         if (!usu || usu.usuario_status !== "Ativo") {
             req.flash("error_message", "Usuário ou senha inválidos ou inativo.");
             return res.redirect('/menu/login');
         }
 
-        perfilId = usu.usuario_perfilid;
-        idUsu = usu._id;
+        const perfilId = usu.usuario_perfilid;
+        const idUsu = usu._id;
+        const nomeUsu = usu.usuario_nome;
 
         const tempoCookie = ["62421801a12aa557219a0fb9", "62421857a12aa557219a0fc1", "624218f5a12aa557219a0fd0"].includes(perfilId)
             ? (5 * 60 * 60 * 1000)
             : (2 * 60 * 60 * 1000);
 
-        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + tempoCookie) });
+        res.cookie('lvlUsu', usu.usuario_perfilid, { expires: new Date(Date.now() + tempoCookie) });
+        res.cookie('fncUsu', usu.usuario_funcaoid, { expires: new Date(Date.now() + tempoCookie) });
         res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + tempoCookie) });
+        res.cookie('nomeUsu', nomeUsu, { expires: new Date(Date.now() + tempoCookie) });
 
-        const aniversariantesDaSemanaUsuario = usuarioClass.filtrarAniversariantes("usuario");
-        const aniversariantesDaSemanaBene = beneClass.filtrarAniversariantes(req, "bene");
+        const aniversariantesDaSemanaUsuario = usuarioClass.filtrarAniversariantes("usuario", semanaDias);
+        const aniversariantesDaSemanaBene = beneClass.filtrarAniversariantes(req, "bene", semanaDias);
 
-        // Agendas semanais
-        const inicioSemana = new Date(domingo);
-        const fimSemana = new Date(domingo);
-        fimSemana.setDate(domingo.getDate() + 6);
+                    // ========================================================================
+            // 📋 AGENDAS SEMANAIS (Lógica adaptada da carregaAgendaPessoal)
+            // ========================================================================
+            console.log("\n" + "=".repeat(80));
+            console.log("📋 [AGENDAS SEMANAIS] Processando substituições (cadeia + dedup)");
+            console.log("=".repeat(80));
 
-        const agendas = await Agenda.find({
-            agenda_data: { $gte: inicioSemana, $lte: fimSemana },
-            agenda_usuid: idUsu
-        });
+            const inicioSemana = new Date(domingo);
+            const fimSemana = new Date(domingo);
+            fimSemana.setDate(domingo.getDate() + 6);
 
-        const [salas, terapias, benesFull] = await Promise.all([
-            Sala.find(),
-            Terapia.find(),
-            Bene.find()
-        ]);
+            // 🔹 1. Buscar agendas brutas do usuário logado
+            const agendasBrutas = await Agenda.find({
+                agenda_data: { $gte: inicioSemana, $lte: fimSemana },
+                agenda_usuid: usu._id
+            });
+            console.log(`\n📦 1. Agendas brutas: ${agendasBrutas.length}`);
 
-        evolucaoFaltante.forEach((af)=>{
-            arrIdsAgendas.push(af._id);
-        })
+            // 🔹 2. Formatação básica (igual à Fase 3 da carregaAgendaPessoal)
+            agendasBrutas.forEach((e) => {
+                const dat = new Date(e.agenda_data);
+                e.agenda_data_dia = fncGeral.getDataFMT(dat);
+                const h = String(dat.getUTCHours()).padStart(2, '0');
+                const m = String(dat.getUTCMinutes()).padStart(2, '0');
+                e.agenda_hora = `${h}:${m}`;
+                e.agenda_data_semana = ["dom","seg","ter","qua","qui","sex","sab"][dat.getUTCDay()];
+            });
 
-        const agendasSemanais = await Agenda.find({agenda_tempId: {$in: arrIdsAgendas}});
+            // 🔹 3. Buscar FILHOS (substituições) - igual à Fase 4
+            const idsAtuais = agendasBrutas.map(a => a._id);
+            const filhosEncontrados = await Agenda.find({
+                agenda_temp: true,
+                agenda_tempId: { $in: idsAtuais },
+                agenda_data: { $gte: inicioSemana, $lte: fimSemana }
+            });
+            console.log(`🔗 3. Filhos encontrados: ${filhosEncontrados.length}`);
 
-        agendaFinal = agendas.filter(a => {
-            let match = agendasSemanais.find(s => 
-                s.agenda_tempId.toString() === a._id.toString()
-            );
+            // 🔹 4. Criar mapa: tempId → [filhos]
+            const mapaFilhos = new Map();
+            filhosEncontrados.forEach(f => {
+                const tempId = f.agenda_tempId?.toString();
+                if (tempId) {
+                    if (!mapaFilhos.has(tempId)) mapaFilhos.set(tempId, []);
+                    mapaFilhos.get(tempId).push(f);
+                }
+            });
 
-            if (!match) return true;
+            // 🔹 5. Buscar dados auxiliares (para enriquecimento)
+            const [salas, terapias, benesFull, usuariosNomes] = await Promise.all([
+                Sala.find(),
+                Terapia.find(),
+                Bene.find(),
+                Usuario.find({ _id: { $in: [...new Set([...agendasBrutas, ...filhosEncontrados].map(r => r.agenda_usuid))] } }, 'usuario_nome')
+            ]);
 
-            return a.agenda_usuid.toString() === match.agenda_usuid.toString();
-        });
+            // Mapa de nomes de terapeutas
+            const mapaNomes = {};
+            usuariosNomes.forEach(u => { mapaNomes[u._id.toString()] = u.usuario_nome; });
+
+            // 🔹 6. Função para resolver cadeia (simples: pai → filho)
+            function resolverCadeia(registroInicial, nivel = 0, visitados = new Set()) {
+                let cadeia = [registroInicial];
+                const idAtual = registroInicial._id.toString();
+                
+                if (visitados.has(idAtual) || nivel >= 2) return cadeia;
+                visitados.add(idAtual);
+                
+                const cat = registroInicial.agenda_categoria;
+                if (["Falta Justificada", "Falta Absoluta", "Feriado"].includes(cat)) return cadeia;
+                
+                const proximos = mapaFilhos.get(idAtual) || [];
+                if (proximos.length > 0) {
+                    const subCadeia = resolverCadeia(proximos[0], nivel + 1, visitados);
+                    cadeia = cadeia.concat(subCadeia);
+                }
+                return cadeia;
+            }
+
+            // 🔹 7. Processar CADA registro (igual à Fase 5 da carregaAgendaPessoal)
+            console.log("\n🧠 7. Processando registros com regras de substituição...");
             
+            for (let idx = 0; idx < agendasBrutas.length; idx++) {
+                const reg = agendasBrutas[idx];
+                const idReg = reg._id.toString();
+                const idUsuReg = reg.agenda_usuid?.toString();
+                const temFilhos = mapaFilhos.has(idReg) && mapaFilhos.get(idReg).length > 0;
 
-        const evolucaoFaltante = agendaFinal
-            .filter(a => !a.agenda_selo)
-            .map(a => {
-                const dat = new Date(a.agenda_data);
+                if (!temFilhos) {
+                    // 🟢 Sem cadeia: registro normal
+                    reg._cadeia = { tamanho: 1, ultimoCategoria: reg.agenda_categoria };
+                    reg._deveAparecer = (idUsuReg === idUsu);
+                    reg._origem = 'normal';
+                    console.log(`   [${idx+1}] ${reg.agenda_hora} | 🟢 Normal | Categoria: ${reg.agenda_categoria}`);
+                    continue;
+                }
+
+                // 🔗 Tem cadeia: resolver
+                const cadeia = resolverCadeia(reg);
+                const ultimo = cadeia[cadeia.length - 1];
+                const catFinal = ultimo.agenda_categoria;
+                const idUltimoUsu = ultimo.agenda_usuid?.toString();
+
+                // 👉 Monta histórico para debug
+                const historicoNomes = cadeia.map((c, i) => {
+                    const nivelTxt = i === 0 ? "Original" : `Subst.${i}`;
+                    const nome = mapaNomes[c.agenda_usuid?.toString()] || "Desconhecido";
+                    return `${nivelTxt}: ${nome} (${c.agenda_categoria})`;
+                });
+
+                // 👉 Texto para substituição
+                let textoSubstituicao = "";
+                if (cadeia.length >= 2 && catFinal === "Substituição") {
+                    const nomeOriginal = mapaNomes[cadeia[0].agenda_usuid?.toString()] || "?";
+                    const nomeSubstituto = mapaNomes[cadeia[1].agenda_usuid?.toString()] || "?";
+                    textoSubstituicao = `${nomeOriginal} → ${nomeSubstituto}`;
+                }
+
+                // Armazena metadados no registro
+                reg._cadeia = {
+                    tamanho: cadeia.length,
+                    ultimoId: ultimo._id,
+                    ultimoCategoria: catFinal,
+                    historico: historicoNomes,
+                    textoSubstituicao
+                };
+
+                // 👉 REGRA PRINCIPAL: Quem deve aparecer?
+                const ehUltimo = ultimo._id.toString() === reg._id.toString();
+                const mesmoTerapeuta = idUltimoUsu === idUsu;
+                
+                if (idUsuReg === idUsu) {
+                    // 👤 Logado é o ORIGINAL (substituído) → mostra PAI
+                    reg._deveAparecer = true;
+                    reg._registroParaView = reg;  // Usa o próprio registro (pai)
+                    reg._origem = 'pai_substituido';
+                    console.log(`   [${idx+1}] ${reg.agenda_hora} | 👤 Substituído → Exibe PAI | ${textoSubstituicao || catFinal}`);
+                } 
+                else if (idUltimoUsu === idUsu && !ehUltimo) {
+                    // 👤 Logado é o SUBSTITUTO → mostra FILHO (último da cadeia)
+                    reg._deveAparecer = true;
+                    reg._registroParaView = ultimo;  // Usa o último da cadeia (filho)
+                    reg._origem = 'filho_substituto';
+                    console.log(`   [${idx+1}] ${reg.agenda_hora} | 👤 Substituto → Exibe FILHO | ${textoSubstituicao || catFinal}`);
+                } 
+                else {
+                    // Não é para este usuário
+                    reg._deveAparecer = false;
+                    console.log(`   [${idx+1}] ${reg.agenda_hora} | ⏭️  Não aparece para este usuário`);
+                }
+            }
+
+            // 🔹 8. Filtrar apenas o que deve aparecer (igual à Fase 6)
+            console.log("\n🎯 8. Filtrando registros para exibição...");
+            let agendaParaView = agendasBrutas.filter(r => r._deveAparecer === true);
+            console.log(`   ✅ Registros que aparecerão: ${agendaParaView.length}`);
+
+            // 🔹 9. Deduplicação: remover pai quando filho existe no mesmo slot (Fase 5.5 adaptada)
+            console.log("\n🧹 9. Deduplicação: Pai vs Filho no mesmo slot...");
+            
+            const grupos = new Map();
+            agendaParaView.forEach(reg => {
+                const chave = `${reg.agenda_data_semana}_${reg.agenda_hora}_${reg.agenda_salaid}_${reg.agenda_beneid}`;
+                if (!grupos.has(chave)) grupos.set(chave, []);
+                grupos.get(chave).push(reg);
+            });
+
+            const idsParaRemover = new Set();
+            grupos.forEach((registros, chave) => {
+                if (registros.length < 2) return;
+                
+                const pais = registros.filter(r => !r.agenda_temp);
+                const filhos = registros.filter(r => r.agenda_temp);
+                
+                if (filhos.length > 0 && pais.length > 0) {
+                    const temSubstituicao = registros.some(r => r.agenda_categoria === "Substituição");
+                    if (!temSubstituicao) {
+                        // Remove pai, mantém filho
+                        pais.forEach(pai => idsParaRemover.add(pai._id.toString()));
+                        console.log(`   🗑️ Remove PAI | Slot: ${chave}`);
+                        console.log(`   ✅ Mantém FILHO | Slot: ${chave}`);
+                    }
+                }
+            });
+
+            agendaParaView = agendaParaView.filter(reg => !idsParaRemover.has(reg._id.toString()));
+            console.log(`   📊 Após dedup: ${agendaParaView.length} registros`);
+
+            // 🔹 10. Enriquecer e formatar PARA A VIEW (estrutura igual ao original)
+            console.log("\n✨ 10. Enriquecendo registros para a view...");
+            aux = 1;
+            
+            agendaFinal = agendaParaView.map(reg => {
+                // Usa o registro correto (pai ou filho) conforme regra
+                const registroParaExibir = reg._registroParaView || reg;
+                const dat = new Date(registroParaExibir.agenda_data);
                 const hora = String(dat.getUTCHours()).padStart(2, '0');
                 const minuto = String(dat.getUTCMinutes()).padStart(2, '0');
-                const sala = salas.find(s => String(s._id) === String(a.agenda_salaid));
-                const bene = benesFull.find(b => String(b._id) === String(a.agenda_beneid));
-                const terapia = terapias.find(t => String(t._id) === String(a.agenda_terapiaid));
 
+                // Enriquecimento com lookup nos arrays
+                const sala = salas.find(s => String(s._id) === String(registroParaExibir.agenda_salaid));
+                const bene = benesFull.find(b => String(b._id) === String(registroParaExibir.agenda_beneid));
+                const terapia = terapias.find(t => String(t._id) === String(registroParaExibir.agenda_terapiaid));
+
+                // 👇 RETORNO EXATO QUE A VIEW ESPERA
                 return {
-                    _id: a._id,
+                    _id: registroParaExibir._id,
                     agenda_data: fncGeral.getDataFMTOption(dat, "/"),
                     agenda_hora: `${hora}:${minuto}`,
                     agenda_data_dia: fncGeral.getDataFMT(dat),
                     agenda_aux: aux++,
                     agenda_data_semana: ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()],
+                    
+                    // Campos que a view usa diretamente
+                    agenda_categoria: registroParaExibir.agenda_categoria,
+                    agenda_selo: registroParaExibir.agenda_selo,
+                    agenda_obs: registroParaExibir.agenda_obs,
+                    agenda_salaid: registroParaExibir.agenda_salaid,
+                    agenda_beneid: registroParaExibir.agenda_beneid,
+                    agenda_terapiaid: registroParaExibir.agenda_terapiaid,
+                    
+                    // Dados enriquecidos (para exibir sem helpers)
                     sala_nome: sala?.sala_nome || "Sala não encontrada",
                     bene_apelido: bene?.bene_apelido || "Beneficiário não encontrado",
+                    bene_nome: bene?.bene_nome || "Sem nome",
                     terapia_nomecid: terapia?.terapia_nomecid || "Terapia não encontrada",
+                    
+                    // Metadados (para lógica futura / debug)
+                    _origem: reg._origem,
+                    _cadeia: reg._cadeia,
+                    
+                    // Ordenação (igual ao original)
                     dia_hora_ordenação: `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${hora}${minuto}`
                 };
-            }).sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
+            });
 
-        // Agendas do dia (com filtro)
-        const inicioDia = new Date();
-        inicioDia.setHours(0, 0, 0, 0);
-        const fimDia = new Date();
-        fimDia.setHours(23, 59, 59, 999);
+            // Ordenar por hora
+            agendaFinal.sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
 
-        // let agendas = await Agenda.find({
-        //     agenda_data: { $gte: inicioDia, $lte: fimDia },
-        //     agenda_usuid: idUsu,
-        //     agenda_temp: false
-        // });
+            // 🔹 11. Montar evolucaoFaltante (igual ao original)
+            evolucaoFaltante = agendaFinal
+                .filter(a => !a.agenda_selo)
+                .map(a => ({
+                    ...a,
+                    linkAcao: `/menu/agenda/evolucaoTemp/${a._id}`
+                }));
+            
+            console.log(`\n📋 11. evolucaoFaltante: ${evolucaoFaltante.length} pendentes`);
 
-        //agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
+            // 🔹 12. Debug final
+            console.log("\n🔍 [DEBUG] Amostra de agendaFinal:");
+            agendaFinal.slice(0, 5).forEach((a, i) => {
+                console.log(`   [${i+1}] ${a.agenda_hora} | ${a.bene_apelido} | ${a.agenda_categoria} | Sala: ${a.sala_nome} | Origem: ${a._origem}`);
+            });
+            console.log("=".repeat(80) + "\n");
 
-        // agendas.forEach(a => {
-        //     const dat = new Date(a.agenda_data);
-        //     a.agenda_data_dia = fncGeral.getDataFMT(dat);
-        //     a.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getUTCMinutes()).padStart(2, '0')}`;
-        //     a.agenda_aux = aux++;
-        //     a.dia_hora_ordenação = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${String(dat.getUTCHours()).padStart(2, '0')}${String(dat.getUTCMinutes()).padStart(2, '0')}`;
-        //     a.agenda_data_semana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()];
-        // });
+        // 🔹 7. Montar evolucaoFaltante (igual ao original)
+        evolucaoFaltante = agendaFinal
+            .filter(a => !a.agenda_selo)
+            .map(a => ({
+                ...a,
+                linkAcao: `/menu/agenda/evolucaoTemp/${a._id}`
+            }));
+        
+        console.log(`\n📋 7. evolucaoFaltante: ${evolucaoFaltante.length} pendentes`);
 
-        // agendaFinal = agendas;
+        // 🔹 8. Debug final
+        console.log("\n🔍 [DEBUG] Amostra de agendaFinal (primeiros 5):");
+        agendaFinal.slice(0, 5).forEach((a, i) => {
+            console.log(`   [${i+1}] ${a.agenda_hora} | ${a.bene_apelido} | ${a.agenda_categoria} | Sala: ${a.sala_nome} | Origem: ${a._origem}`);
+        });
+        console.log("=".repeat(80) + "\n");
 
+        // ========================================================================
+        // 📦 DADOS GLOBAIS (igual ao original)
+        // ========================================================================
         const [terapias2, benes2, usuarios2] = await Promise.all([
             Terapia.find(),
             Bene.find(),
@@ -744,6 +973,9 @@ router.post('/login/backup', passport.authenticate('local', {
             })
         ]);
 
+        // ========================================================================
+        // 🎯 MENSAGEM FLASH
+        // ========================================================================
         const flash = new Resposta();
         if (!usu.usuario_palavrachave || usu.usuario_palavrachave === "undefined") {
             flash.sucesso = "almost";
@@ -756,6 +988,16 @@ router.post('/login/backup', passport.authenticate('local', {
             flash.texto = "Logado com sucesso!";
         }
 
+        // ========================================================================
+        // 🎬 RENDERIZAR VIEW (igual ao original)
+        // ========================================================================
+        console.log("\n🎬 [RENDER] Enviando dados para view 'branco':");
+        console.log(`   • agendas: ${agendaFinal.length}`);
+        console.log(`   • evolucaoFaltante: ${evolucaoFaltante.length}`);
+        console.log(`   • aniversariantesBene: ${aniversariantesDaSemanaBene.length}`);
+        console.log(`   • aniversariantesUsuario: ${aniversariantesDaSemanaUsuario.length}`);
+        console.log("=".repeat(80) + "\n");
+        
         res.render("branco", {
             flash,
             aniversariantesDaSemanaUsuario,
@@ -766,16 +1008,17 @@ router.post('/login/backup', passport.authenticate('local', {
             agendasSemanaiss: agendaFinal,
             benes: benesGeral,
             salas,
-            usuarios: usuarios2
+            usuarios: usuarios2,
+            usuario_nomeabrev: nomeUsu
         });
 
     } catch (err) {
-        console.error("Erro no login:", err);
+        console.error("❌ [ERRO CRÍTICO] /login/backup:", err);
+        console.error("   Stack:", err.stack);
         req.flash("error_message", "Erro ao autenticar o usuário.");
         res.redirect('/menu/login');
     }
-});
-
+}),
 //inicio conjunto de roteamento e processamento para multiempresa
 //Criado por: Victor Andrade
 //2025-09-19
@@ -844,103 +1087,7 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         
-        /*
-        //console.log("LOGIN??");
-        // Usuário
-        const usu = await Usuario.findOne({
-            usuario_email: req.body.email, 
-            usuario_senha: req.body.senha 
-        });
-
-        if (!usu || usu.usuario_status !== "Ativo") {
-            req.flash("error_message", "Usuário ou senha inválidos ou inativo.");
-            return res.redirect('/menu/login');
-        }
-
-        const perfilId = usu.usuario_perfilid;
-        const idUsu = usu._id;
-        let base = dbEscolhida;
-        console.log("base? "+base);
-        const tempoCookie = ["62421801a12aa557219a0fb9", "62421857a12aa557219a0fc1", "624218f5a12aa557219a0fd0"].includes(perfilId)
-            ? (5 * 60 * 60 * 1000)
-            : (2 * 60 * 60 * 1000);
-
-        res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + tempoCookie) });
-        res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + tempoCookie) });
-        res.cookie('preferredDb', base, { expires: new Date(Date.now() + tempoCookie) });
-
-        // Buscar dados em paralelo
-        const [salas] = await Promise.all([
-            Sala.find()
-        ]);
-
-        // Agendas semanais
-        const hoje = new Date();
-        const domingo = new Date(hoje);
-        domingo.setDate(hoje.getDate() - hoje.getDay());
-        const inicioSemana = new Date(domingo);
-        const fimSemana = new Date(domingo);
-        fimSemana.setDate(domingo.getDate() + 6);
-
-        const agendasSemanais = await Agenda.find({
-            agenda_data: { $gte: inicioSemana, $lte: fimSemana },
-            agenda_usuid: idUsu
-        });
-
-        // Agendas do dia
-        const inicioDia = new Date();
-        inicioDia.setHours(0, 0, 0, 0);
-        const fimDia = new Date();
-        fimDia.setHours(23, 59, 59, 999);
-
-        let agendas = await Agenda.find({
-            agenda_data: { $gte: inicioDia, $lte: fimDia },
-            agenda_usuid: idUsu,
-            agenda_temp: false
-        });
-
-        agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
-
-        // Buscar dados adicionais
-        const [terapias2, benes2, usuarios2] = await Promise.all([
-            Terapia.find(),
-            Bene.find(),
-            Usuario.find({
-                usuario_status: "Ativo",
-                $or: [
-                    { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                    { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                ]
-            })
-        ]);
-
-        var diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
-        var mesAtual = String(hoje.getUTCMonth() + 1).padStart(2, '0');
-
-        
-        // Flash
-        const flash = new Resposta();
-        if (!usu.usuario_palavrachave || usu.usuario_palavrachave === "undefined") {
-            flash.sucesso = "almost";
-            flash.texto = "Você ainda não cadastrou sua Palavra Chave.";
-        } else if (usu.usuario_senha === "123456789") {
-            flash.sucesso = "almost";
-            flash.texto = "Você ainda não alterou sua senha temporária.";
-        } else {
-            flash.sucesso = "true";
-            flash.texto = "Logado com sucesso!";
-        }
-
-        // Buscar aniversariantes (usuários e beneficiários ativos)
-        const [usuariosAtivos, benesAtivos] = await Promise.all([
-            Usuario.find({ usuario_status: "Ativo" }),
-            Bene.find({ bene_status: "Ativo" })
-        ]);
-
-        const aniversariantesDaSemanaUsuario = fncUsuario.filtrarAniversariantesDaSemana(usuariosAtivos, 'usuario');
-        const aniversariantesDaSemanaBene = fncUsuario.filtrarAniversariantesDaSemana(benesAtivos, 'bene');
-*/
-// Variáveis iniciais
+       
         let aux = 1;
         const hoje = new Date();
         const diaAtual = String(hoje.getUTCDate()).padStart(2, '0');
@@ -1006,7 +1153,7 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
 
         const perfilId = usu.usuario_perfilid;
         const idUsu = usu._id;
-
+        var nomeUsu = usu.usuario_nome;
         // Definir tempo de expiração do cookie
         const tempoCookie = ["62421801a12aa557219a0fb9", "62421857a12aa557219a0fc1", "624218f5a12aa557219a0fd0"].includes(perfilId)
             ? (5 * 60 * 60 * 1000) // 5 horas
@@ -1015,6 +1162,8 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
         res.cookie('lvlUsu', perfilId, { expires: new Date(Date.now() + tempoCookie) });
         res.cookie('idUsu', idUsu, { expires: new Date(Date.now() + tempoCookie) });
         res.cookie('preferredDb', db, { expires: new Date(Date.now() + tempoCookie) });
+        res.cookie('fncUsu', usu.usuario_funcaoid, { expires: new Date(Date.now() + tempoCookie) });
+        res.cookie('nomeUsu', nomeUsu, { expires: new Date(Date.now() + tempoCookie) });
 
         // Buscar dados gerais
         const [usuariosAtivos, benesAtivos, salas, terapias, benesFull] = await Promise.all([
@@ -1033,103 +1182,400 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
         const fimSemana = new Date(domingo);
         fimSemana.setDate(domingo.getDate() + 6);
 
-        const agendasSemanais = await Agenda.find({
-            agenda_data: { $gte: inicioSemana, $lte: fimSemana },
-            agenda_usuid: idUsu
+        // ✅ CÓDIGO CORRIGIDO:
+        // Usar perfilId e idUsu que JÁ foram obtidos do usuário
+        let isAgendaTerapeuta = false;
+        const arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];
+        arrayIds.forEach((id) => { 
+            if (id == perfilId) isAgendaTerapeuta = true;  // 👈 Usa perfilId, não lvlUsu
         });
 
-        const evolucaoFaltante = agendasSemanais
-            .filter(a => !normalizeBoolean(a.agenda_selo)) // Normaliza o campo agenda_selo
-            .map(a => {
-                const dat = new Date(a.agenda_data);
-                const hora = String(dat.getUTCHours()).padStart(2, '0');
-                const minuto = String(dat.getUTCMinutes()).padStart(2, '0');
-                const sala = salas.find(s => String(s._id) === String(a.agenda_salaid));
-                const bene = benesFull.find(b => String(b._id) === String(a.agenda_beneid));
-                const terapia = terapias.find(t => String(t._id) === String(a.agenda_terapiaid));
-                return {
-                    _id: a._id,
-                    agenda_data: fncGeral.getDataFMTOption(dat, "/"),
-                    agenda_hora: `${hora}:${minuto}`,
-                    agenda_data_dia: fncGeral.getDataFMT(dat),
-                    agenda_aux: aux++,
-                    agenda_data_semana: ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()],
-                    sala_nome: sala?.sala_nome || "Sala não encontrada",
-                    bene_apelido: bene?.bene_apelido || "Beneficiário não encontrado",
-                    terapia_nomecid: terapia?.terapia_nomecid || "Terapia não encontrada",
-                    dia_hora_ordenação: `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${hora}${minuto}`,
-                    agenda_selo: normalizeBoolean(a.agenda_selo) // Normaliza o campo agenda_selo
-                };
-            }).sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
-
-        // Agendas do dia (com filtro)
-        const inicioDia = new Date();
-        inicioDia.setHours(0, 0, 0, 0);
-        const fimDia = new Date();
-        fimDia.setHours(23, 59, 59, 999);
-
-        let agendas = await Agenda.find({
-            agenda_data: { $gte: inicioDia, $lte: fimDia },
-            agenda_usuid: idUsu,
-            agenda_temp: false
-        });
-
-        agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
-
-        agendas.forEach(a => {
-            const dat = new Date(a.agenda_data);
-            a.agenda_data_dia = fncGeral.getDataFMT(dat);
-            a.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getUTCMinutes()).padStart(2, '0')}`;
-            a.agenda_aux = aux++;
-            a.dia_hora_ordenação = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${String(dat.getUTCHours()).padStart(2, '0')}${String(dat.getUTCMinutes()).padStart(2, '0')}`;
-            a.agenda_data_semana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()];
-            a.agenda_selo = normalizeBoolean(a.agenda_selo); // Normaliza o campo agenda_selo
-        });
-
-        const agendaFinal = agendas.sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
-
-        // Buscar dados adicionais
-        const [terapias2, benes2, usuarios2] = await Promise.all([
-            Terapia.find(),
-            Bene.find(),
-            Usuario.find({
-                usuario_status: "Ativo",
-                $or: [
-                    { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                    { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                ]
-            })
-        ]);
-
-        const flash = new Resposta();
-        if (!usu.usuario_palavrachave || usu.usuario_palavrachave === "undefined") {
-            flash.sucesso = "almost";
-            flash.texto = "Você ainda não cadastrou sua Palavra Chave.";
-        } else
-        /*
-         if (usu.usuario_senha === "123456789") {
-            flash.sucesso = "almost";
-            flash.texto = "Você ainda não alterou sua senha temporária.";
-        } else
-        */
-            {
-            flash.sucesso = "true";
-            flash.texto = "Logado com sucesso!";
+        let isSemanal = "false";
+        let idTerapeuta = usu._id.toString();  // 👈 Usa idUsu já validado, não cookie
+        aux = 1;
+        let dtFill, segunda, terca, quarta, quinta, sexta, agora;
+    
+                // ========================================================================
+        // 📅 FASE 1: Definir Período da Semana + Data para Filtro
+        // ========================================================================
+        console.log("\n📅 [FASE 1] Definindo período da semana");
+        
+        let seg = new Date(); seg.setHours(0,0,0,0);
+        let sex = new Date(); sex.setHours(23,59,59,999);
+        let diaSemana = new Date(seg);
+    
+        switch (seg.getUTCDay()) {
+            case 0: agora = "dom"; diaSemana.setUTCDate(diaSemana.getUTCDate() + 1); break;
+            case 1: agora = "seg"; break;
+            case 2: agora = "ter"; diaSemana.setUTCDate(diaSemana.getUTCDate() - 1); break;
+            case 3: agora = "qua"; diaSemana.setUTCDate(diaSemana.getUTCDate() - 2); break;
+            case 4: agora = "qui"; diaSemana.setUTCDate(diaSemana.getUTCDate() - 3); break;
+            case 5: agora = "sex"; diaSemana.setUTCDate(diaSemana.getUTCDate() - 4); break;
+            case 6: agora = "sab"; diaSemana.setUTCDate(diaSemana.getUTCDate() - 5); break;
+            default: agora = "dom"; diaSemana.setUTCDate(diaSemana.getUTCDate() - 6); break;
         }
+    
+        let diaDeHoje = new Date(diaSemana);
+        let semana = [
+            {dia: "seg", data: fncGeral.getData(diaSemana)},
+            {dia: "ter", data: fncGeral.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+            {dia: "qua", data: fncGeral.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+            {dia: "qui", data: fncGeral.getData(diaSemana.setDate(diaSemana.getDate()+1))},
+            {dia: "sex", data: fncGeral.getData(diaSemana.setDate(diaSemana.getDate()+1))}
+        ];
+        
+        let diaBase = new Date(diaDeHoje);
+        segunda = fncGeral.getDataDiaMes(diaBase.setDate(diaBase.getDate()-4));
+        terca = fncGeral.getDataDiaMes(diaBase.setDate(diaBase.getDate()+1));
+        quarta = fncGeral.getDataDiaMes(diaBase.setDate(diaBase.getDate()+1));
+        quinta = fncGeral.getDataDiaMes(diaBase.setDate(diaBase.getDate()+1));
+        sexta = fncGeral.getDataDiaMes(diaBase.setDate(diaBase.getDate()+1));
+    
+        let dataFiltro = seg.toISOString().slice(0, 10);
+        console.log(`   📆 Período: ${seg.toISOString()} até ${sex.toISOString()} | dataFiltro: ${dataFiltro}`);
+        console.log(`   📍 Dia de hoje na semana: ${agora}`);
+    
+        // ========================================================================
+        // 🔍 FASE 2: Buscar Registros do Terapeuta Logado
+        // ========================================================================
+        console.log("\n🔍 [FASE 2] Buscando registros do terapeuta logado");
+        
+        let idFiltro = mongoose.Types.ObjectId(idTerapeuta);
+        let dataIsoSeg = fncGeral.getDateToIsostring(seg);
+        let dataIsoSex = fncGeral.getDateToIsostring(sex);
+    
+        return Agenda.find({
+            agenda_data: { $gte: dataIsoSeg, $lte: dataIsoSex },
+            agenda_usuid: idFiltro
+        }, 'agenda_data agenda_usuid agenda_categoria agenda_temp agenda_tempId agenda_salaid agenda_beneid agenda_obs agenda_terapiaid agenda_selo agenda_evolucao').then((agenda) => {
+            
+            // 🔥 CONVERSÃO IMEDIATA PARA OBJETOS SIMPLES (essencial para campos customizados)
+            let agendaObj = JSON.parse(JSON.stringify(agenda));
+            
+            console.log(`   📦 Registros brutos encontrados: ${agendaObj.length}`);
+            if (agendaObj.length > 0) {
+                console.log(`   🔍 Primeiro registro: obs="${agendaObj[0].agenda_obs || '(vazio)'}" | cat="${agendaObj[0].agenda_categoria}"`);
+            }
+            
+            agendaObj.sort((a, b) => new Date(a.agenda_data) - new Date(b.agenda_data));
+    
+            // ========================================================================
+            // 📝 FASE 3: Formatação dos Campos
+            // ========================================================================
+            console.log("\n📝 [FASE 3] Formatando campos dos registros");
+            
+            agendaObj.forEach((e) => {
+                let dat = new Date(e.agenda_data);
+                e.agenda_data_dia = fncGeral.getDataFMT(dat);
+                let h = String(dat.getUTCHours()).padStart(2, '0');
+                let m = String(dat.getMinutes()).padStart(2, '0');
+                e.agenda_hora = `${h}:${m}`;
+                e.agenda_aux = aux++;
+                const dias = ["dom","seg","ter","qua","qui","sex","sab"];
+                e.agenda_data_semana = dias[dat.getUTCDay()];
+            });
+            
+            console.log(`   ✅ Formatados: ${agendaObj.length} registros`);
+    
+            // ========================================================================
+            // 🔗 FASE 4: Detectar Filhos e Netos
+            // ========================================================================
+            console.log("\n🔗 [FASE 4] Detectando filhos e netos para resolução de cadeia");
+            
+            let idsAtuais = agendaObj.map(a => a._id);
+            console.log(`   🔎 Buscando filhos que apontam para ${idsAtuais.length} registros...`);
+    
+            return Agenda.find({ agenda_tempId: { $in: idsAtuais } }).lean().then((filhosEncontrados) => {
+                
+                console.log(`   📦 Filhos encontrados no banco: ${filhosEncontrados.length}`);
+                
+                // Converter filhos para objetos simples também
+                const filhosObj = JSON.parse(JSON.stringify(filhosEncontrados));
+                
+                let mapaFilhos = new Map();
+                filhosObj.forEach(f => {
+                    let tempId = "" + f.agenda_tempId;
+                    if (tempId) {
+                        if (!mapaFilhos.has(tempId)) mapaFilhos.set(tempId, []);
+                        mapaFilhos.get(tempId).push(f);
+                    }
+                });
+    
+                // ========================================================================
+                // 🧠 FASE 5: Resolver Cadeia + Buscar Nomes dos Terapeutas
+                // ========================================================================
+                console.log("\n🧠 [FASE 5] Resolvendo cadeia e buscando nomes dos terapeutas");
+    
+                let idsTerapeutas = new Set();
+                agendaObj.forEach(r => idsTerapeutas.add(r.agenda_usuid?.toString()));
+                filhosObj.forEach(f => idsTerapeutas.add(f.agenda_usuid?.toString()));
+    
+                return Usuario.find({ _id: { $in: Array.from(idsTerapeutas) } }, 'usuario_nome').lean().then((terapeutasNomes) => {
+                    
+                    let mapaNomes = {};
+                    terapeutasNomes.forEach(t => { mapaNomes[t._id.toString()] = t.usuario_nome; });
+                    console.log(`   👥 Nomes carregados: ${Object.keys(mapaNomes).length} terapeutas`);
+    
+                    // Função recursiva para seguir a cadeia
+                    function resolverCadeia(registroInicial, nivel = 0, visitados = new Set()) {
+                        let cadeia = [registroInicial];
+                        let idAtual = "" + registroInicial._id;
+                        if (visitados.has(idAtual) || nivel >= 2) return cadeia;
+                        visitados.add(idAtual);
+                        let cat = "" + registroInicial.agenda_categoria;
+                        if (cat === "Falta Justificada" || cat === "Falta Absoluta" || cat === "Feriado") return cadeia;
+                        let proximos = mapaFilhos.get(idAtual) || [];
+                        if (proximos.length > 0) {
+                            cadeia = cadeia.concat(resolverCadeia(proximos[0], nivel + 1, visitados));
+                        }
+                        return cadeia;
+                    }
+    
+                    // 🎨 Helper badgeStyle (COR LARANJA PARA FALTA JUSTIFICADA)
+                    function getBadgeStyle(cat) {
+                        const map = {
+                            "Falta": "yellow",
+                            "Falta Justificada": "orange",  // ✅ CORRIGIDO: LARANJA
+                            "Falta Absoluta": "orange",
+                            "Substituição": "cyan",
+                            "SubstitutoFixo": "transparent", // ✅ Tratado como padrão
+                            "Feriado": "purple",
+                            "default": "transparent"
+                        };
+                        const bg = map[cat] || map.default;
+                        return `background-color: ${bg} !important; border: 1px solid transparent; color: #212529; display: inline-block; padding: 2px 6px; font-size: 9px; font-weight: 500; border-radius: 3px; white-space: nowrap; line-height: 1.3;`;
+                    }
+    
+                    // ========================================================================
+                    // 🔄 PROCESSA CADA REGISTRO DA AGENDA (LÓGICA CORRIGIDA)
+                    // ========================================================================
+                    agendaObj.forEach((reg, idx) => {
+                        
+                        let temFilhos = mapaFilhos.has("" + reg._id) && mapaFilhos.get("" + reg._id).length > 0;
+                        
+                        if (!temFilhos) {
+                            // CASO 1: Sem cadeia
+                            let cat = reg.agenda_categoria || "";
+                            reg.cadeia = { nivel: 0, tamanho: 1, ultimoCategoria: cat };
+                            reg.badgeStyle = getBadgeStyle(cat);
+                            reg.deveAparecer = true;
+                            
+                            // 🟢 REGRA ESPECÍFICA PARA SUBSTITUTOFIXO
+                            let isSubstFixo = (cat === "SubstitutoFixo");
+                            let bloqueado = (cat === "Falta Absoluta" || cat === "Feriado");
+                            
+                            reg.ui = {
+                                icone: bloqueado ? "ban" : "pencil",
+                                tooltipTitulo: isSubstFixo ? "Padrão" : cat,
+                                tooltipTexto: isSubstFixo ? "Clique para evoluir" : (
+                                    {
+                                        "Falta Absoluta": "Sem evolução possível",
+                                        "Feriado": "Agenda fechada",
+                                        "Falta Justificada": "Aguardando confirmação",
+                                        "Falta": "Aguardando justificativa"
+                                    }[cat] || "Clique para evoluir"
+                                ),
+                                temLink: !bloqueado
+                            };
+                            return;
+                        }
+                        
+                        // CASO 2: Com cadeia
+                        let cadeia = resolverCadeia(reg);
+                        let ultimo = cadeia[cadeia.length - 1];
+                        let catFinal = (ultimo.agenda_categoria || "").toString().trim() || reg.agenda_categoria;
+                        
+                        reg.cadeia = {
+                            nivel: cadeia.indexOf(reg),
+                            tamanho: cadeia.length,
+                            ultimoCategoria: catFinal,
+                            historico: cadeia.map((c, i) => {
+                                let nome = mapaNomes[c.agenda_usuid?.toString()] || "Desconhecido";
+                                return `${i===0?"Original":`Subst.${i}`}: ${nome} (${c.agenda_categoria})`;
+                            })
+                        };
+                        
+                        reg.badgeStyle = getBadgeStyle(catFinal);
+                        
+                        // 🟢 DETECÇÃO ESTRITA: APENAS "Substituição" dispara lógica especial
+                        let temSubstituicao = cadeia.some(c => c.agenda_categoria === "Substituição");
+                        let isPaiOriginal = (cadeia[0]._id.toString() === reg._id.toString());
+    
+                        // 🟢 TOOLTIP: IDÊNTICO PARA PAI E FILHO (SE FOR SUBSTITUIÇÃO)
+                        let tooltipTexto = "";
+                        let tooltipTitulo = cadeia.length > 1 ? "🔗 Cadeia" : catFinal;
+    
+                        if (temSubstituicao) {
+                            let nomeOrig = mapaNomes[cadeia[0].agenda_usuid?.toString()] || "Terapeuta A";
+                            let regSubst = cadeia.find(c => c.agenda_categoria === "Substituição");
+                            let nomeSubst = mapaNomes[regSubst?.agenda_usuid?.toString()] || "Terapeuta B";
+                            tooltipTexto = `Substituição\n${nomeOrig} por ${nomeSubst}`;
+                            tooltipTitulo = "🔁 Substituição";
+                        } else {
+                            let isSubstFixo = (catFinal === "SubstitutoFixo");
+                            tooltipTitulo = isSubstFixo ? "Padrão" : tooltipTitulo;
+                            tooltipTexto = isSubstFixo ? "Clique para evoluir" : (
+                                catFinal === "Falta Absoluta" ? "Sem evolução possível" :
+                                catFinal === "Feriado" ? "Agenda fechada" :
+                                catFinal === "Falta Justificada" ? "Aguardando confirmação" :
+                                catFinal === "Falta" ? "Aguardando justificativa" :
+                                "Clique para evoluir"
+                            );
+                        }
+    
+                        // 🟢 ÍCONE E LINK: PAI = BAN, FILHO = PENCIL (APENAS EM SUBSTITUIÇÃO)
+                        let iconeTipo = "pencil";
+                        let podeEditar = true;
+    
+                        if (temSubstituicao) {
+                            if (isPaiOriginal) {
+                                iconeTipo = "ban";       
+                                podeEditar = false;
+                            } else {
+                                iconeTipo = "pencil";    
+                                podeEditar = true;
+                            }
+                        } else if (catFinal === "Falta Absoluta" || catFinal === "Feriado") {
+                            iconeTipo = "ban";
+                            podeEditar = false;
+                        }
+    
+                        reg.deveAparecer = reg.agenda_usuid?.toString() === idTerapeuta;
+                        reg.ui = {
+                            icone: iconeTipo,
+                            tooltipTitulo: tooltipTitulo,
+                            tooltipTexto: tooltipTexto,
+                            temLink: podeEditar
+                        };
+                        
+                        console.log(`   [${idx+1}] 🔗 Cadeia(${cadeia.length}) | Pos: ${isPaiOriginal ? 'PAI' : 'FILHO'} | CatFinal: ${catFinal} | Sub? ${temSubstituicao} | Icone: ${iconeTipo}`);
+                    });
+    
+                    // ========================================================================
+                    // 🧹 FASE 5.5: Remover duplicados
+                    // ========================================================================
+                    console.log("\n🧹 [FASE 5.5] Removendo duplicados");
+    
+                    let grupos = new Map();
+                    agendaObj.forEach(reg => {
+                        let chave = `${reg.agenda_data_semana}_${reg.agenda_hora}_${reg.agenda_salaid}_${reg.agenda_beneid}`;
+                        if (!grupos.has(chave)) grupos.set(chave, []);
+                        grupos.get(chave).push(reg);
+                    });
+    
+                    let idsParaRemover = new Set();
+                    grupos.forEach((registros) => {
+                        if (registros.length < 2) return;
+                        let pais = registros.filter(r => !r.agenda_temp);
+                        let filhos = registros.filter(r => r.agenda_temp);
+                        if (filhos.length > 0 && pais.length > 0) {
+                            let temSubstituicao = registros.some(r => r.agenda_categoria === "Substituição");
+                            if (!temSubstituicao) {
+                                pais.forEach(pai => idsParaRemover.add("" + pai._id));
+                            }
+                        }
+                    });
+    
+                    agendaObj = agendaObj.filter(reg => !idsParaRemover.has("" + reg._id));
+                    console.log(`   📊 Duplicados removidos: ${agenda.length - agendaObj.length}`);
+    
+                    // ========================================================================
+                    // 🎯 FASE 6: Filtrar para exibição + enriquecer
+                    // ========================================================================
+                    console.log("\n🎯 [FASE 6] Filtrando e enriquecendo registros");
+                    let agendasParaView = agendaObj.filter(r => r.deveAparecer === true);
+                    
+                    // Injetar beneNome e beneClass
+                    agendasParaView.forEach(reg => {
+                        const beneEncontrado = benesFull.find(b => b._id.toString() === reg.agenda_beneid?.toString());
+                        reg.beneNome = beneEncontrado?.bene_nome || 'Sem beneficiário';
+                        reg.beneApelido = beneEncontrado?.bene_apelido || reg.beneNome;
+                        
+                        // beneClass para compatibilidade com view antiga
+                        const catFinal = reg.cadeia?.ultimoCategoria || reg.agenda_categoria;
+                        reg.beneClass = (() => {
+                            switch(catFinal) {
+                                case "Falta": return "bene-yellow";
+                                case "Falta Justificada": return "bene-orange"; // ✅ LARANJA
+                                case "Falta Absoluta": case "Feriado": return "bene-orange";
+                                case "Substituição": return "bene-cyan";
+                                default: return "bene-default";
+                            }
+                        })();
+                        
+                        // Ajuste UI baseado em agenda_selo
+                        if (reg.agenda_selo === true || reg.agenda_selo === "true") {
+                            reg.ui.temLink = false; reg.ui.icone = "check"; reg.ui.tooltipTexto = "Já evoluído";
+                        }
+                        if (reg.cadeia?.tamanho > 1 && reg.agenda_usuid?.toString() !== idTerapeuta) {
+                            reg.ui.temLink = false; reg.ui.icone = "ban";
+                        }
+                    });
+    
+                    console.log(`   ✅ Registros para view: ${agendasParaView.length}`);
+                    // ========================================================================
+                    // 🧠 FASE 6.5: REGRA ABSOLUTA DE EVOLUÇÃO (SOBRESCREVE TUDO)
+                    // ========================================================================
+                    console.log("\n🧠 [FASE 6.5] Aplicando redefinição de evolução (agenda_selo)");
 
-        res.render("branco", {
-            flash,
-            aniversariantesDaSemanaUsuario,
-            aniversariantesDaSemanaBene,
-            agendas,
-            terapias: terapias2,
-            benes: benes2,
-            salas,
-            usuarios: usuarios2
+                    agendasParaView = agendasParaView.map(reg => redefinicaoEvolucao(reg));
+    
+                    // ========================================================================
+                    // 📋 FASE 7: Log Final
+                    // ========================================================================
+                    console.log("\n📋 [FASE 7] Resumo dos registros para a view");
+                    agendasParaView.forEach((a, i) => {
+                        let tipo = a.agenda_temp ? "FILHO" : "PAI";
+                        let cadeiaTxt = a.cadeia?.tamanho > 1 ? `🔗${a.cadeia.tamanho}` : "🟢";
+                        console.log(`   [${i+1}] ${tipo} | ${a.agenda_hora} | selo:${a.agenda_selo} | cat:${a.agenda_categoria} | bene:${a.beneNome} | class:${a.beneClass} | tooltip:"${a.ui?.tooltipTexto}"`);
+                    });
+    
+                    // ========================================================================
+                    // 📦 FASE 8: Buscar dados adicionais e renderizar
+                    // ========================================================================
+                    console.log("\n📦 [FASE 8] Carregando dados auxiliares");
+                    
+                    return Promise.all([
+                        Terapia.find().lean(),
+                        Bene.find({ bene_status: "Ativo" }).lean(),
+                        Usuario.find({
+                            usuario_status: "Ativo",
+                            $or: [
+                                { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                                { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                            ]
+                        }).lean()
+                    ]).then(([terapias2, benes2, usuarios2]) => {
+                        
+                        benes2.sort((a,b) => a.bene_nome?.localeCompare(b.bene_nome, 'pt-BR')||0);
+                        usuarios2.sort((a,b) => a.usuario_nome?.localeCompare(b.usuario_nome, 'pt-BR')||0);
+    
+                        const flash = new Resposta();
+                        if (!usu.usuario_palavrachave || usu.usuario_palavrachave === "undefined") {
+                            flash.sucesso = "almost";
+                            flash.texto = "Você ainda não cadastrou sua Palavra Chave.";
+                        } else {
+                            flash.sucesso = "true";
+                            flash.texto = "Logado com sucesso!";
+                        }
+    
+                        console.log("\n✅ [SUCESSO] Renderizando view branco");
+                        let dataDeHoje = new Date();
+                        res.render("branco", {
+                            flash,
+                            aniversariantesDaSemanaUsuario,
+                            aniversariantesDaSemanaBene,
+                            agendas: agendasParaView, // ✅ Objetos simples com badgeStyle, ui, cadeia
+                            terapias: terapias2,
+                            benes: benes2,
+                            salas,
+                            usuarios: usuarios2,
+                            dataDeHoje
+                        });
+                    });
+                });
+            });
         });
-        //console.log("Aniversariantes Bene:", aniversariantesDaSemanaBene);
-        //console.log("Aniversariantes Usuário:", aniversariantesDaSemanaUsuario);
-
     } catch (err) {
         console.error("Erro no login:", err);
         req.flash("error_message", "Erro ao autenticar o usuário.");
@@ -1149,6 +1595,40 @@ router.get('/menu/', (req,res)=>{
     res.render("/menu", {nivel: lvl})
 })
 
+function redefinicaoEvolucao(reg) {
+
+    const selo = (reg.agenda_selo === true || reg.agenda_selo === "true");
+
+    const temEvolucao =
+        reg.agenda_evolucao !== null &&
+        reg.agenda_evolucao !== undefined &&
+        String(reg.agenda_evolucao).trim() !== "";
+
+    // 🚨 REGRA FINAL ABSOLUTA
+    if (selo || temEvolucao) {
+
+        reg.ui = {
+            icone: "check",
+            tooltipTitulo: "Evolução",
+            tooltipTexto: "Evolução realizada",
+            temLink: false
+        };
+
+        reg.badgeStyle = `
+            background-color: #c8e6c9 !important;
+            color: #2e7d32 !important;
+            border: 1px solid #a5d6a7;
+            font-weight: 600;
+        `;
+
+        reg.beneClass = "bene-success";
+
+        // opcional debug
+        reg._evoluido = true;
+    }
+
+    return reg;
+}
 /*
     passport.authenticate('local', { failureRedirect: '/login', failureMessage: true }),
     function(req, res) {
@@ -1313,6 +1793,33 @@ router.get("/agenda/lisB", fncGeral.IsAuthenticated, (req,res) =>{//direciona a 
 
 router.post("/agenda/filB", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de filtro de beneficiarios.
     fncAgenda.carregaAgendaFilB(req, res);
+})
+
+// === Agenda Mensal por Beneficiário ===
+router.get("/agenda/lisMensal", fncGeral.IsAuthenticated, (req, res) => {
+    // Carrega a view com filtros vazios (mês atual, TODOS beneficiários, sem filtro SubFix)
+    req.body.dataFinal = new Date().toISOString().split('T')[0]; // hoje como padrão
+    req.body.agendaBeneid = 'TODOS';
+    req.body.soFixo = 'true';
+    fncAgenda.carregaTabdimAgendaMes(req, res);
+})
+
+router.post("/agenda/filMensal", fncGeral.IsAuthenticated, (req, res) => {
+    // Processa os filtros enviados pelo form
+    fncAgenda.carregaTabdimAgendaMes(req, res);
+})
+
+// === Relatório Mensal Consolidado - Apenas Fixos ===
+router.get("/agenda/lisMesFixo", fncGeral.IsAuthenticated, (req, res) => {
+    // Carrega com mês atual e TODOS beneficiários
+    req.body.dataFinal = new Date().toISOString().split('T')[0];
+    req.body.agendaBeneid = 'TODOS';
+    fncAgenda.carregaAgendaMesFixo(req, res);
+})
+
+router.post("/agenda/filMesFixo", fncGeral.IsAuthenticated, (req, res) => {
+    // Processa filtros do form
+    fncAgenda.carregaAgendaMesFixo(req, res);
 })
 
 router.get("/agenda/resp", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de beneficiarios.
@@ -1533,6 +2040,11 @@ router.get('/agenda/lisPessoal', fncGeral.IsAuthenticated, (req,res) =>{//direci
     fncAgenda.carregaAgendaPessoal(req, res);
 })
 
+// 👉 NOVA ROTA: Filtra agenda pessoal por dia específico
+router.post('/agenda/filPessoalDia', fncGeral.IsAuthenticated, (req,res) => {
+    fncAgenda.filtraAgendaPessoalDia(req, res);
+});
+
 router.post('/agenda/filPessoal', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.filtraAgendaPessoal(req, res);
 })
@@ -1550,9 +2062,6 @@ router.get('/agenda/agendaListaGeral', fncGeral.IsAuthenticated, (req,res) =>{//
     fncAgenda.carregaAgendaListaGeral(req, res);
 })
 
-router.post('/agenda/filPessoalSemanal', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
-    fncAgenda.filtraAgendaPessoalSemanal(req, res);
-})
 
 router.get('/agenda/evolucao/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let resposta = new Resposta()
@@ -1968,6 +2477,11 @@ router.get('/atendimento/atendreltera/gestao/relatendgestaoconsfechado', fncGera
 //Gestão - Consolidado dos Atendimentos e convenio periodo
 router.get('/atendimento/atendreltera/gestao/relterapiaconvfec', fncGeral.IsAuthenticated, (req, res) => {
     fncAtend.relterapiaconvfec(req, res)
+});
+
+//Gestão - Consolidado dos Atendimentos e convenio periodo
+router.get('/atendimento/atendreltera/gestao/relterapiaconvfecdet', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.relterapiaconvfecdet(req, res)
 });
 
 //Gestão - Relatório de Faltas Por Beneficiário e Indice de Prejuízo no Tratamento

@@ -24,10 +24,10 @@
                                     </div>
                                     <div class="widget-body">
                                         <div class="widget-main">
-                                            <label>Convênio</label>
+                                            <label for="convConvid">Convênio</label>
                                             <div class="form-group">
                                                 <div class="col-sm-4">
-                                                    <select name="convConvid" id="convConvid" class="chosen-select" required>
+                                                    <select name="convConvid" id="convConvid" class="chosen-select" data-placeholder="Selecione o convênio..." required>
                                                         {{#each convs}}
                                                             <option value="{{_id}}">{{conv_nome}}</option>
                                                         {{/each}}
@@ -35,10 +35,10 @@
                                                 </div>
                                             </div>
 
-                                            <label>Terapia</label>
+                                            <label for="terapiaid">Terapia</label>
                                             <div class="form-group">
                                                 <div class="col-sm-4">
-                                                    <select name="terapiaid" id="terapiaid" class="chosen-select" required>
+                                                    <select name="terapiaid" id="terapiaid" class="chosen-select" data-placeholder="Selecione a terapia..." required>
                                                         {{#each terapias}}
                                                             <option value="{{_id}}">{{terapia_nome}}</option>
                                                         {{/each}}
@@ -50,15 +50,15 @@
                                             <div class="row">
                                                 <div class="col-sm-3">
                                                     <div class="input-group">
-                                                        <input name="data" id="data" type="date" required />
+                                                        <input name="data" id="data" type="date" class="form-control" required />
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <label>Status</label>
+                                            <label for="status">Status</label>
                                             <div class="form-group">
                                                 <div class="col-sm-2">
-                                                    <select name="status" id="status" class="chosen-select">
+                                                    <select name="status" id="status" class="chosen-select" data-placeholder="Selecione...">
                                                         <option value="Ativo">Ativo</option>
                                                         <option value="Inativo">Inativo</option>
                                                     </select>
@@ -66,10 +66,10 @@
                                             </div>
 
                                             <div class="space space-8"></div>
-                                            <label>Observações</label>
+                                            <label for="obs">Observações</label>
                                             <div class="form-group">
                                                 <div class="col-sm-6">
-                                                    <input type="text" name="obs" id="obs" class="form-control" />
+                                                    <input type="text" name="obs" id="obs" class="form-control" placeholder="Opcional" />
                                                 </div>
                                             </div>
                                         </div>
@@ -87,12 +87,12 @@
                                         <div class="widget-main">
                                             <div class="form-group">
                                                 <div class="col-sm-3">
-                                                    <label>Crédito (R$)</label>
+                                                    <label for="valorCredito">Crédito (R$)</label>
                                                     <input type="text" name="valorCredito" id="valorCredito"
                                                            value="0,00" class="form-control money" placeholder="0,00" required />
                                                 </div>
                                                 <div class="col-sm-3">
-                                                    <label>Débito (R$)</label>
+                                                    <label for="valorDebito">Débito (R$)</label>
                                                     <input type="text" name="valorDebito" id="valorDebito"
                                                            value="0,00" class="form-control money" placeholder="0,00" required />
                                                 </div>
@@ -122,5 +122,7 @@
             </div>
         </div>
     </div>
+
+
 </body>
 </html>

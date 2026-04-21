@@ -198,196 +198,151 @@ module.exports = {FiltroEvoatend,
             res.redirect('admin/erro')
         })
     },
+
     listaEvoatend(req, res){
-        let db = req.cookies['preferredDb'];
-        Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
-        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
-        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
-        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+    let db = req.cookies['preferredDb'];
+    Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
+    Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+    Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+    Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
 
-        let flash = new Resposta();
-        let agendaTempArr = [];
-        let lvlUsu = req.cookies['lvlUsu'];
-        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
-        arrayIds.forEach((id)=>{
-            if(id == lvlUsu){
-                isAgendaTerapeuta = true;
-            }
-        })
-        let idTerapeuta = req.cookies['idUsu'];
-        let idsAgendasEx = [];
-        let aux = 1;
-        let seg = new Date();
-        seg.setHours(0);
-        seg.setMinutes(0);
-        seg.setSeconds(0);
-
-        let sex = new Date();
-        sex.setHours(23);
-        sex.setMinutes(59);
-        sex.setSeconds(59);
-
-        switch (seg.getUTCDay()){
-            case 0://DOM
-                seg.setUTCDate(seg.getUTCDate() + 1);
-                sex.setUTCDate(sex.getUTCDate() + 5);
-                break;
-            case 1://SEG
-                sex.setUTCDate(sex.getUTCDate() + 4);
-                break;
-            case 2://TER
-                seg.setUTCDate(seg.getUTCDate() - 1);
-                sex.setUTCDate(sex.getUTCDate() + 3);
-                break;
-            case 3://QUA
-                seg.setUTCDate(seg.getUTCDate() - 2);
-                sex.setUTCDate(sex.getUTCDate() + 2);
-                break;
-            case 4://QUI
-                seg.setUTCDate(seg.getUTCDate() - 3);
-                sex.setUTCDate(sex.getUTCDate() + 1);
-                break;
-            case 5://SEX
-                seg.setUTCDate(seg.getUTCDate() - 4);
-                break;
-            case 6://SAB
-                seg.setUTCDate(seg.getUTCDate() - 5);
-                sex.setUTCDate(sex.getUTCDate() - 1);
-                break;
-            default:
-                seg.setUTCDate(seg.getUTCDate() + 1);
-                sex.setUTCDate(sex.getUTCDate() + 5);
-                break;
+    let flash = new Resposta();
+    let agendaTempArr = [];
+    let lvlUsu = req.cookies['lvlUsu'];
+    let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];
+    let isAgendaTerapeuta = false; // 👉 Declarar variável
+    
+    arrayIds.forEach((id)=>{
+        if(id == lvlUsu){
+            isAgendaTerapeuta = true;
         }
-        dataIni = seg.toISOString();
-        dataFim = sex.toISOString();
-        //let agora = seg.toISOString();
-        //let depois = sex.toISOString();
-        //console.log("Listagem Realizada de Atendimentos!")
-        Agenda.find({ agenda_data: { $gte : new Date(dataIni), $lte: new Date(dataFim) }, agenda_usuid : idTerapeuta, agenda_temp: false }).then((agenda)=>{
-            //console.log("agenda: "+agenda.length)
-            agenda.forEach((e)=>{
+    })
+    
+    let idTerapeuta = req.cookies['idUsu'];
+    let idsAgendasEx = [];
+    let aux = 1;
+    
+    // 📅 Definir período da semana
+    let seg = new Date();
+    seg.setHours(0,0,0,0);
+    let sex = new Date();
+    sex.setHours(23,59,59,999);
+
+    switch (seg.getUTCDay()){
+        case 0: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
+        case 1: sex.setUTCDate(sex.getUTCDate() + 4); break;
+        case 2: seg.setUTCDate(seg.getUTCDate() - 1); sex.setUTCDate(sex.getUTCDate() + 3); break;
+        case 3: seg.setUTCDate(seg.getUTCDate() - 2); sex.setUTCDate(sex.getUTCDate() + 2); break;
+        case 4: seg.setUTCDate(seg.getUTCDate() - 3); sex.setUTCDate(sex.getUTCDate() + 1); break;
+        case 5: seg.setUTCDate(seg.getUTCDate() - 4); break;
+        case 6: seg.setUTCDate(seg.getUTCDate() - 5); sex.setUTCDate(sex.getUTCDate() - 1); break;
+        default: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
+    }
+    
+    let dataIni = seg.toISOString();
+    let dataFim = sex.toISOString();
+
+    // 🔍 Buscar agendas da semana (apenas pais)
+    Agenda.find({ 
+        agenda_data: { $gte : new Date(dataIni), $lte: new Date(dataFim) }, 
+        agenda_usuid : idTerapeuta, 
+        agenda_temp: false 
+    }).then((agenda)=>{
+        
+        // 📝 Formatação dos campos
+        agenda.forEach((e)=>{
+            let dat = new Date(e.agenda_data);
+            e.agenda_data_dia = fncGeral.getDataFMT(dat);
+            let hora = String(dat.getUTCHours()).padStart(2, '0');
+            let min = String(dat.getMinutes()).padStart(2, '0');
+            e.agenda_hora = hora + ":" + min;
+            e.agenda_aux = aux++;
+            e.agenda_data_semana = ["dom","seg","ter","qua","qui","sex","sab"][dat.getUTCDay()];
+        })
+
+        // 🔗 Coletar IDs para buscar filhos
+        let agendaTempIds = agenda.map(a => a._id);
+        
+        Agenda.find({ agenda_tempId: {$in: agendaTempIds} }).then((agendaS)=>{
+            
+            // 📝 Formatação dos filhos
+            agendaS.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = fncGeral.getDataFMT(dat);
-                let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
-                let min = ""+dat.getMinutes();
-                if (hora.length == 1){hora = "0" + hora + "";}
-                if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
-                e.agenda_aux = aux;
-                aux++;
+                let hora = String(dat.getUTCHours()).padStart(2, '0');
+                let min = String(dat.getMinutes()).padStart(2, '0');
+                e.agenda_hora = hora + ":" + min;
+                e.agenda_data_semana = ["dom","seg","ter","qua","qui","sex","sab"][dat.getUTCDay()];
+            })
 
-                switch (dat.getUTCDay()){
-                    case 0:
-                        e.agenda_data_semana = "dom"
-                        break;
-                    case 1:
-                        e.agenda_data_semana = "seg"
-                        break;
-                    case 2:
-                        e.agenda_data_semana = "ter"
-                        break;
-                    case 3:
-                        e.agenda_data_semana = "qua"
-                        break;
-                    case 4:
-                        e.agenda_data_semana = "qui"
-                        break;
-                    case 5:
-                        e.agenda_data_semana = "sex"
-                        break;
-                    case 6:
-                        e.agenda_data_semana = "sab"
-                        break;
-                    default:
-                        
-                        console.log("erro");
-                        break;
+            // 🧹 Montar lista final: pais sem filhos + filhos válidos
+            let agendaFinal = [];
+            
+            // Adicionar pais que NÃO têm filhos
+            agenda.forEach((a)=>{
+                let temFilho = agendaS.some(s => s.agenda_tempId?.toString() === a._id.toString());
+                if (!temFilho) {
+                    agendaFinal.push(a);
                 }
             })
 
-            let agendaTempIds = [];
-            let agendaFinal = [];
-            agenda.forEach((as)=>{
-                agendaTempIds.push(as._id);
-            })
+            // Adicionar filhos válidos (não é falta justificada/feriado e é do terapeuta)
+            agendaS.forEach((s)=>{
+                if (s.agenda_categoria !== "Falta Justificada" && 
+                    s.agenda_categoria !== "Feriado" && 
+                    s.agenda_usuid?.toString() === idTerapeuta?.toString()) {
+                    agendaFinal.push(s);
+                }
+            });
 
-            Agenda.find({ agenda_tempId: {$in: agendaTempIds} }).then((agendaS)=>{
-                let tempIds = [];
-                agendaS.forEach((e)=>{
-                    let dat = new Date(e.agenda_data);
-                    e.agenda_data_dia = fncGeral.getDataFMT(dat);
-                    let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
-                    let min = ""+dat.getMinutes();
-                    if (hora.length == 1){hora = "0" + hora + "";}
-                    if (min.length == 1){min = "0" + min + "";}
-                    e.agenda_hora = hora+":"+min;
-                    //console.log("aux:"+aux)
-                    switch (dat.getUTCDay()){
-                        case 0:
-                            e.agenda_data_semana = "dom"
-                            break;
-                        case 1:
-                            e.agenda_data_semana = "seg"
-                            break;
-                        case 2:
-                            e.agenda_data_semana = "ter"
-                            break;
-                        case 3:
-                            e.agenda_data_semana = "qua"
-                            break;
-                        case 4:
-                            e.agenda_data_semana = "qui"
-                            break;
-                        case 5:
-                            e.agenda_data_semana = "sex"
-                            break;
-                        case 6:
-                            e.agenda_data_semana = "sab"
-                            break;
-                        default:
-                            console.log("erro");
-                            break;
-                    }
-                })
+            // 🎯 ORDENAÇÃO: DATA E HORA EM ORDEM DECRESCENTE (mais recente primeiro)
+            agendaFinal.sort((a, b) => {
+                const dataA = new Date(a.agenda_data);
+                const dataB = new Date(b.agenda_data);
+                return dataA - dataB;  // ✅ Crescente: A - B
+            });
 
-                agenda.forEach((a)=>{
-                    let ok = "true";
-                    agendaS.forEach((s)=>{
-                        if (("-"+s.agenda_tempId+"-") == ("-"+a._id+"-")) {
-                            ok = "false";
-                        }
-                    })
-                    if (ok == "true"){
-                        agendaFinal.push(a);
-                    }
-                })
-
-                agendaS.forEach((s)=>{
-                    if (!(s.agenda_categoria == "Falta Justificada")){
-                        if (!(s.agenda_categoria == "Feriado")){
-                            if ((""+s.agenda_usuid+"") == (""+idTerapeuta+"")){
-                                agendaFinal.push(s);
-                            }
-                        }
-                    }
-                });
-
-                agendaFinal.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista extraese 
-                Terapia.find().then((terapia)=>{
-                     Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
-                    console.log("Listagem Realizada de terapias")
+            // 📦 Carregar dados auxiliares e renderizar
+            Terapia.find().then((terapia)=>{
+                Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
                     Bene.find().then((bene)=>{
-                        bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-                        bene.forEach((b)=>{b.bene_nome = b.bene_nome.replace(".","")});
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-                            res.render("area/evol/evoatendLis", {agendas: agendaFinal, anos: ano, terapias: terapia,usuarios: usuario, benes: bene, flash})
-        })})})})})}).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao Realizar as listas!")
-            res.redirect('admin/erro')
+                        // Ordenar beneficiários alfabeticamente (para o select/filtro)
+                        bene.sort((a,b) => 
+                            a.bene_nome?.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                            .localeCompare(
+                                b.bene_nome?.normalize('NFD').replace(/[\u0300-\u036f]/g, ""), 
+                                'pt-BR'
+                            )
+                        );
+                        bene.forEach((b)=>{ b.bene_nome = b.bene_nome?.replace(".","") });
+                        
+                        Usuario.find({
+                            "usuario_status":"Ativo", 
+                            $or: [
+                                {"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},
+                                {"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}
+                            ]
+                        }).then((usuario)=>{
+                            
+                            res.render("area/evol/evoatendLis", {
+                                agendas: agendaFinal,  // ✅ Ordenado por data/hora decrescente
+                                anos: ano, 
+                                terapias: terapia,
+                                usuarios: usuario, 
+                                benes: bene, 
+                                flash
+                            })
+                        })
+                    })
+                })
+            })
         })
-    },
+    }).catch((err) =>{
+        console.log("❌ [ERRO] listaEvoatend:", err)
+        req.flash("error_message", "Houve um erro ao realizar as listas!")
+        res.redirect('admin/erro')
+    })
+},
     filtraEvoatend4(req, res){
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)

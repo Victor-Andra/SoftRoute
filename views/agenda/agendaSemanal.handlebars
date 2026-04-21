@@ -290,11 +290,18 @@
 											break;
 									}
 								}
+								console.log("apend")
+								console.log("id"+id)
 								document.getElementById(id).append(val);
+								console.log("fim apend")
 							} else {
+								console.log("clone1")
+								console.log("valoe"+valor)
 								let val = document.getElementById(valor).cloneNode(true);
+								console.log("val.id = "+val.id+"x")
 								val.id = val.id+"x";
 								document.getElementById(id).append(val);
+								console.log("fim clone")
 							}
 						})
 					

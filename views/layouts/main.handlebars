@@ -5,7 +5,92 @@
 		<meta charset="utf-8" />
 		<meta name="description" content="overview &amp; stats" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-		
+				<style>
+			/* === Chosen - Tema Ace Admin (Plano e Retangular) === */
+			.chosen-container {
+				width: 100% !important;
+				font-size: 13px;
+			}
+
+			/* Campo principal */
+			.chosen-container-single .chosen-single {
+				border-radius: 0 !important;
+				background: #ffffff !important;
+				background-image: none !important;
+				box-shadow: none !important;
+				border: 1px solid #cccccc !important;
+				height: 30px !important;
+				line-height: 28px !important;
+				padding: 0 8px !important;
+				color: #333333 !important;
+			}
+
+
+			/* Quando o dropdown está aberto */
+			.chosen-container-active.chosen-with-drop .chosen-single {
+				border-bottom-color: transparent !important;
+				border-radius: 0 !important;
+			}
+
+			/* Dropdown de opções */
+			.chosen-container .chosen-drop {
+				border-radius: 0 !important;
+				border: 1px solid #cccccc !important;
+				border-top: 0 !important;
+				box-shadow: none !important;
+				background: #ffffff !important;
+			}
+
+			/* Itens da lista */
+			.chosen-container .chosen-results li {
+				border-radius: 0 !important;
+				background: #ffffff !important;
+				color: #333333 !important;
+				padding: 5px 8px !important;
+				border-bottom: 1px solid #eeeeee !important;
+			}
+			.chosen-container .chosen-results li:last-child {
+				border-bottom: none !important;
+			}
+
+			/* Hover e seleção */
+			.chosen-container .chosen-results li.highlighted {
+				background: #eef3f7 !important;
+				color: #333333 !important;
+				background-image: none !important;
+			}
+			.chosen-container .chosen-results li.result-selected {
+				background: #f9f9f9 !important;
+			}
+
+			/* Placeholder */
+			.chosen-container-single .chosen-default {
+				color: #999999 !important;
+			}
+
+			/* Desabilitado */
+			.chosen-container.chosen-disabled .chosen-single {
+				background: #f5f5f5 !important;
+				color: #999999 !important;
+				cursor: not-allowed;
+			}
+
+			/* Multi-select (caso use) */
+			.chosen-container-multi .chosen-choices {
+				border-radius: 0 !important;
+				background: #fff !important;
+				border: 1px solid #ccc !important;
+				box-shadow: none !important;
+				min-height: 30px !important;
+			}
+			.chosen-container-multi .chosen-choices li.search-choice {
+				border-radius: 0 !important;
+				background: #f1f1f1 !important;
+				border: 1px solid #ccc !important;
+				box-shadow: none !important;
+				padding: 3px 20px 3px 6px !important;
+			}
+		</style>
 	
 		<!--<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>-->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -522,9 +607,9 @@
 					document.getElementById("naveHibguia").remove();
 					//console.log("naveTerapeuta");
 				}
+				document.getElementById("smallSpanNomeUsuario").innerHTML = "Saudações, <br>"+decodeURIComponent(procuraBiscoito("nomeUsu"));
 			}
 			
-					
 			function getCookie(name) {
 				const value = `; ${document.cookie}`;
 				const parts = value.split(`; ${name}=`);
@@ -701,4 +786,15 @@
 			identifyDb();
 		});
 	</script>
+	<!-- Remover sempre esse Script abaixo, antes de atualizar TODAS as telas -->
+	<script type="text/javascript">
+        $(document).ready(function() {
+            $('.chosen-select').chosen({
+                width: '100%',
+                disable_search_threshold: 10,
+                no_results_text: 'Nenhum resultado encontrado'
+            });
+        });
+    </script>
+	
 </html>

@@ -41,56 +41,118 @@
 				document.getElementById("tabilTerapeutaId").value = document.getElementById("atendTerapeutaid").value
 			}
 			
-			
-			function carregaBody(){
-				let dtnsc = new Date(document.getElementById("tratTratdataEdi").value);
-				let mes = (dtnsc.getMonth()+1).toString();
-				let dia = (dtnsc.getUTCDate()).toString();
-				if (mes.length == 1){
-					mes = "0"+mes;
+			function carregaBody() {
+				console.log("🟢 Iniciando carregaBody...");
+				
+				// 🔹 Helper: formata ISO → yyyy-mm-dd para input[date]
+				function formatarParaInputDate(iso) {
+					if (!iso) return "";
+					const d = new Date(iso);
+					if (isNaN(d)) return iso; // já vem formatado?
+					return d.toISOString().split('T')[0];
 				}
-				if (dia.length == 1){
-					dia = "0"+dia;
+
+				// 🔹 Helper: atualiza Chosen se existir
+				function atualizaCampo(id, valor) {
+					const el = document.getElementById(id);
+					if (!el) {
+						console.warn(`⚠️ Campo não encontrado: #${id}`);
+						return false;
+					}
+					
+					// Checkbox
+					if (el.type === "checkbox") {
+						el.checked = (valor === "true" || valor === "1" || valor === true);
+						console.log(`✅ Checkbox #${id} = ${el.checked}`);
+						return true;
+					}
+					
+					// Radio: marca pelo value dentro do mesmo name
+					if (el.type === "radio") {
+						document.querySelectorAll(`input[name="${el.name}"]`).forEach(r => {
+							r.checked = (r.value === valor);
+						});
+						console.log(`✅ Radio group "${el.name}" marcado com valor: ${valor}`);
+						return true;
+					}
+					
+					// Select com Chosen
+					if (el.tagName === "SELECT") {
+						el.value = valor;
+						if (typeof jQuery !== 'undefined' && jQuery.fn.chosen) {
+							jQuery(el).trigger('chosen:updated');
+							console.log(`✅ Select Chosen #${id} atualizado`);
+						}
+						return true;
+					}
+					
+					// Date input
+					if (el.type === "date" && valor) {
+						el.value = formatarParaInputDate(valor);
+						console.log(`✅ Date #${id} = ${el.value}`);
+						return true;
+					}
+					
+					// Text, textarea, number, etc.
+					el.value = valor ?? "";
+					console.log(`✅ Campo #${id} = "${el.value}"`);
+					return true;
 				}
-				let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+
+				// 🔹 Itera sobre todos os campos *Edi*
+				const inputsEdi = document.querySelectorAll('[id^="divCarrega"] input[id$="Edi"]')
+				console.log(`📦 Encontrados ${inputsEdi.length} campos Edi para popular`);
+				
+				inputsEdi.forEach(inputEdi => {
+					try {
+						const idEdi = inputEdi.id; // ex: avafisiodataavaEdi
+						const valor = inputEdi.value;
+						const idBase = idEdi.replace(/Edi$/, ''); // remove "Edi" do final
 						
-				document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
-				document.getElementById("tratBeneid").value = document.getElementById("tratBeneidEdi").value;
-				document.getElementById("tratTratdata").value = fulldate;
+						// Ignora campos que não devem ser populados diretamente
+						if (['id', 'avafisio_id'].includes(idBase)) return;
+						
+						atualizaCampo(idBase, valor);
+					} catch (err) {
+						console.error(`❌ Erro ao popular ${inputEdi?.id}:`, err);
+					}
+				});
 				
-				
-				//document.getElementById("tratDiagnostico").value = document.getElementById("tratDiagnosticoEdi").value;
-				document.getElementById("tratEspecialidadepad").value = document.getElementById("tratEspecialidadepadEdi").value;
-				document.getElementById("tratTerapeutaidpad").value = document.getElementById("tratTerapeutaidpadEdi").value;
-				document.getElementById("tratRegconselhopad").value = document.getElementById("tratRegconselhopadEdi").value;
-				document.getElementById("tratHistoricopad").value = document.getElementById("tratHistoricopadEdi").value;
-				document.getElementById("tratObjgeralpad").value = document.getElementById("tratObjgeralpadEdi").value;
-				document.getElementById("tratObjespecificopad").value = document.getElementById("tratObjespecificopadEdi").value;
-				document.getElementById("tratEstrategiapad").value = document.getElementById("tratEstrategiapadEdi").value;
-				document.getElementById("tratObspad").value = document.getElementById("tratObspadEdi").value;
-				document.getElementById("tratDiagnosticoocup").value = document.getElementById("tratDiagnosticoocupEdi").value;
-				document.getElementById("tratEspecialidadeis").value = document.getElementById("tratEspecialidadeisEdi").value;
-				document.getElementById("tratTerapeutaidis").value = document.getElementById("tratTerapeutaidisEdi").value;
-				document.getElementById("tratRegconselhois").value = document.getElementById("tratRegconselhoisEdi").value;
-				document.getElementById("tratMetacurtois").value = document.getElementById("tratMetacurtoisEdi").value;
-				document.getElementById("tratMetamediois").value = document.getElementById("tratMetamedioisEdi").value;
-				document.getElementById("tratMetalongois").value = document.getElementById("tratMetalongoisEdi").value;
-				document.getElementById("tratObjetivois").value = document.getElementById("tratObjetivoisEdi").value;
-				document.getElementById("tratEspecialidadeavd").value = document.getElementById("tratEspecialidadeavdEdi").value;
-				document.getElementById("tratTerapeutaidavd").value = document.getElementById("tratTerapeutaidavdEdi").value;
-				document.getElementById("tratRegconselhoavd").value = document.getElementById("tratRegconselhoavdEdi").value;
-				console.log("ta chegando aqui?");
-				let usuarioAtual = document.getElementById("usuarioAtual").value;
-				let perfilAtual = document.getElementById("perfilAtual").value;
-				if ((document.getElementById("tratTerapeutaidpad").value || document.getElementById("tratTerapeutaidis").value || document.getElementById("tratTerapeutaidavd").value) == usuarioAtual || perfilAtual == "644743aa78166939169f8486" || perfilAtual == "644742e378166939169f82a1" || perfilAtual == "62421857a12aa557219a0fc1"){
-					document.getElementById("acaoSalvar").style.display = '';
-				} else {
-					document.getElementById("acaoSalvar").style.display = 'none';
-				}
-				this.atualizaDadosbene();
-				
+				// 🔹 Após popular todos os campos Edi, popula dados do beneficiário
+					function populaDadosBeneficiarioEdicao() {
+						// Data de nascimento (formata para yyyy-MM-dd)
+						const beneDatanascEdi = document.getElementById("beneDatanascEdi")?.value;
+						if (beneDatanascEdi && beneDatanascEdi !== "undefined") {
+							const dataFmt = new Date(beneDatanascEdi);
+							if (!isNaN(dataFmt)) {
+								document.getElementById("beneDatanasc").value = formataData(dataFmt);
+								// Recalcula idade se necessário
+								document.getElementById("beneIdade").value = calculaIdade(dataFmt);
+							}
+						}
+						
+						// Idade (caso já venha calculada do backend)
+						const beneIdadeEdi = document.getElementById("beneIdadeEdi")?.value;
+						if (beneIdadeEdi && beneIdadeEdi !== "undefined") {
+							document.getElementById("beneIdade").value = beneIdadeEdi;
+						}
+						
+						// Diagnóstico
+						const laudoDiagEdi = document.getElementById("laudoDiagEdi")?.value;
+						if (laudoDiagEdi && laudoDiagEdi !== "undefined") {
+							document.getElementById("laudoDiag").value = laudoDiagEdi;
+						}
+						
+						console.log("✅ Dados do beneficiário populados na edição");
+					}
+
+					setTimeout(() => {
+						populaDadosBeneficiarioEdicao();
+					}, 50); // Pequeno delay para garantir que os campos já existem no DOM
+					
+				console.log("✅ carregaBody finalizado!");
 			}
-		
+
 			function atualizaData(){
 				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
 				var dataFmt = new Date(dataIso);
@@ -118,26 +180,36 @@
 				return [year, month, day].join('-');
 			}
 			function atualizaDadosbene(){
-				let beneid = document.getElementById("tratBeneid").value;
+				const beneid = document.getElementById("tratBeneid").value;
 
-				var dataIso = new Date(document.getElementById(beneid+"_beneDatanasc").value);
-				if ((""+dataIso.toLocaleTimeString()+"").substring(0,2) != "00") {
-					let num = parseInt((""+dataIso.toLocaleTimeString()+"").substring(0,2));
-					let dif = 24-num;
-					dataIso = new Date(dataIso.getTime() + dif * 60 * 60 * 1000)//add 3h ao gtm
+				console.log("🔍 BeneID:", beneid);
+
+				// 🔹 DATA NASCIMENTO
+				const elData = document.getElementById(beneid + "_beneDatanasc");
+
+				if (elData && elData.value) {
+					const dataIso = new Date(elData.value);
+
+					if (!isNaN(dataIso)) {
+						document.getElementById("beneDatanasc").value = formataData(dataIso);
+						document.getElementById("beneIdade").value = calculaIdade(dataIso);
+						console.log("✅ Data e idade atualizadas");
+					} else {
+						console.warn("❌ Data inválida:", elData.value);
+					}
+				} else {
+					console.warn("❌ Campo de data não encontrado:", beneid);
 				}
-				if (dataIso != undefined && dataIso != "undefined"){
-					var dataFmt = new Date(dataIso);
-					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-					document.getElementById("beneIdade").value = calculaIdade(dataFmt);
+
+				// 🔹 DIAGNÓSTICO
+				const elDiag = document.getElementById(beneid + "_laudoDiagEdi");
+
+				if (elDiag && elDiag.value) {
+					document.getElementById("laudoDiag").value = elDiag.value;
+					console.log("✅ Diagnóstico atualizado");
+				} else {
+					console.warn("❌ Diagnóstico não encontrado:", beneid);
 				}
-				console.log("beneid:"+beneid)
-				console.log(document.getElementById(beneid+"_laudoDiagEdi"));
-				if (document.getElementById(beneid+"_laudoDiagEdi") != "undefined" && document.getElementById(beneid+"_laudoDiagEdi") != null){
-					document.getElementById("laudoDiag").value = document.getElementById(beneid+"_laudoDiagEdi").value;
-				}
-				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
-				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
 			}
 			function calculaIdade(dataFmt) {
 				// Data atual
@@ -180,7 +252,7 @@
 
 								<li class="active">Plano de Tratamentos - Visualizar</li>
 							</ul><!-- /.breadcrumb -->
-							<div id="divCarrega" name="divCarrega" class="hidden">
+							<div id="divCarregahidden" name="divCarregahidden" class="hidden">
 								<input id="tratPlanotipoEdi" name="tratPlanotipoEdi" value="{{trat.trat_planotipo}}"/>
 								<input id="tratBeneidEdi" name="tratBeneidEdi" value="{{trat.trat_beneid}}"/>
 								<input id="tratBeneidadeEdi" name="tratBeneidadeEdi" value="{{trat.trat_beneidade}}"/>
@@ -209,6 +281,10 @@
 								<input id="tratRegconselhoavdEdi" name="tratRegconselhoavdEdi" value="{{trat.trat_regconselhoavd}}"/>
 								<input id="usuarioAtual" name="usuarioAtual" value="{{usuarioAtual}}"/>
 								<input id="perfilAtual" name="perfilAtual" value="{{perfilAtual}}"/>
+									<!-- Dados do beneficiário (para popular campos readonly na edição) -->
+									<input type="text" id="beneDatanascEdi" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
+									<input type="text" id="beneIdadeEdi" name="beneIdadeEdi" value="{{trat.trat_beneidade}}"/>
+									<input type="text" id="laudoDiagEdi" name="laudoDiagEdi" value="{{laudo_diag}}"/>
 							</div>
 						</div>
 					</div>
@@ -226,7 +302,7 @@
 											<i class="orange ace-icon fa fa-check-square bigger-110"></i>
 											Tipo plano de tratamento
 										</h4>
-										<div id="divCarrega" name="divCarrega" class="hidden">
+										<div id="divCarregatipo" name="divCarregatipo" class="hidden">
 											<!-- /.importante Id de indice-->
 											<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
 											{{#each benes}}
@@ -257,7 +333,7 @@
 													<label>Escolha o plano de tratamento:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select disabled name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" value="{{trat.trat_planotipo}}" class="disabled">
+															<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" value="{{trat.trat_planotipo}}">
 																<option value="-">-</option>
 																<option value="Padrão">Padrão</option>
 																<option value="Ocupacional">Ocupacional</option>
@@ -314,7 +390,7 @@
 													<label>Beneficiário:</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="tratBeneid" id="tratBeneid" class="chosen-select" placeholder="Colocar nome completo." readonly="true" >
+															<select name="tratBeneid" id="tratBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene()" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>

@@ -4,7 +4,7 @@ const multer = require('multer')
 const mongoose = require("mongoose")
 const $ = require('jquery')
 const {autenticador} = require("../helpers/autenticador")
-let application = require('../routes/admin')
+let application = require('./admin')
 const connections = require('../serverConnection');
 
 //funções gerais
@@ -112,6 +112,11 @@ const agendaEventoClass = require("../models/agendaEvento")
 var AgendaEvento = getModel("softroute", 'tb_agendaEvento', agendaEventoClass.AgendaEventoSchema);//getModel("softroute", 'tb_agendaEvento', agendaEventoClass.AgendaEventoSchema)
 const fncAgendaEvento = require("../functions/fncAgendaevento")
 
+//AnotaAdm, cadastro dos Anotações administrativas de Atividades como festa route, tipos de relatórios, lembretes etc
+const anotaAdmClass = require("../models/anotaAdm")
+var AnotaAdm = getModel("softroute", 'tb_anotaAdm', anotaAdmClass.AnotaAdmSchema);//getModel("softroute", 'tb_agendaEvento', agendaEventoClass.AgendaEventoSchema)
+const fncAnotaAdm = require("../functions/fncAnotaadm")
+
 //Ajuda
 const ajudaClass = require("../models/ajuda")
 var Ajuda = getModel("PortalDoUsuario", 'tb_ajuda', ajudaClass.AjudaSchema);//Wagner cintra 16/11/2025
@@ -153,9 +158,16 @@ var Evoatend = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema
 const fncEvoatend = require("../functions/fncEvoatend")
 
 //Guias de Atendimento
+//Guias numeros e datas sao inseridas dentro do agendamento, semelhante a evolucao
 const guiaClass = require("../models/evoatend")
 var Evoatend = getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema);//getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
 const fncGuia= require("../functions/fncGuia")
+
+//Lote de Guias de Atendimento
+//Lotes sao um cabecalho que contem inumeras guias (atreladas ao agendamento)
+const guialoteClass = require("../models/guialote")
+var Guialote = getModel("softroute", 'tb_guialote', guialoteClass.GuialoteSchema);//getModel("softroute", 'tb_evoatend', evoatendClass.EvoatendSchema)
+const fncGuialote= require("../functions/fncGuialote")
 
 //Agenda Técnicos
 const agendaTecClass = require("../models/agenda")
@@ -584,6 +596,34 @@ router.post('/ferramentas/usuario/definirSenha', (req,res)=>{
     fncUsuario.definirSenha(req, res);
 })
 
+/**
+ * ============================================================================
+ * 🔄 ROTAS DE LOGIN - BACKUP
+ * Esta rota é chamada após autenticação bem-sucedida via Passport.
+ * VIEW DESTINO: "branco.handlebars" (container mestre que carrega _navbar dinâmico)
+ * CONTAINERS DA VIEW (3 widgets principais):
+ * ┌─────────────────────────────────────────────────────────────┐
+ * │ 1️⃣ Widget "Faltaevo" (id="Faltaevo")                        │
+ * │    → Tabela: "Evoluções Ausentes do dia"                    │
+ * │    → Dados: agendaFinal (agendas sem selo, ordenadas)       │
+ * │    → Ação: Link para evolucaoTemp/{{_id}}                   │
+ * ├─────────────────────────────────────────────────────────────┤
+ * │ 2️⃣ Widget "Pontage" (id="Pontage")                          │
+ * │    → Alert Vermelho: Observações da agenda (agenda_obs)     │
+ * │    → Alert Amarelo: Lista de evolucaoFaltante com ação      │
+ * │    → Dados: agendas (para obs) + evolucaoFaltante (lista)   │
+ * ├─────────────────────────────────────────────────────────────┤
+ * │ 3️⃣ Widget "percep" (id="percep")                            │
+ * │    → Tabela: Aniversariantes da Semana (Beneficiários)      │
+ * │    → Tabela: Aniversariantes da Semana (Colaboradores)      │
+ * │    → Dados: aniversariantesDaSemanaBene + Usuario           │
+ * └─────────────────────────────────────────────────────────────┘
+ * 
+ * DADOS GLOBAIS ENVIADOS:
+ * - flash: Mensagem de login (sucesso/erro)
+ * - terapias, benes, salas, usuarios: Para preenchimento de selects/labels
+ * - agendasSemanaiss: Alias de agendaFinal (compatibilidade com view)
+ */
 
 router.post('/login/backup', passport.authenticate('local', {
     failureRedirect: '/menu/login',
@@ -643,7 +683,7 @@ router.post('/login/backup', passport.authenticate('local', {
         const fimSemana = new Date(domingo);
         fimSemana.setDate(domingo.getDate() + 6);
 
-        const agendasSemanais = await Agenda.find({
+        const agendas = await Agenda.find({
             agenda_data: { $gte: inicioSemana, $lte: fimSemana },
             agenda_usuid: idUsu
         });
@@ -654,7 +694,24 @@ router.post('/login/backup', passport.authenticate('local', {
             Bene.find()
         ]);
 
-        const evolucaoFaltante = agendasSemanais
+        evolucaoFaltante.forEach((af)=>{
+            arrIdsAgendas.push(af._id);
+        })
+
+        const agendasSemanais = await Agenda.find({agenda_tempId: {$in: arrIdsAgendas}});
+
+        agendaFinal = agendas.filter(a => {
+            let match = agendasSemanais.find(s => 
+                s.agenda_tempId.toString() === a._id.toString()
+            );
+
+            if (!match) return true;
+
+            return a.agenda_usuid.toString() === match.agenda_usuid.toString();
+        });
+            
+
+        const evolucaoFaltante = agendaFinal
             .filter(a => !a.agenda_selo)
             .map(a => {
                 const dat = new Date(a.agenda_data);
@@ -684,24 +741,24 @@ router.post('/login/backup', passport.authenticate('local', {
         const fimDia = new Date();
         fimDia.setHours(23, 59, 59, 999);
 
-        let agendas = await Agenda.find({
-            agenda_data: { $gte: inicioDia, $lte: fimDia },
-            agenda_usuid: idUsu,
-            agenda_temp: false
-        });
+        // let agendas = await Agenda.find({
+        //     agenda_data: { $gte: inicioDia, $lte: fimDia },
+        //     agenda_usuid: idUsu,
+        //     agenda_temp: false
+        // });
 
-        agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
+        //agendas = agendas.filter(a => a.atend_categoria !== "Feriado");
 
-        agendas.forEach(a => {
-            const dat = new Date(a.agenda_data);
-            a.agenda_data_dia = fncGeral.getDataFMT(dat);
-            a.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getUTCMinutes()).padStart(2, '0')}`;
-            a.agenda_aux = aux++;
-            a.dia_hora_ordenação = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${String(dat.getUTCHours()).padStart(2, '0')}${String(dat.getUTCMinutes()).padStart(2, '0')}`;
-            a.agenda_data_semana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()];
-        });
+        // agendas.forEach(a => {
+        //     const dat = new Date(a.agenda_data);
+        //     a.agenda_data_dia = fncGeral.getDataFMT(dat);
+        //     a.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getUTCMinutes()).padStart(2, '0')}`;
+        //     a.agenda_aux = aux++;
+        //     a.dia_hora_ordenação = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${String(dat.getUTCHours()).padStart(2, '0')}${String(dat.getUTCMinutes()).padStart(2, '0')}`;
+        //     a.agenda_data_semana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()];
+        // });
 
-        agendaFinal = agendas;
+        // agendaFinal = agendas;
 
         const [terapias2, benes2, usuarios2] = await Promise.all([
             Terapia.find(),
@@ -1516,6 +1573,15 @@ router.post('/agenda/filPessoalSemanal', fncGeral.IsAuthenticated, (req,res) =>{
     fncAgenda.filtraAgendaPessoalSemanal(req, res);
 })
 
+//Agenda em Lista 
+router.get('/agenda/agendaListaGeral', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.carregaAgendaListaGeral(req, res);
+})
+
+router.post('/agenda/filPessoalSemanal', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
+    fncAgenda.filtraAgendaPessoalSemanal(req, res);
+})
+
 router.get('/agenda/evolucao/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let resposta = new Resposta()
     resposta.texto = ""
@@ -1740,14 +1806,7 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
     router.post('/atendimento/relatendvals', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoValFiltro(req,res);
     })
-//Relatório de Atendimentos por Convênio. Tabela Dinamica expansivel
-    router.get('/atendimento/tabdimConvTeraAtendval', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.tabdimConvTeraAtendval(req,res);
-    })
 
-    router.post('/atendimento/tabdimConvTeraAtendvalFiltro', fncGeral.IsAuthenticated,(req,res) =>{
-        fncAtend.tabdimConvTeraAtendvalFiltro(req,res);
-    })
 
 /**
  * TABDIM - Tabelas Dinâmicas de Atendimento
@@ -1804,7 +1863,21 @@ router.post('/atendimento/tabdimConvBeneAtendvalFiltro', fncGeral.IsAuthenticate
 });
 
 // ============================================
-// 5. Convênio, Beneficiário e Terapeuta (3 níveis)
+// 4. Beneficiário e Terapia (semelhante ao Ana. Benefinciario)
+// ============================================
+router.get('/atendimento/tabdimBeneVal', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.tabdimBeneVal(req, res);
+});
+
+router.post('/atendimento/tabdimBeneValFiltro', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.tabdimBeneValFiltro(req, res);
+});
+
+
+
+
+// ============================================
+// 6. Convênio, Beneficiário e Terapeuta (3 níveis)
 // ============================================
 router.get('/atendimento/tabdimConvBeneTeraAtendval', fncGeral.IsAuthenticated, (req, res) => {
     fncAtend.tabdimConvBeneTeraAtendval(req, res);
@@ -1849,6 +1922,13 @@ router.post('/atendimento/tabdimConvBeneTeraAtendvalFiltro', fncGeral.IsAuthenti
     })
     router.post('/atendimento/relatendbeneassinsAT', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoBeneassinFiltroAT(req,res);
+    })
+    //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo e com sessões de terapia 05/12/2025.
+    router.get('/atendimento/relatendbenesec', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBenessec(req,res);
+    })
+    router.post('/atendimento/relatendbenesecs', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBenesecFiltro(req,res);
     })
 //Relatório Consolidado de Atendimentos por Beneficiário.
 //Emite uma consolidado de todos os atendimentos realizados com Valores pelo beneficiário num determinado período de tempo.
@@ -1922,6 +2002,15 @@ router.get('/atendimento/atendreltera/gestao/relterapiaconvfec', fncGeral.IsAuth
 router.get('/atendimento/atendreltera/gestao/relfaltasbene', fncGeral.IsAuthenticated, (req, res) => {
     fncAtend.relfaltasbene(req, res)
 });
+
+//Relatório Calendario Fixo para Auxilio de Fechamento
+router.get('/agenda/calendar/listaCalendarioMensal', fncGeral.IsAuthenticated,(req,res) =>{
+    res.render("agenda/calendar/listaCalendarioMensal");
+})
+
+router.post('/agenda/calendar/filtralistaCalendarioMensal', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.filtraCalendarioMensal(req,res);
+})
 
 //Relatório Emissão NF.
 //Emite uma consolidado consolidado por beneficiário com os valores com formatação para emissão de NF ba prefeitura de recife.
@@ -2453,9 +2542,9 @@ router.post('/area/evol/evoatendrankingFil', fncGeral.IsAuthenticated, (req,res)
 
 
 //Menu Guia ** Area Administrativa   
-//Carrega Cadastro de Mapp
+//Carrega Area de GUIA
 //------------------------------------------------------------------------------------------------
-router.get('/guia/guiaLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de evoluções.
+router.get('/guia/guiaLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de agendamentos para atrelar as guias.
     fncGuia.listaGuia(req, res);
 })
 
@@ -2472,7 +2561,53 @@ router.post('/guia/addguia', fncGeral.IsAuthenticated, (req,res) =>{//direciona 
 // Data: 04-02-2026
 router.post('/guia/addguia/massa', fncGeral.IsAuthenticated, (req,res) => {
     fncGuia.adicionarGuiaMassa(req, res);
-});
+})
+
+//Carrega Area de Guialote
+//------------------------------------------------------------------------------------------------
+router.get('/guia/lote/loteLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de Guialotes.
+    fncGuialote.listaGuialote(req, res);
+})
+
+router.post('/guia/lote/guialotefil', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
+    fncGuialote.filtraGuialotelis(req, res);
+})
+
+router.post('/guia/lote/addlote', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
+    fncGuialote.adicionarGuialote(req, res);
+})
+
+// ✅ NOVA ROTA: SALVAR GUIA EM MASSA com segurança (evita sobrescrita de dados já cadastrados na base)
+// Criado por: Wagner Cintra
+// Data: 16-02-2026
+router.post('/guia/lote/addlote/massa', fncGeral.IsAuthenticated, (req,res) => {
+    fncGuialote.adicionarGuialoteMassa(req, res);
+})
+
+// Cria o Lote efetivamente (vincula os agendamentos)
+router.post('/guia/lote/criarLote', fncGeral.IsAuthenticated, (req,res) => {
+    fncGuialote.criarLote(req, res);
+})
+
+// Buscar lote para edição
+router.get('/guia/lote/buscar/:id', fncGeral.IsAuthenticated, (req, res) => {
+    fncGuialote.buscarGuialotePorId(req, res);
+})
+
+// Editar lote
+router.post('/guia/lote/editar', fncGeral.IsAuthenticated, (req, res) => {
+    fncGuialote.editarGuialote(req, res);
+})
+
+// Gestão de Lotes - Tela inicial
+router.get('/guia/lote/gestao', fncGeral.IsAuthenticated, (req, res) => {
+    fncGuialote.gestaoGuialote(req, res);
+})
+
+// Gestão de Lotes - Filtrar
+router.post('/guia/lote/gestaofil', fncGeral.IsAuthenticated, (req, res) => {
+    fncGuialote.filtragestaoGuialote(req, res);
+})
 //------------------------------------------------------------------------------------------------
 
 //Menu Minha Agenda Area Tecnicos
@@ -2587,14 +2722,22 @@ router.post('/area/plano/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//at
 router.get('/area/plano/imp/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona plano de tratamento
     fncTrat.tratImp(req,res);
 })
-//Deleta plano Selecionado
-router.get('/area/plano/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta plano de tratamento
-    fncTrat.deletaTrat(req, res);
-})
-//Envia para Lixeira o plano Selecionado
-router.get('/area/plano/lixo/:id', fncGeral.IsAuthenticated, (req,res) =>{//envia o plano de tratamento para lixeira
+
+// ✅ ROTA DE EXCLUSÃO LÓGICA - MÉTODO GET (como você prefere)
+router.get('/area/plano/lixo/:id', fncGeral.IsAuthenticated, (req,res) =>{
     fncTrat.lixoTrat(req, res);
 })
+
+// === NOVA ROTA: LISTAR LIXEIRA (apenas perfis autorizados) ===
+router.get('/area/plano/lixeira', fncGeral.IsAuthenticated, (req,res) =>{
+    fncTrat.listaLixeira(req, res);
+})
+
+// === NOVA ROTA: RESTAURAR DA LIXEIRA ===
+router.get('/area/plano/restaurar/:id', fncGeral.IsAuthenticated, (req,res) =>{
+    fncTrat.restaurarTrat(req, res);
+})
+
 
 //Menu Extras ** Area Atendimentos Extras   
 //Carrega Cadastro de Extra 
@@ -3899,6 +4042,40 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
 
     router.post('/ferramentas/agendaEvento/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Empresa
         fncAgendaEvento.atualizaAgendaEvento(req, res);
+    })
+//Menu Ferramentas
+    //AnotaAdm - Anotações Administraticas para Quadros de Adriana e Equipe
+    router.get('/ferramentas/AnotaAdm/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas empresas
+        fncAnotaAdm.listaAnotaAdm(req, res);
+    })
+    
+    router.get('/ferramentas/AnotaAdm/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de empresa.
+        fncAnotaAdm.carregaAnotaAdm(req, res);
+    })
+
+    router.post('/ferramentas/AnotaAdm/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona empresa
+        fncAnotaAdm.cadastraAnotaAdm(req, res);
+
+    })
+    
+    router.get('/ferramentas/AnotaAdm/del/:id', fncGeral.IsAuthenticated, async (req, res) => {
+        try {
+          const anotaAdmId = req.params.id;
+          await fncAnotaAdm.deletaAnotaAdm(anotaAdmId, req, res);
+          // Redireciona para a listagem após a deleção
+          res.redirect('/menu/ferramentas/AnotaAdm/lis'); // URL da listagem
+        } catch (err) {
+          console.error(err);
+          res.render('admin/erro');
+        }
+      })
+    
+    router.get('/ferramentas/AnotaAdm/edi/:id', fncGeral.IsAuthenticated, (req, res) =>{//direciona a edição de empresa
+        fncAnotaAdm.carregaAnotaAdmEdi(req, res);
+    })
+
+    router.post('/ferramentas/agendaEvento/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Empresa
+        fncAnotaAdm.atualizaAnotaAdm(req, res);
     })
 //Menu Ferramentas
     //Especialidade do Plano de tratamento

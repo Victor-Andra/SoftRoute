@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Agenda Pessoal do Dia</title>
+	<style>
+		/* Tooltip personalizado - padrão aceAdmin */
+/* Tooltip personalizado - padrão aceAdmin (CORRIGIDO) */
+.custom-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+    /* Garante que o container receba o hover */
+    z-index: 1;
+}
+
+/* O link do lápis NÃO deve bloquear o hover do tooltip */
+.custom-tooltip a {
+    display: inline-block;
+    position: relative;
+    z-index: 2; /* link acima do tooltip para clique funcionar */
+    pointer-events: auto; /* permite clique no link */
+}
+
+/* Tooltip: sempre acima de tudo */
+.tooltip-text {
+    visibility: hidden;
+    width: max-content;
+    max-width: 280px;
+    background-color: #f3dfdf;
+    color: #c00;
+    font-size: 9px;
+    text-align: left;
+    border-radius: 4px;
+    padding: 8px 10px;
+    position: absolute;
+    z-index: 10000 !important; /* FORÇA acima de tudo */
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.95;
+    white-space: normal;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border: 1px solid #e0b0b0;
+    transition: opacity 0.2s, visibility 0.2s;
+    line-height: 1.4;
+    pointer-events: none !important; /* tooltip NÃO interfere no hover/clique */
+}
+
+.tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #f3dfdf transparent transparent transparent;
+    z-index: 10001; /* seta acima do tooltip */
+}
+
+/* Hover: força visibilidade mesmo sobre links */
+.custom-tooltip:hover .tooltip-text {
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: none !important;
+    z-index: 10000 !important;
+}
+
+/* Garante que o hover funcione mesmo se o mouse estiver sobre o link */
+.custom-tooltip a:hover + .tooltip-text,
+.custom-tooltip:hover .tooltip-text {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+    /* Badge minimalista - mantém cores originais, só adiciona visual */
+    .badge-agenda {
+        display: inline-block;
+        padding: 2px 6px;
+        font-size: 9px;
+        font-weight: 500;
+        border-radius: 3px;
+        white-space: nowrap;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        transition: all 0.2s ease;
+        line-height: 1.3;
+    }
+    .badge-agenda:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+</style>
+		<script type="text/javascript">
+			function atualizaData(){
+				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataIso);
+				document.getElementById("agendaData").value = dataFmt;
+			}
+		function carregaBody(){
+			let dias = ["seg","ter","qua","qui","sex"];
+			try{
+				dias.forEach((dia)=>{
+					console.log("dia:"+dia)
+					document.getElementsByName(dia).forEach((e)=>{
+						let id = "hora"+e.id;
+						let valor = e.value;
+						let tempId = e.id+"_"+e.value;
+						
+						if(valor != "766f69643132333435366964"){
+							let val;
+							
+							if(e.id.indexOf("BeneId_") != -1){
+								// 👉 CLONE DO BENEFICIÁRIO
+								val = document.getElementById(valor).cloneNode(true);
+								// ✅ ID ÚNICO: evita conflito quando há múltiplos agendamentos
+								val.id = val.id + "_clone_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5);
+								
+								document.getElementsByName(tempId).forEach((ti)=>{
+									pintaAgenda(val, ti.value);
+								})
+								console.log("val Bene:", val);
+								document.getElementById(id).append(val);
+								
+							} else if(e.id.indexOf("SalaId_") != -1){
+								// 👉 CLONE DA SALA
+								val = document.getElementById(valor).cloneNode(true);
+								// ✅ ID ÚNICO: evita conflito quando há múltiplos agendamentos
+								val.id = val.id + "_clone_" + Date.now() + "_" + Math.random().toString(36).substr(2, 5);
+								
+								document.getElementsByName(tempId).forEach((ti)=>{
+									console.log("TI Sala:", ti)
+									pintaAgenda(val, ti.value);
+								})
+								console.log("val Sala:", val)
+								document.getElementById(id).append(val);
+							}
+						}
+					})
+
+					if (document.getElementById("isSemanal").value == "false"){
+						document.getElementsByName(dia).forEach((e)=>{
+							if(e.id.indexOf("AcaoId_") != -1){
+								let id = "hora"+e.id;
+								let el = document.getElementById(e.id);
+								document.getElementById(id).append(el);
+							}
+						})
+					}
+				})
+			} catch(err){
+				console.log("❌ Erro em carregaBody:", err);
+			}
+			
+			// 👉 Filtrar tabela para mostrar apenas o dia de hoje (modo diário)
+			if (document.getElementById("isSemanal").value == "false"){
+				let diaDeHoje = document.getElementById("hoje").value;
+				let tabela = document.getElementsByName("tabela");
+
+				// 👉 Loop único (5x era redundante)
+				for(let r=0; r<5; r++){
+					tabela.forEach((cell)=>{
+						let id = cell.id;
+						if(id.indexOf(diaDeHoje) != -1){
+							cell.style.display="";
+						} else {
+							let el = document.getElementById(id);
+							if(el) el.remove();
+						}
+					})
+				}
+			}
+		}
+		function pintaAgenda(val, motivo){
+			console.log("motivo:"+motivo);
+			
+			// 🎨 CORES ORIGINAIS - NÃO ALTERAR (terapeutas já acostumados)
+			const coresOriginais = {
+				"Falta": "yellow",
+				"Falta Justificada": "orange",
+				"Falta Absoluta": "orange", 
+				"Substituição": "cyan",
+				"Roberta Disponpivel": "salmon",
+				"Supervisor": "lightpink",
+				"Nenhuma Observação": "lightgreen"
+			};
+			
+			// Bordas sutis para dar profundidade (mantendo a cor base)
+			const bordas = {
+				"yellow": "#e0a800",
+				"orange": "#e96b02", 
+				"cyan": "#00a3a3",
+				"salmon": "#e86b5d",
+				"lightpink": "#ffa3b2",
+				"lightgreen": "#218838"
+			};
+			
+			let corFundo = coresOriginais[motivo] || "transparent";
+			let corBorda = bordas[corFundo] || corFundo;
+			
+			// 👉 Pega o CONTEÚDO REAL que já está no elemento (nome do bene/sala)
+			let conteudoOriginal = val.textContent || val.innerText || "";
+			
+			// 👉 Limpa e recria com badge envolvendo o conteúdo real
+			val.innerHTML = '';
+			val.style.backgroundColor = ''; // Remove formatação antiga
+			
+			let badge = document.createElement('span');
+			badge.className = 'badge-agenda';
+			
+			// Aplica estilo com a COR ORIGINAL + visual de badge
+			badge.style.cssText = `
+				background-color: ${corFundo} !important;
+				border: 1px solid ${corBorda};
+				color: #212529;
+				display: inline-block;
+				padding: 2px 6px;
+				font-size: 9px;
+				font-weight: 500;
+				border-radius: 3px;
+				white-space: nowrap;
+				box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+				line-height: 1.3;
+			`;
+			
+			// 👉 IMPORTANTE: Mantém o texto original do banco
+			badge.textContent = conteudoOriginal.trim() || "—";
+			
+			val.appendChild(badge);
+			
+			console.log("Badge aplicado:", motivo, "cor:", corFundo, "conteúdo:", conteudoOriginal);
+		}
+			function formataData(){
+				let fulldate=(document.getElementById('dataFil').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataFinal').value = fulldate;
+				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+			}
+		</script>
+	</head>
+	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+
+				<div class="main-content-inner">
+
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Agenda Pessoal do Dia</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					{{#if error}}
+						<div class="alert alert-danger">{{error}}</div>
+					{{else}}
+					{{/if}}
+					<div class="hidden" id="divCarrega" name="divCarrega">
+						<input id="isSemanal" value="{{isSemanal}}" />
+						<input id="766f69643132333435366964" value="&nbsp;" />
+						{{#each agendas}}
+    {{#compareThis agenda_terapiaid "766f69643132333435366964"}}
+    {{else}}
+        <!-- Inputs de Bene/Sala -->
+        <input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_beneid}}" />
+        <input id="{{agenda_data_semana}}SalaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
+        
+        {{#isTrue agenda_temp}}
+            <!-- Inputs para pintaAgenda -->
+            <input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" 
+                   value="{{#if visual.temCadeia}}{{cadeia.ultimoCategoria}}{{else}}{{agenda_categoria}}{{/if}}">
+            <input name="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" 
+                   value="{{#if visual.temCadeia}}{{cadeia.ultimoCategoria}}{{else}}{{agenda_categoria}}{{/if}}">
+            
+            <!-- 👉 AÇÃO PARA FILHO: Tooltip como IRMÃO do ícone (não filho) -->
+            <div id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}" class="custom-tooltip">
+                <!-- Ícone -->
+                {{#ifEqual ui.icone "ban"}}
+                    <i class="red ace-icon fa fa-ban bigger-130"></i>
+                {{else}}
+                    {{#if ui.temLink}}
+                        <a class="blue" href="/menu/agenda/evolucaoTemp/{{_id}}" style="position:relative;z-index:2;">
+                            <i class="ace-icon fa fa-pencil bigger-130"></i>
+                        </a>
+                    {{else}}
+                        <i class="ace-icon fa fa-pencil bigger-130"></i>
+                    {{/if}}
+                {{/ifEqual}}
+                
+                <!-- Tooltip: IRMÃO do ícone, com pointer-events: none -->
+                <span class="tooltip-text">
+                    <strong style="color:#c00">{{ui.tooltipTitulo}}</strong><br>
+                    {{ui.tooltipTexto}}
+                </span>
+            </div>
+            
+        {{else}}
+            <!-- Inputs para pintaAgenda -->
+            <input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" 
+                   value="{{#if visual.temCadeia}}{{cadeia.ultimoCategoria}}{{else}}{{agenda_categoria}}{{/if}}">
+            <input name="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" 
+                   value="{{#if visual.temCadeia}}{{cadeia.ultimoCategoria}}{{else}}{{agenda_categoria}}{{/if}}">
+            
+            <!-- 👉 AÇÃO PARA PAI: Mesma estrutura -->
+            <div id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}" class="custom-tooltip">
+                <!-- Ícone -->
+                {{#ifEqual ui.icone "ban"}}
+                    <i class="red ace-icon fa fa-ban bigger-130"></i>
+                {{else}}
+                    {{#if ui.temLink}}
+                        <a class="blue" href="/menu/agenda/evolucao/{{_id}}" style="position:relative;z-index:2;">
+                            <i class="ace-icon fa fa-pencil bigger-130"></i>
+                        </a>
+                    {{else}}
+                        <i class="ace-icon fa fa-pencil bigger-130"></i>
+                    {{/if}}
+                {{/ifEqual}}
+                
+                <!-- Tooltip -->
+                <span class="tooltip-text">
+                    <strong style="color:#c00">{{ui.tooltipTitulo}}</strong><br>
+                    {{ui.tooltipTexto}}
+                </span>
+            </div>
+        {{/isTrue}}
+    {{/compareThis}}
+{{/each}}
+						{{#each benes}}
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{bene_apelido}}<br/></label>
+						{{/each}}
+						{{#each salas}}
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{sala_nome}}<br/></label>
+						{{/each}}
+					</div>
+					<form class="form-horizontal" role="form" action="/menu/agenda/filPessoalSemanal" method="POST">
+						<div class="breadcrumbs" id="pesquisaAge" >
+							<div style="text-align: center;">
+								<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
+								<label style="margin-left: 25px;">Data:</label>
+								<!-- No form de pesquisa, substitua o input dataFil por: -->
+								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
+								<input class="hidden" id="dataFinal" name="dataFinal" />
+								<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+									<i class="ace-icon fa fa-search-plus "></i>
+								</button>
+							</div>
+						</div>
+					</form>
+					<div class="tab-content"><!-- .tab-contente -->
+						<div class="row">
+							<div class="col-xs-12 col-sm-12">
+								<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
+									<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
+										<thead>
+											<tr role="row">
+												<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
+													<div id="divAlertas">
+														<div class="col-xs-12 col-sm-12" style="padding-top: 2px;">
+															<div class="alert alert-danger">
+																<strong>
+																Agenda
+																</strong>
+																<br>
+																{{#each agendas}}
+																	{{#isNull agenda_obs}}
+																	{{else}}
+																		<label>{{agenda_data_semana}} : {{agenda_hora}} / 
+																			{{#each ../salas}}
+																				{{#ifEqual ../agenda_salaid _id}}
+																					{{sala_nome}}
+																				{{/ifEqual}}
+																			{{/each}}
+																			 / {{#each ../benes}}
+																			 	{{#ifEqual ../agenda_beneid _id}}
+																			 		{{bene_apelido}}
+																			 	{{/ifEqual}}
+																			 {{/each}} - {{agenda_obs}}</label>
+																		<br>
+																	{{/isNull}}
+																{{/each}}
+																
+																<br>
+															</div>
+														</div>
+													</div>
+												</th>
+											</tr>
+											<tr role="row">
+												<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
+													<div id="divAlertas">
+														<div class="col-xs-12 col-sm-12" style="padding-top: 2px;">
+															<div class="alert alert-warning">
+																<strong>
+																Terapeuta
+																</strong>
+																<br>
+																{{usu.usuario_obs}}
+																<br>
+															</div>
+														</div>
+													</div>
+												</th>
+											</tr>
+											<tr role="row">
+												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
+												<th id="thsegr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{segunda}}</th>
+												<th id="thterr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{terca}}</th>
+												<th id="thquar" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quarta}}</th>
+												<th id="thquir" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quinta}}</th>
+												<th id="thsexr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{sexta}}</th>
+											</tr>
+											<tr role="row">	
+												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
+												<th id="thseg1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thseg2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thseg3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th id="thter1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thter2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thter3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th id="thqua1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thqua2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thqua3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th id="thqui1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thqui2" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thqui3" name="tabela" style="width: 25px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+												<th id="thsex1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thsex2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thsex3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
+											</tr>
+										</thead>
+										{{#each horaages}}
+										<tbody>
+											<tr role="row" class="odd">
+												<td style="width: 50px;">{{horaage_hora}}</td>
+												<td name="tabela" id="horasegSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasegBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasegAcaoId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaterSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaterBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaterAcaoId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquaSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquaBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquaAcaoId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquiSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquiBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horaquiAcaoId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasexSalaId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasexBeneId_{{horaage_hora}}"></td>
+												<td name="tabela" id="horasexAcaoId_{{horaage_hora}}"></td>
+											</tr>
+										</tbody>
+										{{/each}}
+									</table>
+								</div>
+							</div>
+							<div id="ocultaIds" class="hidden">
+								<input id="hoje" name="hoje" value="{{hoje}}" />
+							</div>
+							<div class="col-xs-16 col-sm-3">	
+								<div class="alert alert">
+									<br>
+									<br>
+									<br>
+								</div>
+							</div>
+							<!--
+							<div class="col-xs-16 col-sm-3">	
+								<div class="alert alert-info">
+									<strong>
+									Técnico
+									</strong>
+									<br>
+									
+									<br>
+								</div>
+							</div>
+							-->
+						</div>
+					</div>
+				</div>
+
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+		<!-- basic scripts -->
+	</body>
+</html>

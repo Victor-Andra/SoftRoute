@@ -613,26 +613,32 @@ body {
                     <!-- Filtro -->
                     <div class="filtro-container">
                         <form class="form-horizontal" role="form" action="/menu/agenda/filSBFixo" method="POST">
-                            <div class="filtro-row">
-                                <div class="filtro-item">
-                                    <label><i class="ace-icon fa fa-user"></i> Beneficiário:</label>
-                                    <select id="agendaBeneid" name="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." style="width: 320px; height: 38px; padding: 5px;">
-                                        <option value="766f69643132333435366964">-</option>
-                                        {{#each benes}}
-                                        <option value="{{_id}}">{{bene_apelido}}</option>
-                                        {{/each}}
-                                    </select>
-                                </div>
+                            <div class="col-xs-12 col-sm-6">
+								<div class="row">
+                                    <div class="filtro-row">
+                                        <div class="filtro-item">
+                                            <label><i class="ace-icon fa fa-user"></i> Beneficiário:</label>
+                                            <div class="col-xs-12 col-sm-4">
+                                                <select id="agendaBeneid" name="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." style="width: 320px; height: 38px; padding: 5px;">
+                                                    <option value="766f69643132333435366964">-</option>
+                                                    {{#each benes}}
+                                                    <option value="{{_id}}">{{bene_apelido}}</option>
+                                                    {{/each}}
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                <div class="filtro-item">
-                                    <label><i class="ace-icon fa fa-calendar"></i> Data:</label>
-                                    <input type="date" id="dataFil" name="dataFil" class="form-control" style="width: 180px; height: 38px; padding: 5px;" onchange="javascript:formataData();">
-                                    <input type="hidden" id="dataFinal" name="dataFinal" />
-                                </div>
+                                        <div class="filtro-item">
+                                            <label><i class="ace-icon fa fa-calendar"></i> Data:</label>
+                                            <input type="date" id="dataFil" name="dataFil" class="form-control" style="width: 180px; height: 38px; padding: 5px;" onchange="javascript:formataData();">
+                                            <input type="hidden" id="dataFinal" name="dataFinal" />
+                                        </div>
 
-                                <button type="submit" class="btn btn-pesquisar">
-                                    <i class="ace-icon fa fa-search"></i> Pesquisar
-                                </button>
+                                        <button type="submit" class="btn btn-pesquisar">
+                                            <i class="ace-icon fa fa-search"></i> Pesquisar
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>

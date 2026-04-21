@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>SisRoute - Home</title>
+		
+		<!-- 👉 CSS: Redução proporcional de fonte (-1 ponto) -->
+		<style>
+			/* ============================================
+			CORES DO SPAN - BENEFICIÁRIO (Widget Pontage)
+			============================================ */
+
+			/* Padrão (verde aceAdmin) */
+			.bene-default {
+				color: #397097 !important;
+				font-weight: normal;
+			}
+
+			/* Laranja claro - Falta / Falta Justificada */
+			.bene-orange-light {
+				color: #ff9800 !important;
+				font-weight: 500;
+			}
+
+			/* Laranja forte - Falta Absoluta / Feriado */
+			.bene-orange {
+				color: #e65100 !important;
+				font-weight: bold;
+				text-shadow: 0 0 1px rgba(0,0,0,0.1);
+			}
+
+			/* Ciano/Azul - Substituição */
+			.bene-cyan {
+				color: #00bcd4 !important;
+				font-weight: 600;
+			}
+
+			/* Badge OK (verde) */
+			.badge-ok {
+				background-color: #8bc34a !important;
+				color: white !important;
+				padding: 2px 8px !important;
+				border-radius: 12px !important;
+				font-size: 10px !important;
+				font-weight: bold !important;
+			}
+
+			/* Tooltip customizado */
+			.tooltip-custom {
+				position: relative;
+				display: inline-block;
+			}
+			.tooltip-custom:hover::after {
+				content: attr(data-tooltip);
+				position: absolute;
+				bottom: 100%;
+				left: 50%;
+				transform: translateX(-50%);
+				background: #333;
+				color: #fff;
+				padding: 4px 8px;
+				border-radius: 4px;
+				font-size: 10px;
+				white-space: pre-line;
+				z-index: 1000;
+				width: max-content;
+				max-width: 200px;
+			}
+		/* ============================================
+		REDUÇÃO DE FONTE PROPORCIONAL (-1 ponto)
+		COM EXCEÇÃO PARA O MENU/BREADCRUMB
+		============================================ */
+	
+		/* Base: reduz fonte principal de 13px → 12px (aceAdmin padrão) */
+		body, 
+		.main-content, 
+		.widget-body, 
+		.page-content,
+		.table,
+		.form-control,
+		.btn {
+			font-size: 12px !important;
+		}
+		
+		/* Títulos: reduzem proporcionalmente */
+		h1, .h1 { font-size: 22px !important; }
+		h2, .h2 { font-size: 19px !important; }
+		h3, .h3 { font-size: 17px !important; }
+		h4, .h4, .widget-title { 
+			font-size: 14px !important;
+			line-height: 1.3 !important;
+		}
+		h5, .h5 { font-size: 12px !important; }
+		h6, .h6 { font-size: 11px !important; }
+		
+		/* Tabelas: cabeçalhos e células */
+		.table th, 
+		.table td,
+		.dataTables_wrapper .dataTables_info,
+		.dataTables_wrapper .dataTables_paginate {
+			font-size: 11px !important;
+		}
+		
+		/* Labels e textos auxiliares */
+		label, 
+		.alert, 
+		.badge, 
+		.tag,
+		.pagination > li > a {
+			font-size: 12px !important;
+		}
+		
+		/* Badges e tags: mantêm proporção */
+		.badge {
+			padding: 3px 6px !important;
+			font-size: 10px !important;
+		}
+		
+		/* Alertas: ajustam padding e fonte */
+		.alert {
+			padding: 6px 10px !important;
+			font-size: 11px !important;
+		}
+		.alert .close {
+			font-size: 14px !important;
+			top: -2px !important;
+		}
+		
+		/* ============================================
+		ÍCONES: Redução geral, MAS menu original
+		============================================ */
+		
+		/* Ícones GERAIS: 5% menor (para widgets, tabelas, etc) */
+		.widget-body .fa, 
+		.widget-body .ace-icon,
+		.table .fa,
+		.table .ace-icon,
+		.alert .fa,
+		.alert .ace-icon,
+		.badge .fa,
+		.badge .ace-icon,
+		.btn .fa,
+		.btn .ace-icon {
+			font-size: 0.95em !important;
+		}
+		
+		
+		
+		/* Classes de tamanho de ícone: ajustam proporcionalmente */
+		.bigger-110 { font-size: 1.05em !important; }
+		.bigger-120 { font-size: 1.15em !important; }
+		.bigger-130 { font-size: 1.25em !important; }
+		
+		/* 👉 Ícones do menu com classes bigger: mantêm original */
+		.breadcrumb .bigger-110,
+		.breadcrumb .bigger-120,
+		.breadcrumb .bigger-130,
+		.navbar .bigger-110,
+		.navbar .bigger-120,
+		.navbar .bigger-130 {
+			font-size: inherit !important;  /* 👈 Herda do aceAdmin original */
+		}
+		
+		/* Botões: ajustam padding e fonte */
+		.btn {
+			padding: 4px 8px !important;
+			font-size: 11px !important;
+		}
+		.btn-xs {
+			padding: 2px 6px !important;
+			font-size: 10px !important;
+		}
+		
+		/* Inputs e selects */
+		input[type="text"],
+		input[type="date"],
+		select,
+		.chosen-container .chosen-single {
+			font-size: 11px !important;
+			height: 28px !important;
+			padding: 3px 8px !important;
+		}
+		
+		/* DataTables: ajustes específicos */
+		.dataTables_wrapper .dataTables_length,
+		.dataTables_wrapper .dataTables_filter {
+			font-size: 11px !important;
+		}
+		.dataTables_wrapper .dataTables_filter input {
+			height: 26px !important;
+			font-size: 11px !important;
+		}
+		
+		/* Widget boxes: ajustam header e body */
+		.widget-header {
+			min-height: 38px !important;
+			padding: 4px 8px !important;
+		}
+		.widget-header .widget-title {
+			line-height: 30px !important;
+		}
+		.widget-toolbar {
+			line-height: 30px !important;
+		}
+		
+		/* Breadcrumbs: mantém fonte legível mas ícones originais */
+		.breadcrumb {
+			padding: 6px 12px !important;
+			font-size: 12px !important;  /* 👈 Fonte legível */
+		}
+		.breadcrumb > li {
+			font-size: 12px !important;
+		}
+		
+		/* Ajustes para telas menores */
+		@media (max-width: 768px) {
+			body, .main-content {
+				font-size: 11px !important;
+			}
+			.widget-title {
+				font-size: 13px !important;
+			}
+			/* Mantém ícones do menu originais mesmo em mobile */
+			.breadcrumb .fa,
+			.breadcrumb .ace-icon {
+				font-size: 1em !important;
+			}
+		}
+		</style>
+		
+		<script>
+			function OcultaMsg(){
+				document.getElementById("alertMsgFlash").hidden = true;
+			}
+
+			function obterMesAtual() {
+				const dataAtual = new Date();
+				const mesAtual = dataAtual.getMonth() + 1;
+				return mesAtual;
+			}
+
+			function evolucaoSemanalEmDia(id){
+				window.location.href=("/menu/agenda/evolucaoTemp/"+id);
+			}
+		</script>
+	</head>
+	
+	<body class="no-skin" background-image="/assets/images/papelparede/temaLogin.png" onload="javascript:controlaNave();obterMesAtual();">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					{{#compareString flash.sucesso "true"}}
+						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+							<p>
+								<strong>
+									<i class="ace-icon fa fa-check"></i>
+									{{flash.texto}}
+								</strong>
+								<button type="button" class="close" onclick="javascript:OcultaMsg()">
+									<i class="ace-icon fa fa-times"></i>
+								</button>
+							</p>
+						</div>
+					{{else}}
+						{{#compareString flash.sucesso "false"}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+						{{else}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-warning">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-check"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+						{{/compareString}}
+					{{/compareString}}
+					
+					<!-- Widget 1: Evoluções Ausentes -->
+					<div class="col-12 col-sm-12 col-md-4" name="Faltaevo" id="Faltaevo">
+						<div class="widget-box">
+							<div class="widget-header">
+								<h4 class="widget-title">
+									<i class="red ace-icon fa fa-bookmark bigger-110"></i>
+									Evoluções Ausentes do dia
+								</h4>
+								<span class="widget-toolbar">
+									<a href="#" data-action="collapse">
+										<i class="ace-icon fa fa-chevron-up"></i>
+									</a>
+								</span>
+							</div>
+							<div class="widget-body">
+								<div class="widget-main">
+									<div class="row">
+										<div class="col-xs-12">
+											<table id="dynamic-table1" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid">
+												<thead>
+													<tr role="row">
+														<th>Hora</th>
+														<th>Sala</th>
+														<th>categoria</th>
+														<th>Terapia</th>
+														<th>Beneficiário</th>
+														<th>Evoluir</th>
+													</tr>
+												</thead>
+												<tbody>
+													{{#each agendas}}
+														<tr role="row" class="odd">
+															<td>{{agenda_hora}}</td>
+															
+															<td>
+																{{#each ../salas}}
+																	{{#ifEqual this._id ../agenda_salaid}}
+																		{{sala_nome}}
+																	{{/ifEqual}}
+																{{/each}}
+															</td>
+															
+															<!-- 👈 NOVO: Categoria -->
+															<td>{{agenda_categoria}}</td>
+															
+															<td>
+																{{#each ../terapias}}
+																	{{#ifEqual this._id ../agenda_terapiaid}}
+																		{{terapia_nomecid}}
+																	{{/ifEqual}}
+																{{/each}}
+															</td>
+															
+															<td>
+																{{#each ../benes}}
+																	{{#ifEqual this._id ../agenda_beneid}}
+																		{{bene_nome}}
+																	{{/ifEqual}}
+																{{/each}}
+															</td>
+															
+															<td>
+																{{#ifEqual agenda_selo false}}
+																	<div class="action-buttons">
+																		<a class="blue" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
+																			<i class="ace-icon fa fa-pencil bigger-130"></i>
+																		</a>
+																	</div>
+																{{else}}
+																	<span class="badge badge-success">Ok</span>
+																{{/ifEqual}}
+															</td>
+														</tr>
+													{{/each}}
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>		
+						</div>
+					</div>
+					
+					<!-- Widget 2: Pontuações na Agenda -->
+					<div class="col-12 col-sm-12 col-md-4" name="Pontage" id="Pontage">
+						<div class="widget-box">
+							<div class="widget-header">
+								<h4 class="widget-title">
+									<i class="purple ace-icon fa fa-bullseye bigger-110"></i>
+									Pontuações na Agenda
+								</h4>
+								<span class="widget-toolbar">
+									<a href="#" data-action="collapse">
+										<i class="ace-icon fa fa-chevron-up"></i>
+									</a>
+								</span>
+							</div>
+							<div class="widget-body">
+								<div class="widget-main">
+									<div class="row">
+										<div class="col-xs-12">
+											<div class="col-xs-12 col-sm-12" style="padding-top: 2px;">
+												<div class="alert alert-danger">
+													<strong>Agenda:</strong>
+													<div><hr></div>
+													{{#each agendas}}
+														{{#isNull agenda_obs}}
+														{{else}}
+															<label>{{agenda_data_semana}} : {{agenda_hora}} / {{#each ../salas}}{{#ifEqual ../agenda_salaid _id}}{{sala_nome}}{{/ifEqual}}{{/each}} / {{#each ../benes}}{{#ifEqual ../agenda_beneid _id}}{{bene_apelido}}{{/ifEqual}}{{/each}} - {{agenda_obs}}</label>
+															<br>
+														{{/isNull}}
+													{{/each}}
+													<br>
+												</div>
+												<div class="alert alert-warning">
+													<strong>Evoluções Ausentes:</strong>
+													<div><hr></div>
+													{{#each evolucaoFaltante}}
+													<div class="action-buttons">
+														<label>{{formatDate "" agenda_data}}, {{agenda_hora}}, {{sala_nome}}, {{terapia_nomecid}}, {{bene_apelido}}</label>
+														<a class="blue" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
+															<i class="ace-icon fa fa-pencil bigger-130"></i>
+														</a><br>
+													</div>
+													{{/each}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>		
+						</div>
+					</div>
+					
+					<!-- Widget 3: Aniversariantes -->
+					<div class="col-12 col-sm-12 col-md-4" name="percep" id="percep">
+						<div class="widget-box">
+							<div class="widget-header">
+								<h4 class="widget-title">
+									<i class="orange ace-icon fa fa-birthday-cake bigger-110"></i>
+									Aniversariantes da Semana
+								</h4>
+								<span class="widget-toolbar">
+									<a href="#" data-action="collapse">
+										<i class="ace-icon fa fa-chevron-up"></i>
+									</a>
+								</span>
+							</div>
+							<div class="widget-body">
+								<div class="widget-main">
+									<!-- Beneficiários -->
+									<div class="row">
+										<div class="col-xs-12 col-md-12 col-sm-12">
+											<p class="alert alert-info">
+												<b>Beneficiários</b>
+											</p>
+											{{#if aniversariantesDaSemanaBene.length}}
+												<table id="dynamic-table" class="table table-striped table-bordered table-hover" role="grid">
+													<thead>
+														<tr>
+															<th style="width: 5%;">Dia</th>
+															<th>Aniversariante</th>
+														</tr>
+													</thead>
+													<tbody>
+														{{#each aniversariantesDaSemanaBene}}
+															<tr>
+																<td>{{this.diaNascimento}}/{{this.mesNascimento}}</td>
+																<td>
+																	{{this.nome}}
+																	{{#if this.hoje}}
+																		<span class="badge badge-success">Hoje!</span>
+																	{{/if}}
+																</td>
+															</tr>
+														{{/each}}
+													</tbody>
+												</table>
+											{{else}}
+												<label>Não há aniversariantes hoje.</label>
+											{{/if}}
+										</div>
+									</div>	
+									
+									<!-- Colaboradores -->
+									<div class="row">
+										<div class="col-12 col-sm-12 col-md-12">
+											<p class="alert alert-warning">
+												<b>Colaboradores</b>
+											</p>
+											{{#if aniversariantesDaSemanaUsuario.length}}
+												<table id="dynamic-table" class="table table-striped table-bordered table-hover" role="grid">
+													<thead>
+														<tr>
+															<th style="width: 5%;">Dia</th>
+															<th>Aniversariante</th>
+														</tr>
+													</thead>
+													<tbody>
+														{{#each aniversariantesDaSemanaUsuario}}
+															<tr>
+																<td>{{this.diaNascimento}}/{{this.mesNascimento}}</td>
+																<td>
+																	{{this.nome}}
+																	{{#if this.hoje}}
+																		<span class="badge badge-success">Hoje!</span>
+																	{{/if}}
+																</td>
+															</tr>
+														{{/each}}
+													</tbody>
+												</table>
+											{{else}}
+												<label>Não há aniversariantes hoje.</label>
+											{{/if}}
+										</div>
+									</div>
+								</div>
+							</div>		
+						</div>
+					</div>				
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -4,7 +4,202 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta charset="utf-8">
   <title>Relatório Detalhado por Terapeuta e beneficiário</title>
-  
+			<style>
+			/* Estilos para tela */
+			@media screen {
+				.print-header {
+					display: none;
+				}
+			}
+
+			/* Estilos para impressão */
+			@media print {
+				.noprint {
+					display: none !important;
+				}
+
+				/* Cabeçalho fixo com paginação no topo */
+				.print-header {
+					position: fixed;
+					top: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 4px 0;
+					background: white;
+					z-index: 9999;
+					content: "Página " counter(page) " de " counter(pages);
+				}
+
+				/* Margem superior para não sobrepor conteúdo */
+				body {
+					margin-top: 12mm; /* suficiente para o cabeçalho */
+					margin-bottom: 10mm;
+				}
+
+				/* Configuração da página: permite retrato ou paisagem conforme escolha do usuário */
+				@page {
+					margin: 1cm;
+					/* NÃO defina `size` aqui — isso bloqueia a orientação! */
+					@top-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 11px;
+						color: black;
+					}
+					@bottom-center {
+						content: ""; /* remove qualquer rodapé automático */
+					}
+				}
+
+				/* Garante que elementos grandes não quebrem mal */
+				table {
+					page-break-inside: avoid;
+				}
+			}
+			/* ============================================
+				BARRA DE PESQUISA - CLASSE SEPARADA
+			============================================ */
+			.toolbar-pesquisa {
+				background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
+				color: white;
+				padding: 15px;
+				border-radius: 8px;
+				margin: 0 12px 20px 12px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+				border: 1px solid #1976d2;
+			}
+			.toolbar-pesquisa h5 {
+				margin: 0 0 12px 0;
+				font-size: 14px;
+				font-weight: 600;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.toolbar-pesquisa h5 i {
+				font-size: 18px;
+			}
+			.toolbar-pesquisa .form-inline {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px;
+				align-items: flex-end;
+			}
+			.toolbar-pesquisa .form-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px;
+				width: 100%;
+				align-items: flex-end;
+			}
+			.toolbar-pesquisa .form-group {
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				min-width: 140px;
+				flex: 1;
+				max-width: 220px;
+			}
+			.toolbar-pesquisa label {
+				font-size: 11px;
+				font-weight: 500;
+				margin-bottom: 4px;
+				color: #f8f9fa;
+				white-space: nowrap;
+			}
+			.toolbar-pesquisa input[type="date"],
+			.toolbar-pesquisa input[type="time"],
+			.toolbar-pesquisa select {
+				padding: 6px 10px;
+				border: 2px solid #e2e8f0;
+				border-radius: 4px;
+				font-size: 12px;
+				width: 100%;
+				box-sizing: border-box;
+				background: white;
+				color: #333;
+				transition: all 0.3s;
+				height: 30px;
+			}
+			.toolbar-pesquisa input[type="date"]:focus,
+			.toolbar-pesquisa input[type="time"]:focus,
+			.toolbar-pesquisa select:focus {
+				border-color: #fff;
+				box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+				outline: none;
+			}
+			.toolbar-pesquisa .btn-pesquisar {
+				background: #dc3545;
+				color: white;
+				border: none;
+				padding: 8px 24px;
+				border-radius: 4px;
+				font-weight: 600;
+				font-size: 13px;
+				cursor: pointer;
+				transition: all 0.3s;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+				margin-left: auto;
+			}
+			.toolbar-pesquisa .btn-pesquisar:hover {
+				background: #c82333;
+				transform: translateY(-2px);
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+			}
+			
+			/* Grupo compacto para horário (turno + início + fim) */
+			.grupo-horario {
+				display: flex;
+				gap: 6px;
+				align-items: flex-end;
+				flex-wrap: wrap;
+			}
+			.grupo-horario .form-group {
+				min-width: 70px;
+				max-width: 90px;
+				flex: none;
+			}
+			.grupo-horario label {
+				font-size: 10px;
+			}
+			.grupo-horario .info-sala {
+				font-size: 9px;
+				color: #e0e0e0;
+				margin-left: 4px;
+				white-space: nowrap;
+			}
+			.grupo-horario .info-sala i {
+				margin-right: 2px;
+			}
+
+			/* Chosen Select minimalista - compatível com aceAdmin */
+			.toolbar-pesquisa .chosen-container .chosen-single {
+				border: 2px solid #e2e8f0 !important;
+				border-radius: 4px !important;
+				box-shadow: none !important;
+				background: white !important;
+				height: 30px !important;
+				line-height: 28px !important;
+				font-size: 12px !important;
+			}
+			.toolbar-pesquisa .chosen-container .chosen-single:hover {
+				border-color: #fff !important;
+			}
+			.toolbar-pesquisa .chosen-container-active.chosen-with-drop .chosen-single {
+				border-color: #fff !important;
+				background: white !important;
+			}
+			.toolbar-pesquisa .chosen-container .chosen-drop {
+				border: 1px solid #ced4da !important;
+				border-top: none !important;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+			}
+		</style>
 	<style>
 		.detalhe-linha { background-color: #fafafa; display: none; }
 		.detalhe-conteudo { padding: 12px 24px; }
@@ -68,31 +263,51 @@
         </div>
 		<div class="page-content"><!-- .page-content -->
 			<form role="form" action="/menu/atendimento/tabdimTeraBeneAtendvalFiltro" method="POST" onsubmit="atualizaDataIni(); atualizaDataFin();">
-			<div class="row">
-			<div class="col-sm-12">
-				<br>
-				<label>Período de:</label>
-				<input style="height: 30px; width: 140px;" id="dataFilDe" name="dataFilDe" type="date" onchange="atualizaDataIni()">
-				<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}">
+				<div class="toolbar-pesquisa noprint">
+					<h5>
+						<i class="ace-icon fa fa-file-text-o"></i>
+						<span>Filtros do Relatório</span>
+					</h5>
 
-				<label>até:</label>
-				<input style="height: 30px; width: 140px;" id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
-				<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}">
+					<div class="form-inline">
+						<div class="form-row">
 
-				<label>Terapeuta:</label>
-				<select style="height: 30px; width: 300px;" name="relTerapeutaid" id="relTerapeutaid" class="chosen-select">
-					<option value="766f69643132333435366964">-</option>
-					{{#each terapeutas}}
-						<option value="{{_id}}">{{usuario_nome}}</option>
-					{{/each}}
-				</select>
-				<input class="hidden" id="relTeraIdFiltro" name="relTeraIdFiltro" value="{{filtro.terapeutaid}}">
+							<!-- Período de -->
+							<div class="form-group">
+								<label>Período de:</label>
+								<input id="dataFilDe" name="dataFilDe" type="date" onchange="atualizaDataIni()">
+								<input type="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}">
+							</div>
 
-				<button class="btn btn-info btn-sm" type="submit">
-					<i class="ace-icon fa fa-search bigger-110"></i> Pesquisar
-				</button>
+							<!-- Até -->
+							<div class="form-group">
+								<label>até:</label>
+								<input id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
+								<input type="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}">
+							</div>
+
+							<!-- Terapeuta -->
+							<div class="form-group">
+								<label>Terapeuta:</label>
+								<select name="relTerapeutaid" id="relTerapeutaid" class="chosen-select">
+									<option value="766f69643132333435366964">-</option>
+									{{#each terapeutas}}
+										<option value="{{_id}}">{{usuario_nome}}</option>
+									{{/each}}
+								</select>
+								<input type="hidden" id="relTeraIdFiltro" name="relTeraIdFiltro" value="{{filtro.terapeutaid}}">
+							</div>
+
+							<!-- Botão -->
+							<button class="btn-pesquisar" type="submit">
+								<i class="ace-icon fa fa-search"></i>
+								Pesquisar
+							</button>
+
+						</div>
+					</div>
+
 				</div>
-			</>
 			</form>
 
 			<div class="row">

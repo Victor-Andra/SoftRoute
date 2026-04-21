@@ -147,53 +147,66 @@ module.exports = {
         let db = req.cookies['preferredDb'];
         AtendModel = getModel(db, 'tb_atend', AtendSchema);
         //;
+        let atendimento = await AtendModel.findById(req.body.atendId);
+        if (!atendimento) {
+            console.log("Atendimento não encontrado");
+            return false;
+        }
 
-        let usuarioAtual = req.cookies['idUsu'];
-        let dataAtual = new Date();
-        let resultado;
-        //Pega data atual
-        
-        //Realiza Atualização
-        console.log("req.body.atendMergeTerapiaid:"+req.body.atendMergeTerapiaid);
-        await AtendModel.findByIdAndUpdate(req.body.atendId, 
-            {$set: {
-                atend_org : req.body.atendOrg,
-                atend_categoria : req.body.atendCategoria,
-                atend_beneid : req.body.atendBeneid,
-                atend_convid : req.body.atendConvid,
-                atend_usuid : req.body.atendUsuid,
-                atend_atenddata : req.body.atendAtenddata,
-                atend_atendhora : req.body.atendHora,
-                atend_terapeutaid : req.body.atendTerapeutaid,
-                atend_terapiaid : req.body.atendTerapiaid,
-                atend_salaid : req.body.atendSalaid,
-                atend_valorcre : req.body.atendValorcre,
-                atend_valordeb : req.body.atendValordeb,
-                atend_mergeterapeutaid : req.body.atendMergeTerapeutaid,
-                atend_mergeterapiaid : req.body.atendMergeTerapiaid,
-                atend_mergevalorcre : req.body.atendMergevalorcre,
-                atend_mergevalordeb : req.body.atendMergevalordeb,
-                atend_fixo : req.body.atendFixo,
-                atend_fixoterapeutaid : req.body.atendFixoTerapeutaid,
-                atend_fixoterapiaid : req.body.atendFixoTerapiaid,
-                atend_fixovalorcre : req.body.atendFixovalorcre,
-                atend_fixovalordeb : req.body.atendFixovalordeb,
-                atend_obs : req.body.atendObs,
-                atend_valorcreval : req.body.atendValorcreval,//Valor a Crédito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
-                atend_valordebval : req.body.atendValordebval,//Valor a Débito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
-                atend_usuidedi : usuarioAtual, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
-                atend_dataedi : dataAtual.toISOString()
-                }}
-        ).then((res) =>{
-            console.log("Salvo")
-            resultado = true;
-        }).catch((err) =>{
-            console.log("erro mongo:")
-            console.log(err)
-            resultado = err;
-            //res.redirect('admin/branco')
-        })
-        return resultado;
+        let doisMesesAtras = new Date();
+        doisMesesAtras.setMonth(doisMesesAtras.getMonth() - 2);
+        let atendData = new Date(atendimento.atend_atenddata);
+        let bloqueio = atendData < doisMesesAtras;
+        bloqueio = false;
+        if (bloqueio){
+            console.log("Bloqueada a edição devido ao fechamento!");
+            return false;
+        } else {
+            let usuarioAtual = req.cookies['idUsu'];
+            let dataAtual = new Date();
+            let resultado;
+            //Pega data atual
+            //Realiza Atualização
+            await AtendModel.findByIdAndUpdate(req.body.atendId, 
+                {$set: {
+                    atend_org : req.body.atendOrg,
+                    atend_categoria : req.body.atendCategoria,
+                    atend_beneid : req.body.atendBeneid,
+                    atend_convid : req.body.atendConvid,
+                    atend_usuid : req.body.atendUsuid,
+                    atend_atenddata : req.body.atendAtenddata,
+                    atend_atendhora : req.body.atendHora,
+                    atend_terapeutaid : req.body.atendTerapeutaid,
+                    atend_terapiaid : req.body.atendTerapiaid,
+                    atend_salaid : req.body.atendSalaid,
+                    atend_valorcre : req.body.atendValorcre,
+                    atend_valordeb : req.body.atendValordeb,
+                    atend_mergeterapeutaid : req.body.atendMergeTerapeutaid,
+                    atend_mergeterapiaid : req.body.atendMergeTerapiaid,
+                    atend_mergevalorcre : req.body.atendMergevalorcre,
+                    atend_mergevalordeb : req.body.atendMergevalordeb,
+                    atend_fixo : req.body.atendFixo,
+                    atend_fixoterapeutaid : req.body.atendFixoTerapeutaid,
+                    atend_fixoterapiaid : req.body.atendFixoTerapiaid,
+                    atend_fixovalorcre : req.body.atendFixovalorcre,
+                    atend_fixovalordeb : req.body.atendFixovalordeb,
+                    atend_obs : req.body.atendObs,
+                    atend_valorcreval : req.body.atendValorcreval,//Valor a Crédito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
+                    atend_valordebval : req.body.atendValordebval,//Valor a Débito, Fechado ou Validado baseado na Regra Fechamento atual, Wagner Cintra, 26/10/2025
+                    atend_usuidedi : usuarioAtual, //novo campo para rastrear alterações de quem fez a edição 25/04/2025
+                    atend_dataedi : dataAtual.toISOString()
+                    }}
+            ).then((res) =>{
+                console.log("Salvo")
+                resultado = true;
+            }).catch((err) =>{
+                console.log("erro mongo:")
+                console.log(err)
+                resultado = err;
+                //res.redirect('admin/branco')
+            })
+            return resultado;
+        }
     },
     atendAdicionar: async (req,res) => {
 

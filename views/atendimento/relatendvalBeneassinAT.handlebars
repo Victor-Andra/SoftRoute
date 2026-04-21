@@ -1,8 +1,156 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
+<head>
 		<title>Relatório Analítico de Atendimentos por Beneficiário</title>
-		<style>
+		
+ <!-- 🔹 ESTILOS DA TOOLBAR + IMPRESSÃO -->
+    <style>
+      /* ============================================
+         BARRA DE PESQUISA - CLASSE SEPARADA
+         ============================================ */
+      .toolbar-pesquisa {
+        background: linear-gradient(135deg, #21cdf3 0%, #1976d2 100%);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 0 12px 20px 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid #1976d2;
+      }
+      .toolbar-pesquisa h5 {
+        margin: 0 0 12px 0;
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .toolbar-pesquisa h5 i {
+        font-size: 18px;
+      }
+      .toolbar-pesquisa .form-inline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: flex-end;
+      }
+      .toolbar-pesquisa .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        width: 100%;
+        align-items: flex-end;
+      }
+      .toolbar-pesquisa .form-group {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        min-width: 140px;
+        flex: 1;
+        max-width: 220px;
+      }
+      .toolbar-pesquisa label {
+        font-size: 11px;
+        font-weight: 500;
+        margin-bottom: 4px;
+        color: #f8f9fa;
+        white-space: nowrap;
+      }
+      .toolbar-pesquisa input[type="date"],
+      .toolbar-pesquisa input[type="time"],
+      .toolbar-pesquisa select {
+        padding: 6px 10px;
+        border: 2px solid #e2e8f0;
+        border-radius: 4px;
+        font-size: 12px;
+        width: 100%;
+        box-sizing: border-box;
+        background: white;
+        color: #333;
+        transition: all 0.3s;
+        height: 30px;
+      }
+      .toolbar-pesquisa input[type="date"]:focus,
+      .toolbar-pesquisa input[type="time"]:focus,
+      .toolbar-pesquisa select:focus {
+        border-color: #fff;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+        outline: none;
+      }
+      .toolbar-pesquisa .btn-pesquisar {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 24px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        margin-left: auto;
+      }
+      .toolbar-pesquisa .btn-pesquisar:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+      
+      /* Grupo compacto para horário (turno + início + fim) */
+      .grupo-horario {
+        display: flex;
+        gap: 6px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+      }
+      .grupo-horario .form-group {
+        min-width: 70px;
+        max-width: 90px;
+        flex: none;
+      }
+      .grupo-horario label {
+        font-size: 10px;
+      }
+      .grupo-horario .info-sala {
+        font-size: 9px;
+        color: #e0e0e0;
+        margin-left: 4px;
+        white-space: nowrap;
+      }
+      .grupo-horario .info-sala i {
+        margin-right: 2px;
+      }
+
+      /* Chosen Select minimalista - compatível com aceAdmin */
+      .toolbar-pesquisa .chosen-container .chosen-single {
+        border: 2px solid #e2e8f0 !important;
+        border-radius: 4px !important;
+        box-shadow: none !important;
+        background: white !important;
+        height: 30px !important;
+        line-height: 28px !important;
+        font-size: 12px !important;
+      }
+      .toolbar-pesquisa .chosen-container .chosen-single:hover {
+        border-color: #fff !important;
+      }
+      .toolbar-pesquisa .chosen-container-active.chosen-with-drop .chosen-single {
+        border-color: #fff !important;
+        background: white !important;
+      }
+      .toolbar-pesquisa .chosen-container .chosen-drop {
+        border: 1px solid #ced4da !important;
+        border-top: none !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+      }
+
+     
+    </style>
+<style>
 			/* Estilos para tela */
 			@media screen {
 				.print-header {
@@ -27,31 +175,35 @@
 					padding: 4px 0;
 					background: white;
 					z-index: 9999;
-					content: "Página " counter(page) " de " counter(pages);
+					/* O content aqui não funciona diretamente em elementos reais,
+					apenas em pseudo-elementos (@page/@top-center cuidará disso) */
 				}
 
-				/* Margem superior para não sobrepor conteúdo */
+				/* Usar padding em vez de margin evita o grande espaço na 1ª página */
 				body {
-					margin-top: 12mm; /* suficiente para o cabeçalho */
-					margin-bottom: 10mm;
+					margin: 0;
+					padding-top: 12mm;  /* espaço para o cabeçalho fixo */
+					padding-bottom: 10mm;
 				}
 
-				/* Configuração da página: permite retrato ou paisagem conforme escolha do usuário */
+				/* Configuração da página (não trava a orientação do usuário) */
 				@page {
 					margin: 1cm;
-					/* NÃO defina `size` aqui — isso bloqueia a orientação! */
+
 					@top-center {
 						content: "Página " counter(page) " de " counter(pages);
 						font-size: 11px;
 						color: black;
 					}
+
 					@bottom-center {
-						content: ""; /* remove qualquer rodapé automático */
+						content: ""; /* remove rodapé automático */
 					}
 				}
 
 			}
 		</style>
+		
 		<script>
 			function carregaBody(){
 				//Filtro persistente
@@ -71,54 +223,118 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Relatório de Atendimentos por Beneficiário</li>
+							<li class="active">Relatório de Atendimentos por Beneficiário com Assinatura</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<form role="form" action="/menu/atendimento/relatendbeneassinsAT" method="POST">
-						<div class="breadcrumbs noprint" id="breadcrumbs" style="align-items: center; text-align: center;" >
-							<ul class="breadcrumb">
-								<label>Período de:</label>
-								<input style="height: 30px;" id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
-								<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}" />
-								<label>até:</label>
-								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
-								<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}" />
-								<label>Beneficiário: </label>
-								<select style="height: 30px; width:300px;" name="relBeneid"  id="relBeneid" class="chosen-select" data-placeholder="Escolha...">
-									{{#each benes}}
-										<option value="{{_id}}">{{bene_nome}}</option>
-									{{/each}}
-								</select>
-								<input class="hidden" id="relBeneidEdi" name="relBeneidEdi" value="{{filtro.beneId}}" />
-								&nbsp;&nbsp;&nbsp;&nbsp;
-								<label class="control-label bolder red">
-									<select name="porHoras" id="porHoras" class="chosen-select" value=""  >
-											<option value="sim">Sim</option>
-											<option value="nao">Não</option>
-									</select>
-									<span class="lbl">&nbsp;Mostrar horas?</span>
-								</label>
-								&nbsp;&nbsp;&nbsp;&nbsp;
-								<label class="control-label bolder red">
-									<select name="porSala" id="porSala" class="chosen-select" value=""  >
-											<option value="sim">Sim</option>
-											<option value="nao">Não</option>
-									</select>
-									<span class="lbl">&nbsp;Mostrar sala?</span>
-								</label>
-								&nbsp;&nbsp;&nbsp;&nbsp;
-								<label class="control-label bolder red">
-									<select name="exibeInativos" id="exibeInativos" class="chosen-select" value=""  >
-											<option value="nao">Não</option>
-											<option value="sim">Sim</option>
-									</select>
-									<span class="lbl">&nbsp;Exibir Inativos?</span>
-								</label>
-								<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
-									<i class="ace-icon fa fa-search bigger-110"></i>
-									Pesquisar
-								</button>
-							</ul><!-- /.breadcrumb -->
+						<div class="form-inline">
+								<!-- 🔹 TOOLBAR DE PESQUISA (substitui breadcrumbs) -->
+							<div class="toolbar-pesquisa">
+								<h5>
+									<i class="ace-icon fa fa-file-text-o"></i> 
+									<span>Filtros do Relatório com Assinatura</span>
+								</h5>
+
+								<div class="form-inline">
+
+									<!-- 🔵 LINHA 1 -->
+									<div class="form-row" style="display: flex; flex-wrap: nowrap; gap: 10px; align-items: end;">
+
+										<div class="form-group">
+											<label>Período de:</label>
+											<input id="dataFilDe" name="dataFilDe" type="date" onchange="atualizaDataIni()">
+											<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}"/>
+										</div>
+
+										<div class="form-group">
+											<label>até:</label>
+											<input id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
+											<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}"/>
+										</div>
+
+										<div class="form-group" style="min-width: 250px;">
+											<label>Beneficiário:</label>
+											<select name="relBeneid" id="relBeneid" class="chosen-select">
+												{{#each benes}}
+													<option value="{{_id}}" {{#ifEqual ../filtro.relBeneid _id}}selected{{/ifEqual}}>
+														{{bene_nome}}
+													</option>
+												{{/each}}
+											</select>
+										</div>
+
+									</div>
+
+									<!-- 🟠 LINHA 2 -->
+									<div class="form-row" style="display: flex; flex-wrap: nowrap; gap: 10px; align-items: end; margin-top: 5px;">
+
+										<!-- Exibir -->
+										<div class="form-group">
+											<label>Exibir:</label>
+											<select name="porHoras" id="porHoras" class="chosen-select">
+												<option value="sim" {{#ifEqual filtro.porHoras "sim"}}selected{{/ifEqual}}>Horas</option>
+												<option value="nao" {{#ifEqual filtro.porHoras "nao"}}selected{{/ifEqual}}>Resumo</option>
+											</select>
+										</div>
+
+										<!-- Inativos -->
+										<div class="form-group">
+											<label>Inativos:</label>
+											<select name="exibeInativos" id="exibeInativos" class="chosen-select">
+												<option value="nao" {{#ifEqual filtro.exibeInativos "nao"}}selected{{/ifEqual}}>Não</option>
+												<option value="sim" {{#ifEqual filtro.exibeInativos "sim"}}selected{{/ifEqual}}>Sim</option>
+											</select>
+										</div>
+
+										<!-- 🔹 Ajuste Sala Escola -->
+										<div style="display: flex; gap: 8px; align-items: end;">
+
+											<div class="form-group">
+												<label>Turno:</label>
+												<select name="turnoSet" id="turnoSet" class="chosen-select" style="width: 100px;">
+													<option value="">Auto</option>
+													<option value="manha" {{#ifEqual filtro.turnoSet "manha"}}selected{{/ifEqual}}>Manhã</option>
+													<option value="tarde" {{#ifEqual filtro.turnoSet "tarde"}}selected{{/ifEqual}}>Tarde</option>
+													<option value="dia" {{#ifEqual filtro.turnoSet "dia"}}selected{{/ifEqual}}>Dia</option>
+												</select>
+											</div>
+
+											<div class="form-group">
+												<label>Início:</label>
+												<input type="time" name="horaInicialSet" value="{{filtro.horaInicialSet}}">
+											</div>
+
+											<div class="form-group">
+												<label>Fim:</label>
+												<input type="time" name="horaFinalSet" value="{{filtro.horaFinalSet}}">
+											</div>
+
+											<div class="form-group">
+												<label>Início D:</label>
+												<input type="time" name="horaInicialSetD" value="{{filtro.horaInicialSetd}}">
+											</div>
+
+											<div class="form-group">
+												<label>Fim D:</label>
+												<input type="time" name="horaFinalSetD" value="{{filtro.horaFinalSetd}}">
+											</div>
+
+											<span class="info-sala" title="Só afeta sessões na Sala Escola (60min/sessão)">
+												<i class="ace-icon fa fa-info-circle"></i>
+											</span>
+
+										</div>
+
+										<!-- 🔘 Botão -->
+										<button class="btn-pesquisar" name="acaoSalvar" id="acaoSalvar" type="submit">
+											<i class="ace-icon fa fa-search"></i> Pesquisar
+										</button>
+
+									</div>
+
+								</div>
+							</div>
+								<!-- /.toolbar-pesquisa -->
 						</div>
 					</form>
 				</div>
@@ -206,7 +422,7 @@
 															<tr>
 																<td style="width:8%;height:100px">{{dt}}
 																	{{#compareString ../porHoras "sim"}}
-																	<br>Hora Ini: {{horaIni}}<br>Hora Fim: {{horaFim}}
+																	
 																	{{/compareString}}
 																	</td><!-- /.somente data -->
 																{{#compareString ../porSala "sim"}}
@@ -275,22 +491,46 @@
 
 				// Atualiza os campos VISÍVEIS
 				if (filtro.dataIni) {
-					// Formato esperado: YYYY-MM-DD (para input type="date")
-					const dataIniFormatada = filtro.dataIni.split('T')[0]; // remove hora
+					const dataIniFormatada = filtro.dataIni.split('T')[0];
 					document.getElementById('dataFilDe').value = dataIniFormatada;
 				}
 				if (filtro.dataFim) {
 					const dataFimFormatada = filtro.dataFim.split('T')[0];
 					document.getElementById('dataFilAte').value = dataFimFormatada;
 				}
-				if (filtro.convenioId) {
-					document.getElementById('relConvid').value = filtro.convenioId;
+				if (filtro.relBeneid) {
+					document.getElementById('relBeneid').value = filtro.relBeneid;
+				}
+				if (filtro.porHoras) {
+					document.getElementById('porHoras').value = filtro.porHoras;
+				}
+				if (filtro.porSala) {
+					document.getElementById('porSala').value = filtro.porSala;
+				}
+				if (filtro.exibeInativos) {
+					document.getElementById('exibeInativos').value = filtro.exibeInativos;
+				}
+				// Novos campos de ajuste Sala Escola
+				if (filtro.turnoSet !== undefined) {
+					document.getElementById('turnoSet').value = filtro.turnoSet;
+				}
+				if (filtro.horaInicialSet !== undefined) {
+					document.getElementById('horaInicialSet').value = filtro.horaInicialSet;
+				}
+				if (filtro.horaFinalSet !== undefined) {
+					document.getElementById('horaFinalSet').value = filtro.horaFinalSet;
+				}
+				
+				// Atualiza Chosen se disponível
+				if (typeof $('.chosen-select').chosen === 'function') {
+					$('.chosen-select').trigger('chosen:updated');
 				}
 			}
 
 			document.addEventListener('DOMContentLoaded', () => {
 				const filtro = {{#if filtro}} {{{json filtro}}} {{else}} null {{/if}};
 				restaurarFiltro(filtro);
+				
 			});
 		</script>
 	</body>

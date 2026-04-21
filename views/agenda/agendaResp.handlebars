@@ -156,13 +156,16 @@
 					</div>
 					<form class="form-horizontal" role="form" action="/menu/agenda/filResp" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge" >
-								<div style="text-align: center;">
+								<div class="col-xs-12 col-sm-6">
+									<div class="row">
 										<label id="beneFilDiv">Beneficiário:</label>
-										<select id="agendaBeneid" name="agendaBeneid" data-placeholder="Escolha...">
-											{{#each benes}}
-												<option value="{{_id}}">{{bene_apelido}}</option>
-											{{/each}}
-										</select>
+										<div class="col-xs-12 col-sm-4">
+											<select id="agendaBeneid" name="agendaBeneid" class="chosen-select" data-placeholder="Escolha...">
+												{{#each benes}}
+													<option value="{{_id}}">{{bene_apelido}}</option>
+												{{/each}}
+											</select>
+										</div>
 										<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
 										<label style="margin-left: 25px;">Data:</label>
 										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
@@ -170,6 +173,7 @@
 										<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
 											<i class="ace-icon fa fa-search-plus "></i>
 										</button>
+									</div>
 								</div>
 						</div>
 					</form>

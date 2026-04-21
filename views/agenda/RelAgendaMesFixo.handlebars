@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Relatório Mensal - Agendamentos Fixos</title>
+  <style>
+    @media print {
+      .noprint { display: none !important; }
+      .print-header {
+        position: fixed; top: 0; left: 0; right: 0;
+        text-align: center; font-size: 11px;
+        padding: 4px 0; background: white; z-index: 9999;
+      }
+      body { margin-top: 12mm; margin-bottom: 10mm; }
+      @page { margin: 1cm; }
+    
+    }
+    .toolbar-pesquisa {
+      background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
+      color: white; padding: 15px; border-radius: 8px;
+      margin: 0 12px 20px 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border: 1px solid #1976d2;
+    }
+    .toolbar-pesquisa h5 {
+      margin: 0 0 12px 0; font-size: 14px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toolbar-pesquisa .form-inline {
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end;
+    }
+    .toolbar-pesquisa .form-group {
+      display: flex; flex-direction: column;
+      min-width: 140px; flex: 1; max-width: 220px;
+    }
+    .toolbar-pesquisa label {
+      font-size: 11px; font-weight: 500; margin-bottom: 4px;
+      color: #f8f9fa; white-space: nowrap;
+    }
+    .toolbar-pesquisa input[type="date"],
+    .toolbar-pesquisa select {
+      padding: 6px 10px; border: 2px solid #e2e8f0;
+      border-radius: 4px; font-size: 12px;
+      width: 100%; box-sizing: border-box;
+      background: white; color: #333; height: 30px;
+    }
+    .toolbar-pesquisa .btn-pesquisar {
+      background: #dc3545; color: white; border: none;
+      padding: 8px 24px; border-radius: 4px;
+      font-weight: 600; font-size: 13px; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      margin-left: auto;
+    }
+    .toolbar-pesquisa .btn-pesquisar:hover { background: #c82333; }
+    
+    /* Chosen minimalista */
+    .chosen-container .chosen-single {
+      border: 2px solid #e2e8f0 !important;
+      border-radius: 4px !important;
+      box-shadow: none !important;
+      background: white !important;
+      height: 30px !important;
+      line-height: 28px !important;
+      font-size: 12px !important;
+    }
+    .chosen-container .chosen-drop {
+      border: 1px solid #ced4da !important;
+      border-top: none !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Tabela consolidada */
+    .tabela-consolidada {
+      font-size: 11px;
+    }
+    .tabela-consolidada th {
+      background: #f1f5f9;
+      font-weight: 600;
+      color: #1e293b;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    .tabela-consolidada td {
+      vertical-align: middle;
+    }
+    .col-bene {
+      font-weight: 600;
+      background: #f8fafc;
+      border-right: 2px solid #cbd5e1;
+    }
+    .col-total {
+      text-align: center;
+      font-weight: 600;
+    }
+    .col-qt {
+      text-align: center;
+      font-weight: 500;
+    }
+    .col-sub {
+      background: #fffbeb;
+      border-left: 2px solid #f59e0b;
+    }
+    .badge-fix {
+      background: #10b981;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .sem-registros {
+      text-align: center; padding: 40px;
+      color: #64748b; font-style: italic;
+    }
+    .text-right { text-align: right; }
+    .text-center { text-align: center; }
+  </style>
+</head>
+
+<body onload="javascript:controlaNave(); carregaBody();" class="no-skin">
+  <div class="main-container ace-save-state" id="main-container">
+    <div class="main-content">
+      <div class="main-content-inner">
+        <div class="breadcrumbs ace-save-state">
+          <ul class="breadcrumb">
+            <li><i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a></li>
+            <li class="active">Relatório Mensal - Agendamentos Fixos</li>
+          </ul>
+        </div>
+
+        <div class="page-content">
+          <!-- 🔍 Filtros (simples: só data e beneficiário) -->
+          <form role="form" action="/menu/agenda/filMesFixo" method="POST" onsubmit="atualizaDataIni();">
+            <div class="toolbar-pesquisa noprint">
+              <h5><i class="ace-icon fa fa-calendar-check-o"></i> Filtros do Relatório</h5>
+              <div class="form-inline">
+                <div class="form-row">
+                  
+                  <!-- Data -->
+                  <div class="form-group">
+                    <label>Data:</label>
+                    <input id="dataFilDe" name="dataFinal" type="date" onchange="atualizaDataIni()">
+                    <input type="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}">
+                  </div>
+
+                  <!-- Beneficiário -->
+                  <div class="form-group">
+                    <label>Beneficiário:</label>
+                    <select name="agendaBeneid" id="agendaBeneid" class="chosen-select">
+                      <option value="TODOS">TODOS os beneficiários</option>
+                      {{#each benes}}
+                        <option value="{{_id}}">{{bene_nome}}</option>
+                      {{/each}}
+                    </select>
+                    <input type="hidden" id="relBeneIdFiltro" name="relBeneIdFiltro" value="{{filtro.beneid}}">
+                  </div>
+
+                  <!-- Badge fixo: Só Substitutos Fixos -->
+                  <div class="form-group">
+                    <label>&nbsp;</label>
+                    <span class="badge-fix">SOMENTE SUBSTITUTOS FIXOS</span>
+                  </div>
+
+                  <!-- Botão -->
+                  <button class="btn-pesquisar" type="submit">
+                    <i class="ace-icon fa fa-search"></i> Pesquisar
+                  </button>
+
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <!-- 📋 Tabela Consolidada -->
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="widget-box">
+                <div class="widget-header">
+                  <h4 class="widget-title">
+                    <i class="ace-icon fa fa-table green"></i>
+                    Consolidado Fixos 
+                    <small class="text-muted">({{periodoDe}} a {{periodoAte}})</small>
+                  </h4>
+                  <span class="widget-toolbar">
+                    <a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+                    <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+                  </span>
+                </div>
+
+                <div class="widget-body">
+                  <div class="widget-main">
+                    
+                    {{#if agendas.length}}
+                      <table class="table table-striped table-bordered table-hover tabela-consolidada">
+                        <thead>
+                          <tr>
+                            <th rowspan="2">Beneficiário</th>
+                            <th rowspan="2">Convênio</th>
+                            <th rowspan="2" class="text-center">Total Fixos</th>
+                            <th colspan="5" class="text-center" style="background:#e0f2fe;">Detalhe por Terapia</th>
+                          </tr>
+                          <tr style="background:#f1f5f9;">
+                            <th class="col-qt">Qt</th>
+                            <th>Terapia Orig</th>
+                            <th>Terapeuta Orig</th>
+                            <th class="col-sub">Terapia Sub</th>
+                            <th class="col-sub">Terapeuta Sub</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {{#each agendas}}
+                            <!-- 👤 Primeira linha do beneficiário (com rowspan) -->
+                            <tr>
+                              <td class="col-bene" rowspan="{{terapias.length}}">{{beneNome}}</td>
+                              <td rowspan="{{terapias.length}}">{{convNome}}</td>
+                              <td class="col-total" rowspan="{{terapias.length}}">
+                                <span class="label label-lg label-info">{{totalFixos}}</span>
+                              </td>
+                              
+                              <!-- 👇 Primeira terapia -->
+                              {{#with terapias.[0]}}
+                                <td class="col-qt">{{qtPorTerapia}}</td>
+                                <td>{{terapiaOrig}}</td>
+                                <td>{{terapeutaOrig}}</td>
+                                <td class="col-sub">{{terapiaSub}}</td>
+                                <td class="col-sub">{{terapeutaSub}}</td>
+                              {{/with}}
+                            </tr>
+                            
+                            <!-- 👇 Demais terapias do mesmo beneficiário -->
+                            {{#each terapias}}
+                              {{#if @index}}
+                                <tr>
+                                  <td class="col-qt">{{qtPorTerapia}}</td>
+                                  <td>{{terapiaOrig}}</td>
+                                  <td>{{terapeutaOrig}}</td>
+                                  <td class="col-sub">{{terapiaSub}}</td>
+                                  <td class="col-sub">{{terapeutaSub}}</td>
+                                </tr>
+                              {{/if}}
+                            {{/each}}
+                          {{/each}}
+                        </tbody>
+                        <tfoot>
+                          <tr style="background: #f1f5f9; font-weight: 600;">
+                            <td colspan="2" class="text-right">Total Geral:</td>
+                            <td class="text-center"><span class="label label-xl label-primary">{{totalGeral}}</span></td>
+                            <td colspan="5"></td>
+                          </tr>
+                        </tfoot>
+                      </table>
+                    {{else}}
+                      <div class="sem-registros">
+                        <i class="ace-icon fa fa-info-circle bigger-140 orange"></i><br><br>
+                        Nenhum agendamento fixo encontrado no período selecionado.
+                      </div>
+                    {{/if}}
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function atualizaDataIni() {
+      const v = document.getElementById('dataFilDe').value;
+      if (v) document.getElementById('dataIni').value = v + ' 00:00:00.000Z';
+    }
+
+    function carregaBody() {
+      // Data
+      const ini = document.getElementById('dataIni')?.value;
+      if (ini && document.getElementById('dataFilDe')) {
+        document.getElementById('dataFilDe').value = ini.split(' ')[0];
+      }
+      
+      // Beneficiário
+      const beneIdFiltro = document.getElementById('relBeneIdFiltro')?.value || 'TODOS';
+      const selectBene = document.getElementById('agendaBeneid');
+      if (selectBene) {
+        selectBene.value = 'TODOS';
+        if (beneIdFiltro && beneIdFiltro !== 'TODOS') {
+          for (let i = 0; i < selectBene.options.length; i++) {
+            if (selectBene.options[i].value === beneIdFiltro) {
+              selectBene.selectedIndex = i;
+              break;
+            }
+          }
+        }
+      }
+      
+      // Atualiza Chosen
+      if (typeof $.fn.chosen === 'function') {
+        $('.chosen-select').trigger('chosen:updated');
+      }
+    }
+
+    $(document).ready(function () {
+      $(".chosen-select").chosen({
+        no_results_text: "Não encontrado...",
+        search_contains: true,
+        disable_search_threshold: 10
+      });
+    });
+  </script>
+</body>
+</html>

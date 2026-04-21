@@ -1,179 +1,253 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Agenda Pessoal do dia</title>
-		<script type="text/javascript">
-			function atualizaData(){
-				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
-				var dataFmt = new Date(dataIso);
-				console.log(dataIso);
-				document.getElementById("agendaData").value = dataFmt;
-			}
-			function carregaBody(){
-				let dias = ["seg","ter","qua","qui","sex"];
-				try{
-					dias.forEach((dia)=>{
-						console.log("dia:"+dia)
-						document.getElementsByName(dia).forEach((e)=>{
-							let id = "hora"+e.id;
-							let valor = e.value;
-							let tempId = e.id+"_"+e.value;
-							//console.log("valor"+valor)
-							//console.log("id:"+id)
-							//console.log("tempId:"+tempId)
-							if(valor != "766f69643132333435366964"){
-								let val;
-								if(e.id.indexOf("BeneId_") != -1){
-									val = document.getElementById(valor).cloneNode(true);
-									val.id = val.id+"x";
-									document.getElementsByName(tempId).forEach((ti)=>{
-										pintaAgenda(val, ti.value);
-									})
-									console.log("val");
-									console.log(val);
-									document.getElementById(id).append(val);
-								} else if(e.id.indexOf("SalaId_") != -1){//caso não seja  ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
-									val = document.getElementById(valor).cloneNode(true);
-									val.id = val.id+"x";
-									document.getElementsByName(tempId).forEach((ti)=>{
-										console.log("TI:"+ti)
-										pintaAgenda(val, ti.value);
-									})
-									//console.log("val")
-									//console.log(val)
-									document.getElementById(id).append(val);
-								}
-							}
-						})
+		<title>Agenda Pessoal do Dia</title>
+		<style>
+			/* ========================================================================
+		📋 TABELAS - FONTE PADRÃO 11px PARA TODAS AS TABELAS
+		======================================================================== */
 
-						if (document.getElementById("isSemanal").value == "false"){
-							document.getElementsByName(dia).forEach((e)=>{
-								if(e.id.indexOf("AcaoId_") != -1){//se for a ação vai retornar a posição da string e caso não -1
-									let id = "hora"+e.id;//td para receber o append
-									let el = document.getElementById(e.id);//elemento da acao
-									document.getElementById(id).append(el);
-									//elemento td recebendo acao
-								}
-							})
-						}
-					})
-				} catch(err){
-					console.log(err);
-				}
-				if (document.getElementById("isSemanal").value == "false"){
-					//ajustar, so deleta 1 dia por vez e ainda é esquisito
-					let diaDeHoje = document.getElementById("hoje").value;
-					let tabela = document.getElementsByName("tabela");
+		/* 👉 REGRA GERAL: Todas as tabelas na view branco.hbs */
+		.table,
+		table,
+		.dataTable,
+		.dataTables_wrapper {
+			font-size: 11px !important;
+			line-height: 1.3 !important;
+		}
 
-					tabela.forEach((cell)=>{
-						let id = cell.id;
-						//console.log("id:"+id);
-						//s.indexOf("oo") != -1
-						if(id.indexOf(diaDeHoje) != -1){
-							console.log("id = diaDeHoje");
-							console.log("id:"+id);
-							console.log("diaDeHoje:"+diaDeHoje);
-							cell.display="";
-						} else {
-							document.getElementById(id).remove();
-						}
-					})
-					tabela.forEach((cell)=>{
-						let id = cell.id;
-						//console.log("id:"+id);
-						//s.indexOf("oo") != -1
-						if(id.indexOf(diaDeHoje) != -1){
-							console.log("id = diaDeHoje");
-							console.log("id:"+id);
-							console.log("diaDeHoje:"+diaDeHoje);
-							cell.display="";
-						} else {
-							document.getElementById(id).remove();
-						}
-					})
-					tabela.forEach((cell)=>{
-						let id = cell.id;
-						//console.log("id:"+id);
-						//s.indexOf("oo") != -1
-						if(id.indexOf(diaDeHoje) != -1){
-							console.log("id = diaDeHoje");
-							console.log("id:"+id);
-							console.log("diaDeHoje:"+diaDeHoje);
-							cell.display="";
-						} else {
-							document.getElementById(id).remove();
-						}
-					})
-					tabela.forEach((cell)=>{
-						let id = cell.id;
-						//console.log("id:"+id);
-						//s.indexOf("oo") != -1
-						if(id.indexOf(diaDeHoje) != -1){
-							console.log("id = diaDeHoje");
-							console.log("id:"+id);
-							console.log("diaDeHoje:"+diaDeHoje);
-							cell.display="";
-						} else {
-							document.getElementById(id).remove();
-						}
-					})
-					tabela.forEach((cell)=>{
-						let id = cell.id;
-						//console.log("id:"+id);
-						//s.indexOf("oo") != -1
-						if(id.indexOf(diaDeHoje) != -1){
-							console.log("id = diaDeHoje");
-							console.log("id:"+id);
-							console.log("diaDeHoje:"+diaDeHoje);
-							cell.display="";
-						} else {
-							document.getElementById(id).remove();
-						}
-					})
+		/* Células e cabeçalhos */
+		.table td,
+		.table th,
+		table td,
+		table th,
+		.dataTable td,
+		.dataTable th {
+			font-size: 11px !important;
+			line-height: 1.3 !important;
+			vertical-align: middle !important;
+			padding: 4px 6px !important;
+		}
 
-				}
+		/* Cabeçalhos em negrito */
+		.table th,
+		table th,
+		.dataTable th {
+			font-weight: 600 !important;
+			background-color: #f5f5f5 !important;
+		}
+
+		/* DataTables específico (se usar plugin) */
+		.dataTables_wrapper .dataTables_info,
+		.dataTables_wrapper .dataTables_paginate,
+		.dataTables_wrapper .dataTables_length,
+		.dataTables_wrapper .dataTables_filter {
+			font-size: 11px !important;
+		}
+
+		.dataTables_wrapper .dataTables_filter input {
+			font-size: 11px !important;
+			height: 26px !important;
+			padding: 2px 6px !important;
+		}
+
+		/* 👉 Tabela específica #dynamic-table1 (mantém regras específicas) */
+		#dynamic-table1 {
+			font-size: 11px !important;
+		}
+
+		#dynamic-table1 td:last-child,
+		#dynamic-table1 th:last-child {
+			width: 50px !important;
+			text-align: center !important;
+		}
+
+		#dynamic-table1 td:nth-child(5) {
+			white-space: nowrap !important;
+			max-width: 150px !important;
+			overflow: hidden !important;
+			text-overflow: ellipsis !important;
+		}
+
+		/* Evitar quebra de linha em células de ação */
+		#dynamic-table1 td:last-child {
+			white-space: nowrap !important;
+		}
+
+		/* ========================================================================
+		🎨 TOOLTIP E ÍCONES (CORRIGIDO PARA FUNCIONAR DENTRO DE TABELAS)
+		======================================================================== */
+
+		/* 👉 CONTAINER DO TOOLTIP */
+		.custom-tooltip {
+			position: relative;
+			display: inline-block;
+			cursor: help;
+			z-index: 99999 !important;  /* ← Aumentado pra garantir prioridade */
+			vertical-align: middle;
+		}
+
+		.custom-tooltip a,
+		.custom-tooltip i {
+			display: inline-block;
+			position: relative;
+			z-index: 2;
+			pointer-events: auto;
+		}
+
+		/* 👉 CAIXA DO TOOLTIP (com ajustes de posicionamento) */
+		.tooltip-text {
+			visibility: hidden;
+			width: max-content;
+			max-width: 280px;
+			background-color: #f3dfdf;
+			color: #c00;
+			font-size: 9px !important;
+			text-align: left;
+			border-radius: 4px;
+			padding: 8px 10px;
+			position: absolute;
+			z-index: 100000 !important;  /* ← Bem alto pra ficar por cima de tudo */
+			bottom: 130%;
+			left: 50%;
+			transform: translateX(-50%);
+			opacity: 0;  /* ← Começa invisível (mais suave que 0.95) */
+			white-space: normal;
+			box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+			border: 1px solid #e0b0b0;
+			transition: opacity 0.2s ease, visibility 0.2s ease;
+			line-height: 1.4;
+			pointer-events: none !important;
+		}
+
+		/* Seta do tooltip */
+		.tooltip-text::after {
+			content: "";
+			position: absolute;
+			top: 100%;
+			left: 50%;
+			margin-left: -5px;
+			border-width: 5px;
+			border-style: solid;
+			border-color: #f3dfdf transparent transparent transparent;
+			z-index: 100001;  /* ← Seta acima do tooltip */
+		}
+
+		/* 👉 HOVER: Mostra o tooltip com transição suave */
+		.custom-tooltip:hover .tooltip-text,
+		.custom-tooltip i:hover + .tooltip-text,
+		.custom-tooltip a:hover + .tooltip-text {
+			visibility: visible !important;
+			opacity: 1 !important;
+			pointer-events: none !important;
+			z-index: 100000 !important;
+		}
+
+		/* ========================================================================
+		🔧 CORREÇÃO CRÍTICA: PERMITIR TOOLTIP "VAZAR" DA CÉLULA DA TABELA
+		======================================================================== */
+
+		/* 👉 Célula de ação (última coluna) e coluna 5: permitir overflow */
+		#dynamic-table1 td:last-child,
+		#dynamic-table1 td:nth-child(5) {
+			overflow: visible !important;      /* ← Permite tooltip sair da célula */
+			position: static !important;       /* ← Evita stacking context indesejado */
+			z-index: auto !important;          /* ← Não cria novo contexto de empilhamento */
+		}
+
+		/* 👉 Garante que a linha da tabela também não corte o tooltip */
+		#dynamic-table1 tr {
+			position: static !important;
+			z-index: auto !important;
+		}
+
+		/* 👉 Se usar tbody com overflow, libera também */
+		#dynamic-table1 tbody {
+			overflow: visible !important;
+		}
+
+		/* ========================================================================
+		🎨 ÍCONES (mantido + pequenos ajustes)
+		======================================================================== */
+
+		#dynamic-table1 .ace-icon.fa {
+			font-size: 1.25em !important;
+			vertical-align: middle !important;
+			line-height: 1 !important;
+			display: inline-block !important;
+		}
+
+		#dynamic-table1 .fa.fa-ban {
+			color: #d65959 !important;
+		}
+
+		#dynamic-table1 a.blue .fa.fa-pencil {
+			color: #2083c5 !important;
+		}
+
+		#dynamic-table1 a.blue .fa.fa-pencil:hover {
+			color: #1c6ca1 !important;
+		}
+
+		#dynamic-table1 .fa.fa-pencil {
+			color: #999 !important;
+			cursor: default !important;
+		}
+
+		/* ========================================================================
+		🏷️ BADGES E CORES DO BENEFICIÁRIO
+		======================================================================== */
+
+		.badge-ok {
+			background-color: #8bc34a !important;
+			color: #fff !important;
+			padding: 2px 8px !important;
+			border-radius: 12px !important;
+			font-size: 10px !important;
+			font-weight: bold !important;
+			vertical-align: middle !important;
+			display: inline-flex !important;
+			align-items: center !important;
+			min-width: 24px !important;
+		}
+
+		.badge-agenda {
+			display: inline-block;
+			padding: 2px 6px;
+			font-size: 9px;
+			font-weight: 500;
+			border-radius: 3px;
+			white-space: nowrap;
+			line-height: 1.3;
+		}
+
+		.bene-default { color: #397097 !important; font-weight: normal; }
+		.bene-orange-light { color: #ff9800 !important; font-weight: 500; }
+		.bene-orange { color: #e65100 !important; font-weight: bold; }
+		.bene-cyan { color: #00bcd4 !important; font-weight: 600; }
+		.bene-yellow { color: #ffc107 !important; font-weight: 600; }
+		</style>
+		<script>
+			function OcultaMsg(){
+				document.getElementById("alertMsgFlash").hidden = true;
 			}
-			function pintaAgenda(val, motivo){
-				console.log("motivo:"+motivo)
-				switch (motivo) {
-					case "Falta" :
-						val.style.backgroundColor = "yellow";
-						break;
-					case "Falta Justificada":
-						val.style.backgroundColor = "orange";
-						break;
-					case "Falta Absoluta":
-						val.style.backgroundColor = "orange";
-						break;
-					case "Substituição":
-						val.style.backgroundColor = "cyan";
-						break;
-					case "Roberta Disponpivel":
-						val.style.backgroundColor = "salmon";
-						break;
-					case "Supervisor":
-						val.style.backgroundColor = "lightpink";
-						break;
-					case "Nenhuma Observação":
-						val.style.backgroundColor = "lightgreen";
-						break;
-					default :
-						break;
-				}
+
+			function obterMesAtual() {
+				const dataAtual = new Date();
+				const mesAtual = dataAtual.getMonth() + 1;
+				return mesAtual;
 			}
-			function formataData(){
-				let fulldate=(document.getElementById('dataFil').value+' 00:00:00.000Z').toString();
-				document.getElementById('dataFinal').value = fulldate;
-				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+
+			function evolucaoSemanalEmDia(id){
+				window.location.href=("/menu/agenda/evolucaoTemp/"+id);
 			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+	
+	<body class="no-skin" background-image="/assets/images/papelparede/temaLogin.png" onload="javascript:controlaNave();obterMesAtual();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
-
 				<div class="main-content-inner">
-
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
 							<li>
@@ -183,214 +257,291 @@
 							<li class="active">Agenda Pessoal do Dia</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					{{#if error}}
-						<div class="alert alert-danger">{{error}}</div>
-					{{else}}
-					{{/if}}
-					<div class="hidden" id="divCarrega" name="divCarrega">
-						<input id="isSemanal" value="{{isSemanal}}" />
-						<input id="766f69643132333435366964" value="&nbsp;" />
-						{{#each agendas}}
-							{{#compareThis agenda_terapiaid "766f69643132333435366964"}}
-							{{else}}
-							<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_beneid}}" />
-							<input id="{{agenda_data_semana}}SalaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
-							{{#isTrue agenda_temp}}
-								<input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" value="{{agenda_categoria}}">
-								<input name="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" value="{{agenda_categoria}}">
-								
-								{{#compareString agenda_categoria "Falta Justificada"}}
-								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
-									<a class="blue" href="">
-										<i class="red ace-icon fa fa-ban bigger-130"></i>
-									</a><!--sexSalaId_17:20_62714f8fcc378f0617d58747-->
-								</div>
-								{{else}}
-									{{#compareString agenda_categoria "Falta Absoluta"}}
-									<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
-										<a class="blue" href="">
-											<i class="red ace-icon fa fa-ban bigger-130"></i>
-										</a><!--sexSalaId_17:20_62714f8fcc378f0617d58747-->
-									</div>
-									{{else}}
-									<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
-										<a class="blue" href="/menu/agenda/evolucaoTemp/{{_id}}">
-											<i class="ace-icon fa fa-pencil bigger-130"></i>
-										</a><!--sexSalaId_17:20_62714f8fcc378f0617d58747-->
-									</div>
-									{{/compareString}}
-								{{/compareString}}
-							{{else}}
-								
-								{{#compareString agenda_categoria "Falta Justificada"}}
-								<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
-									<a class="blue" href="">
-										<i class="red ace-icon fa fa-ban bigger-130"></i>
-									</a><!--sexSalaId_17:20_62714f8fcc378f0617d58747-->
-								</div>
-								{{else}}
-									{{#compareString agenda_categoria "Falta Absoluta"}}
-									<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
-										<a class="blue" href="">
-											<i class="red ace-icon fa fa-ban bigger-130"></i>
-										</a><!--sexSalaId_17:20_62714f8fcc378f0617d58747-->
-									</div>
-									{{else}}
-									<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}" name="{{agenda_data_semana}}">
-										<a class="blue" href="/menu/agenda/evolucao/{{_id}}">
-											<i class="ace-icon fa fa-pencil bigger-130"></i>
-										</a>
-									</div>
-									{{/compareString}}
-								{{/compareString}}
-							{{/isTrue}}
-							{{/compareThis}}
-						{{/each}}
-						{{#each benes}}
-							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{bene_apelido}}<br/></label>
-						{{/each}}
-						{{#each salas}}
-							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{sala_nome}}<br/></label>
-						{{/each}}
-					</div>
-					<form class="form-horizontal" role="form" action="/menu/agenda/filPessoalSemanal" method="POST">
-						<div class="breadcrumbs" id="pesquisaAge" >
+					<!-- Form de pesquisa com validação -->
+					<form class="form-horizontal" role="form" action="/menu/agenda/filPessoalDia" method="POST" onsubmit="return formataData()">
+						<div class="breadcrumbs" id="pesquisaAge">
 							<div style="text-align: center;">
-								<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
 								<label style="margin-left: 25px;">Data:</label>
-								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
-								<input class="hidden" id="dataFinal" name="dataFinal" />
+								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" disabled onchange="javascript:formataData()">
+								<input class="hidden" id="dataFinal" name="dataFinal" >
 								<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
-									<i class="ace-icon fa fa-search-plus "></i>
+									<i class="ace-icon fa fa-search-plus"></i>
+								</button>
+								<!-- Botão Voltar para Hoje -->
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<button type="button" class="btn btn-xs btn-warning" onclick="window.location.href='/menu/agenda/lisPessoal'" style="margin-left: 10px;">
+									<i class="ace-icon fa fa-calendar-day"></i> Hoje
 								</button>
 							</div>
 						</div>
 					</form>
-					<div class="tab-content"><!-- .tab-contente -->
-						<div class="row">
-							<div class="col-xs-12 col-sm-12">
-								<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
-									<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
-										<thead>
-											<tr role="row">
-												<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
-													<div id="divAlertas">
-														<div class="col-xs-12 col-sm-12" style="padding-top: 2px;">
-															<div class="alert alert-danger">
-																<strong>
-																Agenda
-																</strong>
-																<br>
-																{{#each agendas}}
-																	{{#isNull agenda_obs}}
+
+					<!-- Widget 1: Evoluções Ausentes -->
+					<div class="col-12 col-sm-12 col-md-6" name="Faltaevo" id="Faltaevo">
+						<div class="widget-box">
+							<div class="widget-header">
+								<h4 class="widget-title">
+									<i class="red ace-icon fa fa-bookmark bigger-110"></i>
+									Evoluções Ausentes do dia
+								</h4>
+								<span class="widget-toolbar">
+									<a href="#" data-action="collapse">
+										<i class="ace-icon fa fa-chevron-up"></i>
+									</a>
+								</span>
+							</div>
+							<div class="widget-body">
+								<div class="widget-main">
+									<div class="row">
+										<div class="col-xs-12">
+											<table id="dynamic-table1" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid">
+												<thead>
+													<tr role="row">
+														<th style="width: 40px;">Hora</th>
+														<th style="width: 50px;">Sala</th>
+														<th style="width: 12px;">Terapia</th>
+														<th>Beneficiário</th>
+														<th>Evoluir</th>
+													</tr>
+												</thead>
+												<tbody>
+													{{#each agendas}}
+													<tr role="row" class="odd">
+														<!-- Hora -->
+														<td>{{agenda_hora}}</td>
+															
+														<td>
+															{{#each ../salas}}
+																{{#ifEqual this._id ../agenda_salaid}}
+																	{{sala_nome}}
+																{{/ifEqual}}
+															{{/each}}
+														</td>
+														
+													
+														
+														<!-- Terapia -->
+														<td>
+															{{#each ../terapias}}
+																{{#ifEqual this._id ../agenda_terapiaid}}
+																	{{terapia_nomecid}}
+																{{/ifEqual}}
+															{{/each}}
+														</td>
+
+														<!-- 👉 DEPOIS (formatado igual agenda pessoal): -->
+														<td>
+															{{#each ../benes}}
+																{{#ifEqual this._id ../agenda_beneid}}
+																	<label style="width:85px;border:0px;margin-bottom:2px;font-size:10px;" id="{{this._id}}x">
+																		<span class="badge-agenda" style="{{../badgeStyle}}">
+																			{{this.bene_nome}}
+																		</span>
+																	</label>
+																{{/ifEqual}}
+															{{/each}}
+														</td>
+														
+														<!-- 👉 Evoluir: ícone com tooltip -->
+															<td class="text-center" style="vertical-align: middle; width: 50px;">
+																<div class="custom-tooltip">
+
+																	{{#if ui.temLink}}
+																		<a href="javascript:evolucaoSemanalEmDia('{{_id}}');">
+																			<i class="ace-icon fa fa-{{ui.icone}} bigger-130"></i>
+																		</a>
 																	{{else}}
-																		<label>{{agenda_data_semana}} : {{agenda_hora}} / {{#each ../salas}}{{#ifEqual ../agenda_salaid _id}}{{sala_nome}}{{/ifEqual}}{{/each}} / {{#each ../benes}}{{#ifEqual ../agenda_beneid _id}}{{bene_apelido}}{{/ifEqual}}{{/each}} - {{agenda_obs}}</label>
-																		<br>
-																	{{/isNull}}
-																{{/each}}
-																
-																<br>
-															</div>
-														</div>
-													</div>
-												</th>
-											</tr>
-											<tr role="row">
-												<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
-													<div id="divAlertas">
-														<div class="col-xs-12 col-sm-12" style="padding-top: 2px;">
-															<div class="alert alert-warning">
-																<strong>
-																Terapeuta
-																</strong>
-																<br>
-																{{usu.usuario_obs}}
-																<br>
-															</div>
-														</div>
-													</div>
-												</th>
-											</tr>
-											<tr role="row">
-												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
-												<th id="thsegr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{segunda}}</th>
-												<th id="thterr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{terca}}</th>
-												<th id="thquar" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quarta}}</th>
-												<th id="thquir" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{quinta}}</th>
-												<th id="thsexr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" >{{sexta}}</th>
-											</tr>
-											<tr role="row">	
-												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
-												<th id="thseg1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-												<th id="thseg2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-												<th id="thseg3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-												<th id="thter1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-												<th id="thter2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-												<th id="thter3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-												<th id="thqua1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-												<th id="thqua2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-												<th id="thqua3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-												<th id="thqui1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-												<th id="thqui2" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-												<th id="thqui3" name="tabela" style="width: 25px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-												<th id="thsex1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-												<th id="thsex2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-												<th id="thsex3" name="tabela" style="width: 25px;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >&ensp;Ação&ensp;</th>
-											</tr>
-										</thead>
-										{{#each horaages}}
-										<tbody>
-											<tr role="row" class="odd">
-												<td style="width: 50px;">{{horaage_hora}}</td>
-												<td name="tabela" id="horasegSalaId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horasegBeneId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horasegAcaoId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horaterSalaId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horaterBeneId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horaterAcaoId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horaquaSalaId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horaquaBeneId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horaquaAcaoId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horaquiSalaId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horaquiBeneId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horaquiAcaoId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horasexSalaId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horasexBeneId_{{horaage_hora}}"></td>
-												<td name="tabela" id="horasexAcaoId_{{horaage_hora}}"></td>
-											</tr>
-										</tbody>
+																		<i class="ace-icon fa fa-{{ui.icone}} bigger-130"></i>
+																	{{/if}}
+
+																	<span class="tooltip-text">
+																		<strong style="color:#c00">{{ui.tooltipTitulo}}</strong><br>
+																		{{ui.tooltipTexto}}
+																	</span>
+																</div>
+															</td>
+													</tr>
+													{{/each}}
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<!-- 👉 LABELS OCULTOS: Nomes dos beneficiários (para o JS clonar) -->
+									<div class="hidden" id="divBeneLabels">
+										{{#each benes}}
+											<label id="{{_id}}" style="display:none;">{{bene_nome}}</label>
 										{{/each}}
-									</table>
+									</div>
+
+									<!-- 👉 INPUTS PARA JS: Mapeia dia/hora → beneId + categoria -->
+									<div class="hidden" id="divBeneData">
+										{{#each agendas}}
+											<input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" 
+												value="{{cadeia.ultimoCategoria}}{{#unless cadeia.ultimoCategoria}}{{agenda_categoria}}{{/unless}}">
+										{{/each}}
+									</div>
 								</div>
-							</div>
-							<div id="ocultaIds" class="hidden">
-								<input id="hoje" name="hoje" value="{{hoje}}" />
-							</div>
-							<div class="col-xs-16 col-sm-3">	
-								<div class="alert alert">
-									<br>
-									<br>
-									<br>
-								</div>
-							</div>
-							<!--
-							<div class="col-xs-16 col-sm-3">	
-								<div class="alert alert-info">
-									<strong>
-									Técnico
-									</strong>
-									<br>
-									
-									<br>
-								</div>
-							</div>
-							-->
+							</div>		
 						</div>
 					</div>
+					
+					<!-- Widget 2: Pontuações na Agenda -->
+					<div class="col-12 col-sm-12 col-md-6" name="Pontage" id="Pontage">
+						<div class="widget-box">
+							<div class="widget-header">
+								<h4 class="widget-title">
+									<i class="purple ace-icon fa fa-bullseye bigger-110"></i>
+									Pontuações na Agenda
+								</h4>
+								<span class="widget-toolbar">
+									<a href="#" data-action="collapse">
+										<i class="ace-icon fa fa-chevron-up"></i>
+									</a>
+								</span>
+							</div>
+							<div class="widget-body">
+								<div class="widget-main">
+									<div class="row">
+										<div class="col-xs-12">
+											<div class="col-xs-12 col-sm-12" style="padding-top: 2px;">
+												<div class="alert alert-danger">
+													<strong>Agenda:</strong>
+													<div><hr></div>
+													{{#each agendas}}
+														{{#isNull agenda_obs}}
+														{{else}}
+															<label>{{agenda_data_semana}} : {{agenda_hora}} / {{#each ../salas}}{{#ifEqual ../agenda_salaid _id}}{{sala_nome}}{{/ifEqual}}{{/each}} / {{#each ../benes}}{{#ifEqual ../agenda_beneid _id}}{{bene_apelido}}{{/ifEqual}}{{/each}} - {{agenda_obs}}</label>
+															<br>
+														{{/isNull}}
+													{{/each}}
+													<br>
+												</div>
+												<div class="alert alert-warning">
+													<strong>Evoluções Ausentes:</strong>
+													<div><hr></div>
+													{{#each evolucaoFaltante}}
+													<div class="action-buttons">
+														<label>{{formatDate "" agenda_data}}, {{agenda_hora}}, {{sala_nome}}, {{terapia_nomecid}}, {{bene_apelido}}</label>
+														<a class="blue" name="acaoEvolucaoSemanal" id="acaoEvolucaoSemanal" onclick="javascript:evolucaoSemanalEmDia('{{_id}}');">
+															<i class="ace-icon fa fa-pencil bigger-130"></i>
+														</a><br>
+													</div>
+													{{/each}}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>		
+						</div>
+					</div>
+					
+								
 				</div>
+			</div>
+		</div>
+		<!-- ========================================================================
+     🚀 FUNÇÕES DE CARREGAMENTO DA AGENDA (carregaBody + pintaAgenda)
+		======================================================================== -->
+		<script>
+			
 
-			</div><!-- /.main-content -->
-		</div><!-- /.main-container -->
-		<!-- basic scripts -->
+			function carregaBody(){
+				console.log("🚀 [carregaBody] Iniciando formatação de beneficiários...");
+				let dias = ["seg","ter","qua","qui","sex"];
+				
+				try{
+					dias.forEach((dia)=>{
+						document.getElementsByName(dia).forEach((e)=>{
+							let id = "hora" + e.id;
+							let valor = e.value;
+							let tempId = e.id + "_" + valor;
+							
+							if(valor && valor != "766f69643132333435366964"){
+								// ✅ BENEFICIÁRIO
+								if(e.id.indexOf("BeneId_") != -1){
+									let val = document.getElementById(valor)?.cloneNode(true);
+									if(!val) return;
+									
+									val.id = val.id + "x";
+									
+									// Busca categoria e aplica formatação
+									document.getElementsByName(tempId).forEach((ti)=>{
+										pintaAgenda(val, ti.value);
+									});
+									
+									// Insere na célula de destino
+									let destino = document.getElementById(id);
+									if(destino){
+										destino.innerHTML = '';  // Limpa antes
+										destino.appendChild(val);
+										console.log(`✅ Bene formatado: #${id}`);
+									}
+								}
+							}
+						});
+					});
+					console.log("✅ [carregaBody] Finalizado");
+				} catch(err){
+					console.error("❌ ERRO em carregaBody:", err);
+				}
+			}
+
+			function pintaAgenda(val, motivo){
+				// 🎨 CORES POR CATEGORIA (TEXTO, não background)
+				const coresTexto = {
+					"Falta": "#ffc107",              // 🟡 Amarelo
+					"Falta Justificada": "#ffc107",  // 🟡 Amarelo
+					"Falta Absoluta": "#e65100",     // 🟠 Laranja forte
+					"Substituição": "#00bcd4",       // 🔵 Ciano
+					"Feriado": "#e65100",            // 🟠 Laranja forte
+					"default": "#397097"             // 🔵 Azul padrão
+				};
+				
+				const motivoKey = motivo?.trim() || "default";
+				const corTexto = coresTexto[motivoKey] || coresTexto.default;
+				const texto = val?.textContent?.trim() || "—";
+				
+				if (val) {
+					val.innerHTML = '';  // Limpa
+					
+					// 👉 CRIA SPAN COM COR DE TEXTO (igual agenda pessoal, mas com color)
+					const span = document.createElement('span');
+					span.style.cssText = `
+						color: ${corTexto} !important;
+						font-weight: ${motivoKey === "Falta Absoluta" ? "bold" : "600"};
+						display: inline-block;
+						white-space: nowrap;
+						line-height: 1.3;
+						${motivoKey === "Falta Absoluta" ? "text-shadow: 0 0 1px rgba(0,0,0,0.1);" : ""}
+					`;
+					span.textContent = texto;
+					val.appendChild(span);
+				}
+				console.log(`🎨 Span aplicado: "${motivoKey}" → ${corTexto}`);
+			}
+		</script>
+		<script>
+			// Aguarda DOM estar pronto
+			document.addEventListener('DOMContentLoaded', function() {
+				console.log("🚀 [branco.hbs] DOM pronto, inicializando formatação...");
+				setTimeout(carregaBody, 100);
+				// Verifica se badgeStyle chegou
+				const firstAgenda = {{#if agendas.[0]}}JSON.parse({{json agendas.[0]}}){{else}}null{{/if}};
+				if (firstAgenda) {
+					console.log("🎨 [VIEW DEBUG] Primeiro registro:");
+					console.log("- badgeStyle:", firstAgenda.badgeStyle);
+					console.log("- ui:", firstAgenda.ui);
+					console.log("- cadeia.ultimoCategoria:", firstAgenda.cadeia?.ultimoCategoria);
+				}
+				
+				// Verifica inputs ocultos
+				const input = document.querySelector('#divBeneData input');
+				if (input) {
+					console.log("📦 [INPUT DEBUG] Value:", input.value);
+					console.log("📦 [INPUT DEBUG] Dataset:", input.dataset);
+				}
+			});
+		</script>
 	</body>
 </html>

@@ -104,7 +104,7 @@ module.exports = {
         })
 
     },
-    carregaAtaEdi(req,res){
+    carregaAtaEdiOLD(req,res){
         let db = req.cookies['preferredDb'];
         Ata = getModel(db, 'tb_ata', ataClass.AtaSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -125,7 +125,81 @@ module.exports = {
                 res.render('admin/erro')
             })
         },
+        carregaAtaEdi(req, res) {
+            let db = req.cookies['preferredDb'];
+            Ata = getModel(db, 'tb_ata', ataClass.AtaSchema);
+            Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
 
+            let usuarioAtual = req.cookies['idUsu'];
+            let perfilAtual = req.cookies['lvlUsu'];
+
+            // 1️⃣ Busca o ATA pelo ID único (correto ✅)
+            Ata.findOne({ _id: req.params.id })
+                .then((ata) => {
+                    if (!ata) {
+                        req.flash("error_message", "Registro ATA não encontrado!");
+                        return res.redirect('/menu/area/escalas/ata/lis');
+                    }
+
+                    console.log("=== DEBUG ATA EDIÇÃO ===");
+                    console.log("ATA encontrado:", ata._id);
+                    console.log("Beneficiário vinculado:", ata.ata_beneid);
+                    console.log("=== FIM DEBUG ===");
+
+                    // 2️⃣ Busca TODOS os terapeutas (mantido)
+                    Usuario.find({ usuario_funcaoid: "6241030bfbcc51f47c720a0b" })
+                        .then((terapeuta) => {
+                            terapeuta.sort((a, b) => 
+                                a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "") > 
+                                b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "") ? 1 : -1
+                            );
+
+                            // 3️⃣ 🔧 CORREÇÃO: Busca TODOS os beneficiários (remove filtro "Ativo")
+                            // Mantém apenas o filtro de nome com ponto (dados inválidos)
+                            Bene.find({ bene_nome: { $not: /\./ } })
+                                .then((bene) => {
+                                    bene.sort((a, b) => 
+                                        a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "") > 
+                                        b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "") ? 1 : -1
+                                    );
+
+                                    console.log(`Beneficiários carregados: ${bene.length}`);
+                                    
+                                    // Verifica se o beneficiário do ATA está na lista
+                                    const beneEncontrado = bene.find(b => 
+                                        b._id.toString() === ata.ata_beneid?.toString()
+                                    );
+                                    if (!beneEncontrado) {
+                                        console.warn("⚠️ Beneficiário do ATA não encontrado na lista!");
+                                    }
+
+                                    // 4️⃣ Renderiza a view com todos os dados
+                                    res.render("area/escalas/ata/ataEdi", {
+                                        ata,
+                                        Terapeutas: terapeuta,
+                                        Benes: bene,  // ← Lista COMPLETA, incluindo inativos
+                                        usuarioAtual,
+                                        perfilAtual
+                                    });
+                                })
+                                .catch(err => {
+                                    console.error("Erro ao buscar beneficiários:", err);
+                                    req.flash("error_message", "Erro ao carregar beneficiários!");
+                                    res.render('admin/erro');
+                                });
+                        })
+                        .catch(err => {
+                            console.error("Erro ao buscar terapeutas:", err);
+                            req.flash("error_message", "Erro ao carregar terapeutas!");
+                            res.render('admin/erro');
+                        });
+                })
+                .catch((err) => {
+                    console.error("Erro ao buscar ATA:", err);
+                    req.flash("error_message", "Erro ao realizar a edição!");
+                    res.render('admin/erro');
+                });
+        },
     cadastraAta(req,res){
         console.log("chegou")
         let resultado

@@ -104,6 +104,42 @@ module.exports = {Filtros, Resposta,
         
         return (dia+'/'+mes+'/'+dt.getFullYear()).toString();
     },
+    getDataDiaMes(data){
+        let dt = new Date(data);
+        
+        let mes = (dt.getUTCMonth()+1).toString();
+        let dia = (dt.getUTCDate()).toString();
+        if (mes.length == 1){
+            mes = "0"+mes;
+        }
+        if (dia.length == 1){
+            dia = "0"+dia;
+        }
+        let semana;
+
+        switch (dt.getUTCDay()){
+            case 1:
+                semana = "Segunda";
+                break;
+            case 2:
+                semana = "Terça";
+                break;
+            case 3:
+                semana = "Quarta";
+                break;
+            case 4:
+                semana = "Quinta";
+                break;
+            case 5:
+                semana = "Sexta";
+                break;
+            default:
+                semana = "Dom";
+                break;
+        }
+        
+        return (semana+" - "+dia+'/'+mes).toString();
+    },
     getDataContra(data){
         let dt = new Date(data);
         
@@ -370,5 +406,20 @@ module.exports = {Filtros, Resposta,
         }
 
         return `${sinal}${inteirosFmt},${centavos}`;
+    },
+    definirVisual(catFinal) {
+        switch(catFinal) {
+            case "Falta":
+            case "Falta Justificada":
+                return { corBorda: "orange", corFundo: "#fff3e0", icone: "fa-ban" };
+            case "Falta Absoluta":
+                return { corBorda: "orange", corFundo: "#ffe0b2", icone: "fa-ban" };
+            case "Feriado":
+                return { corBorda: "orange", corFundo: "#ffe0b2", icone: "fa-ban" };
+            case "Substituição":
+                return { corBorda: "#9b59b6", corFundo: "#f8f4fc", icone: "fa-exchange" };
+            default:
+                return { corBorda: "lightgreen", corFundo: "transparent", icone: "fa-pencil" };
+        }
     }
 }

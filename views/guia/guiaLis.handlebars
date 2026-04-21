@@ -1009,10 +1009,11 @@
 										<label>Data Senha</label>
 										<input type="date" id="dataSenhaMassa" />
 									</div>
-									<button type="button" class="btn-toolbar" onclick="salvarEmMassa()">
+									<button type="button" class="btn btn-success" id="btnSalvarMassa" onclick="salvarEmMassa()">
 										<i class="ace-icon fa fa-save"></i>
-										Salvar em Massa
+										Salvar em massa
 									</button>
+									
 								</div>
 							</div>
 
@@ -1168,103 +1169,79 @@
 												</tr>
 											</thead>
 											<tbody>
-												{{#each extras}}
-													<tr role="row" class="odd">
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-														<td>{{agenda_data_dia}}</td>
-														<td>{{agenda_hora}}</td>
-														
-														<td>
-														{{#each ../benes}}
-															{{#ifEqual this._id ../agenda_beneid}}
-																{{bene_nome}}
-															{{/ifEqual}}
-														{{/each}}
-														</td>
-														<td>
-														{{#each ../convs}}
-															{{#ifEqual this._id ../agenda_convid}}
-																{{conv_nome}}
-															{{/ifEqual}}
-														{{/each}}
-														</td>
-														<td>
-														{{#each ../terapeutas}}
-															{{#ifEqual this._id ../agenda_usuid}}
-																{{usuario_nome}}
-															{{/ifEqual}}
-														{{/each}}
-														</td>
-														<td>
-														{{#each ../terapias}}
-															{{#ifEqual this._id ../agenda_terapiaid}}
-																{{terapia_nomecid}}
-															{{/ifEqual}}
-														{{/each}}
-														</td>
-														<td>
-															{{agenda_categoria}}
-														</td>
-														<!-- 2. Evolução: Sim / Não -->
-														<td>
-															{{#ifEqual this.evolucaoSimNao "Sim"}}
-																<span class="badge badge-success">Sim</span>
-																{{else}}
-																<span class="badge badge-danger">Não</span>
-															{{/ifEqual}}
-														</td>
+    {{#each extras}}
+        <tr role="row" class="odd">
+            <td class="center">
+                <label class="pos-rel">
+                    <input type="checkbox" class="ace" />
+                    <span class="lbl"></span>
+                </label>
+            </td>
+            <td>{{agenda_data_dia}}</td>
+            <td>{{agenda_hora}}</td>
+            
+            <!-- ✅ CAMPOS ENRIQUECIDOS COM _display (acesso direto, sem loops) -->
+            <td>{{bene_nome_display}}</td>
+            <td>{{conv_nome_display}}</td>
+            <td>{{terapeuta_nome_display}}</td>
+            <td>{{terapia_nomecid_display}}</td>
+            
+            <td>{{agenda_categoria}}</td>
+            
+            <!-- Evolução: Sim / Não -->
+            <td>
+                {{#ifEqual evolucaoSimNao "Sim"}}
+                    <span class="badge badge-success">Sim</span>
+                {{else}}
+                    <span class="badge badge-danger">Não</span>
+                {{/ifEqual}}
+            </td>
 
-														<!-- 3. Guia, Senha, Data Senha como inputs -->
-														<td>
-															<input type="text" name="agendaId" value="{{_id}}" hidden />
-															<input type="text" name="guia_num{{_id}}" value="{{agenda_guia.guia_num}}" style="width:100%; padding:2px; font-size:12px;" />
-														</td>
-														<td>
-															<input type="date" name="dataguia_{{_id}}" 
-																{{#if agenda_guia.guia_numdatacad}}
-																	value="{{#dataISOToDate agenda_guia.guia_numdatacad}}{{/dataISOToDate}}"
-																{{/if}}
-																style="width:100%; padding:2px; font-size:12px;" />
-														</td>
-														<td>
-															<input type="text" name="senha_{{_id}}" value="{{agenda_guia.guia_senha}}" style="width:100%; padding:2px; font-size:12px;" />
-														</td>
-														<td>
-															<input type="date" name="datasenha_{{_id}}" 
-																{{#if agenda_guia.guia_senhadatacad}}
-																	value="{{#dataISOToDate agenda_guia.guia_senhadatacad}}{{/dataISOToDate}}"
-																{{/if}}
-																style="width:100%; padding:2px; font-size:12px;" />
-														</td>
+            <!-- Guia, Senha, Data Senha como inputs -->
+            <td>
+                <input type="text" name="agendaId" value="{{_id}}" hidden />
+                <input type="text" name="guia_num{{_id}}" value="{{agenda_guia.guia_num}}" style="width:100%; padding:2px; font-size:12px;" />
+            </td>
+            <td>
+                <input type="date" name="dataguia_{{_id}}" 
+                    {{#if guia_numdatacad_input}}
+                        value="{{guia_numdatacad_input}}"
+                    {{/if}}
+                    style="width:100%; padding:2px; font-size:12px;" />
+            </td>
+            <td>
+                <input type="text" name="senha_{{_id}}" value="{{agenda_guia.guia_senha}}" style="width:100%; padding:2px; font-size:12px;" />
+            </td>
+            <td>
+                <input type="date" name="datasenha_{{_id}}" 
+                    {{#if agenda_datasenha_input}}
+                        value="{{agenda_datasenha_input}}"
+                    {{/if}}
+                    style="width:100%; padding:2px; font-size:12px;" />
+            </td>
 
-														<!-- 4. Tooltip com dados de edição/cadastro -->
-														<td>
-															<div class="action-buttons">
-																<button class="btnSalvarGuia">💾</button>
-																<a class="purple custom-tooltip" href="#" title="Detalhes">
-																	<i class="ace-icon fa fa-eye bigger-130"></i>
-																	<span class="tooltip-text">
-																		<strong>Cadastrado em:</strong><br>
-																		{{this.datacad}}<br>
-																		<strong>Por:</strong><br>
-																		{{this.usuarioCadNome}}<br><br>
-
-																		<strong>Última Edição:</strong><br>
-																		{{this.dataedi}}<br>
-																		<strong>Por:</strong><br>
-																		{{this.usuarioEdiNome}}
-																	</span>
-																</a>
-															</div>
-														</td>
-													</tr>
-												{{/each}}
-											</tbody>
+            <!-- Tooltip com dados de edição/cadastro -->
+            <td>
+                <div class="action-buttons">
+                    <button class="btnSalvarGuia">💾</button>
+                    <a class="purple custom-tooltip" href="#" title="Detalhes">
+                        <i class="ace-icon fa fa-eye bigger-130"></i>
+                        <span class="tooltip-text">
+                            <strong>Cadastrado em:</strong><br>
+                            {{datacad}}<br>
+                            <strong>Por:</strong><br>
+                            {{usuarioCadNome}}<br><br>
+                            <strong>Última Edição:</strong><br>
+                            {{dataedi}}<br>
+                            <strong>Por:</strong><br>
+                            {{usuarioEdiNome}}
+                        </span>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    {{/each}}
+</tbody>
 										</table>
 									</div>
 								</div>

@@ -22,6 +22,26 @@
             box-sizing: border-box;
 			rows: 12px; /* Número de linhas padrão */
         }
+		/* --- SEU CSS EXISTENTE --- */
+			/* Força todos os containers do Chosen para 200px */
+			.chosen-container,
+			.chosen-container-single {
+				width: 200px !important;
+			}
+			
+			/* ... outras regras ... */
+
+			/* --- NOVA REGRA: EXCEÇÃO PARA O BENEFICIÁRIO --- */
+			/* Força o container do select Beneficiário a ter 50% da largura da tela */
+			#beneConvid_chosen {
+				width: 30vw !important; /* 50vw = 50% da Viewport (tela) */
+			}
+
+			/* Garante que o dropdown (lista de opções) acompanhe a largura do container */
+			#beneConvid_chosen .chosen-drop,
+			#beneConvid_chosen .chosen-results {
+				width: 100% !important;
+			}
 		</style>
 		<script >
 		
@@ -57,127 +77,167 @@
 			document.getElementById("beneOutcel2").value = document.getElementById("benePaicel2").value;
 			document.getElementById("beneOutemail").value = document.getElementById("benePaiemail").value;
 		}
-		function carregaBody(){
+		// ============================================================================
+// FUNÇÃO HELPER PARA CHOSEN (adicione no topo do <script>)
+// ============================================================================
+function setChosenValue(selectId, value) {
+    var el = document.getElementById(selectId);
+    if (!el) {
+        console.warn('Elemento não encontrado:', selectId);
+        return;
+    }
+    
+    // Define o valor no select nativo primeiro (garantia)
+    el.value = value;
+    
+    // Se jQuery e Chosen estiverem carregados, atualiza a UI
+    if (typeof $ !== 'undefined' && $.fn.chosen) {
+        try {
+            $(el).trigger('chosen:updated');
+        } catch(e) {
+            console.warn('Erro ao atualizar Chosen:', selectId, e);
+        }
+    }
+}
 
-			let dtnsc = new Date(new Date(document.getElementById("beneDatanascEdi").value).getTime() + 3 * 60 * 60 * 1000);
-			let mes = (dtnsc.getMonth()+1).toString();
-			let dia = (dtnsc.getUTCDate()).toString();
-			if (mes.length == 1){
-				mes = "0"+mes;
-			}
-			if (dia.length == 1){
-				dia = "0"+dia;
-			}
-			let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+// ============================================================================
+// FUNÇÃO carregaBody() REFACTORED COM TODOS OS CAMPOS
+// ============================================================================
+function carregaBody(){
+    // === FORMATAÇÃO DE DATA (mantém sua lógica original) ===
+    let dtnsc = new Date(new Date(document.getElementById("beneDatanascEdi").value).getTime() + 3 * 60 * 60 * 1000);
+    let mes = (dtnsc.getMonth()+1).toString();
+    let dia = (dtnsc.getUTCDate()).toString();
+    if (mes.length == 1){ mes = "0"+mes; }
+    if (dia.length == 1){ dia = "0"+dia; }
+    let fulldate = (dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
 
-			document.getElementById("beneNome").value = document.getElementById("beneNomeEdi").value;
-			document.getElementById("beneNomeinfo").value = document.getElementById("beneNomeEdi").value; //repete o nome do beneficiário no cabeçalho
-			document.getElementById("beneApelido").value = document.getElementById("beneApelidoEdi").value;
-			document.getElementById("beneIdade").value = document.getElementById("beneIdadeEdi").value;
-			document.getElementById("beneDatanasc").value = fulldate;
-			document.getElementById("beneNacionalidade").value = document.getElementById("beneNacionalidadeEdi").value;
-			document.getElementById("beneEnd").value = document.getElementById("beneEndEdi").value;
-			document.getElementById("beneEndcompl").value = document.getElementById("beneEndcomplEdi").value;
-			document.getElementById("beneEndbairro").value = document.getElementById("beneEndbairroEdi").value;
-			document.getElementById("beneEndcidade").value = document.getElementById("beneEndcidadeEdi").value;
-			document.getElementById("beneEnduf").value = document.getElementById("beneEndufEdi").value;
-			document.getElementById("beneEndcep").value = document.getElementById("beneEndcepEdi").value;
-			document.getElementById("beneIdent").value = document.getElementById("beneIdentEdi").value;
-			document.getElementById("beneCpf").value = document.getElementById("beneCpfEdi").value;
-			document.getElementById("beneStatus").value = document.getElementById("beneStatusEdi").value;
+    // === CAMPOS DE TEXTO/INPUT (mantém como está) ===
+    document.getElementById("beneNome").value = document.getElementById("beneNomeEdi").value;
+    document.getElementById("beneNomeinfo").value = document.getElementById("beneNomeEdi").value;
+    document.getElementById("beneApelido").value = document.getElementById("beneApelidoEdi").value;
+    document.getElementById("beneIdade").value = document.getElementById("beneIdadeEdi").value;
+    document.getElementById("beneDatanasc").value = fulldate;
+    document.getElementById("beneNacionalidade").value = document.getElementById("beneNacionalidadeEdi").value;
+    document.getElementById("beneEnd").value = document.getElementById("beneEndEdi").value;
+    document.getElementById("beneEndcompl").value = document.getElementById("beneEndcomplEdi").value;
+    document.getElementById("beneEndbairro").value = document.getElementById("beneEndbairroEdi").value;
+    document.getElementById("beneEndcidade").value = document.getElementById("beneEndcidadeEdi").value;
+    document.getElementById("beneEnduf").value = document.getElementById("beneEndufEdi").value;
+    document.getElementById("beneEndcep").value = document.getElementById("beneEndcepEdi").value;
+    document.getElementById("beneIdent").value = document.getElementById("beneIdentEdi").value;
+    document.getElementById("beneCpf").value = document.getElementById("beneCpfEdi").value;
+    
+    document.getElementById("beneDtaini").value = document.getElementById("beneDtainiEdi").value;
+    document.getElementById("beneDtafim").value = document.getElementById("beneDtafimEdi").value;
 
-			document.getElementById("beneDtaini").value = document.getElementById("beneDtainiEdi").value;
-			document.getElementById("beneDtafim").value = document.getElementById("beneDtafimEdi").value;
+    document.getElementById("beneLiminar").value = document.getElementById("beneLiminarEdi").value;
+    document.getElementById("beneNcarteiraconv").value = document.getElementById("beneNcarteiraconvEdi").value;
+    document.getElementById("beneImphora").value = document.getElementById("beneImphoraEdi").value;
+    document.getElementById("beneImpcarimbo").value = document.getElementById("beneImpcarimboEdi").value;
+    
+    document.getElementById("beneOut").value = document.getElementById("beneOutEdi").value;
+    document.getElementById("beneGraupar").value = document.getElementById("beneGrauparEdi").value;
+    document.getElementById("beneOutprof").value = document.getElementById("beneOutprofEdi").value;
+    document.getElementById("beneOutident").value = document.getElementById("beneOutidentEdi").value;
+    document.getElementById("beneOutcpf").value = document.getElementById("beneOutcpfEdi").value;
+    document.getElementById("beneOutend").value = document.getElementById("beneOutendEdi").value;
+    document.getElementById("beneOutendcompl").value = document.getElementById("beneOutendcomplEdi").value;
+    document.getElementById("beneOutendbairro").value = document.getElementById("beneOutendbairroEdi").value;
+    document.getElementById("beneOutendcidade").value = document.getElementById("beneOutendcidadeEdi").value;
+    document.getElementById("beneOutenduf").value = document.getElementById("beneOutendufEdi").value;
+    document.getElementById("beneOutendcep").value = document.getElementById("beneOutendcepEdi").value;
+    document.getElementById("beneOutcel").value = document.getElementById("beneOutcelEdi").value;
+    document.getElementById("beneOutcel2").value = document.getElementById("beneOutcel2Edi").value;
+    document.getElementById("beneOutemail").value = document.getElementById("beneOutemailEdi").value;
+    
+    document.getElementById("beneOrdempg").value = document.getElementById("beneOrdempgEdi").value;
+    document.getElementById("beneOrdemdoc").value = document.getElementById("beneOrdemdocEdi").value;
+    document.getElementById("beneOrdemnome").value = document.getElementById("beneOrdemnomeEdi").value;
+    document.getElementById("beneOrdemretem").value = document.getElementById("beneOrdemretemEdi").value;
 
-			document.getElementById("beneConvid").value = document.getElementById("beneConvEdi").value;
-			document.getElementById("beneLiminar").value = document.getElementById("beneLiminarEdi").value;
-			document.getElementById("beneNcarteiraconv").value = document.getElementById("beneNcarteiraconvEdi").value;//Numero da carteira do convênio do Beneficiário 2025/08/14
-			document.getElementById("beneImphora").value = document.getElementById("beneImphoraEdi").value;
-			document.getElementById("beneImpcarimbo").value = document.getElementById("beneImpcarimboEdi").value;
-			document.getElementById("beneOut").value = document.getElementById("beneOutEdi").value;
-			document.getElementById("beneGraupar").value = document.getElementById("beneGrauparEdi").value;
-			document.getElementById("beneOutprof").value = document.getElementById("beneOutprofEdi").value;
-			document.getElementById("beneOutident").value = document.getElementById("beneOutidentEdi").value;
-			document.getElementById("beneOutcpf").value = document.getElementById("beneOutcpfEdi").value;
-			document.getElementById("beneOutend").value = document.getElementById("beneOutendEdi").value;
-			document.getElementById("beneOutendcompl").value = document.getElementById("beneOutendcomplEdi").value;
-			document.getElementById("beneOutendbairro").value = document.getElementById("beneOutendbairroEdi").value;
-			document.getElementById("beneOutendcidade").value = document.getElementById("beneOutendcidadeEdi").value;
-			document.getElementById("beneOutenduf").value = document.getElementById("beneOutendufEdi").value;
-			document.getElementById("beneOutendcep").value = document.getElementById("beneOutendcepEdi").value;
-			document.getElementById("beneOutcel").value = document.getElementById("beneOutcelEdi").value;
-			document.getElementById("beneOutcel2").value = document.getElementById("beneOutcel2Edi").value;
-			document.getElementById("beneOutemail").value = document.getElementById("beneOutemailEdi").value;
-			
-			document.getElementById("beneOrdempg").value = document.getElementById("beneOrdempgEdi").value;
-			document.getElementById("beneOrdemdoc").value = document.getElementById("beneOrdemdocEdi").value;
-			document.getElementById("beneOrdemnome").value = document.getElementById("beneOrdemnomeEdi").value;
-			document.getElementById("beneOrdemretem").value = document.getElementById("beneOrdemretemEdi").value;
+    document.getElementById("benePai").value = document.getElementById("benePaiEdi").value;
+    document.getElementById("benePaiprof").value = document.getElementById("benePaiprofEdi").value;
+    document.getElementById("benePaiident").value = document.getElementById("benePaiidentEdi").value;
+    document.getElementById("benePaicpf").value = document.getElementById("benePaicpfEdi").value;
+    document.getElementById("benePaicel").value = document.getElementById("benePaicelEdi").value;
+    document.getElementById("benePaicel2").value = document.getElementById("benePaicel2Edi").value;
+    document.getElementById("benePaiemail").value = document.getElementById("benePaiemailEdi").value;
+    
+    document.getElementById("beneMae").value = document.getElementById("beneMaeEdi").value;
+    document.getElementById("beneMaeprof").value = document.getElementById("beneMaeprofEdi").value;
+    document.getElementById("beneMaeident").value = document.getElementById("beneMaeidentEdi").value;
+    document.getElementById("beneMaecpf").value = document.getElementById("beneMaecpfEdi").value;
+    document.getElementById("beneMaecel").value = document.getElementById("beneMaecelEdi").value;
+    document.getElementById("beneMaecel2").value = document.getElementById("beneMaecel2Edi").value;
+    document.getElementById("beneMaeemail").value = document.getElementById("beneMaeemailEdi").value;
+    
+    document.getElementById("beneEscolanome").value = document.getElementById("beneEscolanomeEdi").value;
+    document.getElementById("beneEscolafone").value = document.getElementById("beneEscolafoneEdi").value;
+    document.getElementById("beneEscolaend").value = document.getElementById("beneEscolaendEdi").value;
+    document.getElementById("beneEscolacomp").value = document.getElementById("beneEscolacompEdi").value;
+    document.getElementById("beneEscolabairro").value = document.getElementById("beneEscolabairroEdi").value;
+    document.getElementById("beneEscolacidade").value = document.getElementById("beneEscolacidadeEdi").value;
+    document.getElementById("beneEscolauf").value = document.getElementById("beneEscolaufEdi").value;
+    document.getElementById("beneEscolacep").value = document.getElementById("beneEscolacepEdi").value;
+    document.getElementById("beneEscolaano").value = document.getElementById("beneEscolaanoEdi").value;
+    document.getElementById("beneEscolaserie").value = document.getElementById("beneEscolaserieEdi").value;
+    document.getElementById("beneEscolacoord").value = document.getElementById("beneEscolacoordEdi").value;
+    document.getElementById("beneEscolacoordtel").value = document.getElementById("beneEscolacoordtelEdi").value;
+    
+    document.getElementById("beneEscolaoutro1").value = document.getElementById("beneEscolaoutro1Edi").value;
+    document.getElementById("beneEscolaoutro1func").value = document.getElementById("beneEscolaoutro1funcEdi").value;
+    document.getElementById("beneEscolaoutro1tel").value = document.getElementById("beneEscolaoutro1telEdi").value;
+    
+    document.getElementById("beneEscolaoutro2").value = document.getElementById("beneEscolaoutro2Edi").value;
+    document.getElementById("beneEscolaoutro2func").value = document.getElementById("beneEscolaoutro2funcEdi").value;
+    document.getElementById("beneEscolaoutro2tel").value = document.getElementById("beneEscolaoutro2telEdi").value;
+    
+    document.getElementById("beneEscolaoutro3").value = document.getElementById("beneEscolaoutro3Edi").value;
+    document.getElementById("beneEscolaoutro3func").value = document.getElementById("beneEscolaoutro3funcEdi").value;
+    document.getElementById("beneEscolaoutro3tel").value = document.getElementById("beneEscolaoutro3telEdi").value;
+    
+    document.getElementById("beneEscolaturno").value = document.getElementById("beneEscolaturnoEdi").value;
+    document.getElementById("beneEscolahoraini").value = document.getElementById("beneEscolahorainiEdi").value;
+    document.getElementById("beneEscolahorafim").value = document.getElementById("beneEscolahorafimEdi").value;
+    document.getElementById("beneEscolaemail").value = document.getElementById("beneEscolaemailEdi").value;
+    document.getElementById("beneEscolaobs").value = document.getElementById("beneEscolaobsEdi").value;
+    document.getElementById("beneObsadm").value = document.getElementById("beneObsadmEdi").value;
+    document.getElementById("beneObs").value = document.getElementById("beneObsEdi").value;
 
-			document.getElementById("benePai").value = document.getElementById("benePaiEdi").value;
-			document.getElementById("benePaiprof").value = document.getElementById("benePaiprofEdi").value;
-			document.getElementById("benePaiident").value = document.getElementById("benePaiidentEdi").value;
-			document.getElementById("benePaicpf").value = document.getElementById("benePaicpfEdi").value;
-			//document.getElementById("benePaiend").value = document.getElementById("benePaiendEdi").value;
-			//document.getElementById("benePaiendcompl").value = document.getElementById("benePaiendcomplEdi").value;
-			//document.getElementById("benePaiendbairro").value = document.getElementById("benePaiendbairroEdi").value;
-			//document.getElementById("benePaiendcidade").value = document.getElementById("benePaiendcidadeEdi").value;
-			//document.getElementById("benePaienduf").value = document.getElementById("benePaiendufEdi").value;
-			//document.getElementById("benePaiendcep").value = document.getElementById("benePaiendcepEdi").value;
-			document.getElementById("benePaicel").value = document.getElementById("benePaicelEdi").value;
-			document.getElementById("benePaicel2").value = document.getElementById("benePaicel2Edi").value;
-			document.getElementById("benePaiemail").value = document.getElementById("benePaiemailEdi").value;
-			document.getElementById("beneMae").value = document.getElementById("beneMaeEdi").value;
-			document.getElementById("beneMaeprof").value = document.getElementById("beneMaeprofEdi").value;
-			document.getElementById("beneMaeident").value = document.getElementById("beneMaeidentEdi").value;
-			document.getElementById("beneMaecpf").value = document.getElementById("beneMaecpfEdi").value;
-			//document.getElementById("beneMaeend").value = document.getElementById("beneMaeendEdi").value;
-			//document.getElementById("beneMaeendcompl").value = document.getElementById("beneMaeendcomplEdi").value;
-			//document.getElementById("beneMaeendbairro").value = document.getElementById("beneMaeendbairroEdi").value;
-			//document.getElementById("beneMaeendcidade").value = document.getElementById("beneMaeendcidadeEdi").value;
-			//document.getElementById("beneMaeenduf").value = document.getElementById("beneMaeendufEdi").value;
-			//document.getElementById("beneMaeendcep").value = document.getElementById("beneMaeendcepEdi").value;
-			document.getElementById("beneMaecel").value = document.getElementById("beneMaecelEdi").value;
-			document.getElementById("beneMaecel2").value = document.getElementById("beneMaecel2Edi").value;
-			document.getElementById("beneMaeemail").value = document.getElementById("beneMaeemailEdi").value;
-			
-			document.getElementById("beneEscolanome").value = document.getElementById("beneEscolanomeEdi").value;
-			document.getElementById("beneEscolafone").value = document.getElementById("beneEscolafoneEdi").value;
-			document.getElementById("beneEscolaend").value = document.getElementById("beneEscolaendEdi").value;
-			document.getElementById("beneEscolacomp").value = document.getElementById("beneEscolacompEdi").value;
-			document.getElementById("beneEscolabairro").value = document.getElementById("beneEscolabairroEdi").value;
-			document.getElementById("beneEscolacidade").value = document.getElementById("beneEscolacidadeEdi").value;
-			document.getElementById("beneEscolauf").value = document.getElementById("beneEscolaufEdi").value;
-			document.getElementById("beneEscolacep").value = document.getElementById("beneEscolacepEdi").value;
-			document.getElementById("beneEscolaano").value = document.getElementById("beneEscolaanoEdi").value;
-			document.getElementById("beneEscolaserie").value = document.getElementById("beneEscolaserieEdi").value;
-			document.getElementById("beneEscolacoord").value = document.getElementById("beneEscolacoordEdi").value;
-			document.getElementById("beneEscolacoordtel").value = document.getElementById("beneEscolacoordtelEdi").value;
-			
-			document.getElementById("beneEscolaoutro1").value = document.getElementById("beneEscolaoutro1Edi").value;
-			document.getElementById("beneEscolaoutro1func").value = document.getElementById("beneEscolaoutro1funcEdi").value;
-			document.getElementById("beneEscolaoutro1tel").value = document.getElementById("beneEscolaoutro1telEdi").value;
-			
-			document.getElementById("beneEscolaoutro2").value = document.getElementById("beneEscolaoutro2Edi").value;
-			document.getElementById("beneEscolaoutro2func").value = document.getElementById("beneEscolaoutro2funcEdi").value;
-			document.getElementById("beneEscolaoutro2tel").value = document.getElementById("beneEscolaoutro2telEdi").value;
-			
-			document.getElementById("beneEscolaoutro3").value = document.getElementById("beneEscolaoutro3Edi").value;
-			document.getElementById("beneEscolaoutro3func").value = document.getElementById("beneEscolaoutro3funcEdi").value;
-			document.getElementById("beneEscolaoutro3tel").value = document.getElementById("beneEscolaoutro3telEdi").value;
-			
-			document.getElementById("beneEscolaturno").value = document.getElementById("beneEscolaturnoEdi").value;
-			document.getElementById("beneEscolahoraini").value = document.getElementById("beneEscolahorainiEdi").value;
-			document.getElementById("beneEscolahorafim").value = document.getElementById("beneEscolahorafimEdi").value;
-			document.getElementById("beneEscolaemail").value = document.getElementById("beneEscolaemailEdi").value;
-			document.getElementById("beneEscolaobs").value = document.getElementById("beneEscolaobsEdi").value;
-			document.getElementById("beneObsadm").value = document.getElementById("beneObsadmEdi").value;
-			document.getElementById("beneObs").value = document.getElementById("beneObsEdi").value;
-			document.getElementById("beneAba").value = document.getElementById("beneAbaEdi").value;
-			document.getElementById("beneAbaclinica").value = document.getElementById("beneAbaclinicaEdi").value;
-			document.getElementById("beneAbaescola").value = document.getElementById("beneAbaescolaEdi").value;
-			document.getElementById("beneAbaparticular").value = document.getElementById("beneAbaparticularEdi").value;
-		}
+    // === SELECTS COM CHOSEN (usa a função helper) ===
+    // Status
+    setChosenValue("beneStatus", document.getElementById("beneStatusEdi").value);
+    
+    // Convênio
+    setChosenValue("beneConvid", document.getElementById("beneConvEdi").value);
+    
+    // UF
+    setChosenValue("beneEnduf", document.getElementById("beneEndufEdi").value);
+    
+    // ABA
+    setChosenValue("beneAba", document.getElementById("beneAbaEdi").value);
+    setChosenValue("beneAbaclinica", document.getElementById("beneAbaclinicaEdi").value);
+    setChosenValue("beneAbaescola", document.getElementById("beneAbaescolaEdi").value);
+    setChosenValue("beneAbaparticular", document.getElementById("beneAbaparticularEdi").value);
+    
+    // Ordem de pagamento/retenção
+    setChosenValue("beneOrdempg", document.getElementById("beneOrdempgEdi").value);
+    setChosenValue("beneOrdemretem", document.getElementById("beneOrdemretemEdi").value);
+
+    // === GARANTIA FINAL: atualiza TODOS os Chosen da página ===
+    setTimeout(function(){
+        if (typeof $ !== 'undefined' && $.fn.chosen) {
+            $('.chosen-select').each(function(){
+                try {
+                    $(this).trigger('chosen:updated');
+                } catch(e) {
+                    console.warn('Erro ao atualizar Chosen:', this.id, e);
+                }
+            });
+        }
+    }, 200);
+}
 		function formataData(date) {//yyyy-MM-dd
 					var d = new Date(date);
 					if (d.getTimezoneOffset() == 180){

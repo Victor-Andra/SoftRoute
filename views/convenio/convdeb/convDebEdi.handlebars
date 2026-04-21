@@ -4,18 +4,24 @@
 		<title>Débitos de Convênios Edição</title>
 		<script>
 			function carregaBody(){
-				/*
-				let data = document.getElementById("dataEdi").value;
-
-				let ano = data.substring(0,4);
-				let mes = data.substring(5,7);
-				let dia = data.toString().substring(8,10);
+				// Valores dos hidden inputs
+				const conveniosId = document.getElementById("convdebConvidEdi").value;
+				const terapiaId = document.getElementById("convdebTerapiaidEdi").value;
+				const status = document.getElementById("convdebStatusEdi").value;
 				
-				let fulldate=(ano+"-"+mes+"-"+dia).toString();
-				document.getElementById("convdebData").value = fulldate;*/
-				document.getElementById("convdebConvid").value = document.getElementById("convdebConvidEdi").value;
-				document.getElementById("convdebTerapiaid").value = document.getElementById("convdebTerapiaidEdi").value;
-				document.getElementById("convdebStatus").value = document.getElementById("convdebStatusEdi").value;
+				// 🎯 Atualiza os selects E dispara o evento do Chosen
+				if (typeof jQuery !== 'undefined' && jQuery.fn.chosen) {
+					$('#convdebConvid').val(conveniosId).trigger('chosen:updated');
+					$('#convdebTerapiaid').val(terapiaId).trigger('chosen:updated');
+					$('#convdebStatus').val(status).trigger('chosen:updated');
+				} else {
+					// Fallback caso Chosen não esteja carregado ainda
+					document.getElementById("convdebConvid").value = conveniosId;
+					document.getElementById("convdebTerapiaid").value = terapiaId;
+					document.getElementById("convdebStatus").value = status;
+				}
+				
+				// Data
 				atualizaData();
 			}
 			function atualizaData(){
@@ -26,7 +32,7 @@
 			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+	<body onload="javascript:controlaNave(); carregaBody();" class="no-skin">
 		<div id="divCarrega" name="divCarrega" class="hidden">
 			<input id="convdebId" name="convdebId" value="{{convdeb._id}}"/>
 			<input id="convdebStatusEdi" name="convdebStatusEdi" value="{{convdeb.convdeb_status}}"/>
@@ -50,7 +56,7 @@
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
-											<h4 class="widget-title">Crédito de Convênios</h4>
+											<h4 class="widget-title">Débito de Convênios</h4>
 											<span class="widget-toolbar">
 												<a href="#" data-action="reload">
 													<i class="ace-icon fa fa-refresh"></i>
@@ -144,5 +150,21 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				// Inicializa Chosen nos selects
+				$('.chosen-select').chosen({
+					width: '100%',
+					disable_search_threshold: 10,
+					allow_single_deselect: true,
+					no_results_text: 'Nenhum resultado encontrado'
+				});
+				
+				// 👇 Garante que os valores sejam aplicados APÓS o Chosen estar pronto
+				if (typeof carregaBody === 'function') {
+					carregaBody();
+				}
+			});
+		</script>
 	</body><!-- basic scripts -->
 </html>
