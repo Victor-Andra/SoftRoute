@@ -1,975 +1,490 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
-		
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta charset="utf-8">
-		<title>Página em Branco</title>
-
-
-
-		<meta name="description" content="Static &amp; Dynamic Tables">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
-		<!-- bootstrap & fontawesome -->
-		<link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
-		<link rel="stylesheet" href="../../assets/font-awesome/4.5.0/css/font-awesome.min.css">
-
-		<!-- page specific plugin styles -->
-
-		<!-- text fonts -->
-		<link rel="stylesheet" href="../../assets/css/fonts.googleapis.com.css">
-
-		<!-- ace styles -->
-		<link rel="stylesheet" href="../../assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style">
-		<link rel="stylesheet" href="../../assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
-		<link rel="stylesheet" href="../../assets/css/ace-skins.min.css">
-		<link rel="stylesheet" href="../../assets/css/ace-rtl.min.css">
- 	    <link rel="stylesheet" href="../../assets/css/ace-ie.min.css" />
-
-		<!-- inline styles related to this page -->
-		<!-- ace settings handler -->	
-		<script src="../../assets/js/ace-extra.min.js"></script>
-		<style>@keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-moz-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-webkit-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-ms-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}@-o-keyframes nodeInserted{from{outline-color:#fff}to{outline-color:#000}}.ace-save-state{animation-duration:10ms;-o-animation-duration:10ms;-ms-animation-duration:10ms;-moz-animation-duration:10ms;-webkit-animation-duration:10ms;animation-delay:0s;-o-animation-delay:0s;-ms-animation-delay:0s;-moz-animation-delay:0s;-webkit-animation-delay:0s;animation-name:nodeInserted;-o-animation-name:nodeInserted;-ms-animation-name:nodeInserted;-moz-animation-name:nodeInserted;-webkit-animation-name:nodeInserted}</style>
-		<script src="../../assets/js/html5shiv.min.js"></script>
-		<script src="../../assets/js/respond.min.js"></script>
-		<script type="text/javascript">
-		function abaClicada(req, res){
-			console.log("A Aba Util foi Clicada!")
-		}
-		function carregaBody(){
-			document.getElementById("salaFilDiv").style.display = "none";
-			document.getElementById("agendaSalaid").style.display = "none";
-			document.getElementById("terapeutaFilDiv").style.display = "none";
-			document.getElementById("agendaTerapeutaid").style.display = "none";
-			let dias = ["seg","ter","qua","qui","sex"];
-			try{
-				dias.forEach((dia) =>{
-					console.log("dia")
-					console.log(dia)
-					document.getElementsByName(dia).forEach((e)=>{
-						console.log("e")
-						console.log(e.value)
-						let id = "hora"+e.id;
-						let valor = e.value;
-						console.log("id:"+id)
-						console.log("valor:"+valor)
-						let val = document.getElementById(valor).value;
-						console.log("value2:"+val)
-						document.getElementById(id).append(val);
-					})
-					document.getElementsByName((dia+"e")).forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-					document.getElementsByName((dia+"d")).forEach((e)=>{
-						let id = "hora"+e.id;
-						console.log(e.id)
-						document.getElementById(id).append(e);
-					})
-				})
-			} catch(err){
-				console.log(err)
-			}
-		}
-		function selectFil(){
-			let origem = document.getElementById("tipoFil").value;
-			switch (origem) {
-				case "bene":
-					document.getElementById("beneFilDiv").style.display = "";
-					document.getElementById("agendaBeneid").style.display = "";
-					document.getElementById("salaFilDiv").style.display = "none";
-					document.getElementById("agendaSalaid").style.display = "none";
-					document.getElementById("terapeutaFilDiv").style.display = "none";
-					document.getElementById("agendaTerapeutaid").style.display = "none";
-					break;
-				case "sala":
-					document.getElementById("beneFilDiv").style.display = "none";
-					document.getElementById("agendaBeneid").style.display = "none";
-					document.getElementById("salaFilDiv").style.display = "";
-					document.getElementById("agendaSalaid").style.display = "";
-					document.getElementById("terapeutaFilDiv").style.display = "none";
-					document.getElementById("agendaTerapeutaid").style.display = "none";
-					break;
-				case "tera":
-					document.getElementById("beneFilDiv").style.display = "none";
-					document.getElementById("agendaBeneid").style.display = "none";
-					document.getElementById("salaFilDiv").style.display = "none";
-					document.getElementById("agendaSalaid").style.display = "none";
-					document.getElementById("terapeutaFilDiv").style.display = "";
-					document.getElementById("agendaTerapeutaid").style.display = "";
-					break;
-			}
-		}
-		function testandoData(){
-			let dat = new Date(document.getElementById('dataFil').value);
-			let mes = (dat.getMonth()+1).toString();
-			let dia = (dat.getUTCDate()).toString();
-			if (mes.length == 1){
-				mes = "0"+mes;
-			}
-			if (dia.length == 1){
-				dia = "0"+dia;
-			}
-			let fulldate=(dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-			document.getElementById('dataFinal').value = fulldate;
-		}
-		</script>
-
-	</head>
-
-	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
-
-
-		<div class="main-container ace-save-state" id="main-container">
-
-
-			<div class="main-content">
-				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-						<ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Home</a>
-							</li>
-
-							<li class="active">Agenda Diária</li>
-						</ul><!-- /.breadcrumb -->
-
-					</div>
-					
-					<form class="form-horizontal" role="form" action="/menu/agenda/filL" method="POST">
-						<div class="breadcrumbs" id="pesquisaAge" >
-
-							<div class="col-xs-12 col-sm-3">
-								<label>Tipo Filtro:</label>
-								<select name="tipoFil" id="tipoFil" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectFil()">
-										<option value="bene">Beneficiário</option>
-										<option value="sala">Sala</option>
-										<option value="tera">Terapeuta</option>
-								</select>
-							</div>
-
-							<div class="col-xs-12 col-sm-5 center"  >
-								<label id="beneFilDiv">Beneficiário:</label>
-								<label id="salaFilDiv">Sala:</label>
-								<label id="terapeutaFilDiv">Terapeuta:</label>
-								<select id="agendaBeneid" name="agendaBeneid" class="chosen-select" data-placeholder="Escolha...">
-									{{#each benes}}
-									<option value="{{_id}}">{{bene_nome}}</option>
-									{{/each}}
-								</select>
-								<select id="agendaSalaid" name="agendaSalaid" class="chosen-select" data-placeholder="Escolha...">
-									{{#each salas}}
-									<option value="{{_id}}">{{sala_nome}}</option>
-									{{/each}}
-								</select>
-								<select id="agendaTerapeutaid" name="agendaTerapeutaid" class="chosen-select" data-placeholder="Escolha...">
-									{{#each terapeutas}}
-									<option value="{{_id}}">{{usuario_nome}}</option>
-									{{/each}}
-								</select>
-								<input style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">
-							</div>
-
-							<div class="col-xs-12 col-sm-3 center"  >
-								<label>Data:</label>
-								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:testandoData()">
-								<input class="hidden" id="dataFinal" name="dataFinal" />
-							</div>
-
-							<div class="col-xs-12 col-sm-1">
-								<div class="widget-toolbar hidden-480">
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit">
-										<i class="ace-icon fa fa-search-plus "></i>
-									</button>
-								</div>
-							</div>
-
-						</div>
-					</form>
-					
-					
-					
-					
-					
-					{{#each erros}}
-						<div class="alert alert-danger">{{texto}}</div>
-					{{else}}
-					{{/each}}
-
-
-
-					<div class="page-content"><!-- .page-content -->
-						<div class="row"><!--.row -->
-							<div class="col-xs-12">
-								<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/beneficiario/add" method="POST">
-								<document class="document-horizontal" role="document" >
-									
-										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-											<div class="hidden" id="divHoraage" name="divHoraage">
-												{{#each salas}}
-													<input id="{{_id}}" value="{{sala_nome}}" />
-												{{/each}}
-												{{#each benes}}
-													<input id="{{_id}}" value="{{bene_nome}}" />
-												{{/each}}
-												{{#each convs}}
-													<input id="{{_id}}" value="{{conv_nome}}" />
-												{{/each}}
-												{{#each terapeutas}}
-													<input id="{{_id}}" value="{{usuario_nome}}" />
-												{{/each}}
-												{{#each terapias}}
-													<input id="{{_id}}" value="{{terapia_nome}}" />
-												{{/each}}
-											</div>
-											<div class="tabbable">
-												<ul class="inbox-tabs nav nav-tabs padding-16 tab-size-small tab-space-1" id="myTab">
-
-													{{#each semanas}}
-														{{#compareString ../dtFill.dia dia}}
-															<li class="active">
-														{{else}}
-															<li>
-														{{/compareString}}
-															<a data-toggle="tab" href="#{{dia}}" aria-expanded="true">
-																{{#compareString dia "seg"}}
-																	<i class="orange ace-icon fa fa-calendar-o bigger-120"></i>
-																	Segunda
-																{{/compareString}}
-																{{#compareString dia "ter"}}
-																	<i class="orange ace-icon fa fa-calendar-o bigger-120"></i>
-																	Terça
-																{{/compareString}}
-																{{#compareString dia "qua"}}
-																	<i class="green ace-icon fa fa-calendar-o bigger-120"></i>
-																	Quarta
-																{{/compareString}}
-																{{#compareString dia "qui"}}
-																	<i class="pink ace-icon fa fa-calendar-o bigger-120"></i>
-																	Quinta
-																{{/compareString}}
-																{{#compareString dia "sex"}}
-																	<i class="blue ace-icon fa fa-calendar-o bigger-120"></i>
-																	Sexta
-																{{/compareString}}
-															</a>
-														</li>
-													{{/each}}
-													
-	
-												</ul>
-
-												<div class="tab-content"><!-- .tab-contente -->
-													<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
-														<table style="font-size: 11px;  cellspacing: 1px; cellpadding: 4px;" id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-															<thead>
-																<tr role="row">
-																	<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="8">
-																		<b>	
-																			{{#each semanas}}
-																				{{#compareThis dia "seg"}}
-																					{{data}}
-																				{{/compareThis}}
-																			{{/each}}
-																		</b> 
-																	</th>
-
-																</tr>
-																<tr  role="row">	
-																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 50px;">Ação</th>
-																</tr>
-															</thead>
-															{{#each horaages}}
-																<tbody>
-																	<tr role="row" class="odd">
-																		<td style="width: 50px;">{{horaage_hora}}</td>
-																		<td id="horasegSalaId_{{horaage_hora}}"></td>
-																		<td id="horasegBeneId_{{horaage_hora}}"></td>
-																		<td id="horasegConvId_{{horaage_hora}}"></td>
-																		<td id="horasegTerapiaId_{{horaage_hora}}"></td>
-																		<td id="horasegTerapeutaId_{{horaage_hora}}"></td>
-																		<td class="center"  style="width: 50px;">
-																			<label class="pos-rel">
-																				<input type="checkbox" class="ace" />
-																				<span class="lbl"></span>
-																			</label>
-																		</td>
-																		<td id="horasegacao_{{horaage_hora}}" style="width: 60px;"></td>
-																	</tr>
-																</tbody>
-															{{/each}}
-															<div id="carregaSegunda" class="hidden">
-																{{#each agendas}}
-																	<a class="blue" id="{{agenda_data_semana}}acao_{{agenda_hora}}" name="{{agenda_data_semana}}e" href="#">
-																		<i class="ace-icon fa fa-plus bigger-130"></i>
-																	</a>
-
-																	<a class="green" id="{{agenda_data_semana}}acao_{{agenda_hora}}" name="{{agenda_data_semana}}e" href="/menu/agenda/edi/{{_id}}">
-																		<i class="ace-icon fa fa-pencil bigger-130"></i>
-																	</a>
-																	<a class="red" id="{{agenda_data_semana}}acao_{{agenda_hora}}" name="{{agenda_data_semana}}d" href="/menu/agenda/del/{{_id}}" style="padding-left: 5px;">
-																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																	</a>
-																	<input id="{{agenda_data_semana}}SalaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
-																	<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_beneid}}" />
-																	<input id="{{agenda_data_semana}}ConvId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_convid}}" />
-																	<input id="{{agenda_data_semana}}TerapiaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_terapiaid}}" />
-																	<input id="{{agenda_data_semana}}TerapeutaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_usuid}}" />
-																{{/each}}
-															</div>
-														</table>
-													</div><!-- /fade-tab-seg -->
-													<div id="ter" class="tab-pane fade"><!-- .fade-tab-ter -->
-
-
-														<table style="font-size: 11px;  cellspacing: 1px; cellpadding: 4px;" id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-															
-															<thead>
-																<tr role="row">
-																	<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="8">
-																		<b>
-																			{{#each semanas}}
-																				{{#compareThis dia "ter"}}
-																					{{data}}
-																				{{/compareThis}}
-																			{{/each}}
-																		</b> 
-																	</th>
-															
-
-																</tr>
-																
-															
-																<tr  role="row">	
-
-																
-																	
-																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 50px;">Ação</th>
-
-																</tr>
-																
-															</thead>
-															{{#each horaages}}
-															<tbody>
-																	<tr role="row" class="odd">
-
-
-																		<td style="width: 50px;">{{horaage_hora}}</td>
-																		<td id="horaterSalaId_{{horaage_hora}}"></td>
-																		<td id="horaterBeneId_{{horaage_hora}}"></td>
-																		<td id="horaterConvId_{{horaage_hora}}"></td>
-																		<td id="horaterTerapiaId_{{horaage_hora}}"></td>
-																		<td id="horaterTerapeutaId_{{horaage_hora}}"></td>
-																																				
-																		
-																		<td class="center"  style="width: 50px;">
-																			<label class="pos-rel">
-																				<input type="checkbox" class="ace" />
-																				<span class="lbl"></span>
-																			</label>
-																		</td>
-
-																		<td style="width: 60px;">
-																			<a class="blue" name="acaoNovo" id="acaoNovo" href="/menu/agenda/cadT/{{horaage_hora}}">
-																				<i class="ace-icon fa fa-plus bigger-130"></i>
-																			</a>
-																	
-																			<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/agenda/cadE/{{horaage_hora}}">
-																				<i class="ace-icon fa fa-pencil bigger-130"></i>
-																			</a>
-																		
-
-																			<a class="red" name="acaoDel" id="acaoDel" href="/menu/agenda/del/{{_id}}">
-																				<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																			</a>
-
-
-													
-																		</td>
-																	</tr>
-															</tbody>
-															{{/each}}
-														</table>
-
-													</div><!-- /fade-tab-ter -->
-
-													<div id="qua" class="tab-pane fade"><!-- .fade-tab-qua -->
-
-
-														<table style="font-size: 11px;  cellspacing: 1px; cellpadding: 4px;" id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-															
-															<thead>
-																<tr role="row">
-																	<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="8">
-																		<b>
-																			{{#each semanas}}
-																				{{#compareThis dia "qua"}}
-																					{{data}}
-																				{{/compareThis}}
-																			{{/each}}
-																		</b> 
-																	</th>
-															
-
-																</tr>
-																
-															
-																<tr  role="row">	
-
-																
-																	
-																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 50px;">Ação</th>
-
-																</tr>
-																
-															</thead>
-															{{#each horaages}}
-															<tbody>
-																	<tr role="row" class="odd">
-
-
-																		<td style="width: 50px;">{{horaage_hora}}</td>
-																		<td id="horaquaSalaId_{{horaage_hora}}"></td>
-																		<td id="horaquaBeneId_{{horaage_hora}}"></td>
-																		<td id="horaquaConvId_{{horaage_hora}}"></td>
-																		<td id="horaquaTerapiaId_{{horaage_hora}}"></td>
-																		<td id="horaquaTerapeutaId_{{horaage_hora}}"></td>
-																																				
-																		
-																		<td class="center"  style="width: 50px;">
-																			<label class="pos-rel">
-																				<input type="checkbox" class="ace" />
-																				<span class="lbl"></span>
-																			</label>
-																		</td>
-
-																		<td style="width: 60px;">
-																			<a class="blue" name="acaoNovo" id="acaoNovo" href="/menu/agenda/cadT/{{horaage_hora}}">
-																				<i class="ace-icon fa fa-plus bigger-130"></i>
-																			</a>										
-																			<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/agenda/cadE/{{horaage_hora}}">
-																				<i class="ace-icon fa fa-pencil bigger-130"></i>
-																			</a>
-																			<a class="red" name="acaoDel" id="acaoDel" href="/menu/agenda/del/{{_id}}">
-																				<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																			</a>
-																		</td>
-																	</tr>
-															</tbody>
-															{{/each}}
-														</table>										
-														
-													</div><!-- /fade-tab-qua -->
-
-													<div id="qui" class="tab-pane fade"><!-- .fade-tab-qui -->
-														
-
-														<table style="font-size: 11px;  cellspacing: 1px; cellpadding: 4px;" id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-															
-															<thead>
-																<tr role="row">
-																	<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="8">
-																		<b>
-																			{{#each semanas}}
-																				{{#compareThis dia "qui"}}
-																					{{data}}
-																				{{/compareThis}}
-																			{{/each}}
-																		</b> 
-																	</th>
-																7
-
-																</tr>
-																
-															
-																<tr  role="row">	
-
-																
-																	
-																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 60px;">Ação</th>
-
-																</tr>
-																
-															</thead>
-															{{#each horaages}}
-															<tbody>
-																	<tr role="row" class="odd">
-
-
-																		<td style="width: 50px;">{{horaage_hora}}</td>
-																		<td id="horaquiSalaId_{{horaage_hora}}"></td>
-																		<td id="horaquiBeneId_{{horaage_hora}}"></td>
-																		<td id="horaquiConvId_{{horaage_hora}}"></td>
-																		<td id="horaquiTerapiaId_{{horaage_hora}}"></td>
-																		<td id="horaquiTerapeutaId_{{horaage_hora}}"></td>
-																																				
-																		
-																		<td class="center"  style="width: 50px;">
-																			<label class="pos-rel">
-																				<input type="checkbox" class="ace" />
-																				<span class="lbl"></span>
-																			</label>
-																		</td>
-
-																		<td style="width: 60px;">
-																			<a class="blue" name="acaoNovo" id="acaoNovo" href="/menu/agenda/cadT/{{horaage_hora}}">
-																				<i class="ace-icon fa fa-plus bigger-130"></i>
-																			</a>										
-																	
-																			<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/agenda/cadE/{{horaage_hora}}">
-																				<i class="ace-icon fa fa-pencil bigger-130"></i>
-																			</a>
-																		
-
-																			<a class="red" name="acaoDel" id="acaoDel" href="/menu/agenda/del/{{_id}}">
-																				<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																			</a>
-
-
-													
-																		</td>
-																	</tr>
-															</tbody>
-															{{/each}}
-														</table>
-
-													</div><!-- /fade-tab-qui -->
-
-													<div id="sex" class="tab-pane fade"><!-- .fade-tab-sex -->
-														
-
-														<table style="font-size: 11px;  cellspacing: 1px; cellpadding: 4px;" id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
-															
-															<thead>
-																<tr role="row">
-																	<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="8">
-																		<b>
-																			{{#each semanas}}
-																				{{#compareThis dia "sex"}}
-																					{{data}}
-																				{{/compareThis}}
-																			{{/each}}
-																		</b> 
-																	</th>
-															
-
-																</tr>
-																
-															
-																<tr  role="row">	
-
-																
-																	
-																	<th style="width: 50px;" class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" ><b>Hora</b></th>
-																	<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
-																	<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
-																	<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Convênio</th>
-																	<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapia</th>
-																	<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-																	<th style="width: 50px;" class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" ><i class="center ace-icon fa fa-check bigger-130"></i></th>
-																	<th style="width: 50px;">Ação</th>
-
-																</tr>
-																
-															</thead>
-															{{#each horaages}}
-															<tbody>
-																	<tr role="row" class="odd">
-
-
-																		<td style="width: 50px;">{{horaage_hora}}</td>
-																		<td id="horasexSalaId_{{horaage_hora}}"></td>
-																		<td id="horasexBeneId_{{horaage_hora}}"></td>
-																		<td id="horasexConvId_{{horaage_hora}}"></td>
-																		<td id="horasexTerapiaId_{{horaage_hora}}"></td>
-																		<td id="horasexTerapeutaId_{{horaage_hora}}"></td>
-																																				
-																		
-																		<td class="center"  style="width: 50px;">
-																			<label class="pos-rel">
-																				<input type="checkbox" class="ace" />
-																				<span class="lbl"></span>
-																			</label>
-																		</td>
-
-																		<td style="width: 60px;">
-																			<a class="blue" name="acaoNovo" id="acaoNovo" href="/menu/agenda/cadT/{{horaage_hora}}">
-																				<i class="ace-icon fa fa-plus bigger-130"></i>
-																			</a>										
-																	
-																			<a class="green" name="acaoEdi" id="acaoEdi" href="/menu/agenda/cadE/{{horaage_hora}}">
-																				<i class="ace-icon fa fa-pencil bigger-130"></i>
-																			</a>
-																	
-
-																			<a class="red" name="acaoDel" id="acaoDel" href="/menu/agenda/del/{{_id}}">
-																				<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																			</a>
-
-
-													
-																		</td>
-																	</tr>
-															</tbody>
-															{{/each}}
-														</table>
-
-													</div><!-- /fade-tab-sex -->
-
-
-												</div>
-											</div>
-										</div>
-
-
-									<div class="space-6" style="height: 70px;"></div>
-
-				
-						
-								</document>
-							</form>
-
-							</div>
-						</div><!-- /.row -->
-					</div><!-- /.page-content -->
-
-
-
-				</div>
-			</div><!-- /.main-content -->
-		</div><!-- /.main-container -->
-			
-		
-
-	</body>
-		<!-- basic scripts -->
-
-
-
-
-		<!-- page specific plugin scripts -->
-
-		
-		<script type="text/javascript">
-			jQuery(function($) {
-				/**
-				$('#myTab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-				  //console.log(e.target.getAttribute("href"));
-				})
-					
-				$('#accordion').on('shown.bs.collapse', function (e) {
-					//console.log($(e.target).is('#collapseTwo'))
-				});
-				*/
-				
-				$('#myTab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-					//if($(e.target).attr('href') == "#home") doSomethingNow();
-				})
-			
-				
-				/**
-					//go to next tab, without user clicking
-					$('#myTab > .active').next().find('> a').trigger('click');
-				*/
-			
-			
-				$('#accordion-style').on('click', function(ev){
-					var target = $('input', ev.target);
-					var which = parseInt(target.val());
-					if(which == 2) $('#accordion').addClass('accordion-style2');
-					 else $('#accordion').removeClass('accordion-style2');
-				});
-				
-				//$('[href="#collapseTwo"]').trigger('click');
-			
-			
-				$('.easy-pie-chart.percentage').each(function(){
-					$(this).easyPieChart({
-						barColor: $(this).data('color'),
-						trackColor: '#EEEEEE',
-						scaleColor: false,
-						lineCap: 'butt',
-						lineWidth: 8,
-						animate: ace.vars['old_ie'] ? false : 1000,
-						size:75
-					}).css('color', $(this).data('color'));
-				});
-			
-				//$('[data-rel=tooltip]').tooltip();
-				//$('[data-rel=popover]').popover({html:true});
-			
-			
-				$('#gritter-regular').on(ace.click_event, function(){
-					$.gritter.add({
-						title: 'This is a regular notice!',
-						text: 'This will fade out after a certain amount of time. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="blue">magnis dis parturient</a> montes, nascetur ridiculus mus.',
-						image: 'assets/images/avatars/avatar1.png', //in Ace demo ./dist will be replaced by correct assets path
-						sticky: false,
-						time: '',
-						class_name: (!$('#gritter-light').get(0).checked ? 'gritter-light' : '')
-					});
-			
-					return false;
-				});
-			
-				$('#gritter-sticky').on(ace.click_event, function(){
-					var unique_id = $.gritter.add({
-						title: 'This is a sticky notice!',
-						text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="red">magnis dis parturient</a> montes, nascetur ridiculus mus.',
-						image: 'assets/images/avatars/avatar.png',
-						sticky: true,
-						time: '',
-						class_name: 'gritter-info' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
-					});
-			
-					return false;
-				});
-			
-			
-				$('#gritter-without-image').on(ace.click_event, function(){
-					$.gritter.add({
-						// (string | mandatory) the heading of the notification
-						title: 'This is a notice without an image!',
-						// (string | mandatory) the text inside the notification
-						text: 'This will fade out after a certain amount of time. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="orange">magnis dis parturient</a> montes, nascetur ridiculus mus.',
-						class_name: 'gritter-success' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
-					});
-			
-					return false;
-				});
-			
-			
-				$('#gritter-max3').on(ace.click_event, function(){
-					$.gritter.add({
-						title: 'This is a notice with a max of 3 on screen at one time!',
-						text: 'This will fade out after a certain amount of time. Vivamus eget tincidunt velit. Cum sociis natoque penatibus et <a href="#" class="green">magnis dis parturient</a> montes, nascetur ridiculus mus.',
-						image: 'assets/images/avatars/avatar3.png', //in Ace demo ./dist will be replaced by correct assets path
-						sticky: false,
-						before_open: function(){
-							if($('.gritter-item-wrapper').length >= 3)
-							{
-								return false;
-							}
-						},
-						class_name: 'gritter-warning' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
-					});
-			
-					return false;
-				});
-			
-			
-				$('#gritter-center').on(ace.click_event, function(){
-					$.gritter.add({
-						title: 'This is a centered notification',
-						text: 'Just add a "gritter-center" class_name to your $.gritter.add or globally to $.gritter.options.class_name',
-						class_name: 'gritter-info gritter-center' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
-					});
-			
-					return false;
-				});
-				
-				$('#gritter-error').on(ace.click_event, function(){
-					$.gritter.add({
-						title: 'This is a warning notification',
-						text: 'Just add a "gritter-light" class_name to your $.gritter.add or globally to $.gritter.options.class_name',
-						class_name: 'gritter-error' + (!$('#gritter-light').get(0).checked ? ' gritter-light' : '')
-					});
-			
-					return false;
-				});
-					
-			
-				$("#gritter-remove").on(ace.click_event, function(){
-					$.gritter.removeAll();
-					return false;
-				});
-					
-			
-				///////
-			
-			
-				$("#bootbox-regular").on(ace.click_event, function() {
-					bootbox.prompt("What is your name?", function(result) {
-						if (result === null) {
-							
-						} else {
-							
-						}
-					});
-				});
-					
-				$("#bootbox-confirm").on(ace.click_event, function() {
-					bootbox.confirm("Are you sure?", function(result) {
-						if(result) {
-							//
-						}
-					});
-				});
-				
-			/**
-				$("#bootbox-confirm").on(ace.click_event, function() {
-					bootbox.confirm({
-						message: "Are you sure?",
-						buttons: {
-						  confirm: {
-							 label: "OK",
-							 className: "btn-primary btn-sm",
-						  },
-						  cancel: {
-							 label: "Cancel",
-							 className: "btn-sm",
-						  }
-						},
-						callback: function(result) {
-							if(result) alert(1)
-						}
-					  }
-					);
-				});
-			**/
-				
-			
-				$("#bootbox-options").on(ace.click_event, function() {
-					bootbox.dialog({
-						message: "<span class='bigger-110'>I am a custom dialog with smaller buttons</span>",
-						buttons:
-						{
-							"success" :
-							 {
-								"label" : "<i class='ace-icon fa fa-check'></i> Success!",
-								"className" : "btn-sm btn-success",
-								"callback": function() {
-									//Example.show("great success");
-								}
-							},
-							"danger" :
-							{
-								"label" : "Danger!",
-								"className" : "btn-sm btn-danger",
-								"callback": function() {
-									//Example.show("uh oh, look out!");
-								}
-							}, 
-							"click" :
-							{
-								"label" : "Click ME!",
-								"className" : "btn-sm btn-primary",
-								"callback": function() {
-									//Example.show("Primary button");
-								}
-							}, 
-							"button" :
-							{
-								"label" : "Just a button...",
-								"className" : "btn-sm"
-							}
-						}
-					});
-				});
-			
-			
-			
-				$('#spinner-opts small').css({display:'inline-block', width:'60px'})
-			
-				var slide_styles = ['', 'green','red','purple','orange', 'dark'];
-				var ii = 0;
-				$("#spinner-opts input[type=text]").each(function() {
-					var $this = $(this);
-					$this.hide().after('<span />');
-					$this.next().addClass('ui-slider-small').
-					addClass("inline ui-slider-"+slide_styles[ii++ % slide_styles.length]).
-					css('width','125px').slider({
-						value:parseInt($this.val()),
-						range: "min",
-						animate:true,
-						min: parseInt($this.attr('data-min')),
-						max: parseInt($this.attr('data-max')),
-						step: parseFloat($this.attr('data-step')) || 1,
-						slide: function( event, ui ) {
-							$this.val(ui.value);
-							spinner_update();
-						}
-					});
-				});
-			
-			
-			
-				//CSS3 spinner
-				$.fn.spin = function(opts) {
-					this.each(function() {
-					  var $this = $(this),
-						  data = $this.data();
-			
-					  if (data.spinner) {
-						data.spinner.stop();
-						delete data.spinner;
-					  }
-					  if (opts !== false) {
-						data.spinner = new Spinner($.extend({color: $this.css('color')}, opts)).spin(this);
-					  }
-					});
-					return this;
-				};
-			
-				function spinner_update() {
-					var opts = {};
-					$('#spinner-opts input[type=text]').each(function() {
-						opts[this.name] = parseFloat(this.value);
-					});
-					opts['left'] = 'auto';
-					$('#spinner-preview').spin(opts);
-				}
-			
-			
-			
-				$('#id-pills-stacked').removeAttr('checked').on('click', function(){
-					$('.nav-pills').toggleClass('nav-stacked');
-				});
-			
-				
-				
-				
-				
-				
-				///////////
-				$(document).one('ajaxloadstart.page', function(e) {
-					$.gritter.removeAll();
-					$('.modal').modal('hide');
-				});
-			
-			});
-		</script>
-
+<head>
+    <meta charset="utf-8">
+    <title>Agenda - Lista Mensal</title>
+    
+    <!-- Estilos Ace Admin + Custom -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/ace.min.css">
+    <link rel="stylesheet" href="/assets/css/ace-part2.min.css">
+    <link rel="stylesheet" href="/assets/css/ace-skins.min.css">
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+    
+    <!-- Chosen para selects -->
+    <link rel="stylesheet" href="/js/chosen/chosen.min.css">
+    
+    <style>
+        /* ============================================
+           BARRA DE PESQUISA - SIMPLIFICADA
+           ============================================ */
+        .toolbar-pesquisa {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .toolbar-pesquisa .form-inline {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+        .toolbar-pesquisa .form-group {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .toolbar-pesquisa label {
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #f8f9fa;
+        }
+        .toolbar-pesquisa input[type="date"] {
+            padding: 6px 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 12px;
+            width: 180px;
+            background: white;
+        }
+        .toolbar-pesquisa .btn-pesquisar {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.3s;
+        }
+        .toolbar-pesquisa .btn-pesquisar:hover {
+            background: #c82333;
+        }
+
+        /* Tabela compacta */
+        #dynamic-table, #dynamic-table th, #dynamic-table td {
+            font-size: 10px !important;
+            padding: 4px 6px !important;
+            vertical-align: middle !important;
+        }
+        #dynamic-table th {
+            background: #f5f5f5 !important;
+            font-weight: 600 !important;
+        }
+        
+        /* Labels de categoria */
+        .label-categoria { font-size: 9px !important; padding: 3px 6px !important; }
+        .label-feriado { background: #ffc107 !important; color: #212529 !important; }
+        .label-extra { background: #6f42c1 !important; }
+        .label-substituicao { background: #e83e8c !important; }
+        .label-falta { background: #ffc107 !important; color: #212529 !important; }
+        .label-padrao { background: #28a745 !important; }
+        .label-falta-absoluta { background: #fd7e14 !important; }
+
+        /* Tooltip */
+        .custom-tooltip { position: relative; display: inline-block; cursor: pointer; }
+        .tooltip-text {
+            visibility: hidden;
+            width: max-content;
+            max-width: 300px;
+            background: #f3dfdf;
+            color: #c00;
+            font-size: 9px !important;
+            text-align: left;
+            border-radius: 4px;
+            padding: 8px 10px;
+            position: absolute;
+            z-index: 10000 !important;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            white-space: normal;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 1px solid #e0b0b0;
+            transition: opacity 0.2s;
+            line-height: 1.4;
+            pointer-events: none !important;
+        }
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #f3dfdf transparent transparent transparent;
+        }
+        .custom-tooltip:hover .tooltip-text {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+    </style>
+
+    <script type="text/javascript">
+        // 👉 FUNÇÃO: Formata data para início/fim do mês (envia para backend)
+        function formataData(){
+            let dataFil = document.getElementById('dataFil').value;
+            if(!dataFil) return;
+            
+            let [ano, mes, dia] = dataFil.split('-').map(Number);
+            // Mês em JS é 0-based, então usa diretamente
+            let inicioMes = new Date(Date.UTC(ano, mes - 1, 1, 0, 0, 0));
+            let fimMes = new Date(Date.UTC(ano, mes, 0, 23, 59, 59));
+            
+            // Envia ISO string para o backend
+            document.getElementById('dataFinal').value = inicioMes.toISOString().slice(0,10);
+            console.log("📅 Mês filtrado:", inicioMes.toISOString().slice(0,10), "a", fimMes.toISOString().slice(0,10));
+        }
+
+        // 👉 FUNÇÃO: Confirma exclusão
+        function confirmeDeletar(id){
+            if(confirm("Tem certeza que deseja excluir este agendamento?")){
+                window.location.href = "/menu/agenda/del/" + id;
+            }
+        }
+
+        // 👉 FUNÇÃO: Oculta mensagens flash
+        function OcultaMsg(){
+            document.getElementById("alertMsgFlash").hidden = true;
+        }
+    </script>
+</head>
+
+<body class="no-skin" onload="javascript:controlaNave();">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                
+                <!-- Breadcrumbs -->
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
+                        <li class="active">Agenda - Lista Mensal</li>
+                    </ul>
+                </div>
+
+                <!-- Mensagens Flash -->
+                {{#compareString flash.sucesso "true"}}
+                    <div id="alertMsgFlash" class="alert alert-success">
+                        <button type="button" class="close" onclick="OcultaMsg()"><i class="ace-icon fa fa-times"></i></button>
+                        <strong><i class="ace-icon fa fa-check"></i> {{flash.texto}}</strong>
+                    </div>
+                {{else}}
+                    {{#compareString flash.sucesso "false"}}
+                        <div id="alertMsgFlash" class="alert alert-danger">
+                            <button type="button" class="close" onclick="OcultaMsg()"><i class="ace-icon fa fa-times"></i></button>
+                            <strong><i class="ace-icon fa fa-times"></i> {{flash.texto}}</strong>
+                        </div>
+                    {{/compareString}}
+                {{/compareString}}
+
+                <!-- 🔍 BARRA DE PESQUISA SIMPLIFICADA -->
+                <div class="toolbar-pesquisa">
+                    <form class="form-inline" role="form" action="/menu/agenda/lisGeral" method="POST" onsubmit="return formataData()">
+                        <div class="form-group">
+                            <label for="dataFil"><i class="ace-icon fa fa-calendar"></i> Mês de referência:</label>
+                            <input type="date" id="dataFil" name="dataFil" value="{{dataFiltro}}" onchange="formataData()">
+                            <input type="hidden" id="dataFinal" name="dataFinal" />
+                        </div>
+                        <button type="submit" class="btn-pesquisar">
+                            <i class="ace-icon fa fa-search"></i> Pesquisar
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 📋 TABELA DE AGENDAMENTOS -->
+                <div class="row">
+                    <div class="col-xs-12">
+
+                        <!-- 🔍 PAINEL DE DEBUG - MÉTODO ROBUSTO -->
+<div class="alert alert-info" style="font-size: 9px; margin-bottom: 15px; display: {{#if debugInfo}}block{{else}}none{{/if}};">
+    <strong>🔧 DEBUG - Dados recebidos:</strong><br><br>
+    
+    <strong>📊 Contagens:</strong><br>
+    • Agendas: {{debugInfo.totalAgendas}} | 
+    • Benes: {{debugInfo.totalBenes}} | 
+    • Terapeutas: {{debugInfo.totalTerapeutas}}<br>
+    • Salas: {{debugInfo.totalSalas}} | 
+    • Terapias: {{debugInfo.totalTerapias}} | 
+    • Convs: {{debugInfo.totalConvs}}<br>
+    • Período: {{debugInfo.periodo}}<br>
+    • ID Terapeuta: {{debugInfo.idTerapeuta}}<br><br>
+    
+    {{#if debugSample.length}}
+    <strong>📋 Amostra (primeiros 3):</strong><br>
+    <table style="width:100%; border-collapse: collapse; font-size: 8px;">
+        <thead>
+            <tr style="background:#e2e8f0;">
+                <th style="border:1px solid #ccc; padding:2px;">Data</th>
+                <th style="border:1px solid #ccc; padding:2px;">Hora</th>
+                <th style="border:1px solid #ccc; padding:2px;">BeneID</th>
+                <th style="border:1px solid #ccc; padding:2px;">SalaID</th>
+                <th style="border:1px solid #ccc; padding:2px;">TerapeutaID</th>
+                <th style="border:1px solid #ccc; padding:2px;">Cat</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each debugSample}}
+            <tr>
+                <td style="border:1px solid #ccc; padding:2px;">{{data}}</td>
+                <td style="border:1px solid #ccc; padding:2px;">{{hora}}</td>
+                <td style="border:1px solid #ccc; padding:2px; font-family:monospace; max-width:100px; overflow:hidden;">{{beneId}}</td>
+                <td style="border:1px solid #ccc; padding:2px; font-family:monospace; max-width:100px; overflow:hidden;">{{salaId}}</td>
+                <td style="border:1px solid #ccc; padding:2px; font-family:monospace; max-width:100px; overflow:hidden;">{{terapeutaId}}</td>
+                <td style="border:1px solid #ccc; padding:2px;">{{categoria}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    {{else}}
+    <em>⚠️ Nenhum agendamento na amostra.</em>
+    {{/if}}
+</div>
+
+<!-- Fallback: mostrar contagens básicas sempre -->
+<div class="alert alert-warning" style="font-size: 9px; margin-bottom: 15px;">
+    <strong>📦 Dados brutos:</strong>
+    Agendas: {{agendas.length}} | Benes: {{benes.length}} | Terapeutas: {{terapeutas.length}} | 
+    Salas: {{salas.length}} | Terapias: {{terapias.length}} | Convs: {{convs.length}}
+</div>
+
+
+                        <table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid">
+                            <thead>
+                                <tr>
+                                    <th colspan="6">Atendimento</th>
+                                    <th colspan="5"><span class="label label-sm label-success">Original</span></th>
+                                    <th colspan="4"><span class="label label-sm label-danger">Substituto Fixo</span></th>
+                                    <th colspan="4"><span class="label label-sm label-purple">Substituição</span></th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                                <tr role="row">
+                                    <th class="center" style="width: 30px;">✓</th>
+                                    <th style="width: 100px;">Data</th>
+                                    <th style="width: 50px;">Hora</th>
+                                    <th style="width: 50px;">Sala</th>
+                                    <th>Beneficiário</th>
+                                    <th>Convênio</th>
+                                    <th>Origem</th>
+                                    <th>Categoria</th>
+                                    <th>Evento</th>
+                                    <th>Terapia</th>
+                                    <th>Terapeuta</th>
+                                    <th>Cred</th>
+                                    <th>Deb</th>
+                                    <th>Terapia</th>
+                                    <th>Terapeuta</th>
+                                    <th>Cred</th>
+                                    <th>Deb</th>
+                                    <th>Terapia</th>
+                                    <th>Terapeuta</th>
+                                    <th>Cred</th>
+                                    <th>Deb</th>
+                                    <th style="width: 100px;">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each agendas}}
+                                <tr role="row" class="odd">
+                                    <!-- Checkbox -->
+                                    <td class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" class="ace" name="chekId" value="{{_id}}" />
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </td>
+
+                                    <!-- Data | Hora -->
+                                    <td>{{agenda_data_dia}}</td>
+                                    <td>{{agenda_hora}}</td>
+
+                                    <!-- Sala | Beneficiário | Convênio -->
+                                    <td>
+                                        {{#each ../salas}}
+                                            {{#ifEqual this._id ../agenda_salaid}}{{sala_nome}}{{/ifEqual}}
+                                        {{/each}}
+                                    </td>
+                                    <td>
+                                        {{#each ../benes}}
+                                            {{#ifEqual this._id ../agenda_beneid}}{{bene_nome}}{{/ifEqual}}
+                                        {{/each}}
+                                    </td>
+                                    <td>
+                                        {{#each ../convs}}
+                                            {{#ifEqual this._id ../agenda_convid}}{{conv_nome}}{{/ifEqual}}
+                                        {{/each}}
+                                    </td>
+
+                                    <!-- Origem -->
+                                    <td>
+                                        {{#ifEqual agenda_org "Administrativo"}}
+                                            <span class="label label-sm label-warning">ADM</span>
+                                        {{else}}
+                                            <span class="label label-sm label-success">Padrão</span>
+                                        {{/ifEqual}}
+                                    </td>
+
+                                    <!-- Categoria (Fixo/Padrão) -->
+                                    <td>
+                                        {{#ifEqual agenda_categoria "SubstitutoFixo"}}
+                                            <span class="label label-sm label-danger">Subst. Fixo</span>
+                                        {{else}}
+                                            <span class="label label-sm label-success">Padrão</span>
+                                        {{/ifEqual}}
+                                    </td>
+
+                                    <!-- Evento (Categoria visual) -->
+                                    <td>
+                                        {{#ifEqual agenda_categoria "Feriado"}}
+                                            <span class="label-categoria label-feriado">Feriado</span>
+                                        {{else ifEqual agenda_categoria "Extra"}}
+                                            <span class="label-categoria label-extra">Extra</span>
+                                        {{else ifEqual agenda_categoria "Substituição"}}
+                                            <span class="label-categoria label-substituicao">Substituição</span>
+                                        {{else ifEqual agenda_categoria "Falta"}}
+                                            <span class="label-categoria label-falta">Falta</span>
+                                        {{else ifEqual agenda_categoria "Falta Absoluta"}}
+                                            <span class="label-categoria label-falta-absoluta">Falta Abs.</span>
+                                        {{else ifEqual agenda_categoria "Falta Justificada"}}
+                                            <span class="label-categoria label-falta-absoluta">Falta Just.</span>
+                                        {{else}}
+                                            <span class="label-categoria label-padrao">Sem Evento</span>
+                                        {{/ifEqual}}
+                                    </td>
+
+                                    <!-- === COLUNAS: ORIGINAL === -->
+                                    <td>
+                                        {{#each ../terapias}}
+                                            {{#ifEqual this._id ../agenda_terapiaid}}{{terapia_nome}}{{/ifEqual}}
+                                        {{/each}}
+                                    </td>
+                                    <td>
+                                        {{#each ../terapeutas}}
+                                            {{#ifEqual this._id ../agenda_usuid}}{{usuario_nome}}{{/ifEqual}}
+                                        {{/each}}
+                                    </td>
+                                    <td>{{agenda_valorcre}}</td>
+                                    <td>{{agenda_valordeb}}</td>
+
+                                    <!-- === COLUNAS: SUBSTITUTO FIXO === -->
+                                    <td>
+                                        {{#compareThis agenda_mergeterapiaid "766f69643132333435366964"}}
+                                            -
+                                        {{else}}
+                                            {{#each ../terapias}}
+                                                {{#ifEqual this._id ../agenda_mergeterapiaid}}{{terapia_nome}}{{/ifEqual}}
+                                            {{/each}}
+                                        {{/compareThis}}
+                                    </td>
+                                    <td>
+                                        {{#compareThis agenda_mergeterapeutaid "766f69643132333435366964"}}
+                                            -
+                                        {{else}}
+                                            {{#each ../terapeutas}}
+                                                {{#ifEqual this._id ../agenda_mergeterapeutaid}}{{usuario_nome}}{{/ifEqual}}
+                                            {{/each}}
+                                        {{/compareThis}}
+                                    </td>
+                                    <td>{{agenda_mergevalorcre}}</td>
+                                    <td>{{agenda_mergevalordeb}}</td>
+
+                                    <!-- === COLUNAS: SUBSTITUIÇÃO === -->
+                                    <td>
+                                        {{#compareThis agenda_fixoterapiaid "766f69643132333435366964"}}
+                                            -
+                                        {{else}}
+                                            {{#each ../terapias}}
+                                                {{#ifEqual this._id ../agenda_fixoterapiaid}}{{terapia_nome}}{{/ifEqual}}
+                                            {{/each}}
+                                        {{/compareThis}}
+                                    </td>
+                                    <td>
+                                        {{#compareThis agenda_fixoterapeutaid "766f69643132333435366964"}}
+                                            -
+                                        {{else}}
+                                            {{#each ../terapeutas}}
+                                                {{#ifEqual this._id ../agenda_fixoterapeutaid}}{{usuario_nome}}{{/ifEqual}}
+                                            {{/each}}
+                                        {{/compareThis}}
+                                    </td>
+                                    <td>{{agenda_fixovalorcre}}</td>
+                                    <td>{{agenda_fixovalordeb}}</td>
+
+                                    <!-- Ações + Tooltip -->
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a class="green" href="/menu/agenda/edi/{{_id}}">
+                                                <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                            </a>
+                                            <a class="red" onclick="confirmeDeletar('{{_id}}')">
+                                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                            </a>
+                                            <a class="blue custom-tooltip">
+                                                <i class="ace-icon fa fa-eye bigger-130"></i>
+                                                <span class="tooltip-text">
+                                                    <strong>Agendamento:</strong><br>
+                                                    • Criado: {{#if agenda_datacad}}{{formatDate agenda_datacad}}{{else}}—{{/if}}<br>
+                                                    • Por: {{#if agenda_usucad}}{{#each ../terapeutas}}{{#ifEqual this._id ../agenda_usucad}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{else}}—{{/if}}<br>
+                                                    • Editado: {{#if agenda_dataedi}}{{formatDate agenda_dataedi}}{{else}}—{{/if}}<br>
+                                                    • Por: {{#if agenda_usuedi}}{{#each ../terapeutas}}{{#ifEqual this._id ../agenda_usuedi}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{else}}—{{/if}}<br><br>
+                                                    <strong>Categoria:</strong> {{agenda_categoria}}<br>
+                                                    <strong>Obs:</strong> {{#if agenda_obs}}{{agenda_obs}}{{else}}—{{/if}}
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {{else}}
+                                <tr>
+                                    <td colspan="22" class="text-center text-muted">
+                                        <i class="ace-icon fa fa-info-circle"></i> 
+                                        Nenhum agendamento encontrado para o período selecionado.
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts básicos -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/chosen/chosen.jquery.min.js"></script>
+    <script src="/js/ace.min.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Inicializa Chosen nos selects (se houver)
+            $('.chosen-select').chosen({
+                width: '100%',
+                allow_single_deselect: true,
+                no_results_text: 'Nenhum resultado encontrado',
+                placeholder_text_single: 'Escolha...'
+            });
+            
+            // Tooltip: garante que funcione em mobile
+            if ('ontouchstart' in document.documentElement) {
+                $('.custom-tooltip').on('click', function(e) {
+                    e.preventDefault();
+                    $(this).find('.tooltip-text').toggle();
+                });
+            }
+        });
+    </script>
+</body>
 </html>

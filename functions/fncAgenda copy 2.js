@@ -4451,7 +4451,7 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+"_"+min;
+                e.agenda_hora = hora+":"+min;
                 e.agenda_aux = aux;
                 aux++;
 
@@ -4871,7 +4871,7 @@ carregaAgendaFilSFixo(req,res){
             let min = ""+dat.getMinutes();
             if (hora.length == 1){hora = "0" + hora + "";}
             if (min.length == 1){min = "0" + min + "";}
-            e.agenda_hora = hora+"_"+min;
+            e.agenda_hora = hora+":"+min;
             e.agenda_aux = aux;
             aux++;
 
@@ -9514,7 +9514,7 @@ carregaAgendaPessoalquasela(req, res) {
         })
     },
 
-    carregaAgendaListaGeralOLD(req, res, atrazo, resposta){//Agenda em formato de lista para facilitar Inspecao
+    carregaAgendaListaGeral(req, res, atrazo, resposta){//Agenda em formato de lista para facilitar Inspecao
          let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -9713,167 +9713,6 @@ carregaAgendaPessoalquasela(req, res) {
             res.redirect('admin/erro')
         })
     },
-// ========================================================================
-// 📋 Agenda Lista Geral - LISTA MENSAL (VERSÃO CORRIGIDA)
-// Criado por: Wagner Cintra | Editado em: 2026/04/24
-// ========================================================================
-carregaAgendaListaGeral(req, res, atrazo, resposta) {
-    
-    console.log("=".repeat(80));
-    console.log("📋 [carregaAgendaListaGeral] INÍCIO");
-    console.log("=".repeat(80));
-
-    // 📌 PASSO 1: Configurar estrutura multiempresa
-    let db = req.cookies['preferredDb'];
-    Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-    Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
-
-    // 📌 PASSO 2: Definir terapeuta logado e período (MÊS)
-    let idTerapeuta = req.cookies['idUsu'];
-    console.log(`👤 Terapeuta logado (cookie): ${idTerapeuta}`);
-    
-    let aux = 1;
-    let idsAgendasEx = [];
-    let agendaTempArr = [];
-
-    // 👉 LÓGICA DE DATA: usa data do form OU data atual
-    let dataBase = req.body.dataFinal ? new Date(req.body.dataFinal) : new Date();
-    console.log(`📅 Data base para filtro: ${dataBase.toISOString().slice(0,10)}`);
-    
-    // Criar início e fim do mês NO TIMEZONE LOCAL
-    let inicioMes = new Date(dataBase.getFullYear(), dataBase.getMonth(), 1, 0, 0, 0, 0);
-    let fimMes = new Date(dataBase.getFullYear(), dataBase.getMonth() + 1, 0, 23, 59, 59, 999);
-    
-    // Converter para ISO para query do MongoDB
-    let agora = inicioMes.toISOString();
-    let depois = fimMes.toISOString();
-    
-    console.log(`🔍 Período da query (UTC): ${agora} até ${depois}`);
-    console.log(`🔍 Período local: ${inicioMes.toLocaleString('pt-BR')} até ${fimMes.toLocaleString('pt-BR')}`);
-    console.log(`🔍 Filtro: agenda_usuid = ${idTerapeuta}`);
-
-    // 📌 PASSO 3: Buscar agendamentos ✅ CORREÇÃO: agenda_data (não agenda_)
-    Agenda.find({ 
-        agenda_data: { $gte: agora, $lte: depois },  // ✅ CORRETO AGORA
-        agenda_usuid: idTerapeuta 
-    })
-    .then((agenda) => {
-        console.log(`\n📦 Registros brutos da query: ${agenda.length}`);
-        
-        // 👉 LOG DOS PRIMEIROS 3 (se houver)
-        if (agenda.length > 0) {
-            console.log("\n🔍 AMOSTRA: Primeiros 3 registros:");
-            agenda.slice(0, 3).forEach((reg, idx) => {
-                console.log(`[#${idx+1}] _id:${reg._id} | data:${reg.agenda_data} | bene:${reg.agenda_beneid} | terapeuta:${reg.agenda_usuid}`);
-            });
-        } else {
-            console.warn("⚠️ Nenhum registro! Verifique:");
-            console.warn("  • Há agendamentos salvos para este terapeuta?");
-            console.warn("  • O campo 'agenda_usuid' está sendo preenchido ao salvar?");
-        }
-        
-        // 👉 Filtrar "Feriado"
-        agenda = agenda.filter(a => ("" + a.agenda_categoria) !== "Feriado");
-
-        // 📌 PASSO 4: Formatar campos para exibição
-        agenda.forEach((e) => {
-            let dat = new Date(e.agenda_data);
-            e.agenda_data_dia = fncGeral.getDataFMT(dat);
-            e.agenda_hora = `${String(dat.getUTCHours()).padStart(2,'0')}:${String(dat.getMinutes()).padStart(2,'0')}`;
-            e.agenda_aux = aux++;
-            e.agenda_data_semana = ["dom","seg","ter","qua","qui","sex","sab"][dat.getUTCDay()];
-        });
-
-        // 📌 PASSO 5: Remover duplicados (lógica temp/pai)
-        agenda.forEach((as) => { 
-            if (as.agenda_temp === true) agendaTempArr.push(as.agenda_tempId); 
-        });
-        agenda.forEach((a) => {
-            if (!agendaTempArr.some(atr => ""+atr == ""+a._id)) {
-                idsAgendasEx.push(a);
-            }
-        });
-
-        // 📌 PASSO 6: Buscar dados auxiliares
-        return Promise.all([
-            Bene.find().lean(),
-            Usuario.find({ usuario_funcaoid: "6241030bfbcc51f47c720a0b", usuario_status: "Ativo" }).lean(),
-            Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }).lean(),
-            Sala.find().lean(),
-            Terapia.find({ terapia_status: "Ativo", terapia_lixo: { $ne: "true" }}).lean(),
-            Conv.find().lean()
-        ])
-        .then(([benes, terapeutas, horaage, salas, terapias, convs]) => {
-            
-            // 👉 Ordenar arrays
-            [benes, terapeutas, salas, terapias, convs].forEach(arr => {
-                arr?.sort((a,b) => {
-                    const key = Object.keys(a).find(k => k.includes('nome'));
-                    return a[key]?.localeCompare(b[key], 'pt-BR') || 0;
-                });
-            });
-
-            // 👉 Ordenar agenda por data + hora
-            idsAgendasEx.sort((a, b) => {
-                let h1 = a.agenda_hora.substring(0,2), m1 = a.agenda_hora.substring(3,5);
-                let h2 = b.agenda_hora.substring(0,2), m2 = b.agenda_hora.substring(3,5);
-                let compHora = (h1 == h2) ? (m1 < m2 ? -1 : 1) : (h1 < h2 ? -1 : 1);
-                return new Date(a.agenda_data) - new Date(b.agenda_data) || compHora;
-            });
-
-            // 👉 Preparar debug para view
-            const stringifyIds = (arr) => JSON.parse(JSON.stringify(arr));
-            let debugSample = idsAgendasEx.slice(0, 3).map(reg => ({
-                _id: reg._id, 
-                data: reg.agenda_data_dia, 
-                hora: reg.agenda_hora,
-                beneId: reg.agenda_beneid, 
-                salaId: reg.agenda_salaid,
-                terapiaId: reg.agenda_terapiaid, 
-                terapeutaId: reg.agenda_usuid,
-                convid: reg.agenda_convid, 
-                categoria: reg.agenda_categoria
-            }));
-
-            // 📌 PASSO 7: Renderizar view
-            console.log("\n✅ Renderizando view agendaListaGeral...");
-            console.log("=".repeat(80));
-            
-            res.render("agenda/agendaListaGeral", {
-                agendas: stringifyIds(idsAgendasEx),
-                benes: stringifyIds(benes),
-                terapeutas: stringifyIds(terapeutas),
-                salas: stringifyIds(salas),
-                terapias: stringifyIds(terapias),
-                convs: stringifyIds(convs),
-                horaages: stringifyIds(horaage),
-                dataFiltro: req.body.dataFinal || new Date().toISOString().slice(0,10),
-                debugSample: debugSample,
-                debugInfo: {
-                    totalAgendas: idsAgendasEx.length,
-                    totalBenes: benes.length,
-                    totalTerapeutas: terapeutas.length,
-                    totalSalas: salas.length,
-                    totalTerapias: terapias.length,
-                    totalConvs: convs.length,
-                    periodo: `${inicioMes.toLocaleString('pt-BR')} a ${fimMes.toLocaleString('pt-BR')}`,
-                    idTerapeuta: idTerapeuta
-                },
-                flash: resposta
-            });
-        });
-    })
-    .catch((err) => {
-        console.error("❌ [ERRO] carregaAgendaListaGeral:", err);
-        req.flash("error_message", "Erro ao carregar lista de agendamentos");
-        res.redirect('/admin/erro');
-    });
-},
 
     carregaEvolucaosup(req, res, atrazo, resposta){
         let db = req.cookies['preferredDb'];
@@ -10675,7 +10514,7 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
     if (erros.length) console.warn("Erros:", erros, convid);
 
     // recarrega view ou envia sucesso
-    this.carregaAgendaF(req, res); // mantém a chamada final do teu fluxo
+    //this.carregaAgendaF(req, res); // mantém a chamada final do teu fluxo
   } catch (err) {
     console.error("Erro converteAgendaEmAtend:", err);
     //res.render('admin/erro');

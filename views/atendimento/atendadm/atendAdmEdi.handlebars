@@ -192,12 +192,7 @@
 				// --- Data ISO ---
 				atualizaData();
 				
-				// --- Carrega valores financeiros automaticamente ---
-				if ($('#atendConvid').val() !== 'X' && $('#atendTerapiaid').val()) {
-					carregaValores();
-				}
-				// Sempre tenta carregar os valores fixos também
-				carregaValoresFixo();
+				
 				
 				console.log("=== FINISH carregaBody ===");
 			}
@@ -228,19 +223,15 @@
 
 			// ===== INICIALIZAÇÃO DO CHOSEN + CARREGAMENTO =====
 			$(document).ready(function() {
-				// Inicializa todos os selects com Chosen
-				$(".chosen-select").chosen({
-					width: "100%",
-					allow_single_deselect: true,
-					no_results_text: "Nenhum resultado encontrado...",
-					single_backstroke_delete: false
-				});
 				
-				// Garante que a seção Fixo esteja SEMPRE visível (remove qualquer display:none)
+				
+				// 2️⃣ Depois: garante que a seção Fixo esteja visível
 				$('#divSubFixo').show().css('display', '');
 				
-				// Se o body já carregou via onload, os campos já foram populados
-				// Caso contrário, carregaBody() será chamado pelo onload do body
+				// 3️⃣ POR ÚLTIMO: popula os campos e atualiza o Chosen
+				// Remove o onload do <body> e chama aqui:
+				carregaBody();
+				controlaNave(); // se essa função também depender do DOM pronto
 			});
 		</script>
 	</head>

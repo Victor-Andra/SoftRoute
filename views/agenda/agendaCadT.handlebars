@@ -267,36 +267,56 @@
         }
       }
 
-      function validarCamposObrigatorios(e) {
-        const campos = [
-          { id: 'agendaBeneid', nome: 'Beneficiário' },
-          { id: 'agendaUsuid', nome: 'Terapeuta' },
-          { id: 'agendaTerapiaid', nome: 'Terapia' },
-          { id: 'agendaSalaid', nome: 'Sala' }
-        ];
-        let erro = false;
-        campos.forEach(c => {
-          const el = document.getElementById(c.id);
-          const val = el ? el.value : '';
-          if (!val || val === '766f69643132333435366964' || val === '-') {
-            alert('O campo "' + c.nome + '" é obrigatório e não pode ficar em branco ou com "-"!');
-            if(typeof jQuery !== 'undefined' && jQuery('#'+c.id).data('chosen')) {
-              jQuery('#'+c.id).closest('.chosen-container').addClass('chosen-error');
-              jQuery('#'+c.id).trigger('chosen:updated');
+     function validarCamposObrigatorios(e) {
+          // Lista dos campos que devem ser validados + seus nomes amigáveis
+          const campos = [
+            { id: 'agendaBeneid', nome: 'Beneficiário' },
+            { id: 'agendaUsuid', nome: 'Terapeuta' },
+            { id: 'agendaTerapiaid', nome: 'Terapia' },
+            { id: 'agendaSalaid', nome: 'Sala' },
+            { id: 'agendaHora', nome: 'Hora Agendamento' },
+            { id: 'agendaCateg', nome: 'Categoria' },
+            { id: 'agendaOrg', nome: 'Origem Agendamento' }
+          ];
+
+          let camposComErro = [];
+
+          campos.forEach(c => {
+            const el = document.getElementById(c.id);
+            if (!el) return;
+
+            const val = el.value?.trim();
+            // Verifica se está vazio, com placeholder ou com "-"
+            if (!val || val === '766f69643132333435366964' || val === '-') {
+              camposComErro.push(c.nome);
+              
+              // Destaque visual no Chosen
+              if (typeof jQuery !== 'undefined' && jQuery('#' + c.id).data('chosen')) {
+                jQuery('#' + c.id).closest('.chosen-container').addClass('chosen-error');
+                jQuery('#' + c.id).trigger('chosen:updated');
+              }
+            } else {
+              // Remove destaque se estiver válido
+              if (typeof jQuery !== 'undefined') {
+                jQuery('#' + c.id).closest('.chosen-container').removeClass('chosen-error');
+              }
             }
-            erro = true;
-          } else {
-            if(typeof jQuery !== 'undefined') {
-              jQuery('#'+c.id).closest('.chosen-container').removeClass('chosen-error');
-            }
+          });
+
+          // Se houver erros, bloqueia e mostra mensagem
+          if (camposComErro.length > 0) {
+            e.preventDefault();
+            
+            const mensagem = 'Os seguintes campos são obrigatórios e não podem ficar em branco:\n\n• ' + 
+                            camposComErro.join('\n• ') + 
+                            '\n\nPor favor, selecione uma opção válida para continuar.';
+            
+            alert(mensagem);
+            return false;
           }
-        });
-        if (erro) {
-          e.preventDefault();
-          return false;
+
+          return true;
         }
-        return true;
-      }
     </script>
   </head>
   <body class="no-skin" onload="javascript:controlaNave();carregaBody();controlaCategoria();">

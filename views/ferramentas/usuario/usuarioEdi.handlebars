@@ -18,28 +18,87 @@
 		}
 		</style>
 		<script>
-			
 			function carregaBody(){
+    
+				// 🔧 Helper interna: atualiza um campo e, se for select com Chosen, dispara a atualização da UI
+				function atualizaCampo(idDestino, idOrigem, ehChosen = false) {
+					const origem = document.getElementById(idOrigem);
+					const destino = document.getElementById(idDestino);
+					
+					if (!origem || !destino) {
+						console.warn(`Campos não encontrados: origem="${idOrigem}", destino="${idDestino}"`);
+						return;
+					}
+					
+					destino.value = origem.value;
+					
+					// Se for select com Chosen inicializado, atualiza a UI
+					if (ehChosen && typeof $ !== 'undefined' && $(destino).hasClass('chosen-select')) {
+						// Pequeno delay para garantir que o Chosen já foi inicializado
+						setTimeout(() => {
+							if ($(destino).data('chosen') || $(destino).next('.chosen-container').length) {
+								$(destino).trigger('chosen:updated');
+							}
+						}, 50);
+					}
+				}
 				
-				let funcaoId = document.getElementById("usuFuncaoId").value;
-				document.getElementById("usuarioFuncaoid").value = document.getElementById("usuFuncaoId").value;
-				document.getElementById("usuarioEnduf").value = document.getElementById("usuUFId").value;
-				document.getElementById("usuarioFilhos").value = document.getElementById("usuFilhos").value;
-				console.log("usuperfdilid:"+document.getElementById("usuPerfilId").value);
-				document.getElementById("usuarioPerfilid").value = document.getElementById("usuPerfilId").value;
-				document.getElementById("usuarioContaTipo").value = document.getElementById("usuContaTipo").value;
-				document.getElementById("usuarioTipoPix").value = document.getElementById("usuTipoPix").value;
-				document.getElementById("usuarioContrato").value = document.getElementById("usuContrato").value;
-				document.getElementById("usuarioEscolaridade").value = document.getElementById("usuEscolaridade").value;
-				document.getElementById("usuarioFilhosQt").value = document.getElementById("usuFilhosQt").value;
-				document.getElementById("usuarioGraduacao").value = document.getElementById("usuGraduacao").value;
-				document.getElementById("usuarioEspecializacao").value = document.getElementById("usuEspecializacao").value;
-				document.getElementById("usuarioMetodo").value = document.getElementById("usuMetodo").value;
-				document.getElementById("usuarioMetout").value = document.getElementById("usuMetout").value;
-				document.getElementById("usuarioEscolaridadeobs").value = document.getElementById("usuEscolaridadeobs").value;
-				document.getElementById("usuarioAba").value = document.getElementById("usuAba").value;
-				document.getElementById("usuarioEmpresaid").value = document.getElementById("usuempresaids").value[0];
-				console.log("termina");
+				// 🔧 Helper específica para campos que precisam de split (ex: empresaids)
+				function atualizaCampoComSplit(idDestino, idOrigem, separador = ',', indice = 0, ehChosen = false) {
+					const origem = document.getElementById(idOrigem);
+					const destino = document.getElementById(idDestino);
+					
+					if (!origem || !destino) {
+						console.warn(`Campos não encontrados: origem="${idOrigem}", destino="${idDestino}"`);
+						return;
+					}
+					
+					const valorBruto = origem.value;
+					const valorFinal = valorBruto ? valorBruto.split(separador)[indice] : '';
+					destino.value = valorFinal;
+					
+					if (ehChosen && typeof $ !== 'undefined' && $(destino).hasClass('chosen-select')) {
+						setTimeout(() => {
+							if ($(destino).data('chosen') || $(destino).next('.chosen-container').length) {
+								$(destino).trigger('chosen:updated');
+							}
+						}, 50);
+					}
+				}
+				
+				// 📋 Dados básicos (campos de texto simples)
+				atualizaCampo('usuarioFilhosQt', 'usuFilhosQt');
+				
+				// 📋 Selects simples (com Chosen)
+				atualizaCampo('usuarioFilhos', 'usuFilhos', true);
+				atualizaCampo('usuarioPerfilid', 'usuPerfilId', true);
+				atualizaCampo('usuarioContaTipo', 'usuContaTipo', true);
+				atualizaCampo('usuarioTipoPix', 'usuTipoPix', true);
+				atualizaCampo('usuarioContrato', 'usuContrato', true);
+				atualizaCampo('usuarioEscolaridade', 'usuEscolaridade', true);
+				atualizaCampo('usuarioAba', 'usuAba', true);
+				
+				// 📋 Função (select com Chosen + largura customizada)
+				atualizaCampo('usuarioFuncaoid', 'usuFuncaoId', true);
+				
+				// 📋 Empresa (precisa de split, pois pode vir como lista)
+				atualizaCampoComSplit('usuarioEmpresaid', 'usuempresaids', ',', 0, true);
+				
+				// 📋 UF (select de estados)
+				atualizaCampo('usuarioEnduf', 'usuUFId', true);
+				
+				// 📋 Campos de texto/textarea da escolaridade
+				atualizaCampo('usuarioEscolaridadeobs', 'usuEscolaridadeobs');
+				
+				// 📋 Campos hidden que armazenam valores dos checkboxes (graduacao, especializacao, etc)
+				// Estes NÃO são selects, então não precisam de Chosen
+				atualizaCampo('usuarioGraduacao', 'usuGraduacao');
+				atualizaCampo('usuarioEspecializacao', 'usuEspecializacao');
+				atualizaCampo('usuarioMetodo', 'usuMetodo');
+				atualizaCampo('usuarioMetout', 'usuMetout');
+				
+				// ✅ Log de conclusão (útil para debug)
+				console.log('✅ carregaBody: campos populados com sucesso');
 			}
 			
 			function carregarImagem() {
@@ -66,13 +125,17 @@
 				preencherCheckbox('usuarioMetoutOp', 'usuarioMetout');
 			}
 
-			// Função para preencher os checkboxes com base nos valores existentes
 			function preencherCheckbox(nomeCheckbox, nomeCampoTexto) {
+				var campoTexto = document.getElementById(nomeCampoTexto);
+				if (!campoTexto) {
+					console.warn('Campo não encontrado:', nomeCampoTexto);
+					return;
+				}
 				var checkboxes = document.getElementsByName(nomeCheckbox);
-				var valoresSelecionados = document.getElementById(nomeCampoTexto).value.split(';');
-
-				checkboxes.forEach(function(checkbox) {
-				checkbox.checked = valoresSelecionados.includes(checkbox.value);
+				var valoresSelecionados = campoTexto.value ? campoTexto.value.split(';').filter(v => v) : [];
+				
+				Array.from(checkboxes).forEach(function(checkbox) {
+					checkbox.checked = valoresSelecionados.includes(checkbox.value);
 				});
 			}
 
@@ -114,12 +177,7 @@
 			// Chama a função para preencher os checkboxes ao carregar a página
 			preencherCheckboxes();
 
-			// Adiciona um evento change a cada checkbox
-			checkboxes.forEach(function(checkbox) {
-				checkbox.addEventListener('change', function() {
-				updateUsuarioGraduacao();
-				});
-			});
+			
 
 			function atualizarCamposTexto(nomeCheckbox, nomeCampoTexto) {
 				var checkboxes = document.getElementsByName(nomeCheckbox);
@@ -401,7 +459,7 @@
 																			{{#each especialidades}}
 																			<div class="checkbox">
 																				<label>
-																					<input name="usuarioGraduacaoOp" class="ace" type="checkbox" value="{{_id}}" onchange="atualizarCamposTexto('usuarioGraduacaoOp', 'usuarioGraduacao')">
+																					<input name="usuarioGraduacaoOp" class="ace" type="checkbox" value="{{_id}}" onchange="atualizarCampoTexto('usuarioGraduacaoOp', 'usuarioGraduacao')">
 																					<span class="lbl">&nbsp;{{especialidade_nome}}</span>
 																				</label>
 																			</div>
@@ -412,7 +470,7 @@
 																			{{#each especializacaos}}
 																			<div class="checkbox">
 																				<label>
-																					<input name="usuarioEspecializacaoOp" class="ace" type="checkbox" value="{{_id}}" onchange="atualizarCamposTexto('usuarioEspecializacaoOp', 'usuarioEspecializacao')">
+																					<input name="usuarioEspecializacaoOp" class="ace" type="checkbox" value="{{_id}}" onchange="atualizarCampoTexto('usuarioEspecializacaoOp', 'usuarioEspecializacao')">
 																					<span class="lbl">&nbsp;{{especializacao_nome}}</span>
 																				</label>
 																			</div>
@@ -423,7 +481,7 @@
 																			{{#each metodos}}
 																			<div class="checkbox">
 																				<label>
-																					<input name="usuarioMetodoOp" class="ace" type="checkbox" value="{{_id}}" onchange="atualizarCamposTexto('usuarioMetodoOp', 'usuarioMetodo')">
+																					<input name="usuarioMetodoOp" class="ace" type="checkbox" value="{{_id}}" onchange="atualizarCampoTexto('usuarioMetodoOp', 'usuarioMetodo')">
 																					<span class="lbl">&nbsp;{{metodo_nome}}</span>
 																				</label>
 																			</div>
@@ -434,7 +492,7 @@
 																			{{#each metouts}}
 																			<div class="checkbox">
 																				<label>
-																					<input name="usuarioMetoutOp" class="ace" type="checkbox" value="{{_id}}" onchange="atualizarCamposTexto('usuarioMetoutOp', 'usuarioMetout')">
+																					<input name="usuarioMetoutOp" class="ace" type="checkbox" value="{{_id}}" onchange="atualizarCampoTexto('usuarioMetoutOp', 'usuarioMetout')">
 																					<span class="lbl">&nbsp;{{metout_nome}}</span>
 																				</label>
 																			</div>
@@ -443,11 +501,10 @@
 																		</td>
 																	</tr>
 																	<tr hidden>
-																		<td><input name="usuarioGraduacao" id="usuarioGraduacao" type="text" value="{{_id}}"></td>
-																		<td><input name="usuarioEspecializacao" id="usuarioEspecializacao" type="text"  value="{{_id}}"></td>
-																		<td><input name="usuarioMetodo" id="usuarioMetodo" type="text"  value="{{_id}}"></td>
-																		<td><input name="usuarioMetout" id="usuarioMetout" type="text"  value="{{_id}}"></td>
-																		
+																		<td><input name="usuarioGraduacao" id="usuarioGraduacao" type="text" value="{{usuario.usuario_graduacao}}"></td>
+																		<td><input name="usuarioEspecializacao" id="usuarioEspecializacao" type="text" value="{{usuario.usuario_especializacao}}"></td>
+																		<td><input name="usuarioMetodo" id="usuarioMetodo" type="text" value="{{usuario.usuario_metodo}}"></td>
+																		<td><input name="usuarioMetout" id="usuarioMetout" type="text" value="{{usuario.usuario_metout}}"></td>
 																	</tr>
 																	<tr>
 																		<td colspan="4"><label>Outras informações</label></td>
@@ -792,7 +849,7 @@
 								{{/ifEqual}}
 								<div class="row">
 									<div class="col-sm-12">
-										<form method="POST" action="/menu/ferramentas/usupermis/salvar-massa-uform">
+										<form id="formPermissoes" method="POST" action="/menu/ferramentas/usupermis/salvar-massa-uform">
 											<!-- ID do usuário sendo editado -->
 											<input type="hidden" name="usupermis_usuid" value="{{usuario._id}}" />
 											
@@ -995,16 +1052,25 @@
 			}
 		});	
 		
-		</script>
-		<script>
-			// Garantir que todos os selects de permissão sejam enviados, mesmo se não alterados
-			document.querySelector('#permiss form').addEventListener('submit', function(e) {
-				// Criar inputs hidden com todos os valores atuais dos selects
+			// Helper para atualizar select + Chosen
+			function atualizaSelectComChosen(idSelect, idOrigem) {
+				const valor = document.getElementById(idOrigem).value;
+				const select = document.getElementById(idSelect);
+				if (select) {
+					select.value = valor;
+					// Se o Chosen estiver inicializado, atualiza a UI
+					if ($(select).hasClass('chosen-select') && $(select).data('chosen')) {
+						$(select).trigger('chosen:updated');
+					}
+				}
+			}
+			// Antes: document.querySelector('#permiss form')
+			// Depois:
+			document.getElementById('formPermissoes').addEventListener('submit', function(e) {
 				const selects = this.querySelectorAll('select[name^="permissoes"]');
 				selects.forEach(select => {
 					const name = select.name;
 					const value = select.value;
-					// Se já existe input hidden com esse name, atualiza
 					let hidden = this.querySelector(`input[name="${name}"]`);
 					if (!hidden) {
 						hidden = document.createElement('input');
@@ -1013,6 +1079,27 @@
 						this.appendChild(hidden);
 					}
 					hidden.value = value;
+				});
+			});
+			// Após carregar a página, inicialize o Chosen apenas para a tab ativa
+			$(document).ready(function() {
+				// Inicializa Chosen apenas para elementos visíveis
+				$('.chosen-select:visible').chosen({
+					// suas opções aqui
+					width: '100%',
+					disable_search_threshold: 10
+				});
+				
+				// Quando mudar de tab, inicializa o Chosen nos novos elementos
+				$('#myTab a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+					const targetTab = $(e.target).attr('href');
+					$(targetTab + ' .chosen-select').each(function() {
+						if (!$(this).data('chosen')) {
+							$(this).chosen({ width: '100%' });
+							// Se já tiver valor, força atualização
+							$(this).trigger('chosen:updated');
+						}
+					});
 				});
 			});
 			</script>

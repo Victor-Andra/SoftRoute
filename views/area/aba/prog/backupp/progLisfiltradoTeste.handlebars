@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Lista ABA</title>
+	<style>
+		.sparkline { display: inline-block; width: 100px; height: 30px; display: flex; align-items: center; justify-content: center; }
+		.btn-wider { display: flex; align-items: center; justify-content: center; padding: 5px 10px; min-width: 100px; }
+		.statusfol { display: inline-block; width: 100px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 9px; }
+	</style>
+</head>
+<body onload="controlaNave();carregaBody();" class="no-skin">
+	<div class="main-container ace-save-state" id="main-container">
+		<div class="main-content">
+			<div class="main-content-inner">
+				{{#each benes}}
+				{{!-- ✅ ESCOPO ÚNICO: só 1 beneficiário --}}
+				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li><i class="ace-icon fa fa-home home-icon"></i> <a href="/">Home</a></li>
+						<li class="active">Programas e Supervisões — {{bene_nome}}</li>
+					</ul>
+				</div>
+
+				<!-- ✅ Cabeçalho do Beneficiário -->
+				<div class="widget-box">
+					<div class="widget-header">
+						<h4 class="widget-title">
+							<i class="green ace-icon fa fa-user"></i>
+							{{bene_nome}} &nbsp;
+							<i class="orange ace-icon fa fa-birthday-cake"></i> {{datanasc}} &nbsp;
+							<i class="red ace-icon fa fa-sliders"></i> {{idade}} anos
+						</h4>
+					</div>
+				</div>
+
+				<!-- ✅ Tabs: Programas / Supervisões -->
+				<div class="tabbable">
+					<ul class="nav nav-tabs" id="myTab">
+						<li class="active">
+							<a data-toggle="tab" href="#prog{{_id}}" aria-expanded="true">
+								<i class="red ace-icon fa fa-book"></i> Programas ABA
+							</a>
+						</li>
+						<li>
+							<a data-toggle="tab" href="#super{{_id}}" aria-expanded="false">
+								<i class="blue ace-icon fa fa-user-md"></i> Supervisões
+							</a>
+						</li>
+					</ul>
+
+					<div class="tab-content">
+						<!-- ✅ TAB: PROGRAMAS -->
+						<div id="prog{{_id}}" class="tab-pane active">
+							{{#if ../progs.length}}
+								{{#each ../progs}}
+									{{#ifEqual this.prog_beneid ../_id}}
+									<div class="widget-box">
+										<div class="widget-header">
+											<h5>
+												{{!-- Tipo --}}
+												{{#each ../../progtipos}}
+													{{#ifEqual this._id ../prog_tipo}}
+														{{progtipo_nome}}
+													{{/ifEqual}}
+												{{/each}}
+												&nbsp;—&nbsp;
+												{{!-- Nível --}}
+												{{#each ../../prognivels}}
+													{{#ifEqual this._id ../prog_nivel}}
+														{{prognivel_nome}}
+													{{/ifEqual}}
+												{{/each}}
+												&nbsp;—&nbsp;
+												{{prog_dataini}} até {{prog_datafin}}
+											</h5>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="row">
+													<div class="col-sm-12">
+														<span class="label label-warning arrowed-in-right">Objetivo</span>
+														<p class="alert alert-warning">{{prog_objetivo}}</p>
+													</div>
+													<div class="col-sm-6">
+														<span class="label label-success arrowed-in-right">Procedimento</span>
+														<p class="alert alert-success">{{prog_procedimento}}</p>
+													</div>
+													<div class="col-sm-6">
+														<span class="label label-info arrowed-in-right">Exemplo</span>
+														<p class="alert alert-info">{{prog_exemplo}}</p>
+													</div>
+													<div class="col-sm-12">
+														<span class="label label-danger arrowed-in-right">Dicas</span>
+														<div id="prog-dicatipo-container-{{@index}}">{{prog_dicatipotext}}</div>
+													</div>
+												</div>
+												<hr>
+												<span class="label label-danger arrowed-in-right">SETs</span>
+												<table class="table table-bordered">
+													<thead><tr><th>SET</th><th>Desc</th><th>Estímulos ({{prog_total_estimulos}})</th><th>Registros</th></tr></thead>
+													<tbody>
+														{{#each ../../progsets}}
+															{{#ifEqual this.progset_progid ../_id}}
+															<tr>
+																<td>{{progset_num}}</td>
+																<td>{{progset_desc}}</td>
+																<td>
+																	{{#ifEqual ../progset_qtest 1}}<span class="badge badge-info">{{../progset_esta}}</span>{{/ifEqual}}
+																	{{#ifEqual ../progset_qtest 2}}<span class="badge badge-info">{{../progset_esta}}</span> <span class="badge badge-warning">{{../progset_estb}}</span>{{/ifEqual}}
+																	{{#ifEqual ../progset_qtest 3}}<span class="badge badge-info">{{../progset_esta}}</span> <span class="badge badge-warning">{{../progset_estb}}</span> <span class="badge badge-pink">{{../progset_estc}}</span>{{/ifEqual}}
+																	{{#ifEqual ../progset_qtest 4}}<span class="badge badge-info">{{../progset_esta}}</span> <span class="badge badge-warning">{{../progset_estb}}</span> <span class="badge badge-pink">{{../progset_estc}}</span> <span class="badge badge-danger">{{../progset_estd}}</span>{{/ifEqual}}
+																	{{#ifEqual ../progset_qtest 5}}<span class="badge badge-info">{{../progset_esta}}</span> <span class="badge badge-warning">{{../progset_estb}}</span> <span class="badge badge-pink">{{../progset_estc}}</span> <span class="badge badge-danger">{{../progset_estd}}</span> <span class="badge badge-success">{{../progset_este}}</span>{{/ifEqual}}
+																	{{#ifEqual ../progset_qtest 6}}<span class="badge badge-info">{{../progset_esta}}</span> <span class="badge badge-warning">{{../progset_estb}}</span> <span class="badge badge-pink">{{../progset_estc}}</span> <span class="badge badge-danger">{{../progset_estd}}</span> <span class="badge badge-success">{{../progset_este}}</span> <span class="badge badge-purple">{{../progset_estf}}</span>{{/ifEqual}}
+																	{{#ifEqual ../progset_qtest 7}}<span class="badge badge-info">{{../progset_esta}}</span> <span class="badge badge-warning">{{../progset_estb}}</span> <span class="badge badge-pink">{{../progset_estc}}</span> <span class="badge badge-danger">{{../progset_estd}}</span> <span class="badge badge-success">{{../progset_este}}</span> <span class="badge badge-purple">{{../progset_estf}}</span> <span class="badge badge-brown">{{../progset_estg}}</span>{{/ifEqual}}
+																	{{#ifEqual ../progset_qtest 8}}<span class="badge badge-info">{{../progset_esta}}</span> <span class="badge badge-warning">{{../progset_estb}}</span> <span class="badge badge-pink">{{../progset_estc}}</span> <span class="badge badge-danger">{{../progset_estd}}</span> <span class="badge badge-success">{{../progset_este}}</span> <span class="badge badge-purple">{{../progset_estf}}</span> <span class="badge badge-brown">{{../progset_estg}}</span> <span class="badge badge-green">{{../progset_esth}}</span>{{/ifEqual}}
+																	{{#ifEqual ../progset_qtest 9}}<span class="badge badge-info">{{../progset_esta}}</span> <span class="badge badge-warning">{{../progset_estb}}</span> <span class="badge badge-pink">{{../progset_estc}}</span> <span class="badge badge-danger">{{../progset_estd}}</span> <span class="badge badge-success">{{../progset_este}}</span> <span class="badge badge-purple">{{../progset_estf}}</span> <span class="badge badge-brown">{{../progset_estg}}</span> <span class="badge badge-green">{{../progset_esth}}</span> <span class="badge badge-yellow">{{../progset_esti}}</span>{{/ifEqual}}
+																	{{#ifEqual ../progset_qtest 10}}<span class="badge badge-info">{{../progset_esta}}</span> <span class="badge badge-warning">{{../progset_estb}}</span> <span class="badge badge-pink">{{../progset_estc}}</span> <span class="badge badge-danger">{{../progset_estd}}</span> <span class="badge badge-success">{{../progset_este}}</span> <span class="badge badge-purple">{{../progset_estf}}</span> <span class="badge badge-brown">{{../progset_estg}}</span> <span class="badge badge-green">{{../progset_esth}}</span> <span class="badge badge-yellow">{{../progset_esti}}</span> <span class="badge badge-info">{{../progset_estj}}</span>{{/ifEqual}}
+																</td>
+																<td>
+																	{{#each ../../../folregs}}
+																		{{#ifEqual this.folreg_setid ../_id}}
+																		<a href="/menu/area/aba/folreg/Edi/{{this._id}}/{{../../_id}}" class="btn btn-xs btn-{{#ifEqual folreg_tiporeg 'Simples'}}purple{{else}}info{{/ifEqual}}">
+																			{{folreg_datareg}}
+																		</a>
+																		{{/ifEqual}}
+																	{{/each}}
+																</td>
+															</tr>
+															{{/ifEqual}}
+														{{/each}}
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+									{{/ifEqual}}
+								{{/each}}
+							{{else}}
+								<div class="alert alert-warning">
+									<i class="ace-icon fa fa-exclamation-triangle"></i>
+									Nenhum programa cadastrado para {{bene_nome}}.
+								</div>
+							{{/if}}
+						</div>
+
+						<!-- ✅ TAB: SUPERVISÕES (filtradas por programa) -->
+						<div id="super{{_id}}" class="tab-pane">
+							{{#if ../progs.length}}
+								{{#each ../progs}}
+									{{#ifEqual this.prog_beneid ../_id}}
+									<h5>
+										<i class="blue ace-icon fa fa-book"></i>
+										Supervisões — 
+										{{#each ../../progtipos}}
+											{{#ifEqual this._id ../prog_tipo}}
+												{{progtipo_nome}}
+											{{/ifEqual}}
+										{{/each}}
+									</h5>
+									<table class="table table-bordered">
+										<thead><tr><th>Supervisão</th><th>Análise</th><th>Sugestão</th></tr></thead>
+										<tbody>
+											{{#each ../../notasups}}
+												{{!-- ✅ SÓ entra se: bene + prog corretos --}}
+												{{#ifEqual this.notasup_beneid ../../_id}}
+													{{#ifEqual this.notasup_progid ../_id}}
+													<tr>
+														<td>
+															<p class="alert alert-info">
+																<b>{{notasup_tiposup}}</b> — {{notasup_datanotasup}} {{notasup_horanotasup}}<br>
+																<b>Terapeuta:</b>
+																{{#each ../../../usuarios}}
+																	{{#ifEqual this._id ../notasup_terapeutaid}}
+																		{{usuario_nome}}
+																	{{/ifEqual}}
+																{{/each}}
+															</p>
+														</td>
+														<td>
+															{{#each this.notasup_obs}}
+																{{#ifEqual notaSupObs_progid ../notasup_progid}}
+																	<p class="alert alert-danger">{{notaSupObs_analise}}</p>
+																{{/ifEqual}}
+															{{/each}}
+														</td>
+														<td>
+															{{#each this.notasup_obs}}
+																{{#ifEqual notaSupObs_progid ../notasup_progid}}
+																	<p class="alert alert-warning">{{notaSupObs_sugestao}}</p>
+																{{/ifEqual}}
+															{{/each}}
+														</td>
+													</tr>
+													{{/ifEqual}}
+												{{/ifEqual}}
+											{{/each}}
+										</tbody>
+									</table>
+									<hr>
+									{{/ifEqual}}
+								{{/each}}
+							{{else}}
+								<div class="alert alert-warning">
+									<i class="ace-icon fa fa-exclamation-triangle"></i>
+									Nenhum programa cadastrado → sem supervisões.
+								</div>
+							{{/if}}
+						</div>
+					</div>
+				</div>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+
+	<script>
+		function activateBootstrapTabs() {
+			$('#myTab a[data-toggle="tab"]').off('click.bs.tab').on('click.bs.tab', function(e) {
+				e.preventDefault();
+				$(this).tab('show');
+			});
+			if ($('#myTab .active').length === 0) $('#myTab a:first').tab('show');
+		}
+
+
+		$(document).ready(function() {
+			activateBootstrapTabs();
+			carregaBody();
+		});
+	</script>
+</body>
+</html>

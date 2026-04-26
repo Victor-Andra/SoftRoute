@@ -6,154 +6,12 @@
 
 		<meta name="description" content="Static &amp; Dynamic Tables">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-		<style>
-			/* ============================================
-				BARRA DE PESQUISA - CLASSE SEPARADA
-			============================================ */
-			.toolbar-pesquisa {
-				background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
-				color: white;
-				padding: 15px;
-				border-radius: 8px;
-				margin: 0 12px 20px 12px;
-				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-				border: 1px solid #1976d2;
-			}
-			.toolbar-pesquisa h5 {
-				margin: 0 0 12px 0;
-				font-size: 14px;
-				font-weight: 600;
-				display: flex;
-				align-items: center;
-				gap: 8px;
-			}
-			.toolbar-pesquisa h5 i {
-				font-size: 18px;
-			}
-			.toolbar-pesquisa .form-inline {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 12px;
-				align-items: flex-end;
-			}
-			.toolbar-pesquisa .form-row {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 12px;
-				width: 100%;
-				align-items: flex-end;
-			}
-			.toolbar-pesquisa .form-group {
-				margin: 0;
-				display: flex;
-				flex-direction: column;
-				align-items: flex-start;
-				min-width: 140px;
-				flex: 1;
-				max-width: 220px;
-			}
-			.toolbar-pesquisa label {
-				font-size: 11px;
-				font-weight: 500;
-				margin-bottom: 4px;
-				color: #f8f9fa;
-				white-space: nowrap;
-			}
-			.toolbar-pesquisa input[type="date"],
-			.toolbar-pesquisa input[type="time"],
-			.toolbar-pesquisa select {
-				padding: 6px 10px;
-				border: 2px solid #e2e8f0;
-				border-radius: 4px;
-				font-size: 12px;
-				width: 100%;
-				box-sizing: border-box;
-				background: white;
-				color: #333;
-				transition: all 0.3s;
-				height: 30px;
-			}
-			.toolbar-pesquisa input[type="date"]:focus,
-			.toolbar-pesquisa input[type="time"]:focus,
-			.toolbar-pesquisa select:focus {
-				border-color: #fff;
-				box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
-				outline: none;
-			}
-			.toolbar-pesquisa .btn-pesquisar {
-				background: #dc3545;
-				color: white;
-				border: none;
-				padding: 8px 24px;
-				border-radius: 4px;
-				font-weight: 600;
-				font-size: 13px;
-				cursor: pointer;
-				transition: all 0.3s;
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-				margin-left: auto;
-			}
-			.toolbar-pesquisa .btn-pesquisar:hover {
-				background: #c82333;
-				transform: translateY(-2px);
-				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-			}
-			
-			/* Grupo compacto para horário (turno + início + fim) */
-			.grupo-horario {
-				display: flex;
-				gap: 6px;
-				align-items: flex-end;
-				flex-wrap: wrap;
-			}
-			.grupo-horario .form-group {
-				min-width: 70px;
-				max-width: 90px;
-				flex: none;
-			}
-			.grupo-horario label {
-				font-size: 10px;
-			}
-			.grupo-horario .info-sala {
-				font-size: 9px;
-				color: #e0e0e0;
-				margin-left: 4px;
-				white-space: nowrap;
-			}
-			.grupo-horario .info-sala i {
-				margin-right: 2px;
-			}
 
-			/* Chosen Select minimalista - compatível com aceAdmin */
-			.toolbar-pesquisa .chosen-container .chosen-single {
-				border: 2px solid #e2e8f0 !important;
-				border-radius: 4px !important;
-				box-shadow: none !important;
-				background: white !important;
-				height: 30px !important;
-				line-height: 28px !important;
-				font-size: 12px !important;
-			}
-			.toolbar-pesquisa .chosen-container .chosen-single:hover {
-				border-color: #fff !important;
-			}
-			.toolbar-pesquisa .chosen-container-active.chosen-with-drop .chosen-single {
-				border-color: #fff !important;
-				background: white !important;
-			}
-			.toolbar-pesquisa .chosen-container .chosen-drop {
-				border: 1px solid #ced4da !important;
-				border-top: none !important;
-				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-			}
-		</style>
 		<script>//Filtro para localizar
 				
 				function carregaBody(){
-										
+					// ✅ Atualiza TODOS os chosen-select com os novos valores (incluindo múltiplos)
+					$('.chosen-select').trigger('chosen:updated');
 				}
 		</script>
 		
@@ -248,64 +106,52 @@
 											<br />
 										</div>
 									</div>
-									<div class="toolbar-pesquisa noprint">
-										<div class="row">
-											<!-- Beneficiário -->
-											<div class="col-xs-12 col-sm-4">
-												<label>Escolha o Beneficiário</label>
-												<select name="pesquisaBeneid" id="pesquisaBeneid" class="chosen-select">
-													<option value="766f69643132333435366964">-</option>
-													{{#each benes}}
-														<option value="{{_id}}">{{bene_nome}}</option>
-													{{/each}}
-												</select>
-											</div>
+								<div class="row justify-content-center"> <!-- Centraliza os blocos -->
+								<!-- Beneficiário -->
+								<div class="col-xs-12 col-sm-4 mb-3 px-2">
+									<label for="pesquisaBeneid" class="block mb-1">Escolha o Beneficiário</label>
+									<select name="pesquisaBeneid" id="pesquisaBeneid" class="chosen-select form-control">
+									<option value="766f69643132333435366964">-</option>
+									{{#each benes}}
+										<option value="{{_id}}">{{bene_nome}}</option>
+									{{/each}}
+									</select>
+								</div>
 
-											<!-- ABA Andamento -->
-											<div class="col-xs-12 col-sm-4">
-												<label>&nbsp;</label>
-												<div>
-													<span class="label label-sm label-warning">
-														ABA em Andamento, Iniciados, Pausados
-													</span>
-												</div>
-
-												<button
-													name="acaoPesquisarF"
-													id="acaoPesquisarF"
-													type="submit"
-													class="btn btn-xs btn-warning"
-													style="margin-top: 8px;"
-												>
-													<i class="ace-icon fa fa-search-plus"></i>
-													Localizar Container
-												</button>
-											</div>
-
-											<!-- ABA Manutenção -->
-											<div class="col-xs-12 col-sm-4">
-												<label>&nbsp;</label>
-												<div>
-													<span class="label label-sm label-warning">
-														ABA em Manutenção
-													</span>
-												</div>
-
-												<button 
-													name="acaoPesquisarM"
-													id="acaoPesquisarM"
-													type="button"
-													class="btn btn-xs btn-danger"
-													style="margin-top: 8px;"
-												>
-													<i class="ace-icon fa fa-search-plus"></i>
-													Localizar Container em Manutenção
-												</button>
-											</div>
-
-											
-										</div>
+								<!-- ABA em Andamento -->
+								<div class="col-xs-12 col-sm-4 mb-3 px-2 text-center">
+									<div class="mb-1">
+									<span class="label label-sm label-warning">ABA em Andamento, Iniciados, Pausados</span>
 									</div>
+									<button
+									name="acaoPesquisarF"
+									id="acaoPesquisarF"
+									type="submit"
+									class="btn btn-xs btn-info btn-block"
+									>
+									<i class="ace-icon fa fa-search-plus"></i>
+									Localizar Container
+									</button>
+								</div>
+
+								<!-- ABA em Manutenção -->
+								<div class="col-xs-12 col-sm-4 mb-3 px-2 text-center">
+									<div class="mb-1">
+									<span class="label label-sm label-warning">ABA em Manutenção</span>
+									</div>
+									<button
+									name="acaoPesquisarM"
+									id="acaoPesquisarM"
+									type="button"
+									class="btn btn-xs btn-danger btn-block"
+									>
+									<i class="ace-icon fa fa-search-plus"></i>
+									Localizar Container em Manutenção
+									</button>
+								</div>
+								</div>
+
+								<hr class="mt-2 mb-3">
 									
 								</form>
 

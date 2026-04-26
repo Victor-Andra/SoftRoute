@@ -135,7 +135,7 @@ module.exports = {
         })
     },
 
-    carregaProgsetEdi(req,res){
+    carregaProgsetEdiOLD2(req,res){
         let db = req.cookies['preferredDb'];
         Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -190,7 +190,101 @@ module.exports = {
             res.render('admin/erro')
         })
     },
+carregaProgsetEdi(req, res) {
+    let db = req.cookies['preferredDb'];
+    
+    // Carrega os modelos
+    Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema);
+    Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+    Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
+    Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema);
+    Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema);
+    Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
+    Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema);
 
+    let perfilAtual = req.cookies['lvlUsu'];
+
+    // Busca o progset principal
+    Progset.findById(req.params.id)
+        .then((progset) => {
+            if (!progset) {
+                req.flash("error_message", "SET não encontrado!");
+                return res.redirect('/menu/area/aba/progset/progsetlis');
+            }
+
+            // ✅ Busca os documentos relacionados para exibir os nomes (usando lean() para performance)
+            const benePromise = progset.progset_beneid 
+                ? Bene.findById(progset.progset_beneid).lean() 
+                : Promise.resolve(null);
+            
+            const progtipoPromise = progset.progset_progtipoid 
+                ? Progtipo.findById(progset.progset_progtipoid).lean() 
+                : Promise.resolve(null);
+            
+            const prognivelPromise = progset.progset_prognivelid 
+                ? Prognivel.findById(progset.progset_prognivelid).lean() 
+                : Promise.resolve(null);
+
+            // ✅ Resolve tudo em paralelo
+            return Promise.all([benePromise, progtipoPromise, prognivelPromise])
+                .then(([bene, progtipo, prognivel]) => {
+                    
+                    // ✅ Prepara os valores de exibição (fallback para 'Não informado')
+                    const dadosExibicao = {
+                        beneNome: bene ? bene.bene_nome : 'Não informado',
+                        progtipoNome: progtipo ? progtipo.progtipo_nome : 'Não informado',
+                        prognivelNome: prognivel ? prognivel.prognivel_nome : 'Não informado'
+                    };
+
+                    // ✅ Busca as listas para os selects (mantém sua lógica original)
+                    const usuariosPromise = Usuario.find({
+                        "usuario_status": "Ativo", 
+                        $or: [
+                            {"usuario_funcaoid": "6241030bfbcc51f47c720a0b"},
+                            {"usuario_perfilid": {$in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"]}}
+                        ]
+                    }).lean();
+
+                    const beneListPromise = Bene.find().sort({bene_nome: 1}).lean();
+                    const progdicaPromise = Progdica.find().lean();
+                    const progtipoListPromise = Progtipo.find().lean();
+                    const prognivelListPromise = Prognivel.find().lean();
+                    const progPromise = Prog.find().lean();
+                    const folregPromise = Folreg.find().lean();
+
+                    // ✅ Resolve todas as listas em paralelo
+                    return Promise.all([
+                        usuariosPromise, beneListPromise, progdicaPromise, 
+                        progtipoListPromise, prognivelListPromise, progPromise, folregPromise
+                    ]).then(([usuarios, benes, progdica, progtipos, prognivels, progs, folregs]) => {
+                        
+                        // ✅ Renderiza enviando os nomes já resolvidos
+                        res.render("area/aba/progset/progsetEdi", {
+                            usuarios,
+                            benes,
+                            progset,
+                            progs,
+                            progdicas: progdica,
+                            progtipos,
+                            prognivels,
+                            terapeutas: usuarios, // mantido pra compatibilidade
+                            folregs,
+                            perfilAtual,
+                            
+                            // ✅ Campos de exibição prontos (substituem o helper 'eq')
+                            beneNomeExibicao: dadosExibicao.beneNome,
+                            progtipoNomeExibicao: dadosExibicao.progtipoNome,
+                            prognivelNomeExibicao: dadosExibicao.prognivelNome
+                        });
+                    });
+                });
+        })
+        .catch((err) => {
+            console.error("Erro ao carregar SET para edição:", err);
+            req.flash("error_message", "Houve um erro ao carregar os dados do SET!");
+            res.render('admin/erro');
+        });
+},
     cadastraProgset(req,res){
         let resultado
         let resposta = new Resposta()

@@ -1339,7 +1339,7 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
                             "Falta Absoluta": "orange",
                             "Substituição": "cyan",
                             "SubstitutoFixo": "transparent", // ✅ Tratado como padrão
-                            "Feriado": "purple",
+                            "Feriado": "orange",
                             "default": "transparent"
                         };
                         const bg = map[cat] || map.default;
@@ -2061,6 +2061,22 @@ router.post('/agenda/filPessoalSemanal', fncGeral.IsAuthenticated, (req,res) =>{
 router.get('/agenda/agendaListaGeral', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.carregaAgendaListaGeral(req, res);
 })
+
+// 👉 ROTA GET: carrega lista do mês atual
+router.get('/agenda/lisGeral', fncGeral.IsAuthenticated, (req, res) => {
+    let resposta = new Resposta();
+    resposta.sucesso = "";
+    resposta.texto = "";
+    fncAgenda.carregaAgendaListaGeral(req, res, false, resposta);
+});
+
+// 👉 ROTA POST: filtra por mês selecionado
+router.post('/agenda/lisGeral', fncGeral.IsAuthenticated, (req, res) => {
+    let resposta = new Resposta();
+    resposta.sucesso = "";
+    resposta.texto = "";
+    fncAgenda.carregaAgendaListaGeral(req, res, false, resposta);
+});
 
 
 router.get('/agenda/evolucao/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda

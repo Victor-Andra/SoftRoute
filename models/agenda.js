@@ -34,18 +34,18 @@ const AgendaSchema = mongoose.Schema({
     agenda_tempmotivo :{ type: String, required: false },
     agenda_extra :{ type: Boolean, required: false},
     agenda_cobrarextra :{ type: Boolean, required: false},
-    agenda_evolucao :{ type: String, require: false },
-    agenda_copia :{ type: Boolean, require: false }, //Status de copia, para cria gerenciamento anti-copia duplicada
-    agenda_selo :{ type: Boolean, require: false },
-    agenda_dataSelo :{ type: String, require: false },
-    agenda_atrazo :{ type: Boolean, require: false },
-    agenda_rel :{ type: String, require: false }, //{'-':'todos', 'Beneficiario':'apenas_beneficiario', 'Terapeuta':'apenas_Terapeuta', 'Nenhum':'nenhum'}
-    agenda_turnoFalta :{ type: String, require: false },
-    agenda_faltaId :{ type: ObjectId, require: false },
-    agenda_falta :{ type: String, require: false },
-    agenda_usuedi :{ type: String, require: false }, //Usuário adm que alterou
-    agenda_log :{ type: String, require: false }, //Log das alterações
-    agenda_usucad :{ type: String, require: false },
+    agenda_evolucao :{ type: String, required: false },
+    agenda_copia :{ type: Boolean, required: false }, //Status de copia, para cria gerenciamento anti-copia duplicada
+    agenda_selo :{ type: Boolean, required: false },
+    agenda_dataSelo :{ type: String, required: false },
+    agenda_atrazo :{ type: Boolean, required: false },
+    agenda_rel :{ type: String, required: false }, //{'-':'todos', 'Beneficiario':'apenas_beneficiario', 'Terapeuta':'apenas_Terapeuta', 'Nenhum':'nenhum'}
+    agenda_turnoFalta :{ type: String, required: false },
+    agenda_faltaId :{ type: ObjectId, required: false },
+    agenda_falta :{ type: String, required: false },
+    agenda_usuedi :{ type: String, required: false }, //Usuário adm que alterou
+    agenda_log :{ type: String, required: false }, //Log das alterações
+    agenda_usucad :{ type: String, required: false },
     //Guia e Senha para Pagamento Financeiro
     // ✅ DEPOIS (CORRETO)
     agenda_guia :{ type: GuiaSchema, required: false },
@@ -182,9 +182,9 @@ module.exports = {
             if (req.body.agendaCateg == "Padrão"){
                 await AgendaModel.findByIdAndUpdate(req.body.id, 
                     {$set: {
-                        agenda_data : dataAgenda ,
-                        agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
-                        agenda_horafim : agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                        agenda_data : dataAgenda,
+                        agenda_hora : req.body.agendaHora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                        agenda_horafim : req.body.agendaHorafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
                         agenda_beneid : req.body.agendaBeneid ,
                         agenda_convid : req.body.agendaConvid ,
                         agenda_salaid : req.body.agendaSalaid ,
@@ -211,8 +211,8 @@ module.exports = {
                 await AgendaModel.findByIdAndUpdate(req.body.id, 
                     {$set: {
                         agenda_data : dataAgenda ,
-                        agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
-                        agenda_horafim : agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                        agenda_hora : req.body.agendaHora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                        agenda_horafim : req.body.agendaHorafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
                         agenda_beneid : req.body.agendaBeneid ,
                         agenda_convid : req.body.agendaConvid ,
                         agenda_salaid : req.body.agendaSalaid ,
@@ -248,7 +248,7 @@ module.exports = {
     // Criado por: Wagner Cintra
     // Criado em: 2022/03/20
     // Editado em: 2025/10/03
-    agendaAdicionar: async (req,res) => {
+    agendaAdicionarOLD: async (req,res) => {
 
         //Estrura Multiempresa
         let db = req.cookies['preferredDb'];
@@ -280,8 +280,8 @@ module.exports = {
             //console.log("agendamodel");
             const newAgenda = new AgendaModel({
                 agenda_data : dataAgenda ,
-                agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
-                agenda_horafim : agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                agenda_hora : req.body.agendaHora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                agenda_horafim : req.body.agendaHorafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
                 agenda_beneid : req.body.agendaBeneid ,
                 agenda_convid : req.body.agendaConvid ,
                 agenda_salaid : req.body.agendaSalaid ,
@@ -313,11 +313,111 @@ module.exports = {
         }
     },
 
+    // ========================================================================
+    // ➕ Add Agenda - CADASTRAR NOVO AGENDAMENTO
+    // Criado por: Wagner Cintra | Editado em: 2025/10/03
+    // ========================================================================
+    agendaAdicionar: async (req, res) => {
+
+        // 📌 PASSO 1: Configurar estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema);
+
+        // 📌 PASSO 2: Definir variáveis de data e hora (ORDEM CORRETA!)
+        // 👉 IMPORTANTE: 'data' deve ser definida ANTES de ser usada em dataAgenda
+        let data = new Date(req.body.agendaData);
+        
+        // 👉 CORREÇÃO: Chosen pode enviar array ['08:00'], garantir que é string
+        let agendaHora = Array.isArray(req.body.agendaHora) 
+            ? req.body.agendaHora[0] 
+            : req.body.agendaHora;
+        
+        let agendaHoraFim = Array.isArray(req.body.agendaHoraFim) 
+            ? req.body.agendaHoraFim[0] 
+            : req.body.agendaHoraFim;
+
+        // 📌 PASSO 3: Construir dataAgenda em formato ISO seguro (evita "Invalid Date")
+        let dataAgenda = new Date(
+            `${data.getFullYear()}-${String(data.getMonth()+1).padStart(2,'0')}-${String(data.getDate()).padStart(2,'0')}T${agendaHora}:00.000Z`
+        );
+
+        // 📌 PASSO 4: Validação de segurança - rejeita se data for inválida
+        if (isNaN(dataAgenda.getTime())) {
+            console.error("❌ [agendaAdicionar] Data inválida:", { 
+                reqBody: req.body.agendaData, 
+                dataParsed: data, 
+                dataAgenda 
+            });
+            return false;
+        }
+
+        // 📌 PASSO 5: Verificar bloqueio por fechamento (2 meses atrás)
+        let doisMesesAtras = new Date();
+        doisMesesAtras.setMonth(doisMesesAtras.getMonth() - 2);
+        let bloqueio = dataAgenda < doisMesesAtras;
+
+        if (bloqueio) {
+            console.log("🔒 Bloqueada a criação devido ao fechamento!");
+            return false;
+        }
+
+        // 📌 PASSO 6: Preparar dados para o novo registro
+        let usuarioAtual = req.cookies['idUsu'];
+        let dataAtual = new Date();
+        
+        // Normalizar campo extra (boolean ou string "true"/"false")
+        let extra = (req.body.agendaExtra == true || req.body.agendaExtra == "true");
+
+        // 📌 PASSO 7: Instanciar novo documento com todos os campos
+        const newAgenda = new AgendaModel({
+            // 📅 Dados de data/hora
+            agenda_data: dataAgenda,
+            agenda_hora: agendaHora,              // 👉 String garantida (não array)
+            agenda_horafim: agendaHoraFim,        // 👉 String garantida (não array)
+            
+            // 👥 Relacionamentos
+            agenda_beneid: req.body.agendaBeneid,
+            agenda_convid: req.body.agendaConvid,
+            agenda_salaid: req.body.agendaSalaid,
+            agenda_terapiaid: req.body.agendaTerapiaid,
+            agenda_usuid: req.body.agendaUsuid,
+            agenda_mergeterapeutaid: req.body.agendaMergeterapeutaid,
+            agenda_mergeterapiaid: req.body.agendaMergeterapiaid,
+            
+            // 📊 Metadados
+            agenda_migrado: false,
+            agenda_categoria: req.body.agendaCateg,
+            agenda_org: req.body.agendaOrg,
+            agenda_obs: req.body.agendaObs,
+            agenda_temp: false,
+            agenda_extra: extra,
+            agenda_cobrarextra: req.body.agendaCobrarextra,
+            agenda_selo: false,
+            agenda_copia: false,
+            
+            // 📝 Auditoria
+            agenda_log: req.body.agendaLog,
+            agenda_usucad: usuarioAtual,          // 👉 Agora com required: false corrigido
+            agenda_datacad: dataAtual.toISOString() // 👉 ISO string é mais seguro
+        });
+
+        // 📌 PASSO 8: Salvar no MongoDB com tratamento de erro
+        return await newAgenda.save()
+            .then(() => { 
+                console.log("✅ [SUCESSO] Agendamento cadastrado!"); 
+                return true; 
+            })
+            .catch((err) => { 
+                console.error("❌ [ERRO] Falha ao salvar agendamento:", err); 
+                return err; 
+            });
+    },
+
     // Add Temp Agenda
     // Criado por: Wagner Cintra
     // Criado em: 2022/03/20
     // Editado em: 2025/10/03
-    agendaAdicionarTemp: async (req,res) => {
+    agendaAdicionarTempOLD: async (req,res) => {
 
         //Estrura Multiempresa
         let db = req.cookies['preferredDb'];
@@ -379,11 +479,110 @@ module.exports = {
         }
     },
 
+    // ========================================================================
+    // ➕ Add Temp Agenda - CADASTRAR AGENDAMENTO TEMPORÁRIO (SUBSTITUIÇÃO)
+    // Criado por: Wagner Cintra | Editado em: 2025/10/03
+    // ========================================================================
+    agendaAdicionarTemp: async (req, res) => {
+
+        // 📌 PASSO 1: Configurar estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema);
+
+        // 📌 PASSO 2: Definir variáveis de data e hora (ORDEM CORRETA!)
+        let data = new Date(req.body.agendaData);
+        
+        // 👉 CORREÇÃO: Sanitizar hora para evitar array do Chosen
+        let agendaHora = Array.isArray(req.body.agendaHora) 
+            ? req.body.agendaHora[0] 
+            : req.body.agendaHora;
+        
+        let agendaHoraFim = Array.isArray(req.body.agendaHoraFim) 
+            ? req.body.agendaHoraFim[0] 
+            : req.body.agendaHoraFim;
+
+        // 📌 PASSO 3: Construir dataAgenda em formato ISO seguro
+        let dataAgenda = new Date(
+            `${data.getFullYear()}-${String(data.getMonth()+1).padStart(2,'0')}-${String(data.getDate()).padStart(2,'0')}T${agendaHora}:00.000Z`
+        );
+
+        // 📌 PASSO 4: Validação de segurança
+        if (isNaN(dataAgenda.getTime())) {
+            console.error("❌ [agendaAdicionarTemp] Data inválida:", dataAgenda);
+            return false;
+        }
+
+        // 📌 PASSO 5: Verificar bloqueio por fechamento
+        let doisMesesAtras = new Date();
+        doisMesesAtras.setMonth(doisMesesAtras.getMonth() - 2);
+        let bloqueio = dataAgenda < doisMesesAtras;
+
+        if (bloqueio) {
+            console.log("🔒 Bloqueada a criação devido ao fechamento!");
+            return false;
+        }
+
+        // 📌 PASSO 6: Preparar dados do registro temporário
+        let usuarioAtual = req.cookies['idUsu'];
+        let dataAtual = new Date();
+        
+        // Converter agendaTempId para ObjectId do Mongoose
+        let agendaTempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
+
+        // 📌 PASSO 7: Instanciar novo documento TEMPORÁRIO
+        const newAgenda = new AgendaModel({
+            // 📅 Dados de data/hora
+            agenda_data: dataAgenda,
+            agenda_hora: agendaHora,              // 👉 String garantida
+            agenda_horafim: agendaHoraFim,        // 👉 String garantida
+            
+            // 👥 Relacionamentos
+            agenda_beneid: req.body.agendaBeneid,
+            agenda_convid: req.body.agendaConvid,
+            agenda_salaid: req.body.agendaSalaid,
+            agenda_terapiaid: req.body.agendaTerapiaid,
+            agenda_usuid: req.body.agendaUsuid,
+            agenda_mergeterapeutaid: req.body.agendaMergeterapeutaid,
+            agenda_mergeterapiaid: req.body.agendaMergeterapiaid,
+            
+            // 📊 Metadados
+            agenda_migrado: false,
+            agenda_categoria: req.body.agendaCateg,
+            agenda_org: req.body.agendaOrg,
+            agenda_obs: req.body.agendaObs,
+            
+            // 🔗 Campos específicos de TEMP
+            agenda_temp: true,                    // 👉 Marca como temporário
+            agenda_tempId: agendaTempId,          // 👉 ID do registro original
+            agenda_tempmotivo: req.body.agendaTempMotivo,
+            
+            agenda_selo: false,
+            agenda_copia: false,
+            agenda_turnoFalta: req.body.agendaTurnoFalta,
+            
+            // 📝 Auditoria
+            agenda_log: req.body.agendaLog,
+            agenda_usucad: usuarioAtual,
+            agenda_datacad: dataAtual.toISOString()
+        });
+
+        // 📌 PASSO 8: Salvar no MongoDB
+        return await newAgenda.save()
+            .then(() => { 
+                console.log("✅ [SUCESSO] Agendamento temporário cadastrado!"); 
+                return true; 
+            })
+            .catch((err) => { 
+                console.error("❌ [ERRO] Falha ao salvar temp:", err); 
+                return err; 
+            });
+    },
+    
     // Editar Temp Agenda
     // Criado por: Wagner Cintra
     // Criado em: 2022/03/20
     // Editado em: 2025/10/03
-    agendaEditarTemp: async (req, res) => {
+    agendaEditarTempOLD: async (req, res) => {
 
          //Estrura Multiempresa
         let db = req.cookies['preferredDb'];
@@ -415,8 +614,8 @@ module.exports = {
             await AgendaModel.findByIdAndUpdate(new ObjectId(req.body.agendaId), 
                 {$set: {
                     agenda_data : dataAgenda ,
-                    agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
-                    agenda_horafim : agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                    agenda_hora : req.body.agendaHora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                    agenda_horafim : req.body.agendaHorafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
                     agenda_beneid : req.body.agendaBeneid ,
                     agenda_convid : req.body.agendaConvid ,
                     agenda_salaid : req.body.agendaSalaid ,
@@ -440,6 +639,91 @@ module.exports = {
             })
             return resultado;
         }
+    },
+
+    // ========================================================================
+    // ✏️ Editar Temp Agenda - ATUALIZAR AGENDAMENTO TEMPORÁRIO
+    // Criado por: Wagner Cintra | Editado em: 2025/10/03
+    // ========================================================================
+    agendaEditarTemp: async (req, res) => {
+
+        // 📌 PASSO 1: Configurar estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema);
+
+        // 📌 PASSO 2: Buscar registro existente para validação
+        let agendamento = await Agenda.findById(req.body.agendaId);
+        if (!agendamento) {
+            console.log("❌ Agendamento temporário não encontrado");
+            return false;
+        }
+
+        // 📌 PASSO 3: Verificar bloqueio por fechamento
+        let agora = new Date();
+        let doisMesesAtras = new Date();
+        doisMesesAtras.setMonth(agora.getMonth() - 2);
+        let agendaData = new Date(agendamento.agenda_data);
+        let bloqueio = agendaData < doisMesesAtras;
+
+        if (bloqueio) {
+            console.log("🔒 Bloqueada a edição devido ao fechamento!");
+            return false;
+        }
+
+        // 📌 PASSO 4: Preparar dados de atualização
+        let usuarioAtual = req.cookies['idUsu'];
+        let dataAtual = new Date();
+        
+        // 👉 CORREÇÃO: Definir 'data' ANTES de usar
+        let data = new Date(req.body.agendaData);
+        
+        // 👉 CORREÇÃO: Sanitizar hora
+        let agendaHora = Array.isArray(req.body.agendaHora) 
+            ? req.body.agendaHora[0] 
+            : req.body.agendaHora;
+
+        // 📌 PASSO 5: Construir dataAgenda em formato ISO seguro
+        let dataAgenda = new Date(
+            `${data.getFullYear()}-${String(data.getMonth()+1).padStart(2,'0')}-${String(data.getDate()).padStart(2,'0')}T${data.getUTCHours()}:${data.getMinutes()}:00.000Z`
+        );
+
+        let resultado;
+
+        // 📌 PASSO 6: Atualizar registro TEMP com campos específicos
+        await AgendaModel.findByIdAndUpdate(
+            new mongoose.Types.ObjectId(req.body.agendaId), 
+            { 
+                $set: {
+                    agenda_data: dataAgenda,
+                    agenda_hora: agendaHora,              // 👉 String garantida
+                    agenda_horafim: Array.isArray(req.body.agendaHoraFim) 
+                        ? req.body.agendaHoraFim[0] 
+                        : req.body.agendaHoraFim,
+                    agenda_beneid: req.body.agendaBeneid,
+                    agenda_convid: req.body.agendaConvid,
+                    agenda_salaid: req.body.agendaSalaid,
+                    agenda_usuid: req.body.agendaUsuid,
+                    agenda_terapiaid: req.body.novaAgendaTerapiaid, // 👉 Campo específico temp
+                    agenda_categoria: req.body.agendaCateg,
+                    agenda_org: req.body.agendaOrg,
+                    agenda_obs: req.body.agendaObs,
+                    agenda_temp: true,                    // 👉 Mantém como temp
+                    agenda_usuedi: usuarioAtual,
+                    agenda_dataedi: dataAtual
+                }
+            }
+        )
+            .then(() => { 
+                console.log("✅ [SUCESSO] Temp atualizado"); 
+                resultado = true; 
+            })
+            .catch((err) => { 
+                console.error("❌ [ERRO] Falha ao atualizar temp:", err); 
+                resultado = err; 
+            });
+
+        // 📌 PASSO 7: Retornar resultado
+        return resultado;
     },
 
     // Localizar um Temp Agenda
@@ -742,7 +1026,7 @@ module.exports = {
     // Criado por: Wagner Cintra
     // Criado em: 2022/03/20
     // Editado em: 2025/10/03
-    agendaFeriado: async (req, res) => {
+    agendaFeriadoOLD: async (req, res) => {
 
         //Estrura Multiempresa
         let db = req.cookies['preferredDb'];
@@ -832,8 +1116,8 @@ module.exports = {
                         if (a.agenda_mergeterapeutaid != undefined){
                             let newAgenda = new AgendaModel({
                                 agenda_data : a.agenda_data ,
-                                agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
-                                agenda_horafim : agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                                agenda_hora : a.agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                                agenda_horafim : a.agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
                                 agenda_beneid : a.agenda_beneid ,
                                 agenda_convid : a.agenda_convid ,
                                 agenda_salaid : a.agenda_salaid ,
@@ -860,8 +1144,8 @@ module.exports = {
                         } else {
                             let newAgenda = new AgendaModel({
                                 agenda_data : a.agenda_data ,
-                                agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
-                                agenda_horafim : agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                                agenda_hora : a.agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                                agenda_horafim : a.agenda_horafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
                                 agenda_beneid : a.agenda_beneid ,
                                 agenda_convid : a.agenda_convid ,
                                 agenda_salaid : a.agenda_salaid ,
@@ -898,6 +1182,150 @@ module.exports = {
             return retorno;
         })
     },
+
+    // ========================================================================
+    // 🎉 Feriado do Dia Agenda - MARCAR AGENDAMENTOS COMO FERIADO
+    // Criado por: Wagner Cintra | Editado em: 2025/10/03
+    // ========================================================================
+    agendaFeriado: async (req, res) => {
+
+        // 📌 PASSO 1: Configurar estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema);
+
+        // 📌 PASSO 2: Definir período do dia (00:00:00 até 23:59:59)
+        let dataAtual = new Date();
+        let usuarioAtual = req.cookies['idUsu'];
+        
+        let seg = new Date(req.body.agendaData);
+        seg.setUTCHours(0, 0, 0, 0);  // 👉 Início do dia em UTC
+        
+        let sex = new Date(req.body.agendaData);
+        sex.setUTCHours(23, 59, 59, 999);  // 👉 Fim do dia em UTC
+
+        console.log("📅 Período feriado:", {
+            ini: fncGeral.getDateToIsostring(seg),
+            fim: fncGeral.getDateToIsostring(sex)
+        });
+
+        // 📌 PASSO 3: Buscar registros do dia (apenas pais, não temporários)
+        let busca = { 
+            agenda_data: { 
+                $gte: fncGeral.getDateToIsostring(seg), 
+                $lte: fncGeral.getDateToIsostring(sex) 
+            }, 
+            agenda_temp: false  // 👉 Ignora registros temporários
+        };
+
+        let arrayIds = [];
+        let agendaFinal = [];
+        let arrayAgendasNovas = [];
+
+        // 📌 PASSO 4: Buscar pais e detectar filhos (cadeia)
+        await AgendaModel.find(busca)
+            .then((agenda) => {
+                // Coletar IDs dos pais
+                agenda.forEach(a => { arrayIds.push(a._id); });
+
+                // Buscar filhos que apontam para esses pais
+                return AgendaModel.find({ agenda_tempId: { $in: arrayIds } });
+            })
+            .then((agendaSemanal) => {
+                // Unir pais + filhos na lista final
+                agendaSemanal.forEach(as => { agendaFinal.push(as); });
+                
+                agenda.forEach((a) => {
+                    let add = "true";
+                    agendaSemanal.forEach(as => {
+                        if ("" + as.agenda_tempId + "" == "" + a._id + "") {
+                            add = "false";  // 👉 Já está na lista como filho
+                        }
+                    });
+                    if (add == "true") {
+                        agendaFinal.push(a);
+                    }
+                });
+
+                // 📌 PASSO 5: Processar cada registro para marcar como feriado
+                agendaFinal.forEach(a => {
+                    let agendaS = (a.agenda_tempId && a.agenda_tempId != "undefined") ? "true" : "false";
+                    
+                    if (agendaS == "true") {
+                        // 👉 Filho: atualizar categoria diretamente
+                        if (a.agenda_categoria != "Feriado") {
+                            arrayAgendasNovas.push(a);
+                            AgendaModel.findByIdAndUpdate(a._id, {
+                                $set: {
+                                    agenda_categoria: "Feriado",
+                                    agenda_org: "Administrativo",
+                                    agenda_usucad: usuarioAtual,
+                                    agenda_dataedi: dataAtual,
+                                    agenda_tempmotivo: "Feriado",
+                                    agenda_extra: false,
+                                    agenda_turnoFalta: req.body.agendaTurnoFalta
+                                }
+                            }).catch((err) => {
+                                console.error("❌ Erro ao atualizar filho:", err);
+                            });
+                        }
+                    } else {
+                        // 👉 Pai: criar novo registro temporário como feriado
+                        let newAgenda = new AgendaModel({
+                            // 📅 Dados de data/hora (FERIADO não usa hora específica)
+                            agenda_data: a.agenda_data,
+                            agenda_hora: null,              // 👉 Feriado não tem hora
+                            agenda_horafim: null,           // 👉 Feriado não tem hora fim
+                            
+                            // 👥 Relacionamentos (mantém do original)
+                            agenda_beneid: a.agenda_beneid,
+                            agenda_convid: a.agenda_convid,
+                            agenda_salaid: a.agenda_salaid,
+                            agenda_terapiaid: a.agenda_terapiaid,
+                            agenda_usuid: a.agenda_usuid,
+                            agenda_mergeterapeutaid: a.agenda_mergeterapeutaid,
+                            agenda_mergeterapiaid: a.agenda_mergeterapiaid,
+                            
+                            // 📊 Metadados
+                            agenda_migrado: false,
+                            agenda_categoria: "Feriado",    // 👉 Marca como feriado
+                            agenda_org: "Administrativo",
+                            agenda_obs: a.agenda_obs,
+                            
+                            // 🔗 Campos de TEMP
+                            agenda_temp: true,
+                            agenda_tempId: new mongoose.Types.ObjectId(a._id),
+                            agenda_tempmotivo: "Feriado",
+                            
+                            agenda_selo: false,
+                            agenda_copia: false,
+                            agenda_extra: false,
+                            agenda_turnoFalta: req.body.agendaTurnoFalta,
+                            
+                            // 📝 Auditoria
+                            agenda_usucad: usuarioAtual,
+                            agenda_datacad: dataAtual.toISOString()
+                        });
+                        
+                        arrayAgendasNovas.push(newAgenda);
+                        
+                        // Salvar o novo registro temporário
+                        newAgenda.save().catch((err) => {
+                            console.error("❌ Erro ao salvar temp feriado:", err);
+                        });
+                    }
+                });
+            })
+            .catch((err) => {
+                console.error("❌ [ERRO] agendaFeriado:", err);
+            })
+            .finally(() => {
+                console.log(`✅ [FINAL] ${arrayAgendasNovas.length} registros processados como feriado`);
+            });
+
+        // 📌 PASSO 6: Retornar status
+        return "true";
+    },
+    
     /*
     agendaFaltaDia: async (req, res, busca, buscaSemanal) => {
         let usuarioAtual = req.cookies['idUsu'];

@@ -80,6 +80,62 @@
 					console.log(chck.value);
 				}
 			}
+			function validarCamposObrigatorios(e) {
+				// Campos obrigatórios + nomes amigáveis
+				const campos = [
+					{ id: 'agendaBeneid', nome: 'Beneficiário' },
+					{ id: 'agendaUsuid', nome: 'Terapeuta' },
+					{ id: 'novaAgendaTerapiaid', nome: 'Terapia (substituição)' },
+					{ id: 'agendaSalaid', nome: 'Local' },
+					{ id: 'agendaHora', nome: 'Hora Agendamento' },
+					{ id: 'dataAg', nome: 'Data Agendamento' },
+					{ id: 'agendaCateg', nome: 'Categoria' },
+					{ id: 'agendaOrg', nome: 'Origem Agendamento' }
+				];
+
+				let camposComErro = [];
+
+				campos.forEach(c => {
+					const el = document.getElementById(c.id);
+					if (!el) return;
+
+					const val = el.value?.trim();
+					
+					// Verifica vazio, placeholder ou "-"
+					if (!val || val === '766f69643132333435366964' || val === '-') {
+					camposComErro.push(c.nome);
+					
+					// Destaque no Chosen
+					if (typeof jQuery !== 'undefined' && jQuery('#' + c.id).data('chosen')) {
+						jQuery('#' + c.id).closest('.chosen-container').addClass('chosen-error');
+						jQuery('#' + c.id).trigger('chosen:updated');
+					} else if (el.tagName === 'SELECT') {
+						el.style.borderColor = '#f00';
+					}
+					} else {
+					// Remove destaque se válido
+					if (typeof jQuery !== 'undefined' && jQuery('#' + c.id).data('chosen')) {
+						jQuery('#' + c.id).closest('.chosen-container').removeClass('chosen-error');
+					} else if (el.tagName === 'SELECT') {
+						el.style.borderColor = '';
+					}
+					}
+				});
+
+				// Bloqueia e mostra mensagem se houver erro
+				if (camposComErro.length > 0) {
+					e.preventDefault();
+					
+					const mensagem = '⚠️ Campos obrigatórios não preenchidos:\n\n• ' + 
+									camposComErro.join('\n• ') + 
+									'\n\nPor favor, selecione uma opção válida para continuar.';
+					
+					alert(mensagem);
+					return false;
+				}
+
+				return true;
+				}
 			
 		</script>
 	</head>
@@ -99,7 +155,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form" action="/menu/agenda/atualizaTemp" method="POST">
+							<form class="form-horizontal" role="form" action="/menu/agenda/atualizaTemp" method="POST" onsubmit="return validarCamposObrigatorios(event);">
 								<div class="col-xs-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
