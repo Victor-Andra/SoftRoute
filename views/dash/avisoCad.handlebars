@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Extras</title>
-	
+		<title>Avisos</title>
+		<style>
+			.badge-priority {
+				display: inline-block;
+				padding: 5px 10px;
+				border-radius: 6px;
+				font-size: 13px;
+				font-weight: 600;
+				margin-left: 8px;
+				border: 1px solid transparent;
+				transition: all 0.2s;
+				}
+				.priority-baixo     { background: #d1ecf1; color: #0c5460; border-color: #b6d7e8; }
+				.priority-normal    { background: #d4edda; color: #155724; border-color: #c3e6cb; }
+				.priority-moderado  { background: #fff3cd; color: #856404; border-color: #ffeeba; }
+				.priority-alto      { background: #ffe5cc; color: #cc5500; border-color: #ffd699; }
+				.priority-urgente   { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+		</style>
 	</head>
 	<body onload="javascript:controlaNave();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -18,177 +34,142 @@
 						</ul><!-- /.breadcrumb -->
 					</div>
 				
-						<div class="col-xs-12">
-							<form class="form-horizontal" role="form" action="/menu/dash/add" method="POST">
-								<div class="row">
-									<div class="col-sm-6">
-										<div class="widget-box">
-											<div class="widget-header">
-												<h4 class="widget-title">
-													<i class="orange ace-icon fa fa-pencil-square-o bigger-110"></i>
-													Aviso
-												</h4>
-												<div class="hidden">
-													<input id="nextNum" name="nextNum" type="number"  value="{{extra.extra_num}}" />
-												</div>
-												<span class="widget-toolbar">
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												</span>
-											</div>
-											<div class="widget-body">
-												<div class="widget-main">
-													
-													<label>Usuário:</label>
-													<div class="form-group">
-														<div class="col-sm-6">
-															<input type="text" id="avisoUsuid" name="avisoUsuid" class="form-control"  readonly="true" value="Usuário Atual"/>
-														</div>
-													</div>
-										
-															
-													<div class="col-sm-2">
-														<div class="row">
-															<label for="id-date-picker-1">Data Aviso:</label>
-															<div class="row">
-																<div class="col-sm-4">
-																	<div class="input-group">
-																		<input name="avisoAvisodata" id="avisoAvisodata" type="date" onchange="javascript:atualizaData()" />
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>												
-													<div class="col-sm-2">
-														<div class="row">
-															<label> <span class="label label-xs label-danger arrowed-in-right arrowed">Expira?</span></label><!--Ok-->
-														</div>
-														<div class="row">
-															<div class="input-group">
-																<div class="input-group">
-																	<select name="avisoExpira" id="avisoExpira" class="chosen-select"  value="-">
-																			<option value="-">-</option>
-																			<option value="Sim">Sim</option>
-																			<option value="Não">Não</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>													
-													<div class="col-sm-2">
-														<div class="row">
-															<label for="id-date-picker-1">Data Limite:</label>
-															<div class="row">
-																<div class="col-sm-4">
-																	<div class="input-group">
-																		<input name="avisoExpiradata" id="avisoExpiradata" type="date" onchange="javascript:atualizaData()" />
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-sm-6">
-															<label>Tipo Aviso:</label>
-															<div class="form-group">
-																<div class="col-sm-9">
-																	<select id="avisoTipo" name="avisoTipo" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
-																		<option value="-">-</option>
-																		<option value="Todos">Todos</option>
-																		<option value="Administrativo">Administrativo</option>
-																		<option value="Supervisores">Supervisores</option>
-																		<option value="Terapeutas">Terapeutas</option>
-																		<option value="Recepcao">Recepção</option>
-																		<option value="Pessoal">Pessoal</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-sm-6">
-															<label>De:</label>
-															<div class="form-group">
-																<div class="col-sm-9">
-																	<select id="avisoUsuidorigem" name="avisoUsuidorigem" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
-																		<option value="766f69643132333435366964">-</option>
-																		{{#each usuarios}}
-																			<option value="{{_id}}">{{usuario_nome}}</option>
-																		{{/each}}
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-sm-6">
-															<label>Para:</label>
-															<div class="form-group">
-																<div class="col-sm-9">
-																	<select id="avisoUsuiddestino" name="avisoUsuiddestino" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
-																		<option value="766f69643132333435366964">-</option>
-																		{{#each usuarios}}
-																			<option value="{{_id}}">{{usuario_nome}}</option>
-																		{{/each}}
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-															
-													<label>Grau</label>
-													<div class="form-group">
-														<div class="col-sm-9">
-															<select id="avisoGrau" name="avisoGrau" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
-																<option id="traco" value="-">-</option>
-																<option id="Baixo" value="Baixo">Baixo</option>
-																<option id="Normal" value="Normal">Normal</option>
-																<option id="Moderado" value="Moderado">Moderado</option>
-																<option id="Alto" value="Alto">Alto</option>
-																<option id="Urgente" value="Urgente">Urgente</option>
-															</select>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-sm-12">
-															<label>Descrição:</label>
-															<div class="form-group">
-																<div class="col-sm-12">
-																	<textarea name="avisoDesc" id="avisoDesc" style="font-size: 12px" class="form-control" ></textarea>
-																</div>
-															</div>	
-														</div>
-													</div>
-													
-													<div class="row">
-														<div class="col-sm-6">
-															<label> <span class="label label-xs label-warning arrowed-in-right arrowed">Lido?</span></label><!--Ok-->
-															<div class="form-group">
-																<div class="col-sm-9">
-																	<select name="avisoVisto" id="avisoVisto" class="chosen-select"  value="-">
-																				<option value="-">-</option>
-																				<option value="Sim">Sim</option>
-																				<option value="Não">Não</option>
-																		</select>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
+					<div class="col-xs-12">
+						<form class="form-horizontal" role="form" action="/menu/dash/add" method="POST" id="formAviso">
+							<div class="row">
+							<div class="col-sm-12">
+								<div class="widget-box">
+								<div class="widget-header">
+									<h4 class="widget-title">
+									<i class="orange ace-icon fa fa-pencil-square-o bigger-110"></i>
+									Cadastro de Aviso / Notificação
+									</h4>
+									<input id="nextNum" name="nextNum" type="hidden" value="{{extra.extra_num}}" />
+									<span class="widget-toolbar">
+									<a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+									<a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+									</span>
+								</div>
+
+								<div class="widget-body">
+									<div class="widget-main">
+									
+									<!-- Linha 1: Dados Básicos -->
+									<div class="row">
+										<div class="col-sm-3">
+										<label for="avisoUsuid">Usuário:</label>
+										<input type="text" id="avisoUsuid" name="avisoUsuid" class="form-control" readonly value="Usuário Atual" />
+										</div>
+										<div class="col-sm-3">
+										<label for="avisoAvisodata">Data do Aviso:</label>
+										<input name="avisoAvisodata" id="avisoAvisodata" type="date" class="form-control" />
+										</div>
+										<div class="col-sm-3">
+										<label for="avisoExpira">Expira?</label>
+										<select name="avisoExpira" id="avisoExpira" class="form-control chosen-select">
+											<option value="Não" selected>Não</option>
+											<option value="Sim">Sim</option>
+										</select>
+										</div>
+										<div class="col-sm-3">
+										<label for="avisoExpiradata">Data Limite:</label>
+										<input name="avisoExpiradata" id="avisoExpiradata" type="date" class="form-control" disabled />
 										</div>
 									</div>
+
+									<hr class="hr hr-18 dotted hr-double" />
+
+									<!-- Linha 2: Destino e Categoria -->
+									<div class="row">
+										<div class="col-sm-4">
+										<label for="avisoTipo">Tipo / Categoria:</label>
+										<select id="avisoTipo" name="avisoTipo" class="form-control chosen-select" data-placeholder="Escolha a opção...">
+											<option value="-">-</option>
+											<option value="Todos">Todos</option>
+											<option value="Administrativo">Administrativo</option>
+											<option value="Supervisores">Supervisores</option>
+											<option value="Terapeutas">Terapeutas</option>
+											<option value="Recepcao">Recepção</option>
+											<option value="Pessoal">Pessoal</option>
+										</select>
+										</div>
+										<div class="col-sm-4">
+										<label for="avisoUsuidorigem">De:</label>
+										<select id="avisoUsuidorigem" name="avisoUsuidorigem" class="form-control chosen-select" data-placeholder="Remetente...">
+											{{#each usuarios}}
+											<option value="{{_id}}">{{usuario_nome}}</option>
+											{{/each}}
+										</select>
+										</div>
+										<div class="col-sm-4">
+										<label for="avisoUsuiddestino">Para:</label>
+										<select id="avisoUsuiddestino" name="avisoUsuiddestino" class="form-control chosen-select" data-placeholder="Destinatário ou Grupo...">
+											{{#each usuarios}}
+											<option value="{{_id}}">{{usuario_nome}}</option>
+											{{/each}}
+										</select>
+										</div>
+									</div>
+
+									<hr class="hr hr-18 dotted hr-double" />
+
+									<!-- Linha 3: Grau e Descrição -->
+									<div class="row">
+										<div class="col-sm-6">
+										<label for="avisoGrau">Grau de Prioridade:</label>
+										<select id="avisoGrau" name="avisoGrau" class="form-control chosen-select" required>
+											<option value="-">-</option>
+											<option value="Baixo">Baixo</option>
+											<option value="Normal">Normal</option>
+											<option value="Moderado">Moderado</option>
+											<option value="Alto">Alto</option>
+											<option value="Urgente">Urgente</option>
+										</select>
+										<span id="priority-preview" class="badge-priority">Selecione o grau</span>
+										</div>
+										<div class="col-sm-6">
+										<label for="avisoDesc">Descrição / Mensagem:</label>
+										<textarea name="avisoDesc" id="avisoDesc" class="form-control" rows="4" required placeholder="Digite o conteúdo do aviso..."></textarea>
+										</div>
+									</div>
+
+									<hr class="hr hr-18 dotted hr-double" />
+
+									<!-- Linha 4: Botões de Ação -->
+									<div class="row">
+										<div class="col-sm-12 text-right">
+										<button type="button" class="btn btn-white btn-warning btn-bold" onclick="window.history.back()">
+											<i class="ace-icon fa fa-times red"></i> Cancelar
+										</button>
+										<button type="submit" class="btn btn-primary btn-bold">
+											<i class="ace-icon fa fa-check green"></i> Salvar Aviso
+										</button>
+										</div>
+									</div>
+
+									</div>
 								</div>
-							</form>
-						</div>
+								</div>
+							</div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
 		<!-- basic scripts -->
 		<!-- Script do editor de texto -->
+		<script>
+			$('#avisoGrau').on('change', function() {
+				var val = $(this).val().toLowerCase();
+				var $badge = $('#priority-preview');
+				$badge.removeClass().addClass('badge-priority');
+				if (val === '-') {
+					$badge.text('Selecione o grau').css({background:'#f5f5f5', color:'#666', borderColor:'#ddd'});
+				} else {
+					$badge.addClass('priority-' + val).text(val.charAt(0).toUpperCase() + val.slice(1));
+				}
+				});
+		</script>
 	</body>
 </html>

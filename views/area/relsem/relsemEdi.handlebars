@@ -1,327 +1,310 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-	<head>
-		<title>Relatório Semestral</title>
-		<script>
-			function formataData(date) {//yyyy-MM-dd
-				var d = new Date(date);
-				if (d.getTimezoneOffset() == 180){
-					d.setHours(d.getHours()+3);
-				}
-				console.log("d:"+d);
-					month = '' + (d.getMonth() + 1);
-					day = '' + d.getDate();
-					year = d.getFullYear();
+<head>
+    <title>Relatório Semestral - Edição</title>
+    <style>
+        /* Ajuste visual para o Chosen no Ace Admin */
+        .chosen-container-single .chosen-single {
+            border-color: #c5d0dc !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            background: #fff !important;
+        }
+        .chosen-container-active.chosen-with-drop .chosen-single {
+            border-color: #f59942 !important;
+        }
+    </style>
+    <script>
+        function formataData(date) {
+            var d = new Date(date);
+            if (d.getTimezoneOffset() == 180) d.setHours(d.getHours()+3);
+            var month = '' + (d.getMonth() + 1);
+            var day = '' + d.getDate();
+            var year = d.getFullYear();
+            if (month.length == 1) month = '0' + month;
+            if (day.length == 1) day = '0' + day;
+            return [year, month, day].join('-');
+        }
 
-				if (month.length == 1) {
-					month = '0' + month;
-				}
-					
-				if (day.length == 1) {
-					day = '0' + day;
-				}
+        function atualizaDadosbene() {
+            let beneid = document.getElementById("relsemBeneid").value;
+            if (!beneid || beneid === '-') return;
 
-				return [year, month, day].join('-');
-			}
-			function atualizaData(){
-				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
-				var dataFmt = new Date(dataIso);
-				console.log(dataFmt.toISOString());
-				document.getElementById("a").value = dataFmt;
-			}
-			function atualizaDadosbene(){
-				let beneid = document.getElementById("relsemBeneid").value;
+            // Data de nascimento
+            var dataNascEl = document.getElementById(beneid + "_beneDatanasc");
+            if (dataNascEl && dataNascEl.value) {
+                var dataFmt = new Date(dataNascEl.value);
+                document.getElementById("beneDatanasc").value = formataData(dataFmt);
+                document.getElementById("beneIdade").value = calculaIdade(dataFmt);
+            }
 
-				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
-				if (dataIso != undefined && dataIso != "undefined"){
-					var dataFmt = new Date(dataIso);
-					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-					document.getElementById("beneIdade").value = calculaIdade(dataFmt);
-				}
-				console.log("benediag: "+(beneid+"_laudoDiagEdi"))
-				document.getElementById("laudoDiag").value = document.getElementById((beneid+"_laudoDiagEdi")).value;
-			}
-			function carregaBody(){
-				document.getElementById("relsemBeneid").value = document.getElementById("relsemBeneidEdi").value;
-				document.getElementById("relsemTerapia").value = document.getElementById("relsemTerapiaEdi").value;
-				document.getElementById("relsemData").value = document.getElementById("relsemDataEdi").value;
-				document.getElementById("relsemMes").value = document.getElementById("relsemMesEdi").value;
-				document.getElementById("relsemTerapeutaid").value = document.getElementById("relsemTerapeutaid").value;
+            // Diagnóstico do laudo
+            var laudoDiagEl = document.getElementById(beneid + "_laudoDiagEdi");
+            if (laudoDiagEl) {
+                document.getElementById("laudoDiag").value = laudoDiagEl.value || '';
+            }
+        }
 
-				this.atualizaDadosbene();
-			}
-			function calculaIdade(dataFmt) {
-				// Data atual
-				const hoje = new Date();
+        function calculaIdade(dataFmt) {
+            const hoje = new Date();
+            const aniversario = new Date(dataFmt);
+            let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
+            let idadeMeses = hoje.getMonth() - aniversario.getMonth();
+            if (hoje.getDate() < aniversario.getDate()) idadeMeses--;
+            if (idadeMeses < 0) {
+                idadeAnos--;
+                idadeMeses += 12;
+            }
+            return idadeAnos + " anos e " + Math.abs(idadeMeses) + " meses.";
+        }
 
-				// Data de aniversário
-				const aniversario = new Date(dataFmt);
+        // ✅ Inicializa Chosen E atualiza após o DOM estar pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializa Chosen
+            if (typeof $ !== 'undefined' && $.fn.chosen) {
+                $('.chosen-select').chosen({
+                    no_results_text: "Nenhum resultado encontrado...",
+                    width: "100%",
+                    disable_search_threshold: 10
+                });
 
-				// Cálculo da idade
-				let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
-				let idadeMeses = hoje.getMonth() - aniversario.getMonth();
+                // ✅ Força atualização visual APÓS a inicialização
+                // (garante que opções 'selected' do Handlebars apareçam)
+                $('.chosen-select').trigger('chosen:updated');
+            }
 
-				// Ajuste caso o dia de aniversário ainda não tenha ocorrido este ano
-				if (hoje.getDate() < aniversario.getDate()) {
-					idadeMeses--;
-				}
+            // ✅ Se houver dados ocultos, atualiza campos dependentes
+            var beneIdEdi = document.getElementById("relsemBeneidEdi");
+            if (beneIdEdi && beneIdEdi.value && beneIdEdi.value !== 'undefined') {
+                // Define o valor do select PRIMEIRO
+                document.getElementById("relsemBeneid").value = beneIdEdi.value;
+                
+                // ✅ Atualiza o Chosen visualmente
+                if (typeof $ !== 'undefined' && $.fn.chosen) {
+                    $('#relsemBeneid').trigger('chosen:updated');
+                }
+                
+                // Agora atualiza os campos dependentes
+                atualizaDadosbene();
+            }
 
-				// Se o mês do aniversário for maior que o mês atual, ajusta a idade
-				if (idadeMeses < 0) {
-					idadeAnos--;
-					idadeMeses += 12;
-				}
-				return (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
-				
-				}
-		</script>
-	</head>
-	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
-		<div class="main-container ace-save-state" id="main-container">
-			<div class="main-content">
-				<div class="main-content-inner">
-					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-						<ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Relatório Semestral</a>
-							</li>
-							<li class="active">Edição</li>
-						</ul><!-- /.breadcrumb -->
-					</div>
-					<div id="divCarrega" name="divCarrega" class="hidden">
-						<input type="text" id="relsemTerapeutaidEdi" name="relsemTerapeutaidEdi" value="{{relsem.relsem_terapeutaid}}"/>
-						<input type="text" id="relsemBeneidEdi" name="relsemBeneidEdi" value="{{relsem.relsem_beneid}}"/>
-						<input type="text" id="relsemTerapiaEdi" name="relsemTerapiaEdi" value="{{relsem.relsem_terapia}}"/>
-						<input type="text" id="beneIdadeEdi" name="beneIdadeEdi" value="{{relsem.relsem_mes}}"/>
-						<input type="text" id="laudoDescEdi" name="laudoDescEdi" value="{{laudo.laudo_desc}}"/>
-						<input type="date" id="relsemDataEdi" name="relsemDataEdi" value="{{relsem.relsem_data}}"/>
-						<input type="text" id="relsemMesEdi" name="relsemMesEdi" value="{{relsem.relsem_mes}}"/>
-						{{#each benes}}
-							<input type="text" id="{{_id}}_beneDatanasc" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
-						{{/each}}
-						{{#each laudos}}
-							<input type="text" id="{{laudo_beneid}}_laudoDiagEdi" name="{{laudo_beneid}}_laudoDiagEdi" value="{{laudo_diag}}"/>
-						{{/each}}
-					</div>
-					<div class="row">
-						<div class="col-xs-12">
-							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/area/relsem/atualizar" method="POST">
-								<input class="hidden" id="id" name="id" value="{{relsem._id}}" />
-								<div class="form-horizontal" role="form">
-									<div class="col-sm-12"><!-- Widget Dados Básicos -->
-										<div class="widget-box">
-											<div class="widget-header">
-												<h4 class="widget-title">
-													<i class="ace-icon fa fa-bookmark-o"></i>
-													Dados do Beneficiário
-												</h4>
-												<span class="widget-toolbar">
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
-													<a href="#" data-action="fullscreen" class="orange2">
-														<i class="ace-icon fa fa-expand"></i>
-													</a>
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												</span>
-											</div>
-											<div class="widget-body">
-												<div class="widget-main">
-													<div class="row">
-														<div class="col-sm-6">
-															<label> Beneficiário</label>
-															<div class="form-group">
-																<div class="col-sm-4">
-																	<select name="relsemBeneid" id="relsemBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene();">
-																		<option value="-">-</option>
-																		{{#each benes}}
-																			<option value="{{_id}}">{{bene_nome}}</option>
-																		{{/each}}
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-xs-12">
-															<div class="alert alert-warning">
-																<button type="button" class="close" data-dismiss="alert">
-																	<i class="ace-icon fa fa-times"></i>
-																</button>
-																Os campos aqui são preenchidos automaticamente.
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-xs-5 col-sm-5">
-															<label>Data de nascimento:</label>
-															<div class="form-group">
-																<div class="col-sm-5">
-																	<div class="input-group">
-																		<input name="beneDatanasc" id="beneDatanasc" type="date" readonly="true"/>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="col-xs-3 col-sm-3">
-															<label>Idade:</label>
-															<div class="row">
-																<div class="col-sm-3">
-																	<div class="input-group">
-																		<input name="beneIdade" id="beneIdade" type="text" readonly="true" />
-																	</div>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-sm-12">
-															<label> Diagnóstico</label>
-															<div class="form-group">
-																<div class="col-sm-12" >
-																	<textarea name="laudoDiag" id="laudoDiag" style="font-size: 12px" data-placeholder="-" readonly="true" class="form-control"></textarea>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="widget-box">
-											<div class="widget-header">
-												<h4 class="widget-title">
-													<i class="ace-icon fa fa-bookmark-o"></i>
-													RELATÓRIO DE ACOMPANHAMENTO SEMESTRAL
-												</h4>
-												<span class="widget-toolbar">
-													<a href="#" data-action="reload">
-														<i class="ace-icon fa fa-refresh"></i>
-													</a>
-													<a href="#" data-action="fullscreen" class="orange2">
-														<i class="ace-icon fa fa-expand"></i>
-													</a>
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												</span>
-											</div>
-											<div class="widget-body">
-												<div class="widget-main">
-													<div class="row">
-														<div class="col-sm-3">
-															<label for="id-date-picker-1"> Data </label>
-															<div class="row">
-																<div class="input-group">
-																	<div class="col-sm-4">
-																		<input id="relsemData" name="relsemData" type="date"  value="{{relsem.relsem_data}}">
-																	</div>
-																</div>
-															</div>
-														</div>
-														<!--
-														<div class="col-sm-3">
-															<label for="id-date-picker-1"> Ano e Mês de Referência</label>
-															<div class="row">
-																<div class="input-group">
-																	<div class="col-sm-3">
-																		<input id="relsemMes" name="relsemMes" type="text"  value="{{relsem.relsem_mes}}">
-																	</div>
-																</div>
-															</div>
-														</div>
-														-->
-													</div>
-													<div class="row">
-														<div class="col-sm-6">
-															<label> Terapeuta</label>
-															<div class="form-group">
-																<div class="col-sm-6">
-																	<select name="relsemTerapeutaid" id="relsemTerapeutaid" class="chosen-select"  realonly="true">
-																		<option value="766f69643132333435366964">-</option>
-																		{{#each terapeutas}}
-																			<option value="{{_id}}">{{usuario_nomecompleto}}</option>
-																		{{/each}}
-																	</select>
-																</div>
-															</div>
-														</div>
-														<div class="col-sm-4">
-															<label> Nº Conselho</label>
-															<div class="form-group">
-																<div class="col-sm-3">
-																	<input type="text" name="relsemConselho" id="relsemConselho" class="form-control" value="{{relsem.relsem_conselho}}"/>
-																</div>
-															</div>
-														</div>
-														<div class="col-sm-3">
-															<label> Terapia</label>
-															<div class="form-group">
-																<div class="col-sm-6">
-																	<select name="relsemTerapia" id="relsemTerapia" class="chosen-select" data-placeholder="Escolha...">
-																		<option value="-">-</option>
-																		<option value="Fisioterapia">Fisioterapia</option>
-																		<option value="Fonoaudiologia">Fonoaudiologia</option>
-																		<option value="Musicoterapia">Musicoterapia</option>
-																		<option value="Nutrição">Nutrição</option>
-																		<option value="Psicologia">Psicologia</option>
-																		<option value="Psicomotricista">Psicomotricista</option>
-																		<option value="PsicomotricistaFuncional">Psicomotricista Funcional</option>
-																		<option value="PsicomotricistaRelacional">Psicomotricista Relacional</option>
-																		<option value="Psicopedagogia">Psicopedagogia</option>
-																		<option value="Psicologia">Psicologia</option>
-																		<option value="TerapiaCognitivoComportamental">Terapia Cognitivo Comportamental</option>
-																		<option value="TerapiaOcupacional">Terapia Ocupacional</option>
-																		<option value="TerapiaOcupacionalcomAbordagememIntegraçãoSensorial">Terapia Ocupacional com Abordagem em Integração Sensorial</option>
-																		<option value="TerapiaAnáliseDoComportamentoAplicada-ABA">Terapia Análise Do Comportamento Aplicada - ABA</option>
-																		<option value="TerapiaAnáliseDoComportamentoAplicada-ABAEscolar">Terapia Análise Do Comportamento Aplicada - ABA Escolar</option>
-																	</select>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-sm-12">
-															<label> Relatório</label>
-															<div class="form-group">
-																<div class="col-sm-12" >
-																	<textarea type="text" data-placeholder="-" name="relsemDesc" id="relsemDesc" placeholder="-" class="form-control" rows="62"  >{{relsem.relsem_desc}}</textarea>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>	
-									</div>
-								</div>
-								<div class="space-4"></div>							
-								<div class="space-4"></div>
-								<div class="row">
-									<div clas="col-xs-12">
-										<div class="form-actions">
-											<div class="col-xs-12" style="text-align: center;" >
-												<button class="btn btn-info" name="acao" type="submit">
-													<i class="ace-icon fa fa-check bigger-110"></i>
-													Salvar
-												</button>
-												&nbsp; &nbsp; &nbsp;
-												<button class="btn btn-warning" onclick="menu/area/aba/relsem/lis">
-													<i class="ace-icon fa fa-undo bigger-110"></i>
-													Voltar
-												</button>
-											</div>
-										</div>
-									</div>
-								</div>
-							</form>
-						</div><!-- /.col -->
-					</div><!-- /.row -->
-				</div>
-			</div><!-- /.main-content -->
-		</div><!-- /.main-container --><!-- basic scripts -->
-	</body>
+            // Atualiza terapia se tiver valor salvo
+            var terapiaEdi = document.getElementById("relsemTerapiaEdi");
+            if (terapiaEdi && terapiaEdi.value && terapiaEdi.value !== 'undefined') {
+                document.getElementById("relsemTerapia").value = terapiaEdi.value;
+                if (typeof $ !== 'undefined' && $.fn.chosen) {
+                    $('#relsemTerapia').trigger('chosen:updated');
+                }
+            }
+        });
+    </script>
+</head>
+<body onload="javascript:controlaNave();" class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="ace-icon fa fa-home home-icon"></i>
+                            <a href="#">Relatório Semestral</a>
+                        </li>
+                        <li class="active">Edição</li>
+                    </ul>
+                </div>
+
+                <!-- ✅ Dados ocultos para apoio (não muda) -->
+                <div id="divCarrega" name="divCarrega" class="hidden">
+                    <input type="hidden" id="relsemBeneidEdi" value="{{relsem.relsem_beneid}}"/>
+                    <input type="hidden" id="relsemTerapiaEdi" value="{{relsem.relsem_terapia}}"/>
+                    <input type="hidden" id="relsemDataEdi" value="{{relsem.relsem_data}}"/>
+                    <input type="hidden" id="relsemMesEdi" value="{{relsem.relsem_mes}}"/>
+                    
+                    {{#each benes}}
+                        <input type="hidden" id="{{_id}}_beneDatanasc" value="{{bene_datanasc}}"/>
+                    {{/each}}
+                    {{#each laudos}}
+                        <input type="hidden" id="{{laudo_beneid}}_laudoDiagEdi" value="{{laudo_diag}}"/>
+                    {{/each}}
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form class="form-horizontal" role="form" action="/menu/area/relsem/atualizar" method="POST">
+                            <input type="hidden" id="id" name="id" value="{{relsem._id}}" />
+                            
+                            <!-- Widget: Dados do Beneficiário -->
+                            <div class="widget-box">
+                                <div class="widget-header">
+                                    <h4 class="widget-title">
+                                        <i class="ace-icon fa fa-user"></i>
+                                        Dados do Beneficiário
+                                    </h4>
+                                </div>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>Beneficiário</label>
+                                                <div class="form-group">
+                                                    <div class="col-sm-10">
+                                                        <!-- ✅ Handlebars marca a opção selecionada -->
+                                                        <select name="relsemBeneid" id="relsemBeneid" class="chosen-select" onchange="atualizaDadosbene();" data-placeholder="Selecione...">
+                                                            <option value="">Selecione...</option>
+                                                            {{#each benes}}
+                                                                <option value="{{_id}}" {{#ifEqual ../relsem.relsem_beneid _id}}selected{{/ifEqual}}>
+                                                                    {{bene_nome}}
+                                                                </option>
+                                                            {{/each}}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <div class="alert alert-warning">
+                                                    <button type="button" class="close" data-dismiss="alert">
+                                                        <i class="ace-icon fa fa-times"></i>
+                                                    </button>
+                                                    Os campos abaixo são preenchidos automaticamente.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-xs-5 col-sm-4">
+                                                <label>Data de nascimento</label>
+                                                <input name="beneDatanasc" id="beneDatanasc" type="text" readonly class="form-control"/>
+                                            </div>
+                                            <div class="col-xs-3 col-sm-3">
+                                                <label>Idade</label>
+                                                <input name="beneIdade" id="beneIdade" type="text" readonly class="form-control"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <label>Diagnóstico</label>
+                                                <textarea name="laudoDiag" id="laudoDiag" readonly class="form-control" rows="3"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Widget: Relatório Semestral -->
+                            <div class="widget-box">
+                                <div class="widget-header">
+                                    <h4 class="widget-title">
+                                        <i class="ace-icon fa fa-clipboard"></i>
+                                        RELATÓRIO DE ACOMPANHAMENTO SEMESTRAL
+                                    </h4>
+                                </div>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <label>Data do Relatório</label>
+                                                <!-- ✅ Data já vem formatada do backend (YYYY-MM-DD para input date) -->
+                                                <input id="relsemData" name="relsemData" type="date" 
+                                                       value="{{#if relsem.relsem_data}}{{relsem.relsem_data}}{{/if}}" 
+                                                       class="form-control"/>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label>Ano e Mês de Referência</label>
+                                                <input id="relsemMes" name="relsemMes" type="text" 
+                                                       value="{{relsem.relsem_mes}}" 
+                                                       class="form-control" placeholder="Ex: 2026/04"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                                <label>Terapeuta</label>
+                                                <div class="form-group">
+                                                    <div class="col-sm-12">
+                                                        <!-- ✅ Marca terapeuta selecionado -->
+                                                        <select name="relsemTerapeutaid" id="relsemTerapeutaid" class="chosen-select" readonly data-placeholder="Selecione...">
+                                                            <option value="">Selecione...</option>
+                                                            {{#each terapeutas}}
+                                                                <option value="{{_id}}" {{#ifEqual ../relsem.relsem_terapeutaid _id}}selected{{/ifEqual}}>
+                                                                    {{usuario_nomecompleto}}
+                                                                </option>
+                                                            {{/each}}
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label>Nº Conselho</label>
+                                                <input type="text" name="relsemConselho" id="relsemConselho" 
+                                                       value="{{relsem.relsem_conselho}}" 
+                                                       class="form-control" placeholder="Ex: CRP 12345"/>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <label>Tipo de Terapia</label>
+                                                <!-- ✅ Marca terapia salva -->
+                                                <select name="relsemTerapia" id="relsemTerapia" class="chosen-select" data-placeholder="Selecione...">
+                                                    <option value="">Selecione...</option>
+                                                    <option value="Fisioterapia" {{#ifEqual ../relsem.relsem_terapia "Fisioterapia"}}selected{{/ifEqual}}>Fisioterapia</option>
+                                                    <option value="Fonoaudiologia" {{#ifEqual ../relsem.relsem_terapia "Fonoaudiologia"}}selected{{/ifEqual}}>Fonoaudiologia</option>
+                                                    <option value="Musicoterapia" {{#ifEqual ../relsem.relsem_terapia "Musicoterapia"}}selected{{/ifEqual}}>Musicoterapia</option>
+                                                    <option value="Nutrição" {{#ifEqual ../relsem.relsem_terapia "Nutrição"}}selected{{/ifEqual}}>Nutrição</option>
+                                                    <option value="Psicologia" {{#ifEqual ../relsem.relsem_terapia "Psicologia"}}selected{{/ifEqual}}>Psicologia</option>
+                                                    <option value="Psicomotricista" {{#ifEqual ../relsem.relsem_terapia "Psicomotricista"}}selected{{/ifEqual}}>Psicomotricista</option>
+                                                    <option value="PsicomotricistaFuncional" {{#ifEqual ../relsem.relsem_terapia "PsicomotricistaFuncional"}}selected{{/ifEqual}}>Psicomotricista Funcional</option>
+                                                    <option value="PsicomotricistaRelacional" {{#ifEqual ../relsem.relsem_terapia "PsicomotricistaRelacional"}}selected{{/ifEqual}}>Psicomotricista Relacional</option>
+                                                    <option value="Psicopedagogia" {{#ifEqual ../relsem.relsem_terapia "Psicopedagogia"}}selected{{/ifEqual}}>Psicopedagogia</option>
+                                                    <option value="TerapiaCognitivoComportamental" {{#ifEqual ../relsem.relsem_terapia "TerapiaCognitivoComportamental"}}selected{{/ifEqual}}>Terapia Cognitivo Comportamental</option>
+                                                    <option value="TerapiaOcupacional" {{#ifEqual ../relsem.relsem_terapia "TerapiaOcupacional"}}selected{{/ifEqual}}>Terapia Ocupacional</option>
+                                                    <option value="TerapiaOcupacionalcomAbordagememIntegraçãoSensorial" {{#ifEqual ../relsem.relsem_terapia "TerapiaOcupacionalcomAbordagememIntegraçãoSensorial"}}selected{{/ifEqual}}>Terapia Ocupacional com Integração Sensorial</option>
+                                                    <option value="TerapiaAnáliseDoComportamentoAplicada-ABA" {{#ifEqual ../relsem.relsem_terapia "TerapiaAnáliseDoComportamentoAplicada-ABA"}}selected{{/ifEqual}}>ABA</option>
+                                                    <option value="TerapiaAnáliseDoComportamentoAplicada-ABAEscolar" {{#ifEqual ../relsem.relsem_terapia "TerapiaAnáliseDoComportamentoAplicada-ABAEscolar"}}selected{{/ifEqual}}>ABA Escolar</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <label>Relatório</label>
+                                                <textarea name="relsemDesc" id="relsemDesc" class="form-control" rows="12" placeholder="Descreva o acompanhamento semestral...">{{relsem.relsem_desc}}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botões de ação -->
+                            <div class="space-4"></div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-actions center">
+                                        <button class="btn btn-info" type="submit">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            Salvar
+                                        </button>
+                                        &nbsp; &nbsp;
+                                        <button class="btn btn-warning" type="button" onclick="window.location.href='/menu/area/relsem/lis'">
+                                            <i class="ace-icon fa fa-undo bigger-110"></i>
+                                            Voltar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts básicos (jQuery, Ace Admin, Chosen) -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/chosen.jquery.min.js"></script>
+    <script src="/js/ace-elements.min.js"></script>
+    <script src="/js/ace.min.js"></script>
+</body>
 </html>

@@ -130,8 +130,9 @@
         var v1 = document.getElementById(beneId).value.toString();
         console.log(v1);
         document.getElementById("agendaConvid").value = v1;
-        if(typeof jQuery !== 'undefined' && jQuery('#agendaConvid').data('chosen')) {
-          jQuery('#agendaConvid').trigger('chosen:updated');
+        document.getElementById("agendaConvidVisivel").value = v1;
+        if(typeof jQuery !== 'undefined' && jQuery('#agendaConvidVisivel').data('chosen')) {
+          jQuery('#agendaConvidVisivel').trigger('chosen:updated');
         }
       }
 
@@ -317,6 +318,10 @@
 
           return true;
         }
+
+        function atribuiConvId() {
+          document.getElementById("agendaConvid").value = document.getElementById("agendaConvidVisivel").value;
+        }
     </script>
   </head>
   <body class="no-skin" onload="javascript:controlaNave();carregaBody();controlaCategoria();">
@@ -438,7 +443,7 @@
                               <div class="col-sm-4">
                                 <div class="input-group">
                                   <input name="agendaData" id="agendaData" type="date" style="width: 200px;">
-                                  <input name="agendaHoraToogleButton" id="agendaHoraToogleButton" type="button" onclick="javasctipt:alternaHorario()" value="Agenda padrão" >
+                                  
                                   <input class="hidden" id="agendaHoraToogle" name="agendaHoraToogle" value="true" />
                                 </div>
                               </div>
@@ -456,7 +461,7 @@
                               </div>
                             </div>
                           </div>
-                          <div id="divHoraInputIni" class="col-xs-12 col-sm-3">
+                          <div id="divHoraInputIni" class="col-xs-12 col-sm-3" hidden>
                             <label for="id-date-picker-1">Hora início agendamento</label>
                             <div class="form-group">
                               <div class="col-sm-8">
@@ -469,7 +474,7 @@
                               </div>
                             </div>
                           </div>
-                          <div id="divHoraInputFim" class="col-xs-12 col-sm-3">
+                          <div id="divHoraInputFim" class="col-xs-12 col-sm-3" hidden>
                             <label for="id-date-picker-1">Hora fim agendamento</label>
                             <div class="form-group">
                               <div class="col-sm-8">
@@ -559,7 +564,8 @@
                             <label>Convênio</label>
                             <div class="form-group">
                               <div class="col-xs-9 col-sm-9">
-                                <select disabled="disabled" tabindex="-1" aria-disabled="true" name="agendaConvid" id="agendaConvid" class="chosen-select" data-placeholder="Convênio (automático)">
+                                <input name="agendaConvid" id="agendaConvid" class="hidden" value="" />
+                                <select disabled="disabled" tabindex="-1" aria-disabled="true" name="agendaConvidVisivel" id="agendaConvidVisivel" class="chosen-select" data-placeholder="Convênio (automático)" onchange="javascript:atribuiConvId();">
                                   {{#each benes}}
                                     {{#each ../convs}}
                                       {{#ifEqual ../bene_convid _id}}

@@ -13452,7 +13452,7 @@ relterapiaconvfecdet: async (req, res) => {
         res.status(500).send("Erro ao gerar relatório consolidado detalhado.");
     }
 },
-   relfaltasbene: async (req, res) => {
+   relfaltasbene_FaltaTerapiaTerapeuta: async (req, res) => {
         try {
             console.log("\n======================");
             console.log("🔍 INICIANDO relfaltasbene");
@@ -13582,6 +13582,191 @@ relterapiaconvfecdet: async (req, res) => {
                     categoria: at.atend_categoria || "—"
                 });
             }
+
+            // ------------------------ RESULTADOS ------------------------
+            console.log("\n📌 RESULTADOS POR BENEFICIÁRIO:");
+            console.log("----------------------------------------------------");
+
+            let rels = Object.values(mapa).map(r => {
+                const totalFaltas = r.qt_falta + r.qt_falta_abs + r.qt_falta_jus;
+
+                const indice = r.total_registros > 0
+                    ? parseFloat((totalFaltas / r.total_registros).toFixed(4))
+                    : 0;
+
+                console.log(`
+    👤 BENEFICIÁRIO: ${r.bene_nome}
+    🏥 CONVÊNIO: ${r.convenio}
+    📌 Total registros: ${r.total_registros}
+    ❌ Falta: ${r.qt_falta}
+    ❌ Falta Absoluta: ${r.qt_falta_abs}
+    ❌ Falta Justificada: ${r.qt_falta_jus}
+    🟦 Feriado: ${r.qt_feriado}
+    📉 Índice: ${indice}
+    ----------------------------------------------------
+                `);
+
+                return {
+                    ...r,
+                    indice_faltas: (indice * 100).toFixed(2) // converte para porcentagem
+                };
+            });
+
+            // ------------------------ ORDENAR ------------------------
+            rels.sort((a, b) =>
+                a.bene_nome.localeCompare(b.bene_nome, "pt", { sensitivity: "base" })
+            );
+
+            // ------------------------ RENDER ------------------------
+            return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                rels,
+                periodoDe: dataIniStr.split("-").reverse().join("/"),
+                periodoAte: dataFimStr.split("-").reverse().join("/"),
+                pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr }
+            });
+
+        } catch (err) {
+            console.error("💥 Erro em relfaltasbene:", err);
+            return res.status(500).send("Erro ao gerar relatório de faltas.");
+        }
+    },
+   relfaltasbene: async (req, res) => {
+        try {
+            console.log("\n======================");
+            console.log("🔍 INICIANDO relfaltasbene");
+            console.log("======================");
+
+            const db = req.cookies['preferredDb'];
+            if (!db) return res.status(400).send("Banco de dados não selecionado.");
+            console.log("📌 Banco selecionado:", db);
+
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Bene  = getModel(db, 'tb_bene', beneClass.BeneSchema);
+            const Conv  = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
+            // ------------------------ DATAS ------------------------
+            const dataIniStr = req.query.dataIni || req.body.dataIni;
+            const dataFimStr = req.query.dataFim || req.body.dataFim;
+
+            console.log("📅 Datas recebidas:", dataIniStr, "→", dataFimStr);
+
+            if (!dataIniStr || !dataFimStr) {
+                console.log("⚠️ Datas não enviadas.");
+                return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                    rels: [],
+                    periodoDe: '',
+                    periodoAte: '',
+                    pesquisa: { dataIni: '', dataFim: '' }
+                });
+            }
+
+            const dataIni = new Date(dataIniStr);
+            const dataFim = new Date(dataFimStr);
+            dataFim.setUTCHours(23, 59, 59, 999);
+
+            // ---------------------- BUSCA ATEND ----------------------
+            console.log("\n📥 Buscando atendimentos...");
+            const atendimentos = await Atend.find(
+                {
+                    atend_atenddata: { $gte: dataIni, $lte: dataFim },
+                    atend_beneid: { $ne: null },
+                    atend_convid: { $ne: null }
+                },
+                'atend_beneid atend_convid atend_categoria atend_atenddata atend_atendhora atend_terapia atend_terapeuta atend_terapiaid'
+            ).lean();
+
+            console.log("   → Encontrados:", atendimentos.length);
+
+            if (atendimentos.length === 0) {
+                console.log("⚠️ Nenhum registro encontrado.");
+                return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                    rels: [],
+                    periodoDe: dataIniStr,
+                    periodoAte: dataFimStr,
+                    pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr }
+                });
+            }
+
+ // ---------------------- BUSCAR NOMES (CORRIGIDO) ----------------------
+const beneIds = [...new Set(atendimentos.map(a => String(a.atend_beneid)))];
+const convIds = [...new Set(atendimentos.map(a => String(a.atend_convid)))];
+const terapiaIds = [...new Set(atendimentos.map(a => String(a.atend_terapiaid)))];
+const terapeutaIds = [...new Set(atendimentos.map(a => String(a.atend_terapeuta)))]; // <-- NOVO
+
+console.log("\n📥 Buscando beneficiários...");
+const benes = await Bene.find({ _id: { $in: beneIds } }, 'bene_nome').lean();
+
+console.log("📥 Buscando convênios...");
+const convs = await Conv.find({ _id: { $in: convIds } }, 'conv_nome').lean();
+
+console.log("📥 Buscando terapias...");
+const terapias = await Terapia.find({ _id: { $in: terapiaIds } }, 'terapia_nomecid').lean();
+
+console.log("📥 Buscando terapeutas..."); // <-- NOVO
+const terapeutas = await getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema)
+    .find({ _id: { $in: terapeutaIds } }, 'usuario_nome usuario_nomecompleto')
+    .lean();
+
+// Maps para substituição
+const beneMap = Object.fromEntries(benes.map(b => [String(b._id), b.bene_nome]));
+const convMap = Object.fromEntries(convs.map(c => [String(c._id), c.conv_nome]));
+const terapiaMap = Object.fromEntries(terapias.map(t => [String(t._id), t.terapia_nomecid]));
+const terapeutaMap = Object.fromEntries(terapeutas.map(t => [ // <-- NOVO
+    String(t._id), 
+    t.usuario_nomecompleto || t.usuario_nome
+]));
+
+// ---------------------- AGRUPAMENTO (CORRIGIDO) ----------------------
+console.log("\n📊 AGRUPANDO registros...");
+const mapa = {};
+
+for (const at of atendimentos) {
+    const beneId = String(at.atend_beneid);
+    const convId = String(at.atend_convid);
+    const terapiaId = String(at.atend_terapiaid);
+    const terapeutaId = String(at.atend_terapeuta);
+
+    if (!mapa[beneId]) {
+        mapa[beneId] = {
+            bene_id: beneId,
+            bene_nome: beneMap[beneId] || "—",
+            convenio: convMap[convId] || "—",
+            total_registros: 0,
+            qt_falta: 0,
+            qt_falta_abs: 0,
+            qt_falta_jus: 0,
+            qt_feriado: 0,
+            detalhes: []
+        };
+    }
+
+    const item = mapa[beneId];
+    item.total_registros++;
+
+    // Contagem de categorias
+    switch (at.atend_categoria) {
+        case "Falta": item.qt_falta++; break;
+        case "Falta Absoluta": item.qt_falta_abs++; break;
+        case "Falta Justificada": item.qt_falta_jus++; break;
+        case "Feriado": item.qt_feriado++; break;
+    }
+
+    // Detalhes COM NOMES RESOLVIDOS ✅
+    const dataBr = at.atend_atenddata
+        ? new Date(at.atend_atenddata).toISOString().slice(0, 10).split("-").reverse().join("/")
+        : "—";
+
+    item.detalhes.push({
+        data: dataBr,
+        hora: at.atend_atendhora || "—",
+        terapia: terapiaMap[terapiaId] || at.atend_terapia || "—", // <-- USA O MAP
+        terapeuta: terapeutaMap[terapeutaId] || at.atend_terapeuta || "—", // <-- USA O MAP
+        categoria: at.atend_categoria || "—"
+    });
+}
+
+               
 
             // ------------------------ RESULTADOS ------------------------
             console.log("\n📌 RESULTADOS POR BENEFICIÁRIO:");

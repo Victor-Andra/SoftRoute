@@ -381,5 +381,143 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
+			<!-- Modal de confirmação para Evolução não finalizada -->
+		<div id="modalEvolucaoNaoFinalizada" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">
+							<i class="ace-icon fa fa-exclamation-triangle orange"></i>
+							Atenção
+						</h4>
+					</div>
+					<div class="modal-body">
+						<p class="blue">
+							Você tentou salvar a evolução sem marcar a <b>Evolução como finalizada</b>. O que deseja fazer?
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button id="btnMarcarSalvar" class="btn btn-success" type="button">
+							<i class="ace-icon fa fa-check"></i>
+							Marcar e salvar
+						</button>
+						<button id="btnSalvarSemMarcar" class="btn btn-danger" type="button">
+							<i class="ace-icon fa fa-times"></i>
+							Não marcar, irei editar mais tarde!
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Script do modal de evolução -->
+		<script type="text/javascript">
+		// === MODAL: Evolução não finalizada ===
+		(function(){
+			function $(id){ return document.getElementById(id); }
+			
+			var form = document.querySelector('form[action="/menu/agenda/evolucao"]');
+			var btnSalvar = $('acaoSalvar');
+			var modal = $('modalEvolucaoNaoFinalizada');
+			var txtEvolucao = $('agendaEvolucao');
+			var txtOriginal = $('agendaEvolucaoEdi');
+			var chkFinalizada = $('agendaSelo');
+			var inputSelamento = $('agendaSelamento');
+			
+			var submitPending = false;
+
+			function initModal(){
+				if(window.jQuery && jQuery.fn.modal){
+					jQuery(modal).modal({show: false, backdrop: 'static', keyboard: false});
+				}
+			}
+
+			function showModal(){
+				if(window.jQuery && jQuery.fn.modal){
+					jQuery(modal).modal('show');
+				} else {
+					modal.style.display = 'block';
+				}
+			}
+
+			function hideModal(){
+				if(window.jQuery && jQuery.fn.modal){
+					jQuery(modal).modal('hide');
+				} else {
+					modal.style.display = 'none';
+				}
+			}
+
+			function evolucaoFoiAlterada(){
+				var atual = (txtEvolucao.value || '').trim();
+				var original = (txtOriginal.value || '').trim();
+				return atual !== original;
+			}
+
+			function prepararESubmit(marcarFinalizada){
+				if(marcarFinalizada){
+					chkFinalizada.checked = true;
+					chkFinalizada.value = "true";
+					inputSelamento.value = "true";
+					if(typeof selamento === 'function') selamento();
+				}
+				form.removeEventListener('submit', interceptSubmit, true);
+				form.submit();
+			}
+
+			function interceptSubmit(e){
+				if(submitPending) return true;
+
+				var divEvolucao = $('divEvolucao');
+				if(!divEvolucao || divEvolucao.offsetParent === null){
+					return true;
+				}
+
+				var evolucaoPreenchida = (txtEvolucao.value || '').trim().length > 0;
+				var estaFinalizada = chkFinalizada.checked;
+
+				if(evolucaoFoiAlterada() && evolucaoPreenchida && !estaFinalizada){
+					e.preventDefault();
+					e.stopPropagation();
+					
+					if(!btnSalvar.dataset.modalBound){
+						$('btnMarcarSalvar').addEventListener('click', function(){
+							hideModal();
+							prepararESubmit(true);
+						});
+						$('btnSalvarSemMarcar').addEventListener('click', function(){
+							hideModal();
+							prepararESubmit(false);
+						});
+						btnSalvar.dataset.modalBound = "true";
+					}
+					
+					showModal();
+					return false;
+				}
+				return true;
+			}
+
+			function bindEvents(){
+				if(form){
+					form.addEventListener('submit', interceptSubmit, true);
+				}
+				if(btnSalvar){
+					btnSalvar.addEventListener('click', function(e){
+						if(!interceptSubmit(e)){
+							e.preventDefault();
+						}
+					});
+				}
+				initModal();
+			}
+
+			if(document.readyState === 'loading'){
+				document.addEventListener('DOMContentLoaded', bindEvents);
+			} else {
+				bindEvents();
+			}
+		})();
+		</script>	
 	</body>
 </html>

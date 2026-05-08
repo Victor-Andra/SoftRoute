@@ -75,11 +75,11 @@ function validarFormulario(event) {
         erros.push("O campo <strong>Data da Atividade</strong> é obrigatório.");
     }
 
-    // === 5. Validar Frequência ===
-    const frequencia = document.getElementById('bordoFrequencia').value;
-    if (!frequencia || frequencia === '-' || frequencia === '766f69643132333435366964') {
-        erros.push("O campo <strong>Frequência</strong> deve ser preenchido.");
-    }
+    // === 5. Validar Frequência === REMOVIDO por solicitação de Roberta 05-05-2026
+    //const frequencia = document.getElementById('bordoFrequencia').value;
+    //if (!frequencia || frequencia === '-' || frequencia === '766f69643132333435366964') {
+    //    erros.push("O campo <strong>Frequência</strong> deve ser preenchido.");
+    //}
 
     // === 6. Exibir alertas ===
     limparAlertas(); // Remove alertas anteriores
@@ -276,10 +276,10 @@ document.addEventListener('DOMContentLoaded', function () {
 														<input id="bordoDataativ" name="bordoDataativ" type="date" >
 													</div>
 												</div>
-												<label> Frequência</label>
-												<div class="form-group">
+												
+												<div class="form-group" hidden>
 													<div class="col-sm-6">
-														<select name="bordoFrequencia" id="bordoFrequencia" class="chosen-select" onchange="javascript:mudaSeausente()" >
+														<select name="bordoFrequencia" id="bordoFrequencia" class="chosen-select" value="Presente" onchange="javascript:mudaSeausente()" >
 															<option value="-">-</option>
 															<option value="Ausente">Ausente</option>
 															<option value="Presente">Presente</option>

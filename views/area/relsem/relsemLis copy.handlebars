@@ -122,47 +122,16 @@
 													
 													<td>
 														<div class="action-buttons">
-															<a class="green" href="/menu/area/relsem/edi/{{_id}}" title="Editar">
+															<a class="green" href="/menu/area/relsem/edi/{{_id}}">
 																<i class="ace-icon fa fa-pencil bigger-130"></i>
 															</a>
-															<a class="blue" href="/menu/area/relsem/imp/{{_id}}" title="Imprimir">
+															<a class="blue" href="/menu/area/relsem/imp/{{_id}}">
 																<i class="ace-icon fa fa-print bigger-130"></i>
 															</a>
-															<a class="brown" href="/menu/area/relsem/capa/{{_id}}" title="Capa">
+															<a class="brown" href="/menu/area/relsem/capa/{{_id}}">
 																<i class="ace-icon fa fa-bookmark-o bigger-130"></i>
 															</a>
-															
-															<!-- ✅ Ícone de olho com tooltip (NOVO) -->
-															<a class="purple custom-tooltip" title="Informações">
-																<i class="ace-icon fa fa-eye bigger-130"></i>
-																<span class="tooltip-text">
-																	<strong>Última Edição:</strong><br>
-																	{{#if dataedi_formatada}}
-																		🕐 {{dataedi_formatada}}<br>
-																	{{else}}
-																		🕐 —<br>
-																	{{/if}}
-																	{{#if usuarioEdiNome}}
-																		👤 {{usuarioEdiNome}}
-																	{{else}}
-																		👤 Não informado
-																	{{/if}}
-																	<hr style="margin:6px 0;border-color:#ccc;">
-																	<strong>Cadastrado em:</strong><br>
-																	{{#if datacad_formatada}}
-																		🕐 {{datacad_formatada}}<br>
-																	{{else}}
-																		🕐 —<br>
-																	{{/if}}
-																	{{#if usuarioCadNome}}
-																		👤 {{usuarioCadNome}}
-																	{{else}}
-																		👤 Não informado
-																	{{/if}}
-																</span>
-															</a>
-															
-															<a class="red" href="#" onclick="confirmeDeletar('{{_id}}');" title="Excluir">
+															<a class="red" href="#" onclick="confirmeDeletar('{{_id}}');">
 																<i class="ace-icon fa fa-trash-o bigger-130"></i>
 															</a>
 														</div>

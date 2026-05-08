@@ -5,9 +5,56 @@
 		<meta charset="utf-8">
 		<title>agendamentos do Dia</title>
 		<style>
-			/* ============================================
+		/* Estilos para tela */
+			@media screen {
+				.print-header {
+					display: none;
+				}
+			}
+
+			/* Estilos para impressão */
+			@media print {
+				.noprint {
+					display: none !important;
+				}
+
+				/* Cabeçalho fixo com paginação no topo */
+				.print-header {
+					position: fixed;
+					top: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 4px 0;
+					background: white;
+					z-index: 9999;
+					content: "Página " counter(page) " de " counter(pages);
+				}
+
+				/* Margem superior para não sobrepor conteúdo */
+				body {
+					margin-top: 12mm; /* suficiente para o cabeçalho */
+					margin-bottom: 10mm;
+				}
+
+				/* Configuração da página: permite retrato ou paisagem conforme escolha do usuário */
+				@page {
+					margin: 1cm;
+					/* NÃO defina `size` aqui — isso bloqueia a orientação! */
+					@top-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 11px;
+						color: black;
+					}
+					@bottom-center {
+						content: ""; /* remove qualquer rodapé automático */
+					}
+				}
+			}
+		/* ============================================
          BARRA DE PESQUISA - CLASSE SEPARADA
-         ============================================ */
+        ============================================ */
       .toolbar-pesquisa {
         background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
         color: white;
@@ -242,74 +289,78 @@
 				}
 			}
 			function carregaBody(){
-				//formataData();
-				if (document.getElementById("carregaFiltro").value == "true"){
-					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
-					if(document.getElementById("tipoData").value == "Ano/Mes"){
-						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
-						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
-					} else if (document.getElementById("tipoData").value == "Semana"){
-						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
-					} else if (document.getElementById("tipoData").value == "Dia"){
-						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+				// Carrega filtros apenas se carregaFiltro == "true"
+				if (document.getElementById("carregaFiltro")?.value == "true"){
+					
+					// === Tipo de data ===
+					const tipoDataVal = document.getElementById("tipoDataFil")?.value || "Ano/Mes";
+					document.getElementById("tipoData").value = tipoDataVal;
+					
+					if(tipoDataVal == "Ano/Mes"){
+						document.getElementById("anoAtend").value = document.getElementById("anoAtendFil")?.value || "";
+						document.getElementById("mesAtend").value = document.getElementById("mesAtendFil")?.value || "";
+					} else if (tipoDataVal == "Semana" || tipoDataVal == "Dia"){
+						const dataFilVal = document.getElementById("dataFinalFil")?.value || "";
+						if(dataFilVal){
+							const dat = new Date(dataFilVal);
+							const mes = String(dat.getUTCMonth()).padStart(2,'0');
+							const dia = String(dat.getUTCDate()).padStart(2,'0');
+							document.getElementById("dataFil").value = `${dat.getFullYear()}-${mes}-${dia}`;
+						}
 					}
-
-					document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
-					if (document.getElementById("atendTipoPessoa").value == "Geral"){
-
-					} else if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
-						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value
-					} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
-						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
+					
+					// === Tipo de pessoa ===
+					const tipoPessoaVal = document.getElementById("tipoPessoaFil")?.value || "Geral";
+					document.getElementById("atendTipoPessoa").value = tipoPessoaVal;
+					
+					if(tipoPessoaVal == "Beneficiario"){
+						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil")?.value || "";
+					} else if(tipoPessoaVal == "Terapeuta"){
+						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil")?.value || "";
 					}
-
+					
+					// === Concluído ===
+					document.getElementById("AtendConcluido").value = document.getElementById("AtendConcluidoFil")?.value || "Todos";
+					
+					// === Selo (NOVO) ===
+					document.getElementById("atendSelo").value = document.getElementById("atendSeloFil")?.value || "Todos";
 				}
-				let tipoDataEdi = document.getElementById("tipoDataEdi").value;
-				let tipoPessoaEdi =document.getElementById("tipoPessoaEdi").value;
-				if (tipoDataEdi == "Ano/Mes"){
+				
+				// === Carregamento via edição (Edi) ===
+				const tipoDataEdi = document.getElementById("tipoDataEdi")?.value;
+				const tipoPessoaEdi = document.getElementById("tipoPessoaEdi")?.value;
+				
+				if (tipoDataEdi){
 					document.getElementById("tipoData").value = tipoDataEdi;
-					document.getElementById("anoAtend").value = document.getElementById("anoAtendEdi").value;
-					document.getElementById("mesAtend").value = document.getElementById("mesAtendEdi").value;
-				} else if (tipoDataEdi == "Semana"){
-					document.getElementById("tipoData").value = tipoDataEdi;
-					let dat = new Date(document.getElementById('dataFinalEdi').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
+					if(tipoDataEdi == "Ano/Mes"){
+						document.getElementById("anoAtend").value = document.getElementById("anoAtendEdi")?.value || "";
+						document.getElementById("mesAtend").value = document.getElementById("mesAtendEdi")?.value || "";
+					} else if(tipoDataEdi == "Semana" || tipoDataEdi == "Dia"){
+						const dataEdiVal = document.getElementById("dataFinalEdi")?.value;
+						if(dataEdiVal){
+							const dat = new Date(dataEdiVal);
+							const mes = String(dat.getUTCMonth()).padStart(2,'0');
+							const dia = String(dat.getUTCDate()).padStart(2,'0');
+							document.getElementById("dataFil").value = `${dat.getFullYear()}-${mes}-${dia}`;
+						}
 					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia).toString();
-					document.getElementById("dataFil").value = fulldate;
-					document.getElementById("dataFinal").value = (fulldate+' 00:00:00.000Z');
-				} else if (tipoDataEdi == "Dia"){
-					document.getElementById("tipoData").value = tipoDataEdi;
-					let dat = new Date(document.getElementById('dataFinalEdi').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia).toString();
-					document.getElementById("dataFil").value = fulldate;
-					document.getElementById("dataFinal").value = (fulldate+' 00:00:00.000Z');
 				}
-				if (tipoPessoaEdi == "Geral"){
+				
+				if(tipoPessoaEdi){
 					document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
-				} else if (tipoPessoaEdi == "Beneficiario"){
-					document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
-					document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioEdi").value;
-				} else if (tipoPessoaEdi == "Terapeuta"){
-					document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
-					document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaEdi").value;
+					if(tipoPessoaEdi == "Beneficiario"){
+						document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioEdi")?.value || "";
+					} else if(tipoPessoaEdi == "Terapeuta"){
+						document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaEdi")?.value || "";
+					}
 				}
+				
+				// === Atualiza visibilidade dos campos ===
 				trocaFiltroData();
 				trocaFilpessoa();
+				
+				// === ATUALIZA TODOS OS CHOSEN ===
+				$('.chosen-select').trigger('chosen:updated');
 			}
 		</script>
 	</head>
@@ -436,16 +487,7 @@
 									<div class="input-group">
 										<label>Data:&nbsp;</label>
 										<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-										<input class="hidden" id="dataFinal" name="dataFinal" />
-										<input class="hidden" id="idDeletar" name="idDeletar" />
-										<input class="hidden" id="tipoDataEdi" name="tipoDataEdi" value="{{filtroTela.tipoData}}" />
-										<input class="hidden" id="anoAtendEdi" name="anoAtendEdi" value="{{filtroTela.anoAtend}}" />
-										<input class="hidden" id="mesAtendEdi" name="mesAtendEdi" value="{{filtroTela.mesAtend}}" />
-										<input class="hidden" id="dataFinalEdi" name="dataFinalEdi" value="{{filtroTela.dataFinal}}" />
-										<input class="hidden" id="tipoPessoaEdi" name="tipoPessoaEdi" value="{{filtroTela.tipoPessoa}}" />
-										<input class="hidden" id="atendBeneficiarioEdi" name="atendBeneficiarioEdi" value="{{filtroTela.atendBeneficiario}}" />
-										<input class="hidden" id="atendTerapeutaEdi" name="atendTerapeutaEdi" value="{{filtroTela.atendTerapeuta}}" />
-										<input class="hidden" id="idEdi" name="idEdi" value="{{filtroTela.atendTerapeuta}}" />
+										
 									</div>
 								</div>
 								<div id="divTipoFil" class="col-sm-2">
@@ -484,16 +526,50 @@
 										</div>
 									</div>
 								</div>
+								
+								<div id="divAtendSelo" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Concluído:&nbsp;</label>
+											<select name="atendSelo" id="atendSelo" class="chosen-select" data-placeholder="Escolha...">
+												<option value="Todos" {{#compareString filtroTela.atendSelo "Todos"}}selected{{/compareString}}>Todos</option>
+												<option value="Sim" {{#compareString filtroTela.atendSelo "Sim"}}selected{{/compareString}}>Sim</option>
+												<option value="Não" {{#compareString filtroTela.atendSelo "Não"}}selected{{/compareString}}>Não</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								
+								
+								
 								<div class="row">
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-danger" style="margin-left: 25px;">
 										<i class="ace-icon fa fa-search-plus "></i>
 										Pesquisar
 									</button>
 									
 								</div>
-								<hr>
 							</div>
-							
+							<div class="hidden">
+								<!-- Controle de carregamento -->
+								<input type="hidden" id="carregaFiltro" name="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+								
+								<!-- Filtros para persistência (TODOS vindos de filtroTela) -->
+								<input type="hidden" id="tipoDataFil" name="tipoDataFil" value="{{filtroTela.tipoData}}" />
+								<input type="hidden" id="anoAtendFil" name="anoAtendFil" value="{{filtroTela.anoAtend}}" />
+								<input type="hidden" id="mesAtendFil" name="mesAtendFil" value="{{filtroTela.mesAtend}}" />
+								<input type="hidden" id="dataFinalFil" name="dataFinalFil" value="{{filtroTela.dataFinal}}" />
+								<input type="hidden" id="tipoPessoaFil" name="tipoPessoaFil" value="{{filtroTela.tipoPessoa}}" />
+								<input type="hidden" id="atendBeneficiarioFil" name="atendBeneficiarioFil" value="{{filtroTela.atendBeneficiario}}" />
+								<input type="hidden" id="atendTerapeutaFil" name="atendTerapeutaFil" value="{{filtroTela.atendTerapeuta}}" />
+								<input type="hidden" id="AtendConcluidoFil" name="AtendConcluidoFil" value="{{filtroTela.atendConcluido}}" />
+								<input type="hidden" id="atendSeloFil" name="atendSeloFil" value="{{filtroTela.atendSelo}}" />
+								
+								<!-- Outros campos -->
+								<input type="hidden" id="dataIniFil" name="dataIniFil" value="{{filtroTela.dataIni}}" />
+								<input type="hidden" id="dataFimFil" name="dataFimFil" value="{{filtroTela.dataFim}}" />
+								<input type="hidden" id="idsChecked" name="idsChecked" value="" />
+							</div>
 						</form>
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
@@ -512,12 +588,13 @@
 												<tr role="row">
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Data</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Hora</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Tipo</th>
 													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia</th>
 													<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapeuta</th>
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Beneficiário</th>
 													<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1">Evolução</th>
 													<th class="sorting" tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" width="90px;">Concluiu</th>
-													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">No Prazo</th>
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">No Prazo?</th>
 													<th class="sorting" tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Ação</th>
 													
 												</tr>
@@ -537,6 +614,40 @@
 																<td>{{terapia_nomecid}}</td>
 															{{/ifEqual}}
 														{{/each}}
+
+														<td>
+															{{#compareThis agenda_categoria "Padrão"}}
+																<span name="ageCateg" id="ageCateg" class="label label-success arrowed">{{agenda_categoria}}</span>
+
+															{{else}}
+															{{#compareThis agenda_categoria "Feriado"}}
+																<span name="ageCateg" id="ageCateg" class="label label-black">{{agenda_categoria}}</span>
+
+															{{else}}
+															{{#compareThis agenda_categoria "Substituição"}}
+																<span name="ageCateg" id="ageCateg" class="label label-warning">{{agenda_categoria}}</span>
+
+															{{else}}
+															{{#compareThis agenda_categoria "Falta Absoluta"}}
+																<span name="ageCateg" id="ageCateg" class="label label-warning">{{agenda_categoria}}</span>
+
+															{{else}}
+															{{#compareThis agenda_categoria "Falta Justificada"}}
+																<span name="ageCateg" id="ageCateg" class="label label-black">{{agenda_categoria}}</span>
+
+															{{else}}
+															{{#compareThis agenda_categoria "Falta"}}
+																<span name="ageCateg" id="ageCateg" class="label label-warning">{{agenda_categoria}}</span>
+
+															{{else}}
+																<span name="verselo" id="verselo" class="label label-info arrowed-in">{{agenda_categoria}}</span>
+															{{/compareThis}}
+															{{/compareThis}}
+															{{/compareThis}}
+															{{/compareThis}}
+															{{/compareThis}}
+															{{/compareThis}}
+														</td>
 														
 														<td>
 															{{#each ../terapeutas}}
@@ -555,9 +666,9 @@
 														<td>{{agenda_evolucao}}</td>
 														<td>
 															{{#compareThis agenda_selo "true"}}
-																<span name="verselo" id="verselo" class="label label-success arrowed">Sim</span>
+																<span name="verselo" id="verselo" class="label label-success arrowed">Afirmativo</span>
 															{{else}}
-																<span name="verselo" id="verselo" class="label label-danger arrowed-in">Não</span>
+																<span name="verselo" id="verselo" class="label label-danger arrowed-in">Negado</span>
 															{{/compareThis}}
 														</td>
 														
@@ -572,12 +683,33 @@
 																<span class="label label-purple arrowed-right">Não</span>
 															{{/compareThis}}
 														</td>
+														
 														<td>
-															<div class="action-buttons">
-																<a class="blue" href="/menu/agenda/evolucao/{{_id}}">
-																	<i class="ace-icon fa fa-pencil bigger-130"></i>
-																</a>
-															</div>
+															{{#compareThis agenda_categoria "Feriado"}}
+																<div class="action-buttons">
+																	<a class="red" >
+																		<i class="ace-icon fa fa-ban bigger-130"></i>
+																	</a>
+																</div>
+
+															{{else}}
+															
+															{{#compareThis agenda_categoria "Falta Absoluta"}}
+																<div class="action-buttons">
+																	<a class="orange">
+																		<i class="ace-icon fa fa-ban bigger-130"></i>
+																	</a>
+																</div>
+
+															{{else}}
+																<div class="action-buttons">
+																	<a class="blue" href="/menu/agenda/evolucao/{{_id}}">
+																		<i class="ace-icon fa fa-pencil bigger-130"></i>
+																	</a>
+																</div>
+															{{/compareThis}}
+															{{/compareThis}}
+															
 															
 														</td>
 													</tr>
@@ -607,7 +739,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [null, null, null, null,null, null, null, null, { "bSortable": false }],
+			"aoColumns": [null, null, null, null,null, null, null, null, null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [ 100, 200, 300, 500],
 			"lengthChange": true,

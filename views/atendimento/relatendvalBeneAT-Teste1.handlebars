@@ -7,6 +7,74 @@
     
     <!-- 🔹 ESTILOS DA TOOLBAR + IMPRESSÃO -->
     <style>
+      /* Força a tabela a respeitar EXATAMENTE as larguras definidas */
+        table.table-bordered {
+           
+            width: 100% !important;
+            border-collapse: collapse !important;
+        }
+
+        /* Garante que td/herde a largura do th */
+        table.table-bordered td,
+        table.table-bordered th {
+       
+            
+           
+            word-wrap: break-word !important;
+            overflow-wrap: break-word !important;
+        }
+
+       
+       
+      /* ===== IMPRESSÃO COM CORES ===== */
+      @media print {
+          /* Força impressão de cores de fundo e texto */
+          * {
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+              color-adjust: exact !important;
+          }
+          
+          /* Labels coloridas mantêm o fundo na impressão */
+          .label-info {
+              background-color: #17a2b8 !important;
+              color: white !important;
+              border-color: #138496 !important;
+          }
+          .label-success {
+              background-color: #28a745 !important;
+              color: white !important;
+              border-color: #218838 !important;
+          }
+          .label-warning {
+              background-color: #ffc107 !important;
+              color: #212529 !important;
+              border-color: #e0a800 !important;
+          }
+          
+          /* Ícones e textos coloridos */
+          .blue { color: #007bff !important; }
+          .green { color: #28a745 !important; }
+          
+          /* Ajuste de fontes para impressão */
+          body {
+              font-size: 9pt !important;
+              zoom: 0.95; /* leve redução para caber melhor */
+          }
+          
+          /* Garante que as colunas fiquem lado a lado na impressão */
+          .col-xs-6 {
+              width: 50% !important;
+              float: left !important;
+              box-sizing: border-box;
+          }
+          
+          /* Remove sombras e efeitos que gastam tinta desnecessariamente */
+          .label {
+              box-shadow: none !important;
+              text-shadow: none !important;
+          }
+      }
       /* ============================================
          BARRA DE PESQUISA - CLASSE SEPARADA
          ============================================ */
@@ -152,7 +220,7 @@
 
      
     </style>
-<style>
+    <style>
 			/* Estilos para tela */
 			@media screen {
 				.print-header {
@@ -372,90 +440,68 @@
 										<!-- /widget-main padding-24 -->
 										<div class="row">
 											<!-- /row -->
-											<div class="col-sm-12">
-												<!-- /col-sm-12 -->
-
-												<div class="row">
-													<!-- /row -->
-													<div class="col-xs-12 label label-lg label-info arrowed-in arrowed-right">
-														<!-- /col-xs-12 label -->
-														<b>Informações do Prestador</b>
-													</div>
-													<!-- /.col-xs-12 label -->
-												</div>
-												<!-- /.row -->
-
-												<div>
-													<!-- /informacoes prestador -->
-													<ul class="list-unstyled">
-														<li>
-															<i class="ace-icon fa fa-caret-right blue"></i><b>Prestador: </b>Route Centro de Terapia e Apoio Infantil
-														</li>
-														<li>
-															<i class="ace-icon fa fa-caret-right blue"></i><b>CNPJ: </b> 33.346.423/0001-17
-														</li>
-													</ul>
-												</div>
-												<!-- /.informacoes prestador -->
-
-												<div class="row">
-													<!-- /row -->
-													<div class="col-xs-12 label label-lg label-success arrowed-in arrowed-right">
-														<!-- /col-xs-12 label -->
-														<b>Informações do Relatório</b>
-													</div>
-													<!-- /.col-xs-12 label -->
-												</div>
-												<!-- /.row -->
-
-												<div>
-													<!-- /informacoes relatorio -->
-													<ul class="list-unstyled">
-														<li>
-															<i class="ace-icon fa fa-caret-right green"></i><b>Período de: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}
-														</li>
-														<li>
-															<i class="ace-icon fa fa-caret-right green"></i><b>Beneficiário: </b>{{bene_nome}}
-														</li>
-														<li>
-															<i class="ace-icon fa fa-caret-right green"></i><b>Convênio:</b> {{conv_nome}}
-														</li>
-													</ul>
-												</div>
-												<!-- /.informacoes relatorio -->
-
-												<div class="row"><!-- /row -->
-													<div class="col-xs-12 label label-lg label-warning arrowed-in arrowed-right"><!-- /col-xs-12 label -->
-														<b>Informações dos Atendimentos</b>
-													</div><!-- /.col-xs-12 label -->
-												</div><!-- /.row -->
-											</div><!-- /.col-sm-12 -->
+										<div class="col-sm-12">
+                          <!-- 🔹 Título da Seção de Atendimentos (centralizado ou full-width) -->
+                      </div>
 											
 										</div><!-- /.row -->
 										<div class="page"><!-- /page -->
-											<table class="table table-striped table-bordered" style="font-size: 11px;">
+											<table class="table table-bordered" style="font-size: 11px; ">
 												<thead>
-												<tr>
-													<th>Data do Atendimento</th>
-													<th>Especialidade</th>
-													<th>Profissional</th>
-												</tr>
-												</thead>
+                            <!-- LINHA 1: Cabeçalho dividido 50/50 usando DIVs internas (SEM colspan) -->
+                            <tr>
+                                <th colspan="3" style="padding: 0; border: 1px solid #ccc; background: #f8f9fa;">
+                                    <div style="display: flex; width: 100%;">
+                                        <div style="width: 50%; padding: 6px 8px; border-right: 1px solid #ccc; box-sizing: border-box; text-align: left;">
+                                            <div class="label label-lg label-info arrowed-in arrowed-right" style="font-size: 10px; padding: 4px 8px; margin-bottom: 3px; display: inline-block;">
+                                                <b>Informações do Prestador</b>
+                                            </div>
+                                            <ul class="list-unstyled" style="font-size: 11px; margin: 0; padding-left: 4px;">
+                                                <li style="line-height: 1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>Prestador:</b> Route Centro de Terapia</li>
+                                                <li style="line-height: 1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>CNPJ:</b> 33.346.423/0001-17</li>
+                                            </ul>
+                                        </div>
+                                        <div style="width: 50%; padding: 6px 8px; box-sizing: border-box; text-align: left;">
+                                            <div class="label label-lg label-success arrowed-in arrowed-right" style="font-size: 10px; padding: 4px 8px; margin-bottom: 3px; display: inline-block;">
+                                                <b>Informações do Relatório</b>
+                                            </div>
+                                            <ul class="list-unstyled" style="font-size: 11px; margin: 0; padding-left: 4px;">
+                                                <li style="line-height: 1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Período:</b> {{periodoDe}} até {{periodoAte}}</li>
+                                                <li style="line-height: 1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Beneficiário:</b> {{bene_nome}}</li>
+                                                <li style="line-height: 1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Convênio:</b> {{conv_nome}}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+
+                            <!-- LINHA 2: Título da seção (ocupa as 3 colunas) -->
+                            <tr>
+                                <th colspan="3" style="text-align: center; padding: 5px 8px; border: 1px solid #ccc; background: #fff3cd;">
+                                    <div class="label label-lg label-warning arrowed-in arrowed-right" style="font-size: 10px; padding: 4px 8px; display: inline-block;">
+                                        <b>Informações dos Atendimentos</b>
+                                    </div>
+                                </th>
+                            </tr>
+
+                            <!-- LINHA 3: Colunas de dados (15% | 15% | 70%) - AQUI QUE TRAVA AS LARGURAS -->
+                            <tr>
+                                <th style="width: 20% !important;  left !important; padding: 6px !important; border: 1px solid #ccc !important; background: #e9ecef !important; font-weight: 600;">Data do Atendimento</th>
+                                <th style="width: 20% !important; text-align: left !important; padding: 6px !important; border: 1px solid #ccc !important; background: #e9ecef !important; font-weight: 600;">Especialidade</th>
+                                <th style="width: 60% !important; text-align: left !important; padding: 6px !important; border: 1px solid #ccc !important; background: #e9ecef !important; font-weight: 600;">Profissional</th>
+                            </tr>
+                        </thead>
 												<tbody>
 												{{#each rels}}
 													<tr>
-													<td>{{dt}}</td>
-													{{#each ../terapias}}
-														{{#ifEqual this._id ../especialidade}}
-														<td>{{terapia_nomecid}}</td>
-														{{/ifEqual}}
-													{{/each}}
-													{{#each ../terapeutas}}
-														{{#ifEqual this._id ../profissional}}
-														<td>{{usuario_nomecompleto}}</td>
-														{{/ifEqual}}
-													{{/each}}
-													</tr>
+                              <td style="width: 20% !important;  text-align: left; padding: 6px; border: 1px solid #ccc; vertical-align: top;">{{dt}}</td>
+                              <td style="width: 20% !important;  text-align: left; padding: 6px; border: 1px solid #ccc; vertical-align: top;">
+                                  {{#each ../terapias}}{{#ifEqual this._id ../especialidade}}{{terapia_nomecid}}{{/ifEqual}}{{/each}}
+                              </td>
+                              <td style="width: 60% !important;  text-align: left; padding: 6px; border: 1px solid #ccc; vertical-align: top;">
+                                  {{#each ../terapeutas}}{{#ifEqual this._id ../profissional}}{{usuario_nomecompleto}}{{/ifEqual}}{{/each}}
+                              </td>
+                          </tr>
 												{{/each}}
 												</tbody>
 												
@@ -485,18 +531,28 @@
 
      	<div class="row">
 			<div class="col-xs-12">
+          <table class="table table-striped table-bordered" style="font-size: 11px; width: 100%; table-layout: fixed;">
+            <tbody>
+              <tr>
+                  <td style="height: 90px; vertical-align: top; padding: 10px; border: 1px solid #333;">
+                      <!-- Espaço para carimbo/assinatura (aprox. 4 linhas) -->
+                      <div style="border-bottom: 1px dashed #666; height: 60px; margin-bottom: 5px;"></div>
+                      <div style="text-align: center; font-size: 10px; color: #555;">
+                          Assinatura do Responsável
+                      </div>
+                  </td>
+                  <td style="height: 90px; vertical-align: top; padding: 10px; border: 1px solid #333;">
+                      <!-- Espaço para carimbo/assinatura (aprox. 4 linhas) -->
+                      <div style="border-bottom: 1px dashed #666; height: 60px; margin-bottom: 5px;"></div>
+                      <div style="text-align: center; font-size: 10px; color: #555;">
+                          Assinatura da Clínica
+                      </div>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
 				<div style="margin-top: 32px;"></div>
-				<div class="row">
-					<div class="col-xs-4 col-sm-4 text-center">
-						<div class="hr"></div>
-						<label>Assinatura do Responsável</label>
-					</div>
-					<div class="col-xs-4 col-sm-4"></div>
-					<div class="col-xs-4 col-sm-4 text-center">
-						<div class="hr"></div>
-						<label>Assinatura da Clínica</label>
-					</div>
-				</div>
+				
 			</div>
 		</div>
 			

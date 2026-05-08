@@ -2,56 +2,40 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 const { getModel } = require('../functions/fncGeral');
 
+// models/relsem.js
 const RelsemSchema = mongoose.Schema({
-    relsem_id:{ type: ObjectId, required: false },
-    relsem_terapeutaid:{type: ObjectId, required: true},
-    relsem_beneid:{type: ObjectId, required: true},
+    relsem_id: { type: ObjectId, required: false },
+    
+    // ✅ COM REF (mesmo banco - preferredDb)
+    relsem_beneid: { 
+        type: ObjectId, 
+        ref: 'tb_bene',  // ← Nome exato usado no getModel(db, 'tb_bene', ...)
+        required: true 
+    },
+    relsem_convid: { 
+        type: ObjectId, 
+        ref: 'tb_conv',
+        required: false 
+    },
+    
+    // ❌ SEM REF (banco diferente - PortalDoUsuario)
+    // Mantém como ObjectId puro, resolve manualmente depois
+    relsem_terapeutaid: { type: ObjectId, required: true },
+    
+    // controle
+    relsem_datacad: { type: Date, required: false },
+    relsem_usuidcad: { type: ObjectId, required: false },  // ← também cross-db
+    relsem_dataedi: { type: Date, required: false },
+    relsem_usuidedi: { type: ObjectId, required: false },  // ← também cross-db
+    
     relsem_data: { type: String, required: false },
     relsem_mes: { type: String, required: false },
     relsem_conselho: { type: String, required: false },
     relsem_terapia: { type: String, required: false },
     relsem_desc: { type: String, required: false },
-    //controle
-    relsem_datacad: { type: Date, required: false },
-    relsem_usuidcad: { type: ObjectId, required: false },
-    relsem_dataedi: { type: Date, required: false },
-    relsem_usuidedi: { type: ObjectId, required: false },
-    
 })
 
-class Relsem{
-    constructor(
-        relsem_id,
-        relsem_terapeutaid,
-        relsem_beneid,
-        relsem_data, 
-        relsem_mes, 
-        relsem_conselho,
-        relsem_terapia, 
-        relsem_desc, 
-        relsem_datacad, 
-        relsem_usuidcad, 
-        relsem_dataedi, 
-        relsem_usuidedi 
-   
-         ){
-            this.relsem_id = relsem_id,
-            this.relsem_terapeutaid = relsem_terapeutaid, 
-            this.relsem_beneid = relsem_beneid, //Ok
-            this.relsem_data = relsem_data, //Ok
-            this.relsem_mes = relsem_mes,
-            this.relsem_conselho = relsem_conselho,
-            this.relsem_terapia = relsem_terapia,
-            this.relsem_desc = relsem_desc,
-            this.relsem_datacad = relsem_datacad,
-            this.relsem_usuidcad = relsem_usuidcad,
-            this.relsem_dataedi = relsem_dataedi,
-            this.relsem_usuidedi = relsem_usuidedi
 
-    }
-}
-
-RelsemSchema.loadClass(Relsem)
 var RelsemModel = getModel("softroute", 'tb_relsem', RelsemSchema)
 module.exports = {
     RelsemModel,

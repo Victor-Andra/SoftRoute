@@ -13,6 +13,7 @@ const usuarioClass = require("../models/usuario")
 const terapiaClass = require("../models/terapia")
 const escolaClass = require("../models/escola")
 const laudoClass = require("../models/laudo")
+const anoClass = require("../models/ano")
 
 //Tabela Plano de Relsemamento 
 var Relsem = getModel("SoftRoute", 'tb_relsem', relsemClass.RelsemSchema)
@@ -24,6 +25,7 @@ var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSche
 var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 var Escola = getModel("SoftRoute", 'tb_escola', escolaClass.EscolaSchema)
 var Laudo = getModel("SoftRoute", 'tb_laudo', laudoClass.LaudoSchema)
+var Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
 
 //Funções auxiliares
 const fncGeral = require("./fncGeral");
@@ -31,84 +33,131 @@ const Resposta = fncGeral.Resposta;
 const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
-    listaRelsem(req, res, resposta){
-        let db = req.cookies['preferredDb'];
-        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
 
+async listaRelsem(req, res, resposta){
+    try {
+        console.log('🔍 [listaRelsem] Iniciando listagem...');
+        let db = req.cookies['preferredDb'] || "softroute";
+        
+        // Modelos do banco principal (preferredDb)
+        const Relsem = getModel(db, 'tb_relsem', relsemClass.RelsemSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        
+        // Modelo do banco externo (PortalDoUsuario) - para usuários
+        const UsuarioPortal = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
+        
         let flash = new Resposta();
-        //console.log('listando Relsemeses')
-            let relsem;
 
-            Bene.find().then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Usuario.find().then((usuario)=>{
-                    res.render('area/relsem/relsemLis', {relsems: relsem, usuarios: usuario, benes: bene, flash})
-        })}).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar!")
-            res.redirect('admin/erro')
-        })
-    },
-    filtraRelsem(req, res, resposta){
-        let db = req.cookies['preferredDb'];
-        Relsem = getModel(db, 'tb_relsem', relsemClass.RelsemSchema)
-        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        // ✅ Busca TODOS os relsems, com populate apenas para campos do MESMO banco
+        let relsems = await Relsem.find()
+            .populate('relsem_beneid', 'bene_nome bene_status')  // ✅ mesmo banco
+            .populate('relsem_convid', 'conv_nome')              // ✅ mesmo banco (se existir)
+            .sort({ relsem_datacad: -1 })  // Ordena por mais recente
+            .lean();
 
-        let flash = new Resposta();
-        let dataIni;
-        let dataFim;
-        //console.log('listando Relsemeses')
-        dataIni = new Date();
-        dataIni.setDate(01);
-        dataIni.setFullYear(parseInt(req.body.anoBordo)-1);
-        dataIni.setUTCMonth(1);
-        dataIni.setHours(0, 0, 0, 0);
+        console.log(`📊 [listaRelsem] ${relsems.length} registros encontrados`);
 
-        dataFim = new Date();
-        dataFim.setDate(01);
-        dataFim.setFullYear(parseInt(req.body.anoBordo)+1);
-        dataFim.setUTCMonth(1);
-        dataFim.setHours(0, 0, 0, 0);
+        // 🔁 Coleta IDs únicos para buscas em lote (performance)
+        const terapeutaIds = [...new Set(
+            relsems
+                .map(r => r.relsem_terapeutaid)
+                .filter(id => id && typeof id.toString === 'function' && id.toString().length === 24)
+                .map(id => id.toString())
+        )];
 
-        Relsem.find({relsem_beneid: req.body.relsemBeneid, relsem_data: { $gte :new Date(dataIni), $lte:  new Date(dataFim) }}).then((relsem) =>{
-            relsem.sort((a,b) => (a.relsem_benenome > b.relsem_benenome) ? 1 : ((b.relsem_benenome > a.relsem_benenome) ? -1 : 0));//Ordena a nome do beneficiário na lista relsemese 
-            relsem.forEach((c)=>{
-               //console.log("c.datacad"+c.relsem_datacad)
-               let datacad = new Date(c.relsem_data)
-               let mes = (datacad.getMonth()+1).toString();
-               let dia = (datacad.getUTCDate()).toString();
-               if (mes.length == 1){
-                   mes = "0"+mes;
-               }
-               if (dia.length == 1){
-                   dia = "0"+dia;
-               }
-               let fulldate=(datacad.getFullYear()+"-"+mes+"-"+dia).toString();
-               c.relsem_data=fulldate;
+        const editorIds = [...new Set(
+            relsems
+                .flatMap(r => [r.relsem_usuidcad, r.relsem_usuidedi])
+                .filter(id => id && typeof id.toString === 'function' && id.toString().length === 24)
+                .map(id => id.toString())
+        )];
+
+        // 🔁 Busca usuários do banco externo (PortalDoUsuario) em lote
+        let usuariosMap = {};
+        const todosIdsExternos = [...new Set([...terapeutaIds, ...editorIds])];
+        
+        if (todosIdsExternos.length > 0) {
+            const usuariosExternos = await UsuarioPortal.find({ _id: { $in: todosIdsExternos } })
+                .select('_id usuario_nome')
+                .lean();
+            
+            usuariosExternos.forEach(u => {
+                usuariosMap[u._id.toString()] = u.usuario_nome;
+            });
+            console.log(`👥 [listaRelsem] ${usuariosExternos.length} usuários externos carregados`);
+        }
+
+        // 🔄 Helper para formatar data no padrão dd/mm/yyyy
+        const formatarDataBR = (data) => {
+            if (!data) return '—';
+            const d = new Date(data);
+            if (isNaN(d)) return '—';
+            const dia = String(d.getUTCDate()).padStart(2, '0');
+            const mes = String(d.getMonth() + 1).padStart(2, '0');
+            const ano = d.getFullYear();
+            return `${dia}/${mes}/${ano}`;
+        };
+
+        // 🔄 Processa cada registro para a view
+        relsems = relsems.map(r => {
+            // Terapeuta (banco externo)
+            const terapeuta = usuariosMap[r.relsem_terapeutaid?.toString()];
+            
+            // Data do relatório (campo relsem_data - string ou date)
+            let dataRelatorioFormatada = '—';
+            if (r.relsem_data) {
+                const d = new Date(r.relsem_data);
+                if (!isNaN(d)) {
+                    dataRelatorioFormatada = formatarDataBR(d);
+                }
+            }
+            
+            return {
+                ...r,
+                // ✅ Campos para o tooltip (cadastro/edição)
+                usuarioCadNome: usuariosMap[r.relsem_usuidcad?.toString()] || 'Não informado',
+                usuarioEdiNome: usuariosMap[r.relsem_usuidedi?.toString()] || 'Não informado',
+                datacad_formatada: formatarDataBR(r.relsem_datacad),
+                dataedi_formatada: formatarDataBR(r.relsem_dataedi),
                 
+                // ✅ Campos para exibição na tabela
+                terapeuta_nome: terapeuta || 'Não identificado',
+                relsem_data_formatada: dataRelatorioFormatada,
+                
+                // ✅ Nome do beneficiário (populate ou fallback)
+                bene_nome_exib: r.relsem_beneid?.bene_nome || r.relsem_benenome || 'Não identificado'
+            };
+        });
 
+        // 📋 Listas auxiliares para selects/filtros da view (se necessário)
+        const benes = await Bene.find({ 
+                bene_status: "Ativo", 
+                bene_nome: { $not: /\./ } 
             })
+            .sort({ bene_nome: 1 })
+            .lean()
+            .catch(err => {
+                console.warn('⚠️ Erro ao carregar beneficiários:', err.message);
+                return [];
+            });
 
-            Bene.find().then((bene)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Usuario.find().then((usuario)=>{
-                    //console.log("Listagem Realizada Usuário!")
-                    /*if(resposta.sucesso == ""){
-                        console.log(' objeto vazio');
-                        flash.texto = ""
-                        flash.sucesso = ""
-                    } else {
-                        console.log(resposta.sucesso+' objeto com valor: '+resposta.texto);
-                        flash.texto = resposta.texto
-                        flash.sucesso = resposta.sucesso
-                    }*/
-                    res.render('area/relsem/relsemLis', {relsems: relsem, usuarios: usuario, benes: bene, flash})
-        })})}).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar!")
-            res.redirect('admin/erro')
-        })
-    },
+        console.log('✅ [listaRelsem] Renderizando view...');
+        
+        res.render('area/relsem/relsemLis', {
+            relsems,           // ✅ Todos os registros processados
+            benes: benes || [], 
+            usuarios: [],      // Pode remover se não usar selects na view
+            flash
+        });
+
+    } catch (err) {
+        console.error('❌ [listaRelsem] ERRO CRÍTICO:', err);
+        console.error('❌ Stack:', err.stack);
+        req.flash("error_message", "Houve um erro ao listar os relatórios: " + err.message);
+        res.redirect('/admin/erro');
+    }
+},
+
     carregaRelsem(req,res){
         let db = req.cookies['preferredDb'];
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)

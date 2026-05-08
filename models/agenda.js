@@ -15,9 +15,9 @@ const AgendaSchema = mongoose.Schema({
     agenda_horafim :{ type: String, required: false },//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
     agenda_data_semana :{ type: String, required: false },
     agenda_data_dia :{ type: String, required: false },
-    agenda_beneid :{ type: ObjectId, required: false },
-    agenda_convid :{ type: ObjectId, required: false },
-    agenda_salaid :{ type: ObjectId, required: false },
+    agenda_beneid :{ type: ObjectId, required: true },
+    agenda_convid :{ type: ObjectId, required: true },
+    agenda_salaid :{ type: ObjectId, required: true },
     agenda_terapiaid :{ type: ObjectId, required: false },
     agenda_usuid :{ type: ObjectId, required: false }, //Id do terapeuta padrão mas no antendimento foi alterado para atend_terapeutaid
     agenda_mergeterapeutaid :{type: ObjectId, required: false }, 

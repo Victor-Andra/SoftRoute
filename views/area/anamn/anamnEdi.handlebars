@@ -207,6 +207,11 @@
 						document.getElementById("anamnTce").value = document.getElementById("anamnTceEdi").value;
 						document.getElementById("anamnObssaude").value = document.getElementById("anamnObssaudeEdi").value;
 						document.getElementById("anamnObssaude2").value = document.getElementById("anamnObssaude2Edi").value;
+						// === ENFERMIDADES ADICIONAIS (13-04-2026) ===
+						document.getElementById("anamnProblcardiaco").value = document.getElementById("anamnProblcardiacoEdi").value;
+						document.getElementById("anamnAsmabronquite").value = document.getElementById("anamnAsmabronquiteEdi").value;
+						document.getElementById("anamnDesmaiotontura").value = document.getElementById("anamnDesmaiotonturaEdi").value;
+						document.getElementById("anamnFeridainfectpele").value = document.getElementById("anamnFeridainfectpeleEdi").value;
 						
 						// Enfermidades (Grupo 3)
 						document.getElementById("anamnOtite").value = document.getElementById("anamnOtiteEdi").value;
@@ -2316,7 +2321,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnProblcardiaco" id="anamnProblcardiaco" class="chosen-select"  value="{{anamn.anamn_problcardiaco}}">
+																		<select name="anamnProblcardiaco" id="anamnProblcardiaco" class="chosen-select"  >
 																				<option value="-">-</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -2332,7 +2337,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnAsmabronquite" id="anamnAsmabronquite" class="chosen-select"  value="{{anamn.anamn_asmabronquite}}">
+																		<select name="anamnAsmabronquite" id="anamnAsmabronquite" class="chosen-select"  ">
 																				<option value="-">-</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -2348,7 +2353,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnDesmaiotontura" id="anamnDesmaiotontura" class="chosen-select"  value="{{anamn.anamn_desmaiotontura}}">
+																		<select name="anamnDesmaiotontura" id="anamnDesmaiotontura" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
@@ -2364,7 +2369,7 @@
 															<div class="row">
 																<div class="input-group">
 																	<div class="input-group">
-																		<select name="anamnFeridainfectpele" id="anamnFeridainfectpele" class="chosen-select"  value="{{anamn.anamn_feridainfectpele}}">
+																		<select name="anamnFeridainfectpele" id="anamnFeridainfectpele" class="chosen-select" >
 																				<option value="-">-</option>
 																				<option value="Sim">Sim</option>
 																				<option value="Não">Não</option>
