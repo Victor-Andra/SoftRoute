@@ -295,7 +295,7 @@
 																	<div class="row">
 																		<div class="col-sm-4">
 																			<div class="input-group">
-																				<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="agendaOrg" name="agendaOrg" class="select2" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																				<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="agendaOrg" name="agendaOrg" class="select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
 																					<option value="Padrão">Padrão</option>
 																					<option value="Administrativo">Administrativo</option>
 																				</select>
@@ -332,7 +332,7 @@
 														</div>
 														<div class="form-group" >
 															<div class="col-sm-5">
-																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaBeneid" id="agendaBeneid" class="select2" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaBeneid" id="agendaBeneid" class="select" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
 																	{{/each}}
@@ -344,7 +344,7 @@
 														<label>Convênio</label>
 														<div class="form-group"  >
 															<div class="col-sm-6" style="width: 500px;">
-																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid"  id="agendaConvid" class="select2" data-placeholder="Escolha..." >
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid"  id="agendaConvid" class="select" data-placeholder="Escolha..." >
 																	{{#each benes}}
 																		{{#each ../convs}}
 																			{{#ifEqual ../bene_convid _id}}
@@ -376,7 +376,7 @@
 														<label>Terapia</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaTerapiaid" id="agendaTerapiaid" class="select2" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaTerapiaid" id="agendaTerapiaid" class="select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 																	{{#each terapias}}
 																		<option value="{{_id}}">{{terapia_nome}}</option>
 																	{{/each}}
@@ -390,7 +390,7 @@
 														<label>Local</label>
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 300px;">
-																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaSalaid" id="agendaSalaid" class="select2" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaSalaid" id="agendaSalaid" class="select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 																	{{#each salas}}
 																		<option value="{{_id}}">{{sala_nome}}</option>
 																	{{/each}}

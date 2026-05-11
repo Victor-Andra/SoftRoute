@@ -2,6 +2,80 @@
 <html lang="pt-br">
 	<head>
 		<title>Agendamentos</title>
+		<style>
+			/* Modal responsivo para mobile/tablet - Ace Admin */
+@media (max-width: 767px) {
+    /* Modal ocupa quase toda a tela em mobile */
+    .modal-dialog {
+        width: 95% !important;
+        margin: 10px auto !important;
+    }
+    
+    /* Títulos e textos com tamanho legível */
+    .modal-title {
+        font-size: 16px !important;
+        line-height: 1.4 !important;
+    }
+    
+    .modal-body p {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Botões em coluna, tamanho maior para toque */
+    .modal-footer {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        padding: 10px 15px !important;
+    }
+    
+    .modal-footer .btn {
+        width: 100% !important;
+        min-height: 44px !important; /* Área de toque mínima para mobile */
+        font-size: 14px !important;
+        text-align: left !important;
+        padding: 10px 15px !important;
+    }
+    
+    /* Ícones dos botões com espaçamento adequado */
+    .modal-footer .btn i {
+        margin-right: 8px !important;
+        width: 20px !important;
+        text-align: center;
+    }
+}
+
+/* Tablet: ajuste intermediário */
+@media (min-width: 768px) and (max-width: 991px) {
+    .modal-dialog {
+        width: 90% !important;
+        max-width: 600px !important;
+    }
+    
+    .modal-footer .btn {
+        min-height: 38px;
+        padding: 6px 12px;
+    }
+}
+
+/* Garante alinhamento à esquerda em todos os elementos do modal */
+.modal-content .text-left,
+.modal-content p,
+.modal-content h4 {
+    text-align: left !important;
+}
+
+/* Remove margens/paddings indesejados do Ace Admin no mobile */
+.modal-body {
+    padding: 15px !important;
+}
+
+.modal-footer {
+    padding: 10px 15px 15px !important;
+    border-top: 1px solid #e5e5e5;
+}
+		</style>
 		<script type="text/javascript">
 			/*function ajustaOption(){
 				let valor;
@@ -46,8 +120,6 @@
 				document.getElementById("agendaUsuid").value = document.getElementById("agendaUsuidEdi").value;
 				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value;
 				//document.getElementById("agendaTempMotivo").value = document.getElementById("agendaTempMotivoEdi").value;
-				
-				
 				atualizaData();
 				if (document.getElementById("agendaSelamento").value == 'false'){
 					document.getElementById("agendaSelo").checked = false;
@@ -70,219 +142,90 @@
 			function selamento(){
 				document.getElementById("agendaSelamento").value = document.getElementById("agendaSelo").checked;
 			}
-			
+			document.getElementById('acaoCancelar').addEventListener('click', function() {
+				window.history.back();
+			});
 		</script>
-		<script type="text/javascript">
-(function(){
-  function log(...args){ if(window.console) console.log("[Evolucao]", ...args); }
+		
+	<script>
+		// ========================================================================
+	// 📝 FUNÇÃO: Atualizar textarea de evolução ao escolher Categoria/Título
+	// ========================================================================
+	function atualizaEvolucaoPorTitulo() {
+		// 👉 Elementos
+		const selectCategoria = document.getElementById('evolucaoconfCategoria');
+		const selectTitulo = document.getElementById('evolucaoconfTitulo');
+		const inputPadrao = document.getElementById('evolucaoconfEvolucaopad');
+		const textareaEvolucao = document.getElementById('agendaEvolucao');
+		
+		// 👉 Fonte de dados (span ocultos gerados pelo Handlebars)
+		const sourceSpans = document.querySelectorAll('#evolucaoconfSource .evitem');
+		
+		// 👉 Mapear dados: { "Categoria": [ {titulo, evol}, ... ] }
+		const dadosEvolucao = {};
+		sourceSpans.forEach(span => {
+			const cat = span.getAttribute('data-cat');
+			const titulo = span.getAttribute('data-titulo');
+			const evol = span.getAttribute('data-evol') || '';
+			
+			if (!dadosEvolucao[cat]) dadosEvolucao[cat] = [];
+			dadosEvolucao[cat].push({ titulo, evol });
+		});
+		
+		// 👉 EVENTO 1: Ao mudar CATEGORIA → atualiza TÍTULOS
+		if (selectCategoria) {
+			selectCategoria.addEventListener('change', function() {
+				const catSelecionada = this.value;
+				
+				// Limpa e reseta o select de título
+				selectTitulo.innerHTML = '<option value="-">-</option>';
+				selectTitulo.value = '-';
+				inputPadrao.value = '';
+				textareaEvolucao.value = '';
+				
+				// Se categoria válida, preenche títulos correspondentes
+				if (catSelecionada && catSelecionada !== '-' && dadosEvolucao[catSelecionada]) {
+					dadosEvolucao[catSelecionada]
+						.sort((a, b) => a.titulo.localeCompare(b.titulo))
+						.forEach(item => {
+							const opt = document.createElement('option');
+							opt.value = item.titulo;
+							opt.textContent = item.titulo;
+							opt.dataset.evol = item.evol; // 👈 Armazena texto padrão no atributo data
+							selectTitulo.appendChild(opt);
+						});
+				}
+				console.log(`📋 Categoria "${catSelecionada}" → ${selectTitulo.options.length - 1} títulos carregados`);
+			});
+		}
+		
+		// 👉 EVENTO 2: Ao mudar TÍTULO → preenche TEXTAREA
+		if (selectTitulo) {
+			selectTitulo.addEventListener('change', function() {
+				const optSelecionada = this.options[this.selectedIndex];
+				const textoPadrao = optSelecionada?.dataset?.evol || '';
+				const tituloTexto = this.value;
+				
+				if (tituloTexto && tituloTexto !== '-') {
+					// 👉 Preenche textarea: Título + quebra de linha + texto padrão
+					textareaEvolucao.value = tituloTexto + '\n' + textoPadrao;
+					inputPadrao.value = textoPadrao; // 👈 Mantém hidden atualizado
+					console.log(`✏️ Textarea preenchida: "${tituloTexto}"`);
+				} else {
+					// Se selecionou "-", limpa tudo
+					textareaEvolucao.value = '';
+					inputPadrao.value = '';
+				}
+			});
+		}
+	}
 
-  // lê valor de elemento por id ou name e normaliza pra boolean quando possível
-  function readValueFromEl(el){
-    if(!el) return null;
-    var v = el.value;
-    if(typeof v === "string") v = v.trim().toLowerCase();
-    if(v === "true") return true;
-    if(v === "false") return false;
-    if(el.type === "checkbox") return !!el.checked;
-    return null;
-  }
-
-  // tenta localizar a flag em uma lista de ids/names conhecidos
-  function detectSupervisorFlag(){
-    var candidates = ["isAgendaSuperCoo","isAgendaTerapeuta","isAgendaSuperCooInput","isAgendaTerapeutaInput","agendasup","agendatera"];
-    for(var i=0;i<candidates.length;i++){
-      var id = candidates[i];
-      var elById = document.getElementById(id);
-      if(elById){
-        var v = readValueFromEl(elById);
-        if(v === true || v === false) { log("flag detectada por id:", id, v); return {found:true, id:id, value:v}; }
-      }
-      var elsByName = document.getElementsByName(id);
-      if(elsByName && elsByName.length){
-        var v2 = readValueFromEl(elsByName[0]);
-        if(v2 === true || v2 === false) { log("flag detectada por name:", id, v2); return {found:true, id:id, value:v2}; }
-      }
-    }
-
-    // fallback: procura inputs cujo id/name contenham 'super' ou 'sup'
-    var inputs = document.querySelectorAll('input');
-    for(var j=0;j<inputs.length;j++){
-      var inp = inputs[j];
-      var token = (inp.id||"") + "|" + (inp.name||"");
-      if(/super|sup/i.test(token)){
-        var vv = readValueFromEl(inp);
-        log("fallback candidate:", token, "value:", inp.value);
-        if(vv === true || vv === false) return {found:true, id: inp.id||inp.name||token, value: vv};
-      }
-    }
-
-    // fallback 2: procura os campos explícitos que você adicionou (agendasup / agendatera) mesmo sem id
-    var byNameAgSup = document.getElementsByName("agendasup");
-    if(byNameAgSup && byNameAgSup.length){
-      var v = readValueFromEl(byNameAgSup[0]);
-      if(v === true || v === false) { log("flag detectada por name: agendasup", v); return {found:true, id:"agendasup", value:v}; }
-    }
-    var byNameAgTer = document.getElementsByName("agendatera");
-    if(byNameAgTer && byNameAgTer.length){
-      var v = readValueFromEl(byNameAgTer[0]);
-      if(v === true || v === false) { log("flag detectada por name: agendatera", v); return {found:true, id:"agendatera", value:v}; }
-    }
-
-    log("nenhuma flag clara encontrada; retornando found:false (value=false)");
-    return {found:false, id:null, value:false};
-  }
-
-  // utilitários DOM esperados
-  function $(id){ return document.getElementById(id); }
-
-  document.addEventListener("DOMContentLoaded", function(){
-    try {
-      var catSelect = $("evolucaoconfCategoria");
-      var tituloSelect = $("evolucaoconfTitulo");
-      var evolPad = $("evolucaoconfEvolucaopad");
-      var evolucaoTxt = $("agendaEvolucao");
-      var divEvolucaoConf = $("divEvolucaoConf");
-      var sourceNodes = document.querySelectorAll("#evolucaoconfSource .evitem");
-
-      if(!catSelect || !tituloSelect || !evolPad || !evolucaoTxt || !divEvolucaoConf){
-        log("Elementos obrigatórios faltando:", {
-          cat: !!catSelect, titulo: !!tituloSelect, pad: !!evolPad, ag: !!evolucaoTxt, div: !!divEvolucaoConf
-        });
-        return;
-      }
-
-      // carrega dados do bloco oculto
-      var evolucaoconfs = [];
-      sourceNodes.forEach(function(span){
-        evolucaoconfs.push({
-          evolucaoconf_categoria: span.getAttribute("data-cat") || "",
-          evolucaoconf_titulo: span.getAttribute("data-titulo") || "",
-          evolucaoconf_evolucaopad: span.getAttribute("data-evol") || ""
-        });
-      });
-      log("items evolucaoconf lidos:", evolucaoconfs.length);
-
-      function setOnlyDash(selectEl){
-        selectEl.innerHTML = "";
-        var o = document.createElement("option");
-        o.value = "-"; o.textContent = "-";
-        selectEl.appendChild(o);
-        selectEl.value = "-";
-      }
-
-      function preencherCategorias(){
-        catSelect.innerHTML = "";
-        var optPad = document.createElement("option"); optPad.value = "-"; optPad.textContent = "-"; catSelect.appendChild(optPad);
-        var cats = Array.from(new Set(evolucaoconfs.map(e=>e.evolucaoconf_categoria).filter(Boolean)));
-        cats.sort();
-        cats.forEach(function(c){
-          var o = document.createElement("option"); o.value = c; o.textContent = c; catSelect.appendChild(o);
-        });
-      }
-
-      function preencherTitulos(categoria){
-        tituloSelect.innerHTML = "";
-        var optPad = document.createElement("option"); optPad.value = "-"; optPad.textContent = "-"; tituloSelect.appendChild(optPad);
-        if(!categoria || categoria === "-") return;
-        var filtrados = evolucaoconfs.filter(e => e.evolucaoconf_categoria === categoria);
-        filtrados.sort((a,b)=> a.evolucaoconf_titulo > b.evolucaoconf_titulo ? 1 : -1);
-        filtrados.forEach(function(f){
-          var o = document.createElement("option"); o.value = f.evolucaoconf_titulo; o.textContent = f.evolucaoconf_titulo;
-          o.setAttribute("data-evol", f.evolucaoconf_evolucaopad || "");
-          tituloSelect.appendChild(o);
-        });
-      }
-
-      // eventos
-      catSelect.addEventListener("change", function(){
-        var v = this.value;
-        if(!v || v === "-"){
-          setOnlyDash(tituloSelect);
-          evolPad.value = "";
-          evolucaoTxt.value = "";
-          return;
-        }
-        preencherTitulos(v);
-        evolPad.value = "";
-        evolucaoTxt.value = "";
-      });
-
-      tituloSelect.addEventListener("change", function(){
-        var sel = this.options[this.selectedIndex];
-        if(!sel || sel.value === "-"){
-          evolPad.value = "";
-          evolucaoTxt.value = "";
-          return;
-        }
-        var pad = sel.getAttribute("data-evol") || "";
-        evolPad.value = pad;
-        evolucaoTxt.value = sel.value + "\n" + pad;
-      });
-
-      function resetAndHideAll(){
-        try{ catSelect.value = "-"; }catch(e){}
-        setOnlyDash(tituloSelect);
-        try{ tituloSelect.value = "-"; }catch(e){}
-        evolPad.value = "";
-        evolucaoTxt.value = "";
-        divEvolucaoConf.style.display = "none";
-        catSelect.setAttribute("disabled","disabled");
-        tituloSelect.setAttribute("disabled","disabled");
-        log("reset e hide executados");
-      }
-
-      function enableAndShow(){
-        var cats = Array.from(new Set(evolucaoconfs.map(e=>e.evolucaoconf_categoria).filter(Boolean)));
-        preencherCategorias();
-        divEvolucaoConf.style.display = "";
-        catSelect.removeAttribute("disabled");
-        tituloSelect.removeAttribute("disabled");
-        log("enableAndShow executado");
-      }
-
-      // aplica conforme flag detectada
-      function aplicarSegunFlag(){
-        var flag = detectSupervisorFlag();
-        log("detectSupervisorFlag ->", flag);
-        if(flag.found && flag.value === true){
-          enableAndShow();
-        } else {
-          resetAndHideAll();
-        }
-        return flag;
-      }
-
-      // primeira execução
-      var flag = aplicarSegunFlag();
-
-      // observa inputs que possamos ter utilizado
-      var watchNames = ["isAgendaSuperCoo","isAgendaTerapeuta","agendasup","agendatera"];
-      watchNames.forEach(function(nm){
-        var el = document.getElementById(nm) || document.getElementsByName(nm)[0];
-        if(el){
-          el.addEventListener("change", function(){
-            log("watcher change em", nm, "=>", el.value);
-            aplicarSegunFlag();
-          });
-          el.addEventListener("input", function(){
-            log("watcher input em", nm, "=>", el.value);
-            aplicarSegunFlag();
-          });
-        }
-      });
-
-      // se não encontrou flag por nenhum dos caminhos, ainda aplica reset defensivo
-      if(!flag.found){
-        log("flag não encontrada; aplicando reset defensivo");
-        resetAndHideAll();
-      }
-
-    } catch(err){
-      console.error("[Evolucao] erro:", err);
-    }
-  });
-})();
-</script>
+	// 👉 Inicializa a função quando o DOM estiver pronto
+	document.addEventListener('DOMContentLoaded', function() {
+		// Aguarda um pouco para garantir que os spans ocultos foram renderizados
+		setTimeout(atualizaEvolucaoPorTitulo, 100);
+	});
+	</script>
 
 
 
@@ -369,7 +312,7 @@
 																<label>Categoria</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
-																		<select name="evolucaoconfCategoria" id="evolucaoconfCategoria" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="evolucaoconfCategoria" id="evolucaoconfCategoria" class="select2" data-placeholder="Escolha...">
 																			<!-- As opções serão preenchidas via JavaScript -->
 																		</select>
 																	</div>
@@ -380,7 +323,7 @@
 																<label>Escolha o Título</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
-																		<select name="evolucaoconfTitulo" id="evolucaoconfTitulo" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="evolucaoconfTitulo" id="evolucaoconfTitulo" class="select2" data-placeholder="Escolha...">
 																			<!-- As opções serão preenchidas via JavaScript -->
 																		</select>
 																	</div>
@@ -467,7 +410,7 @@
 															<label for="id-date-picker-1">Hora Agendamento</label>
 															<div class="form-group">
 																<div class="col-sm-8">
-																	<select style="pointer-events: none;touch-action: none;" name="agendaHora" id="agendaHora" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
+																	<select style="pointer-events: none;touch-action: none;" name="agendaHora" id="agendaHora" class="select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
 																		{{#each horaages}}
 																			<option value="{{horaage_hora}}">{{horaage_hora}}</option>
 																		{{/each}}
@@ -481,7 +424,7 @@
 															<label>Origem Agendamento</label>
 															<div class="form-group">
 																<div class="col-sm-9">
-																	<select style="pointer-events: none;touch-action: none;" id="agendaOrg" name="agendaOrg" class="select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																	<select style="pointer-events: none;touch-action: none;" id="agendaOrg" name="agendaOrg" class="select" data-placeholder="Escolhaa a opção..." >
 																		<option value="Administrativo">Administrativo</option>
 																		<option value="Padrão">Padrão</option>
 																	</select>
@@ -492,7 +435,7 @@
 															<label>Categoria</label>
 															<div class="form-group">
 																<div class="col-sm-9">
-																	<select style="pointer-events: none;touch-action: none;" id="agendaCateg" name="agendaCateg" class="select" data-placeholder="Escolha a opção..." onchange="javascript:ajustaOption();">
+																	<select style="pointer-events: none;touch-action: none;" id="agendaCateg" name="agendaCateg" class="select" data-placeholder="Escolha a opção..." >
 																		<option id="Falta" value="Falta">Falta</option>
 																		<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
 																		<option id="Pais" value="Pais">Pais</option>
@@ -516,7 +459,7 @@
 															</div>
 															<div class="form-group" >
 																<div class="col-sm-5">
-																	<select class="col-sm-5" name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..."  style="width: 400px;" onchange="javascript:selectConv()">
+																	<select class="col-sm-5" name="agendaBeneid" id="agendaBeneid" class="select" data-placeholder="Escolha..."  style="width: 400px;" onchange="javascript:selectConv()">
 																		{{#each benes}}
 																			<option style="pointer-events: none;touch-action: none;" value="{{_id}}">{{bene_nome}}</option>
 																		{{/each}}
@@ -546,7 +489,7 @@
 															<label>Terapeuta</label>
 															<div class="form-group">
 																<div class="col-sm-4" style="width: 500px;">
-																	<select style="pointer-events: none;touch-action: none;" name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select style="pointer-events: none;touch-action: none;" name="agendaUsuid" id="agendaUsuid" class="select" data-placeholder="Escolha..." >
 																		{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
 																		{{/each}}
@@ -588,7 +531,7 @@
 															<label>Motivo</label>
 															<div class="form-group">
 																<div class="col-sm-4" style="width: 300px;">
-																	<select name="agendaTempMotivo" id="agendaTempMotivo" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:ajustaOption()">
+																	<select name="agendaTempMotivo" id="agendaTempMotivo" class="select2" data-placeholder="Escolha..." onchange="javascript:ajustaOption()">
 																		<option style="background-color: yellow;" value="Falta">Falta</option>
 																		<option style="background-color: orange;" value="Falta Justificada">Falta Justificada</option>
 																		<option style="background-color: cyan;" value="Substituição">Substituição</option>
@@ -643,6 +586,8 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
+		<!-- ... resto do seu HTML ... -->
+
 		<!-- Modal de confirmação para Evolução não finalizada -->
 		<div id="modalEvolucaoNaoFinalizada" class="modal fade" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
@@ -678,6 +623,7 @@
 				</div>
 			</div>
 		</div>
+
 		<!-- Script do modal de evolução -->
 		<script type="text/javascript">
 		// === MODAL: Evolução não finalizada ===
@@ -787,20 +733,22 @@
 			}
 		})();
 		// Garante que o botão Cancelar feche o modal corretamente
-			document.addEventListener("DOMContentLoaded", function(){
-				var btnCancelar = document.getElementById("btnCancelarModal");
-				var modal = document.getElementById("modalEvolucaoNaoFinalizada");
-				
-				if(btnCancelar && modal){
-					btnCancelar.addEventListener("click", function(){
-						if(window.jQuery && jQuery.fn.modal){
-							jQuery(modal).modal("hide");
-						} else {
-							modal.style.display = "none";
-						}
-					});
-				}
-			});
+document.addEventListener("DOMContentLoaded", function(){
+    var btnCancelar = document.getElementById("btnCancelarModal");
+    var modal = document.getElementById("modalEvolucaoNaoFinalizada");
+    
+    if(btnCancelar && modal){
+        btnCancelar.addEventListener("click", function(){
+            if(window.jQuery && jQuery.fn.modal){
+                jQuery(modal).modal("hide");
+            } else {
+                modal.style.display = "none";
+            }
+        });
+    }
+});
 		</script>
+
+	
 	</body>
 </html>
