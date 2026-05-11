@@ -96,6 +96,230 @@
 			
 			/* Cursor pointer para links clicáveis */
 			.cursor-pointer { cursor: pointer; }
+			/* ============================================
+            BARRA DE PESQUISA - CLASSE SEPARADA
+            ============================================ */
+			.toolbar-pesquisa {
+				background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); /* Azul */
+				color: white;
+				padding: 15px;
+				border-radius: 8px;
+				margin-bottom: 20px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+				border: 1px solid #1976d2;
+			}
+
+			.toolbar-pesquisa h5 {
+				margin: 0 0 10px 0;
+				font-size: 14px;
+				font-weight: 600;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+
+			.toolbar-pesquisa h5 i {
+				font-size: 18px;
+			}
+
+			.toolbar-pesquisa .form-inline {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px;
+				align-items: center;
+			}
+
+			.toolbar-pesquisa .form-group {
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+			}
+
+			.toolbar-pesquisa label {
+				font-size: 11px;
+				font-weight: 500;
+				margin-bottom: 4px;
+				color: #f8f9fa;
+				white-space: nowrap;
+			}
+
+			.toolbar-pesquisa input[type="text"],
+			.toolbar-pesquisa input[type="date"],
+			.toolbar-pesquisa select {
+				padding: 6px 10px;
+				border: 2px solid #e2e8f0;
+				border-radius: 4px;
+				font-size: 12px;
+				width: 120px;
+				transition: all 0.3s;
+				background: white;
+				color: #333;
+			}
+
+			.toolbar-pesquisa input[type="text"]:focus,
+			.toolbar-pesquisa input[type="date"]:focus,
+			.toolbar-pesquisa select:focus {
+				border-color: #fff;
+				box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+				outline: none;
+			}
+
+			.toolbar-pesquisa .btn-toolbar {
+				background: #dc3545; /* Cor danger do AceAdmin */
+				color: white;
+				border: none;
+				padding: 8px 20px;
+				border-radius: 4px;
+				font-weight: 600;
+				font-size: 13px;
+				cursor: pointer;
+				transition: all 0.3s;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+			}
+
+			.toolbar-pesquisa .btn-toolbar:hover {
+				background: #c82333;
+				transform: translateY(-2px);
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+			}
+
+			.toolbar-pesquisa .btn-toolbar:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+				transform: none;
+			}
+
+			.toolbar-pesquisa .btn-toolbar i {
+				font-size: 14px;
+			}
+			/* ============================================
+			SELECT2 - ESTILOS GERAIS
+			============================================ */
+			.select2-container {
+				min-width: 120px !important;
+			}
+
+			/* Campo principal do Select2 (a "caixa" visível) */
+			.select2-container--default .select2-selection--single {
+				height: 30px !important;
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				background: white !important;
+				display: flex !important;
+				align-items: center !important;
+				padding: 0 8px !important;
+				font-size: 12px !important;
+			}
+
+			/* Seta do dropdown */
+			.select2-container--default .select2-selection--single .select2-selection__arrow {
+				height: 28px !important;
+				right: 5px !important;
+			}
+
+			/* Texto selecionado */
+			.select2-container--default .select2-selection--single .select2-selection__rendered {
+				line-height: 28px !important;
+				padding-left: 0 !important;
+				color: #333 !important;
+			}
+
+			/* Placeholder */
+			.select2-container--default .select2-selection--single .select2-selection__placeholder {
+				color: #999 !important;
+			}
+
+			/* Dropdown (lista de opções) */
+			.select2-dropdown {
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+			}
+
+			/* Campo de busca dentro do dropdown */
+			.select2-container--default .select2-search--dropdown .select2-search__field {
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				padding: 4px 8px !important;
+				font-size: 12px !important;
+				margin: 4px !important;
+			}
+
+			/* Itens da lista */
+			.select2-container--default .select2-results__option {
+				padding: 6px 10px !important;
+				font-size: 12px !important;
+			}
+
+			/* Item selecionado/hover */
+			.select2-container--default .select2-results__option--highlighted[aria-selected] {
+				background-color: #2196f3 !important;
+				color: white !important;
+			}
+
+			/* Foco no select */
+			.select2-container--default.select2-container--focus .select2-selection--single {
+				border-color: #2196f3 !important;
+				box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2) !important;
+			}
+
+			/* ============================================
+			SELECT2 NA BARRA DE PESQUISA - LARGURA
+			============================================ */
+			.toolbar-pesquisa .select2-container {
+				width: 140px !important; /* Aumentado de 120px */
+			}
+
+			.toolbar-pesquisa .select2-container .select2-selection--single {
+				width: 138px !important; /* 2px a menos para borda */
+			}
+
+			/* Dropdown acompanha a largura */
+			.toolbar-pesquisa .select2-dropdown {
+				min-width: 140px !important;
+			}
+
+			/* ============================================
+			SELECT2 BENEFICIÁRIO E TERAPEUTA - 3x MAIOR
+			============================================ */
+			#divAtendBeneficiario .select2-container,
+			#divAtendTerapeuta .select2-container {
+				width: 360px !important;
+			}
+
+			#divAtendBeneficiario .select2-selection--single,
+			#divAtendTerapeuta .select2-selection--single {
+				width: 358px !important;
+			}
+
+			#divAtendBeneficiario .select2-dropdown,
+			#divAtendTerapeuta .select2-dropdown {
+				min-width: 360px !important;
+			}
+
+			/* ============================================
+			RESPONSIVO - Ajustes para mobile
+			============================================ */
+			@media (max-width: 768px) {
+				.toolbar-pesquisa .select2-container {
+					width: 100% !important;
+				}
+				.toolbar-pesquisa .select2-selection--single {
+					width: 100% !important;
+				}
+				#divAtendBeneficiario .select2-container,
+				#divAtendTerapeuta .select2-container {
+					width: 100% !important;
+				}
+				#divAtendBeneficiario .select2-selection--single,
+				#divAtendTerapeuta .select2-selection--single {
+					width: 100% !important;
+				}
+			}
 		</style>
 		
 		<script type="text/javascript">

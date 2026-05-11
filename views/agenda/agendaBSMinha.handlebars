@@ -2,7 +2,178 @@
 <html lang="pt-br">
 	<head>
 		<title>Agenda Semanal por Beneficiário</title>
-		
+		<style>
+			 /* ============================================
+           BARRA DE PESQUISA - CLASSE SEPARADA
+           ============================================ */
+        .toolbar-pesquisa {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); /* Azul */
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #1976d2;
+        }
+
+        .toolbar-pesquisa h5 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-pesquisa h5 i {
+            font-size: 18px;
+        }
+
+        .toolbar-pesquisa .form-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .toolbar-pesquisa .form-group {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .toolbar-pesquisa label {
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #f8f9fa;
+            white-space: nowrap;
+        }
+
+        .toolbar-pesquisa input[type="text"],
+        .toolbar-pesquisa input[type="date"],
+        .toolbar-pesquisa select {
+            padding: 6px 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 12px;
+            width: 120px;
+            transition: all 0.3s;
+            background: white;
+            color: #333;
+        }
+
+        .toolbar-pesquisa input[type="text"]:focus,
+        .toolbar-pesquisa input[type="date"]:focus,
+        .toolbar-pesquisa select:focus {
+            border-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+        .toolbar-pesquisa .btn-toolbar {
+            background: #dc3545; /* Cor danger do AceAdmin */
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toolbar-pesquisa .btn-toolbar:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .toolbar-pesquisa .btn-toolbar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .toolbar-pesquisa .btn-toolbar i {
+            font-size: 14px;
+        }
+		/* ============================================
+			SELECT2 - ESTILOS GERAIS
+			============================================ */
+			.select2-container {
+				min-width: 120px !important;
+			}
+
+			/* Campo principal do Select2 (a "caixa" visível) */
+			.select2-container--default .select2-selection--single {
+				height: 30px !important;
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				background: white !important;
+				display: flex !important;
+				align-items: center !important;
+				padding: 0 8px !important;
+				font-size: 12px !important;
+			}
+
+			/* Seta do dropdown */
+			.select2-container--default .select2-selection--single .select2-selection__arrow {
+				height: 28px !important;
+				right: 5px !important;
+			}
+
+			/* Texto selecionado */
+			.select2-container--default .select2-selection--single .select2-selection__rendered {
+				line-height: 28px !important;
+				padding-left: 0 !important;
+				color: #333 !important;
+			}
+
+			/* Placeholder */
+			.select2-container--default .select2-selection--single .select2-selection__placeholder {
+				color: #999 !important;
+			}
+
+			/* Dropdown (lista de opções) */
+			.select2-dropdown {
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+			}
+
+			/* Campo de busca dentro do dropdown */
+			.select2-container--default .select2-search--dropdown .select2-search__field {
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				padding: 4px 8px !important;
+				font-size: 12px !important;
+				margin: 4px !important;
+			}
+
+			/* Itens da lista */
+			.select2-container--default .select2-results__option {
+				padding: 6px 10px !important;
+				font-size: 12px !important;
+			}
+
+			/* Item selecionado/hover */
+			.select2-container--default .select2-results__option--highlighted[aria-selected] {
+				background-color: #2196f3 !important;
+				color: white !important;
+			}
+
+			/* Foco no select */
+			.select2-container--default.select2-container--focus .select2-selection--single {
+				border-color: #2196f3 !important;
+				box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2) !important;
+			}
+		</style>
 
 		<script type="text/javascript">
 			function atualizaData(){
@@ -239,61 +410,48 @@
 							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{sala_nome}}</label>
 						{{/each}}
 					</div>
-					<form class="form-horizontal" role="form" action="/menu/agenda/filSemBM" method="POST">
-						<div class="breadcrumbs" id="pesquisaAge" >
-							<div class="col-xs-12 col-sm-6">
-								<div class="row">
-									<label id="beneFilDiv">Beneficiário:</label>
-									 <div class="col-xs-12 col-sm-4">
-										<select id="agendaBeneid" name="agendaBeneid" class="select2" data-placeholder="Escolha...">
-											{{#each benes}}
-												<option value="{{_id}}">{{bene_apelido}}</option>
-											{{/each}}
-										</select>
-									 </div>
-									<!--<input class="hidden" style="height: 30px; width:295px;" id="filtro" name="filtro" type="text">-->
-									<label style="margin-left: 25px;">Data:</label>
-									<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-									<input class="hidden" id="dataFinal" name="dataFinal" />
-									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
-										<i class="ace-icon fa fa-search-plus "></i>
-									</button>
-								</div>
-							</div>
-							<!--
-							<div class="col-xs-16 col-sm-3">	
-								<div class="alert alert-danger">
-									<strong>
-									Agenda
-									</strong>
-									<br>
-									{{#each agendas}}
-										{{#isNull agenda_obs}}
-										{{else}}
-											<label>{{agenda_data_semana}} : {{agenda_hora}} - {{agenda_obs}}</label>
-											<br>
-										{{/isNull}}
-									{{/each}}
-									<br>
-								</div>
-							</div>
-							
-							<div class="col-xs-16 col-sm-3">	
-								<div class="alert alert-warning">
-									<strong>
-									Beneficiário
-									</strong>
-									<br>
-									{{bene.bene_obs}}
-									<br>
-								</div>
-							</div>
-							-->
-						</div>
-					</form>
+					
 						<div class="tab-content"><!-- .tab-contente -->
 							<div class="row">
+									
+									<!-- ============================================
+									🔎 BARRA DE PESQUISA
+									============================================ -->
+								<div class="toolbar-pesquisa">
+									<h5>
+										<i class="ace-icon fa fa-search"></i>
+										<span>Filtros de Pesquisa</span>
+									</h5>
+									<form class="form-horizontal" role="form" action="/menu/agenda/filSemBM" method="POST">
+										<div class="hidden">
+											<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+											<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
+											<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
+											<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
+										</div>
+										<div class="form-group">
+											<label for="dataFil" class="control-label">Data:</label>
+											<input id="dataFil" name="dataFil" type="date" class="form-control" onchange="javascript:formataData();">
+											<input class="hidden" id="dataFinal" name="dataFinal" />
+										</div>
+												
+										<div class="form-group">
+											<label for="agendaBeneid" class="control-label">Beneficiário:</label>
+											<select id="agendaBeneid" name="agendaBeneid" class="select2" data-placeholder="Escolha..." style="width: 100%;">
+												{{#each benes}}
+													<option value="{{_id}}">{{bene_apelido}}</option>
+												{{/each}}
+											</select>
+										</div>
+										<button id="btnPesquisar" type="submit" class="btn-toolbar">
+											<i class="ace-icon fa fa-search-plus"></i>
+											Pesquisar
+										</button>
+
+									</form>
+								</div>
 								<div class="col-xs-16 col-sm-12">
+									
 									<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
 										<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
 											<thead>

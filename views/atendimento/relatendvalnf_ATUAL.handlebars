@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Relatório de Consolidado por Beneficiário</title>
+		<style>
+			/* Estilos para tela */ 
+			@media screen {
+				.print-header {
+					display: none;
+				}
+			}
+
+			/* Estilos para impressão */
+			@media print {
+				.noprint {
+					display: none !important;
+				}
+
+				/* Cabeçalho fixo com paginação no topo */
+				.print-header {
+					position: fixed;
+					top: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 4px 0;
+					background: white;
+					z-index: 9999;
+					content: "Página " counter(page) " de " counter(pages);
+				}
+
+				/* Margem superior para não sobrepor conteúdo */
+				body {
+					margin-top: 12mm; /* suficiente para o cabeçalho */
+					margin-bottom: 10mm;
+				}
+
+				/* Configuração da página: permite retrato ou paisagem conforme escolha do usuário */
+				@page {
+					margin: 1cm;
+					/* NÃO defina `size` aqui — isso bloqueia a orientação! */
+					@top-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 11px;
+						color: black;
+					}
+					@bottom-center {
+						content: ""; /* remove qualquer rodapé automático */
+					}
+				}
+
+				/* Garante que elementos grandes não quebrem mal */
+				table {
+					page-break-inside: avoid;
+				}
+			}
+			/* ============================================
+				BARRA DE PESQUISA - CLASSE SEPARADA
+			============================================ */
+			.toolbar-pesquisa {
+				background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
+				color: white;
+				padding: 15px;
+				border-radius: 8px;
+				margin: 0 12px 20px 12px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+				border: 1px solid #1976d2;
+			}
+			.toolbar-pesquisa h5 {
+				margin: 0 0 12px 0;
+				font-size: 14px;
+				font-weight: 600;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.toolbar-pesquisa h5 i {
+				font-size: 18px;
+			}
+			.toolbar-pesquisa .form-inline {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px;
+				align-items: flex-end;
+			}
+			.toolbar-pesquisa .form-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px;
+				width: 100%;
+				align-items: flex-end;
+			}
+			.toolbar-pesquisa .form-group {
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				min-width: 140px;
+				flex: 1;
+				max-width: 220px;
+			}
+			.toolbar-pesquisa label {
+				font-size: 11px;
+				font-weight: 500;
+				margin-bottom: 4px;
+				color: #f8f9fa;
+				white-space: nowrap;
+			}
+			.toolbar-pesquisa input[type="date"],
+			.toolbar-pesquisa input[type="time"],
+			.toolbar-pesquisa select {
+				padding: 6px 10px;
+				border: 2px solid #e2e8f0;
+				border-radius: 4px;
+				font-size: 12px;
+				width: 100%;
+				box-sizing: border-box;
+				background: white;
+				color: #333;
+				transition: all 0.3s;
+				height: 30px;
+			}
+			.toolbar-pesquisa input[type="date"]:focus,
+			.toolbar-pesquisa input[type="time"]:focus,
+			.toolbar-pesquisa select:focus {
+				border-color: #fff;
+				box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+				outline: none;
+			}
+			.toolbar-pesquisa .btn-pesquisar {
+				background: #dc3545;
+				color: white;
+				border: none;
+				padding: 8px 24px;
+				border-radius: 4px;
+				font-weight: 600;
+				font-size: 13px;
+				cursor: pointer;
+				transition: all 0.3s;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+				margin-left: auto;
+			}
+			.toolbar-pesquisa .btn-pesquisar:hover {
+				background: #c82333;
+				transform: translateY(-2px);
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+			}
+			
+			/* Grupo compacto para horário (turno + início + fim) */
+			.grupo-horario {
+				display: flex;
+				gap: 6px;
+				align-items: flex-end;
+				flex-wrap: wrap;
+			}
+			.grupo-horario .form-group {
+				min-width: 70px;
+				max-width: 90px;
+				flex: none;
+			}
+			.grupo-horario label {
+				font-size: 10px;
+			}
+			.grupo-horario .info-sala {
+				font-size: 9px;
+				color: #e0e0e0;
+				margin-left: 4px;
+				white-space: nowrap;
+			}
+			.grupo-horario .info-sala i {
+				margin-right: 2px;
+			}
+
+			/* Chosen Select minimalista - compatível com aceAdmin */
+			.toolbar-pesquisa .chosen-container .chosen-single {
+				border: 2px solid #e2e8f0 !important;
+				border-radius: 4px !important;
+				box-shadow: none !important;
+				background: white !important;
+				height: 30px !important;
+				line-height: 28px !important;
+				font-size: 12px !important;
+			}
+			.toolbar-pesquisa .chosen-container .chosen-single:hover {
+				border-color: #fff !important;
+			}
+			.toolbar-pesquisa .chosen-container-active.chosen-with-drop .chosen-single {
+				border-color: #fff !important;
+				background: white !important;
+			}
+			.toolbar-pesquisa .chosen-container .chosen-drop {
+				border: 1px solid #ced4da !important;
+				border-top: none !important;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+			}
+		</style>
+		<script type="text/javascript">
+			function atualizaDataIni(){
+				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataIni').value = fulldate;
+			}
+			function atualizaDataFin(){
+				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataFim').value = fulldate;
+			}
+			
+			function carregaBody(){
+				
+				let dt = new Date();
+        
+				let mes = (dt.getUTCMonth()+1).toString();
+				let dia = (dt.getUTCDate()).toString();
+				if (mes.length == 1){
+					mes = "0"+mes;
+				}
+				if (dia.length == 1){
+					dia = "0"+dia;
+				}
+				
+				document.getElementById('contarecDataevento').value =  (dt.getFullYear()+'/'+mes+'/'+dia).toString();
+				document.getElementById('contarecDatacad').value =  (dt.getFullYear()+'/'+mes+'/'+dia).toString();
+				//Filtro persistente
+				document.getElementById('dataFilDe').value = document.getElementById('dataIni').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
+				document.getElementById('dataFilAte').value = document.getElementById('dataFim').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
+			
+			}
+		</script>
+	</head>
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner noprint">
+					<div class="breadcrumbs ace-save-state noprint" id="breadcrumbs_home"  >
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Relatório de Emissão de Nota Fiscal</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					<form role="form" action="/menu/atendimento/relatendvalnfs" method="POST">
+						<div class="toolbar-pesquisa" id="breadcrumbs">
+
+							<h5>
+								<i class="ace-icon fa fa-file-text-o"></i>
+								<span>Filtros do Relatório</span>
+							</h5>
+
+							<div class="form-inline">
+
+								<!-- 🔵 LINHA 1 -->
+								<div class="form-row">
+
+									<div class="form-group">
+										<label>Período de:</label>
+										<input id="dataFilDe" name="dataFilDe" type="date" onchange="javascript:atualizaDataIni()">
+										<input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}"/>
+									</div>
+
+									<div class="form-group">
+										<label>até:</label>
+										<input id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
+										<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}"/>
+									</div>
+
+									<div class="form-group" style="min-width: 260px;">
+										<label>Beneficiário:</label>
+										<select name="relBeneid" id="relBeneid" class="select2" data-placeholder="Escolha...">
+											{{#each benes}}
+												<option value="{{_id}}">{{bene_nome}}</option>
+											{{/each}}
+										</select>
+									</div>
+
+								</div>
+
+								<!-- 🟠 LINHA 2 -->
+								<div class="form-row">
+
+									<div class="form-group">
+										<label>Exibir Inativos?</label>
+										<select name="exibeInativos" id="exibeInativos" class="select2">
+											<option value="nao">Não</option>
+											<option value="sim">Sim</option>
+										</select>
+									</div>
+
+									<button class="btn-pesquisar" name="acaoSalvar" id="acaoSalvar" type="submit">
+										<i class="ace-icon fa fa-search"></i>
+										Pesquisar
+									</button>
+
+								</div>
+
+							</div>
+
+						</div>
+					</form>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- PAGE CONTENT BEGINS -->
+						<div class="space-6"></div>
+						<div class="row">
+							<div class="col-sm-10 col-sm-offset-1">
+								<div class="widget-box transparent">
+									<div style="text-align: center;">
+										<img width="140" height="60" alt="150x150" style="alight: center" src="/images/gallery/logo_route_centro.png">
+									</div>
+										<div class="widget-header widget-header-large">
+											<h3 class="widget-title grey lighter">
+												<i class="ace-icon fa fa-leaf green"></i>
+												Atendimentos e Valores
+											</h3>
+										</div>
+									<div class="widget-body">
+										<div class="widget-main padding-24">
+											<div class="row">
+												<div class="col-sm-12">
+													<div class="row">
+														<div class="col-xs-12 label label-lg label-info arrowed-in arrowed-right">
+															<b>Informações do Prestador</b>
+														</div>
+													</div>
+													<div>
+														<ul class="list-unstyled">
+															<li>
+																<i class="ace-icon fa fa-caret-right blue"></i><b>Prestador: </b>Route Centro de Terapia e Apoio Infantil
+															</li>
+															<li>
+																<i class="ace-icon fa fa-caret-right blue"></i><b>CNPJ: </b> 33.346.423/0001-17
+															</li>
+														</ul>
+													</div>
+													<div class="row">
+														<div class="col-xs-12 label label-lg label-success arrowed-in arrowed-right">
+															<b>Informações do Relatório</b>
+														</div>
+													</div>
+													<div>
+														<ul class="list-unstyled ">
+															<li>
+																<i class="ace-icon fa fa-caret-right green"></i><b>Período de: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}
+															</li>
+															<li>
+																<i class="ace-icon fa fa-caret-right green"></i><b>Beneficiário:</b> {{bene_nome}}
+															</li>
+														</ul>
+													</div>
+													<div class="row">
+														<div class="col-xs-12 label label-lg label-warning arrowed-in arrowed-right">
+															<b>Informações dos Atendimentos</b>
+														</div>
+													</div>
+											</div><!-- /.row -->
+											<div class="page"><!-- /page -->
+												<div class="col-xs-12">
+													<div class="row">
+														<label>REFERENTE AO TRATAMENTO MULTIDISCIPLINAR DO BENEFICIÁRIO:</label>
+														<label> {{bene_nome}}</label>
+													</div>
+													<div class="row">
+														<label>DATA DE REFERÊNCIA DOS ATENDIMENTOS: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}</label>
+													</div>
+													<div class="row">
+														<label>SESSÕES REALIZADAS NAS DATAS DE REFERÊNCIA.</label>
+													</div>											
+													
+													{{#each rels}}
+														<div class="row">
+															{{#each ../terapias}}
+																{{#ifEqual this._id ../nomecid}}
+																	{{terapia_nomecid}} : 
+																{{/ifEqual}}
+															{{/each}}
+															{{sessoes}} SESSÃO(ÕES) * 
+															R$ {{valor}} CADA = 		
+															R$ {{total}}
+														</div>				
+													{{/each}}
+		
+													<footer>
+														<div class="row">
+															<b>VALOR TOTAL DAS SESSÕES: </b>
+															<b>{{total.total}}</b>
+														</div>
+													<label>INFORMAÇÕES FINANCEIRAS</label>	
+														<div class="row">
+															<b>BRADESCO </b>
+														</div>					
+														<div class="row">
+															<b>AGÊNCIA: 3453 </b>
+														</div>
+														<div class="row">
+															<b>CONTA CORRENTE: 50.715-6 </b>
+														</div>					
+														<div class="row">
+															<b>ROUTE CENTRO DE TERAPIA E APOIO INFANTIL LTDA </b>
+														</div>
+														<div class="row">
+															<b>CNPJ: 33.346.423/0001-17 </b>
+														</div>
+														<div class="row">
+															<b>CONTATO: DÉBORA CLARO +55 (81) 9 9299 9989 </b>
+														</div>														
+													</footer>
+													</table>
+												</div>
+											</div><!-- /.page -->
+											
+										</div>
+									</div>
+								</div>
+							</div>
+						</div><!-- PAGE CONTENT ENDS -->
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container --><!-- basic scripts -->
+		<div id="rodape" style="text-align: center; margin-top: 20px;"></div>
+		<script>
+			// Exemplo: Mostrar a primeira página
+            //mostrarPagina(1, 7);
+            function mostrarPagina(paginaAtual, totalPaginas) {
+                  const rodape = document.getElementById("rodape");
+                  if (rodape) {
+                        rodape.innerHTML = `Página ${paginaAtual} de ${totalPaginas}`;
+                  }
+            }
+      </script>
+	  <div class="row"><!-- Área reservada para Assinaturas -->
+			<div class="col-xs-12">
+				<div style="margin-top: 32px;"></div>
+				<div class="row">
+					<div class="col-xs-4 col-sm-4 text-center">
+						
+					</div>
+					<div class="col-xs-4 col-sm-4"></div>
+					<div class="col-xs-4 col-sm-4 text-center">
+						<div class="hr"></div>
+						<label>Assinatura da Clínica</label>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.Área reservada para Assinaturas -->
+	  <!-- Cabeçalho de impressão (paginação no topo) -->
+		<div class="print-header"></div>
+
+		<!-- Página em branco única no final -->
+		<div style="page-break-before: always;"></div>
+	</body>
+</html>

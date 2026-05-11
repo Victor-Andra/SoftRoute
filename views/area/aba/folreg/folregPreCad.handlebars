@@ -489,64 +489,73 @@ function preencherCamposVisiveis(qtdEstimulos) {
 				});
 			}
 			function carregaBody() {
-    console.log("▶ carregaBody() iniciado");
-    
-    // ✅ 1. Mantém seus assignments originais (HIDDEN/TEXT)
-    document.getElementById("folregUsuid").value = document.getElementById("usuarioAtual").value;
-    document.getElementById("folregBeneid").value = document.getElementById("progBene").value;
-    document.getElementById("folregProgtipoid").value = document.getElementById("progTipo").value;
-    document.getElementById("folregPrognivelid").value = document.getElementById("progNivel").value;
-    document.getElementById("folregSetnum").value = document.getElementById("setNum").value;
-    document.getElementById("folregSetdescr").value = document.getElementById("setDescr").value;
-    document.getElementById("folregSetobs").value = document.getElementById("setObs").value;
-    document.getElementById("folregQtest").value = document.getElementById("qtEst").value;
-    document.getElementById("folregEsta").value = document.getElementById("folrega").value;
-    document.getElementById("folregEstb").value = document.getElementById("folregb").value;
-    document.getElementById("folregEstc").value = document.getElementById("folregc").value;
-    document.getElementById("folregEstd").value = document.getElementById("folregd").value;
-    document.getElementById("folregEste").value = document.getElementById("folrege").value;
-    document.getElementById("folregEstf").value = document.getElementById("folregf").value;
-    document.getElementById("folregEstg").value = document.getElementById("folregg").value;
-    document.getElementById("folregEsth").value = document.getElementById("folregh").value;
-    document.getElementById("folregEsti").value = document.getElementById("folregi").value;
-    document.getElementById("folregEstj").value = document.getElementById("folregj").value;
+				console.log("▶ carregaBody() iniciado");
+				
+				// ✅ 1. Mantém seus assignments originais (HIDDEN/TEXT)
+				document.getElementById("folregUsuid").value = document.getElementById("usuarioAtual").value;
+				document.getElementById("folregBeneid").value = document.getElementById("progBene").value;
+				document.getElementById("folregProgtipoid").value = document.getElementById("progTipo").value;
+				document.getElementById("folregPrognivelid").value = document.getElementById("progNivel").value;
+				document.getElementById("folregSetnum").value = document.getElementById("setNum").value;
+				document.getElementById("folregSetdescr").value = document.getElementById("setDescr").value;
+				document.getElementById("folregSetobs").value = document.getElementById("setObs").value;
+				document.getElementById("folregQtest").value = document.getElementById("qtEst").value;
+				document.getElementById("folregEsta").value = document.getElementById("folrega").value;
+				document.getElementById("folregEstb").value = document.getElementById("folregb").value;
+				document.getElementById("folregEstc").value = document.getElementById("folregc").value;
+				document.getElementById("folregEstd").value = document.getElementById("folregd").value;
+				document.getElementById("folregEste").value = document.getElementById("folrege").value;
+				document.getElementById("folregEstf").value = document.getElementById("folregf").value;
+				document.getElementById("folregEstg").value = document.getElementById("folregg").value;
+				document.getElementById("folregEsth").value = document.getElementById("folregh").value;
+				document.getElementById("folregEsti").value = document.getElementById("folregi").value;
+				document.getElementById("folregEstj").value = document.getElementById("folregj").value;
 
-    const tiporegValue = document.getElementById("tiporeg")?.value || "Não Informado";
-    document.getElementById("folregTiporeg").value = tiporegValue;
+				const tiporegValue = document.getElementById("tiporeg")?.value || "Não Informado";
+				document.getElementById("folregTiporeg").value = tiporegValue;
 
-    // ✅ 2. CORREÇÃO: Atualiza APENAS os Select2 (Beneficiário, Tipo e Nível)
-    var selectsSelect2 = ['#folregBeneid', '#folregProgtipoid', '#folregPrognivelid'];
-    selectsSelect2.forEach(function(id) {
-        var $el = jQuery(id);
-        var valorAtual = $el.val(); // Pega o valor que acabamos de definir
+				// ✅ 2. CORREÇÃO: Atualiza APENAS os Select2 (Beneficiário, Tipo e Nível)
+				var selectsSelect2 = ['#folregBeneid', '#folregProgtipoid', '#folregPrognivelid'];
+				selectsSelect2.forEach(function(id) {
+					var $el = jQuery(id);
+					var valorAtual = $el.val(); // Pega o valor que acabamos de definir
 
-        // Garante que o Select2 está inicializado
-        if (!$el.data('select2')) {
-            $el.select2({
-                dropdownParent: $el.closest('.widget-box') || jQuery(document.body),
-                placeholder: "Escolha..."
-            });
-        }
-        // Força o Select2 a sincronizar a UI com o valor nativo
-        $el.val(valorAtual).trigger('change.select2');
-    });
-	$('#folregUsuid').val(document.getElementById("usuarioAtual").value).trigger('change');
+					// Garante que o Select2 está inicializado
+					if (!$el.data('select2')) {
+						$el.select2({
+							dropdownParent: $el.closest('.widget-box') || jQuery(document.body),
+							placeholder: "Escolha..."
+						});
+					}
+					// Força o Select2 a sincronizar a UI com o valor nativo
+					$el.val(valorAtual).trigger('change.select2');
+				});
+				$('#folregUsuid').val(document.getElementById("usuarioAtual").value).trigger('change');
+				$('#folregTiporeg').val(document.getElementById("folregTiporeg").value).trigger('change');
 
-    // ✅ 3. Mantém a atualização do Chosen (como já estava)
-    $('.chosen-select').each(function() {
-        if ($(this).data('chosen')) {
-            $(this).trigger('chosen:updated');
-        }
-    });
+				// ✅ 3. Mantém a atualização do Chosen (como já estava)
+				$('.chosen-select').each(function() {
+					if ($(this).data('chosen')) {
+						$(this).trigger('chosen:updated');
+					}
+				});
 
-    // ✅ 4. Lógicas restantes (mantidas do seu original)
-    mudaRegistro();
-    updateStimulusFields();
-    showStimulusFieldsWithValues();
-    popularCheckboxDicaTipo();
-    console.log("✅ carregaBody() concluído — tiporeg:", tiporegValue);
-    syncDisabledSelects();
-}
+				// ✅ 4. Lógicas restantes (mantidas do seu original)
+				mudaRegistro();
+				updateStimulusFields();
+				showStimulusFieldsWithValues();
+				popularCheckboxDicaTipo();
+				console.log("✅ carregaBody() concluído — tiporeg:", tiporegValue);
+				syncDisabledSelects();
+
+				// ✅ Sincroniza Select2 (sem criar hidden duplicado!)
+				['#folregBeneid', '#folregProgtipoid', '#folregPrognivelid', '#folregUsuid'].forEach(function(id) {
+					var $el = jQuery(id);
+					if ($el.data('select2')) {
+						$el.trigger('change.select2'); // Atualiza a UI do Select2
+					}
+				});
+			}
 			// Sincroniza valores dos selects disabled → hidden inputs
 			function syncDisabledSelects() {
 				const mappings = [
@@ -577,6 +586,8 @@ function preencherCamposVisiveis(qtdEstimulos) {
 					form.submit();
 				}
 			}
+
+
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();mudaRegistro();carregaBody();" class="no-skin">
@@ -651,14 +662,8 @@ function preencherCamposVisiveis(qtdEstimulos) {
 									<input  type="text" id="folregRaTentDuplCad9" name="folregRaTentDuplCad9" value="" />
 									<input  type="text" id="folregRaTentDuplCad10" name="folregRaTentDuplCad10" value="" />
 								</div>
-								<!-- Campos hidden para contornar "disabled" nos selects -->
-									<div id="divHiddenSync" hidden>
-										<input type="text" id="folregBeneid_sync" name="folregBeneid" />
-										<input type="text" id="folregProgtipoid_sync" name="folregProgtipoid" />
-										<input type="text" id="folregPrognivelid_sync" name="folregPrognivelid" />
-										<input type="text" id="folregTiporeg_sync" name="folregTiporeg" />
-										<input type="text" id="folregQtest_sync" name="folregQtest" />
-									</div>
+								
+									
 							</div>
 							<div class="col-sm-12" name="cabec" id="cabec"><!-- .Widget Cabec-->
 								<div class="widget-box">
@@ -800,7 +805,7 @@ function preencherCamposVisiveis(qtdEstimulos) {
 													<label>Tipo do Registro</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="folregTiporeg" id="folregTiporeg" class="select2" disabled  onchange="javascript:mudaRegistro();populateCheckboxes();">
+															<select name="folregTiporeg" id="folregTiporeg" class="select2 select2-readonly" onchange="javascript:mudaRegistro();populateCheckboxes();">
 																<option value="Não Informado">Não Informado</option>
 																<option value="Simples">Simples</option>
 																<option value="Duplo">Duplo</option>
@@ -819,7 +824,7 @@ function preencherCamposVisiveis(qtdEstimulos) {
 													<label>Técnico Aplicador</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="folregUsuid" id="folregUsuid" class="select2" data-placeholder="Escolha..." {{#compareString usuarioAtual.usuario_perfilid "62421903a12aa557219a0fd3"}} style="pointer-events: none; touch-action: none;" {{/compareString}} >
+															<select name="folregUsuid" id="folregUsuid" class="select2 select2-readonly" data-placeholder="Escolha..." {{#compareString usuarioAtual.usuario_perfilid "62421903a12aa557219a0fd3"}} style="pointer-events: none; touch-action: none;" {{/compareString}} >
 																{{#each terapeutas}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
 																{{/each}}
