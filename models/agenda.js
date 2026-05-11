@@ -641,11 +641,63 @@ module.exports = {
         }
     },
 
+    //Old
+    agendaEditarTemp: async (req, res) => {
+
+         //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
+        //;
+
+        let agora = new Date();
+        let doisMesesAtras = new Date();
+        doisMesesAtras.setMonth(agora.getMonth() - 2);
+        let agendaData = new Date(agendamento.agenda_data);
+        let bloqueio = agendaData < doisMesesAtras;
+
+        if (bloqueio) {
+            console.log("🔒 Bloqueada a edição devido ao fechamento!");
+            return false;
+        }
+
+        let usuarioAtual = req.cookies['idUsu'];
+        let dataAtual = new Date();
+        let data = new Date(req.body.agendaData);
+        let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+data.getUTCHours()+':'+data.getMinutes()+':00.000Z');
+        let resultado;
+        //Pega data atual
+        //Realiza Atualização - Atualização não faz alteração temporaria
+        await AgendaModel.findByIdAndUpdate(new ObjectId(req.body.agendaId), 
+            {$set: {
+                agenda_data : dataAgenda ,
+                agenda_beneid : req.body.agendaBeneid ,
+                agenda_convid : req.body.agendaConvid ,
+                agenda_salaid : req.body.agendaSalaid ,
+                agenda_usuid : req.body.agendaUsuid ,
+                agenda_terapiaid : req.body.novaAgendaTerapiaid ,
+                agenda_categoria : req.body.agendaCateg ,
+                agenda_org : req.body.agendaOrg ,
+                agenda_obs : req.body.agendaObs ,
+                agenda_temp : true ,
+                agenda_usuedi: usuarioAtual ,
+                agenda_dataedi : dataAtual
+                }}
+        ).then((res) =>{
+            console.log("Salvo")
+            resultado = true;
+        }).catch((err) =>{
+            console.log("erro mongo:")
+            console.log(err)
+            resultado = err;
+            //res.redirect('admin/branco')
+        })
+        return resultado;
+    },
     // ========================================================================
     // ✏️ Editar Temp Agenda - ATUALIZAR AGENDAMENTO TEMPORÁRIO
     // Criado por: Wagner Cintra | Editado em: 2025/10/03
     // ========================================================================
-    agendaEditarTemp: async (req, res) => {
+    agendaEditarTempNew: async (req, res) => {
 
         // 📌 PASSO 1: Configurar estrutura multiempresa
         let db = req.cookies['preferredDb'];
