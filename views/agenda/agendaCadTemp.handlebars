@@ -597,7 +597,7 @@
 														<label for="id-date-picker-1">Hora Agendamento</label>
 														<div class="form-group">
 															<div class="col-sm-8">
-																<select name="agendaHora" id="agendaHora" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
+																<select name="agendaHora" id="agendaHora" class="select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
 																	{{#each horaages}}
 																		<option value="{{horaage_hora}}">{{horaage_hora}}</option>
 																	{{/each}}
@@ -611,7 +611,7 @@
 														<label>Origem Agendamento</label>
 														<div class="form-group">
 															<div class="col-sm-9">
-																<select id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																<select id="agendaOrg" name="agendaOrg" class="select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
 																	<option value="Administrativo">Administrativo</option>
 																	<option value="Padrão">Padrão</option>
 																</select>
@@ -622,7 +622,7 @@
 														<label>Categoria</label>
 														<div class="form-group">
 															<div class="col-sm-9">
-																<select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." value="Padrão" onchange="javascript:ocultaDivFaltas();">
+																<select id="agendaCateg" name="agendaCateg" class="select" data-placeholder="Escolha a opção..." value="Padrão" onchange="javascript:ocultaDivFaltas();">
 																	<option style="background-color: yellow;" value="Falta">Falta</option>
 																	<option style="background-color: orange;" value="Falta Justificada">Falta Justificada</option>
 																	<option style="background-color: orange;" value="Falta Absoluta">Falta Absoluta</option>
@@ -651,7 +651,7 @@
 														</div>
 														<div class="form-group" >
 															<div class="col-sm-5">
-																<select class="col-sm-5" name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..."  style="width: 400px;" onchange="javascript:selectConv();selectSessao();">
+																<select class="col-sm-5" name="agendaBeneid" id="agendaBeneid" class="select" data-placeholder="Escolha..."  style="width: 400px;" onchange="javascript:selectConv();selectSessao();">
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
 																	{{/each}}
@@ -663,7 +663,7 @@
 														<label>Convênio</label>
 														<div class="form-group"  >
 															<div class="col-sm-6" style="width: 500px;">
-																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid"  id="agendaConvid" class="chosen-select" data-placeholder="Escolha..." >
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid"  id="agendaConvid" class="select" data-placeholder="Escolha..." >
 																	{{#each benes}}
 																		{{#each ../convs}}
 																			{{#ifEqual ../bene_convid _id}}
@@ -681,7 +681,7 @@
 														<label>Terapeuta</label>
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 500px;">
-																<select name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="agendaUsuid" id="agendaUsuid" class="select" data-placeholder="Escolha..." >
 																	{{#each terapeutas}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
@@ -693,7 +693,7 @@
 														<label>Terapia</label>
 														<div class="form-group">
 															<div class="col-sm-4" >
-																<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." style="width: 200px;" onchange="javascript:carregaValores()">
+																<select name="agendaTerapiaid" id="agendaTerapiaid" class="select" data-placeholder="Escolha..." style="width: 200px;" onchange="javascript:carregaValores()">
 																	{{#each terapias}}
 																		<option value="{{_id}}">{{terapia_nome}}</option>
 																	{{/each}}
@@ -707,7 +707,7 @@
 														<label>Local</label>
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 300px;">
-																<select name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha...">
+																<select name="agendaSalaid" id="agendaSalaid" class="select" data-placeholder="Escolha...">
 																	{{#each salas}}
 																		<option value="{{_id}}">{{sala_nome}}</option>
 																	{{/each}}
@@ -724,7 +724,7 @@
 														<label>Motivo</label>
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 300px;">
-																<select name="agendaTempMotivo" id="agendaTempMotivo" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:ajustaOption()">
+																<select name="agendaTempMotivo" id="agendaTempMotivo" class="select" data-placeholder="Escolha..." onchange="javascript:ajustaOption()">
 																	
 																</select>
 															</div>
@@ -736,7 +736,7 @@
 														<label>Turno</label>
 														<div class="form-group" >
 															<div class="col-sm-6">
-																<select name="agendaTurnoFalta" id="agendaTurnoFalta" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="agendaTurnoFalta" id="agendaTurnoFalta" class="select" data-placeholder="Escolha..." >
 																	<option value="Ambos">Ambos</option>
 																	<option value="Manhã">Manhã</option>
 																	<option value="Tarde">Tarde</option>
@@ -747,7 +747,7 @@
 														<div class="form-group">
 															<div class="col-sm-6">
 																<input id="agendaFaltaId" name="agendaFaltaId" class="hidden" value="-" />
-																<select id="agendaAlvoFalta" name="agendaAlvoFalta" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:CarregaIdFalta();">
+																<select id="agendaAlvoFalta" name="agendaAlvoFalta" class="select" data-placeholder="Escolha..." onchange="javascript:CarregaIdFalta();">
 																	<option value="Beneficiário">Beneficiário</option>
 																	<option value="Terapeuta">Terapeuta</option>
 																</select>

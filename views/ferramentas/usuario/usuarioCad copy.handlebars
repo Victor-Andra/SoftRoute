@@ -522,7 +522,7 @@
 																<label> Filhos</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
-																		<select name="usuarioFilhos" id="usuarioFilhos" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="usuarioFilhos" id="usuarioFilhos" class="select2" data-placeholder="Escolha...">
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -555,7 +555,7 @@
 														<label >Escolaridade</label>
 														<div class="form-group">
 															<div class="col-sm-4">
-																<select name="usuarioEscolaridade" id="usuarioEscolaridade" class="chosen-select" >
+																<select name="usuarioEscolaridade" id="usuarioEscolaridade" class="select2" >
 																	<option value="-">-</option>
 																	<option value="Fundamental">Fundamental</option>
 																	<option value="Médio">Médio</option>
@@ -654,7 +654,7 @@
 																		</tr>
 																		<tr>
 																			<td>
-																				<select name="usuarioAba" id="usuarioAba" class="chosen-select" data-placeholder="Escolha...">
+																				<select name="usuarioAba" id="usuarioAba" class="select2" data-placeholder="Escolha...">
 																					<option value="-">-</option>
 																					<option value="Sim">Sim</option>
 																					<option value="Não">Não</option>
@@ -704,7 +704,7 @@
 																<label>UF</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
-																		<select name="usuarioEnduf" id="usuarioEnduf" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="usuarioEnduf" id="usuarioEnduf" class="select2" data-placeholder="Escolha...">
 																			<option value="766f69643132333435366964">-</option>
 																			{{#each estados}}
 																				<option value="{{_id}}">{{estado_uf}}</option>
@@ -782,7 +782,7 @@
 																<label for="id-date-picker-1">Tipo</label>
 																<div class="form-group">
 																	<div class="col-sm-8">
-																		<select name="usuarioContaTipo" id="usuarioContaTipo" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="usuarioContaTipo" id="usuarioContaTipo" class="select2" data-placeholder="Escolha...">
 																			<option value="{{usuario.usuario_contatipo}}">{{usuario.usuario_contatipo}}</option>
 																			<option value="Salário">Salário</option>
 																			<option value="Poupança">Poupança</option>
@@ -797,7 +797,7 @@
 																<label for="id-date-picker-1">Contrato</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
-																		<select name="usuarioContrato" id="usuarioContrato" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="usuarioContrato" id="usuarioContrato" class="select2" data-placeholder="Escolha...">
 																				<option value="-">-</option>
 																				<option value="CLT">CLT</option>
 																				<option value="CNPJ">CNPJ</option>
@@ -822,7 +822,7 @@
 																<label for="id-date-picker-1">Tipo PIX</label>
 																<div class="form-group">
 																	<div class="col-sm-8">
-																		<select name="usuarioTipoPix" id="usuarioTipoPix" class="chosen-select" data-placeholder="Escolha..." >
+																		<select name="usuarioTipoPix" id="usuarioTipoPix" class="select2" data-placeholder="Escolha..." >
 																			<option value="CPF">CPF</option>
 																			<option value="CNPJ">CNPJ</option>
 																			<option value="Número Celular">Número Celular</option>
@@ -876,7 +876,7 @@
 																	<label>Função</label>
 																	<div class="form-group">
 																		<div class="col-sm-4">
-																			<select id="usuarioFuncaoid" name="usuarioFuncaoid" class="chosen-select" data-placeholder="Escolha..." style="width: 200px;" >
+																			<select id="usuarioFuncaoid" name="usuarioFuncaoid" class="select2" data-placeholder="Escolha..." style="width: 200px;" >
 																				{{#each funcaos}}
 																				<option value="{{_id}}">{{funcao_nome}}</option>
 																				{{else}}
@@ -890,7 +890,7 @@
 																	<label>Perfil</label>
 																	<div class="form-group">
 																		<div class="col-sm-4">
-																			<select id="usuarioPerfilid" name="usuarioPerfilid" class="chosen-select" data-placeholder="Escolha...">
+																			<select id="usuarioPerfilid" name="usuarioPerfilid" class="select2" data-placeholder="Escolha...">
 																				{{#each perfils}}
 																				<option value="{{_id}}">{{perfil_nome}}-{{perfil_descricao}}</option>
 																				{{else}}
@@ -905,7 +905,7 @@
 																	<label>Status</label>
 																	<div class="form-group">
 																		<div class="col-sm-4">
-																			<select name="usuarioStatus" class="chosen-select" data-placeholder="Escolha..."  value="{{usuario.usuario_status}}">
+																			<select name="usuarioStatus" class="select2" data-placeholder="Escolha..."  value="{{usuario.usuario_status}}">
 																				<option value="{{usuario.usuario_status}}">{{usuario.usuario_status}}</option>
 																				<option value="Ativo">Ativo</option>
 																				<option value="Inativo">Inativo</option>
@@ -919,7 +919,7 @@
 																	<div class="form-group">
 																		<div class="col-sm-4">
 																			<!--
-																			<select id="usuarioEmpresaselect" name="usuarioEmpresaselect" class="chosen-select" data-placeholder="Escolha...">
+																			<select id="usuarioEmpresaselect" name="usuarioEmpresaselect" class="select2" data-placeholder="Escolha...">
 																				<option value="766f69643132333435366964">-</option>
 																				{{#each empresas}}
 																				<option value="{{_id}}">{{empresa_nome}}</option>
@@ -962,7 +962,7 @@
 																			</div>-->
 
 																			<div class="col-xs-12"> <!-- Ajuste para col-xs-12 para ocupar toda a largura na tela menor -->
-																				<select name="empresaIdSelect" id="empresaIdSelect" class="chosen-select" onchange="addEmpresaId();">
+																				<select name="empresaIdSelect" id="empresaIdSelect" class="select2" onchange="addEmpresaId();">
 																					<!--progDicatiposelect => empresaIdSelect // addExcecaoDicaid => addEmpresaId -->
 																					<option value="766f69643132333435366964">-</option>
 																					{{#each progdicas}}

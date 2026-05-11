@@ -78,7 +78,7 @@
 												<label> Convênio </label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select name="convcreConvid" id="convcreConvid" class="chosen-select" data-placeholder="Escolha...">
+														<select name="convcreConvid" id="convcreConvid" class="select2" data-placeholder="Escolha...">
 															{{#each convs}}
 															<option value="{{_id}}">{{conv_nome}}</option>
 															{{else}}
@@ -97,7 +97,7 @@
 												<label>Terapia</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select name="convcreTerapiaid" id="convcreTerapiaid" class="chosen-select" data-placeholder="Escolha...">
+														<select name="convcreTerapiaid" id="convcreTerapiaid" class="select2" data-placeholder="Escolha...">
 															{{#each terapias}}
 															<option value="{{_id}}">{{terapia_nome}}</option>
 															{{else}}
@@ -127,7 +127,7 @@
 												<label>Status</label>
 												<div class="form-group">
 													<div class="col-sm-2">
-														<select name="convcreStatus" id="convcreStatus" class="chosen-select" style="width: 100px;">
+														<select name="convcreStatus" id="convcreStatus" class="select2" style="width: 100px;">
 															<option value="Ativo">Ativo</option>
 															<option value="Inativo">Inativo</option>
 														</select>

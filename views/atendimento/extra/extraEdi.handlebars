@@ -181,7 +181,7 @@
                                                 <!-- Campo: Usuário que criou -->
                                                 <div class="col-xs-12 col-sm-6">
                                                     <label>Quem criou o extra na agenda?</label>
-                                                    <select name="extraUsucad" id="extraUsucad" class="chosen-select form-control" data-placeholder="Escolha um usuário...">
+                                                    <select name="extraUsucad" id="extraUsucad" class="form-control select2" data-placeholder="Escolha um usuário...">
                                                         <option value=""></option>
                                                         {{#each usuarios}}
                                                             <option value="{{_id}}" {{#ifEqual ../extra.extra_usucad _id}}selected{{/ifEqual}}>
@@ -208,7 +208,7 @@
                                                         <!-- Quem Alterou (à direita) -->
                                                         <div class="col-xs-12 col-sm-6">
                                                             <label>Quem alterou o extra na agenda?</label>
-                                                            <select name="extraUsuedi" id="extraUsuedi" class="chosen-select form-control" data-placeholder="Escolha...">
+                                                            <select name="extraUsuedi" id="extraUsuedi" class="form-control select2" data-placeholder="Escolha...">
                                                                 <option value=""></option>
                                                                 {{#each usuarios}}
                                                                     <option value="{{_id}}" {{#ifEqual ../extra.extra_usuedi _id}}selected{{/ifEqual}}>
@@ -246,7 +246,7 @@
                                                         <!-- Quem Exportou (direita) -->
                                                         <div class="col-xs-12 col-sm-4">
                                                             <label>Quem Exportou o Extra para Controle?</label>
-                                                            <select name="extraUsuidExportou" id="extraUsuidExportou" class="chosen-select form-control" data-placeholder="Escolha...">
+                                                            <select name="extraUsuidExportou" id="extraUsuidExportou" class="form-control select2" data-placeholder="Escolha...">
                                                                 <option value=""></option>
                                                                 {{#each usuarios}}
                                                                     <option value="{{_id}}" {{#ifEqual ../extra.extra_usuidExportou _id}}selected{{/ifEqual}}>
@@ -259,7 +259,7 @@
                                                 <label for="extrasAuditado">Auditado</label>
                                                 <div class="form-group">
                                                     <div class="col-sm-6">
-                                                        <select name="extraAuditado" id="extraAuditado" class="chosen-select" data-placeholder="Escolha..." >
+                                                        <select name="extraAuditado" id="extraAuditado" class="select2" data-placeholder="Escolha..." >
                                                                 <option value="false">Não</option>
                                                                 <option value="true">Sim</option>
 															</select>
@@ -268,7 +268,7 @@
                                                 <label for="extrastatus">Status</label>
                                                 <div class="form-group">
                                                     <div class="col-sm-6">
-                                                        <select name="extraExtraStatus" id="extraExtraStatus" class="chosen-select" data-placeholder="Escolha..." >
+                                                        <select name="extraExtraStatus" id="extraExtraStatus" class="select2" data-placeholder="Escolha..." >
                                                                 <option value="Aguardando">Aguardando</option>
                                                                 <option value="Gerado">Gerado</option>
                                                                 <option value="Pago">Pago</option>
@@ -280,7 +280,7 @@
                                                  <label for="extrastatus">Quitado</label>
                                                 <div class="form-group">
                                                     <div class="col-sm-6">
-                                                        <select name="extraExtraStatusPg" id="extraExtraStatusPg" class="chosen-select" data-placeholder="Escolha..." >
+                                                        <select name="extraExtraStatusPg" id="extraExtraStatusPg" class="select2" data-placeholder="Escolha..." >
                                                                 <option value="false">Não</option>
                                                                 <option value="true">Sim</option>
 															</select>
@@ -337,7 +337,7 @@
                                                 <label>Origem do Extra</label>
                                                 <div class="form-group">
                                                         <div class="col-sm-9">
-                                                            <select id="extraOrg" name="extraOrg" class="chosen-select" data-placeholder="Escolha a origem...">
+                                                            <select id="extraOrg" name="extraOrg" class="select2" data-placeholder="Escolha a origem...">
                                                                 <option value="Administrativo">Administrativo</option>
                                                                 <option value="Padrão">Padrão</option>
                                                                 <!-- Adicione outras opções se necessário -->
@@ -377,7 +377,7 @@
 												</div>
 												<div class="form-group">
 													<div class="col-sm-9">
-															<select name="extraBeneid" id="extraBeneid" class="chosen-select" data-placeholder="Escolha..." value="{{extra_beneid}}" >
+															<select name="extraBeneid" id="extraBeneid" class="select2" data-placeholder="Escolha..." value="{{extra_beneid}}" >
 																	
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
@@ -389,7 +389,7 @@
                                                 <label> Convênio</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="extraConvid"  id="extraConvid" class="chosen-select" data-placeholder="Escolha..." >
+														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="extraConvid"  id="extraConvid" class="select2" data-placeholder="Escolha..." >
 															{{#each benes}}
 																{{#each ../convs}}
 																	{{#ifEqual ../bene_convid _id}}
@@ -403,7 +403,7 @@
 												<label>Sala</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select id="extraSalaid" name="extraSalaid" class="chosen-select" data-placeholder="Escolha...">
+														<select id="extraSalaid" name="extraSalaid" class="select2" data-placeholder="Escolha...">
 																{{#each salas}}
 																	<option value="{{_id}}">{{sala_nome}}</option>
 																{{/each}}
@@ -415,7 +415,7 @@
                                                <label> Terapeuta</label>
 												<div class="form-group">
 														<div class="col-sm-4">
-															<select name="extraTerapeutaid" id="extraTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+															<select name="extraTerapeutaid" id="extraTerapeutaid" class="select2" data-placeholder="Escolha..." >
 																	
 																	{{#each terapeutas}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
@@ -428,7 +428,7 @@
 												<label> Terapia</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select name="extraTerapiaid" id="extraTerapiaid" class="chosen-select" data-placeholder="Escolha..." >
+														<select name="extraTerapiaid" id="extraTerapiaid" class="select2" data-placeholder="Escolha..." >
 																
 																{{#each terapias}}
 																<option value="{{_id}}">{{terapia_nome}}</option>

@@ -250,7 +250,7 @@
 												<label>Beneficiário</label>
 												<div class="form-group" >
 													<div class="col-xs-9 col-sm-9">
-														<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
+														<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="select2" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
 															<option value="766f69643132333435366964">-</option>
 															{{#each benes}}
 																<option value="{{_id}}">{{bene_nome}}</option>
@@ -261,7 +261,7 @@
 												<label> Convênio</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="contarecConvid"  id="contarecConvid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaConvId()">
+														<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="contarecConvid"  id="contarecConvid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaConvId()">
 															<option value="766f69643132333435366964">-</option>
 															{{#each convs}}
 																<option value="{{_id}}">{{conv_nome}}</option>
@@ -433,7 +433,7 @@
 												<label>Pago?</label>
 												<div class="form-group">
 													<div class="col-sm-3">
-														<select name="contarecPg" id="contarecPg" class="chosen-select" data-placeholder="Escolha...">
+														<select name="contarecPg" id="contarecPg" class="select2" data-placeholder="Escolha...">
 															<option value="Não">Não</option>
 															<option value="Sim">Sim</option>
 														</select>

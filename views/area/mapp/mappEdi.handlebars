@@ -30,7 +30,7 @@
 												</div>
 												<div class="row">
 													<div class="input-group">
-															<select name="mappBeneid" id="mappBeneid" class="chosen-select" data-placeholder="Escolha..." value="{{mapp.mapp_beneid}}">
+															<select name="mappBeneid" id="mappBeneid" class="select2" data-placeholder="Escolha..." value="{{mapp.mapp_beneid}}">
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
 																{{/each}}
@@ -44,7 +44,7 @@
 												</div>
 												<div class="row">
 													<div class="input-group">
-															<select name="mappUsuid" id="mappUsuid" class="chosen-select" data-placeholder="Escolha..." value="{{mapp.mapp_usuarioid}}">
+															<select name="mappUsuid" id="mappUsuid" class="select2" data-placeholder="Escolha..." value="{{mapp.mapp_usuarioid}}">
 																{{#each usuarios}}
 																<option value="{{_id}}">{{usuario_nome}}</option>
 																{{/each}}

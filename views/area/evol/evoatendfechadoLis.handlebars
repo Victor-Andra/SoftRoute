@@ -493,7 +493,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label>Tipo Filtro:&nbsp;</label>
-											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+											<select name="tipoData" id="tipoData" class="select2" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
 												<option value="Ano/Mes">Ano/Mês</option>
 												<option value="Semana">Semana</option>
 												<option value="Dia">Dia</option>
@@ -505,7 +505,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label> Filial:&nbsp;</label>
-											<select name="empresaFilial" id="empresaFilial" class="chosen-select" data-placeholder="Escolha..." value="Natriz">
+											<select name="empresaFilial" id="empresaFilial" class="select2" data-placeholder="Escolha..." value="Natriz">
 												<option value="Matriz">Matriz</option>
 												<option value="Filial 1">Filial 1</option>
 												<option value="Filial 2">Filial 2</option>
@@ -519,7 +519,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label for="id-date-picker-1">Ano:&nbsp;</label>
-											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:formataData();">
+											<select name="anoAtend" id="anoAtend" class="select2" data-placeholder="Escolha..." onchange="javascript:formataData();">
 												{{#each anos}}
 													<option value="{{ano_nome}}">{{ano_nome}}</option>
 												{{/each}}
@@ -531,7 +531,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label for="id-date-picker-1">Mês:&nbsp;</label>
-											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+											<select name="mesAtend" id="mesAtend" class="select2" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
 												<option value="0">Janeiro</option>
 												<option value="1">Fevereiro</option>
 												<option value="2">Março</option>
@@ -567,7 +567,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label>Tipo Filtro:&nbsp;</label>
-											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
+											<select name="atendTipoPessoa" id="atendTipoPessoa" class="select2" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
 												<option value="Geral">Geral</option>
 												<option value="Beneficiario">Beneficiário</option>
 												<option value="Terapeuta">Terapeuta</option>
@@ -579,7 +579,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label>Beneficiário:&nbsp;</label>
-											<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha..." value="">
+											<select name="atendBeneficiario" id="atendBeneficiario" class="select2" data-placeholder="Escolha..." value="">
 												{{#each benes}}
 													<option value="{{_id}}">{{bene_nome}}</option>
 												{{/each}}
@@ -591,7 +591,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label>Terapeuta:&nbsp;</label>
-											<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha..." value="">
+											<select name="atendTerapeuta" id="atendTerapeuta" class="select2" data-placeholder="Escolha..." value="">
 												{{#each terapeutas}}
 													<option value="{{_id}}">{{usuario_nome}}</option>
 												{{/each}}

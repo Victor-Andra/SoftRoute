@@ -105,7 +105,7 @@
 								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
 								<input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}" />
 								<label>Convênio: </label>
-								<select style="height: 30px; width:300px;" name="relConvid"  id="relConvid" class="chosen-select" data-placeholder="Escolha...">
+								<select style="height: 30px; width:300px;" name="relConvid"  id="relConvid" class="select2" data-placeholder="Escolha...">
 									<option value="766f69643132333435366964">-</option>
 									{{#each convs}}
 										<option value="{{_id}}">{{conv_nome}}</option>
@@ -114,7 +114,7 @@
 								<input class="hidden" id="relConvIdFiltro" name="relConvIdFiltro" value="{{filtro.convId}}" />
 								&nbsp;&nbsp;&nbsp;&nbsp;
 								<label class="control-label bolder red">
-									<select name="exibeInativos" id="exibeInativos" class="chosen-select" value=""  >
+									<select name="exibeInativos" id="exibeInativos" class="select2" value=""  >
 											<option value="nao">Não</option>
 											<option value="sim">Sim</option>
 									</select>

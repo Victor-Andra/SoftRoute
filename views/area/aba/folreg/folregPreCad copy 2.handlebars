@@ -625,7 +625,7 @@ function preencherCamposVisiveis(qtdEstimulos) {
 													<label>Beneficiário</label>
 													<div class="form-group">
 														<div class="col-lg-6 col-md-12">
-															<select name="folregBeneid" id="folregBeneid" class="chosen-select" disabled>
+															<select name="folregBeneid" id="folregBeneid" class="select2" disabled>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
 																{{/each}}
@@ -754,7 +754,7 @@ function preencherCamposVisiveis(qtdEstimulos) {
 													<label>Técnico Aplicador</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="folregUsuid" id="folregUsuid" class="chosen-select" data-placeholder="Escolha..." {{#compareString usuarioAtual.usuario_perfilid "62421903a12aa557219a0fd3"}} style="pointer-events: none; touch-action: none;" {{/compareString}} >
+															<select name="folregUsuid" id="folregUsuid" class="select2" data-placeholder="Escolha..." {{#compareString usuarioAtual.usuario_perfilid "62421903a12aa557219a0fd3"}} style="pointer-events: none; touch-action: none;" {{/compareString}} >
 																{{#each terapeutas}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
 																{{/each}}

@@ -114,10 +114,10 @@
 				setSelectedValue("saudecolabInsulina", document.getElementById("saudecolabInsulinaEdi").value);
 				setSelectedValue("saudecolabAceitartermos", document.getElementById("saudecolabAceitartermosEdi").value);
 				
-				// ATUALIZA O CHOSEN APÓS CARREGAR OS VALORES
-				if (typeof $.fn.chosen !== 'undefined') {
-					$(".chosen-select").trigger("chosen:updated");
-				}
+				// ✅ ATUALIZA O SELECT2 APÓS CARREGAR OS VALORES
+					if (typeof $.fn.select2 !== 'undefined') {
+						$(".select2").trigger("change");
+					}
 			}
 
 			// Função auxiliar para selecionar valor em SELECT
@@ -213,7 +213,7 @@
 													<label>Nome completo:</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-6">
-															<select name="saudecolabSaudecolabusuid" id="saudecolabSaudecolabusuid" class="chosen-select" onchange="">
+															<select name="saudecolabSaudecolabusuid" id="saudecolabSaudecolabusuid" class="select2" onchange="">
 																<option value="766f69643132333435366964">-</option>
 																{{#each usuarios}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
@@ -227,7 +227,7 @@
 													<label>Tipo Sanguíneo:</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-3">
-															<select name="saudecolabTiposangue" id="saudecolabTiposangue" class="chosen-select" onchange="">
+															<select name="saudecolabTiposangue" id="saudecolabTiposangue" class="select2" onchange="">
 																<option value="-">-</option>
 																<option value="A+">A+</option>
 																<option value="A-">A-</option>
@@ -245,7 +245,7 @@
 													<label>Possui plano de saúde?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
-															<select name="saudecolabPlanosaude" id="saudecolabPlanosaude" class="form-control">
+															<select name="saudecolabPlanosaude" id="saudecolabPlanosaude" class="select2">
 																<option value="-">-</option>
 																<option value="Sim">Sim</option>
 																<option value="Não">Não</option>
@@ -270,7 +270,7 @@
 													<label>Possui algum tipo de alergia?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
-															<select name="saudecolabAlergia" id="saudecolabAlergia" class="form-control">
+															<select name="saudecolabAlergia" id="saudecolabAlergia" class="select2">
 																<option value="-">-</option>
 																<option value="Sim">Sim</option>
 																<option value="Não">Não</option>
@@ -281,14 +281,14 @@
 													<label>Se sim, descreva qual tipo de alergia você possui?</label>
 													<div class="form-group">
 														<div class="col-xs-62 col-sm-6">
-															<input type="text" name="saudecolabAlergiaqual" id="saudecolabAlergiaqual" class="form-control" />
+															<input type="text" name="saudecolabAlergiaqual" id="saudecolabAlergiaqual" class="select2" />
 														</div>
 													</div>
 
 													<label>Há algum medicamento que não possa ingerir?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
-															<select name="saudecolabMedicamentonao" id="saudecolabMedicamentonao" class="form-control">
+															<select name="saudecolabMedicamentonao" id="saudecolabMedicamentonao" class="select2">
 																<option value="-">-</option>
 																<option value="Sim">Sim</option>
 																<option value="Não">Não</option>
@@ -306,7 +306,7 @@
 													<label hidden>Usa Medicamentos Regularmente?</label>
 													<div class="form-group" hidden>
 														<div class="col-xs-2 col-sm-2">
-															<select name="saudecolabMedicamentosim" id="saudecolabMedicamentosim" class="form-control">
+															<select name="saudecolabMedicamentosim" id="saudecolabMedicamentosim" class="select2">
 																<option value="-">-</option>
 																<option value="Sim">Sim</option>
 																<option value="Não">Não</option>
@@ -324,7 +324,7 @@
 													<label>É hipertenso?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
-															<select name="saudecolabHipertenso" id="saudecolabHipertenso" class="form-control">
+															<select name="saudecolabHipertenso" id="saudecolabHipertenso" class="select2">
 																<option value="-">-</option>
 																<option value="Sim">Sim</option>
 																<option value="Não">Não</option>
@@ -335,7 +335,7 @@
 													<label>É cardíaco?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
-															<select name="saudecolabCardiaco" id="saudecolabCardiaco" class="form-control">
+															<select name="saudecolabCardiaco" id="saudecolabCardiaco" class="select2">
 																<option value="-">-</option>
 																<option value="Sim">Sim</option>
 																<option value="Não">Não</option>
@@ -346,7 +346,7 @@
 													<label>É diabético?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
-															<select name="saudecolabDiabetico" id="saudecolabDiabetico" class="form-control">
+															<select name="saudecolabDiabetico" id="saudecolabDiabetico" class="select2">
 																<option value="-">-</option>
 																<option value="Sim">Sim</option>
 																<option value="Não">Não</option>
@@ -357,7 +357,7 @@
 													<label>Faz uso de insulina?</label>
 													<div class="form-group">
 														<div class="col-xs-2 col-sm-2">
-															<select name="saudecolabInsulina" id="saudecolabInsulina" class="form-control">
+															<select name="saudecolabInsulina" id="saudecolabInsulina" class="select2">
 																<option value="-">-</option>
 																<option value="Sim">Sim</option>
 																<option value="Não">Não</option>
@@ -462,7 +462,7 @@
 															<label>Aceita os termos?</label>
 															<div class="form-group">
 																<div class="col-xs-2 col-sm-2">
-																	<select name="saudecolabAceitartermos" id="saudecolabAceitartermos" class="form-control" onchange="aceitaTermo();">
+																	<select name="saudecolabAceitartermos" id="saudecolabAceitartermos" class="select2" onchange="aceitaTermo();">
 																		<option value="-">-</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
@@ -504,16 +504,7 @@
 		</div><!-- /.main-container -->
 		<!-- basic scripts -->
 		<script>
-    		// Inicializa o Chosen ANTES de carregar os dados
-    			$(document).ready(function() {
-					if (typeof $.fn.chosen !== 'undefined') {
-						$(".chosen-select").chosen({
-							allow_single_deselect: true,
-							no_results_text: "Nada encontrado!",
-							width: "100%"
-						});
-					}
-				});
+    		
 		</script>
 	</body>
 </html>

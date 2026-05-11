@@ -81,7 +81,7 @@
 												<label>Beneficiário</label>
 												<div class="form-group">
 													<div class="col-sm-5">
-														<select id="excecaoteraTerapeutaid" name="excecaoteraTerapeutaid" class="chosen-select form-control" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+														<select id="excecaoteraTerapeutaid" name="excecaoteraTerapeutaid" class="form-control select2" data-placeholder="Escolha..." onchange="javascript:selectConv()">
 															<option value="766f69643132333435366964">-</option>
 															{{#each terapeutas}}
 															<option value="{{_id}}">{{usuario_nome}}</option>
@@ -91,7 +91,7 @@
 												</div>
 												<div class="form-group">
 													<div class="col-sm-5">
-														<select name="excecaoteraTerapiaid" id="excecaoteraTerapiaid"  class="chosen-select form-control" data-placeholder="Escolha..." >
+														<select name="excecaoteraTerapiaid" id="excecaoteraTerapiaid"  class="form-control select2" data-placeholder="Escolha..." >
 															<option value="766f69643132333435366964">-</option>
 															{{#each terapias}}
 															<option value="{{_id}}">{{terapia_nome}}</option>

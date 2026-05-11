@@ -40,7 +40,7 @@
 												<label>Convênio</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select name="convdebConvid" id="convdebConvid" class="chosen-select" data-placeholder="Escolha...">
+														<select name="convdebConvid" id="convdebConvid" class="select2" data-placeholder="Escolha...">
 															{{#each convs}}
 																<option value="{{_id}}">{{conv_nome}}</option>
 															{{/each}}
@@ -58,7 +58,7 @@
 												<label>Terapia</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select name="convdebTerapiaid" id="convdebTerapiaid" class="chosen-select" data-placeholder="Escolha...">
+														<select name="convdebTerapiaid" id="convdebTerapiaid" class="select2" data-placeholder="Escolha...">
 															{{#each terapias}}
 																<option value="{{_id}}">{{terapia_nome}}</option>
 															{{/each}}
@@ -76,7 +76,7 @@
 												<label>Status</label>
 												<div class="form-group">
 													<div class="col-sm-2">
-														<select name="convdebStatus" id="convdebStatus" class="chosen-select" style="width: 100px;">
+														<select name="convdebStatus" id="convdebStatus" class="select2" style="width: 100px;">
 															<option value="Ativo">Ativo</option>
 															<option value="Inativo">Inativo</option>
 														</select>

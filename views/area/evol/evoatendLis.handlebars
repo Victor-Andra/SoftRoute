@@ -4,190 +4,550 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
 		<title>agendamentos do Dia</title>
-		<style>
-			/* Estilos para impressão */
-			@media print {
-				.noprint {
-					display: none !important;
-				}
+<style>
+			/* Apenas tabela e conteúdo */
+		#dynamic-table,
+		#dynamic-table th,
+		#dynamic-table td,
+		#dynamic-table .btn,
+		#dynamic-table .label {
+			font-size: 10px !important;
+		}
+		/* ========== Estilo para os Cards de Estatísticas ========== */
+		.count-card {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			padding: 10px;
+			border-radius: 6px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+			cursor: default; /* Não clicável por padrão */
+			min-height: 60px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			text-align: center;
+		}
 
-				/* Cabeçalho fixo com paginação no topo */
-				.print-header {
-					position: fixed;
-					top: 0;
-					left: 0;
-					right: 0;
-					text-align: center;
-					font-size: 11px;
-					padding: 4px 0;
-					background: white;
-					z-index: 9999;
-					content: "Página " counter(page) " de " counter(pages);
-				}
+		.count-card:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+		}
 
-				/* Margem superior para não sobrepor conteúdo */
-				body {
-					margin-top: 12mm; /* suficiente para o cabeçalho */
-					margin-bottom: 10mm;
-				}
+		/* Cores específicas para cada métrica */
+		.count-card.total {        background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); }   /* Roxo - Total */
+		.count-card.convenio {     background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); }   /* Azul - Válidos */
+		.count-card.liminar {      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); }   /* Vermelho - Cancelados */
+		.count-card.particular {   background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); }   /* Verde - Validados */
+		.count-card.warning {      background: linear-gradient(135deg, #f39c12 0%, #d35400 100%); }   /* Laranja - Sem Evolução */
+		.count-card.danger {       background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); }   /* Laranja Escuro - Cancel c/ Evol */
+		.count-card.orphan {       background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%); }   /* Cinza - Órfãos */
+		.count-card.success {      background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%); }   /* Verde Água - Completo */
 
-				/* Configuração da página: permite retrato ou paisagem conforme escolha do usuário */
-				@page {
-					margin: 1cm;
-					/* NÃO defina `size` aqui — isso bloqueia a orientação! */
-					@top-center {
-						content: "Página " counter(page) " de " counter(pages);
-						font-size: 11px;
-						color: black;
-					}
-					@bottom-center {
-						content: ""; /* remove qualquer rodapé automático */
-					}
-				}
-			}
-			/* ============================================
-				BARRA DE PESQUISA - CLASSE SEPARADA
-				============================================ */
-			.toolbar-pesquisa {
-				background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
-				color: white;
-				padding: 15px;
-				border-radius: 8px;
-				margin: 0 12px 20px 12px;
-				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-				border: 1px solid #1976d2;
-			}
-			.toolbar-pesquisa h5 {
-				margin: 0 0 12px 0;
-				font-size: 14px;
-				font-weight: 600;
-				display: flex;
-				align-items: center;
-				gap: 8px;
-			}
-			.toolbar-pesquisa h5 i {
-				font-size: 18px;
-			}
-			.toolbar-pesquisa .form-inline {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 12px;
-				align-items: flex-end;
-			}
-			.toolbar-pesquisa .form-row {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 12px;
-				width: 100%;
-				align-items: flex-end;
-			}
-			.toolbar-pesquisa .form-group {
-				margin: 0;
-				display: flex;
-				flex-direction: column;
-				align-items: flex-start;
-				min-width: 140px;
-				flex: 1;
-				max-width: 220px;
-			}
-			.toolbar-pesquisa label {
-				font-size: 11px;
-				font-weight: 500;
-				margin-bottom: 4px;
-				color: #f8f9fa;
-				white-space: nowrap;
-			}
-			.toolbar-pesquisa input[type="date"],
-			.toolbar-pesquisa input[type="time"],
-			.toolbar-pesquisa select {
-				padding: 6px 10px;
-				border: 2px solid #e2e8f0;
-				border-radius: 4px;
-				font-size: 12px;
-				width: 100%;
-				box-sizing: border-box;
-				background: white;
-				color: #333;
-				transition: all 0.3s;
-				height: 30px;
-			}
-			.toolbar-pesquisa input[type="date"]:focus,
-			.toolbar-pesquisa input[type="time"]:focus,
-			.toolbar-pesquisa select:focus {
-				border-color: #fff;
-				box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
-				outline: none;
-			}
-			.toolbar-pesquisa .btn-pesquisar {
-				background: #dc3545;
-				color: white;
-				border: none;
-				padding: 8px 24px;
-				border-radius: 4px;
-				font-weight: 600;
-				font-size: 13px;
-				cursor: pointer;
-				transition: all 0.3s;
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-				margin-left: auto;
-			}
-			.toolbar-pesquisa .btn-pesquisar:hover {
-				background: #c82333;
-				transform: translateY(-2px);
-				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+		.count-header {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			margin-bottom: 5px;
+		}
+
+		.count-icon {
+			font-size: 18px; /* Reduzido de 28px */
+		}
+
+		.count-label {
+			font-size: 11px; /* Reduzido para caber melhor */
+			font-weight: 500;
+			opacity: 0.95;
+			white-space: nowrap;
+		}
+
+		.count-value {
+			font-size: 20px; /* Reduzido de 28px */
+			font-weight: 700;
+			line-height: 1.2;
+		}
+
+		/* Responsivo */
+		@media (max-width: 768px) {
+			.count-card {
+				min-height: 55px;
+				padding: 8px;
 			}
 			
-			/* Grupo compacto para horário (turno + início + fim) */
-			.grupo-horario {
-				display: flex;
-				gap: 6px;
-				align-items: flex-end;
-				flex-wrap: wrap;
+			.count-value {
+				font-size: 18px;
 			}
-			.grupo-horario .form-group {
-				min-width: 70px;
-				max-width: 90px;
-				flex: none;
-			}
-			.grupo-horario label {
+			
+			.count-label {
 				font-size: 10px;
 			}
-			.grupo-horario .info-sala {
-				font-size: 9px;
-				color: #e0e0e0;
-				margin-left: 4px;
-				white-space: nowrap;
+			
+			.count-icon {
+				font-size: 16px;
 			}
-			.grupo-horario .info-sala i {
-				margin-right: 2px;
-			}
+		}
+        /*Tooltip personalizado */
+        .custom-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
 
-			/* Chosen Select minimalista - compatível com aceAdmin */
-			.toolbar-pesquisa .chosen-container .chosen-single {
-				border: 2px solid #e2e8f0 !important;
-				border-radius: 4px !important;
-				box-shadow: none !important;
-				background: white !important;
-				height: 30px !important;
-				line-height: 28px !important;
-				font-size: 12px !important;
-			}
-			.toolbar-pesquisa .chosen-container .chosen-single:hover {
-				border-color: #fff !important;
-			}
-			.toolbar-pesquisa .chosen-container-active.chosen-with-drop .chosen-single {
-				border-color: #fff !important;
-				background: white !important;
-			}
-			.toolbar-pesquisa .chosen-container .chosen-drop {
-				border: 1px solid #ced4da !important;
-				border-top: none !important;
-				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-			}
-		</style>
+        .tooltip-text {
+            visibility: hidden;
+            width: max-content;
+            background-color: #f3dfdf;
+            color: red;
+            font-size: 8px;
+            text-align: left;
+            border-radius: 4px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 9999;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.9;
+            white-space: normal;
+            min-width: 150px;
+            max-width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: opacity 0.3s;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #f3dfdf transparent transparent transparent;
+        }
+
+        .custom-tooltip:hover .tooltip-text {
+            visibility: visible;
+        }
+
+        /* ============================================
+           BARRA DE PESQUISA - CLASSE SEPARADA
+           ============================================ */
+        .toolbar-pesquisa {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); /* Azul */
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #1976d2;
+        }
+
+        .toolbar-pesquisa h5 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-pesquisa h5 i {
+            font-size: 18px;
+        }
+
+        .toolbar-pesquisa .form-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .toolbar-pesquisa .form-group {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .toolbar-pesquisa label {
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #f8f9fa;
+            white-space: nowrap;
+        }
+
+        .toolbar-pesquisa input[type="text"],
+        .toolbar-pesquisa input[type="date"],
+        .toolbar-pesquisa select {
+            padding: 6px 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 12px;
+            width: 120px;
+            transition: all 0.3s;
+            background: white;
+            color: #333;
+        }
+
+        .toolbar-pesquisa input[type="text"]:focus,
+        .toolbar-pesquisa input[type="date"]:focus,
+        .toolbar-pesquisa select:focus {
+            border-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+        .toolbar-pesquisa .btn-toolbar {
+            background: #dc3545; /* Cor danger do AceAdmin */
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toolbar-pesquisa .btn-toolbar:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .toolbar-pesquisa .btn-toolbar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .toolbar-pesquisa .btn-toolbar i {
+            font-size: 14px;
+        }
+
+        /* ============================================
+           BARRA DE SALVAR EM MASSA - CLASSE SEPARADA
+           ============================================ */
+        .toolbar-massa {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #8000ff;
+        }
+
+        .toolbar-massa h5 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toolbar-massa h5 i {
+            font-size: 18px;
+        }
+
+        .toolbar-massa .form-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .toolbar-massa .form-group {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .toolbar-massa label {
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #f8f9fa;
+            white-space: nowrap;
+        }
+
+        .toolbar-massa input[type="text"],
+        .toolbar-massa input[type="date"],
+        .toolbar-massa select {
+            padding: 6px 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 12px;
+            width: 120px;
+            transition: all 0.3s;
+            background: white;
+            color: #333;
+        }
+
+        .toolbar-massa input[type="text"]:focus,
+        .toolbar-massa input[type="date"]:focus,
+        .toolbar-massa select:focus {
+            border-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+        .toolbar-massa .btn-toolbar {
+            background: #dc3545; /* Cor danger do AceAdmin */
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toolbar-massa .btn-toolbar:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .toolbar-massa .btn-toolbar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .toolbar-massa .btn-toolbar i {
+            font-size: 14px;
+        }
+
+        .toolbar-massa .info-selecao {
+            font-size: 11px;
+            color: #e2e8f0;
+            margin-left: 15px;
+            font-weight: 500;
+        }
+
+        .toolbar-massa .badge-selecionados {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Animação de sucesso */
+        @keyframes pulseSuccess {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .btn-success-pulse {
+            animation: pulseSuccess 0.5s ease;
+        }
+
+        /* Campos Guia e Senha maiores - APENAS na barra de massa */
+        .toolbar-massa input#guiaMassa,
+        .toolbar-massa input#senhaMassa {
+            width: 240px !important; /* Dobrado */
+            font-size: 14px !important;
+            text-align: center;
+        }
+
+        /* Estilo minimalista para chosen-select */
+        .chosen-container .chosen-single {
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+            box-shadow: none !important;
+            background: white !important;
+            height: 30px !important;
+            line-height: 30px !important;
+        }
+
+        .chosen-container .chosen-single:hover {
+            border-color: #868e96 !important;
+        }
+
+        .chosen-container-active.chosen-with-drop .chosen-single {
+            border-color: #868e96 !important;
+            background: white !important;
+        }
+
+        .chosen-container .chosen-drop {
+            border: 1px solid #ced4da !important;
+            border-top: none !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        }
+
+        .chosen-container .chosen-search input[type="text"] {
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+            margin: 4px !important;
+        }
+
+        /* ✅ CORREÇÃO CRÍTICA: Divs ocultas via CSS (não apenas atributo hidden) */
+        .hidden-div {
+            display: none !important;
+        }
+
+        /* ✅ Selects de Beneficiário e Terapeuta 3x maiores */
+        #divAtendBeneficiario select,
+        #divAtendTerapeuta select {
+            width: 360px !important;
+        }
+
+        .chosen-container#atendBeneficiario_chosen,
+        .chosen-container#atendTerapeuta_chosen {
+            width: 360px !important;
+        }
+
+        .chosen-container#atendBeneficiario_chosen .chosen-single,
+        .chosen-container#atendTerapeuta_chosen .chosen-single {
+            width: 358px !important; /* -2px para borda */
+        }
+
+        .chosen-container#atendBeneficiario_chosen .chosen-drop,
+        .chosen-container#atendTerapeuta_chosen .chosen-drop {
+            width: 358px !important;
+        }
+		/* ============================================
+   SELECT2 - ESTILOS GERAIS
+   ============================================ */
+.select2-container {
+    min-width: 120px !important;
+}
+
+/* Campo principal do Select2 (a "caixa" visível) */
+.select2-container--default .select2-selection--single {
+    height: 30px !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    background: white !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 8px !important;
+    font-size: 12px !important;
+}
+
+/* Seta do dropdown */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 28px !important;
+    right: 5px !important;
+}
+
+/* Texto selecionado */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 28px !important;
+    padding-left: 0 !important;
+    color: #333 !important;
+}
+
+/* Placeholder */
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #999 !important;
+}
+
+/* Dropdown (lista de opções) */
+.select2-dropdown {
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+/* Campo de busca dentro do dropdown */
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+    margin: 4px !important;
+}
+
+/* Itens da lista */
+.select2-container--default .select2-results__option {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+}
+
+/* Item selecionado/hover */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #2196f3 !important;
+    color: white !important;
+}
+
+/* Foco no select */
+.select2-container--default.select2-container--focus .select2-selection--single {
+    border-color: #2196f3 !important;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2) !important;
+}
+
+/* ============================================
+   SELECT2 NA BARRA DE PESQUISA - LARGURA
+   ============================================ */
+.toolbar-pesquisa .select2-container {
+    width: 140px !important; /* Aumentado de 120px */
+}
+
+.toolbar-pesquisa .select2-container .select2-selection--single {
+    width: 138px !important; /* 2px a menos para borda */
+}
+
+/* Dropdown acompanha a largura */
+.toolbar-pesquisa .select2-dropdown {
+    min-width: 140px !important;
+}
+
+/* ============================================
+   SELECT2 BENEFICIÁRIO E TERAPEUTA - 3x MAIOR
+   ============================================ */
+#divAtendBeneficiario .select2-container,
+#divAtendTerapeuta .select2-container {
+    width: 360px !important;
+}
+
+#divAtendBeneficiario .select2-selection--single,
+#divAtendTerapeuta .select2-selection--single {
+    width: 358px !important;
+}
+
+#divAtendBeneficiario .select2-dropdown,
+#divAtendTerapeuta .select2-dropdown {
+    min-width: 360px !important;
+}
+
+/* ============================================
+   RESPONSIVO - Ajustes para mobile
+   ============================================ */
+@media (max-width: 768px) {
+    .toolbar-pesquisa .select2-container {
+        width: 100% !important;
+    }
+    .toolbar-pesquisa .select2-selection--single {
+        width: 100% !important;
+    }
+    #divAtendBeneficiario .select2-container,
+    #divAtendTerapeuta .select2-container {
+        width: 100% !important;
+    }
+    #divAtendBeneficiario .select2-selection--single,
+    #divAtendTerapeuta .select2-selection--single {
+        width: 100% !important;
+    }
+}
+    </style>
 		<script type="text/javascript">
 			function ajustaData(){
 				let fullDatas = document.getElementsByName("fullData");
@@ -464,7 +824,7 @@
 								<div class="col-sm-2">
 									<div class="input-group">
 										<label>Tipo Filtro:&nbsp;</label>
-										<select name="tipoData" id="tipoData" class="chosen-select"
+										<select name="tipoData" id="tipoData" class="select2"
 											onchange="trocaFiltroData()">
 											<option value="Ano/Mes">Ano/Mês</option>
 											<option value="Semana">Semana</option>
@@ -477,7 +837,7 @@
 								<div class="col-sm-2 hidden">
 									<div class="input-group">
 										<label>Filial:&nbsp;</label>
-										<select name="empresaFilial" id="empresaFilial" class="chosen-select">
+										<select name="empresaFilial" id="empresaFilial" class="select2">
 											<option value="Matriz">Matriz</option>
 											<option value="Filial 1">Filial 1</option>
 											<option value="Filial 2">Filial 2</option>
@@ -491,7 +851,7 @@
 								<div id="divAnoAtend" class="col-sm-2">
 									<div class="input-group">
 										<label>Ano:&nbsp;</label>
-										<select name="anoAtend" id="anoAtend" class="chosen-select"
+										<select name="anoAtend" id="anoAtend" class="select2"
 											onchange="formataData();">
 											{{#each anos}}
 												<option value="{{ano_nome}}">{{ano_nome}}</option>
@@ -504,7 +864,7 @@
 								<div id="divMesAtend" class="col-sm-2">
 									<div class="input-group">
 										<label>Mês:&nbsp;</label>
-										<select name="mesAtend" id="mesAtend" class="chosen-select"
+										<select name="mesAtend" id="mesAtend" class="select2"
 											onchange="formataData();">
 											<option value="0">Janeiro</option>
 											<option value="1">Fevereiro</option>
@@ -538,7 +898,7 @@
 									<div class="input-group">
 										<label>Tipo:&nbsp;</label>
 										<select name="atendTipoPessoa" id="atendTipoPessoa"
-											class="chosen-select"
+											class="select2"
 											onchange="trocaFilpessoa()">
 											<option value="Geral">Geral</option>
 											<option value="Beneficiario">Beneficiário</option>
@@ -551,7 +911,7 @@
 									<div class="input-group">
 										<label>Beneficiário:&nbsp;</label>
 										<select name="atendBeneficiario" id="atendBeneficiario"
-											class="chosen-select">
+											class="select2">
 											{{#each benes}}
 												<option value="{{_id}}">{{bene_nome}}</option>
 											{{/each}}
@@ -613,7 +973,9 @@
 
 													<tr role="row" class="odd">
 														<td>{{agenda_data_dia}}</td>
+
 														<td>{{agenda_hora}}</td>
+														
 														{{#each ../terapias}}<!-- Ok -->
 															{{#ifEqual this._id ../agenda_terapiaid}}
 																<td>{{terapia_nomecid}}</td>

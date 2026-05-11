@@ -152,7 +152,7 @@
 																<label>Origem atendimento</label>
 																<div class="form-group">
 																	<div class="col-sm-9">
-																		<select id="extraTipo" name="extraTipo" class="chosen-select" data-placeholder="Escolha...">
+																		<select id="extraTipo" name="extraTipo" class="select2" data-placeholder="Escolha...">
 																		<option value="-">-</option>
 																		<option value="terapeuta">Terapeuta</option>
 																		
@@ -164,7 +164,7 @@
 																<label>Cobrar extra?</label>
 																<div class="form-group">
 																	<div class="col-sm-9">
-																		<select id="extraCobrarextra" name="extraCobrarextra" class="chosen-select" >
+																		<select id="extraCobrarextra" name="extraCobrarextra" class="select2" >
 																		<option value="true">Sim</option>
 																		<option value="false">Não</option>
 																		
@@ -176,7 +176,7 @@
 																<label>Auditado</label>
 																<div class="form-group">
 																	<div class="col-sm-9">
-																		<select id="extraAuditado" name="extraAuditado" class="chosen-select" >
+																		<select id="extraAuditado" name="extraAuditado" class="select2" >
 																			<option value="Não">Não</option>
 																			<option value="Sim">Sim</option>
 																		</select>
@@ -187,7 +187,7 @@
 																<label>Exportado ou cobrado ou já foi cobrado?</label>
 																<div class="form-group">
 																	<div class="col-sm-9">
-																		<select id="extraExportado" name="extraExportado" class="chosen-select">
+																		<select id="extraExportado" name="extraExportado" class="select2">
 																			<option value="false">Não</option>
 																			<option value="true">Sim</option>
 																		</select>
@@ -273,7 +273,7 @@
 															<label for="id-date-picker-1">Hora Atendimento Extra</label>
 															<div class="row">
 																<div class="col-sm-8">
-																	<select name="extraHora" id="extraHora" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="extraHora" id="extraHora" class="select2" data-placeholder="Escolha..." >
 																		{{#each horaages}}
 																			<option value="{{horaage_hora}}">{{horaage_hora}}</option>
 																		{{/each}}
@@ -283,7 +283,7 @@
 															<label>Origem Atendimento</label>
 															<div class="form-group">
 																<div class="col-sm-9">
-																	<select id="extraOrg" name="extraOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																	<select id="extraOrg" name="extraOrg" class="select2" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
 																		<option value="Administrativo">Administrativo</option>
 																		<option value="Padrão">Padrão</option>
 																	</select>
@@ -292,7 +292,7 @@
 															<label>Categoria</label>
 															<div class="form-group">
 																<div class="col-sm-9">
-																	<select id="extraCategoria" name="extraCategoria" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
+																	<select id="extraCategoria" name="extraCategoria" class="select2" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
 																		<option id="Apoio" value="-">-</option>
 																		<option id="Apoio" value="Apoio">Apoio</option>
 																		<option id="Extra" value="Extra">Extra</option>
@@ -320,7 +320,7 @@
 													</div>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select id="extraBeneid" name="extraBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+															<select id="extraBeneid" name="extraBeneid" class="select2" data-placeholder="Escolha..." onchange="javascript:selectConv()">
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -334,7 +334,7 @@
 													</div>
 													<div class="form-group">
 															<div class="col-sm-4">
-																<select tabindex="-1" id="extraConvid" name="extraConvid" class="chosen-select" data-placeholder="Escolha...">
+																<select tabindex="-1" id="extraConvid" name="extraConvid" class="select2" data-placeholder="Escolha...">
 																		{{#each benes}}
 																			{{#each ../convs}}
 																				{{#ifEqual ../bene_convid _id}}
@@ -348,7 +348,7 @@
 													<label>Sala</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select id="extraSalaid" name="extraSalaid" class="chosen-select" data-placeholder="Escolha...">
+															<select id="extraSalaid" name="extraSalaid" class="select2" data-placeholder="Escolha...">
 																	{{#each salas}}
 																		<option value="{{_id}}">{{sala_nome}}</option>
 																	{{/each}}
@@ -381,7 +381,7 @@
 											<label>Terapeuta</label>
 											<div class="form-group">
 												<div class="col-sm-4">
-													<select id="extraTerapeutaid" name="extraTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+													<select id="extraTerapeutaid" name="extraTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
 														<option value="766f69643132333435366964">-</option>
 														{{#each usuarios}}
 															<option value="{{_id}}">{{usuario_nome}}</option>
@@ -416,7 +416,7 @@
 											</div>
 											<div class="form-group">
 												<div class="col-sm-4">
-													<select id="extraTerapiaid" name="extraTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+													<select id="extraTerapiaid" name="extraTerapiaid" class="select2" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 															<option value="766f69643132333435366964">-</option>
 															{{#each terapias}}
 															<option value="{{_id}}">{{terapia_nome}}</option>
@@ -463,7 +463,7 @@
 											<label>Terapeuta</label>
 											<div class="form-group">
 												<div class="col-sm-4">
-													<select id="extraMergeTerapeutaid" name="extraMergeTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
+													<select id="extraMergeTerapeutaid" name="extraMergeTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
 															<option value="766f69643132333435366964">-</option>
 															{{#each usuarios}}
 															<option value="{{_id}}">{{usuario_nome}}</option>
@@ -479,7 +479,7 @@
 											</div>
 											<div class="form-group">
 													<div class="col-sm-4">
-														<select id="extraMergeTerapiaid" name="extraMergeTerapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
+														<select id="extraMergeTerapiaid" name="extraMergeTerapiaid" class="select2" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
 																<option value="766f69643132333435366964">-</option>
 																{{#each terapias}}
 																<option value="{{_id}}">{{terapia_nome}}</option>
@@ -542,7 +542,7 @@
 															<label for="id-date-picker-1">Hora Atendimento Extra</label>
 															<div class="row">
 																<div class="col-sm-8">
-																	<select name="extraHoracop" id="extraHoracop" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="extraHoracop" id="extraHoracop" class="select2" data-placeholder="Escolha..." >
 																		{{#each horaages}}
 																			<option value="{{horaage_hora}}">{{horaage_hora}}</option>
 																		{{/each}}
@@ -552,7 +552,7 @@
 															<label>Origem Atendimento</label>
 															<div class="form-group">
 																<div class="col-sm-9">
-																	<select id="extraOrgcop" name="extraOrgcop" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																	<select id="extraOrgcop" name="extraOrgcop" class="select2" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
 																		<option value="Administrativo">Administrativo</option>
 																		<option value="Padrão">Padrão</option>
 																	</select>
@@ -561,7 +561,7 @@
 															<label>Categoria</label>
 															<div class="form-group">
 																<div class="col-sm-9">
-																	<select id="extraCategoriacop" name="extraCategoriacop" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
+																	<select id="extraCategoriacop" name="extraCategoriacop" class="select2" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
 																		<option id="Apoio" value="-">-</option>
 																		<option id="Apoio" value="Apoio">Apoio</option>
 																		<option id="Extra" value="Extra">Extra</option>
@@ -589,7 +589,7 @@
 													</div>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select id="extraBeneidcop" name="extraBeneidcop" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+															<select id="extraBeneidcop" name="extraBeneidcop" class="select2" data-placeholder="Escolha..." onchange="javascript:selectConv()">
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -603,7 +603,7 @@
 													</div>
 													<div class="form-group">
 															<div class="col-sm-4">
-																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="extraConvid" name="extraConvid" class="chosen-select" data-placeholder="Escolha...">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="extraConvid" name="extraConvid" class="select2" data-placeholder="Escolha...">
 																		{{#each benes}}
 																			{{#each ../convs}}
 																				{{#ifEqual ../bene_convid _id}}
@@ -617,7 +617,7 @@
 													<label>Sala</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select id="extraSalaidcop" name="extraSalaidcop" class="chosen-select" data-placeholder="Escolha...">
+															<select id="extraSalaidcop" name="extraSalaidcop" class="select2" data-placeholder="Escolha...">
 																	{{#each salas}}
 																		<option value="{{_id}}">{{sala_nome}}</option>
 																	{{/each}}
@@ -651,7 +651,7 @@
 											<label>Terapeuta</label>
 											<div class="form-group">
 												<div class="col-sm-4">
-													<select id="extraTerapeutaidcop" name="extraTerapeutaidcop" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+													<select id="extraTerapeutaidcop" name="extraTerapeutaidcop" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
 														<option value="766f69643132333435366964">-</option>
 														{{#each usuarios}}
 															<option value="{{_id}}">{{usuario_nome}}</option>
@@ -686,7 +686,7 @@
 											</div>
 											<div class="form-group">
 												<div class="col-sm-4">
-													<select id="extraTerapiaidcop" name="extraTerapiaidcop" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+													<select id="extraTerapiaidcop" name="extraTerapiaidcop" class="select2" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 															<option value="766f69643132333435366964">-</option>
 															{{#each terapias}}
 															<option value="{{_id}}">{{terapia_nome}}</option>
@@ -733,7 +733,7 @@
 											<label>Terapeuta</label>
 											<div class="form-group">
 												<div class="col-sm-4">
-													<select id="extraMergeTerapeutaidcop" name="extraMergeTerapeutaidcop" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
+													<select id="extraMergeTerapeutaidcop" name="extraMergeTerapeutaidcop" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
 															<option value="766f69643132333435366964">-</option>
 															{{#each usuarios}}
 															<option value="{{_id}}">{{usuario_nome}}</option>
@@ -749,7 +749,7 @@
 											</div>
 											<div class="form-group">
 													<div class="col-sm-4">
-														<select id="extraMergeTerapiaidcop" name="extraMergeTerapiaidcop" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
+														<select id="extraMergeTerapiaidcop" name="extraMergeTerapiaidcop" class="select2" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
 																<option value="766f69643132333435366964">-</option>
 																{{#each terapias}}
 																<option value="{{_id}}">{{terapia_nome}}</option>

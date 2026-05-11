@@ -5,92 +5,72 @@
 		<meta charset="utf-8" />
 		<meta name="description" content="overview &amp; stats" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-				<style>
-			/* === Chosen - Tema Ace Admin (Plano e Retangular) === */
-			.chosen-container {
+		<style>
+			/* === Select2 - Tema Ace Admin (Plano e Retangular) === */
+			/* Container principal */
+			.select2-container {
 				width: 100% !important;
-				font-size: 13px;
+				font-size: 12px;
 			}
 
-			/* Campo principal */
-			.chosen-container-single .chosen-single {
-				border-radius: 0 !important;
-				background: #ffffff !important;
-				background-image: none !important;
-				box-shadow: none !important;
+			/* A caixa do select (campo fechado) */
+			.select2-container--default .select2-selection--single {
+				border-radius: 0 !important;        /* Remove bordas arredondadas */
 				border: 1px solid #cccccc !important;
-				height: 30px !important;
-				line-height: 28px !important;
-				padding: 0 8px !important;
+				background-color: #ffffff !important;
+				height: 30px !important;            /* Altura padrão Ace Admin */
+				line-height: 28px !important;       /* Centraliza o texto verticalmente */
+				box-shadow: none !important;        /* Remove sombra */
+			}
+
+			/* O texto selecionado dentro do campo */
+			.select2-container--default .select2-selection--single .select2-selection__rendered {
 				color: #333333 !important;
+				line-height: 28px !important;       /* Alinha com a altura do campo */
+				padding-left: 8px;
 			}
 
-
-			/* Quando o dropdown está aberto */
-			.chosen-container-active.chosen-with-drop .chosen-single {
-				border-bottom-color: transparent !important;
-				border-radius: 0 !important;
+			/* A setinha (dropdown arrow) */
+			.select2-container--default .select2-selection--single .select2-selection__arrow {
+				height: 28px !important;
+				right: 5px;
 			}
 
-			/* Dropdown de opções */
-			.chosen-container .chosen-drop {
+			/* O dropdown de opções (lista aberta) */
+			.select2-dropdown {
 				border-radius: 0 !important;
 				border: 1px solid #cccccc !important;
-				border-top: 0 !important;
 				box-shadow: none !important;
-				background: #ffffff !important;
+				z-index: 1051; /* Garante que fique acima de modais/abas do Ace */
 			}
 
 			/* Itens da lista */
-			.chosen-container .chosen-results li {
-				border-radius: 0 !important;
-				background: #ffffff !important;
-				color: #333333 !important;
-				padding: 5px 8px !important;
-				border-bottom: 1px solid #eeeeee !important;
-			}
-			.chosen-container .chosen-results li:last-child {
-				border-bottom: none !important;
+			.select2-results__option {
+				padding: 6px 8px;
+				font-size: 13px;
+				color: #333;
 			}
 
-			/* Hover e seleção */
-			.chosen-container .chosen-results li.highlighted {
-				background: #eef3f7 !important;
-				color: #333333 !important;
-				background-image: none !important;
+			/* Hover e Selecionado */
+			.select2-container--default .select2-results__option--highlighted[aria-selected] {
+				background-color: #eef3f7 !important; /* Cor de hover suave */
+				color: #333 !important;
 			}
-			.chosen-container .chosen-results li.result-selected {
-				background: #f9f9f9 !important;
+			.select2-container--default .select2-results__option[aria-selected=true] {
+				background-color: #f9f9f9 !important;
 			}
 
-			/* Placeholder */
-			.chosen-container-single .chosen-default {
-				color: #999999 !important;
+			/* Placeholder (texto "Escolha...") */
+			.select2-container--default .select2-selection--single .select2-selection__placeholder {
+				color: #999;
 			}
 
 			/* Desabilitado */
-			.chosen-container.chosen-disabled .chosen-single {
-				background: #f5f5f5 !important;
-				color: #999999 !important;
+			.select2-container--default.select2-container--disabled .select2-selection--single {
+				background-color: #f5f5f5 !important;
 				cursor: not-allowed;
 			}
-
-			/* Multi-select (caso use) */
-			.chosen-container-multi .chosen-choices {
-				border-radius: 0 !important;
-				background: #fff !important;
-				border: 1px solid #ccc !important;
-				box-shadow: none !important;
-				min-height: 30px !important;
-			}
-			.chosen-container-multi .chosen-choices li.search-choice {
-				border-radius: 0 !important;
-				background: #f1f1f1 !important;
-				border: 1px solid #ccc !important;
-				box-shadow: none !important;
-				padding: 3px 20px 3px 6px !important;
-			}
-		</style>
+		</style>	
 	
 		<!--<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>-->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -140,8 +120,10 @@
 		<link rel="stylesheet" href="/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
 		<link rel="stylesheet" href="/css/ace-skins.min.css" />
 		<link rel="stylesheet" href="/css/ace-rtl.min.css" />
-		<link rel="stylesheet" href="/css/chosen.min.css" />
 		<link rel="stylesheet" href="/css/mascaras.css"><!-- Carrega mascaras de valores com paginas html -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+
+
 		<!-- Carrega div Conteudo com paginas html -->
 		<script type = "text/javascript">
  			function carregar(pagina){ $("#conteudo").load(pagina);	}
@@ -770,7 +752,9 @@
     <script type="text/javascript" src="/js/jquery.flot.min.js"></script>
     <script type="text/javascript" src="/js/jquery.flot.pie.min.js"></script>
     <script type="text/javascript" src="/js/jquery.flot.resize.min.js"></script>
-	<script type="text/javascript" src="/js/chosen.jquery.min.js"></script>
+	
+	<!-- jQuery Select2 Compativel com tablest e Smartfones sem Bugs ocasionais-->
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Editor de Textos plugin scripts -->
     <script type="text/javascript" src="/js/markdown.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap-markdown.min.js"></script>
@@ -786,15 +770,21 @@
 			identifyDb();
 		});
 	</script>
-	<!-- Remover sempre esse Script abaixo, antes de atualizar TODAS as telas -->
-	<script type="text/javascript">
-        $(document).ready(function() {
-            $('.chosen-select').chosen({
-                width: '100%',
-                disable_search_threshold: 10,
-                no_results_text: 'Nenhum resultado encontrado'
-            });
-        });
-    </script>
+	
+	<!-- select2 -->
+	<script>
+		$(document).ready(function () {
+			$('.select2').select2({
+				placeholder: "-",
+				width: '100%',
+				minimumResultsForSearch: 10,
+				language: {
+				noResults: function () {
+					return "Nenhum resultado encontrado";
+				}
+				}
+			});
+		});
+	</script>
 	
 </html>

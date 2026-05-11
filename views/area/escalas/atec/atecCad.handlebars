@@ -28,10 +28,49 @@
 
 			// Função chamada no evento onchange dos radio inputs
 			function radioOnChange(questionario, pergunta, valor) {
-				// Chame a função para atualizar o campo de texto correspondente
 				atualizarCampos(questionario, pergunta, valor);
+				
+				// ✅ Calcula os totais imediatamente após selecionar uma opção
+				calcularTotaisATEC(); 
 			}
+			// ✅ Nova função: Soma os valores dos campos ocultos e atualiza os totais
+				function calcularTotaisATEC() {
+					// Função auxiliar para ler o valor (tratando "2,0" como número)
+					function getVal(id) {
+						const el = document.getElementById(id);
+						if (!el || !el.value) return 0;
+						return parseFloat(el.value.replace(',', '.')) || 0;
+					}
 
+					let t1 = 0, t2 = 0, t3 = 0, t4 = 0;
+
+					// Soma Seção I (14 itens: 01 a 14)
+					for (let i = 1; i <= 14; i++) {
+						t1 += getVal('atec1Q' + (i < 10 ? '0' : '') + i);
+					}
+
+					// Soma Seção II (20 itens: 01 a 20)
+					for (let i = 1; i <= 20; i++) {
+						t2 += getVal('atec2Q' + (i < 10 ? '0' : '') + i);
+					}
+
+					// Soma Seção III (18 itens: 01 a 18)
+					for (let i = 1; i <= 18; i++) {
+						t3 += getVal('atec3Q' + (i < 10 ? '0' : '') + i);
+					}
+
+					// Soma Seção IV (25 itens: 01 a 25)
+					for (let i = 1; i <= 25; i++) {
+						t4 += getVal('atec4Q' + (i < 10 ? '0' : '') + i);
+					}
+
+					// Atualiza os inputs visuais de Total
+					document.getElementById('atecAtec1Total').value = t1;
+					document.getElementById('atecAtec2Total').value = t2;
+					document.getElementById('atecAtec3Total').value = t3;
+					document.getElementById('atecAtec4Total').value = t4;
+					document.getElementById('atecTotpont').value = t1 + t2 + t3 + t4;
+				}
 			
 			</script>
 		
@@ -176,7 +215,7 @@
 																<label>Beneficiário</label>
 																<div class="form-group">
 																	<div class="col-sm-6">
-																		<select name="atecBeneid" id="atecBeneid" class="chosen-select" datec-placeholder="Escolha..." >
+																		<select name="atecBeneid" id="atecBeneid" class="select2" datec-placeholder="Escolha..." >
 																			<option value="766f69643132333435366964">-</option>
 																			{{#each Benes}}
 																				<option value="{{_id}}">{{bene_nome}}</option>
@@ -191,7 +230,7 @@
 																<label> Sexo</label>
 																<div class="form-group">
 																	<div class="col-sm-6">
-																		<select name="atecBenesexo" id="atecBenesexo" class="chosen-select" value="-" >
+																		<select name="atecBenesexo" id="atecBenesexo" class="select2" value="-" >
 																			<option value="-">-</option>
 																			<option value="F">Feminino</option>
 																			<option value="M">Masculino</option>
@@ -248,7 +287,7 @@
 																<label>Técnico acompanhante</label>
 																<div class="form-group">
 																	<div class="col-sm-8">
-																		<select name="atecTeraacompid" id="atecTeraacompid" class="chosen-select" datec-placeholder="Escolha..." value="-">
+																		<select name="atecTeraacompid" id="atecTeraacompid" class="select2" datec-placeholder="Escolha..." value="-">
 																			<option value="-">-</option>
 																			{{#each Terapeutas}}
 																				<option value="{{_id}}">{{usuario_nome}}</option>

@@ -45,7 +45,7 @@
 												<label>Categoria</label>
 												<div class="form-group">
 													<div class="col-xs-12 col-sm-4" >
-														<select id="debitCategoriaid" name="debitCategoriaid" class="chosen-select">
+														<select id="debitCategoriaid" name="debitCategoriaid" class="select2">
 															{{#each categorias}}
 																<option value="{{_id}}">{{debitcateg_nome}}</option>
 															{{else}}
@@ -56,7 +56,7 @@
 												<label>Subcategoria</label>
 												<div class="form-group">
 													<div class="col-xs-12 col-sm-4" >
-														<select id="debitSubcategoriaid" name="debitSubcategoriaid" class="chosen-select">
+														<select id="debitSubcategoriaid" name="debitSubcategoriaid" class="select2">
 															{{#each subcategorias}}
 																<option value="{{_id}}">{{debitsubcateg_nome}}</option>
 															{{else}}
@@ -67,7 +67,7 @@
 												<label>Fornecedor</label>
 												<div class="form-group">
 													<div class="col-xs-12 col-sm-4" >
-														<select name="debitFornecid" class="chosen-select" data-placeholder="Escolha o fornecedor...">
+														<select name="debitFornecid" class="select2" data-placeholder="Escolha o fornecedor...">
 															{{#each fornecs}}
 																<option value="{{_id}}">{{fornec_fantasia}}</option>
 															{{else}}
@@ -85,7 +85,7 @@
 												<label class="small red">Exemplo: Celpe, Compesa, Internet etc</label>
 												<div class="form-group">
 													<div class="col-sm-2">
-														<select name="debitRecorrente" class="chosen-select" data-placeholder="Escolha...">
+														<select name="debitRecorrente" class="select2" data-placeholder="Escolha...">
 															<option value="Não">Não</option>
 															<option value="Sim">Sim</option>
 														</select>
@@ -144,7 +144,7 @@
 												<label>Pago?</label>
 												<div class="form-group">
 													<div class="col-sm-2">
-														<select id="debitPg" name="debitPg" class="chosen-select" data-placeholder="Escolha...">
+														<select id="debitPg" name="debitPg" class="select2" data-placeholder="Escolha...">
 															<option value="Não">Não</option>
 															<option value="Sim">Sim</option>
 														</select>
@@ -153,7 +153,7 @@
 												<label>De onde saiu pagamento</label>
 												<div class="form-group">
 													<div class="col-xs-12 col-sm-4" >
-														<select id="debitCategoriaid2" name="debitCategoriaid2" class="chosen-select">
+														<select id="debitCategoriaid2" name="debitCategoriaid2" class="select2">
 															{{#each categorias}}
 																<option value="{{_id}}">{{debitcateg_nome}}</option>
 															{{else}}
@@ -164,7 +164,7 @@
 												<label>Conta</label>
 												<div class="form-group">
 													<div class="col-xs-12 col-sm-4" >
-														<select id="debitSubcategoriaid2" name="debitSubcategoriaid2" class="chosen-select">
+														<select id="debitSubcategoriaid2" name="debitSubcategoriaid2" class="select2">
 															{{#each subcategorias}}
 																<option value="{{_id}}">{{debitsubcateg_nome}}</option>
 															{{else}}
@@ -175,7 +175,7 @@
 												<label>Tipo pagamento</label>
 												<div class="form-group">
 													<div class="col-xs-12 col-sm-4" >
-														<select id="debitSubcategoriaid2" name="debitSubcategoriaid2" class="chosen-select">
+														<select id="debitSubcategoriaid2" name="debitSubcategoriaid2" class="select2">
 															<option value="1">Espécie</option>
 															<option value="2">Transferencia</option>
 															<option value="3">Cheque</option>
@@ -225,7 +225,7 @@
 												<label>Categoria atendimento</label>
 												<div class="form-group">
 													<div class="col-sm-9">
-														<select name="debitCategoria" class="chosen-select" data-placeholder="Escolha a opção...">
+														<select name="debitCategoria" class="select2" data-placeholder="Escolha a opção...">
 															<option value="">&nbsp;</option>
 															<option value="Padrão">Padrão</option>
 															<option value="Falta">Falta</option>						
@@ -242,7 +242,7 @@
 													<label>Terapia</label>
 													<div class="form-group">
 														<div class="col-sm-4" style="width: 600px;">
-															<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+															<select name="agendaTerapiaid" id="agendaTerapiaid" class="select2" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 																<option value="">&nbsp;</option>
 																{{#each terapias}}
 																	<option value="{{_id}}">{{terapia_nome}}</option>
@@ -254,7 +254,7 @@
 												<label> Convenio</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select id="atendConvid" name="atendConvid" class="chosen-select" data-placeholder="Escolha...">
+														<select id="atendConvid" name="atendConvid" class="select2" data-placeholder="Escolha...">
 															<option value="">&nbsp;</option>
 															{{#each convs}}
 																	<option value="{{_id}}">{{conv_nome}}</option>
@@ -265,7 +265,7 @@
 												<label> Terapeuta</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select id="atendTerapeutaid" name="atendTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+														<select id="atendTerapeutaid" name="atendTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
 															<option value="">&nbsp;</option>
 															{{#each usuarios}}
 																<option value="{{_id}}">{{usuario_nome}}</option>

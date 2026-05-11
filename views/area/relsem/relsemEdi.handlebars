@@ -149,7 +149,7 @@
                                                 <div class="form-group">
                                                     <div class="col-sm-10">
                                                         <!-- ✅ Handlebars marca a opção selecionada -->
-                                                        <select name="relsemBeneid" id="relsemBeneid" class="chosen-select" onchange="atualizaDadosbene();" data-placeholder="Selecione...">
+                                                        <select name="relsemBeneid" id="relsemBeneid" class="select2" onchange="atualizaDadosbene();" data-placeholder="Selecione...">
                                                             <option value="">Selecione...</option>
                                                             {{#each benes}}
                                                                 <option value="{{_id}}" {{#ifEqual ../relsem.relsem_beneid _id}}selected{{/ifEqual}}>
@@ -226,8 +226,7 @@
                                                 <div class="form-group">
                                                     <div class="col-sm-12">
                                                         <!-- ✅ Marca terapeuta selecionado -->
-                                                        <select name="relsemTerapeutaid" id="relsemTerapeutaid" class="chosen-select" readonly data-placeholder="Selecione...">
-                                                            <option value="">Selecione...</option>
+                                                       <select name="relsemTerapeutaid" id="relsemTerapeutaid" class="select2">
                                                             {{#each terapeutas}}
                                                                 <option value="{{_id}}" {{#ifEqual ../relsem.relsem_terapeutaid _id}}selected{{/ifEqual}}>
                                                                     {{usuario_nomecompleto}}
@@ -246,7 +245,7 @@
                                             <div class="col-sm-4">
                                                 <label>Tipo de Terapia</label>
                                                 <!-- ✅ Marca terapia salva -->
-                                                <select name="relsemTerapia" id="relsemTerapia" class="chosen-select" data-placeholder="Selecione...">
+                                                <select name="relsemTerapia" id="relsemTerapia" class="select2" data-placeholder="Selecione...">
                                                     <option value="">Selecione...</option>
                                                     <option value="Fisioterapia" {{#ifEqual ../relsem.relsem_terapia "Fisioterapia"}}selected{{/ifEqual}}>Fisioterapia</option>
                                                     <option value="Fonoaudiologia" {{#ifEqual ../relsem.relsem_terapia "Fonoaudiologia"}}selected{{/ifEqual}}>Fonoaudiologia</option>

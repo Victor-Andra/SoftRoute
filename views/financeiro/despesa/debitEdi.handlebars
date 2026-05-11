@@ -66,7 +66,7 @@
 												<label>Categoria</label>
 												<div class="form-group">
 													<div class="col-sm-9">
-														<select name="atendCategoria" class="chosen-select" data-placeholder="Escolha a opção...">
+														<select name="atendCategoria" class="select2" data-placeholder="Escolha a opção...">
 															<option value="Padrão">Padrão</option>
 															<option value="Falta">Falta</option>						
 															<option value="Apoio">Apoio</option>
@@ -165,7 +165,7 @@
 												<label>Pago?</label>
 												<div class="form-group">
 													<div class="col-sm-2">
-														<select name="debitPg" class="chosen-select" data-placeholder="Escolha..." value="{{debit.debit_pg}}">
+														<select name="debitPg" class="select2" data-placeholder="Escolha..." value="{{debit.debit_pg}}">
 															<option value="{{debit.debit_pg}}">{{debit.debit_pg}}</option>
 															<option value="Sim">Sim</option>
 															<option value="Não">Não</option>						
@@ -181,7 +181,7 @@
 												<label>Categoria</label>
 												<div class="form-group">
 													<div class="col-xs-12 col-sm-4" >
-														<select id="debitCategoriaid" name="debitCategoriaid" class="chosen-select">
+														<select id="debitCategoriaid" name="debitCategoriaid" class="select2">
 															{{#each categorias}}
 																<option value="{{_id}}">{{debitcateg_nome}}</option>
 															{{else}}
@@ -192,7 +192,7 @@
 												<label>Subcategoria</label>
 												<div class="form-group">
 													<div class="col-xs-12 col-sm-4" >
-														<select id="debitSubcategoriaid" name="debitSubcategoriaid" class="chosen-select">
+														<select id="debitSubcategoriaid" name="debitSubcategoriaid" class="select2">
 															{{#each subcategorias}}
 																<option value="{{_id}}">{{debitsubcateg_nome}}</option>
 															{{else}}
@@ -203,7 +203,7 @@
 												<label>Fornecedor</label>
 												<div class="form-group">
 													<div class="col-sm-8">
-														<select name="debitFornecid" class="chosen-select" data-placeholder="Escolha o fornecedor...">
+														<select name="debitFornecid" class="select2" data-placeholder="Escolha o fornecedor...">
 															{{#each fornecs}}
 																<option value="{{_id}}">{{fornec_fantasia}}</option>
 															{{else}}
@@ -221,7 +221,7 @@
 												<label class="small red">Exemplo: Celpe, Compesa, Internet etc</label>
 												<div class="form-group">
 													<div class="col-sm-2">
-														<select name="debitRecorrente" class="chosen-select" data-placeholder="Escolha...">
+														<select name="debitRecorrente" class="select2" data-placeholder="Escolha...">
 															<option value="{{debit.debit_recorrente}}">{{debit.debit_recorrente}}</option>
 															<option value="Sim">Sim</option>
 															<option value="Não">Não</option>						

@@ -9,271 +9,128 @@
 			}
     	</style>
 		<script type="text/javascript">
-// 🔹 INICIALIZAÇÃO DO SELECT2 (substitui o Chosen)
-function initSelect2() {
-    if (typeof $.fn.select2 === 'function') {
-        $('.select2').select2({
-            placeholder: "Escolha...",
-            allowClear: true,
-            width: '100%',
-            language: {
-                noResults: () => "Nenhum resultado encontrado"
-            }
-        });
+// 🔹 Helper reutilizável para atualizar Chosen (igual à view de créditos)
+function atualizaChosen(selectId, valor) {
+    if (typeof jQuery !== 'undefined' && jQuery.fn.chosen) {
+        $('#' + selectId).val(valor).trigger('chosen:updated');
+    } else {
+        // Fallback puro JS
+        document.getElementById(selectId).value = valor;
     }
 }
 
-// 🔹 Formatação de valor: 1 → "1,0" | 1.5 → "1,5" | 2 → "2,0"
-function formatarValorCARS(valor) {
-    if (!valor) return "0,0";
-    const num = parseFloat(valor);
-    if (isNaN(num)) return "0,0";
-    // Garante 1 casa decimal e troca ponto por vírgula
-    return num.toFixed(1).replace('.', ',');
+// 🔹 Formatação de data (mantida)
+function atualizaData(){
+    let dataIso = document.getElementById("b").value + "T00:00:00.000Z";
+    let dataFmt = new Date(dataIso);
+    document.getElementById("a").value = dataFmt;
 }
 
-// 🔹 Atualiza o campo de texto da pergunta X com o valor do radio selecionado
-function atualizarCampoPergunta(numPergunta) {
-    // Pega o radio selecionado do grupo carsQ{num}
-    const radioSelecionado = document.querySelector(`input[name="carsQ${numPergunta}"]:checked`);
-    const campoTexto = document.getElementById(`carsTq${numPergunta}`);
+// 🔹 Cálculo de totais (mantida)
+function atualizarTotais(num) {
+    let campo = 'input[name="carsQ'+num+'"]:checked';
+    let pontos = $(campo).val();
+    if (!pontos) return;
     
-    if (radioSelecionado && campoTexto) {
-        const valorBruto = radioSelecionado.value; // ex: "1.5"
-        const valorFormatado = formatarValorCARS(valorBruto); // ex: "1,5"
-        campoTexto.value = valorFormatado;
-        return valorFormatado;
-    }
-    return null;
+    document.getElementById("carsTq"+num).value = (""+parseFloat(pontos.replace(",",".")).toFixed(1)+"").replace(".",",");
+    
+    let arrTot = Array.from(document.querySelectorAll('[name^="carsTq"]'));
+    let totalGeral = 0;
+    
+    arrTot.forEach((val) => {
+        if (val.id != "carsTqt" && val.value) {
+            totalGeral = parseFloat(totalGeral) + parseFloat(val.value.replace(",","."));
+        }
+    });
+    
+    document.getElementById("carsTqt").value = (""+totalGeral.toFixed(1)+"").replace(".",",");
 }
 
-// 🔹 Calcula o total geral somando todos os campos carsTqXX
-function calcularTotalGeral() {
-    let total = 0;
-    for (let i = 1; i <= 15; i++) {
-        const num = String(i).padStart(2, '0');
-        const el = document.getElementById(`carsTq${num}`);
-        if (el && el.value) {
-            const val = parseFloat(el.value.replace(',', '.'));
-            if (!isNaN(val)) total += val;
+// 🔹 Seleção de radios (mantida, com pequeno ajuste)
+function selecionarRadioComBaseNoValor(campoNumero) {
+    let campoId = "carsTq" + campoNumero + "Edi";
+    let valorCampo = document.getElementById(campoId)?.value;
+    if (!valorCampo) return;
+    
+    let radioPrefixo = "cars" + campoNumero;
+    
+    for (let i = 1; i <= 7; i++) {
+        let radioId = radioPrefixo + i;
+        let radio = document.getElementById(radioId);
+        if (!radio) continue;
+        
+        switch (valorCampo) {
+            case "1,0": if (i == 1) radio.checked = true; break;
+            case "1,5": if (i == 2) radio.checked = true; break;
+            case "2,0": if (i == 3) radio.checked = true; break;
+            case "2,5": if (i == 4) radio.checked = true; break;
+            case "3,0": if (i == 5) radio.checked = true; break;
+            case "3,5": if (i == 6) radio.checked = true; break;
+            case "4,0": if (i == 7) radio.checked = true; break;
         }
     }
-    // Atualiza o campo total com 1 casa decimal
-    const elTotal = document.getElementById('carsTqt');
-    if (elTotal) {
-        elTotal.value = total.toFixed(1).replace('.', ',');
-    }
 }
 
-// 🔹 Função principal chamada no onchange dos radios
-function atualizarTotais(numPergunta) {
-    // 1. Atualiza o campo da pergunta específica
-    atualizarCampoPergunta(numPergunta);
-    // 2. Recalcula o total geral
-    calcularTotalGeral();
-}
-
-// 🔹 Seleciona o radio com base no valor salvo (para edição/rascunho)
-function selecionarRadioComBaseNoValor(numPergunta, valorSalvo) {
-    if (!valorSalvo) return;
-    
-    // Converte "1,5" → 1.5 → 15 (para comparação inteira)
-    const valorNum = parseFloat(String(valorSalvo).replace(',', '.'));
-    const mapeamento = {
-        1: 1,   1.5: 2,   2: 3,   2.5: 4,
-        3: 5,   3.5: 6,   4: 7
-    };
-    const index = mapeamento[valorNum];
-    if (!index) return;
-    
-    const radioId = `cars${numPergunta}${index}`;
-    const radio = document.getElementById(radioId);
-    if (radio) {
-        radio.checked = true;
-        // Força a atualização do campo de texto
-        atualizarCampoPergunta(numPergunta);
-    }
-}
-
-// 🔹 Carrega os dados na view de edição (REFATORADA para Select2)
+// 🔹 Função principal de carregamento (REFATORADA)
 function carregaBody() {
     // 1️⃣ Formata data
-    let dtcarspre = new Date(document.getElementById("carsCarsdataEdi")?.value);
-    if (dtcarspre && !isNaN(dtcarspre)) {
+    let dtcarspre = new Date(document.getElementById("carsCarsdataEdi").value);
+    if (!isNaN(dtcarspre)) {
         let mes = (dtcarspre.getMonth()+1).toString().padStart(2, '0');
-        let dia = (dtcarspre.getDate()).toString().padStart(2, '0');
-        document.getElementById("carsCarsdata").value = `${dtcarspre.getFullYear()}-${mes}-${dia}`;
+        let dia = (dtcarspre.getUTCDate()).toString().padStart(2, '0');
+        let fulldate = dtcarspre.getFullYear()+"-"+mes+"-"+dia;
+        document.getElementById("carsCarsdata").value = fulldate;
     }
-    
-    // 2️⃣ Campos normais (input/textarea)
+
+    // 2️⃣ Atualiza campos NORMAIS (input, textarea)
     const camposNormais = [
-        'carsBenedatanasc', 'carsBeneidade', 'carsPreechido',
+        'carsBenedatanasc', 'carsBeneidade', 'carsPreechido', 
         'carsParentesco', 'carsInfo', 'carsComentarios'
     ];
     camposNormais.forEach(campo => {
-        const el = document.getElementById(campo);
-        const elEdi = document.getElementById(campo + "Edi");
+        let el = document.getElementById(campo);
+        let elEdi = document.getElementById(campo + "Edi");
         if (el && elEdi) el.value = elEdi.value;
     });
-    
-    // 3️⃣ ✅ Select2: atualiza valor e dispara change
-    const camposSelect2 = [
+
+    // 3️⃣ Atualiza selects COM Chosen (usando helper)
+    const camposChosen = [
         {id: 'carsBeneid', edi: 'carsBeneidEdi'},
         {id: 'carsBenesexo', edi: 'carsBenesexoEdi'},
         {id: 'carsTerapeutaid', edi: 'carsTerapeutaidEdi'}
     ];
-    camposSelect2.forEach(({id, edi}) => {
-        const val = document.getElementById(edi)?.value;
-        const $el = $('#' + id);
-        if ($el.length && val) {
-            $el.val(val).trigger('change');
-        }
+    camposChosen.forEach(({id, edi}) => {
+        let val = document.getElementById(edi)?.value;
+        if (val) atualizaChosen(id, val);
     });
-    
-    // 4️⃣ Campos de pontuação (carsTq01...carsTq15)
+
+    // 4️⃣ Atualiza campos de pontuação (inputs normais)
     for (let i = 1; i <= 15; i++) {
-        const num = String(i).padStart(2, '0');
-        const el = document.getElementById(`carsTq${num}`);
-        const elEdi = document.getElementById(`carsTq${num}Edi`);
-        if (el && elEdi) {
-            el.value = elEdi.value;
-        }
+        let num = i.toString().padStart(2, '0');
+        let el = document.getElementById("carsTq"+num);
+        let elEdi = document.getElementById("carsTq"+num+"Edi");
+        if (el && elEdi) el.value = elEdi.value;
     }
     
-    // 5️⃣ Total geral
-    const tqtEdi = document.getElementById("carsTqtEdi")?.value;
+    // Total geral
+    let tqtEdi = document.getElementById("carsTqtEdi")?.value;
     if (tqtEdi) document.getElementById("carsTqt").value = tqtEdi;
-    
-    // 6️⃣ Checkbox "Concluído"
-    const concluido = document.getElementById("carsConcluidoEdi")?.value;
-    const chk = document.getElementById("carsConcluido");
+
+    // 5️⃣ Checkbox "Concluído"
+    let concluido = document.getElementById("carsConcluidoEdi")?.value;
+    let chk = document.getElementById("carsConcluido");
     if (chk) chk.checked = (concluido === "on");
-    
-    // 7️⃣ ✅ Marca os radios com base nos valores salvos
+
+    // 6️⃣ Seleciona radios das 15 questões
     for (let i = 1; i <= 15; i++) {
-        const num = String(i).padStart(2, '0');
-        const valEdi = document.getElementById(`carsTq${num}Edi`)?.value;
-        if (valEdi) {
-            selecionarRadioComBaseNoValor(num, valEdi);
-        }
+        let num = i.toString().padStart(2, '0');
+        selecionarRadioComBaseNoValor(num);
     }
-    
-    // 8️⃣ Remove div de carregamento
-    const divCarrega = document.getElementById("divCarrega");
+
+    // 7️⃣ Remove div de carregamento
+    let divCarrega = document.getElementById("divCarrega");
     if (divCarrega) divCarrega.remove();
 }
-
-// 🔹 Carrega rascunho do localStorage (REFATORADO para Select2)
-function loadDraftReport() {
-    console.log("Iniciando carregamento do rascunho CARS...");
-    const savedData = localStorage.getItem('setDraftReportCars');
-    if (!savedData) {
-        alert('Nenhum rascunho encontrado.');
-        return;
-    }
-    
-    try {
-        const draftData = JSON.parse(savedData);
-        const fieldName = [
-            "carsBeneid", "carsBenesexo", "carsBenedatanasc", "carsBeneidade",
-            "carsPreechido", "carsParentesco", "carsCarsdata", "carsTerapeutaid",
-            "carsInfo", "carsTqt", "carsComentarios", "carsConcluido",
-            // Campos de pontuação
-            "carsTq01","carsTq02","carsTq03","carsTq04","carsTq05",
-            "carsTq06","carsTq07","carsTq08","carsTq09","carsTq10",
-            "carsTq11","carsTq12","carsTq13","carsTq14","carsTq15"
-        ];
-        
-        // Preenche campos normais e Select2
-        fieldName.forEach(campoId => {
-            const campo = document.getElementById(campoId);
-            if (!campo || draftData[campoId] === undefined) return;
-            const valorSalvo = draftData[campoId];
-            
-            if (campoId === 'carsConcluido' && campo.type === 'checkbox') {
-                campo.checked = (valorSalvo === "on");
-            }
-            else if (['carsBeneid', 'carsBenesexo', 'carsTerapeutaid'].includes(campoId)) {
-                $(campo).val(valorSalvo).trigger('change');
-            }
-            else {
-                campo.value = valorSalvo;
-            }
-        });
-        
-        // Marca os radios com base nos campos carsTqXX preenchidos
-        for (let i = 1; i <= 15; i++) {
-            const num = String(i).padStart(2, '0');
-            const val = draftData[`carsTq${num}`];
-            if (val) {
-                selecionarRadioComBaseNoValor(num, val);
-            }
-        }
-        
-        // Recalcula o total geral ao final
-        calcularTotalGeral();
-        
-        alert('✅ Rascunho CARS recuperado com sucesso!');
-        
-    } catch (error) {
-        console.error("❌ Erro ao recuperar rascunho:", error);
-        alert('❌ Falha ao recuperar o rascunho.');
-    }
-}
-
-// 🔹 Salvamento automático (mantido)
-function autoSaveReport() {
-    const reportData = {
-        carsBeneid: document.getElementById('carsBeneid')?.value,
-        carsBenesexo: document.getElementById('carsBenesexo')?.value,
-        carsBenedatanasc: document.getElementById('carsBenedatanasc')?.value,
-        carsBeneidade: document.getElementById('carsBeneidade')?.value,
-        carsPreechido: document.getElementById('carsPreechido')?.value,
-        carsParentesco: document.getElementById('carsParentesco')?.value,
-        carsCarsdata: document.getElementById('carsCarsdata')?.value,
-        carsTerapeutaid: document.getElementById('carsTerapeutaid')?.value,
-        carsInfo: document.getElementById('carsInfo')?.value,
-        carsTq01: document.getElementById('carsTq01')?.value,
-        carsTq02: document.getElementById('carsTq02')?.value,
-        carsTq03: document.getElementById('carsTq03')?.value,
-        carsTq04: document.getElementById('carsTq04')?.value,
-        carsTq05: document.getElementById('carsTq05')?.value,
-        carsTq06: document.getElementById('carsTq06')?.value,
-        carsTq07: document.getElementById('carsTq07')?.value,
-        carsTq08: document.getElementById('carsTq08')?.value,
-        carsTq09: document.getElementById('carsTq09')?.value,
-        carsTq10: document.getElementById('carsTq10')?.value,
-        carsTq11: document.getElementById('carsTq11')?.value,
-        carsTq12: document.getElementById('carsTq12')?.value,
-        carsTq13: document.getElementById('carsTq13')?.value,
-        carsTq14: document.getElementById('carsTq14')?.value,
-        carsTq15: document.getElementById('carsTq15')?.value,
-        carsTqt: document.getElementById('carsTqt')?.value,
-        carsComentarios: document.getElementById('carsComentarios')?.value,
-        carsConcluido: document.getElementById('carsConcluido')?.value
-    };
-    localStorage.setItem('setDraftReportCars', JSON.stringify(reportData));
-}
-
-// 🔹 Inicialização ao carregar a página
-document.addEventListener('DOMContentLoaded', () => {
-    // Inicializa Select2
-    initSelect2();
-    
-    // Carrega body se for edição
-    if (typeof carregaBody === 'function' && document.getElementById('carsBeneidEdi')) {
-        setTimeout(carregaBody, 100);
-    }
-    
-    // Auto-save a cada 2min
-    setInterval(autoSaveReport, 120000);
-    
-    // Auto-save ao digitar
-    document.querySelectorAll('input, textarea, select').forEach(el => {
-        el.addEventListener('input', autoSaveReport);
-        el.addEventListener('change', autoSaveReport);
-    });
-});
 </script>
 	</head>
 
@@ -4172,8 +4029,57 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			}
 
-			
+			// Evento para iniciar o salvamento automático quando a página é carregada
+			document.addEventListener('DOMContentLoaded', () => {
+				console.log("Página carregada. Iniciando salvamento automático...");
+
+				// Carrega o rascunho ao carregar a página
+				//loadDraftReport(); //Desabilita pra ser chamado apenas pelo botão
+
+				// Salva automaticamente a cada 2 minutos (120.000 milissegundos)
+				setInterval(() => {
+				console.log("Disparando salvamento automático (intervalo de 2 minutos)...");
+				autoSaveReport();
+				}, 120000);
+
+				// Salva automaticamente quando o usuário interage com o formulário
+				const form = document.getElementById('reportForm');
+				if (form) {
+				form.addEventListener('input', () => {
+					console.log("Usuário interagiu com o formulário. Salvando rascunho...");
+					autoSaveReport();
+				});
+				} else {
+				console.warn("Formulário 'reportForm' não encontrado no DOM.");
+				}
+			});
+
 		</script>
-		
+		<script>
+			<!-- 🔹 INICIALIZAÇÃO SEGURA (igual à view de créditos) -->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				// 1. Inicializa Chosen em TODOS os selects da página
+				if (typeof $.fn.chosen === 'function') {
+					$('.chosen-select').chosen({
+						width: '100%',
+						disable_search_threshold: 10,
+						allow_single_deselect: true,
+						no_results_text: 'Nenhum resultado encontrado'
+					});
+				}
+				
+				// 2. Carrega os valores do formulário (APÓS Chosen estar pronto)
+				if (typeof carregaBody === 'function') {
+					setTimeout(carregaBody, 50); // Pequeno delay para garantir
+				}
+				
+				// 3. Inicializa navegação do Ace Admin
+				if (typeof controlaNave === 'function') {
+					controlaNave();
+				}
+			});
+		</script>
+		</script>
 	</body>
 </html>

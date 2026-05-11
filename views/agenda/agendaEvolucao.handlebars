@@ -365,7 +365,7 @@
 																<label>Categoria</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
-																		<select name="evolucaoconfCategoria" id="evolucaoconfCategoria" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="evolucaoconfCategoria" id="evolucaoconfCategoria" class="select" data-placeholder="Escolha...">
 																			<!-- As opções serão preenchidas via JavaScript -->
 																		</select>
 																	</div>
@@ -376,7 +376,7 @@
 																<label>Escolha o Título</label>
 																<div class="form-group">
 																	<div class="col-sm-4">
-																		<select name="evolucaoconfTitulo" id="evolucaoconfTitulo" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="evolucaoconfTitulo" id="evolucaoconfTitulo" class="select" data-placeholder="Escolha...">
 																			<!-- As opções serão preenchidas via JavaScript -->
 																		</select>
 																	</div>
@@ -463,7 +463,7 @@
 															<label for="id-date-picker-1">Hora Agendamento</label>
 															<div class="form-group">
 																<div class="col-sm-8">
-																	<select style="pointer-events: none;touch-action: none;" name="agendaHora" id="agendaHora" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
+																	<select style="pointer-events: none;touch-action: none;" name="agendaHora" id="agendaHora" class="select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
 																		{{#each horaages}}
 																			<option value="{{horaage_hora}}">{{horaage_hora}}</option>
 																		{{/each}}
@@ -477,7 +477,7 @@
 															<label>Origem Agendamento</label>
 															<div class="form-group">
 																<div class="col-sm-9">
-																	<select style="pointer-events: none;touch-action: none;" id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																	<select style="pointer-events: none;touch-action: none;" id="agendaOrg" name="agendaOrg" class="select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
 																		<option value="Administrativo">Administrativo</option>
 																		<option value="Padrão">Padrão</option>
 																	</select>
@@ -488,7 +488,7 @@
 															<label>Categoria</label>
 															<div class="form-group">
 																<div class="col-sm-9">
-																	<select style="pointer-events: none;touch-action: none;" id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onchange="javascript:ajustaOption();">
+																	<select style="pointer-events: none;touch-action: none;" id="agendaCateg" name="agendaCateg" class="select" data-placeholder="Escolha a opção..." onchange="javascript:ajustaOption();">
 																		<option id="Falta" value="Falta">Falta</option>
 																		<option id="Padrão" value="Padrão" style="display: none;">Padrão</option>
 																		<option id="Pais" value="Pais">Pais</option>
@@ -512,7 +512,7 @@
 															</div>
 															<div class="form-group" >
 																<div class="col-sm-5">
-																	<select class="col-sm-5" name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..."  style="width: 400px;" onchange="javascript:selectConv()">
+																	<select class="col-sm-5" name="agendaBeneid" id="agendaBeneid" class="select" data-placeholder="Escolha..."  style="width: 400px;" onchange="javascript:selectConv()">
 																		{{#each benes}}
 																			<option style="pointer-events: none;touch-action: none;" value="{{_id}}">{{bene_nome}}</option>
 																		{{/each}}
@@ -524,7 +524,7 @@
 															<label>Convênio</label>
 															<div class="form-group"  >
 																<div class="col-sm-6" style="width: 500px;">
-																	<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid"  id="agendaConvid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid"  id="agendaConvid" class="select" data-placeholder="Escolha..." >
 																		{{#each benes}}
 																			{{#each ../convs}}
 																				{{#ifEqual ../bene_convid _id}}
@@ -542,7 +542,7 @@
 															<label>Terapeuta</label>
 															<div class="form-group">
 																<div class="col-sm-4" style="width: 500px;">
-																	<select style="pointer-events: none;touch-action: none;" name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select style="pointer-events: none;touch-action: none;" name="agendaUsuid" id="agendaUsuid" class="select" data-placeholder="Escolha..." >
 																		{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
 																		{{/each}}
@@ -554,7 +554,7 @@
 															<label>Terapia</label>
 															<div class="form-group">
 																<div class="col-sm-4" style="width: 600px;">
-																	<select style="pointer-events: none;touch-action: none;" name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																	<select style="pointer-events: none;touch-action: none;" name="agendaTerapiaid" id="agendaTerapiaid" class="select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 																		{{#each terapias}}
 																			<option value="{{_id}}">{{terapia_nome}}</option>
 																		{{/each}}
@@ -568,7 +568,7 @@
 															<label>Local</label>
 															<div class="form-group">
 																<div class="col-sm-4" style="width: 300px;">
-																	<select style="pointer-events: none;touch-action: none;" name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha...">
+																	<select style="pointer-events: none;touch-action: none;" name="agendaSalaid" id="agendaSalaid" class="select" data-placeholder="Escolha...">
 																		{{#each salas}}
 																			<option value="{{_id}}">{{sala_nome}}</option>
 																		{{/each}}
@@ -584,7 +584,7 @@
 															<label>Motivo</label>
 															<div class="form-group">
 																<div class="col-sm-4" style="width: 300px;">
-																	<select name="agendaTempMotivo" id="agendaTempMotivo" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:ajustaOption()">
+																	<select name="agendaTempMotivo" id="agendaTempMotivo" class="select" data-placeholder="Escolha..." onchange="javascript:ajustaOption()">
 																		<option style="background-color: yellow;" value="Falta">Falta</option>
 																		<option style="background-color: orange;" value="Falta Justificada">Falta Justificada</option>
 																		<option style="background-color: cyan;" value="Substituição">Substituição</option>

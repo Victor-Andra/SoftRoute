@@ -404,7 +404,7 @@
 														<label>Beneficiário</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="ataBeneid" id="ataBeneid" class="chosen-select" data-placeholder="Escolha..." onclick="atualizarContagem()">
+																<select name="ataBeneid" id="ataBeneid" class="select2" data-placeholder="Escolha..." onclick="atualizarContagem()">
 																		<option value="766f69643132333435366964">-</option>
 																	{{#each Benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
@@ -452,7 +452,7 @@
 														<label>Técnico acompanhante</label>
 														<div class="form-group">
 															<div class="col-sm-8">
-																<select name="ataAcompanhausuid" id="ataAcompanhausuid" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="ataAcompanhausuid" id="ataAcompanhausuid" class="select2" data-placeholder="Escolha..." >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each Terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
@@ -467,7 +467,7 @@
 														<label for="id-date-picker-1">Corrigido por</label>
 														<div class="row">
 															<div class="col-sm-6">
-																<select name="ataCorrecusuid" id="ataCorrecusuid" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="ataCorrecusuid" id="ataCorrecusuid" class="select2" data-placeholder="Escolha..." >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each Terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>

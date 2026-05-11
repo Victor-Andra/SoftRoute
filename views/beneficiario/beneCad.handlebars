@@ -22,27 +22,37 @@
             box-sizing: border-box;
 			rows: 12px; /* Número de linhas padrão */
         }
-		
-			/* --- SEU CSS EXISTENTE --- */
-			/* Força todos os containers do Chosen para 200px */
-			.chosen-container,
-			.chosen-container-single {
-				width: 200px !important;
-			}
+		/* --- CSS CONVERTIDO PARA SELECT2 --- */
+
+		/* Força todos os containers do Select2 para 200px */
+		.select2-container,
+		.select2-container--default {
+			width: 200px !important;
+		}
+
+		/* Garante que o select original também respeite a largura */
+		select.select2 {
+			width: 200px !important;
+		}
+
+		/* --- EXCEÇÃO PARA O BENEFICIÁRIO --- */
+		/* Força o container do select Beneficiário a ter 30vw */
+		#tratBeneid + .select2-container,
+		.select2-container[aria-owns*="tratBeneid"] {
+			width: 30vw !important;
+		}
+
+		/* Garante que o dropdown (lista de opções) acompanhe a largura do container */
+		#tratBeneid + .select2-container .select2-dropdown,
+		#tratBeneid + .select2-container .select2-results {
+			width: 100% !important;
+		}
+
+		/* Ajuste opcional: largura mínima para o dropdown não ficar muito estreito */
+		#tratBeneid + .select2-container .select2-dropdown {
+			min-width: 300px;
+		}
 			
-			/* ... outras regras ... */
-
-			/* --- NOVA REGRA: EXCEÇÃO PARA O BENEFICIÁRIO --- */
-			/* Força o container do select Beneficiário a ter 50% da largura da tela */
-			#beneConvid_chosen {
-				width: 30vw !important; /* 50vw = 50% da Viewport (tela) */
-			}
-
-			/* Garante que o dropdown (lista de opções) acompanhe a largura do container */
-			#beneConvid_chosen .chosen-drop,
-			#beneConvid_chosen .chosen-results {
-				width: 100% !important;
-			}
 		</style>
 		<script type="text/javascript">
 			function exibenome() {
@@ -329,7 +339,7 @@
 															<label>Status</label>
 															<div class="input-group">
 																<div >
-																	<select name="beneStatus" id="beneStatus" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="beneStatus" id="beneStatus" class="select2" >
 																		<option value="Ativo">Ativo</option>
 																		<option value="Inativo">Inativo</option>
 																	</select>
@@ -405,7 +415,7 @@
 															<label>UF</label>
 															<div class="input-group">
 																	<div >
-																		<select name="beneEnduf" id="beneEnduf" class="chosen-select" data-placeholder="Escolha...">
+																		<select name="beneEnduf" id="beneEnduf" class="select2" >
 																				{{#each estados}}
 																				<option value="{{_id}}">{{estado_uf}}</option>
 																				{{else}}
@@ -425,50 +435,61 @@
 													</div>
 												</div>
 												<div id="conv" class="tab-pane fade">
-													<label>Convênio</label>
-													<div class="input-group">
-														<select name="beneConvid" id="beneConvid"  class="chosen-select" data-placeholder="Escolha..." style="width: 500px;">
-															{{#each convs}}
-																<option value="{{_id}}">{{conv_nome}}</option>
-															{{else}}
-															{{/each}}
-														</select>
-													</div>
-													<label>Número da Carteira do Convênio</label>
-													<div class="form-group">
-														<div class="col-xs-12 col-sm-3 col-md-3">
-															<input type="text" name="beneNcarteiraconv" id="beneNcarteiraconv" class="form-control" />
+													<div class="row">
+														<div class="col-xs-12 col-sm-6">
+															<label>Convênio</label>
+															<div class="input-group">
+																<select name="beneConvid" id="beneConvid"  class="select2" >
+																	{{#each convs}}
+																		<option value="{{_id}}">{{conv_nome}}</option>
+																	{{else}}
+																	{{/each}}
+																</select>
+															</div>
 														</div>
-													</div>
-													<br>
-													<label>Por Liminar</label>
-													<div class="form-group">
-														<div class="col-sm-4">
-															<select name="beneLiminar" id="beneLiminar" class="chosen-select" >
-																<option value="-">-</option>
-																<option value="Sim">Sim</option>
-																<option value="Não">Não</option>
-															</select>
+														<div class="col-xs-12 col-sm-6">
+															<label>Número da Carteira do Convênio</label>
+															<div class="form-group">
+																<div class="col-xs-12 col-sm-3 col-md-3">
+																	<input type="text" name="beneNcarteiraconv" id="beneNcarteiraconv" class="form-control" />
+																</div>
+															</div>
 														</div>
-													</div>
-													<label>Impressão de horas nos relatórios</label>
-													<div class="form-group">
-														<div class="col-sm-4">
-															<select name="beneImphora" id="beneImphora" class="chosen-select" >
-																<option value="-">-</option>
-																<option value="Ativo">Sim</option>
-																<option value="Inativo">Não</option>
-															</select>
+														<div class="col-xs-12 col-sm-6">
+															<label>Por Liminar</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="beneLiminar" id="beneLiminar" class="select2" >
+																		<option value="-">-</option>
+																		<option value="Sim">Sim</option>
+																		<option value="Não">Não</option>
+																	</select>
+																</div>
+															</div>
 														</div>
-													</div>
-													<label>Impressão dos carimbos nos relatórios</label>
-													<div class="form-group">
-														<div class="col-sm-4">
-															<select name="beneImpcarimbo" id="beneImpcarimbo" class="chosen-select" >
-																<option value="-">-</option>
-																<option value="Ativo">Sim</option>
-																<option value="Inativo">Não</option>
-															</select>
+														<div class="col-xs-12 col-sm-6">
+															<label>Impressão de horas nos relatórios</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="beneImphora" id="beneImphora" class="select2" >
+																		<option value="-">-</option>
+																		<option value="Ativo">Sim</option>
+																		<option value="Inativo">Não</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-6">
+															<label>Impressão dos carimbos nos relatórios</label>
+															<div class="form-group">
+																<div class="col-sm-4">
+																	<select name="beneImpcarimbo" id="beneImpcarimbo" class="select2" >
+																		<option value="-">-</option>
+																		<option value="Ativo">Sim</option>
+																		<option value="Inativo">Não</option>
+																	</select>
+																</div>
+															</div>
 														</div>
 													</div>
 												</div>
@@ -703,7 +724,7 @@
 																<label>UF</label>
 																<div class="input-group">
 																		<div >
-																			<select name="beneOutenduf" id="beneOutenduf" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="beneOutenduf" id="beneOutenduf" class="select2" data-placeholder="Escolha...">
 																					{{#each estados}}
 																					<option value="{{_id}}">{{estado_uf}}</option>
 																					{{else}}
@@ -841,7 +862,7 @@
 																<label>UF</label>
 																<div class="input-group">
 																		<div >
-																			<select name="beneEscolauf" id="beneEscolauf" class="chosen-select" data-placeholder="Escolha...">
+																			<select name="beneEscolauf" id="beneEscolauf" class="select2" data-placeholder="Escolha...">
 																					{{#each estados}}
 																					<option value="{{_id}}">{{estado_uf}}</option>
 																					{{else}}
@@ -1033,7 +1054,7 @@
 															<label>Ordem pagamento por</label>
 															<div class="input-group">
 																<div >
-																	<select name="beneOrdempg" id="beneOrdempg" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="beneOrdempg" id="beneOrdempg" class="select2" data-placeholder="Escolha...">
 																		<option value="-">-</option>
 																		<option value="CPF">CPF</option>
 																		<option value="CNPJ">CNPJ</option>
@@ -1061,7 +1082,7 @@
 															<label>Retenção dos impostos</label>
 															<div class="input-group">
 																<div >
-																	<select name="beneOrdemretem" id="beneOrdemretem" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="beneOrdemretem" id="beneOrdemretem" class="select2" data-placeholder="Escolha...">
 																		<option value="-">-</option>
 																		<option value="Sim">Sim</option>
 																		<option value="Não">Não</option>
@@ -1089,7 +1110,7 @@
 																			
 																			<div class="input-group">
 																				<label>Realiza ABA?</label>&nbsp;&nbsp;
-																				<select name="beneAba" id="beneAba" class="chosen-select" class="form-control" data-placeholder="Escolha...">
+																				<select name="beneAba" id="beneAba" class="select2" class="form-control" data-placeholder="Escolha...">
 																						<option value="Não">Não</option>
 																						<option value="Sim">Sim</option>
 																				</select>
@@ -1106,7 +1127,7 @@
 																				</span>
 																			</td>
 																			<td>
-																				<select name="beneAbaclinica" id="beneAbaclinica" class="chosen-select" class="form-control" data-placeholder="Escolha...">
+																				<select name="beneAbaclinica" id="beneAbaclinica" class="select2" class="form-control" data-placeholder="Escolha...">
 																						<option value="Não">Não</option>
 																						<option value="Sim">Sim</option>
 																				</select>
@@ -1119,7 +1140,7 @@
 																				</span>
 																			</td>
 																			<td>
-																				<select name="beneAbaescola" id="beneAbaescola" class="chosen-select" class="form-control" data-placeholder="Escolha...">
+																				<select name="beneAbaescola" id="beneAbaescola" class="select2" class="form-control" data-placeholder="Escolha...">
 																						<option value="Não">Não</option>
 																						<option value="Sim">Sim</option>
 																				</select>
@@ -1132,7 +1153,7 @@
 																				</span>
 																			</td>
 																			<td>
-																				<select name="beneAbaparticular" id="beneAbaparticular" class="chosen-select" class="form-control" data-placeholder="Escolha...">
+																				<select name="beneAbaparticular" id="beneAbaparticular" class="select2" class="form-control" data-placeholder="Escolha...">
 																						<option value="Não">Não</option>
 																						<option value="Sim">Sim</option>
 																				</select>

@@ -61,12 +61,7 @@
 				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
 				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
 			}
-			function atualizaData(){
-				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
-				var dataFmt = new Date(dataIso);
-				console.log(dataFmt.toISOString());
-				document.getElementById("a").value = dataFmt;
-			}
+			
 			function formataData(date) {//yyyy-MM-dd
 				var d = new Date(date);
 				if (d.getTimezoneOffset() == 180){

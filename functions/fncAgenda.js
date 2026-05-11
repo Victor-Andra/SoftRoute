@@ -4835,7 +4835,7 @@ carregaAgendaFilS(req, res) {
 
                 // ===== CONSULTA: TERAPISTAS =====
                 console.log('   🧑‍⚕️  Buscando terapeutas...');
-                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta) => {//Tem terapeuta que nao e terapeuta e alguns agendamentos nao sao terapia mas sim reuniao tem q listar os usuarios corretos.
+                Usuario.find().then((terapeuta) => {//Tem terapeuta que nao e terapeuta e alguns agendamentos nao sao terapia mas sim reuniao tem q listar os usuarios corretos.
                     console.log('   ✅ Terapeuta: Encontrados', terapeuta.length, 'registros');
                     terapeuta.sort((a,b) => {
                         const na = (a.usuario_nome||'').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -8564,7 +8564,7 @@ carregaAgendaPessoalquasela(req, res) {
             Bene.find().then((bene)=>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 //console.log("Listagem Realizada de Beneficiários!")
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    Usuario.find().then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
                             Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{

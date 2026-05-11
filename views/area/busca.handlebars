@@ -29,7 +29,7 @@
 														<div class="row">
 															<div class="input-group">
 																<label for="id-date-picker-1">Ano:&nbsp;</label>
-																<select name="anoBordo" id="anoBordo" class="chosen-select" data-placeholder="Escolha..."  onchange="javascript:formataData();">
+																<select name="anoBordo" id="anoBordo" class="select2" data-placeholder="Escolha..."  onchange="javascript:formataData();">
 																	<option value="2023">2023</option>
 																	<option value="2024">2024</option>
 																	<option value="2025">2025</option>
@@ -42,7 +42,7 @@
 														<div class="row">
 															<div class="input-group">
 																<label>Beneficiário:&nbsp;</label>
-																<select name="tratBeneficiario" id="tratBeneficiario" class="chosen-select" data-placeholder="Escolha..." value="">
+																<select name="tratBeneficiario" id="tratBeneficiario" class="select2" data-placeholder="Escolha..." value="">
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
 																	{{/each}}

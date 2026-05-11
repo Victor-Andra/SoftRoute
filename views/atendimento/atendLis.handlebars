@@ -108,42 +108,7 @@
         font-size: 10px !important;
       }
 
-      /* Chosen Select minimalista - compatível com aceAdmin */
-      .chosen-container .chosen-single {
-        border: 1px solid #ced4da !important;
-        border-radius: 4px !important;
-        box-shadow: none !important;
-        background: white !important;
-        height: 30px !important;
-        line-height: 30px !important;
-        font-size: 12px !important;
-      }
-      .chosen-container .chosen-single:hover {
-        border-color: #868e96 !important;
-      }
-      .chosen-container-active.chosen-with-drop .chosen-single {
-        border-color: #868e96 !important;
-        background: white !important;
-      }
-      .chosen-container .chosen-drop {
-        border: 1px solid #ced4da !important;
-        border-top: none !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-      }
-
-      /* Selects de Beneficiário/Terapeuta mais largos */
-      #divAtendBeneficiario .chosen-container,
-      #divAtendTerapeuta .chosen-container,
-      #divAtendConv .chosen-container {
-        width: 100% !important;
-        max-width: 360px !important;
-      }
-      #divAtendBeneficiario .chosen-single,
-      #divAtendTerapeuta .chosen-single,
-      #divAtendConv .chosen-single {
-        width: 100% !important;
-      }
-
+    
       /* Tooltip personalizado */
       .custom-tooltip {
         position: relative;
@@ -399,7 +364,7 @@
                   <div class="col-sm-2">
                     <div class="form-group">
                       <label>Tipo Filtro:&nbsp;</label>
-                      <select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:trocaFiltroData()">
+                      <select name="tipoData" id="tipoData" class="select2" data-placeholder="Escolha..." onchange="javascript:trocaFiltroData()">
                         <option value="Ano/Mes">Ano/Mês</option>
                         <option value="Semana">Semana</option>
                         <option value="Dia">Dia</option>
@@ -411,7 +376,7 @@
                   <div id="divAnoAtend" class="col-sm-2">
                     <div class="form-group">
                       <label>Ano:&nbsp;</label>
-                      <select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:formataData();">
+                      <select name="anoAtend" id="anoAtend" class="select2" data-placeholder="Escolha..." onchange="javascript:formataData();">
                         {{#each anos}}
                           <option value="{{ano_nome}}">{{ano_nome}}</option>
                         {{/each}}
@@ -423,7 +388,7 @@
                   <div id="divMesAtend" class="col-sm-2">
                     <div class="form-group">
                       <label>Mês:&nbsp;</label>
-                      <select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:formataData();">
+                      <select name="mesAtend" id="mesAtend" class="select2" data-placeholder="Escolha..." onchange="javascript:formataData();">
                         <option value="0">Janeiro</option>
                         <option value="1">Fevereiro</option>
                         <option value="2">Março</option>
@@ -453,7 +418,7 @@
                   <div id="divTipoFil" class="col-sm-2">
                     <div class="form-group">
                       <label>Tipo Filtro:&nbsp;</label>
-                      <select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:trocaFilpessoa()">
+                      <select name="atendTipoPessoa" id="atendTipoPessoa" class="select2" data-placeholder="Escolha..." onchange="javascript:trocaFilpessoa()">
                         <option value="Geral">Geral</option>
                         <option value="Beneficiario">Beneficiário</option>
                         <option value="Terapeuta">Terapeuta</option>
@@ -466,7 +431,7 @@
                   <div id="divAtendBeneficiario" class="col-sm-4" style="display:none;">
                     <div class="form-group">
                       <label>Beneficiário:&nbsp;</label>
-                      <select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha...">
+                      <select name="atendBeneficiario" id="atendBeneficiario" class="select2" data-placeholder="Escolha...">
                         <option value=""></option>
                         {{#each benes}}
                           <option value="{{_id}}">{{bene_nome}}</option>
@@ -479,7 +444,7 @@
                   <div id="divAtendTerapeuta" class="col-sm-4" style="display:none;">
                     <div class="form-group">
                       <label>Terapeuta:&nbsp;</label>
-                      <select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha...">
+                      <select name="atendTerapeuta" id="atendTerapeuta" class="select2" data-placeholder="Escolha...">
                         <option value=""></option>
                         {{#each terapeutas}}
                           <option value="{{_id}}">{{usuario_nome}}</option>
@@ -492,7 +457,7 @@
                   <div id="divAtendConv" class="col-sm-4" style="display:none;">
                     <div class="form-group">
                       <label>Convênio:&nbsp;</label>
-                      <select name="atendConv" id="atendConv" class="chosen-select" data-placeholder="Escolha...">
+                      <select name="atendConv" id="atendConv" class="select2" data-placeholder="Escolha...">
                         <option value=""></option>
                         {{#each convs}}
                           <option value="{{_id}}">{{conv_nome}}</option>

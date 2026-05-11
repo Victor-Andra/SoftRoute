@@ -3,70 +3,54 @@
 	<head>
 		<title>Escala ATEC</title>
 		<script type="text/javascript">
-		// Função para atualizar os campos de texto com os valores dos radio inputs
-			function atualizarCampos(questionario, pergunta, valor) {
-				// Construa o ID do campo de texto com base no questionário e na pergunta
-				var campoId = 'atec' + questionario + 'Q' + pergunta;
-				console.log(campoId);
-				// Encontre o elemento de input de texto com o ID correspondente
-				var campoTexto = document.getElementById(campoId);
-				console.log(campoTexto);
-				// Verifique se o campo de texto foi encontrado
-				if (campoTexto) {
-				// Atualize o valor do campo de texto com o valor do radio input
-				campoTexto.value = valor;
-				}
-				console.log(valor);
+		// ✅ Função principal: atualiza campo oculto + recalcula totais
+		function atualizarCampos(questionario, pergunta, valor) {
+			// Garante formato 01, 02... com zero à esquerda
+			const numPergunta = pergunta.padStart(2, '0');
+			const campoId = 'atec' + questionario + 'Q' + numPergunta;
+			const campoTexto = document.getElementById(campoId);
+			
+			if (campoTexto) {
+				campoTexto.value = valor; // Atualiza o hidden field
 			}
+			// ✅ NÃO chama calcularTotais aqui para evitar recálculo parcial
+		}
 
-			// Função chamada no evento onchange dos radio inputs
-			function radioOnChange(questionario, pergunta, valor) {
-				atualizarCampos(questionario, pergunta, valor);
-				
-				// ✅ Calcula os totais imediatamente após selecionar uma opção
-				calcularTotaisATEC(); 
-			}
-
-		
-		// ✅ 2. Função robusta que soma TODOS os campos ocultos (incluindo herdados do banco)
+		// ✅ Função que soma todas as seções e atualiza os campos de total
 		function calcularTotaisATEC() {
-			// Helper seguro: lê o valor, troca vírgula por ponto, ignora vazios/inválidos
+			// Helper: converte "2,0" → 2 (inteiro), trata null/undefined/vazio
 			function getVal(id) {
 				const el = document.getElementById(id);
-				if (!el || !el.value.trim()) return 0;
-				const num = parseFloat(el.value.replace(',', '.'));
-				return isNaN(num) ? 0 : num;
+				if (!el || !el.value) return 0;
+				return Math.round(parseFloat(String(el.value).replace(',', '.')) || 0);
 			}
 
 			let t1 = 0, t2 = 0, t3 = 0, t4 = 0;
 
-			// 🔹 Seção I: 14 itens
+			// 🔹 Seção I: 14 itens (01 a 14)
 			for (let i = 1; i <= 14; i++) {
 				t1 += getVal('atec1Q' + String(i).padStart(2, '0'));
 			}
-			// 🔹 Seção II: 20 itens
+			// 🔹 Seção II: 20 itens (01 a 20)
 			for (let i = 1; i <= 20; i++) {
 				t2 += getVal('atec2Q' + String(i).padStart(2, '0'));
 			}
-			// 🔹 Seção III: 18 itens
+			// 🔹 Seção III: 18 itens (01 a 18)
 			for (let i = 1; i <= 18; i++) {
 				t3 += getVal('atec3Q' + String(i).padStart(2, '0'));
 			}
-			// 🔹 Seção IV: 25 itens
+			// 🔹 Seção IV: 25 itens (01 a 25)
 			for (let i = 1; i <= 25; i++) {
 				t4 += getVal('atec4Q' + String(i).padStart(2, '0'));
 			}
 
-			// Atualiza os inputs de total na tela
-			const setTotal = (id, val) => { const el = document.getElementById(id); if(el) el.value = val; };
-			
-			setTotal('atecAtec1Total', t1);
-			setTotal('atecAtec2Total', t2);
-			setTotal('atecAtec3Total', t3);
-			setTotal('atecAtec4Total', t4);
-			setTotal('atecTotpont', t1 + t2 + t3 + t4);
+			// Atualiza os campos de total na tela
+			document.getElementById('atecAtec1Total').value = t1;
+			document.getElementById('atecAtec2Total').value = t2;
+			document.getElementById('atecAtec3Total').value = t3;
+			document.getElementById('atecAtec4Total').value = t4;
+			document.getElementById('atecTotpont').value = t1 + t2 + t3 + t4;
 		}
-				
 		function marcarRadioInputs() {
 				// Array com os IDs dos campos de texto
 				const pergunta = [
@@ -138,11 +122,9 @@
 				let chk = document.getElementById("atecConcluido");
 				if (chk) chk.checked = (concluido === "on");
 
-				  marcarRadioInputs(); // ✅ primeiro sincroniza UI
-
-				
-
-				}
+				// 5️⃣ Marca os radios do questionário
+				marcarRadioInputs();
+			}
 		</script>
 		
 	</head>
@@ -168,7 +150,7 @@
 							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/area/escalas/atec/atualizar" method="POST">
 							<input class="hidden" id="atecId" name="atecId" value="{{atec._id}}" />
-								<div class="col-xs-12" hidden >
+								<div class="col-xs-12"  >
 									<!-- Cabeçalho -->
 										<!-- Não necessário atributos, replicação aqui somente na edição -->
 									<input type="text" id="atecBeneidEdi" name="atecBeneidEdi" value="{{atec.atec_beneid}}" />	
@@ -189,7 +171,7 @@
 									<input type="text" id="atecTotpontEdi" name="atecTotpontEdi" value="{{atec.atec_totpont}}" />
 									<input type="text" id="atecComentatecEdi" name="atecComentatecEdi" value="{{atec.atec_comentatec}}" />
 									<!-- Questionário I - 1 -->
-									primeiro<input type="text" id="atec1Q01temp" name="atec1Q01temp" value="{{atec.atec_1q01}}" />
+									<input type="text" id="atec1Q01temp" name="atec1Q01temp" value="{{atec.atec_1q01}}" />
 									<input type="text" id="atec1Q02temp" name="atec1Q02temp" value="{{atec.atec_1q02}}" />
 									<input type="text" id="atec1Q03temp" name="atec1Q03temp" value="{{atec.atec_1q03}}" />
 									<input type="text" id="atec1Q04temp" name="atec1Q04temp" value="{{atec.atec_1q04}}" />
@@ -3782,15 +3764,11 @@
 						}
 					}
 					
-					// ✅ Recalcula os totais com base em TODOS os campos já preenchidos
-					if (typeof calcularTotaisATEC === 'function') {
-						calcularTotaisATEC();
-					}
-
-					console.log("✅ Rascunho ATEC carregado com sucesso!");
-					alert("✅ Rascunho ATEC carregado com sucesso!");
+					// ✅ PASSO 3: SÓ AGORA calcula os totais com base em TUDO já populado
+					calcularTotaisATEC();
 					
-				
+					console.log('✅ Rascunho ATEC recuperado com sucesso!');
+					alert('✅ Rascunho ATEC recuperado com sucesso!');
 					
 				} catch (error) {
 					console.error("❌ Erro ao recuperar rascunho:", error);

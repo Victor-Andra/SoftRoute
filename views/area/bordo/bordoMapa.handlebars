@@ -51,7 +51,7 @@
 								<input style="height: 30px;" id="dataFilAte" name="dataFilAte" type="date" onchange="javascript:atualizaDataFin()">
 								<input class="hidden" id="dataFim" name="dataFim" />
 								<label>Beneficiário: </label>
-								<select style="height: 30px; width:300px;" name="relBeneid"  id="relBeneid" class="chosen-select" data-placeholder="Escolha...">
+								<select style="height: 30px; width:300px;" name="relBeneid"  id="relBeneid" class="select2" data-placeholder="Escolha...">
 									{{#each benes}}
 										<option value="{{_id}}">{{bene_nome}}</option>
 									{{/each}}

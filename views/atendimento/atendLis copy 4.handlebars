@@ -399,7 +399,7 @@
                   <div class="col-sm-2">
                     <div class="form-group">
                       <label>Tipo Filtro:&nbsp;</label>
-                      <select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:trocaFiltroData()">
+                      <select name="tipoData" id="tipoData" class="select2" data-placeholder="Escolha..." onchange="javascript:trocaFiltroData()">
                         <option value="Ano/Mes">Ano/Mês</option>
                         <option value="Semana">Semana</option>
                         <option value="Dia">Dia</option>
@@ -411,7 +411,7 @@
                   <div id="divAnoAtend" class="col-sm-2">
                     <div class="form-group">
                       <label>Ano:&nbsp;</label>
-                      <select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:formataData();">
+                      <select name="anoAtend" id="anoAtend" class="select2" data-placeholder="Escolha..." onchange="javascript:formataData();">
                         {{#each anos}}
                           <option value="{{ano_nome}}">{{ano_nome}}</option>
                         {{/each}}
@@ -423,7 +423,7 @@
                   <div id="divMesAtend" class="col-sm-2">
                     <div class="form-group">
                       <label>Mês:&nbsp;</label>
-                      <select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:formataData();">
+                      <select name="mesAtend" id="mesAtend" class="select2" data-placeholder="Escolha..." onchange="javascript:formataData();">
                         <option value="0">Janeiro</option>
                         <option value="1">Fevereiro</option>
                         <option value="2">Março</option>
@@ -453,7 +453,7 @@
                   <div id="divTipoFil" class="col-sm-2">
                     <div class="form-group">
                       <label>Tipo Filtro:&nbsp;</label>
-                      <select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:trocaFilpessoa()">
+                      <select name="atendTipoPessoa" id="atendTipoPessoa" class="select2" data-placeholder="Escolha..." onchange="javascript:trocaFilpessoa()">
                         <option value="Geral">Geral</option>
                         <option value="Beneficiario">Beneficiário</option>
                         <option value="Terapeuta">Terapeuta</option>
@@ -466,7 +466,7 @@
                   <div id="divAtendBeneficiario" class="col-sm-4" style="display:none;">
                     <div class="form-group">
                       <label>Beneficiário:&nbsp;</label>
-                      <select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha...">
+                      <select name="atendBeneficiario" id="atendBeneficiario" class="select2" data-placeholder="Escolha...">
                         <option value=""></option>
                         {{#each benes}}
                           <option value="{{_id}}">{{bene_nome}}</option>
@@ -479,7 +479,7 @@
                   <div id="divAtendTerapeuta" class="col-sm-4" style="display:none;">
                     <div class="form-group">
                       <label>Terapeuta:&nbsp;</label>
-                      <select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha...">
+                      <select name="atendTerapeuta" id="atendTerapeuta" class="select2" data-placeholder="Escolha...">
                         <option value=""></option>
                         {{#each terapeutas}}
                           <option value="{{_id}}">{{usuario_nome}}</option>
@@ -492,7 +492,7 @@
                   <div id="divAtendConv" class="col-sm-4" style="display:none;">
                     <div class="form-group">
                       <label>Convênio:&nbsp;</label>
-                      <select name="atendConv" id="atendConv" class="chosen-select" data-placeholder="Escolha...">
+                      <select name="atendConv" id="atendConv" class="select2" data-placeholder="Escolha...">
                         <option value=""></option>
                         {{#each convs}}
                           <option value="{{_id}}">{{conv_nome}}</option>

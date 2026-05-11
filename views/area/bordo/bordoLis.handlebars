@@ -345,7 +345,7 @@
 									<div class="col-sm-2">
 										<div class="input-group">
 											<label>Tipo Filtro:&nbsp;</label>
-											<select name="tipoData" id="tipoData" class="chosen-select"
+											<select name="tipoData" id="tipoData" class="select2"
 												onchange="trocaFiltroData()">
 												<option value="Ano/Mes">Ano/Mês</option>
 												<option value="Semana">Semana</option>
@@ -358,7 +358,7 @@
 									<div class="col-sm-2 hidden">
 										<div class="input-group">
 											<label>Filial:&nbsp;</label>
-											<select name="empresaFilial" id="empresaFilial" class="chosen-select">
+											<select name="empresaFilial" id="empresaFilial" class="select2">
 												<option value="Matriz">Matriz</option>
 												<option value="Filial 1">Filial 1</option>
 												<option value="Filial 2">Filial 2</option>
@@ -372,7 +372,7 @@
 									<div id="divAnoBordo" class="col-sm-2">
 										<div class="input-group">
 											<label>Ano:&nbsp;</label>
-											<select name="anoBordo" id="anoBordo" class="chosen-select"
+											<select name="anoBordo" id="anoBordo" class="select2"
 												onchange="formataData();">
 												{{#each anos}}
 													<option value="{{ano_nome}}">{{ano_nome}}</option>
@@ -385,7 +385,7 @@
 									<div id="divMesBordo" class="col-sm-2">
 										<div class="input-group">
 											<label>Mês:&nbsp;</label>
-											<select name="mesBordo" id="mesBordo" class="chosen-select"
+											<select name="mesBordo" id="mesBordo" class="select2"
 												onchange="formataData();">
 												<option value="0">Janeiro</option>
 												<option value="1">Fevereiro</option>
@@ -419,7 +419,7 @@
 										<div class="input-group">
 											<label>Tipo:&nbsp;</label>
 											<select name="bordoTipoPessoa" id="bordoTipoPessoa"
-												class="chosen-select"
+												class="select2"
 												onchange="trocaFilpessoa()">
 												<option value="Geral">Geral</option>
 												<option value="Beneficiario">Beneficiário</option>
@@ -433,7 +433,7 @@
 										<div class="input-group">
 											<label>Beneficiário:&nbsp;</label>
 											<select name="bordoBeneficiario" id="bordoBeneficiario"
-												class="chosen-select">
+												class="select2">
 												{{#each benes}}
 													<option value="{{_id}}">{{bene_nome}}</option>
 												{{/each}}
@@ -446,7 +446,7 @@
 										<div class="input-group">
 											<label>Terapeuta:&nbsp;</label>
 											<select name="bordoTerapeuta" id="bordoTerapeuta"
-												class="chosen-select">
+												class="select2">
 												{{#each terapeutas}}
 													<option value="{{_id}}">{{usuario_nome}}</option>
 												{{/each}}

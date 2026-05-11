@@ -103,92 +103,159 @@
 		}
 	</style>
 <script>
-// 🔹 Formata data ISO para yyyy-mm-dd (input[type="date"])
-function formatarDataParaInput(dataISO) {
-    if (!dataISO) return "";
-    const data = new Date(dataISO);
-    if (isNaN(data.getTime())) return ""; // data inválida
-    const dia = String(data.getDate()).padStart(2, '0');
-    const mes = String(data.getMonth() + 1).padStart(2, '0');
-    const ano = data.getFullYear();
-    return `${ano}-${mes}-${dia}`;
-}
-
-// 🔹 Atualiza campo Chosen (com fallback se não estiver disponível)
-function atualizaChosen(selectId, valor) {
-    const el = document.getElementById(selectId);
-    if (!el) return;
-    
-    el.value = valor;
-    
-    // Se jQuery e Chosen estiverem disponíveis, atualiza o plugin
-    if (typeof jQuery !== 'undefined' && jQuery.fn.chosen) {
-        jQuery(el).trigger('chosen:updated');
+// 🔹 Helper para atualizar Select2 (substituto do Chosen)
+function atualizaSelect2(selectId, valor) {
+    if (typeof jQuery !== 'undefined' && jQuery.fn.select2) {
+        const $select = $('#' + selectId);
+        $select.val(valor).trigger('change');
+        // Atualiza visualmente o Select2
+        if ($select.data('select2')) {
+            $select.select2('destroy').select2({
+                width: '100%',
+                allowClear: true,
+                placeholder: $select.attr('placeholder') || 'Selecione...'
+            });
+            $select.val(valor).trigger('change');
+        }
+    } else {
+        // Fallback puro JS
+        const el = document.getElementById(selectId);
+        if (el) el.value = valor;
     }
 }
 
-// 🔹 Função principal de carregamento
+// 🔹 Lista de TODOS os campos Select2 do formulário
+const camposSelect2 = [
+    // Palpação
+    'avafisiopaldeltoidedir', 'avafisiopaldeltoideesq',
+    'avafisiopalbicepsdir', 'avafisiopalbicepsesq',
+    'avafisiopaltricepsdir', 'avafisiopaltricepsesq',
+    'avafisiopalpeitoraldir', 'avafisiopalpeitoralesq',
+    'avafisiopalabdominaisdir', 'avafisiopalabdominaisesq',
+    'avafisiopalobliquosdir', 'avafisiopalobliquosesq',
+    'avafisiopalquadricepsdir', 'avafisiopalquadricepsesq',
+    'avafisiopaltricepssuraldir', 'avafisiopaltricepssuralesq',
+    'avafisiopalisquiotibiaisdir', 'avafisiopalisquiotibiaisesq',
+    
+    // Força Muscular - Membros Superiores
+    'avafisioforcaabducaobracodir', 'avafisioforcaabducaobracoesq',
+    'avafisioforcaaducaobracodir', 'avafisioforcaaducaobracoesq',
+    'avafisioforcaflexaodobracodir', 'avafisioforcaflexaobracoesq',
+    'avafisioforcaextensaodobracodir', 'avafisioforcaextensaobracoesq',
+    'avafisioforcaflexaodoantebracodir', 'avafisioforcaflexaoantebracoesq',
+    'avafisioforcaextensaoantebracodir', 'avafisioforcaextensaoanteesq',
+    'avafisioforcaflexaopunhodir', 'avafisioforcaflexaopunhoesq',
+    'avafisioforcaextensaopunhodir', 'avafisioforcaextensaopunhoesq',
+    
+    // Força Muscular - Membros Inferiores
+    'avafisioforcaflexaoquadrildir', 'avafisioforcaflexaoquadrilesq',
+    'avafisioforcaextensaoquadrildir', 'avafisioforcaextensaoquadrilesq',
+    'avafisioforcaabducaoquadrildir', 'avafisioforcaabducaoquadrilesq',
+    'avafisioforcaaducaoquadrildir', 'avafisioforcaaducaoquadrilesq',
+    'avafisioforcaflexaojoelhodir', 'avafisioforcaflexaojoelhoesq',
+    'avafisioforcaextensaojoelhodir', 'avafisioforcaextensaojoelhoesq',
+    'avafisioforcaflexaotornozelodir', 'avafisioforcaflexaotornoesq',
+    'avafisioforcaextensaotornozelodir', 'avafisioforcaexttornozeloesq',
+    
+    // Força Muscular - Tronco
+    'avafisioforcaflexaotroncodir', 'avafisioforcaflexaotroncoesq',
+    'avafisioforcaextensaotroncodir', 'avafisioforcaextensaotroncoesq',
+    
+    // Reação de Proteção
+    'avafisioreaprotfrentesentado', 'avafisioreaprotfrentepe',
+    'avafisioreaprotladosentado', 'avafisioreaprotladope',
+    'avafisioreaprotatrassentado', 'avafisioreaprotatraspe',
+    
+    // Avaliação Motora (itens com escala Sim/Razoável/Não)
+    'avafisiosupcabecamed', 'avafisiosupmovanti', 'avafisiosuppressao',
+    'avafisiosupelevacaoquad', 'avafisiosupacompolhos',
+    'avafisioposlatconsficpos', 'avafisioposlatativabdom',
+    'avafisiopronoextquadril',
+    'avafisiopuxposcabflet',
+    'avafisiosentprotecab',
+    'avafisioempealinha'
+];
+
 function carregaBody() {
     console.log("🟢 Iniciando carregamento dos campos...");
     
-    // Aguarda um tick para garantir que o DOM e plugins estejam prontos
     setTimeout(() => {
         const inputsEdi = document.querySelectorAll('[id$="Edi"]');
         
         inputsEdi.forEach(inputEdi => {
             try {
                 const idEdi = inputEdi.id;
-                const valor = inputEdi.value;
+                const valor = inputEdi.value?.trim();
                 const idBase = idEdi.replace('Edi', '');
                 
-                if (!idBase) return;
+                if (!idBase || !valor) return;
                 
-                const campoReal = document.getElementById(idBase);
+                // 1️⃣ Tenta buscar pelo ID primeiro (para inputs normais)
+                let campoReal = document.getElementById(idBase);
                 
-                // Campo não encontrado? Tenta por name (para radios)
+                // 2️⃣ Se não encontrou, tenta buscar radios pelo NAME
                 if (!campoReal) {
                     const radios = document.querySelectorAll(`input[name="${idBase}"]`);
                     if (radios.length > 0) {
-                        radios.forEach(r => {
-                            if (r.value === valor) r.checked = true;
+                        // Normaliza valor (remove vírgula para comparação numérica)
+                        const valorNormalizado = valor.replace(',', '.');
+                        radios.forEach(radio => {
+                            const radioValue = radio.value.replace(',', '.');
+                            if (radioValue === valorNormalizado || radio.value === valor) {
+                                radio.checked = true;
+                                console.log(`✅ Radio marcado: ${idBase} = ${valor}`);
+                            }
                         });
+                        // Atualiza campo de texto associado se existir
+                        const campoTexto = document.getElementById(idBase.replace('q', 'Q'));
+                        if (campoTexto) campoTexto.value = valor;
                     }
                     return;
                 }
                 
-                // Checkbox
+                // 3️⃣ Checkbox
                 if (campoReal.type === "checkbox") {
                     campoReal.checked = (valor === "true" || valor === "1" || valor === "on");
                     return;
                 }
                 
-                // Radio
+                // 4️⃣ Radio (quando encontrado por ID)
                 if (campoReal.type === "radio") {
                     const radios = document.querySelectorAll(`input[name="${campoReal.name}"]`);
-                    radios.forEach(r => {
-                        if (r.value === valor) r.checked = true;
+                    const valorNormalizado = valor.replace(',', '.');
+                    radios.forEach(radio => {
+                        const radioValue = radio.value.replace(',', '.');
+                        if (radioValue === valorNormalizado || radio.value === valor) {
+                            radio.checked = true;
+                        }
                     });
                     return;
                 }
                 
-                // Campos de data (input type="date")
+                // 5️⃣ Campos de data
                 const camposDeData = [
+                    "anamnDataanamnese", "anamnBenedatanasc", "carsCarsdata",
                     "avafisiodataava", "avafisiodatainitrat", "avafisiodatanasc",
                     "avafisiodatanascmae", "avafisiodatanascpai"
                 ];
-                
                 if (camposDeData.includes(idBase) && campoReal.type === "date") {
                     campoReal.value = formatarDataParaInput(valor);
                     return;
                 }
                 
-                // Select com Chosen
+                // 6️⃣ Select com Chosen/Select2
                 if (campoReal.tagName === "SELECT") {
-                    atualizaChosen(idBase, valor);
+                    campoReal.value = valor;
+                    if (typeof jQuery !== 'undefined' && jQuery.fn.chosen) {
+                        jQuery(campoReal).trigger('chosen:updated');
+                    }
+                    if (typeof jQuery !== 'undefined' && jQuery.fn.select2) {
+                        jQuery(campoReal).trigger('change');
+                    }
                     return;
                 }
                 
-                // Textarea ou input comum
+                // 7️⃣ Input/Textarea comum
                 if (campoReal.tagName === "TEXTAREA" || campoReal.tagName === "INPUT") {
                     campoReal.value = valor;
                     return;
@@ -200,7 +267,25 @@ function carregaBody() {
         });
         
         console.log("✅ Campos populados!");
-    }, 100); // pequeno delay para garantir que plugins estejam prontos
+        
+        // 🔄 Força atualização visual dos plugins após tudo estar pronto
+        if (typeof jQuery !== 'undefined') {
+            jQuery('.chosen-select').trigger('chosen:updated');
+            jQuery('.select2').trigger('change');
+        }
+        
+    }, 150); // Delay um pouco maior para garantir que plugins estejam inicializados
+}
+
+// 🔹 Helper para formatar data ISO para input[type="date"]
+function formatarDataParaInput(dataISO) {
+    if (!dataISO) return "";
+    const data = new Date(dataISO);
+    if (isNaN(data.getTime())) return "";
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const ano = data.getFullYear();
+    return `${ano}-${mes}-${dia}`;
 }
 </script>
 	
@@ -311,20 +396,27 @@ function carregaBody() {
 							<input type="text" id="avafisioombroretracaodirEdi" name="avafisioombroretracaodirEdi" value="{{avafisio.avafisio_ombroretracaodir}}"/>
 							<input type="text" id="avafisioombroretracaoesqEdi" name="avafisioombroretracaoesqEdi" value="{{avafisio.avafisio_ombroretracaoesq}}"/>
 							<input type="text" id="avafisioombroobsEdi" name="avafisioombroobsEdi" value="{{avafisio.avafisio_ombroobs}}"/>
+							<!-- COTOVELO - -->
 							<input type="text" id="avafisiocotoveloposicaoEdi" name="avafisiocotoveloposicaoEdi" value="{{avafisio.avafisio_cotoveloposicao}}"/>
+							
 							<input type="text" id="avafisiocotovelopronacaopreEdi" name="avafisiocotovelopronacaopreEdi" value="{{avafisio.avafisio_cotovelopronacaopre}}"/>
-							<input type="text" id="avafisiocotovelorotainternadirEdi" name="avafisiocotovelorotainternadirEdi" value="{{avafisio.avafisio_cotovelorotainternadir}}"/>
-							<input type="text" id="avafisiocotovelorotainternaesqEdi" name="avafisiocotovelorotainternaesqEdi" value="{{avafisio.avafisio_cotovelorotainternaesq}}"/>
+							<input type="text" id="avafisiocotovelopronacaopredirEdi" name="avafisiocotovelopronacaopredirEdi" value="{{avafisio.avafisio_cotovelopronacaodir}}"/>
+							<input type="text" id="avafisiocotovelopronacaopreEdi" name="avafisiocotovelopronacaopreEdi" value="{{avafisio.avafisio_cotovelopronacaoesq}}"/>
+							
 							<input type="text" id="avafisiocotovelosupinacaopreEdi" name="avafisiocotovelosupinacaopreEdi" value="{{avafisio.avafisio_cotovelosupinacaopre}}"/>
 							<input type="text" id="avafisiocotovelosupinacaodirEdi" name="avafisiocotovelosupinacaodirEdi" value="{{avafisio.avafisio_cotovelosupinacaodir}}"/>
 							<input type="text" id="avafisiocotovelosupinacaoesqEdi" name="avafisiocotovelosupinacaoesqEdi" value="{{avafisio.avafisio_cotovelosupinacaoesq}}"/>
+							
 							<input type="text" id="avafisiocotoveloflexaopreEdi" name="avafisiocotoveloflexaopreEdi" value="{{avafisio.avafisio_cotoveloflexaopre}}"/>
 							<input type="text" id="avafisiocotoveloflexaodirEdi" name="avafisiocotoveloflexaodirEdi" value="{{avafisio.avafisio_cotoveloflexaodir}}"/>
 							<input type="text" id="avafisiocotoveloflexaoesqEdi" name="avafisiocotoveloflexaoesqEdi" value="{{avafisio.avafisio_cotoveloflexaoesq}}"/>
+							
 							<input type="text" id="avafisiocotoveloextensaopreEdi" name="avafisiocotoveloextensaopreEdi" value="{{avafisio.avafisio_cotoveloextensaopre}}"/>
 							<input type="text" id="avafisiocotoveloextensaodirEdi" name="avafisiocotoveloextensaodirEdi" value="{{avafisio.avafisio_cotoveloextensaodir}}"/>
 							<input type="text" id="avafisiocotoveloextensaoesqEdi" name="avafisiocotoveloextensaoesqEdi" value="{{avafisio.avafisio_cotoveloextensaoesq}}"/>
+							
 							<input type="text" id="avafisiocotoveloobsEdi" name="avafisiocotoveloobsEdi" value="{{avafisio.avafisio_cotoveloobs}}"/>
+							<!-- PUNHO - -->
 							<input type="text" id="avafisiopunhoposicaoEdi" name="avafisiopunhoposicaoEdi" value="{{avafisio.avafisio_punhoposicao}}"/>
 							<input type="text" id="avafisiopunhoflexaopreEdi" name="avafisiopunhoflexaopreEdi" value="{{avafisio.avafisio_punhoflexaopre}}"/>
 							<input type="text" id="avafisiopunhoflexaodirEdi" name="avafisiopunhoflexaodirEdi" value="{{avafisio.avafisio_punhoflexaodir}}"/>
@@ -566,7 +658,7 @@ function carregaBody() {
 												</div>
 												<div class="col-sm-2">
 													<label>Sexo</label>
-													<select name="avafisiosexo" id="avafisiosexo" class="chosen-select">
+													<select name="avafisiosexo" id="avafisiosexo" class="select2">
 														<option value="">-</option>
 														<option value="M">Masculino</option>
 														<option value="F">Feminino</option>
@@ -1522,7 +1614,7 @@ function carregaBody() {
 																	<td>
 																		<div class="checkbox">
 																			<label>
-																				<input type="checkbox" name="avafisiocotovelorotainternadir" id="avafisiocotovelorotainternadir" class="ace" value="true">
+																				<input type="checkbox" name="avafisiocotovelopronacaodir" id="avafisiocotovelopronacaodir" class="ace" value="true">
 																				<span class="lbl"></span>
 																			</label>
 																		</div>
@@ -1530,7 +1622,7 @@ function carregaBody() {
 																	<td>
 																		<div class="checkbox">
 																			<label>
-																				<input type="checkbox" name="avafisiocotovelorotainternaesq" id="avafisiocotovelorotainternaesq" class="ace" value="true">
+																				<input type="checkbox" name="avafisiocotovelopronacaoesq" id="avafisiocotovelopronacaoesq" class="ace" value="true">
 																				<span class="lbl"></span>
 																			</label>
 																		</div>
@@ -1541,7 +1633,7 @@ function carregaBody() {
 																	<td>
 																		<div class="radio">
 																			<label>
-																				<input id="avafisio_cotovelosupinacaopre1" name="avafisio_cotovelosupinacaopre" type="radio" class="ace" value="true" onchange="">
+																				<input id="avafisiocotovelosupinacaopre1" name="avafisiocotovelosupinacaopre" type="radio" class="ace" value="true" onchange="">
 																				<span class="lbl"></span>
 																			</label>
 																		</div>
@@ -1549,7 +1641,7 @@ function carregaBody() {
 																	<td>
 																		<div class="radio">
 																			<label>
-																				<input id="avafisio_cotovelosupinacaopre2" name="avafisio_cotovelosupinacaopre" type="radio" class="ace" value="false" onchange="">
+																				<input id="avafisiocotovelosupinacaopre2" name="avafisiocotovelosupinacaopre" type="radio" class="ace" value="false" onchange="">
 																				<span class="lbl"></span>
 																			</label>
 																		</div>
@@ -1557,7 +1649,7 @@ function carregaBody() {
 																	<td>
 																		<div class="checkbox">
 																			<label>
-																				<input type="checkbox" name="avafisio_cotovelosupinacaodir" id="avafisio_cotovelosupinacaodir" class="ace" value="true">
+																				<input type="checkbox" name="avafisiocotovelosupinacaodir" id="avafisiocotovelosupinacaodir" class="ace" value="true">
 																				<span class="lbl"></span>
 																			</label>
 																		</div>
@@ -1565,7 +1657,7 @@ function carregaBody() {
 																	<td>
 																		<div class="checkbox">
 																			<label>
-																				<input type="checkbox" name="avafisio_cotovelosupinacaoesq" id="avafisio_cotovelosupinacaoesq" class="ace" value="true">
+																				<input type="checkbox" name="avafisiocotovelosupinacaoesq" id="avafisiocotovelosupinacaoesq" class="ace" value="true">
 																				<span class="lbl"></span>
 																			</label>
 																		</div>
@@ -4314,5 +4406,37 @@ function carregaBody() {
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+$(document).ready(function() {
+    // 1. Inicializa Select2 em TODOS os selects da página
+    if (typeof $.fn.select2 === 'function') {
+        $('.select2').each(function() {
+            const $el = $(this);
+            if (!$el.data('select2')) {
+                $el.select2({
+                    width: '100%',
+                    allowClear: true,
+                    placeholder: $el.attr('placeholder') || 'Selecione...',
+                    language: {
+                        noResults: function() {
+                            return "Nenhum resultado encontrado";
+                        }
+                    }
+                });
+            }
+        });
+    }
+    
+    // 2. Carrega os valores do formulário (APÓS Select2 estar pronto)
+    if (typeof carregaBody === 'function') {
+        setTimeout(carregaBody, 150); // delay maior para garantir inicialização
+    }
+    
+    // 3. Inicializa navegação do Ace Admin
+    if (typeof controlaNave === 'function') {
+        controlaNave();
+    }
+});
+</script>
 </body>
 </html>

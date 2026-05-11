@@ -450,7 +450,7 @@
 										<!-- Tipo de Data -->
 										<div class="form-group">
 											<label>Tipo Filtro:</label>
-											<select name="tipoData" id="tipoData" class="chosen-select" onchange="trocaFiltroData()">
+											<select name="tipoData" id="tipoData" class="select2" onchange="trocaFiltroData()">
 												<option value="Ano/Mes">Ano/Mês</option>
 												<option value="Semana">Semana</option>
 												<option value="Dia">Dia</option>
@@ -460,7 +460,7 @@
 										<!-- Ano -->
 										<div id="divAnoAtend" class="form-group">
 											<label>Ano:</label>
-											<select name="anoAtend" id="anoAtend" class="chosen-select" onchange="formataData()">
+											<select name="anoAtend" id="anoAtend" class="select2" onchange="formataData()">
 												{{#each anos}}
 													<option value="{{ano_nome}}">{{ano_nome}}</option>
 												{{/each}}
@@ -470,7 +470,7 @@
 										<!-- Mês -->
 										<div id="divMesAtend" class="form-group">
 											<label>Mês:</label>
-											<select name="mesAtend" id="mesAtend" class="chosen-select" onchange="formataData()">
+											<select name="mesAtend" id="mesAtend" class="select2" onchange="formataData()">
 												<option value="0">Janeiro</option>
 												<option value="1">Fevereiro</option>
 												<option value="2">Março</option>
@@ -496,7 +496,7 @@
 										<!-- Tipo Pessoa -->
 										<div id="divTipoFil" class="form-group">
 											<label>Tipo:</label>
-											<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" onchange="trocaFilpessoa()">
+											<select name="atendTipoPessoa" id="atendTipoPessoa" class="select2" onchange="trocaFilpessoa()">
 												<option value="Geral">Geral</option>
 												<option value="Terapeuta">Terapeuta</option>
 												<option value="Beneficiario">Beneficiário</option>
@@ -506,7 +506,7 @@
 										<!-- Beneficiário -->
 										<div id="divAtendBeneficiario" class="form-group">
 											<label>Beneficiário:</label>
-											<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select">
+											<select name="atendBeneficiario" id="atendBeneficiario" class="select2">
 												{{#each benes}}
 													<option value="{{_id}}">{{bene_nome}}</option>
 												{{/each}}
@@ -516,7 +516,7 @@
 										<!-- Terapeuta -->
 										<div id="divAtendTerapeuta" class="form-group">
 											<label>Terapeuta:</label>
-											<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select">
+											<select name="atendTerapeuta" id="atendTerapeuta" class="select2">
 												{{#each terapeutas}}
 													<option value="{{_id}}">{{usuario_nome}}</option>
 												{{/each}}

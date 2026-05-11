@@ -9,12 +9,94 @@
 			font-size: 12px;
 		}
 		</style>
-		<script type="text/javascript">
-			
-			function defineplanopadrao(){
-				document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
-			}
-			function mudaPlano() {
+
+		  <script>
+        function formataData(date) {
+            var d = new Date(date);
+            if (d.getTimezoneOffset() == 180) d.setHours(d.getHours()+3);
+            var month = '' + (d.getMonth() + 1);
+            var day = '' + d.getDate();
+            var year = d.getFullYear();
+            if (month.length == 1) month = '0' + month;
+            if (day.length == 1) day = '0' + day;
+            return [year, month, day].join('-');
+        }
+
+        function atualizaDadosbene() {
+            let beneid = document.getElementById("tratBeneid").value;
+            if (!beneid || beneid === '-') return;
+
+            // Data de nascimento
+            var dataNascEl = document.getElementById(beneid + "_beneDatanasc");
+            if (dataNascEl && dataNascEl.value) {
+                var dataFmt = new Date(dataNascEl.value);
+                document.getElementById("beneDatanasc").value = formataData(dataFmt);
+                document.getElementById("beneIdade").value = calculaIdade(dataFmt);
+            }
+
+            // Diagnóstico do Plano de Tratamento
+            var laudoDiagEl = document.getElementById(beneid + "_laudoDiagEdi");
+            if (laudoDiagEl) {
+                document.getElementById("laudoDiag").value = laudoDiagEl.value || '';
+            }
+        }
+
+        function calculaIdade(dataFmt) {
+            const hoje = new Date();
+            const aniversario = new Date(dataFmt);
+            let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
+            let idadeMeses = hoje.getMonth() - aniversario.getMonth();
+            if (hoje.getDate() < aniversario.getDate()) idadeMeses--;
+            if (idadeMeses < 0) {
+                idadeAnos--;
+                idadeMeses += 12;
+            }
+            return idadeAnos + " anos e " + Math.abs(idadeMeses) + " meses.";
+        }
+
+        // ✅ Inicializa Chosen E atualiza após o DOM estar pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializa Chosen
+            if (typeof $ !== 'undefined' && $.fn.chosen) {
+                $('.chosen-select').chosen({
+                    no_results_text: "Nenhum resultado encontrado...",
+                    width: "100%",
+                    disable_search_threshold: 10
+                });
+
+                // ✅ Força atualização visual APÓS a inicialização
+                // (garante que opções 'selected' do Handlebars apareçam)
+                $('.chosen-select').trigger('chosen:updated');
+            }
+
+            // ✅ Se houver dados ocultos, atualiza campos dependentes
+            var beneIdEdi = document.getElementById("tratBeneidEdi");
+            if (beneIdEdi && beneIdEdi.value && beneIdEdi.value !== 'undefined') {
+                // Define o valor do select PRIMEIRO
+                document.getElementById("tratBeneid").value = beneIdEdi.value;
+                
+                // ✅ Atualiza o Chosen visualmente
+                if (typeof $ !== 'undefined' && $.fn.chosen) {
+                    $('#tratBeneid').trigger('chosen:updated');
+                }
+                
+                // Agora atualiza os campos dependentes
+                atualizaDadosbene();
+            }
+
+            // Atualiza terapia se tiver valor salvo
+            var terapiaEdi = document.getElementById("tratTerapiaEdi");
+            if (terapiaEdi && terapiaEdi.value && terapiaEdi.value !== 'undefined') {
+                document.getElementById("tratTerapia").value = terapiaEdi.value;
+                if (typeof $ !== 'undefined' && $.fn.chosen) {
+                    $('#tratTerapia').trigger('chosen:updated');
+                }
+            }
+        });
+		function defineplanopadrao(){
+			document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
+		}
+		function mudaPlano() {
 				let tipodoc = document.getElementById("tratPlanotipoEdi").value;
 				console.log(tipodoc)
 				if (tipodoc == "Padrão") {
@@ -37,22 +119,10 @@
 				}
 				document.getElementById('tratPlanotipo').ReadOnly
    			}
-			function atualizaTerapeutaId(){
-				document.getElementById("tabilTerapeutaId").value = document.getElementById("atendTerapeutaid").value
-			}
-			
 			function carregaBody() {
 				console.log("🟢 Iniciando carregaBody...");
 				
-				// 🔹 Helper: formata ISO → yyyy-mm-dd para input[date]
-				function formatarParaInputDate(iso) {
-					if (!iso) return "";
-					const d = new Date(iso);
-					if (isNaN(d)) return iso; // já vem formatado?
-					return d.toISOString().split('T')[0];
-				}
-
-				// 🔹 Helper: atualiza Chosen se existir
+				// 🔹 Helper: atualiza Select2 (substituto do Chosen)
 				function atualizaCampo(id, valor) {
 					const el = document.getElementById(id);
 					if (!el) {
@@ -76,12 +146,16 @@
 						return true;
 					}
 					
-					// Select com Chosen
+					// Select com Select2
 					if (el.tagName === "SELECT") {
-						el.value = valor;
-						if (typeof jQuery !== 'undefined' && jQuery.fn.chosen) {
-							jQuery(el).trigger('chosen:updated');
-							console.log(`✅ Select Chosen #${id} atualizado`);
+						// Define o valor primeiro
+						el.value = valor ?? "";
+						
+						// Atualiza visualmente o Select2
+						if (typeof jQuery !== 'undefined' && jQuery.fn.select2) {
+							// Método mais confiável: destruir e recriar se necessário, ou apenas trigger
+							$(el).val(valor).trigger('change');
+							console.log(`✅ Select Select2 #${id} atualizado para: ${valor}`);
 						}
 						return true;
 					}
@@ -99,133 +173,10 @@
 					return true;
 				}
 
-				// 🔹 Itera sobre todos os campos *Edi*
-				const inputsEdi = document.querySelectorAll('#divCarrega input[id$="Edi"]');
-				console.log(`📦 Encontrados ${inputsEdi.length} campos Edi para popular`);
 				
-				inputsEdi.forEach(inputEdi => {
-					try {
-						const idEdi = inputEdi.id; // ex: avafisiodataavaEdi
-						const valor = inputEdi.value;
-						const idBase = idEdi.replace(/Edi$/, ''); // remove "Edi" do final
-						
-						// Ignora campos que não devem ser populados diretamente
-						if (['id', 'avafisio_id'].includes(idBase)) return;
-						
-						atualizaCampo(idBase, valor);
-					} catch (err) {
-						console.error(`❌ Erro ao popular ${inputEdi?.id}:`, err);
-					}
-				});
-				
-				// 🔹 Após popular todos os campos Edi, popula dados do beneficiário
-					function populaDadosBeneficiarioEdicao() {
-						// Data de nascimento (formata para yyyy-MM-dd)
-						const beneDatanascEdi = document.getElementById("beneDatanascEdi")?.value;
-						if (beneDatanascEdi && beneDatanascEdi !== "undefined") {
-							const dataFmt = new Date(beneDatanascEdi);
-							if (!isNaN(dataFmt)) {
-								document.getElementById("beneDatanasc").value = formataData(dataFmt);
-								// Recalcula idade se necessário
-								document.getElementById("beneIdade").value = calculaIdade(dataFmt);
-							}
-						}
-						
-						// Idade (caso já venha calculada do backend)
-						const beneIdadeEdi = document.getElementById("beneIdadeEdi")?.value;
-						if (beneIdadeEdi && beneIdadeEdi !== "undefined") {
-							document.getElementById("beneIdade").value = beneIdadeEdi;
-						}
-						
-						// Diagnóstico
-						const laudoDiagEdi = document.getElementById("laudoDiagEdi")?.value;
-						if (laudoDiagEdi && laudoDiagEdi !== "undefined") {
-							document.getElementById("laudoDiag").value = laudoDiagEdi;
-						}
-						
-						console.log("✅ Dados do beneficiário populados na edição");
-					}
-
-					setTimeout(() => {
-						populaDadosBeneficiarioEdicao();
-					}, 50); // Pequeno delay para garantir que os campos já existem no DOM
-					
 				console.log("✅ carregaBody finalizado!");
 			}
-
-			function atualizaData(){
-				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
-				var dataFmt = new Date(dataIso);
-				console.log(dataFmt.toISOString());
-				document.getElementById("a").value = dataFmt;
-			}
-			function formataData(date) {//yyyy-MM-dd
-				var d = new Date(date);
-				if (d.getTimezoneOffset() == 180){
-					d.setHours(d.getHours()+3);
-				}
-				console.log("d:"+d);
-					month = '' + (d.getMonth() + 1);
-					day = '' + d.getDate();
-					year = d.getFullYear();
-
-				if (month.length == 1) {
-					month = '0' + month;
-				}
-					
-				if (day.length == 1) {
-					day = '0' + day;
-				}
-
-				return [year, month, day].join('-');
-			}
-			function atualizaDadosbene(){
-				let beneid = document.getElementById("tratBeneid").value;
-
-				var dataIso = new Date(document.getElementById(beneid+"_beneDatanasc").value);
-				if ((""+dataIso.toLocaleTimeString()+"").substring(0,2) != "00") {
-					let num = parseInt((""+dataIso.toLocaleTimeString()+"").substring(0,2));
-					let dif = 24-num;
-					dataIso = new Date(dataIso.getTime() + dif * 60 * 60 * 1000)//add 3h ao gtm
-				}
-				if (dataIso != undefined && dataIso != "undefined"){
-					var dataFmt = new Date(dataIso);
-					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-					document.getElementById("beneIdade").value = calculaIdade(dataFmt);
-				}
-				console.log("beneid:"+beneid)
-				console.log(document.getElementById(beneid+"_laudoDiagEdi"));
-				if (document.getElementById(beneid+"_laudoDiagEdi") != "undefined" && document.getElementById(beneid+"_laudoDiagEdi") != null){
-					document.getElementById("laudoDiag").value = document.getElementById(beneid+"_laudoDiagEdi").value;
-				}
-				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
-				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
-			}
-			function calculaIdade(dataFmt) {
-				// Data atual
-				const hoje = new Date();
-
-				// Data de aniversário
-				const aniversario = new Date(dataFmt);
-
-				// Cálculo da idade
-				let idadeAnos = hoje.getFullYear() - aniversario.getFullYear();
-				let idadeMeses = hoje.getMonth() - aniversario.getMonth();
-
-				// Ajuste caso o dia de aniversário ainda não tenha ocorrido este ano
-				if (hoje.getDate() < aniversario.getDate()) {
-					idadeMeses--;
-				}
-
-				// Se o mês do aniversário for maior que o mês atual, ajusta a idade
-				if (idadeMeses < 0) {
-					idadeAnos--;
-					idadeMeses += 12;
-				}
-				return (idadeAnos + " anos e " + (""+idadeMeses+"").replace("-","") + " meses.");
-				
-			}
-		</script>
+    </script>
 	</head>
 
 	<body onload="javascript:controlaNave();carregaBody();mudaPlano();" class="no-skin">
@@ -242,7 +193,7 @@
 
 								<li class="active">Plano de Tratamentos - Visualizar</li>
 							</ul><!-- /.breadcrumb -->
-							<div id="divCarrega" name="divCarrega" class="hidden">
+							<div id="divCarregahidden" name="divCarregahidden" class="hidden">
 								<input id="tratPlanotipoEdi" name="tratPlanotipoEdi" value="{{trat.trat_planotipo}}"/>
 								<input id="tratBeneidEdi" name="tratBeneidEdi" value="{{trat.trat_beneid}}"/>
 								<input id="tratBeneidadeEdi" name="tratBeneidadeEdi" value="{{trat.trat_beneidade}}"/>
@@ -275,6 +226,7 @@
 									<input type="text" id="beneDatanascEdi" name="beneDatanascEdi" value="{{bene_datanasc}}"/>
 									<input type="text" id="beneIdadeEdi" name="beneIdadeEdi" value="{{trat.trat_beneidade}}"/>
 									<input type="text" id="laudoDiagEdi" name="laudoDiagEdi" value="{{laudo_diag}}"/>
+									
 							</div>
 						</div>
 					</div>
@@ -292,7 +244,7 @@
 											<i class="orange ace-icon fa fa-check-square bigger-110"></i>
 											Tipo plano de tratamento
 										</h4>
-										<div id="divCarrega" name="divCarrega" class="hidden">
+										<div id="divCarregatipo" name="divCarregatipo" class="hidden">
 											<!-- /.importante Id de indice-->
 											<!-- /.IMPORTANTE!!! TODOS type DEVEM SER text !!!!!!!!!!!-->
 											{{#each benes}}
@@ -323,7 +275,7 @@
 													<label>Escolha o plano de tratamento:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" value="{{trat.trat_planotipo}}">
+															<select name="tratPlanotipo" id="tratPlanotipo" class="select2" value="{{trat.trat_planotipo}}">
 																<option value="-">-</option>
 																<option value="Padrão">Padrão</option>
 																<option value="Ocupacional">Ocupacional</option>
@@ -380,7 +332,7 @@
 													<label>Beneficiário:</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="tratBeneid" id="tratBeneid" class="chosen-select" placeholder="Colocar nome completo." readonly="true" >
+															<select name="tratBeneid" id="tratBeneid" class="select2" onchange="javascript:atualizaDadosbene()" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -476,11 +428,11 @@
 													</div>	
 												</div>
 												
-												<div class="col-sm-4">
+												<div class="col-sm-6">
 													<label>Terapeuta:</label>
 													<div class="form-group">
-														<div class="col-sm-4">
-															<select name="tratTerapeutaidpad" id="tratTerapeutaidpad" class="chosen-select" placeholder="Escolha..." >
+														<div class="col-sm-6">
+															<select name="tratTerapeutaidpad" id="tratTerapeutaidpad" class="select2" placeholder="Escolha..." >
 																<option value="766f69643132333435366964">-</option>
 																{{#each usuarios}}
 																	<option value="{{_id}}">{{usuario_nomecompleto}}</option>
@@ -543,7 +495,7 @@
 													<label>Terapeuta:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="tratTerapeutaidis" id="tratTerapeutaidis" class="chosen-select" placeholder="Escolha..." style="width:400px;">
+															<select name="tratTerapeutaidis" id="tratTerapeutaidis" class="select2" placeholder="Escolha..." style="width:400px;">
 																<option value="766f69643132333435366964">-</option>
 																{{#each usuarios}}
 																<option value="{{_id}}">{{usuario_nomecompleto}}</option>
@@ -578,7 +530,7 @@
 													<label>Terapeuta:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="tratTerapeutaidavd" id="tratTerapeutaidavd" class="chosen-select" placeholder="Escolha..." style="width:400px;">
+															<select name="tratTerapeutaidavd" id="tratTerapeutaidavd" class="select2" placeholder="Escolha..." style="width:400px;">
 																<option value="766f69643132333435366964">-</option>
 																{{#each usuarios}}
 																<option value="{{_id}}">{{usuario_nomecompleto}}</option>
@@ -633,7 +585,7 @@
 													<label>Histórico clínico:</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea type="text" name="tratHistoricopad" id="tratHistoricopad"  style="font-size: 12px" placeholder="Com base na sua especialidade terapêutica." class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+															<textarea type="text" name="tratHistoricopad" id="tratHistoricopad"  style="font-size: 12px" placeholder="Com base na sua especialidade terapêutica." class="form-control" rows="9"  data-iconlibrary="fa"></textarea>
 														</div>
 													</div>	
 												</div>
@@ -642,7 +594,7 @@
 													<label>Objetivos gerais:</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea type="text" name="tratObjgeralpad" id="tratObjgeralpad"  style="font-size: 12px" placeholder="Descreva os objetivos da sua intervenção terapêutica para os próximos 6 meses de forma geral, seguindo uma sequência de acontecimentos ou informando a sua organização / planejamento com o beneficiário." class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+															<textarea type="text" name="tratObjgeralpad" id="tratObjgeralpad"  style="font-size: 12px" placeholder="Descreva os objetivos da sua intervenção terapêutica para os próximos 6 meses de forma geral, seguindo uma sequência de acontecimentos ou informando a sua organização / planejamento com o beneficiário." class="form-control" rows="9"  data-iconlibrary="fa"></textarea>
 														</div>
 													</div>	
 												</div>
@@ -651,7 +603,7 @@
 													<label>Objetivos específicos:</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea type="text" name="tratObjespecificopad" id="tratObjespecificopad"  style="font-size: 12px" placeholder="Descreva os objetivos específicos da sua intervenção terapêutica, detalhando métodos, técnicas e meios utilizados para a evolução do beneficiário." class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+															<textarea type="text" name="tratObjespecificopad" id="tratObjespecificopad"  style="font-size: 12px" placeholder="Descreva os objetivos específicos da sua intervenção terapêutica, detalhando métodos, técnicas e meios utilizados para a evolução do beneficiário." class="form-control" rows="9"  data-iconlibrary="fa"></textarea>
 														</div>
 													</div>	
 												</div>
@@ -660,7 +612,7 @@
 													<label>Estratégias:</label>
 													<div class="form-group">
 														<div class="col-sm-12">
-															<textarea type="text" name="tratEstrategiapad" id="tratEstrategiapad"  style="font-size: 12px" placeholder="Descreva suas estratégias para os próximos seis meses de intervenção terapêutica." class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+															<textarea type="text" name="tratEstrategiapad" id="tratEstrategiapad"  style="font-size: 12px" placeholder="Descreva suas estratégias para os próximos seis meses de intervenção terapêutica." class="form-control" rows="9"  data-iconlibrary="fa"></textarea>
 														</div>
 													</div>	
 												</div>
@@ -696,7 +648,7 @@
 											<label>Diagnóstico terapêutico ocupacional:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratDiagnosticoocup" id="tratDiagnosticoocup" placeholder="Com base na sua especialidade terapêutica." class="form-control" rows="5"  data-iconlibrary="fa"></textarea>
+													<textarea type="text" name="tratDiagnosticoocup" id="tratDiagnosticoocup" placeholder="Com base na sua especialidade terapêutica." class="form-control" rows="9"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>	
 
@@ -704,7 +656,7 @@
 											<label>Metas à curto prazo:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratMetacurtois" id="tratMetacurtois" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+													<textarea type="text" name="tratMetacurtois" id="tratMetacurtois" placeholder="" class="form-control" rows="9"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>
 											
@@ -713,7 +665,7 @@
 											<label>Metas à médio prazo:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratMetamediois" id="tratMetamediois" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+													<textarea type="text" name="tratMetamediois" id="tratMetamediois" placeholder="" class="form-control" rows="9"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>
 											
@@ -722,7 +674,7 @@
 											<label>Metas à longo prazo:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratMetalongois" id="tratMetalongois" placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+													<textarea type="text" name="tratMetalongois" id="tratMetalongois" placeholder="" class="form-control" rows="9"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>
 											
@@ -731,7 +683,7 @@
 											<label>Estratégias e objetivos:</label>
 											<div class="form-group">
 												<div class="col-sm-12">
-													<textarea type="text" name="tratObjetivois" id="tratObjetivois"  placeholder="" class="form-control" rows="3"  data-iconlibrary="fa"></textarea>
+													<textarea type="text" name="tratObjetivois" id="tratObjetivois"  placeholder="" class="form-control" rows="9"  data-iconlibrary="fa"></textarea>
 												</div>
 											</div>
 																							

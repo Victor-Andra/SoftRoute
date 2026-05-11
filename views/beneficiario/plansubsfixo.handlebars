@@ -295,7 +295,7 @@
                         </td>
                         <td style="width: 10px;">
                             <!-- Este campo envia 'atendTipoPessoa' (Geral, Beneficiario, Terapeuta) -->
-                            <select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha..." onchange="trocaFilpessoa()">
+                            <select name="atendTipoPessoa" id="atendTipoPessoa" class="select2" data-placeholder="Escolha..." onchange="trocaFilpessoa()">
                                 <option value="Geral">Geral</option>
                                 <option value="Beneficiario">Beneficiário</option>
                                 <option value="Terapeuta">Terapeuta</option>
@@ -309,7 +309,7 @@
                         <td id="tdBeneDivFil" style="display: none;">
                             <label for="agendaBeneid" id="beneFilDiv">Beneficiário:&nbsp;</label>
                             <!-- Este campo envia 'agendaBeneid' (ObjectId do beneficiário) -->
-                            <select id="agendaBeneid" name="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="formataData();">
+                            <select id="agendaBeneid" name="agendaBeneid" class="select2" data-placeholder="Escolha..." onchange="formataData();">
                                 {{#each benes}}
                                 <option value="{{_id}}">{{bene_apelido}}</option>
                                 {{/each}}
@@ -323,7 +323,7 @@
                         <td id="tdTeraFil" style="display: none;">
                             <label for="agendaUsuid" id="teraFilDiv">Terapeuta:&nbsp;</label>
                             <!-- Este campo envia 'agendaUsuid' (ObjectId do terapeuta) -->
-                            <select id="agendaUsuid" name="agendaUsuid" class="chosen-select" data-placeholder="Escolha..." onchange="formataData();">
+                            <select id="agendaUsuid" name="agendaUsuid" class="select2" data-placeholder="Escolha..." onchange="formataData();">
                                 {{#each terapeutas}}
                                 <option value="{{_id}}">{{usuario_nome}}</option>
                                 {{/each}}

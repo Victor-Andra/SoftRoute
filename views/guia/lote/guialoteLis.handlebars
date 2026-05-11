@@ -38,6 +38,9 @@
 		.badge-lote-editavel:hover::after {
 		opacity: 1;
 		}
+		.hidden-div {
+			display: none !important;
+		}
 		/* ========== Estilo para os Cards de Estatísticas ========== */
 		.count-card {
 			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -103,6 +106,9 @@
 				font-size: 16px;
 			}
 		}
+			
+
+		
     /* Tooltip personalizado - CORRIGIDO */
 		.custom-tooltip {
 			position: relative;
@@ -164,7 +170,7 @@
 			visibility: visible;
 			opacity: 1;
 		}
-
+		
         /* ============================================
            BARRA DE PESQUISA - CLASSE SEPARADA
            ============================================ */
@@ -411,62 +417,133 @@
             transition: background-color 0.5s;
         }
 
-        /* Estilo minimalista para chosen-select */
-        .chosen-container .chosen-single {
-            border: 1px solid #ced4da !important;
-            border-radius: 4px !important;
-            box-shadow: none !important;
-            background: white !important;
-            height: 30px !important;
-            line-height: 30px !important;
-        }
+       /* ============================================
+   SELECT2 - ESTILOS GERAIS
+   ============================================ */
+.select2-container {
+    min-width: 120px !important;
+  
+}
 
-        .chosen-container .chosen-single:hover {
-            border-color: #868e96 !important;
-        }
+/* Campo principal do Select2 (a "caixa" visível) */
+.select2-container--default .select2-selection--single {
+    height: 30px !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    background: white !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 8px !important;
+    font-size: 12px !important;
+}
 
-        .chosen-container-active.chosen-with-drop .chosen-single {
-            border-color: #868e96 !important;
-            background: white !important;
-        }
+/* Seta do dropdown */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 28px !important;
+    right: 5px !important;
+}
 
-        .chosen-container .chosen-drop {
-            border: 1px solid #ced4da !important;
-            border-top: none !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-        }
+/* Texto selecionado */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 28px !important;
+    padding-left: 0 !important;
+    color: #333 !important;
+}
 
-        .chosen-container .chosen-search input[type="text"] {
-            border: 1px solid #ced4da !important;
-            border-radius: 4px !important;
-            margin: 4px !important;
-        }
+/* Placeholder */
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #999 !important;
+}
 
-        /* Divs ocultas via CSS */
-        .hidden-div {
-            display: none !important;
-        }
+/* Dropdown (lista de opções) */
+.select2-dropdown {
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
 
-        /* Selects de Beneficiário e Terapeuta 3x maiores */
-        #divAtendBeneficiario select,
-        #divAtendTerapeuta select {
-            width: 360px !important;
-        }
+/* Campo de busca dentro do dropdown */
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+    margin: 4px !important;
+}
 
-        .chosen-container#atendBeneficiario_chosen,
-        .chosen-container#atendTerapeuta_chosen {
-            width: 360px !important;
-        }
+/* Itens da lista */
+.select2-container--default .select2-results__option {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+}
 
-        .chosen-container#atendBeneficiario_chosen .chosen-single,
-        .chosen-container#atendTerapeuta_chosen .chosen-single {
-            width: 358px !important;
-        }
+/* Item selecionado/hover */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #2196f3 !important;
+    color: white !important;
+}
 
-        .chosen-container#atendBeneficiario_chosen .chosen-drop,
-        .chosen-container#atendTerapeuta_chosen .chosen-drop {
-            width: 358px !important;
-        }
+/* Foco no select */
+.select2-container--default.select2-container--focus .select2-selection--single {
+    border-color: #2196f3 !important;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2) !important;
+}
+
+/* ============================================
+   SELECT2 NA BARRA DE PESQUISA - LARGURA
+   ============================================ */
+.toolbar-pesquisa .select2-container {
+    width: 140px !important; /* Aumentado de 120px */
+}
+
+.toolbar-pesquisa .select2-container .select2-selection--single {
+    width: 138px !important; /* 2px a menos para borda */
+}
+
+/* Dropdown acompanha a largura */
+.toolbar-pesquisa .select2-dropdown {
+    min-width: 140px !important;
+}
+
+/* ============================================
+   SELECT2 BENEFICIÁRIO E TERAPEUTA - 3x MAIOR
+   ============================================ */
+#divAtendBeneficiario .select2-container,
+#divAtendTerapeuta .select2-container {
+    width: 360px !important;
+}
+
+#divAtendBeneficiario .select2-selection--single,
+#divAtendTerapeuta .select2-selection--single {
+    width: 358px !important;
+}
+
+#divAtendBeneficiario .select2-dropdown,
+#divAtendTerapeuta .select2-dropdown {
+    min-width: 360px !important;
+}
+
+/* ============================================
+   RESPONSIVO - Ajustes para mobile
+   ============================================ */
+@media (max-width: 768px) {
+    .toolbar-pesquisa .select2-container {
+        width: 100% !important;
+    }
+    .toolbar-pesquisa .select2-selection--single {
+        width: 100% !important;
+    }
+    #divAtendBeneficiario .select2-container,
+    #divAtendTerapeuta .select2-container {
+        width: 100% !important;
+    }
+    #divAtendBeneficiario .select2-selection--single,
+    #divAtendTerapeuta .select2-selection--single {
+        width: 100% !important;
+    }
+}
+
+      
     </style>
 	<script type="text/javascript">
 		function ajustaData(){
@@ -510,42 +587,62 @@
 			}
 		}
 
-		// ✅ CORRIGIDO: Usa style.display em vez de atributo hidden
-		function trocaFiltroData(){
-			const tipo = document.getElementById("tipoData").value;
-			
-			// Oculta tudo
-			document.getElementById("divAnoAtend").classList.add('hidden-div');
-			document.getElementById("divMesAtend").classList.add('hidden-div');
-			document.getElementById("divDataFil").classList.add('hidden-div');
-			
-			// Mostra conforme seleção
-			if(tipo == "Ano/Mes"){
-				document.getElementById("divAnoAtend").classList.remove('hidden-div');
-				document.getElementById("divMesAtend").classList.remove('hidden-div');
-			} else if (tipo == "Semana" || tipo == "Dia"){
-				document.getElementById("divDataFil").classList.remove('hidden-div');
-			}
-			
-			console.log('[DEBUG] Tipo Data:', tipo);
-		}
+		function trocaFiltroData() {
+    const tipo = $('#tipoData').val();
+    const isAnoMes = (tipo === 'Ano/Mes');
+    
+    // ✅ LÓGICA CORRIGIDA:
+    // Se for Ano/Mês → mostra Ano e Mês, OCULTA Data
+    // Se for Semana/Dia → oculta Ano e Mês, MOSTRA Data
+    $('#divAnoAtend').toggle(isAnoMes);
+    $('#divMesAtend').toggle(isAnoMes);
+    $('#divDataFil').toggleClass('hidden-div', isAnoMes); // ← CORREÇÃO: era !isAnoMes
+    
+    // ✅ Força Select2 recalcular após mudar visibilidade
+    setTimeout(() => {
+        if (isAnoMes) {
+            // Atualiza Ano e Mês
+            ['#anoAtend', '#mesAtend'].forEach(sel => {
+                const $el = $(sel);
+                if ($el.data('select2')) {
+                    $el.select2('destroy').select2({ 
+                        width: 'resolve', 
+                        placeholder: "Selecione...",
+                        allowClear: false  // ← Remove o X
+                    });
+                }
+            });
+        } else {
+            // Atualiza Data
+            const $el = $('#dataFil');
+            if ($el.data('select2')) {
+                $el.select2('destroy').select2({ 
+                    width: 'resolve', 
+                    placeholder: "Selecione...",
+                    allowClear: false  // ← Remove o X
+                });
+            }
+        }
+    }, 50);
+    
+    console.log('[DEBUG] Tipo Data:', tipo, '| isAnoMes:', isAnoMes);
+}
 
-		// ✅ CORRIGIDO: Usa style.display em vez de atributo hidden
-		function trocaFilpessoa() {
-			const tipo = document.getElementById("atendTipoPessoa").value;
-			
-			// Oculta tudo
-			document.getElementById("divAtendBeneficiario").classList.add('hidden-div');
-			document.getElementById("divAtendTerapeuta").classList.add('hidden-div');
-			
-			// Mostra conforme seleção
-			if(tipo == "Beneficiario"){
-				document.getElementById("divAtendBeneficiario").classList.remove('hidden-div');
-			} else if(tipo == "Terapeuta"){
-				document.getElementById("divAtendTerapeuta").classList.remove('hidden-div');
+		function trocFilpessoa() {
+			const tipo = $('#atendTipoPessoa').val();
+
+			if (tipo === 'Geral') {
+				$('#divAtendBeneficiario').addClass('hidden-div');
+				$('#divAtendTerapeuta').addClass('hidden-div');
+
+			} else if (tipo === 'Beneficiario') {
+				$('#divAtendBeneficiario').removeClass('hidden-div');
+				$('#divAtendTerapeuta').addClass('hidden-div');
+
+			} else if (tipo === 'Terapeuta') {
+				$('#divAtendBeneficiario').addClass('hidden-div');
+				$('#divAtendTerapeuta').removeClass('hidden-div');
 			}
-			
-			console.log('[DEBUG] Tipo Pessoa:', tipo);
 		}
 
 		// ✅ CORRIGIDO: Carrega estado inicial com visibilidade correta
@@ -1008,17 +1105,17 @@
 							<!-- 🔹 Tipo de Filtro -->
 							<div class="form-group">
 								<label>Tipo Filtro</label>
-								<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha...">
+								<select name="tipoData" id="tipoData" class="select2">
 									<option value="Ano/Mes" {{#ifEqual filtroTipo "Ano/Mes"}}selected{{/ifEqual}}>Ano/Mês</option>
 									<option value="Semana" {{#ifEqual filtroTipo "Semana"}}selected{{/ifEqual}}>Semana</option>
 									<option value="Dia" {{#ifEqual filtroTipo "Dia"}}selected{{/ifEqual}}>Dia</option>
 								</select>
 							</div>
 							
-														<!-- 🔹 Ano -->
+							<!-- 🔹 Ano -->
 							<div id="divAnoAtend" class="form-group">
 								<label>Ano</label>
-								<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha...">
+								<select name="anoAtend" id="anoAtend" class="select2" >
 									<option value="">Selecione...</option>
 									{{#each anos}}
 										<option value="{{this.ano_nome}}" 
@@ -1032,7 +1129,7 @@
 							 <!-- 🔹 Mês -->
 							<div id="divMesAtend" class="form-group">
 								<label>Mês</label>
-								<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha...">
+								<select name="mesAtend" id="mesAtend" class="select2" data-placeholder="Escolha...">
 									<option value="0" {{#ifEqual filtroMes "0"}}selected{{/ifEqual}}>Janeiro</option>
 									<option value="1" {{#ifEqual filtroMes "1"}}selected{{/ifEqual}}>Fevereiro</option>
 									<option value="2" {{#ifEqual filtroMes "2"}}selected{{/ifEqual}}>Março</option>
@@ -1066,7 +1163,7 @@
 							<!-- 🔹 Tipo de Pessoa -->
 							<div class="form-group">
 								<label>Tipo</label>
-								<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha...">
+								<select name="atendTipoPessoa" id="atendTipoPessoa" class="select2" data-placeholder="Escolha...">
 									<option value="Geral" {{#ifEqual filtroTipoPessoa "Geral"}}selected{{/ifEqual}}>Geral</option>
 									<option value="Beneficiario" {{#ifEqual filtroTipoPessoa "Beneficiario"}}selected{{/ifEqual}}>Beneficiário</option>
 									<option value="Terapeuta" {{#ifEqual filtroTipoPessoa "Terapeuta"}}selected{{/ifEqual}}>Terapeuta</option>
@@ -1076,7 +1173,7 @@
 							<!-- 🔹 Beneficiário - visível apenas quando tipoPessoa = "Beneficiario" -->
 							<div id="divAtendBeneficiario" class="form-group{{#ifEqual filtroTipoPessoa "Beneficiario"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Beneficiário</label>
-								<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha...">
+								<select name="atendBeneficiario" id="atendBeneficiario" class="select2" data-placeholder="Escolha...">
 									<option value=""></option>
 									{{#each benes}}
 										<option value="{{this._id}}" 
@@ -1090,7 +1187,7 @@
 							<!-- 🔹 Terapeuta - visível apenas quando tipoPessoa = "Terapeuta" -->
 							<div id="divAtendTerapeuta" class="form-group{{#ifEqual filtroTipoPessoa "Terapeuta"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Terapeuta</label>
-								<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha...">
+								<select name="atendTerapeuta" id="atendTerapeuta" class="select2" data-placeholder="Escolha...">
 									<option value=""></option>
 									{{#each terapeutas}}
 										<option value="{{this._id}}" 
@@ -1147,7 +1244,7 @@
 									
 									<div class="form-group">
 										<label>Status</label>
-										<select id="guialoteStatus" name="guialoteStatus" class="chosen-select">
+										<select id="guialoteStatus" name="guialoteStatus" class="select2">
 											<option value="Aberto">Aberto</option>
 											<option value="Enviado">Enviado</option>
 											<option value="Fechado">Fechado</option>
@@ -1602,38 +1699,47 @@
 </div>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			// Inicializar Chosen Select
-			$(".chosen-select").chosen({
-				no_results_text: "Não encontrado...",
-				search_contains: true,
-				disable_search_threshold: 10
-			});
+    // 🔹 Inicializar Select2 (substituindo o Chosen)
+    $(".select2").select2({
+        placeholder: $(this).data('placeholder') || "Escolha...",
+        allowClear: true,
+        width: 'resolve',
+        language: {
+            noResults: function() { return "Nenhum resultado encontrado..."; },
+            searching: function() { return "Buscando..."; }
+        }
+    });
 
-			// ✅ Listeners para Chosen Select (crucial para funcionar)
-			$("#tipoData").on("change", function() {
-				trocaFiltroData();
-			});
+    // Quando mudar
+		$('#tipoData').on('change', trocaFiltroData);
+		$('#atendTipoPessoa').on('change', trocFilpessoa);
 
-			$("#atendTipoPessoa").on("change", function() {
-				trocaFilpessoa();
-			});
+		// Quando carregar a tela (ESSENCIAL)
+		trocaFiltroData();
+		trocFilpessoa();
 
-			$("#dynamic-table").DataTable({
-				"language": { "url": "/js/lang/datatable-pt-br.json" },
-				"aaSorting": [],
-				"aoColumns": [{ "bSortable": false } , null, null, null, null,null, null, null, null, null, null, null, null, null, null, { "bSortable": false } ],
-				"responsive": true,
-				"lengthMenu": [ 200, 300, 500 ],
-				"paging": true,
-				"searching": true,
-				"ordering": true,
-				"info": true,
-				select: { style: 'multi' }
-			});
-			
-			// Inicializar contador
-			atualizarContadorSelecionados();
-		});
+    // 🔹 DataTable
+    $("#dynamic-table").DataTable({
+        "language": { "url": "/js/lang/datatable-pt-br.json" },
+        "aaSorting": [],
+        "aoColumns": [
+            { "bSortable": false }, null, null, null, null, null, null, null, null, 
+            null, null, null, null, null, null, { "bSortable": false }
+        ],
+        "responsive": true,
+        "lengthMenu": [200, 300, 500],
+        "paging": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        select: { style: 'multi' }
+    });
+    
+    // Inicializar contador
+    atualizarContadorSelecionados();
+    
+    
+});
 		// ============================================
 // MODAL DE EDIÇÃO DE LOTE
 // ============================================

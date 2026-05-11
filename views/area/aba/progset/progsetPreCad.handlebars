@@ -103,7 +103,7 @@
 														<label>Beneficiário</label>
 														<div class="form-group">
 															<div class="col-lg-6 col-md-12">
-																<select name="progsetBeneid" id="progsetBeneid" class="chosen-select" >
+																<select name="progsetBeneid" id="progsetBeneid" class="select2" >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
@@ -120,7 +120,7 @@
 														<label>Tipo de Programa</label>
 														<div class="form-group">
 															<div class="col-lg-12 col-md-12">
-																<select name="progsetProgtipoid" id="progsetProgtipoid" class="chosen-select" >
+																<select name="progsetProgtipoid" id="progsetProgtipoid" class="select2" >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each progtipos}}
 																		<option value="{{_id}}">{{progtipo_nome}}</option>
@@ -135,7 +135,7 @@
 														<label>Nível do Programa</label>
 														<div class="form-group">
 															<div class="col-lg-12 col-md-12">
-																<select name="progsetPrognivelid" id="progsetPrognivelid" class="chosen-select"  >
+																<select name="progsetPrognivelid" id="progsetPrognivelid" class="select2"  >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each prognivels}}
 																		<option value="{{_id}}">{{prognivel_nome}}</option>
@@ -150,7 +150,7 @@
 														<label>Terapeuta Responsável</label>
 														<div class="form-group">
 															<div class="col-lg-12 col-md-12">
-																<select name="progsetTeraid" id="progsetTeraid" class="chosen-select">
+																<select name="progsetTeraid" id="progsetTeraid" class="select2">
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each usuarios}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
@@ -213,7 +213,7 @@
 														<label>Tipo Meta</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetMetatipo" id="progsetMetatipo" class="chosen-select" onchange="">
+																<select name="progsetMetatipo" id="progsetMetatipo" class="select2" onchange="">
 																	<option value="3">3</option>
 																	<option value="25">25</option>
 																</select>
@@ -227,7 +227,7 @@
 														<label>Status do SET</label>
 														<div class="form-group">
 															<div class="col-lg-4 col-md-12">
-																<select name="progsetStatus" id="progsetStatus" class="chosen-select" onchange="">
+																<select name="progsetStatus" id="progsetStatus" class="select2" onchange="">
 																	<option value="Agendado">Agendado</option>
 																	<option value="Andamento">Andamento</option>
 																	<option value="Pausado">Pausado</option>
@@ -240,7 +240,7 @@
 														<label>Tipo do Registro para TODO o SET</label>
 														<div class="form-group">
 															<div class="col-lg-4 col-md-12">
-																<select name="progsetTiporeg" id="progsetTiporeg" class="chosen-select" onchange="javascript:mudaRegistro()">
+																<select name="progsetTiporeg" id="progsetTiporeg" class="select2" onchange="javascript:mudaRegistro()">
 																	<option value="Não Informado">Não Informado</option>
 																	<option value="Simples">Simples</option>
 																	<option value="Duplo">Duplo</option>
@@ -285,7 +285,7 @@
 														<label> Quantidade de Estímulos para esse SET </label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="progsetQtest" id="progsetQtest" class="chosen-select" data-placeholder="Escolha..." onchange="updateStimulusFields()">
+																<select name="progsetQtest" id="progsetQtest" class="select2" data-placeholder="Escolha..." onchange="updateStimulusFields()">
 																	<option value="1">1</option>
 																	<option value="2">2</option>
 																	<option value="3">3</option>

@@ -453,7 +453,7 @@
                             <label for="id-date-picker-1">Hora Agendamento</label>
                             <div class="form-group">
                               <div class="col-sm-8">
-                                <select name="agendaHora" id="agendaHora" class="chosen-select" data-placeholder="Escolha...">
+                                <select name="agendaHora" id="agendaHora" class="select" data-placeholder="Escolha...">
                                   {{#each horaages}}
                                     <option value="{{horaage_hora}}">{{horaage_hora}}</option>
                                   {{/each}}
@@ -466,7 +466,7 @@
                             <div class="form-group">
                               <div class="col-sm-8">
                                 <input id="agendaHora" name="agendaHora" type="text" />
-                                {{!-- <select name="agendaHoraSelect" id="agendaHoraSelect" class="chosen-select" data-placeholder="Escolha...">
+                                {{!-- <select name="agendaHoraSelect" id="agendaHoraSelect" class="select" data-placeholder="Escolha...">
                                   {{#each horaages}}
                                     <option value="{{horaage_hora}}">{{horaage_hora}}</option>
                                   {{/each}}
@@ -497,7 +497,7 @@
                             <label>Cobrar Extra</label>
                             <div class="form-group">
                               <div class="col-sm-9">
-                                <select id="agendaCobrarextra" name="agendaCobrarextra" class="chosen-select" data-placeholder="Escolha...">
+                                <select id="agendaCobrarextra" name="agendaCobrarextra" class="select" data-placeholder="Escolha...">
                                   <option value="false">Não</option>
                                   <option value="true">Sim</option>
                                 </select>
@@ -511,7 +511,7 @@
                             <label>Origem Agendamento</label>
                             <div class="form-group">
                               <div class="col-sm-9">
-                                <select id="agendaOrg" name="agendaOrg" class="chosen-select" data-placeholder="Escolha a opção..." onchange="javascript:controlaCategoria()">
+                                <select id="agendaOrg" name="agendaOrg" class="select" data-placeholder="Escolha a opção..." onchange="javascript:controlaCategoria()">
                                   <option value="Padrão">Padrão</option>
                                   <option value="Administrativo">Administrativo</option>
                                 </select>
@@ -522,7 +522,7 @@
                             <label>Categoria</label>
                             <div class="form-group">
                               <div class="col-sm-9">
-                                <select id="agendaCateg" name="agendaCateg" class="chosen-select" data-placeholder="Escolha a opção..." onchange="javascript: mudaSubis()">
+                                <select id="agendaCateg" name="agendaCateg" class="select" data-placeholder="Escolha a opção..." onchange="javascript: mudaSubis()">
                                   <option id="Apoio" value="Apoio">Apoio</option>
                                   <option id="Extra" value="Extra">Extra</option>
                                   <option id="Falta" value="Falta">Falta</option>
@@ -551,7 +551,7 @@
                             </div>
                             <div class="form-group">
                               <div class="col-xs-9 col-sm-9">
-                                <select name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv();selectSessao();selectExcecao();">
+                                <select name="agendaBeneid" id="agendaBeneid" class="select" data-placeholder="Escolha..." onchange="javascript:selectConv();selectSessao();selectExcecao();">
                                   <option value="766f69643132333435366964">-</option>
                                   {{#each benes}}
                                     <option value="{{_id}}">{{bene_nome}}</option>
@@ -565,7 +565,7 @@
                             <div class="form-group">
                               <div class="col-xs-9 col-sm-9">
                                 <input name="agendaConvid" id="agendaConvid" class="hidden" value="" />
-                                <select disabled="disabled" tabindex="-1" aria-disabled="true" name="agendaConvidVisivel" id="agendaConvidVisivel" class="chosen-select" data-placeholder="Convênio (automático)" onchange="javascript:atribuiConvId();">
+                                <select disabled="disabled" tabindex="-1" aria-disabled="true" name="agendaConvidVisivel" id="agendaConvidVisivel" class="select" data-placeholder="Convênio (automático)" onchange="javascript:atribuiConvId();">
                                   {{#each benes}}
                                     {{#each ../convs}}
                                       {{#ifEqual ../bene_convid _id}}
@@ -584,7 +584,7 @@
                             <label>Terapia</label>
                             <div class="form-group">
                               <div class="col-sm-6">
-                                <select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+                                <select name="agendaTerapiaid" id="agendaTerapiaid" class="select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
                                   <option value="766f69643132333435366964">-</option>
                                   {{#each terapias}}
                                     <option value="{{_id}}">{{terapia_nome}}</option>
@@ -600,7 +600,7 @@
                             <label>Terapeuta</label>
                             <div class="form-group">
                               <div class="col-xs-9 col-sm-9">
-                                <select name="agendaUsuid" id="agendaUsuid" class="chosen-select" data-placeholder="Escolha...">
+                                <select name="agendaUsuid" id="agendaUsuid" class="select" data-placeholder="Escolha...">
                                   <option value="766f69643132333435366964">-</option>
                                   {{#each terapeutas}}
                                     <option value="{{_id}}">{{usuario_nome}}</option>
@@ -632,7 +632,7 @@
                                   <label>Terapeuta</label>
                                   <div class="form-group">
                                     <div class="col-sm-5">
-                                      <select id="agendaMergeterapeutaid" name="agendaMergeterapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
+                                      <select id="agendaMergeterapeutaid" name="agendaMergeterapeutaid" class="select" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
                                         <option value="766f69643132333435366964">-</option>
                                         {{#each terapeutas}}
                                           <option value="{{_id}}">{{usuario_nome}}</option>
@@ -643,7 +643,7 @@
                                   <label>Terapia</label>
                                   <div class="form-group">
                                     <div class="col-sm-4">
-                                      <select id="agendaMergeterapiaid" name="agendaMergeterapiaid" class="chosen-select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
+                                      <select id="agendaMergeterapiaid" name="agendaMergeterapiaid" class="select" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
                                         <option value="766f69643132333435366964">-</option>
                                         {{#each terapias}}
                                           <option value="{{_id}}">{{terapia_nome}}</option>
@@ -662,7 +662,7 @@
                             <label>Local</label>
                             <div class="form-group">
                               <div class="col-sm-6">
-                                <select name="agendaSalaid" id="agendaSalaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+                                <select name="agendaSalaid" id="agendaSalaid" class="select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
                                   <option value="766f69643132333435366964">-</option>
                                   {{#each salas}}
                                     <option value="{{_id}}">{{sala_nome}}</option>

@@ -71,7 +71,7 @@
 												<label> Convênio </label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select name="convimpConvid" id="convimpConvid" class="chosen-select" data-placeholder="Escolha...">
+														<select name="convimpConvid" id="convimpConvid" class="select2" data-placeholder="Escolha...">
 															{{#each convs}}
 															<option value="{{_id}}">{{conv_nome}}</option>
 															{{else}}
@@ -82,7 +82,7 @@
 												<label>Imposto</label>
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select name="convimpImpid" id="convimpImpid" class="chosen-select" data-placeholder="Escolha...">
+														<select name="convimpImpid" id="convimpImpid" class="select2" data-placeholder="Escolha...">
 															{{#each impostos}}
 															<option value="{{_id}}">{{imposto_nome}}</option>
 															{{else}}

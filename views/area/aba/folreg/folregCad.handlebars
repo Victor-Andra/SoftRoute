@@ -299,7 +299,7 @@
 																	<label>Tipo do Registro</label>
 																	<div class="form-group">
 																			<div class="col-sm-4">
-																				<select name="folregTiporeg" id="folregTiporeg" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro()">
+																				<select name="folregTiporeg" id="folregTiporeg" class="select2" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro()">
 																					<option value="Não Informado">Não Informado</option>
 																					<option value="Simples">Simples</option>
 																					<option value="Duplo">Duplo</option>
@@ -319,7 +319,7 @@
 																	<label>Beneficiário</label>
 																	<div class="form-group">
 																		<div class="col-sm-8">
-																			<select name="folregBeneid" id="folregBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																			<select name="folregBeneid" id="folregBeneid" class="select2" data-placeholder="Escolha..." >
 																				{{#each benes}}
 																					<option value="{{_id}}">{{bene_nome}}</option>
 																				{{/each}}
@@ -330,7 +330,7 @@
 																	<label>Programa</label>
 																	<div class="input-group">
 																		<div class="input-group">
-																			<select name="folregProgid" id="folregProgid" class="chosen-select" value="Sem Info" onchange="" >
+																			<select name="folregProgid" id="folregProgid" class="select2" value="Sem Info" onchange="" >
 																					<option value="766f69643132333435366964">-</option>
 																					{{#each progs}}
 																						<option value="{{_id}}">{{_id}}</option>
@@ -355,7 +355,7 @@
 																	<label>Técnico Aplicador</label>
 																	<div class="form-group">
 																		<div class="col-sm-8">
-																			<select name="folregUsuid" id="folregUsuid" class="chosen-select" data-placeholder="Escolha..." >
+																			<select name="folregUsuid" id="folregUsuid" class="select2" data-placeholder="Escolha..." >
 																				{{#each terapeutas}}
 																					<option value="{{_id}}">{{usuario_nome}}</option>
 																				{{/each}}
@@ -364,7 +364,7 @@
 																	</div>
 																	<div class="col-xs-12 col-sm-2">
 																		<label>Quantidade de Estímulos Reservados no SET</label>
-																		<select name="folregQtest" id="folregQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro()">
+																		<select name="folregQtest" id="folregQtest" class="select2" data-placeholder="Escolha..." value="Não Informado" onchange="javascript:mudaRegistro()">
 																			<option value="1">1</option>
 																			<option value="2">2</option>
 																			<option value="3">3</option>
@@ -417,7 +417,7 @@
 																	<label>Sequência da Aplicação dos Estímulos</label>
 																	<div class="form-group">
 																		<div class="col-sm-12">
-																			<select name="folregEstseq" id="folregEstseq" class="chosen-select" data-placeholder="Escolha..." >
+																			<select name="folregEstseq" id="folregEstseq" class="select2" data-placeholder="Escolha..." >
 																				<option value="-">-</option>
 																				<option value="1">ABC;BAC;BAC</option>
 																				<option value="2">BAC;BAC;BCA</option>

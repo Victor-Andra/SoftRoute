@@ -58,7 +58,7 @@
 														<label>Programa</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetProgid" id="progsetProgid" class="chosen-select" value="Sem Info" onchange="" >
+																<select name="progsetProgid" id="progsetProgid" class="select2" value="Sem Info" onchange="" >
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each progs}}
 																			<option value="{{_id}}">{{_id}}</option>
@@ -73,7 +73,7 @@
 														<label>Beneficiário</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetBeneid" id="progsetBeneid" class="chosen-select" value="Sem Info" onchange="" >
+																<select name="progsetBeneid" id="progsetBeneid" class="select2" value="Sem Info" onchange="" >
 																	<option value="766f69643132333435366964">-</option>
 																		{{#each benes}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
@@ -88,7 +88,7 @@
 														<label>Tipo de Programa</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetProgtipoid" id="progsetProgtipoid" class="chosen-select" onchange="">
+																<select name="progsetProgtipoid" id="progsetProgtipoid" class="select2" onchange="">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each progtipos}}
 																			<option value="{{_id}}">{{progtipo_nome}}</option>
@@ -102,7 +102,7 @@
 														<label>Nível do Programa</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetPrognivelid" id="progsetPrognivelid" class="chosen-select" onchange="">
+																<select name="progsetPrognivelid" id="progsetPrognivelid" class="select2" onchange="">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each prognivels}}
 																			<option value="{{_id}}">{{prognivel_nome}}</option>
@@ -115,7 +115,7 @@
 														<label>Terapeuta Resposável</label>
 														<div class="input-group">
 															<div class="input-group">
-																<select name="progsetTecid" id="progsetTecid" class="chosen-select" onchange="">
+																<select name="progsetTecid" id="progsetTecid" class="select2" onchange="">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each usuarios}}
 																			<option value="{{_id}}">{{usuario_nome}}</option>
@@ -201,7 +201,7 @@
 												<label> Quantidade de Estímulos para esse SET </label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="progsetQtest" id="progsetQtest" class="chosen-select" data-placeholder="Escolha..." value="Não Informado" >
+														<select name="progsetQtest" id="progsetQtest" class="select2" data-placeholder="Escolha..." value="Não Informado" >
 															<option value="1">1</option>
 															<option value="2">2</option>
 															<option value="3">3</option>

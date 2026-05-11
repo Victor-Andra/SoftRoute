@@ -521,13 +521,14 @@ module.exports = {
         Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
         Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema)
 
         let usuarioAtual = req.cookies['idUsu'];
         Bordo.findById(req.params.id).then((bordo) =>{console.log("ID: "+bordo._id)
             Conv.find().then((conv)=>{
                 Terapia.find().then((terapia)=>{
                     console.log("Listagem Realizada de terapias")
-                    Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                    Usuario.find().then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas, supervisores, diretores, corrdenadores
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
                         console.log("Listagem Realizada de Usuário")
                         Bene.find({bene_status: "Ativo", bene_nome: { $not: /\./ } }).then((bene) => {

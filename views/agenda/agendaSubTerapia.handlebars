@@ -64,7 +64,7 @@
 														<label>Filtro</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="filtroPesquisa" id="filtroPesquisa" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="filtroPesquisa" id="filtroPesquisa" class="select2" data-placeholder="Escolha..." >
 																	<option value="-">-</option>
 																	<option value="TrocaBeneFiltroData">Trocar beneficiário filtrando apenas por data</option>
 																</select>
@@ -97,7 +97,7 @@
 														<label>Beneficiário original</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="agendaBeneid" id="agendaBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="agendaBeneid" id="agendaBeneid" class="select2" data-placeholder="Escolha..." >
 																	<option value="-">-</option>
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
@@ -108,7 +108,7 @@
 																<label>Beneficiário substituto</label>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<select name="agendaBeneSubid" id="agendaBeneSubid" class="chosen-select" data-placeholder="Escolha..." >
+																		<select name="agendaBeneSubid" id="agendaBeneSubid" class="select2" data-placeholder="Escolha..." >
 																			<option value="-">-</option>
 																			{{#each benes}}
 																				<option value="{{_id}}">{{bene_nome}}</option>
@@ -125,7 +125,7 @@
 														<label>Terapeuta original</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select id="agendaTerapeutaid" name="agendaTerapeutaid" class="chosen-select" data-placeholder="Escolha...">
+																<select id="agendaTerapeutaid" name="agendaTerapeutaid" class="select2" data-placeholder="Escolha...">
 																	<option value="-">-</option>
 																	{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
@@ -136,7 +136,7 @@
 																<label>Terapeuta substituto</label>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<select id="agendaTerapeutaSubsid" name="agendaTerapeutaSubsid" class="chosen-select" data-placeholder="Escolha...">
+																		<select id="agendaTerapeutaSubsid" name="agendaTerapeutaSubsid" class="select2" data-placeholder="Escolha...">
 																			<option value="-">-</option>
 																			{{#each terapeutas}}
 																				<option value="{{_id}}">{{usuario_nome}}</option>
@@ -153,7 +153,7 @@
 														<label>Terapia original</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="agendaTeraFindid" id="agendaTeraFindid" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="agendaTeraFindid" id="agendaTeraFindid" class="select2" data-placeholder="Escolha..." >
 																	<option value="-">-</option>
 																	{{#each terapias}}
 																		<option value="{{_id}}">{{terapia_nome}}</option>
@@ -164,7 +164,7 @@
 																<label>Terapia substituto</label>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<select id="agendaTpiaSubsid" name="agendaTpiaSubsid" class="chosen-select" data-placeholder="Escolha...">
+																		<select id="agendaTpiaSubsid" name="agendaTpiaSubsid" class="select2" data-placeholder="Escolha...">
 																			<option value="-">-</option>
 																			{{#each terapias}}
 																				<option value="{{_id}}">{{terapia_nome}}</option>
@@ -181,7 +181,7 @@
 														<label>Convênio original</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="agendaConvid" id="agendaConvid" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="agendaConvid" id="agendaConvid" class="select2" data-placeholder="Escolha..." >
 																	<option value="-">-</option>
 																	{{#each convs}}
 																		<option value="{{_id}}">{{conv_nome}}</option>
@@ -192,7 +192,7 @@
 																<label>Convênio substituto</label>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<select name="agendaConvSubsid" id="agendaConvSubsid"  class="chosen-select" data-placeholder="Escolha..." style="width: 500px;">
+																		<select name="agendaConvSubsid" id="agendaConvSubsid"  class="select2" data-placeholder="Escolha..." style="width: 500px;">
 																			<option value="-">-</option>
 																			{{#each convs}}
 																				<option value="{{_id}}">{{conv_nome}}</option>
@@ -209,7 +209,7 @@
 														<label>Abrangência</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select id="agendaAbra" name="agendaAbra" class="chosen-select" data-placeholder="Escolha...">
+																<select id="agendaAbra" name="agendaAbra" class="select2" data-placeholder="Escolha...">
 																	<option value="-">-</option>
 																	<option value="agenda">Somente Agenda</option>
 																	<option value="atend">Somente Atendimento</option>
@@ -220,7 +220,7 @@
 																<label>Categoria</label>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<select id="agendaCategoria" name="agendaCategoria" class="chosen-select" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()"  onchange="javascript: mudaSubis()">
+																		<select id="agendaCategoria" name="agendaCategoria" class="select2" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()"  onchange="javascript: mudaSubis()">
 																			<option value="-">-</option>
 																			<option id="Apoio" value="Apoio">Apoio</option>
 																			<option id="Extra" value="Extra">Extra</option>
@@ -270,7 +270,7 @@
 														<label>Terapeuta substituto fixo</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select id="agendaTerapeutaMergeSubsid" name="agendaTerapeutaMergeSubsid" class="chosen-select" data-placeholder="Escolha...">
+																<select id="agendaTerapeutaMergeSubsid" name="agendaTerapeutaMergeSubsid" class="select2" data-placeholder="Escolha...">
 																<option value="-">-</option>
 																{{#each terapeutas}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
@@ -281,7 +281,7 @@
 																<label>Terapia substituto fixo</label>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<select id="agendaTerapiaMergeSubsid" name="agendaTerapiaMergeSubsid" class="chosen-select" data-placeholder="Escolha...">
+																		<select id="agendaTerapiaMergeSubsid" name="agendaTerapiaMergeSubsid" class="select2" data-placeholder="Escolha...">
 																			<option value="-">-</option>
 																			{{#each terapias}}
 																				<option value="{{_id}}">{{terapia_nome}}</option>

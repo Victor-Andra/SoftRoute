@@ -72,7 +72,7 @@
 																<label>Beneficiário</label>
 																<div class="form-group">
 																	<div class="col-sm-6">
-																		<select name="carsBeneid" id="carsBeneid" class="chosen-select" dcars-placeholder="Escolha..." >
+																		<select name="carsBeneid" id="carsBeneid" class="select2" dcars-placeholder="Escolha..." >
 																			{{#each Benes}}
 																				<option value="{{_id}}">{{bene_nome}}</option>
 																			{{/each}}
@@ -87,7 +87,7 @@
 																<div class="row">
 																	<div class="input-group">
 																		<div class="col-sm-2">
-																			<select name="carsBenesexo" id="carsBenesexo" class="chosen-select" dcars-placeholder="Escolha..."value="-" >
+																			<select name="carsBenesexo" id="carsBenesexo" class="select2" dcars-placeholder="Escolha..."value="-" >
 																						<option value="-">-</option>
 																						<option value="F">Feminino</option>
 																						<option value="M">Masculino</option>
@@ -144,7 +144,7 @@
 																<label>Técnico Acompanhante</label>
 																<div class="form-group">
 																	<div class="col-sm-8">
-																		<select name="carsterapeutaid" id="carsterapeutaid" class="chosen-select" dcars-placeholder="Escolha..." value="-">
+																		<select name="carsterapeutaid" id="carsterapeutaid" class="select2" dcars-placeholder="Escolha..." value="-">
 																			{{#each Terapeutas}}
 																				<option value="{{_id}}">{{usuario_nome}}</option>
 																			{{/each}}
@@ -2687,7 +2687,7 @@
 																			<span>15</span>
 																		</td>
 																		<td>	
-																			<select name="carsterapeutaid" id="carsterapeutaid" class="chosen-select" value="-">
+																			<select name="carsterapeutaid" id="carsterapeutaid" class="select2" value="-">
 																				
 																					<option style="background-color:white" value="&nbsp;">&nbsp;</option>
 																					<option style="background-color:crimson" value="1">1</option>

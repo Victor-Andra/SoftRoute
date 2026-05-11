@@ -165,28 +165,7 @@
 				margin-right: 2px;
 			}
 
-			/* Chosen Select minimalista - compatível com aceAdmin */
-			.toolbar-pesquisa .chosen-container .chosen-single {
-				border: 2px solid #e2e8f0 !important;
-				border-radius: 4px !important;
-				box-shadow: none !important;
-				background: white !important;
-				height: 30px !important;
-				line-height: 28px !important;
-				font-size: 12px !important;
-			}
-			.toolbar-pesquisa .chosen-container .chosen-single:hover {
-				border-color: #fff !important;
-			}
-			.toolbar-pesquisa .chosen-container-active.chosen-with-drop .chosen-single {
-				border-color: #fff !important;
-				background: white !important;
-			}
-			.toolbar-pesquisa .chosen-container .chosen-drop {
-				border: 1px solid #ced4da !important;
-				border-top: none !important;
-				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-			}
+		
 		</style>
 		<script>
 		// Função principal: inicializa os selects e mantém sincronia com campos ocultos
@@ -272,7 +251,7 @@
 								<!-- Tipo Filtro -->
 								<div class="col-xs-12 col-sm-2">
 									<label>Tipo Filtro</label>
-									<select name="tipoData" id="tipoData" class="chosen-select">
+									<select name="tipoData" id="tipoData" class="select2">
 										<option value="Ano/Mes" selected>Ano/Mês</option>
 									</select>
 								</div>
@@ -280,7 +259,7 @@
 								<!-- Ano -->
 								<div class="col-xs-12 col-sm-2" id="divAnoAtend">
 									<label>Ano</label>
-									<select name="anoAtend" id="anoSelect" class="chosen-select">
+									<select name="anoAtend" id="anoSelect" class="select2">
 										<option value="">Selecione</option>
 										{{#each anos}}
 											<option value="{{ano_nome}}" {{#ifCond this.ano_nome '==' ../filtroAno}}selected{{/ifCond}}>
@@ -293,7 +272,7 @@
 								<!-- Mês -->
 								<div class="col-xs-12 col-sm-2" id="divMesAtend">
 									<label>Mês</label>
-									<select name="mesAtend" id="mesSelect" class="chosen-select">
+									<select name="mesAtend" id="mesSelect" class="select2">
 										<option value="0">Janeiro</option>
 										<option value="1">Fevereiro</option>
 										<option value="2">Março</option>

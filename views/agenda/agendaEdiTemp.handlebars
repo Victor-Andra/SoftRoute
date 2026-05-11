@@ -187,7 +187,7 @@
 														<label for="id-date-picker-1">Hora Agendamento</label>
 														<div class="form-group">
 															<div class="col-xs-12 col-sm-10">
-																<select name="agendaHora" id="agendaHora" class="chosen-select form-control" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
+																<select name="agendaHora" id="agendaHora" class="select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
 																	{{#each horaages}}
 																		<option value="{{horaage_hora}}">{{horaage_hora}}</option>
 																	{{/each}}
@@ -201,7 +201,7 @@
 														<label>Origem Agendamento</label>
 														<div class="form-group">
 															<div class="col-xs-12 col-sm-10">
-																<select id="agendaOrg" name="agendaOrg" class="chosen-select form-control" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
+																<select id="agendaOrg" name="agendaOrg" class="select" data-placeholder="Escolhaa a opção..." onchange="javascript:controlaCategoria()">
 																	<option value="Administrativo">Administrativo</option>
 																	<option value="Padrão">Padrão</option>
 																</select>
@@ -212,7 +212,7 @@
 														<label>Categoria</label>
 														<div class="form-group">
 															<div class="col-xs-12 col-sm-10">
-																<select id="agendaCateg" name="agendaCateg" class="chosen-select form-control" data-placeholder="Escolha a opção..." onchange="javascript:ajustaOption();">
+																<select id="agendaCateg" name="agendaCateg" class="select" data-placeholder="Escolha a opção..." onchange="javascript:ajustaOption();">
 																	<option style="backgroundColor:yellow" id="Falta" value="Falta">Falta</option>
 																	<option style="backgroundColor:orange" id="Falta Justificada" value="Falta Justificada">Falta Justificada</option>
 																	<option style="backgroundColor:orange" id="Falta Absoluta" value="Falta Absoluta">Falta Absoluta</option>
@@ -242,7 +242,7 @@
 														</div>
 														<div class="form-group">
 															<div class="col-xs-12 col-sm-10">
-																<select name="agendaBeneid" id="agendaBeneid" class="chosen-select form-control" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+																<select name="agendaBeneid" id="agendaBeneid" class="select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
 																	{{/each}}
@@ -254,7 +254,7 @@
 														<label>Convênio</label>
 														<div class="form-group">
 															<div class="col-xs-12 col-sm-10">
-																<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid" id="agendaConvid" class="chosen-select form-control" data-placeholder="Escolha...">
+																<select style="pointer-events: none; touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid" id="agendaConvid" class="select" data-placeholder="Escolha...">
 																	{{#each benes}}
 																		{{#each ../convs}}
 																			{{#ifEqual ../bene_convid _id}}
@@ -272,7 +272,7 @@
 														<label>Terapeuta</label>
 														<div class="form-group">
 															<div class="col-xs-12 col-sm-10">
-																<select name="agendaUsuid" id="agendaUsuid" class="chosen-select form-control" data-placeholder="Escolha...">
+																<select name="agendaUsuid" id="agendaUsuid" class="select" data-placeholder="Escolha...">
 																	{{#each terapeutas}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
@@ -285,7 +285,7 @@
 															<label style="color: red; font-weight: bold;">Terapia Atual</label>
 															<div class="form-group">
 																<div class="col-xs-12">
-																	<select name="agendaTerapiaid" id="agendaTerapiaid" class="chosen-select form-control" disabled>
+																	<select name="agendaTerapiaid" id="agendaTerapiaid" class="select" disabled>
 																		{{#each terapias}}
 																			<option value="{{_id}}">{{terapia_nome}}</option>
 																		{{/each}}
@@ -293,7 +293,7 @@
 																	<br>
 																	<label style="color: blue; font-weight: bold;">Terapia para substituir a atual acima!</label>
 																	<br>
-																	<select name="novaAgendaTerapiaid" id="novaAgendaTerapiaid" class="chosen-select form-control" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
+																	<select name="novaAgendaTerapiaid" id="novaAgendaTerapiaid" class="select" data-placeholder="Escolha..." onchange="javascript:carregaValores()">
 																		{{#each terapianovos}}
 																			<option value="{{_id}}">{{terapia_nome}}</option>
 																		{{/each}}
@@ -308,7 +308,7 @@
 														<label>Local</label>
 														<div class="form-group">
 															<div class="col-xs-12 col-sm-10">
-																<select name="agendaSalaid" id="agendaSalaid" class="chosen-select form-control" data-placeholder="Escolha...">
+																<select name="agendaSalaid" id="agendaSalaid" class="select" data-placeholder="Escolha...">
 																	{{#each salas}}
 																		<option value="{{_id}}">{{sala_nome}}</option>
 																	{{/each}}

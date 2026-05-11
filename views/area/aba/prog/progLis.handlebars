@@ -10,8 +10,7 @@
 		<script>//Filtro para localizar
 				
 				function carregaBody(){
-					// ✅ Atualiza TODOS os chosen-select com os novos valores (incluindo múltiplos)
-					$('.chosen-select').trigger('chosen:updated');
+					
 				}
 		</script>
 		
@@ -110,11 +109,11 @@
 								<!-- Beneficiário -->
 								<div class="col-xs-12 col-sm-4 mb-3 px-2">
 									<label for="pesquisaBeneid" class="block mb-1">Escolha o Beneficiário</label>
-									<select name="pesquisaBeneid" id="pesquisaBeneid" class="chosen-select form-control">
-									<option value="766f69643132333435366964">-</option>
-									{{#each benes}}
-										<option value="{{_id}}">{{bene_nome}}</option>
-									{{/each}}
+									<select name="pesquisaBeneid" id="pesquisaBeneid" class="select2">
+										<option value="766f69643132333435366964">-</option>
+										{{#each benes}}
+											<option value="{{_id}}">{{bene_nome}}</option>
+										{{/each}}
 									</select>
 								</div>
 

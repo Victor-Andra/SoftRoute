@@ -134,7 +134,7 @@
 															<label> Terapeuta</label>
 															<div class="form-group">
 																<div class="col-sm-6">
-																	<select name="pecsTerapeutaid" id="pecsTerapeutaid" class="chosen-select"  >
+																	<select name="pecsTerapeutaid" id="pecsTerapeutaid" class="select2"  >
 																		<option value="-">-</option>
 																		{{#each terapeutas}}
 																			<option value="{{_id}}">{{usuario_nome}}</option>
@@ -150,7 +150,7 @@
 															<label> Beneficiário</label>
 															<div class="form-group">
 																<div class="col-sm-4">
-																	<select name="pecsBeneid" id="pecsBeneid" class="chosen-select" >
+																	<select name="pecsBeneid" id="pecsBeneid" class="select2" >
 																		<option value="-">-</option>
 																		{{#each benes}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
@@ -186,7 +186,7 @@
 															<label> Andamento</label>
 															<div class="form-group">
 																<div class="col-sm-4">
-																	<select name="pecsAndamento" id="pecsAndamento" class="chosen-select" value="{{pecs.pecs_andamento}}">
+																	<select name="pecsAndamento" id="pecsAndamento" class="select2" value="{{pecs.pecs_andamento}}">
 																			<option value="Iniciado">Iniciado</option>
 																			<option value="Andamento">Andamento</option>
 																			<option value="Concluido">Concluido</option>

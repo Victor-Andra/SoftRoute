@@ -177,7 +177,7 @@
 															<label> Terapeuta / Therapist</label>
 															<div class="form-group">
 																<div class="col-sm-6">
-																	<select name="notasupTerapeutaid" id="notasupTerapeutaid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="notasupTerapeutaid" id="notasupTerapeutaid" class="select2" data-placeholder="Escolha..." >
 																		{{#each Terapeutas}}
 																			<option value="{{_id}}">{{usuario_nome}}</option>
 																		{{/each}}
@@ -191,7 +191,7 @@
 															<label> Beneficiário / Beneficiary</label>
 															<div class="form-group">
 																<div class="col-sm-6">
-																	<select name="notasupBeneid" id="notasupBeneid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="notasupBeneid" id="notasupBeneid" class="select2" data-placeholder="Escolha..." >
 																		{{#each Benes}}
 																			{{#ifEqual _id ../beneid}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
@@ -226,7 +226,7 @@
 															<label> Tipo supervisão / Type supervision</label>
 															<div class="form-group">
 																<div class="col-sm-4">
-																	<select name="notasupTiposup" id="notasupTiposup" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="notasupTiposup" id="notasupTiposup" class="select2" data-placeholder="Escolha..." >
 																			<option value="Direta">Direta</option>
 																			<option value="Indireta">Indireta</option>
 																			<option value="Avaliativa">Avaliativa</option>
@@ -239,7 +239,7 @@
 															<label> Supervisor / Supervisor</label>
 															<div class="form-group">
 																<div class="col-sm-6">
-																	<select name="notasupSupid" id="notasupSupid" class="chosen-select" data-placeholder="Escolha..." >
+																	<select name="notasupSupid" id="notasupSupid" class="select2" data-placeholder="Escolha..." >
 																		{{#each Terapeutas}}
 																			<option value="{{_id}}">{{usuario_nome}}</option>
 																		{{/each}}

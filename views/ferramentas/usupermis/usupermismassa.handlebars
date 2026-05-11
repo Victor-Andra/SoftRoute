@@ -76,7 +76,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <select name="usupermisEmpresaid" id="usupermisEmpresaid" 
-                                        class="chosen-select form-control" required>
+                                        class="form-control select2" required>
                                     <option value="">Selecione a Empresa</option>
                                     {{#each empresas}}
                                         <option value="{{_id}}">{{empresa_nome}}</option>
@@ -94,7 +94,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <select name="usupermisUsuid" id="usupermisUsuid" 
-                                        class="chosen-select form-control" required>
+                                        class="form-control select2" required>
                                     <option value="">Selecione o Usuário</option>
                                     {{#each usuarios}}
                                         <option value="{{_id}}">{{usuario_nome}}</option>
@@ -112,7 +112,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <select name="usupermisCodfunc" id="usupermisCodfunc" 
-                                        class="chosen-select form-control" required>
+                                        class="form-control select2" required>
                                     <option value="">Selecione a Funcionalidade</option>
                                     {{#each usufuncs}}
                                         <option value="{{_id}}">{{usufunc_nome}} ({{usufunc_codigo}})</option>
@@ -130,7 +130,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <select name="usupermisTipo" id="usupermisTipo" 
-                                        class="chosen-select form-control" required>
+                                        class="form-control select2" required>
                                     <option value="">Selecione o Nível</option>
                                     <option value="1">1 - Sem acesso</option>
                                     <option value="2">2 - Listar</option>

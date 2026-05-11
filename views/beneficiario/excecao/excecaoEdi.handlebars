@@ -269,7 +269,7 @@
 												</div>
 												<div class="form-group">
 													<div class="col-sm-10">
-														<select id="excecaoBeneid" name="excecaoBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+														<select id="excecaoBeneid" name="excecaoBeneid" class="select2" data-placeholder="Escolha..." onchange="javascript:selectConv()">
 															<option value="766f69643132333435366964"></option>
 															{{#each benes}}
 															<option value="{{_id}}">{{bene_nome}}</option>
@@ -280,7 +280,7 @@
 												<label>Convênio</label>		
 												<div class="form-group">
 													<div class="col-sm-4">
-														<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="excecaoConvid" name="excecaoConvid" class="chosen-select" data-placeholder="Escolha...">
+														<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="excecaoConvid" name="excecaoConvid" class="select2" data-placeholder="Escolha...">
 																<option value="766f69643132333435366964"></option>
 																{{#each benes}}
 																	{{#each ../convs}}
@@ -304,7 +304,7 @@
 													<tbody>
 														<tr><!-- 1AReg -->
 															<td>
-																<select name="excecaoTerapiaid" id="excecaoTerapiaid"  class="chosen-select form-control" data-placeholder="Escolha..." >
+																<select name="excecaoTerapiaid" id="excecaoTerapiaid"  class="form-control select2" data-placeholder="Escolha..." >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each terapias}}
 																	<option value="{{_id}}">{{terapia_nome}}</option>
@@ -346,7 +346,7 @@
 																</div>
 															</td>
 															<td>
-																<select name="excecaoSubsterapiaid" id="excecaoSubsterapiaid"  class="chosen-select form-control" data-placeholder="Escolha..." >
+																<select name="excecaoSubsterapiaid" id="excecaoSubsterapiaid"  class="form-control select2" data-placeholder="Escolha..." >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each terapias}}
 																	<option value="{{_id}}">{{terapia_nome}}</option>

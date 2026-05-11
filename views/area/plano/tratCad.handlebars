@@ -251,7 +251,7 @@
 													<label>Tipo de plano de tratamento:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="tratPlanotipo" id="tratPlanotipo" class="chosen-select" class="cab" data-placeholder="-" onchange="javascript:mudaPlano();">
+															<select name="tratPlanotipo" id="tratPlanotipo" class="select2" class="cab" data-placeholder="-" onchange="javascript:mudaPlano();">
 																<option value="-">-</option>
 																<option value="Padrão">Padrão</option>
 																<option value="Ocupacional">Ocupacional</option>
@@ -310,7 +310,7 @@
 													<label>Beneficiário:</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="tratBeneid" id="tratBeneid" class="chosen-select"  class="cab" onchange="javascript:atualizaDadosbene()">
+															<select name="tratBeneid" id="tratBeneid" class="select2"  class="cab" onchange="javascript:atualizaDadosbene()">
 																<option value="766f69643132333435366964">-</option>
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
@@ -402,7 +402,7 @@
 													<label>Especialidade:</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="tratEspecialidadepad" id="tratEspecialidadepad" class="chosen-select" class="pad" data-placeholder="Escolha...">
+															<select name="tratEspecialidadepad" id="tratEspecialidadepad" class="select2" class="pad" data-placeholder="Escolha...">
 																<option value="-">-</option>
 																<option value="Fisioterapia">Fisioterapia</option>
 																<option value="Fonoaudiologia">Fonoaudiologia</option>
@@ -431,7 +431,7 @@
 													<label>Terapeuta:</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="tratTerapeutaidpad" id="tratTerapeutaidpad" class="pad" class="chosen-select" >
+															<select name="tratTerapeutaidpad" id="tratTerapeutaidpad" class="pad" class="select2" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each usuarios}}
 																	<option value="{{_id}}">{{usuario_nomecompleto}}</option>
@@ -485,7 +485,7 @@
 													<label>Especialidade:</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<select name="tratEspecialidadeis" id="tratEspecialidadeis" class="chosen-select" class="ocup" data-placeholder="Escolha...">
+															<select name="tratEspecialidadeis" id="tratEspecialidadeis" class="select2" class="ocup" data-placeholder="Escolha...">
 																<option value="-">-</option>
 																<option value="Fisioterapia">Fisioterapia</option>
 																<option value="Fonoaudiologia">Fonoaudiologia</option>
@@ -512,7 +512,7 @@
 													<label>Terapeuta:</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<select name="tratTerapeutaidis" id="tratTerapeutaidis" class="chosen-select" class="ocup" data-placeholder="-" >
+															<select name="tratTerapeutaidis" id="tratTerapeutaidis" class="select2" class="ocup" data-placeholder="-" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each usuarios}}
 																<option value="{{_id}}">{{usuario_nomecompleto}}</option>
@@ -538,7 +538,7 @@
 													<label>Especialidade:</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<select name="tratEspecialidadeavd" id="tratEspecialidadeavd" class="chosen-select" class="ocup" data-placeholder="Escolha...">
+															<select name="tratEspecialidadeavd" id="tratEspecialidadeavd" class="select2" class="ocup" data-placeholder="Escolha...">
 																<option value="-">-</option>
 																<option value="Fisioterapia">Fisioterapia</option>
 																<option value="Fonoaudiologia">Fonoaudiologia</option>
@@ -565,7 +565,7 @@
 													<label>Terapeuta:</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="tratTerapeutaidavd" id="tratTerapeutaidavd" class="chosen-select" data-placeholder="-" >
+															<select name="tratTerapeutaidavd" id="tratTerapeutaidavd" class="select2" data-placeholder="-" >
 																<option value="766f69643132333435366964">-</option>
 																{{#each usuarios}}
 																<option value="{{_id}}">{{usuario_nomecompleto}}</option>

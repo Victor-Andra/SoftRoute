@@ -116,7 +116,7 @@
 													<label>Status</label>
 													<div class="form-group">
 															<div class="col-sm-6">
-																<select name="convStatus" id="convStatus" class="chosen-select" data-placeholder="" >
+																<select name="convStatus" id="convStatus" class="select2" data-placeholder="" >
 																	<option value="Ativo">Ativo</option>
 																	<option value="Inativo">Inativo</option>
 																</select>
@@ -148,7 +148,7 @@
 												<label>Cobrança de laudo</label>
 												<div class="form-group">
 													<div class="col-sm-2">
-														<select name="convCobralaudo" id="convCobralaudo" class="chosen-select" style="width: 100px;"	data-placeholder="">
+														<select name="convCobralaudo" id="convCobralaudo" class="select2" style="width: 100px;"	data-placeholder="">
 															<option value="0 Mês">0 Mês</option>
 															<option value="6 Meses">6 Meses</option>
 															<option value="12 Meses">12 Meses</option>
@@ -190,7 +190,7 @@
 												<label>UF</label>
 												<div class="form-group">
 														<div class="col-sm-6">
-															<select name="convEnduf" id="convEnduf"  class="chosen-select" data-placeholder="Escolha o estado..." >
+															<select name="convEnduf" id="convEnduf"  class="select2" data-placeholder="Escolha o estado..." >
 																{{#each estados}}
 																	<option value="{{_id}}">{{estado_uf}}</option>
 																	{{else}}

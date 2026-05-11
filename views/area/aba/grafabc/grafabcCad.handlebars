@@ -57,7 +57,7 @@
 													<label> Beneficiário</label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<select name="atendBeneid" id="atendBeneid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+															<select name="atendBeneid" id="atendBeneid" class="select2" data-placeholder="Escolha..." onchange="javascript:selectConv()">
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
 																{{/each}}
@@ -98,7 +98,7 @@
 													<label> Terapeuta / Técnico </label>
 													<div class="form-group">
 														<div class="col-sm-6">
-															<select name="atendTerapeutaid" id="atendTerapeutaid" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+															<select name="atendTerapeutaid" id="atendTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
 																{{#each usuarios}}
 																<option value="{{_id}}">{{usuario_nome}}</option>
 																{{/each}}

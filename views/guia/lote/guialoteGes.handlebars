@@ -28,6 +28,10 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
   align-items: center;
   gap: 8px;
 }
+/* Dropdown acompanha a largura */
+.toolbar-pesquisa .select2-dropdown {
+    min-width: 140px !important;
+}
 .toolbar-pesquisa h5 i {
   font-size: 18px;
 }
@@ -422,7 +426,7 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
 							<!-- 🔹 Tipo de Filtro -->
 							<div class="form-group">
 								<label>Tipo Filtro</label>
-								<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha...">
+								<select name="tipoData" id="tipoData" class="select2" data-placeholder="Escolha...">
 									<option value="Ano/Mes" {{#ifEqual filtroTipo "Ano/Mes"}}selected{{/ifEqual}}>Ano/Mês</option>
 									<option value="Semana" {{#ifEqual filtroTipo "Semana"}}selected{{/ifEqual}}>Semana</option>
 									<option value="Dia" {{#ifEqual filtroTipo "Dia"}}selected{{/ifEqual}}>Dia</option>
@@ -432,7 +436,7 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
 														<!-- 🔹 Ano -->
 							<div id="divAnoAtend" class="form-group">
 								<label>Ano</label>
-								<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha...">
+								<select name="anoAtend" id="anoAtend" class="select2" data-placeholder="Escolha...">
 									<option value="">Selecione...</option>
 									{{#each anos}}
 										<option value="{{this.ano_nome}}" 
@@ -446,7 +450,7 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
 							 <!-- 🔹 Mês -->
 							<div id="divMesAtend" class="form-group">
 								<label>Mês</label>
-								<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha...">
+								<select name="mesAtend" id="mesAtend" class="select2" data-placeholder="Escolha...">
 									<option value="0" {{#ifEqual filtroMes "0"}}selected{{/ifEqual}}>Janeiro</option>
 									<option value="1" {{#ifEqual filtroMes "1"}}selected{{/ifEqual}}>Fevereiro</option>
 									<option value="2" {{#ifEqual filtroMes "2"}}selected{{/ifEqual}}>Março</option>
@@ -480,7 +484,7 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
 							<!-- 🔹 Tipo de Pessoa -->
 							<div class="form-group">
 								<label>Tipo</label>
-								<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha...">
+								<select name="atendTipoPessoa" id="atendTipoPessoa" class="select2" data-placeholder="Escolha...">
 									<option value="Geral" {{#ifEqual filtroTipoPessoa "Geral"}}selected{{/ifEqual}}>Geral</option>
 									<option value="Beneficiario" {{#ifEqual filtroTipoPessoa "Beneficiario"}}selected{{/ifEqual}}>Beneficiário</option>
 									<option value="Terapeuta" {{#ifEqual filtroTipoPessoa "Terapeuta"}}selected{{/ifEqual}}>Terapeuta</option>
@@ -490,7 +494,7 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
 							<!-- 🔹 Beneficiário - visível apenas quando tipoPessoa = "Beneficiario" -->
 							<div id="divAtendBeneficiario" class="form-group{{#ifEqual filtroTipoPessoa "Beneficiario"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Beneficiário</label>
-								<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha...">
+								<select name="atendBeneficiario" id="atendBeneficiario" class="select2" data-placeholder="Escolha...">
 									<option value=""></option>
 									{{#each benes}}
 										<option value="{{this._id}}" 
@@ -504,7 +508,7 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
 							<!-- 🔹 Terapeuta - visível apenas quando tipoPessoa = "Terapeuta" -->
 							<div id="divAtendTerapeuta" class="form-group{{#ifEqual filtroTipoPessoa "Terapeuta"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Terapeuta</label>
-								<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha...">
+								<select name="atendTerapeuta" id="atendTerapeuta" class="select2" data-placeholder="Escolha...">
 									<option value=""></option>
 									{{#each terapeutas}}
 										<option value="{{this._id}}" 

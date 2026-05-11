@@ -144,7 +144,7 @@
 
 							<div class="col-xs-12 col-sm-3">
 								<label>Tipo Filtro:</label>
-								<select name="tipoFil" id="tipoFil" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:selectFil()">
+								<select name="tipoFil" id="tipoFil" class="select2" data-placeholder="Escolha..." onchange="javascript:selectFil()">
 										<option value="bene">Beneficiário</option>
 										<option value="sala">Sala</option>
 										<option value="tera">Terapeuta</option>
@@ -155,17 +155,17 @@
 								<label id="beneFilDiv">Beneficiário:</label>
 								<label id="salaFilDiv">Sala:</label>
 								<label id="terapeutaFilDiv">Terapeuta:</label>
-								<select id="agendaBeneid" name="agendaBeneid" class="chosen-select" data-placeholder="Escolha...">
+								<select id="agendaBeneid" name="agendaBeneid" class="select2" data-placeholder="Escolha...">
 									{{#each benes}}
 									<option value="{{_id}}">{{bene_nome}}</option>
 									{{/each}}
 								</select>
-								<select id="agendaSalaid" name="agendaSalaid" class="chosen-select" data-placeholder="Escolha...">
+								<select id="agendaSalaid" name="agendaSalaid" class="select2" data-placeholder="Escolha...">
 									{{#each salas}}
 									<option value="{{_id}}">{{sala_nome}}</option>
 									{{/each}}
 								</select>
-								<select id="agendaTerapeutaid" name="agendaTerapeutaid" class="chosen-select" data-placeholder="Escolha...">
+								<select id="agendaTerapeutaid" name="agendaTerapeutaid" class="select2" data-placeholder="Escolha...">
 									{{#each terapeutas}}
 									<option value="{{_id}}">{{usuario_nome}}</option>
 									{{/each}}

@@ -174,7 +174,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label>Tipo Filtro:&nbsp;</label>
-											<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
+											<select name="tipoData" id="tipoData" class="select2" data-placeholder="Escolha..." value="Ano/Mes" onchange="javascript:trocaFiltroData()">
 												<option selected value="Ano/Mes">Ano/Mês</option>
 												
 											</select>
@@ -186,7 +186,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label for="id-date-picker-1">Ano:&nbsp;</label>
-											<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
+											<select name="anoAtend" id="anoAtend" class="select2" data-placeholder="Escolha..." value="2023" onchange="javascript:formataData();">
 												{{#each anos}}
 													<option value="{{ano_nome}}">{{ano_nome}}</option>
 												{{/each}}
@@ -198,7 +198,7 @@
 									<div class="row">
 										<div class="input-group">
 											<label for="id-date-picker-1">Mês:&nbsp;</label>
-											<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
+											<select name="mesAtend" id="mesAtend" class="select2" data-placeholder="Escolha..." value="Janeiro" onchange="javascript:formataData();">
 												<option value="0">Janeiro</option>
 												<option value="1">Fevereiro</option>
 												<option value="2">Março</option>

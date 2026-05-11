@@ -27,7 +27,7 @@
                                             <label for="convConvid">Convênio</label>
                                             <div class="form-group">
                                                 <div class="col-sm-4">
-                                                    <select name="convConvid" id="convConvid" class="chosen-select" data-placeholder="Selecione o convênio..." required>
+                                                    <select name="convConvid" id="convConvid" class="select2" data-placeholder="Selecione o convênio..." required>
                                                         {{#each convs}}
                                                             <option value="{{_id}}">{{conv_nome}}</option>
                                                         {{/each}}
@@ -38,7 +38,7 @@
                                             <label for="terapiaid">Terapia</label>
                                             <div class="form-group">
                                                 <div class="col-sm-4">
-                                                    <select name="terapiaid" id="terapiaid" class="chosen-select" data-placeholder="Selecione a terapia..." required>
+                                                    <select name="terapiaid" id="terapiaid" class="select2" data-placeholder="Selecione a terapia..." required>
                                                         {{#each terapias}}
                                                             <option value="{{_id}}">{{terapia_nome}}</option>
                                                         {{/each}}
@@ -58,7 +58,7 @@
                                             <label for="status">Status</label>
                                             <div class="form-group">
                                                 <div class="col-sm-2">
-                                                    <select name="status" id="status" class="chosen-select" data-placeholder="Selecione...">
+                                                    <select name="status" id="status" class="select2" data-placeholder="Selecione...">
                                                         <option value="Ativo">Ativo</option>
                                                         <option value="Inativo">Inativo</option>
                                                     </select>

@@ -483,7 +483,7 @@
 																	</label>
 																</td>
 																<td width="70%;" >
-																	<select class="col-xs-9 col-sm-9" name="contarecNftipo" id="contarecNftipo" class="chosen-select"   onchange="javascript:contaRecTiponf();">
+																	<select class="col-xs-9 col-sm-9" name="contarecNftipo" id="contarecNftipo" class="select2"   onchange="javascript:contaRecTiponf();">
 																		<option value="-">-</option>
 																		<option value="I">Beneficiário</option>
 																		<option value="L">Lote</option>
@@ -528,7 +528,7 @@
 																	</tr>
 																	<tr>
 																		<td colspan="2" name="linbene">
-																			<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="chosen-select" value="766f69643132333435366964" onchange="javascript:atualizaDadosbene();preencherAlqimpostos();">
+																			<select class="col-xs-9 col-sm-9" name="contarecBeneid" id="contarecBeneid" class="select2" value="766f69643132333435366964" onchange="javascript:atualizaDadosbene();preencherAlqimpostos();">
 																				<option value="766f69643132333435366964">-</option>
 																				{{#each benes}}
 																					<option value="{{_id}}">{{bene_nome}}</option>
@@ -543,7 +543,7 @@
 																	</tr>
 																	<tr>
 																		<td colspan="2">
-																			<select class="col-xs-9 col-sm-9" name="contarecConvid" id="contarecConvid" class="chosen-select" value="766f69643132333435366964" onchange="javascript:preencheConvLote();preencherAlqimpostos();">
+																			<select class="col-xs-9 col-sm-9" name="contarecConvid" id="contarecConvid" class="select2" value="766f69643132333435366964" onchange="javascript:preencheConvLote();preencherAlqimpostos();">
 																				<option value="766f69643132333435366964">-</option>
 																				{{#each convs}}
 																					<option value="{{_id}}">{{conv_nome}}</option>
@@ -565,7 +565,7 @@
 																		<td><input type="text" name="contarecTomador" id="contarecTomador" placeholder="" style="width: 100%;"/></td>
 																		<td><input type="text" name="contarecCpfcnpj" id="contarecCpfcnpj" placeholder="" style="width: 100%;"/></td>
 																		<td>
-																			<select name="contarecRetencao" id="contarecRetencao" class="chosen-select">
+																			<select name="contarecRetencao" id="contarecRetencao" class="select2">
 																					<option value="-">-</option>
 																					<option value="Sim">Sim</option>
 																					<option value="Não">Não</option>
@@ -645,7 +645,7 @@
 																	<tr>
 																		<td>
 																			
-																			<select class="col-xs-9 col-sm-9" name="contarecFormapg" id="contarecFormapg" class="chosen-select" >
+																			<select class="col-xs-9 col-sm-9" name="contarecFormapg" id="contarecFormapg" class="select2" >
 																				<option value="-">-</option>
 																				<option value="Pix">Pix</option>
 																				<option value="Boleto">Boleto</option>
@@ -655,7 +655,7 @@
 																		</td>
 																		<td><input type="date" id="contarecDatapg" name="contarecDatapg"  placeholder=""></td>
 																		<td>
-																			<select name="contarecPg" id="contarecPg" class="chosen-select">
+																			<select name="contarecPg" id="contarecPg" class="select2">
 																					<option value="-">-</option>
 																					<option value="Sim">Sim</option>
 																					<option value="Não">Não</option>

@@ -46,7 +46,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2">Empresa</label>
                                         <div class="col-sm-4">
-                                            <select id="select-empresa" class="chosen-select" required>
+                                            <select id="select-empresa" class="select2" required>
                                                 <option value="">Selecione</option>
                                                 {{#each empresas}}
                                                     <option value="{{_id}}">{{empresa_nome}}</option>
@@ -57,7 +57,7 @@
                                     <div class="form-group">
                                         <label class="col-sm-2">Usuário</label>
                                         <div class="col-sm-4">
-                                            <select id="select-usuario" class="chosen-select" required>
+                                            <select id="select-usuario" class="select2" required>
                                                 <option value="">Selecione</option>
                                                 {{#each usuarios}}
                                                     <option value="{{_id}}">{{usuario_nome}}</option>

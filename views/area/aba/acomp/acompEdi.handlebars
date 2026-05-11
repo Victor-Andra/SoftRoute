@@ -134,7 +134,7 @@
 															<label> Terapeuta</label>
 															<div class="form-group">
 																<div class="col-sm-6">
-																	<select name="acompTerapeutaid" id="acompTerapeutaid" class="chosen-select"  >
+																	<select name="acompTerapeutaid" id="acompTerapeutaid" class="select2"  >
 																		<option value="-">-</option>
 																		{{#each terapeutas}}
 																			<option value="{{_id}}">{{usuario_nome}}</option>
@@ -150,7 +150,7 @@
 															<label> Beneficiário</label>
 															<div class="form-group">
 																<div class="col-sm-4">
-																	<select name="acompBeneid" id="acompBeneid" class="chosen-select" >
+																	<select name="acompBeneid" id="acompBeneid" class="select2" >
 																		<option value="-">-</option>
 																		{{#each benes}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
@@ -187,7 +187,7 @@
 															<label> Sinalização</label>
 															<div class="form-group">
 																<div class="col-sm-4">
-																	<select name="acompAndamento" id="acompAndamento" class="chosen-select" value="{{acomp.acomp_andamento}}">
+																	<select name="acompAndamento" id="acompAndamento" class="select2" value="{{acomp.acomp_andamento}}">
 																			<option value="{{acomp.acomp_andamento}}">{{acomp.acomp_andamento}}</option>
 																			<option value="Amarelo">Amarelo</option>
 																			<option value="Laranja">Laranja</option>

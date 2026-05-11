@@ -1354,18 +1354,23 @@ module.exports = {
                     avafisio_ombroobs : req.body.avafisioombroobs,
                     //cotovelo
                     avafisio_cotoveloposicao : req.body.avafisiocotoveloposicao,
+                    
                     avafisio_cotovelopronacaopre : req.body.avafisiocotovelopronacaopre,
                     avafisio_cotovelopronacaodir : req.body.avafisiocotovelopronacaodir,
                     avafisio_cotovelopronacaoesq : req.body.avafisiocotovelopronacaoesq,
+                    
                     avafisio_cotovelosupinacaopre : req.body.avafisiocotovelosupinacaopre,
                     avafisio_cotovelosupinacaodir : req.body.avafisiocotovelosupinacaodir,
                     avafisio_cotovelosupinacaoesq : req.body.avafisiocotovelosupinacaoesq,
+                    
                     avafisio_cotoveloflexaopre : req.body.avafisiocotoveloflexaopre,
                     avafisio_cotoveloflexaodir : req.body.avafisiocotoveloflexaodir,
                     avafisio_cotoveloflexaoesq : req.body.avafisiocotoveloflexaoesq,
+                    
                     avafisio_cotoveloextensaopre : req.body.avafisiocotoveloextensaopre,
                     avafisio_cotoveloextensaodir : req.body.avafisiocotoveloextensaodir,
                     avafisio_cotoveloextensaoesq : req.body.avafisiocotoveloextensaoesq,
+                    
                     avafisio_cotoveloobs : req.body.avafisiocotoveloobs,
                     //punho
                     avafisio_punhoposicao : req.body.avafisiopunhoposicao,

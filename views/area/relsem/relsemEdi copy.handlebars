@@ -136,7 +136,7 @@
 															<label> Beneficiário</label>
 															<div class="form-group">
 																<div class="col-sm-4">
-																	<select name="relsemBeneid" id="relsemBeneid" class="chosen-select" onchange="javascript:atualizaDadosbene();">
+																	<select name="relsemBeneid" id="relsemBeneid" class="select2" onchange="javascript:atualizaDadosbene();">
 																		<option value="-">-</option>
 																		{{#each benes}}
 																			<option value="{{_id}}">{{bene_nome}}</option>
@@ -240,7 +240,7 @@
 															<label> Terapeuta</label>
 															<div class="form-group">
 																<div class="col-sm-6">
-																	<select name="relsemTerapeutaid" id="relsemTerapeutaid" class="chosen-select"  realonly="true">
+																	<select name="relsemTerapeutaid" id="relsemTerapeutaid" class="select2"  realonly="true">
 																		<option value="766f69643132333435366964">-</option>
 																		{{#each terapeutas}}
 																			<option value="{{_id}}">{{usuario_nomecompleto}}</option>
@@ -261,7 +261,7 @@
 															<label> Terapia</label>
 															<div class="form-group">
 																<div class="col-sm-6">
-																	<select name="relsemTerapia" id="relsemTerapia" class="chosen-select" data-placeholder="Escolha...">
+																	<select name="relsemTerapia" id="relsemTerapia" class="select2" data-placeholder="Escolha...">
 																		<option value="-">-</option>
 																		<option value="Fisioterapia">Fisioterapia</option>
 																		<option value="Fonoaudiologia">Fonoaudiologia</option>

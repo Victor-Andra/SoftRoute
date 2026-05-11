@@ -83,7 +83,7 @@
 												<label> Beneficiário</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordoBeneid" id="bordoBeneid" class="chosen-select"  >
+														<select name="bordoBeneid" id="bordoBeneid" class="select2"  >
 															<option value="766f69643132333435366964">-</option>
 															{{#each benes}}
 																<option value="{{_id}}">{{bene_nome}}</option>
@@ -94,7 +94,7 @@
 												<label> Atendimento realizado em:</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordoAtendem" id="bordoAtendem" class="chosen-select" >
+														<select name="bordoAtendem" id="bordoAtendem" class="select2" >
 															<option value="766f69643132333435366964">-</option>
 															<option value="Escola">Escola</option>
 															<option value="Casa">Casa</option>
@@ -113,7 +113,7 @@
 												<label> Escola</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordoEscolanome" id="bordoEscolanome" class="chosen-select">
+														<select name="bordoEscolanome" id="bordoEscolanome" class="select2">
 															<option value="-">-</option>
 															{{#each colegios}}
 																{{#each this.colegio}}
@@ -142,7 +142,7 @@
 														<div class="row">
 															<div class="col-sm-5">
 																<div class="input-group">
-																	<select name="bordoFrequencia" id="bordoFrequencia" class="chosen-select" onchange="javascript:mudaSeausente()" >
+																	<select name="bordoFrequencia" id="bordoFrequencia" class="select2" onchange="javascript:mudaSeausente()" >
 																		<option value="-">-</option>
 																		<option value="Ausente">Ausente</option>
 																		<option value="Presente">Presente</option>
@@ -198,7 +198,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. Segue rotina</td>
 																	<td name="Pontua">
-																		<select name="bordoSeguerotina" id="bordoSeguerotina" class="chosen-select" >
+																		<select name="bordoSeguerotina" id="bordoSeguerotina" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -217,7 +217,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. Apresentou extereotipias</td>
 																	<td name="Pontua">
-																		<select name="bordoEstereotipas" id="bordoEstereotipas" class="chosen-select" >
+																		<select name="bordoEstereotipas" id="bordoEstereotipas" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -237,7 +237,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. Foco atencional</td>
 																	<td name="Pontua">
-																		<select name="bordoFoco" id="bordoFoco" class="chosen-select" >
+																		<select name="bordoFoco" id="bordoFoco" class="select2" >
 																					<option value="-">-</option>
 																					<option value="00">00</option>
 																					<option value="01">01</option>
@@ -256,7 +256,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. Necessita de auto cuidado</td>
 																	<td name="Pontua">
-																		<select name="bordoAutocuidado" id="bordoAutocuidado" class="chosen-select" >
+																		<select name="bordoAutocuidado" id="bordoAutocuidado" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -275,7 +275,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">5. Se alimenta com independência</td>
 																	<td name="Pontua">
-																		<select name="bordoAliindepende" id="bordoAliindepende" class="chosen-select" >
+																		<select name="bordoAliindepende" id="bordoAliindepende" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -294,7 +294,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">6. Ecolalia</td>
 																	<td name="Pontua">
-																		<select name="bordoEscolalia" id="bordoEscolalia" class="chosen-select" >
+																		<select name="bordoEscolalia" id="bordoEscolalia" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -313,7 +313,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">7. Participação no grupo</td>
 																	<td name="Pontua">
-																		<select name="bordoParticipa" id="bordoParticipa" class="chosen-select" >
+																		<select name="bordoParticipa" id="bordoParticipa" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -332,7 +332,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">8. Segue instruções do professor</td>
 																	<td name="Pontua">
-																		<select name="bordoSegue" id="bordoSegue" class="chosen-select" >
+																		<select name="bordoSegue" id="bordoSegue" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -351,7 +351,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">9. Repertório de comunicação social</td>
 																	<td name="Pontua">
-																		<select name="bordoRepertorio" id="bordoRepertorio" class="chosen-select" >
+																		<select name="bordoRepertorio" id="bordoRepertorio" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -369,7 +369,7 @@
 																	<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;"> 10. Se desorganiza ao trocar de atividade ou de ambiente</td>
 																	<td name="Pontua">
-																		<select name="bordoDesorganiza" id="bordoDesorganiza" class="chosen-select" >
+																		<select name="bordoDesorganiza" id="bordoDesorganiza" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -451,7 +451,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. Autoagressão (bater em si mesmo)</td>
 																	<td name="Pontua">
-																		<select name="bordoAutoagressao" id="bordoAutoagressao" class="chosen-select" >
+																		<select name="bordoAutoagressao" id="bordoAutoagressao" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -461,7 +461,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. Agride adultos</td>
 																	<td name="Pontua">
-																		<select name="bordoAgrideadulto" id="bordoAgrideadulto" class="chosen-select" >
+																		<select name="bordoAgrideadulto" id="bordoAgrideadulto" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -472,7 +472,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. Agride pares</td>
 																	<td name="Pontua">
-																		<select name="bordoAgridepares" id="bordoAgridepares" class="chosen-select" >
+																		<select name="bordoAgridepares" id="bordoAgridepares" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -482,7 +482,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. Destruição de objetos</td>
 																	<td name="Pontua">
-																		<select name="bordoDestruir" id="bordoDestruir" class="chosen-select" >
+																		<select name="bordoDestruir" id="bordoDestruir" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -492,7 +492,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">5. Gritos</td>
 																	<td name="Pontua">
-																		<select name="bordoGritos" id="bordoGritos" class="chosen-select" >
+																		<select name="bordoGritos" id="bordoGritos" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -502,7 +502,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">6. Choros</td>
 																	<td name="Pontua">
-																		<select name="bordoChoros" id="bordoChoros" class="chosen-select" >
+																		<select name="bordoChoros" id="bordoChoros" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -512,7 +512,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">7. Birras</td>
 																	<td name="Pontua">
-																		<select name="bordoBirras" id="bordoBirras" class="chosen-select" >
+																		<select name="bordoBirras" id="bordoBirras" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -564,7 +564,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. O beneficiário emitiu mandos para os adultos?</td>
 																	<td name="Pontua">
-																		<select name="bordoMandosadulto" id="bordoMandosadulto" class="chosen-select" >
+																		<select name="bordoMandosadulto" id="bordoMandosadulto" class="select2" >
 																			<option value="-">-</option>
 																			<option value="I">I</option>
 																			<option value="A">A</option>
@@ -574,7 +574,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. O beneficiário emitiu mandos para os pares?</td>
 																	<td name="Pontua">
-																		<select name="bordoMandospares" id="bordoMandospares" class="chosen-select" >
+																		<select name="bordoMandospares" id="bordoMandospares" class="select2" >
 																			<option value="-">-</option>
 																			<option value="I">I</option>
 																			<option value="A">A</option>
@@ -585,7 +585,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. O beneficiário fez perguntas?</td>
 																	<td name="Pontua">
-																		<select name="bordoPergunta" id="bordoPergunta" class="chosen-select" >
+																		<select name="bordoPergunta" id="bordoPergunta" class="select2" >
 																			<option value="-">-</option>
 																			<option value="I">I</option>
 																			<option value="A">A</option>
@@ -595,7 +595,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. O beneficiário respondeu perguntas?</td>
 																	<td name="Pontua">
-																		<select name="bordoResponde" id="bordoResponde" class="chosen-select" >
+																		<select name="bordoResponde" id="bordoResponde" class="select2" >
 																			<option value="-">-</option>
 																			<option value="I">I</option>
 																			<option value="A">A</option>
@@ -605,7 +605,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">5. O beneficiário imitou os colegas?</td>
 																	<td name="Pontua">
-																		<select name="bordoImita" id="bordoImita" class="chosen-select" >
+																		<select name="bordoImita" id="bordoImita" class="select2" >
 																			<option value="-">-</option>
 																			<option value="I">I</option>
 																			<option value="A">A</option>
@@ -615,7 +615,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">6. O beneficiário iniciou interações verbais?</td>
 																	<td name="Pontua">
-																		<select name="bordoInteracaoverbal" id="bordoInteracaoverbal" class="chosen-select" >
+																		<select name="bordoInteracaoverbal" id="bordoInteracaoverbal" class="select2" >
 																			<option value="-">-</option>
 																			<option value="I">I</option>
 																			<option value="A">A</option>
@@ -666,7 +666,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. O beneficiário foi colaborativo todo o tempo?</td>
 																	<td name="Pontua">
-																		<select name="bordoColabtodotempo" id="bordoColabtodotempo" class="chosen-select" >
+																		<select name="bordoColabtodotempo" id="bordoColabtodotempo" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -677,7 +677,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. O beneficiário foi colaborativo maior parte do tempo?</td>
 																	<td name="Pontua">
-																		<select name="bordoColabmaiortempo" id="bordoColabmaiortempo" class="chosen-select" >
+																		<select name="bordoColabmaiortempo" id="bordoColabmaiortempo" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -687,7 +687,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. O beneficiário foi colaborativo metade do tempo?</td>
 																	<td name="Pontua">
-																		<select name="bordoColabmetadetempo" id="bordoColabmetadetempo" class="chosen-select" >
+																		<select name="bordoColabmetadetempo" id="bordoColabmetadetempo" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -697,7 +697,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. O beneficiário foi colaborativo menos da metade do tempo?</td>
 																	<td name="Pontua">
-																		<select name="bordoColabmenosmetadetempo" id="bordoColabmenosmetadetempo" class="chosen-select" >
+																		<select name="bordoColabmenosmetadetempo" id="bordoColabmenosmetadetempo" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -707,7 +707,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">5. O beneficiário não colaborou em nenhum momento?</td>
 																	<td name="Pontua">
-																		<select name="bordoColabnao" id="bordoColabnao" class="chosen-select" >
+																		<select name="bordoColabnao" id="bordoColabnao" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -758,7 +758,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. Mesmas atividades que a turma e foi bem sucedida.</td>
 																	<td name="Pontua">
-																		<select name="bordoAtivsucedido" id="bordoAtivsucedido" class="chosen-select" >
+																		<select name="bordoAtivsucedido" id="bordoAtivsucedido" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -768,7 +768,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. Mesma atividade que a turma e não conseguiu realizar.</td>
 																	<td name="Pontua">
-																		<select name="bordoAtivnaosucedido" id="bordoAtivnaosucedido" class="chosen-select" >
+																		<select name="bordoAtivnaosucedido" id="bordoAtivnaosucedido" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -780,7 +780,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. A professora passou atividade adaptada, mas era muito difícil.</td>
 																	<td name="Pontua">
-																		<select name="bordoAdequadodificil" id="bordoAdequadodificil" class="chosen-select" >
+																		<select name="bordoAdequadodificil" id="bordoAdequadodificil" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -790,7 +790,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. A professora passou atividade adaptada, mas era muito fácil.</td>
 																	<td name="Pontua">
-																		<select name="bordoAdequadodifacil" id="bordoAdequadodifacil" class="chosen-select" >
+																		<select name="bordoAdequadodifacil" id="bordoAdequadodifacil" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -800,7 +800,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">5. A professora não passou nenhuma atividade para o beneficiário.</td>
 																	<td name="Pontua">
-																		<select name="bordoSemativ" id="bordoSemativ" class="chosen-select" >
+																		<select name="bordoSemativ" id="bordoSemativ" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -810,7 +810,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">6. Com mediação da terapeuta para realizar a atividade.</td>
 																	<td name="Pontua">
-																		<select name="bordoMediacao" id="bordoMediacao" class="chosen-select" >
+																		<select name="bordoMediacao" id="bordoMediacao" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -820,7 +820,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">7. Com adaptação de material da terapeuta para realizar.</td>
 																	<td name="Pontua">
-																		<select name="bordoAdaptacao" id="bordoAdaptacao" class="chosen-select" >
+																		<select name="bordoAdaptacao" id="bordoAdaptacao" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -870,7 +870,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. Brincou sozinho e longe dos pares.</td>
 																	<td name="Pontua">
-																		<select name="bordoBrincousolonge" id="bordoBrincousolonge" class="chosen-select" >
+																		<select name="bordoBrincousolonge" id="bordoBrincousolonge" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -880,7 +880,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. Brincou sozinho, mas perto dos pares.</td>
 																	<td name="Pontua">
-																		<select name="bordoBrincousoperto" id="bordoBrincousoperto" class="chosen-select" >
+																		<select name="bordoBrincousoperto" id="bordoBrincousoperto" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -891,7 +891,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. Tentou brincar com os pares.</td>
 																	<td name="Pontua">
-																		<select name="bordoTentoubrincar" id="bordoTentoubrincar" class="chosen-select" >
+																		<select name="bordoTentoubrincar" id="bordoTentoubrincar" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -901,7 +901,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. Brincou com os pares de forma independente.</td>
 																	<td name="Pontua">
-																		<select name="bordoBrincouparesindep" id="bordoBrincouparesindep" class="chosen-select" >
+																		<select name="bordoBrincouparesindep" id="bordoBrincouparesindep" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -911,7 +911,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">5. Iniciou brincadeira com ajuda do terapeuta.</td>
 																	<td name="Pontua">
-																		<select name="bordoBrincouparesterapeuta" id="bordoBrincouparesterapeuta" class="chosen-select" >
+																		<select name="bordoBrincouparesterapeuta" id="bordoBrincouparesterapeuta" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -921,7 +921,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">6. Não quer brincar.</td>
 																	<td name="Pontua">
-																		<select name="bordoNaobrincar" id="bordoNaobrincar" class="chosen-select" >
+																		<select name="bordoNaobrincar" id="bordoNaobrincar" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -971,7 +971,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. O beneficiário consegue ler texto sozinho?</td>
 																	<td name="Pontua">
-																		<select name="bordoLerso" id="bordoLerso" class="chosen-select" >
+																		<select name="bordoLerso" id="bordoLerso" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -981,7 +981,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. O beneficiário precisa de ajuda na leitura?</td>
 																	<td name="Pontua">
-																		<select name="bordoLerajuda" id="bordoLerajuda" class="chosen-select" >
+																		<select name="bordoLerajuda" id="bordoLerajuda" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -991,7 +991,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. O beneficiário compreende a leitura?</td>
 																	<td name="Pontua">
-																		<select name="bordoLercompreende" id="bordoLercompreende" class="chosen-select" >
+																		<select name="bordoLercompreende" id="bordoLercompreende" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1002,7 +1002,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. O beneficiário consegue fazer contas de somar?</td>
 																	<td name="Pontua">
-																		<select name="bordoFazsoma" id="bordoFazsoma" class="chosen-select" >
+																		<select name="bordoFazsoma" id="bordoFazsoma" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1018,7 +1018,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">6. O beneficiário consegue fazer conta de subtração?</td>
 																	<td name="Pontua">
-																		<select name="bordoSubtrai" id="bordoSubtrai" class="chosen-select" >
+																		<select name="bordoSubtrai" id="bordoSubtrai" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1034,7 +1034,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">8. O beneficiário consegue fazer conta de dividir?</td>
 																	<td name="Pontua">
-																		<select name="bordoDividir" id="bordoDividir" class="chosen-select" placeholder="Escolha...">
+																		<select name="bordoDividir" id="bordoDividir" class="select2" placeholder="Escolha...">
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1044,7 +1044,7 @@
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">9. O beneficiário consegue fazer conta de multiplicar?</td>
 																	<td name="Pontua">
-																		<select name="bordoMultiplicar" id="bordoMultiplicar" class="chosen-select" placeholder="Escolha...">
+																		<select name="bordoMultiplicar" id="bordoMultiplicar" class="select2" placeholder="Escolha...">
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>

@@ -162,6 +162,10 @@
 					contafeitos(cg_xxi) + contafeitos(cg_xxii)
 					);
 				document.getElementById("ataTotalpontos").value = totalpontos;
+				// ✅ Garante que selects Select2 reflitam o valor atual
+				if (typeof $.fn.select2 !== 'undefined') {
+					$('.select2').trigger('change');
+				}
 			}
 
 			// Função para contar checkboxes por grupo
@@ -178,37 +182,34 @@
 			//	}
 			//	return 0;
 			//}
-
+			
+			/**
+			* Atualiza o campo temporário correspondente ao checkbox.
+			* Garante que o valor seja sempre string "true" ou "false", 
+			* evitando falhas na recuperação do rascunho e na contagem.
+			*/
 			function updateTempField(checkbox) {
-				// Obtém o valor do checkbox (true ou false)
-				let valcheck;
-				console.log("checkbox.checked: "+checkbox.checked);
-				console.log("checkbox.value: "+checkbox.value);
-				
-				if (checkbox.checked !== undefined) {
-					valcheck = checkbox.checked;
-				} else {
-					// Caso a propriedade "checked" não esteja disponível, tenta obter o estado usando o atributo "value"
-					valcheck = checkbox.value === "true";
+				// 1️⃣ Validação de segurança
+				if (!checkbox || !checkbox.id) {
+					console.warn('⚠️ updateTempField: Elemento checkbox inválido ou sem ID.');
+					return;
 				}
 
-				// Constrói o nome do campo temporário
-				const checkboxTempName = checkbox.name + "temp";
+				// 2️⃣ Converte booleano para STRING (padrão exigido pelo loadDraftReport)
+				const valorTemp = checkbox.checked ? "true" : "false";
+				
+				// 3️⃣ Busca pelo ID (mais rápido e preciso que getElementsByName)
+				const tempFieldId = checkbox.id + "temp";
+				const tempField = document.getElementById(tempFieldId);
 
-				// Obtém a referência ao campo temporário
-				const tempField = document.getElementsByName(checkboxTempName)[0];
-				console.log("tempField.checked: "+tempField.checked);
-				console.log("tempField.value: "+tempField.value);
-
-				// Verifica se o campo temporário foi encontrado antes de atribuir o valor
+				// 4️⃣ Atribuição segura
 				if (tempField) {
-					tempField.value = valcheck;
-					console.log('Valor: ' + valcheck);
+					tempField.value = valorTemp;
 				} else {
-					console.error('Campo temporário não encontrado para ' + checkboxTempName);
+					console.warn(`⚠️ updateTempField: Campo temporário "${tempFieldId}" não encontrado no DOM.`);
 				}
 			}
-			
+		
 			function inputTrue(){
 				document.getElementById("ataXxiii01temp").value = "true";
 				radioRes = 1;
@@ -405,7 +406,7 @@
 														<label>Beneficiário</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<select name="ataBeneid" id="ataBeneid" class="chosen-select" data-placeholder="Escolha..." onclick="atualizarContagem()">
+																<select name="ataBeneid" id="ataBeneid" class="select2" data-placeholder="Escolha..." onclick="atualizarContagem()">
 																		<option value="766f69643132333435366964">-</option>
 																	{{#each Benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
@@ -453,7 +454,7 @@
 														<label>Técnico acompanhante</label>
 														<div class="form-group">
 															<div class="col-sm-8">
-																<select name="ataAcompanhausuid" id="ataAcompanhausuid" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="ataAcompanhausuid" id="ataAcompanhausuid" class="select2" data-placeholder="Escolha..." >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each Terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
@@ -468,7 +469,7 @@
 														<label for="id-date-picker-1">Corrigido por</label>
 														<div class="row">
 															<div class="col-sm-6">
-																<select name="ataCorrecusuid" id="ataCorrecusuid" class="chosen-select" data-placeholder="Escolha..." >
+																<select name="ataCorrecusuid" id="ataCorrecusuid" class="select2" data-placeholder="Escolha..." >
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each Terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
@@ -3810,6 +3811,9 @@
 			// Atualiza os campos temp explicitamente
 			updateTempFields(reportData);
 
+			// ✅ Recalcula todos os contadores após restaurar os valores
+			atualizarContagem();
+
 			alert('Rascunho recuperado automaticamente!');
 		} catch (error) {
 			console.error("Erro ao processar o rascunho:", error);
@@ -4084,29 +4088,23 @@
 				}
 			}
 
-			// Evento para salvar automaticamente enquanto o usuário preenche o formulário
 			document.addEventListener('DOMContentLoaded', () => {
-				console.log("Página carregada. Iniciando salvamento automático...");
-
-				// Carrega o rascunho ao carregar a página
-				//loadDraftReport();
-
-				// Salva automaticamente a cada 2 minutos (120.000 milissegundos)
-				setInterval(() => {
-					console.log("Disparando salvamento automático (intervalo de 2 minutos)...");
-					autoSaveReport();
-				}, 120000); // Salva automaticamente a cada 2 minutos (120.000 milissegundos)
-
-				// Salva automaticamente quando o usuário interage com o formulário
+				console.log("✅ Página ATA carregada. Salvamento automático ativo.");
 				const form = document.getElementById('reportForm');
-				if (form) {
-					form.addEventListener('input', () => {
-						console.log("Usuário interagiu com o formulário. Salvando rascunho...");
+				if (!form) return;
+
+				// 1️⃣ Textos, datas e textareas
+				form.addEventListener('input', autoSaveReport);
+
+				// 2️⃣ Select2, Checkboxes e Radios (disparam 'change')
+				form.addEventListener('change', (e) => {
+					if (e.target.tagName === 'SELECT' || e.target.type === 'checkbox' || e.target.type === 'radio') {
 						autoSaveReport();
-					});
-				} else {
-					console.warn("Formulário 'reportForm' não encontrado no DOM.");
-				}
+					}
+				});
+
+				// 3️⃣ Backup a cada 2 minutos
+				setInterval(autoSaveReport, 120000);
 			});
 		</script>
 	</body>

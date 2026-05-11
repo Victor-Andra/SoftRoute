@@ -162,28 +162,7 @@
 				margin-right: 2px;
 			}
 
-			/* Chosen Select minimalista - compatível com aceAdmin */
-			.toolbar-pesquisa .chosen-container .chosen-single {
-				border: 2px solid #e2e8f0 !important;
-				border-radius: 4px !important;
-				box-shadow: none !important;
-				background: white !important;
-				height: 30px !important;
-				line-height: 28px !important;
-				font-size: 12px !important;
-			}
-			.toolbar-pesquisa .chosen-container .chosen-single:hover {
-				border-color: #fff !important;
-			}
-			.toolbar-pesquisa .chosen-container-active.chosen-with-drop .chosen-single {
-				border-color: #fff !important;
-				background: white !important;
-			}
-			.toolbar-pesquisa .chosen-container .chosen-drop {
-				border: 1px solid #ced4da !important;
-				border-top: none !important;
-				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-			}
+			
 		</style>
 		<script type="text/javascript">
 			function atualizaDataIni(){
@@ -254,7 +233,7 @@
 									<div class="form-group" style="min-width: 260px;">
 										<label>Terapeuta:</label>
 										<select name="relTeraid" id="relTeraid"
-												class="chosen-select"
+												class="select2"
 												data-placeholder="Escolha...">
 											<option value=""></option>
 											{{#each terapeutas}}
