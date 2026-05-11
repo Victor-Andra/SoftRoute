@@ -26,55 +26,7 @@
 
        
        
-      /* ===== IMPRESSÃO COM CORES ===== */
-      @media print {
-          /* Força impressão de cores de fundo e texto */
-          * {
-              -webkit-print-color-adjust: exact !important;
-              print-color-adjust: exact !important;
-              color-adjust: exact !important;
-          }
-          
-          /* Labels coloridas mantêm o fundo na impressão */
-          .label-info {
-              background-color: #17a2b8 !important;
-              color: white !important;
-              border-color: #138496 !important;
-          }
-          .label-success {
-              background-color: #28a745 !important;
-              color: white !important;
-              border-color: #218838 !important;
-          }
-          .label-warning {
-              background-color: #ffc107 !important;
-              color: #212529 !important;
-              border-color: #e0a800 !important;
-          }
-          
-          /* Ícones e textos coloridos */
-          .blue { color: #007bff !important; }
-          .green { color: #28a745 !important; }
-          
-          /* Ajuste de fontes para impressão */
-          body {
-              font-size: 9pt !important;
-              zoom: 0.95; /* leve redução para caber melhor */
-          }
-          
-          /* Garante que as colunas fiquem lado a lado na impressão */
-          .col-xs-6 {
-              width: 50% !important;
-              float: left !important;
-              box-sizing: border-box;
-          }
-          
-          /* Remove sombras e efeitos que gastam tinta desnecessariamente */
-          .label {
-              box-shadow: none !important;
-              text-shadow: none !important;
-          }
-      }
+     
       /* ============================================
          BARRA DE PESQUISA - CLASSE SEPARADA
          ============================================ */
@@ -220,59 +172,241 @@
 
      
     </style>
+   <style>
+  /* ============================================
+     ESTILOS PARA IMPRESSÃO - CORRIGIDOS
+     ============================================ */
+  @media print {
+    .noprint { display: none !important; }
+    
+    /* Remove sombras e fundos desnecessários */
+    body { 
+      margin: 0; 
+      font-size: 11px; 
+      -webkit-print-color-adjust: exact; 
+      print-color-adjust: exact; 
+    }
+    
+    /* === CONFIGURAÇÃO DAS PÁGINAS === */
+    
+    /* Primeira página: mais espaço para logo + título + cabeçalho fixo */
+    @page :first {
+      margin: 1cm;
+      margin-top: 5cm; /* espaço para: logo(1.5cm) + título(0.8cm) + cabeçalho(2.5cm) + respiro */
+      
+      @top-center {
+        content: "Página " counter(page) " de " counter(pages);
+        font-size: 10px;
+        color: #333;
+      }
+    }
+    
+    /* Páginas seguintes: menos espaço (sem logo) */
+    @page {
+      margin: 1cm;
+      margin-top: 3.5cm; /* espaço para: título(0.8cm) + cabeçalho(2.5cm) + respiro */
+      
+      @top-center {
+        content: "Página " counter(page) " de " counter(pages);
+        font-size: 10px;
+        color: #333;
+      }
+      @bottom-center { content: ""; }
+    }
+    
+    /* === CABEÇALHO FIXO DO RELATÓRIO (repete em TODAS as páginas) === */
+    .cabecalho-relatorio.print-only {
+      display: block !important;
+      position: fixed;
+      top: 22mm; /* posiciona abaixo do título compacto */
+      left: 1cm;
+      right: 1cm;
+      z-index: 9999;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 0;
+    }
+    
+    .cabecalho-interno {
+      display: flex;
+      width: 100%;
+    }
+    
+    .cabecalho-coluna {
+      width: 50%;
+      padding: 4px 8px;
+      box-sizing: border-box;
+      font-size: 10px;
+    }
+    
+    .cabecalho-coluna:first-child {
+      border-right: 1px solid #ccc;
+    }
+    
+    .cabecalho-coluna ul {
+      margin: 0;
+      padding-left: 4px;
+      list-style: none;
+    }
+    
+    .cabecalho-coluna li {
+      line-height: 1.2;
+      margin-bottom: 2px;
+    }
+    
+    /* === TÍTULO COMPACTO (aparece em TODAS as páginas, acima do cabeçalho) === */
+    .titulo-relatorio-print {
+      display: block !important;
+      position: fixed;
+      top: 12mm; /* logo abaixo da margem superior */
+      left: 1cm;
+      right: 1cm;
+      z-index: 10000;
+      text-align: center;
+      background: white;
+      padding: 2px 0;
+      font-size: 11px;
+      font-weight: 600;
+      color: #333;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .titulo-relatorio-print i {
+      margin-right: 4px;
+      color: #27ae60;
+    }
+    
+    /* === LOGO (aparece APENAS na primeira página) === */
+    .logo-print-first {
+      display: block !important;
+      position: fixed;
+      top: 1cm;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10001;
+      text-align: center;
+      background: white;
+      padding: 0 1cm;
+    }
+    
+    .logo-print-first img {
+      width: 120px;
+      height: auto;
+      display: block;
+    }
+    
+    /* === CONTEÚDO PRINCIPAL (tabela) - evita sobreposição === */
+    .widget-main.padding-24,
+    .page,
+    table.table-bordered {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
+    
+    /* Garante que a tabela comece após o cabeçalho fixo */
+    .conteudo-relatorio {
+      margin-top: 45mm !important; /* espaço para título + cabeçalho fixo */
+      padding-top: 5px;
+    }
+    
+    /* Na primeira página, adiciona espaço extra para o logo */
+    @page :first {
+      /* já definido acima com margin-top: 5cm */
+    }
+    
+    /* Força quebra de página correta nos elementos */
+    .page { page-break-inside: avoid; }
+    tr { page-break-inside: avoid; page-break-after: auto; }
+    
+    /* Remove elementos que atrapalham na impressão */
+    .widget-header, .widget-title, .space-6, .breadcrumb {
+      display: none !important;
+    }
+  }
+  
+  /* === ESTILOS PARA TELA (não imprime) === */
+  @media screen {
+    .print-only, .print-title-all, .logo-print-first, .titulo-relatorio-print {
+      display: none !important;
+    }
+    .cabecalho-relatorio.noprint { display: block; }
+  }
+</style>
     <style>
-			/* Estilos para tela */
-			@media screen {
-				.print-header {
-					display: none;
-				}
-			}
+      /* ============================================
+      CABEÇALHO DO RELATÓRIO - TELA E IMPRESSÃO
+      ============================================ */
+    .cabecalho-relatorio {
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
 
-			/* Estilos para impressão */
-			@media print {
-				.noprint {
-					display: none !important;
-				}
+    .cabecalho-interno {
+      display: flex;
+      width: 100%;
+      border: 1px solid #ccc;
+      background: #f8f9fa;
+      padding: 0;
+    }
 
-				/* Cabeçalho fixo com paginação no topo */
-				.print-header {
-					position: fixed;
-					top: 0;
-					left: 0;
-					right: 0;
-					text-align: center;
-					font-size: 11px;
-					padding: 4px 0;
-					background: white;
-					z-index: 9999;
-					/* O content aqui não funciona diretamente em elementos reais,
-					apenas em pseudo-elementos (@page/@top-center cuidará disso) */
-				}
+    .cabecalho-coluna {
+      width: 50%;
+      padding: 6px 8px;
+      box-sizing: border-box;
+      text-align: left;
+    }
 
-				/* Usar padding em vez de margin evita o grande espaço na 1ª página */
-				body {
-					margin: 0;
-					padding-top: 12mm;  /* espaço para o cabeçalho fixo */
-					padding-bottom: 10mm;
-				}
+    .cabecalho-coluna:first-child {
+      border-right: 1px solid #ccc;
+    }
 
-				/* Configuração da página (não trava a orientação do usuário) */
-				@page {
-					margin: 1cm;
+    /* 🔹 VERSÃO PARA TELA (padrão) */
+    .cabecalho-relatorio.noprint {
+      display: block;
+    }
 
-					@top-center {
-						content: "Página " counter(page) " de " counter(pages);
-						font-size: 11px;
-						color: black;
-					}
+    .cabecalho-relatorio.print-only {
+      display: none;
+    }
 
-					@bottom-center {
-						content: ""; /* remove rodapé automático */
-					}
-				}
-
-			}
-		</style>
+    /* 🔹 VERSÃO PARA IMPRESSÃO */
+    @media print {
+      .cabecalho-relatorio.noprint {
+        display: none !important;
+      }
+      
+      .cabecalho-relatorio.print-only {
+        display: block !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;
+        background: white;
+        padding: 2px 0;
+        border-bottom: 1px solid #ccc;
+      }
+      
+      /* Compensa o espaço do cabeçalho fixo */
+      .widget-main.padding-24,
+      .page,
+      table.table-bordered {
+        margin-top: 70px !important;
+        padding-top: 10px !important;
+      }
+      
+      /* Garante quebra de página correta */
+      .page {
+        page-break-inside: avoid;
+      }
+      
+      /* Remove margens extras na primeira página */
+      body {
+        padding-top: 75mm !important;
+      }
+    }
+    </style>
     <script>
       function carregaBody(){
         document.getElementById('dataFilDe').value = document.getElementById('dataIni').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
@@ -283,6 +417,23 @@
 
   <body onload="javascript:controlaNave();carregaBody();" class="no-skin">
     <div class="main-container ace-save-state" id="main-container">
+      <!-- 🔹 ELEMENTOS EXCLUSIVOS PARA IMPRESSÃO -->
+
+    <!-- Logo: apenas na primeira página -->
+    <div class="logo-print-first noprint">
+      <img src="/images/gallery/logo_route_centro.png" alt="Route Centro de Terapia" style="width:120px;height:auto;">
+    </div>
+
+     <div class="widget-header widget-header-large">
+        <!-- /widget-header -->
+        <h5 class="widget-title grey lighter">
+          
+          <i class="ace-icon fa fa-puzzle-piece green"></i>
+          
+          Atendimentos por Beneficiário
+        </h5>
+      </div>
+
       <div class="main-content">
         <div class="main-content-inner noprint">
           <ul class="breadcrumb">
@@ -419,97 +570,102 @@
 							<div class="widget-box transparent">
 								<!-- /widget-box transparent -->
 
-								<div style="text-align: center;">
-									<!-- /text-align center -->
-									<img width="140" height="60" alt="150x150" src="/images/gallery/logo_route_centro.png">
-								</div>
-								<!-- /.text-align center -->
+							
 
-								<div class="widget-header widget-header-large">
-									<!-- /widget-header -->
-									<h3 class="widget-title grey lighter">
-										<i class="ace-icon fa fa-leaf green"></i>
-										Atendimentos por Beneficiário
-									</h3>
-								</div>
+								
 								<!-- /.widget-header -->
 
 								<div class="widget-body">
 									<!-- /widget-body -->
-									<div class="widget-main padding-24">
-										<!-- /widget-main padding-24 -->
-										<div class="row">
-											<!-- /row -->
-										<div class="col-sm-12">
-                          <!-- 🔹 Título da Seção de Atendimentos (centralizado ou full-width) -->
-                      </div>
-											
-										</div><!-- /.row -->
-										<div class="page"><!-- /page -->
-											<table class="table table-bordered" style="font-size: 11px; ">
-												<thead>
-                            <!-- LINHA 1: Cabeçalho dividido 50/50 usando DIVs internas (SEM colspan) -->
-                            <tr>
-                                <th colspan="3" style="padding: 0; border: 1px solid #ccc; background: #f8f9fa;">
-                                    <div style="display: flex; width: 100%;">
-                                        <div style="width: 50%; padding: 6px 8px; border-right: 1px solid #ccc; box-sizing: border-box; text-align: left;">
-                                            <div class="label label-lg label-info arrowed-in arrowed-right" style="font-size: 10px; padding: 4px 8px; margin-bottom: 3px; display: inline-block;">
-                                                <b>Informações do Prestador</b>
-                                            </div>
-                                            <ul class="list-unstyled" style="font-size: 11px; margin: 0; padding-left: 4px;">
-                                                <li style="line-height: 1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>Prestador:</b> Route Centro de Terapia</li>
-                                                <li style="line-height: 1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>CNPJ:</b> 33.346.423/0001-17</li>
-                                            </ul>
-                                        </div>
-                                        <div style="width: 50%; padding: 6px 8px; box-sizing: border-box; text-align: left;">
-                                            <div class="label label-lg label-success arrowed-in arrowed-right" style="font-size: 10px; padding: 4px 8px; margin-bottom: 3px; display: inline-block;">
-                                                <b>Informações do Relatório</b>
-                                            </div>
-                                            <ul class="list-unstyled" style="font-size: 11px; margin: 0; padding-left: 4px;">
-                                                <li style="line-height: 1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Período:</b> {{periodoDe}} até {{periodoAte}}</li>
-                                                <li style="line-height: 1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Beneficiário:</b> {{bene_nome}}</li>
-                                                <li style="line-height: 1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Convênio:</b> {{conv_nome}}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </th>
-                            </tr>
+								<div class="widget-main padding-24">
+  
+  <!-- ✅ NOVO: Wrapper para controle de espaçamento na impressão -->
+  <div class="conteudo-relatorio">
+    
+    <!-- Cabeçalho do relatório (versão tela) -->
+    <div class="cabecalho-relatorio noprint">
+      <div class="cabecalho-interno">
+        <div class="cabecalho-coluna">
+          <div class="label label-lg label-info arrowed-in arrowed-right" style="font-size:10px;padding:4px 8px;margin-bottom:3px;display:inline-block;">
+            <b>Informações do Prestador</b>
+          </div>
+          <ul class="list-unstyled" style="font-size:11px;margin:0;padding-left:4px;">
+            <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>Prestador:</b> Route Centro de Terapia</li>
+            <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>CNPJ:</b> 33.346.423/0001-17</li>
+          </ul>
+        </div>
+        <div class="cabecalho-coluna">
+          <div class="label label-lg label-success arrowed-in arrowed-right" style="font-size:10px;padding:4px 8px;margin-bottom:3px;display:inline-block;">
+            <b>Informações do Relatório</b>
+          </div>
+          <ul class="list-unstyled" style="font-size:11px;margin:0;padding-left:4px;">
+            <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Período:</b> {{periodoDe}} até {{periodoAte}}</li>
+            <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Beneficiário:</b> {{bene_nome}}</li>
+            <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Convênio:</b> {{conv_nome}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-                            <!-- LINHA 2: Título da seção (ocupa as 3 colunas) -->
-                            <tr>
-                                <th colspan="3" style="text-align: center; padding: 5px 8px; border: 1px solid #ccc; background: #fff3cd;">
-                                    <div class="label label-lg label-warning arrowed-in arrowed-right" style="font-size: 10px; padding: 4px 8px; display: inline-block;">
-                                        <b>Informações dos Atendimentos</b>
-                                    </div>
-                                </th>
-                            </tr>
+    <!-- Cabeçalho do relatório (versão impressão - FIXO) -->
+    <div class="cabecalho-relatorio print-only">
+      <div class="cabecalho-interno">
+        <div class="cabecalho-coluna">
+          <div class="label label-lg label-info arrowed-in arrowed-right" style="font-size:10px;padding:4px 8px;margin-bottom:3px;display:inline-block;">
+            <b>Informações do Prestador</b>
+          </div>
+          <ul class="list-unstyled" style="font-size:11px;margin:0;padding-left:4px;">
+            <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>Prestador:</b> Route Centro de Terapia</li>
+            <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>CNPJ:</b> 33.346.423/0001-17</li>
+          </ul>
+        </div>
+        <div class="cabecalho-coluna">
+          <div class="label label-lg label-success arrowed-in arrowed-right" style="font-size:10px;padding:4px 8px;margin-bottom:3px;display:inline-block;">
+            <b>Informações do Relatório</b>
+          </div>
+          <ul class="list-unstyled" style="font-size:11px;margin:0;padding-left:4px;">
+            <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Período:</b> {{periodoDe}} até {{periodoAte}}</li>
+            <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Beneficiário:</b> {{bene_nome}}</li>
+            <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Convênio:</b> {{conv_nome}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
-                            <!-- LINHA 3: Colunas de dados (15% | 15% | 70%) - AQUI QUE TRAVA AS LARGURAS -->
-                            <tr>
-                                <th style="width: 20% !important;  left !important; padding: 6px !important; border: 1px solid #ccc !important; background: #e9ecef !important; font-weight: 600;">Data do Atendimento</th>
-                                <th style="width: 20% !important; text-align: left !important; padding: 6px !important; border: 1px solid #ccc !important; background: #e9ecef !important; font-weight: 600;">Especialidade</th>
-                                <th style="width: 60% !important; text-align: left !important; padding: 6px !important; border: 1px solid #ccc !important; background: #e9ecef !important; font-weight: 600;">Profissional</th>
-                            </tr>
-                        </thead>
-												<tbody>
-												{{#each rels}}
-													<tr>
-                              <td style="width: 20% !important;  text-align: left; padding: 6px; border: 1px solid #ccc; vertical-align: top;">{{dt}}</td>
-                              <td style="width: 20% !important;  text-align: left; padding: 6px; border: 1px solid #ccc; vertical-align: top;">
-                                  {{#each ../terapias}}{{#ifEqual this._id ../especialidade}}{{terapia_nomecid}}{{/ifEqual}}{{/each}}
-                              </td>
-                              <td style="width: 60% !important;  text-align: left; padding: 6px; border: 1px solid #ccc; vertical-align: top;">
-                                  {{#each ../terapeutas}}{{#ifEqual this._id ../profissional}}{{usuario_nomecompleto}}{{/ifEqual}}{{/each}}
-                              </td>
-                          </tr>
-												{{/each}}
-												</tbody>
-												
-											</table>
-											
-										</div><!-- /.page -->
-									
-									</div>
+    <!-- ✅ TABELA DE DADOS (agora com espaçamento correto) -->
+    <table class="table table-bordered" style="font-size:11px;">
+      <thead>
+        <tr>
+          <th colspan="3" style="text-align:center;padding:5px 8px;border:1px solid #ccc;background:#fff3cd;">
+            <div class="label label-lg label-warning arrowed-in arrowed-right" style="font-size:10px;padding:4px 8px;display:inline-block;">
+              <b>Informações dos Atendimentos</b>
+            </div>
+          </th>
+        </tr>
+        <tr>
+          <th style="width:20%!important;text-align:left!important;padding:6px!important;border:1px solid #ccc!important;background:#e9ecef!important;font-weight:600;">Data do Atendimento</th>
+          <th style="width:20%!important;text-align:left!important;padding:6px!important;border:1px solid #ccc!important;background:#e9ecef!important;font-weight:600;">Especialidade</th>
+          <th style="width:60%!important;text-align:left!important;padding:6px!important;border:1px solid #ccc!important;background:#e9ecef!important;font-weight:600;">Profissional</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each rels}}
+          <tr>
+            <td style="width:20%!important;text-align:left;padding:6px;border:1px solid #ccc;vertical-align:top;">{{dt}}</td>
+            <td style="width:20%!important;text-align:left;padding:6px;border:1px solid #ccc;vertical-align:top;">
+              {{#each ../terapias}}{{#ifEqual this._id ../especialidade}}{{terapia_nomecid}}{{/ifEqual}}{{/each}}
+            </td>
+            <td style="width:60%!important;text-align:left;padding:6px;border:1px solid #ccc;vertical-align:top;">
+              {{#each ../terapeutas}}{{#ifEqual this._id ../profissional}}{{usuario_nomecompleto}}{{/ifEqual}}{{/each}}
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    
+  </div><!-- /.conteudo-relatorio -->
+  
+</div>
 									<!-- /.widget-main padding-24 -->
 								</div>
 								<!-- /.widget-body -->
@@ -551,7 +707,7 @@
               </tr>
             </tbody>
           </table>
-				<div style="margin-top: 32px;"></div>
+				
 				
 			</div>
 		</div>

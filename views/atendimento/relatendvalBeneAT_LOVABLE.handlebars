@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Relatório Analítico de Atendimentos por Beneficiário</title>
+
+  <!-- Ace Admin / Bootstrap (mantenha os seus links normais do projeto) -->
+  <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/ace.min.css">
+  <link rel="stylesheet" href="/assets/css/chosen.min.css">
+
+  <style>
+    /* ============================================================
+       TELA — mantém seus filtros INTACTOS
+       (apenas o necessário para o relatório; não alterei a toolbar)
+       ============================================================ */
+    table.table-bordered { width: 100% !important; border-collapse: collapse !important; }
+    table.table-bordered td,
+    table.table-bordered th {
+      word-wrap: break-word !important;
+      overflow-wrap: break-word !important;
+    }
+
+    /* ====== TOOLBAR DE FILTROS (mantida como você já tinha) ====== */
+    .toolbar-pesquisa{background:linear-gradient(135deg,#21e2f3 0%,#1976d2 100%);color:#fff;padding:15px;border-radius:8px;margin:0 12px 20px;box-shadow:0 4px 6px rgba(0,0,0,.1);border:1px solid #1976d2}
+    .toolbar-pesquisa h5{margin:0 0 12px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+    .toolbar-pesquisa .form-row{display:flex;flex-wrap:wrap;gap:12px;width:100%;align-items:flex-end}
+    .toolbar-pesquisa .form-group{margin:0;display:flex;flex-direction:column;align-items:flex-start;min-width:140px;flex:1;max-width:220px}
+    .toolbar-pesquisa label{font-size:11px;font-weight:500;margin-bottom:4px;color:#f8f9fa;white-space:nowrap}
+    .toolbar-pesquisa input[type=date],.toolbar-pesquisa input[type=time],.toolbar-pesquisa select{padding:6px 10px;border:2px solid #e2e8f0;border-radius:4px;font-size:12px;width:100%;box-sizing:border-box;background:#fff;color:#333;height:30px}
+    .toolbar-pesquisa .btn-pesquisar{background:#dc3545;color:#fff;border:0;padding:8px 24px;border-radius:4px;font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;margin-left:auto}
+    .toolbar-pesquisa .btn-pesquisar:hover{background:#c82333}
+    .grupo-horario{display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap}
+    .grupo-horario .form-group{min-width:70px;max-width:90px;flex:none}
+
+    /* ====== CABEÇALHO DO RELATÓRIO (TELA) ====== */
+    .relatorio-wrapper { background:#fff; padding: 16px; }
+    .logo-topo { text-align:center; margin-bottom: 8px; }
+    .logo-topo img { max-height: 70px; }
+    .titulo-relatorio{
+      text-align:center; font-size:18px; font-weight:700;
+      margin: 6px 0 14px; color:#1976d2;
+      border-bottom: 2px solid #1976d2; padding-bottom: 6px;
+    }
+    .cabecalho-duas-colunas{
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+      margin-bottom: 14px;
+    }
+    .cabecalho-duas-colunas .bloco{
+      border:1px solid #d6d6d6; border-radius:6px; padding:10px 12px;
+      background:#fafbfc;
+    }
+    .cabecalho-duas-colunas .bloco h6{
+      margin:0 0 6px; font-size:12px; font-weight:700;
+      text-transform:uppercase; color:#1976d2; letter-spacing:.4px;
+    }
+    .cabecalho-duas-colunas .bloco p{ margin: 2px 0; font-size: 12px; }
+
+    .cabecalho-secundario{
+      background:#1976d2; color:#fff; padding: 6px 10px;
+      font-weight:600; font-size:13px; border-radius:4px 4px 0 0;
+      margin-top: 6px;
+    }
+
+    /* Numeração de página — só na impressão */
+    .page-counter{ display:none; }
+
+    /* Página em branco para carimbos */
+    .pagina-carimbos{
+      page-break-before: always;
+      min-height: 60vh;
+      display:flex; gap:24px; justify-content:space-around; align-items:flex-end;
+      padding: 80px 40px 40px;
+    }
+    .pagina-carimbos .assinatura{
+      flex:1; text-align:center; border-top:1px solid #333;
+      padding-top:6px; font-size:12px;
+    }
+
+    /* ============================================================
+       IMPRESSÃO
+       ============================================================ */
+    @media print{
+      .noprint{ display:none !important; }
+
+      @page{
+        size: A4;
+        margin: 28mm 10mm 14mm 10mm;   /* topo maior reservado p/ cabeçalho fixo */
+      }
+
+      html, body{ background:#fff !important; margin:0; padding:0; font-size:11px; color:#000; }
+
+      /* Remove qualquer interferência do Ace na hora de imprimir */
+      .main-container, .main-content, .page-content,
+      .widget-box, .widget-main, .widget-header { all: unset; display:block; }
+
+      /* ===== CABEÇALHO PRINCIPAL FIXO EM TODAS AS PÁGINAS ===== */
+      .cabecalho-principal-print{
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        background:#fff;
+        padding: 4px 10px 6px;
+        border-bottom: 2px solid #1976d2;
+        z-index: 9999;
+      }
+      .cabecalho-principal-print .num-pagina{
+        text-align:center; font-size:10px; font-weight:600;
+        color:#333; margin-bottom: 2px;
+      }
+      .cabecalho-principal-print .titulo-print{
+        text-align:center; font-size:13px; font-weight:700; color:#1976d2;
+        margin: 0 0 4px;
+      }
+      .cabecalho-principal-print .duas-colunas-print{
+        display: table; width:100%; table-layout: fixed;
+      }
+      .cabecalho-principal-print .duas-colunas-print .col-print{
+        display: table-cell; width:50%; vertical-align: top;
+        padding: 0 6px; font-size: 10px; line-height: 1.25;
+      }
+      .cabecalho-principal-print .col-print h6{
+        margin:0 0 2px; font-size:10px; font-weight:700;
+        color:#1976d2; text-transform:uppercase;
+      }
+      .cabecalho-principal-print .col-print p{ margin: 0; }
+
+      /* Numeração via CSS counters (CSS Paged Media) */
+      .cabecalho-principal-print .num-pagina::before{
+        content: "Página " counter(page) " de " counter(pages);
+      }
+
+      /* Logo só na primeira página, ACIMA do cabeçalho */
+      .logo-primeira-pagina{
+        display:block; text-align:center;
+        margin: 0 0 8px;
+      }
+      .logo-primeira-pagina img{ max-height: 60px; }
+      /* Some a partir da 2ª página: usamos truque de "running" via posição */
+      .logo-primeira-pagina{ break-after: avoid; }
+
+      /* Esconde o cabeçalho de tela durante a impressão */
+      .cabecalho-tela{ display:none !important; }
+
+      /* Cabeçalho secundário (acima da tabela) repete em cada página */
+      .cabecalho-secundario-print{
+        background:#e9f1fb !important;
+        color:#1976d2 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-weight:700; font-size:11px;
+        padding: 4px 6px; border:1px solid #1976d2;
+      }
+
+      /* Tabela */
+      table.tabela-relatorio{
+        width:100% !important; border-collapse: collapse !important;
+        margin-top: 0;
+      }
+      table.tabela-relatorio thead{ display: table-header-group; } /* repete em todas */
+      table.tabela-relatorio tfoot{ display: table-footer-group; }
+      table.tabela-relatorio tr{ page-break-inside: avoid; }
+      table.tabela-relatorio th,
+      table.tabela-relatorio td{
+        border:1px solid #999 !important;
+        padding: 4px 6px !important; font-size: 10px;
+      }
+      table.tabela-relatorio thead th{
+        background:#1976d2 !important; color:#fff !important;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+
+      /* Página em branco com carimbos — ainda recebe o cabeçalho fixo */
+      .pagina-carimbos{
+        page-break-before: always;
+        min-height: 70vh;
+        padding-top: 40mm;
+      }
+      .pagina-carimbos .assinatura{ font-size:11px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="main-container">
+  <div class="main-content">
+    <div class="page-content">
+
+      <!-- ============================================================
+           SEUS FILTROS — NÃO ALTERADOS
+           ============================================================ -->
+      <div class="toolbar-pesquisa noprint">
+        <h5><i class="fa fa-filter"></i> Filtros do Relatório</h5>
+        <form class="form-inline" method="get">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Período de:</label>
+              <input type="date" name="periodoDe" value="{{periodoDe}}">
+            </div>
+            <div class="form-group">
+              <label>até:</label>
+              <input type="date" name="periodoAte" value="{{periodoAte}}">
+            </div>
+            <div class="form-group">
+              <label>Beneficiário:</label>
+              <select name="beneficiario" class="chosen-select">
+                {{#each benes}}
+                  <option value="{{_id}}">{{bene_nome}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Exibir:</label>
+              <select name="exibir">
+                <option value="horas">Horas</option>
+                <option value="resumo">Resumo</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Inativos:</label>
+              <select name="inativos">
+                <option value="nao">Não</option>
+                <option value="sim">Sim</option>
+              </select>
+            </div>
+
+            <div class="grupo-horario">
+              <div class="form-group">
+                <label>Turno:</label>
+                <select name="turno">
+                  <option>Auto</option><option>Manhã</option>
+                  <option>Tarde</option><option>Dia</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Início:</label><input type="time" name="ini"></div>
+              <div class="form-group"><label>Fim:</label><input type="time" name="fim"></div>
+              <div class="form-group"><label>Início D:</label><input type="time" name="iniD"></div>
+              <div class="form-group"><label>Fim D:</label><input type="time" name="fimD"></div>
+            </div>
+
+            <button type="submit" class="btn-pesquisar">
+              <i class="fa fa-search"></i> Pesquisar
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ============================================================
+           CABEÇALHO FIXO DE IMPRESSÃO (repete em TODAS as páginas)
+           ============================================================ -->
+      <div class="cabecalho-principal-print">
+        <div class="num-pagina"><!-- counter(page) de counter(pages) --></div>
+        <div class="titulo-print">Relatório Analítico de Atendimentos por Beneficiário</div>
+        <div class="duas-colunas-print">
+          <div class="col-print">
+            <h6>Dados da Clínica</h6>
+            <p><strong>Prestador:</strong> Route Centro de Terapia</p>
+            <p><strong>CNPJ:</strong> 33.346.423/0001-17</p>
+          </div>
+          <div class="col-print">
+            <h6>Dados do Beneficiário</h6>
+            <p><strong>Beneficiário:</strong> {{bene_nome}}</p>
+            <p><strong>Convênio:</strong> {{conv_nome}}</p>
+            <p><strong>Período:</strong> {{periodoDe}} a {{periodoAte}}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           CONTEÚDO DO RELATÓRIO
+           ============================================================ -->
+      <div class="relatorio-wrapper">
+
+        <!-- LOGO — apenas na PRIMEIRA página, acima do cabeçalho principal -->
+        <div class="logo-primeira-pagina">
+          <img src="/assets/img/logo-route.png" alt="Route Centro de Terapia">
+        </div>
+
+        <!-- Cabeçalho de TELA (some na impressão; o de impressão é fixo) -->
+        <div class="cabecalho-tela">
+          <div class="titulo-relatorio">
+            Relatório Analítico de Atendimentos por Beneficiário
+          </div>
+          <div class="cabecalho-duas-colunas">
+            <div class="bloco">
+              <h6>Dados da Clínica</h6>
+              <p><strong>Prestador:</strong> Route Centro de Terapia</p>
+              <p><strong>CNPJ:</strong> 33.346.423/0001-17</p>
+            </div>
+            <div class="bloco">
+              <h6>Dados do Beneficiário</h6>
+              <p><strong>Beneficiário:</strong> {{bene_nome}}</p>
+              <p><strong>Convênio:</strong> {{conv_nome}}</p>
+              <p><strong>Período:</strong> {{periodoDe}} a {{periodoAte}}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cabeçalho secundário -->
+        <div class="cabecalho-secundario cabecalho-secundario-print">
+          Atendimentos do Beneficiário
+        </div>
+
+        <!-- Corpo da tabela -->
+        <table class="table table-bordered tabela-relatorio">
+          <thead>
+            <tr>
+              <th style="width:18%">Data</th>
+              <th style="width:32%">Especialidade</th>
+              <th style="width:50%">Profissional</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each rels}}
+              <tr>
+                <td>{{dt}}</td>
+                <td>
+                  {{#each ../terapias}}
+                    {{#ifEqual this._id ../especialidade}}{{terapia_nomecid}}{{/ifEqual}}
+                  {{/each}}
+                </td>
+                <td>
+                  {{#each ../terapeutas}}
+                    {{#ifEqual this._id ../profissional}}{{usuario_nomecompleto}}{{/ifEqual}}
+                  {{/each}}
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+
+        <!-- ============================================================
+             ÚLTIMA PÁGINA EM BRANCO PARA CARIMBOS
+             (recebe automaticamente o cabeçalho principal fixo)
+             ============================================================ -->
+        <div class="pagina-carimbos">
+          <div class="assinatura">Assinatura do Responsável</div>
+          <div class="assinatura">Carimbo / Assinatura da Clínica</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts do Ace Admin (mantenha os seus do projeto) -->
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/chosen.jquery.min.js"></script>
+<script>
+  $(function () {
+    if ($.fn.chosen) {
+      $('.chosen-select').chosen({ width: '100%', allow_single_deselect: true });
+    }
+  });
+</script>
+</body>
+</html>

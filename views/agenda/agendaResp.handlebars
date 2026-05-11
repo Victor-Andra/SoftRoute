@@ -249,8 +249,43 @@
 						</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
+		<!-- Modal de Validação de Filtro -->
+		<div id="modalValidacaoFiltro" class="modal fade" tabindex="-1" role="dialog">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Atenção</h4>
+					</div>
+					<div class="modal-body">
+						<p>Porfavor insira o nome do Beneficiário e a Data de pesquisa referente a semana desejada.</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" id="btnVoltarModal">Voltar</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<!-- basic scripts -->
 		<script type="text/javascript">
+			// Validação do filtro antes de pesquisar
+			$('#acaoPesquisar').on('click', function(e) {
+				var beneId = $('#agendaBeneid').val();
+				var dataFil = $('#dataFil').val();
+				
+				// Se algum dos campos estiver vazio, previne o submit e mostra o modal
+				if (!beneId || !dataFil) {
+					e.preventDefault();
+					$('#modalValidacaoFiltro').modal('show');
+					return false;
+				}
+				// Se estiver tudo ok, formata a data e permite o submit
+				formataData();
+			});
+
+			// Fecha o modal ao clicar no botão Voltar
+			$('#btnVoltarModal').on('click', function() {
+				$('#modalValidacaoFiltro').modal('hide');
+			});
 			$(document).ready(function () {
 				// Inicializa DataTable
 				var table = $('#dynamic-table').DataTable({

@@ -5,150 +5,161 @@
     <meta charset="utf-8">
     <title>Lista de Atendimentos</title>
     <style>
-      /* ============================================
-         BARRA DE PESQUISA - CLASSE SEPARADA
-         ============================================ */
-      .toolbar-pesquisa {
-        background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
-        color: white;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border: 1px solid #1976d2;
-      }
-      .toolbar-pesquisa h5 {
-        margin: 0 0 10px 0;
-        font-size: 14px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .toolbar-pesquisa h5 i {
-        font-size: 18px;
-      }
-      .toolbar-pesquisa .form-inline {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: center;
-      }
-      .toolbar-pesquisa .form-group {
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        min-width: 120px;
-      }
-      .toolbar-pesquisa label {
-        font-size: 11px;
-        font-weight: 500;
-        margin-bottom: 4px;
-        color: #f8f9fa;
-        white-space: nowrap;
-      }
-      .toolbar-pesquisa input[type="text"],
-      .toolbar-pesquisa input[type="date"],
-      .toolbar-pesquisa select {
-        padding: 6px 10px;
-        border: 2px solid #e2e8f0;
-        border-radius: 4px;
-        font-size: 12px;
-        width: 100%;
-        max-width: 200px;
-        transition: all 0.3s;
-        background: white;
-        color: #333;
-        box-sizing: border-box;
-      }
-      .toolbar-pesquisa input[type="text"]:focus,
-      .toolbar-pesquisa input[type="date"]:focus,
-      .toolbar-pesquisa select:focus {
-        border-color: #fff;
-        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
-        outline: none;
-      }
-      .toolbar-pesquisa .btn-toolbar {
-        background: #dc3545;
-        color: white;
-        border: none;
-        padding: 8px 20px;
-        border-radius: 4px;
-        font-weight: 600;
-        font-size: 13px;
-        cursor: pointer;
-        transition: all 0.3s;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        margin-top: 20px;
-      }
-      .toolbar-pesquisa .btn-toolbar:hover {
-        background: #c82333;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      }
-      .toolbar-pesquisa .btn-toolbar:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        transform: none;
-      }
-      .toolbar-pesquisa .btn-toolbar i {
-        font-size: 14px;
-      }
+    /* Apenas tabela e conteúdo */
+    #dynamic-table, #dynamic-table th, #dynamic-table td, #dynamic-table .btn, #dynamic-table .label {
+      font-size: 10px !important;
+    }
 
-      /* Apenas tabela e conteúdo */
-      #dynamic-table,
-      #dynamic-table th,
-      #dynamic-table td,
-      #dynamic-table .btn,
-      #dynamic-table .label {
-        font-size: 10px !important;
-      }
+    /* Tooltip personalizado */
+    .custom-tooltip { position: relative; display: inline-block; cursor: pointer; }
+    .tooltip-text {
+      visibility: hidden; width: max-content; background-color: #f3dfdf; color: red;
+      font-size: 8px; text-align: left; border-radius: 4px; padding: 8px 12px;
+      position: absolute; z-index: 9999; bottom: 125%; left: 50%;
+      transform: translateX(-50%); opacity: 0.9; white-space: normal;
+      min-width: 150px; max-width: 300px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: opacity 0.3s;
+    }
+    .tooltip-text::after {
+      content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+      border-width: 5px; border-style: solid;
+      border-color: #f3dfdf transparent transparent transparent;
+    }
+    .custom-tooltip:hover .tooltip-text { visibility: visible; }
 
-    
-      /* Tooltip personalizado */
-      .custom-tooltip {
-        position: relative;
-        display: inline-block;
-        cursor: pointer;
-      }
-      .tooltip-text {
-        visibility: hidden;
-        width: max-content;
-        background-color: #f3dfdf;
-        color: red;
-        font-size: 8px;
-        text-align: left;
-        border-radius: 4px;
-        padding: 8px 12px;
-        position: absolute;
-        z-index: 9999;
-        bottom: 125%;
-        left: 50%;
-        transform: translateX(-50%);
-        opacity: 0.9;
-        white-space: normal;
-        min-width: 150px;
-        max-width: 300px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        transition: opacity 0.3s;
-      }
-      .tooltip-text::after {
-        content: "";
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        margin-left: -5px;
-        border-width: 5px;
-        border-style: solid;
-        border-color: #f3dfdf transparent transparent transparent;
-      }
-      .custom-tooltip:hover .tooltip-text {
-        visibility: visible;
-      }
+    /* ============================================
+      BARRA DE PESQUISA - CLASSE SEPARADA
+      ============================================ */
+    .toolbar-pesquisa {
+      background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+      color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 1px solid #1976d2;
+    }
+    .toolbar-pesquisa h5 {
+      margin: 0 0 10px 0; font-size: 14px; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .toolbar-pesquisa h5 i { font-size: 18px; }
+    .toolbar-pesquisa .form-inline {
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+    }
+    .toolbar-pesquisa .form-group {
+      margin: 0; display: flex; flex-direction: column;
+      align-items: flex-start; min-width: 120px;
+    }
+    .toolbar-pesquisa label {
+      font-size: 11px; font-weight: 500; margin-bottom: 4px;
+      color: #f8f9fa; white-space: nowrap;
+    }
+    .toolbar-pesquisa input[type="text"],
+    .toolbar-pesquisa input[type="date"],
+    .toolbar-pesquisa select {
+      padding: 6px 10px; border: 2px solid #e2e8f0; border-radius: 4px;
+      font-size: 12px; width: 100%; max-width: 200px; transition: all 0.3s;
+      background: white; color: #333; box-sizing: border-box;
+    }
+    .toolbar-pesquisa input[type="text"]:focus,
+    .toolbar-pesquisa input[type="date"]:focus,
+    .toolbar-pesquisa select:focus {
+      border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,0.2); outline: none;
+    }
+    .toolbar-pesquisa .btn-toolbar {
+      background: #dc3545; color: white; border: none; padding: 8px 20px;
+      border-radius: 4px; font-weight: 600; font-size: 13px; cursor: pointer;
+      transition: all 0.3s; display: flex; align-items: center; gap: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2); margin-top: 20px;
+    }
+    .toolbar-pesquisa .btn-toolbar:hover {
+      background: #c82333; transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    .toolbar-pesquisa .btn-toolbar:disabled {
+      opacity: 0.5; cursor: not-allowed; transform: none;
+    }
+    .toolbar-pesquisa .btn-toolbar i { font-size: 14px; }
+
+    /* ============================================
+      SELECT2 - ESTILOS GERAIS
+      ============================================ */
+    .select2-container { min-width: 120px !important; }
+    .select2-container--default .select2-selection--single {
+      height: 30px !important; border: 1px solid #ced4da !important;
+      border-radius: 4px !important; background: white !important;
+      display: flex !important; align-items: center !important;
+      padding: 0 8px !important; font-size: 12px !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      height: 28px !important; right: 5px !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      line-height: 28px !important; padding-left: 0 !important; color: #333 !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+      color: #999 !important;
+    }
+    .select2-dropdown {
+      border: 1px solid #ced4da !important; border-radius: 4px !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    }
+    .select2-container--default .select2-search--dropdown .select2-search__field {
+      border: 1px solid #ced4da !important; border-radius: 4px !important;
+      padding: 4px 8px !important; font-size: 12px !important; margin: 4px !important;
+    }
+    .select2-container--default .select2-results__option {
+      padding: 6px 10px !important; font-size: 12px !important;
+    }
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+      background-color: #2196f3 !important; color: white !important;
+    }
+    .select2-container--default.select2-container--focus .select2-selection--single {
+      border-color: #2196f3 !important;
+      box-shadow: 0 0 0 2px rgba(33,150,243,0.2) !important;
+    }
+
+    /* ============================================
+      SELECT2 NA BARRA DE PESQUISA
+      ============================================ */
+    .toolbar-pesquisa .select2-container { width: 140px !important; }
+    .toolbar-pesquisa .select2-container .select2-selection--single {
+      width: 138px !important;
+    }
+    .toolbar-pesquisa .select2-dropdown { min-width: 140px !important; }
+
+    /* ============================================
+      SELECT2 BENEFICIÁRIO, TERAPEUTA E CONVÊNIO - LARGURA MAIOR
+      ============================================ */
+    #divAtendBeneficiario .select2-container,
+    #divAtendTerapeuta .select2-container,
+    #divAtendConv .select2-container {
+      width: 280px !important;
+    }
+    #divAtendBeneficiario .select2-selection--single,
+    #divAtendTerapeuta .select2-selection--single,
+    #divAtendConv .select2-selection--single {
+      width: 278px !important;
+    }
+    #divAtendBeneficiario .select2-dropdown,
+    #divAtendTerapeuta .select2-dropdown,
+    #divAtendConv .select2-dropdown {
+      min-width: 280px !important;
+    }
+
+    /* ============================================
+      RESPONSIVO
+      ============================================ */
+    @media (max-width: 768px) {
+      .toolbar-pesquisa .select2-container { width: 100% !important; }
+      .toolbar-pesquisa .select2-selection--single { width: 100% !important; }
+      #divAtendBeneficiario .select2-container,
+      #divAtendTerapeuta .select2-container,
+      #divAtendConv .select2-container { width: 100% !important; }
+      #divAtendBeneficiario .select2-selection--single,
+      #divAtendTerapeuta .select2-selection--single,
+      #divAtendConv .select2-selection--single { width: 100% !important; }
+    }
+
+    /* ✅ CORREÇÃO: Divs ocultas via CSS */
+    .hidden-div { display: none !important; }
     </style>
     <script type="text/javascript">
       function ajustaData(){
@@ -162,89 +173,106 @@
           let fulldate = (dia+"/"+mes+"/"+dat.getFullYear()).toString();
         });
       }
+      
+      const $id = (id) => document.getElementById(id);
 
       function formataData(){
-        let tipo = document.getElementById("tipoData").value;
+        let tipo = $id("tipoData").value;
         if(tipo == "Ano/Mes"){
-          let dat = new Date(document.getElementById('anoAtend').value+"-"+document.getElementById('mesAtend').value+"-01 00:00:00.000Z");
-          let mes = (dat.getUTCMonth()+1).toString();
-          let dia = (dat.getUTCDate()).toString();
-          if (mes.length == 1) mes = "0"+mes;
-          if (dia.length == 1) dia = "0"+dia;
-          let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-          document.getElementById('dataFinal').value = fulldate;
-        } else if (tipo == "Semana" || tipo == "Dia"){
-          let dat = new Date(document.getElementById('dataFil').value);
-          let mes = (dat.getUTCMonth()).toString();
-          let dia = (dat.getUTCDate()).toString();
-          if (mes.length == 1) mes = "0"+mes;
-          if (dia.length == 1) dia = "0"+dia;
-          let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-          document.getElementById('dataFinal').value = fulldate;
+          let dat = new Date($id('anoAtend').value+"-"+$id('mesAtend').value+"-01 00:00:00.000Z");
+          let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
+          let dia = (dat.getUTCDate()).toString().padStart(2,'0');
+          let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
+          $id('dataFinal').value = fulldate;
+        } else {
+          let dat = new Date($id('dataFil').value);
+          let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
+          let dia = (dat.getUTCDate()).toString().padStart(2,'0');
+          let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
+          $id('dataFinal').value = fulldate;
         }
       }
 
-      function trocaFiltroData(){
-        let fill = document.getElementById("tipoData").value;
-        if(fill == "Ano/Mes"){
-          document.getElementById("divAnoAtend").hidden = false;
-          document.getElementById("divMesAtend").hidden = false;
-          document.getElementById("divDataFil").hidden = true;
-        } else {
-          document.getElementById("divAnoAtend").hidden = true;
-          document.getElementById("divMesAtend").hidden = true;
-          document.getElementById("divDataFil").hidden = false;
-        }
+      function trocaFiltroData() {
+        const tipo = $('#tipoData').val();
+        const isAnoMes = (tipo === 'Ano/Mes');
+        
+        $('#divAnoAtend, #divMesAtend').toggle(isAnoMes);
+        $('#divDataFil').toggleClass('hidden-div', isAnoMes);
+        
+        setTimeout(() => {
+          ['#anoAtend', '#mesAtend', '#dataFil'].forEach(sel => {
+            const $el = $(sel);
+            if ($el.data('select2')) {
+              $el.select2('destroy').select2({ width: 'resolve', placeholder: "Selecione...", allowClear: false });
+            }
+          });
+        }, 50);
       }
 
       function trocaFilpessoa() {
-        let fillTipopessoa = document.getElementById("atendTipoPessoa").value;
+        const tipo = $('#atendTipoPessoa').val();
+        
         // Esconde todos primeiro
         $('#divAtendBeneficiario, #divAtendTerapeuta, #divAtendConv').hide();
-        if($('#atendBeneficiario_chosen').length) $('#atendBeneficiario_chosen').hide();
-        if($('#atendTerapeuta_chosen').length) $('#atendTerapeuta_chosen').hide();
-        if($('#atendConv_chosen').length) $('#atendConv_chosen').hide();
-
-        if(fillTipopessoa == "Beneficiario"){
-          $('#divAtendBeneficiario').show();
-          if($('#atendBeneficiario_chosen').length) $('#atendBeneficiario_chosen').show();
-        } else if(fillTipopessoa == "Convenio"){
-          $('#divAtendConv').show();
-          if($('#atendConv_chosen').length) $('#atendConv_chosen').show();
-        } else if(fillTipopessoa == "Terapeuta"){
-          $('#divAtendTerapeuta').show();
-          if($('#atendTerapeuta_chosen').length) $('#atendTerapeuta_chosen').show();
-        }
+        
+        // Mostra o selecionado
+        if(tipo === 'Beneficiario') $('#divAtendBeneficiario').show();
+        else if(tipo === 'Terapeuta') $('#divAtendTerapeuta').show();
+        else if(tipo === 'Convenio') $('#divAtendConv').show();
+        
+        // Força Select2 recalcular
+        setTimeout(() => {
+          $('#atendBeneficiario, #atendTerapeuta, #atendConv').each(function() {
+            if ($(this).data('select2')) {
+              $(this).select2('destroy').select2({ width: 'resolve', allowClear: true, placeholder: "Selecione..." });
+            }
+          });
+        }, 50);
       }
+      
+     
+
+     
 
       function carregaBody(){
+        
+        // Valores padrão
+        if(!$id("tipoData").value) $id("tipoData").value = "Ano/Mes";
+        if(!$id("atendTipoPessoa").value) $id("atendTipoPessoa").value = "Geral";
+        
+        // Aplica visibilidade inicial
         trocaFiltroData();
         trocaFilpessoa();
-        formataData();
-
-        if (document.getElementById("carregaFiltro").value == "true"){
-          document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
-          if(document.getElementById("tipoData").value == "Ano/Mes"){
-            document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value;
-            document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value;
-          } else {
-            document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
-          }
-          document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
-          if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
-            document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value;
-          } else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
-            document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value;
-          } else if (document.getElementById("atendTipoPessoa").value == "Convenio"){
-            document.getElementById("atendConv").value = document.getElementById("atendConvFil").value;
-          }
-          // Atualiza Chosen se existir
-          if($.fn.chosen){
-            $('#tipoData, #anoAtend, #mesAtend, #atendTipoPessoa, #atendBeneficiario, #atendTerapeuta, #atendConv').trigger('chosen:updated');
-          }
-        }
-        document.getElementById("atualizaValores").value = "false";
+        
+        // Carrega filtros salvos
+        if($id("carregaFiltro")?.value === "true") carregarFiltros();
+        
+        $id("atualizaValores").value = "false";
       }
+
+      function carregarFiltros() {
+        const tipoData = $id("tipoDataFil")?.value || "Ano/Mes";
+        const tipoPessoa = $id("tipoPessoaFil")?.value || "Geral";
+
+        $id("tipoData").value = tipoData;
+        trocaFiltroData();
+
+        if(tipoData === "Ano/Mes") {
+          $id("anoAtend").value = $id("anoAtendFil")?.value || "";
+          $id("mesAtend").value = $id("mesAtendFil")?.value || "0";
+        } else {
+          const data = $id("dataFinalFil")?.value;
+          if(data) $id("dataFil").value = data.split('T')[0];
+        }
+
+        $id("atendTipoPessoa").value = tipoPessoa;
+        trocaFilpessoa();
+
+        if(tipoPessoa === "Beneficiario") $id("atendBeneficiario").value = $id("atendBeneficiarioFil")?.value || "";
+        if(tipoPessoa === "Terapeuta") $id("atendTerapeuta").value = $id("atendTerapeutaFil")?.value || "";
+        if(tipoPessoa === "Convenio") $id("atendConv").value = $id("atendConvFil")?.value || "";
+      } 
 
       function mostraDivCopia(id){
         document.getElementById("atualId").value = id;
@@ -256,6 +284,7 @@
         document.getElementById("divCopiaAtend").style.display = "none";
         document.getElementById("divFormPesquisa").style.display = "";
       }
+
 
       function addCopia(){
         document.getElementById("divCopiaAtend").style.display = "none";
@@ -323,6 +352,8 @@
           form.submit();
         }
       }
+
+
     </script>
   </head>
   <body class="no-skin" onload="javascript:controlaNave();carregaBody();">
@@ -364,7 +395,7 @@
                   <div class="col-sm-2">
                     <div class="form-group">
                       <label>Tipo Filtro:&nbsp;</label>
-                      <select name="tipoData" id="tipoData" class="select2" data-placeholder="Escolha..." onchange="javascript:trocaFiltroData()">
+                      <select name="tipoData" id="tipoData" class="select2" data-placeholder="Escolha...">
                         <option value="Ano/Mes">Ano/Mês</option>
                         <option value="Semana">Semana</option>
                         <option value="Dia">Dia</option>
@@ -376,7 +407,7 @@
                   <div id="divAnoAtend" class="col-sm-2">
                     <div class="form-group">
                       <label>Ano:&nbsp;</label>
-                      <select name="anoAtend" id="anoAtend" class="select2" data-placeholder="Escolha..." onchange="javascript:formataData();">
+                      <select name="anoAtend" id="anoAtend" class="select2" data-placeholder="Escolha...">
                         {{#each anos}}
                           <option value="{{ano_nome}}">{{ano_nome}}</option>
                         {{/each}}
@@ -388,7 +419,7 @@
                   <div id="divMesAtend" class="col-sm-2">
                     <div class="form-group">
                       <label>Mês:&nbsp;</label>
-                      <select name="mesAtend" id="mesAtend" class="select2" data-placeholder="Escolha..." onchange="javascript:formataData();">
+                      <select name="mesAtend" id="mesAtend" class="select2" data-placeholder="Escolha...">
                         <option value="0">Janeiro</option>
                         <option value="1">Fevereiro</option>
                         <option value="2">Março</option>
@@ -418,7 +449,7 @@
                   <div id="divTipoFil" class="col-sm-2">
                     <div class="form-group">
                       <label>Tipo Filtro:&nbsp;</label>
-                      <select name="atendTipoPessoa" id="atendTipoPessoa" class="select2" data-placeholder="Escolha..." onchange="javascript:trocaFilpessoa()">
+                      <select name="atendTipoPessoa" id="atendTipoPessoa" class="select" data-placeholder="Escolha...">
                         <option value="Geral">Geral</option>
                         <option value="Beneficiario">Beneficiário</option>
                         <option value="Terapeuta">Terapeuta</option>
@@ -685,32 +716,54 @@
     <!-- Scripts -->
     <script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
     <script type="text/javascript">
-      $(document).ready(function() {
-        $("#dynamic-table").DataTable({
-          "language": { "url": "/js/lang/datatable-pt-br.json" },
-          "aaSorting": [],
-          "aoColumns": [{ "bSortable": false }, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, { "bSortable": false }],
-          "responsive": true,
-          "lengthMenu": [ 100, 200, 500, 1000, 2000 ],
-          "lengthChange": true,
-          "autoWidth": true,
-          "paging": true,
-          "searching": true,
-          "ordering": true,
-          "info": true,
-          select: { style: 'multi' }
-        });
+$(document).ready(function() {
+  // ✅ Eventos para Select2 (sem onchange inline)
+  $('#tipoData').on('change.select2', function() {
+    trocaFiltroData();
+    formataData();
+  });
 
-        // Inicializa Chosen
-        if($.fn.chosen){
-          $('.chosen-select').chosen({
-            width: '100%',
-            disable_search_threshold: 10,
-            allow_single_deselect: true,
-            no_results_text: 'Nenhum resultado encontrado'
-          });
-        }
+  $('#anoAtend, #mesAtend').on('change.select2', function() {
+    formataData();
+  });
+
+  $('#dataFil').on('change', function() {
+    formataData();
+  });
+
+  $('#atendTipoPessoa').on('change.select2', function() {
+    trocaFilpessoa();
+  });
+
+  // ✅ DataTable
+  $("#dynamic-table").DataTable({
+    language: { url: "/js/lang/datatable-pt-br.json" },
+    aaSorting: [],
+    aoColumns: [
+      { bSortable: false }, null, null, null, null, null,
+      null, null, null, null, null, null, null, null, null,
+      null, null, null, null, null, null, { bSortable: false }
+    ],
+    responsive: true,
+    lengthMenu: [100, 200, 500, 1000, 2000],
+    paging: true, searching: true, ordering: true, info: true,
+    select: { style: 'multi' }
+  });
+
+  // ✅ Inicializa Select2 nos campos do filtro
+  $('.select2').each(function() {
+    if(!$(this).data('select2')) {
+      $(this).select2({
+        width: 'resolve',
+        placeholder: $(this).data('placeholder') || "Selecione...",
+        allowClear: $(this).attr('id') !== 'tipoData' // sem clear no tipoData
       });
-    </script>
+    }
+  });
+
+  // ✅ Formata data inicial se necessário
+  formataData();
+});
+</script>
   </body>
 </html>
