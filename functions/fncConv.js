@@ -161,7 +161,6 @@ module.exports = {
     listaConv(req, res) {
         let db = req.cookies['preferredDb'];
         Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); // ← Adicionar
 
         function formatDateToBR(date) {
             const d = new Date(date);

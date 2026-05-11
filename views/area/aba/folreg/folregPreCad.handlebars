@@ -3,6 +3,14 @@
 	<head>
 		<title>REGISTROS: Simples ou Duplo</title>
 		<style>
+			.select2-readonly + .select2-container, .select2-readonly.select2-container {
+				pointer-events: none !important;
+				opacity: 0.85;
+				background-color: #f5f5f5 !important;
+				cursor: not-allowed !important;
+			}
+			.select2-readonly + .select2-container .select2-selection__arrow { display: none !important; } 
+
 			.table-wrapper {
 				overflow-x: auto;
 				max-width: 100%;
@@ -481,50 +489,64 @@ function preencherCamposVisiveis(qtdEstimulos) {
 				});
 			}
 			function carregaBody() {
-				console.log("▶ carregaBody() iniciado");
+    console.log("▶ carregaBody() iniciado");
+    
+    // ✅ 1. Mantém seus assignments originais (HIDDEN/TEXT)
+    document.getElementById("folregUsuid").value = document.getElementById("usuarioAtual").value;
+    document.getElementById("folregBeneid").value = document.getElementById("progBene").value;
+    document.getElementById("folregProgtipoid").value = document.getElementById("progTipo").value;
+    document.getElementById("folregPrognivelid").value = document.getElementById("progNivel").value;
+    document.getElementById("folregSetnum").value = document.getElementById("setNum").value;
+    document.getElementById("folregSetdescr").value = document.getElementById("setDescr").value;
+    document.getElementById("folregSetobs").value = document.getElementById("setObs").value;
+    document.getElementById("folregQtest").value = document.getElementById("qtEst").value;
+    document.getElementById("folregEsta").value = document.getElementById("folrega").value;
+    document.getElementById("folregEstb").value = document.getElementById("folregb").value;
+    document.getElementById("folregEstc").value = document.getElementById("folregc").value;
+    document.getElementById("folregEstd").value = document.getElementById("folregd").value;
+    document.getElementById("folregEste").value = document.getElementById("folrege").value;
+    document.getElementById("folregEstf").value = document.getElementById("folregf").value;
+    document.getElementById("folregEstg").value = document.getElementById("folregg").value;
+    document.getElementById("folregEsth").value = document.getElementById("folregh").value;
+    document.getElementById("folregEsti").value = document.getElementById("folregi").value;
+    document.getElementById("folregEstj").value = document.getElementById("folregj").value;
 
-				// ✅ 1. Preenche todos os campos HIDDEN e TEXT
-				document.getElementById("folregUsuid").value = document.getElementById("usuarioAtual").value;
-				document.getElementById("folregBeneid").value = document.getElementById("progBene").value;
-				document.getElementById("folregProgtipoid").value = document.getElementById("progTipo").value;
-				document.getElementById("folregPrognivelid").value = document.getElementById("progNivel").value;
-				document.getElementById("folregSetnum").value = document.getElementById("setNum").value;
-				document.getElementById("folregSetdescr").value = document.getElementById("setDescr").value;
-				document.getElementById("folregSetobs").value = document.getElementById("setObs").value;
-				document.getElementById("folregQtest").value = document.getElementById("qtEst").value;
-				document.getElementById("folregEsta").value = document.getElementById("folrega").value;
-				document.getElementById("folregEstb").value = document.getElementById("folregb").value;
-				document.getElementById("folregEstc").value = document.getElementById("folregc").value;
-				document.getElementById("folregEstd").value = document.getElementById("folregd").value;
-				document.getElementById("folregEste").value = document.getElementById("folrege").value;
-				document.getElementById("folregEstf").value = document.getElementById("folregf").value;
-				document.getElementById("folregEstg").value = document.getElementById("folregg").value;
-				document.getElementById("folregEsth").value = document.getElementById("folregh").value;
-				document.getElementById("folregEsti").value = document.getElementById("folregi").value;
-				document.getElementById("folregEstj").value = document.getElementById("folregj").value;
-				
-				// ✅ 2. Define TIPO DE REGISTRO (antes de qualquer chosen)
-				const tiporegValue = document.getElementById("tiporeg")?.value || "Não Informado";
-				document.getElementById("folregTiporeg").value = tiporegValue;
+    const tiporegValue = document.getElementById("tiporeg")?.value || "Não Informado";
+    document.getElementById("folregTiporeg").value = tiporegValue;
 
-				// ✅ 3. Atualiza TODOS os Chosen PRIMEIRO (estado inicial)
-				$('.chosen-select').each(function() {
-					if ($(this).data('chosen')) {
-						$(this).trigger('chosen:updated');
-					}
-				});
+    // ✅ 2. CORREÇÃO: Atualiza APENAS os Select2 (Beneficiário, Tipo e Nível)
+    var selectsSelect2 = ['#folregBeneid', '#folregProgtipoid', '#folregPrognivelid'];
+    selectsSelect2.forEach(function(id) {
+        var $el = jQuery(id);
+        var valorAtual = $el.val(); // Pega o valor que acabamos de definir
 
-				// ✅ 4. Só AGORA aplica lógica condicional
-				mudaRegistro(); // mostra/oculta simples/duplo
-				updateStimulusFields(); // mostra campos de estímulo
-				showStimulusFieldsWithValues(); // exibe baseado no valor
-				
-				// ✅ 5. Popular checkboxes (independente de chosen)
-				popularCheckboxDicaTipo();
+        // Garante que o Select2 está inicializado
+        if (!$el.data('select2')) {
+            $el.select2({
+                dropdownParent: $el.closest('.widget-box') || jQuery(document.body),
+                placeholder: "Escolha..."
+            });
+        }
+        // Força o Select2 a sincronizar a UI com o valor nativo
+        $el.val(valorAtual).trigger('change.select2');
+    });
+	$('#folregUsuid').val(document.getElementById("usuarioAtual").value).trigger('change');
 
-				console.log("✅ carregaBody() concluído — tiporeg:", tiporegValue);
-				syncDisabledSelects();
-			}
+    // ✅ 3. Mantém a atualização do Chosen (como já estava)
+    $('.chosen-select').each(function() {
+        if ($(this).data('chosen')) {
+            $(this).trigger('chosen:updated');
+        }
+    });
+
+    // ✅ 4. Lógicas restantes (mantidas do seu original)
+    mudaRegistro();
+    updateStimulusFields();
+    showStimulusFieldsWithValues();
+    popularCheckboxDicaTipo();
+    console.log("✅ carregaBody() concluído — tiporeg:", tiporegValue);
+    syncDisabledSelects();
+}
 			// Sincroniza valores dos selects disabled → hidden inputs
 			function syncDisabledSelects() {
 				const mappings = [
@@ -670,7 +692,7 @@ function preencherCamposVisiveis(qtdEstimulos) {
 													<label>Beneficiário</label>
 													<div class="form-group">
 														<div class="col-lg-6 col-md-12">
-															<select name="folregBeneid" id="folregBeneid" class="select2" disabled>
+															<select name="folregBeneid" id="folregBeneid" class="select2 select2-readonly">
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
 																{{/each}}
@@ -686,7 +708,7 @@ function preencherCamposVisiveis(qtdEstimulos) {
 													<label>Programa Tipo</label>
 													<div class="form-group">
 														<div class="col-lg-6 col-md-12">
-															<select name="folregProgtipoid" id="folregProgtipoid" class="select2" disabled>
+															<select name="folregProgtipoid" id="folregProgtipoid" class="select2 select2-readonly">
 																<option value="766f69643132333435366964">-</option>
 																{{#each progtipos}}
 																	<option value="{{_id}}">{{progtipo_nome}}</option>
@@ -703,7 +725,7 @@ function preencherCamposVisiveis(qtdEstimulos) {
 													<label>Programa Nível</label>
 													<div class="form-group">
 														<div class="col-lg-6 col-md-12">
-															<select name="folregPrognivelid" id="folregPrognivelid" class="select2" disabled>
+															<select name="folregPrognivelid" id="folregPrognivelid" class="select2 select2-readonly">
 																<option value="766f69643132333435366964">-</option>
 																{{#each prognivels}}
 																	<option value="{{_id}}">{{prognivel_nome}}</option>

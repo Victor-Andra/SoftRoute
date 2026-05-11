@@ -1509,7 +1509,6 @@ carregaTabdimAgendaMes(req, res) {
     Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
     Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
     // 🗓️ Define a data base (usa data do form ou data atual)
     let dataBase = new Date(req.body.dataFinal || new Date());
@@ -1667,7 +1666,6 @@ carregaAgendaMesFixo(req, res) {
     Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
     Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
     // 🗓️ Define a data base (usa data do form ou data atual)
     let dataBase = new Date(req.body.dataFinal || new Date());
@@ -4371,7 +4369,6 @@ carregaAgendaMesFixo(req, res) {
             const db = req.cookies['preferredDb'];
             const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
             const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-            const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
             const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
             const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
 
@@ -4673,31 +4670,18 @@ carregaAgendaMesFixo(req, res) {
         })
     },
 carregaAgendaFilS(req, res) {
-    // ===== LOG INICIAL =====
-    console.log('\n🚀 Agenda Semanal Inicializada...');
-    console.log('   📥 req.body.dataFinal:', req.body.dataFinal);
-    
     let db = req.cookies['preferredDb'];
-    console.log('   🗄️  DB selecionado:', db);
-
-    // ===== MODELOS =====
-    console.log('   📦 Carregando modelos...');
     const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
     const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
     const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
     const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
     const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    // NUNCA FAÇA ISSO! USUARIO DEVE SEMPRE SER SETANO AO INICIO DA FUNÇÃO SENDO UTILIZADO O PORTAL DO USUARIO E APENAS ELE! NÃO ALTERE O DESTINO! 
-    // const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); // <-- ADICIONADO (faltava!)[E NEM DEVERIA TER SIDO ADICIONADO POIS ELE É GERADO AO TOPO DA FUNÇÃO SE NÃO EXISTIR ADICIONE, APENAS AO TOPO, NUNCA ATUALIZANDO O BANCO, SEMPRE ESTÁTICO!]
-    console.log('   ✅ Modelos carregados');
 
-    // ===== VARIÁVEIS DE CONTROLE =====
     let aux = 1;
     let idsAgendasEx = [];
     let segunda, terca, quarta, quinta, sexta;
     
-    // ===== CÁLCULO DA SEMANA =====
     console.log('   📅 Calculando período da semana...');
     let dtFill = new Date(req.body.dataFinal);
     let seg = new Date(req.body.dataFinal);
@@ -6108,8 +6092,7 @@ carregaAgendaFilSFixo(req,res){
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
-
+    
         let isAgendaTerapeuta = false;
         let lvlUsu = req.cookies['lvlUsu'];
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];
@@ -6464,8 +6447,7 @@ carregaAgendaFilSFixo(req,res){
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
-
+    
         let isAgendaTerapeuta = false;
         let lvlUsu = req.cookies['lvlUsu'];
         let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];
@@ -6861,7 +6843,6 @@ carregaAgendaPessoalquasela(req, res) {
     Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
     Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
     Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
 
     const idTerapeuta = req.cookies['idUsu'];
@@ -7157,8 +7138,7 @@ carregaAgendaPessoalquasela(req, res) {
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
-        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+            Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
 
         const idTerapeuta = req.cookies['idUsu'];
         let aux = 1;
@@ -7461,13 +7441,6 @@ carregaAgendaPessoalquasela(req, res) {
     },
 
     filtraAgendaPessoalDia(req, res) {
-        console.log("=".repeat(80));
-        console.log("🔍 [FILTRA AGENDA PESSOAL DIA] INÍCIO");
-        console.log("👤 Terapeuta:", req.cookies['idUsu']);
-        console.log("📅 Data Recebida:", req.body.dataFinal);
-        console.log("=".repeat(80));
-
-        // 👉 VALIDAÇÃO: Data em branco ou inválida
         if (!req.body.dataFinal || req.body.dataFinal.trim() === "" || req.body.dataFinal === "undefined") {
             console.warn("⚠️ Data em branco - redirecionando");
             req.flash("warning_message", "Por favor, selecione uma data para filtrar.");
@@ -7479,16 +7452,12 @@ carregaAgendaPessoalquasela(req, res) {
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
-        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+            Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
 
         const idTerapeuta = req.cookies['idUsu'];
         let aux = 1;
         let dtFill, segunda, terca, quarta, quinta, sexta, hoje, hojeCompleto;
 
-        // ========================================================================
-        // 📅 FASE 1: Definir Data Exata do Filtro
-        // ========================================================================
         console.log("\n📅 [FASE 1] Definindo data exata");
         
         let dataFiltro = new Date(req.body.dataFinal + "T00:00:00.000Z");
@@ -7522,16 +7491,12 @@ carregaAgendaPessoalquasela(req, res) {
         console.log(`📆 Filtrando: ${inicioDia.toISOString()} até ${fimDia.toISOString()}`);
         console.log(`📍 Dia: ${dataFiltroFormatada}`);
 
-        // ========================================================================
-        // 🔍 FASE 2: Buscar Registros APENAS do Dia Filtrado
-        // ========================================================================
         console.log("\n🔍 [FASE 2] Buscando registros do dia");
         
         const idFiltro = mongoose.Types.ObjectId(idTerapeuta);
         const dataIsoInicio = fncGeral.getDateToIsostring(inicioDia);
         const dataIsoFim = fncGeral.getDateToIsostring(fimDia);
 
-        // 👉 CORREÇÃO: campo CORRETO é agenda_data
         return Agenda.find({
             agenda_data: { $gte: dataIsoInicio, $lte: dataIsoFim },
             agenda_usuid: idFiltro
@@ -7823,8 +7788,7 @@ carregaAgendaPessoalquasela(req, res) {
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
-
+    
         let idTerapeuta = req.cookies['idUsu'];
         let isSemanal = "true";
         let aux = 1;
@@ -10110,7 +10074,6 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
     Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
     Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
     // 📌 PASSO 2: Definir terapeuta logado e período (MÊS)
     let idTerapeuta = req.cookies['idUsu'];

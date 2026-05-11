@@ -2109,7 +2109,6 @@ async filtraEvoatendgeral(req, res) {
         const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
         // ===== CAPTURA DOS FILTROS COM PERSISTÊNCIA =====
         const filtroTela = {

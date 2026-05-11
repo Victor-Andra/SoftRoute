@@ -1,6 +1,80 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
+		<style>
+			/* Modal responsivo para mobile/tablet - Ace Admin */
+@media (max-width: 767px) {
+    /* Modal ocupa quase toda a tela em mobile */
+    .modal-dialog {
+        width: 95% !important;
+        margin: 10px auto !important;
+    }
+    
+    /* Títulos e textos com tamanho legível */
+    .modal-title {
+        font-size: 16px !important;
+        line-height: 1.4 !important;
+    }
+    
+    .modal-body p {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Botões em coluna, tamanho maior para toque */
+    .modal-footer {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        padding: 10px 15px !important;
+    }
+    
+    .modal-footer .btn {
+        width: 100% !important;
+        min-height: 44px !important; /* Área de toque mínima para mobile */
+        font-size: 14px !important;
+        text-align: left !important;
+        padding: 10px 15px !important;
+    }
+    
+    /* Ícones dos botões com espaçamento adequado */
+    .modal-footer .btn i {
+        margin-right: 8px !important;
+        width: 20px !important;
+        text-align: center;
+    }
+}
+
+/* Tablet: ajuste intermediário */
+@media (min-width: 768px) and (max-width: 991px) {
+    .modal-dialog {
+        width: 90% !important;
+        max-width: 600px !important;
+    }
+    
+    .modal-footer .btn {
+        min-height: 38px;
+        padding: 6px 12px;
+    }
+}
+
+/* Garante alinhamento à esquerda em todos os elementos do modal */
+.modal-content .text-left,
+.modal-content p,
+.modal-content h4 {
+    text-align: left !important;
+}
+
+/* Remove margens/paddings indesejados do Ace Admin no mobile */
+.modal-body {
+    padding: 15px !important;
+}
+
+.modal-footer {
+    padding: 10px 15px 15px !important;
+    border-top: 1px solid #e5e5e5;
+}
+		</style>
 		<title>Agendamentos</title>
 		<script type="text/javascript">
 			/*function ajustaOption(){
@@ -646,24 +720,31 @@
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h4 class="modal-title">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+							<i class="ace-icon fa fa-times"></i>
+						</button>
+						<h4 class="modal-title text-left">
 							<i class="ace-icon fa fa-exclamation-triangle orange"></i>
 							Atenção
 						</h4>
 					</div>
-					<div class="modal-body">
-						<p class="blue">
+					<div class="modal-body text-left">
+						<p class="blue" style="text-align: left; margin: 0; padding: 5px 0;">
 							Você tentou salvar a evolução sem marcar a <b>Evolução como finalizada</b>. O que deseja fazer?
 						</p>
 					</div>
-					<div class="modal-footer">
-						<button id="btnMarcarSalvar" class="btn btn-success" type="button">
+					<div class="modal-footer text-left" style="text-align: left;">
+						<button id="btnMarcarSalvar" class="btn btn-success btn-sm" type="button">
 							<i class="ace-icon fa fa-check"></i>
 							Marcar e salvar
 						</button>
-						<button id="btnSalvarSemMarcar" class="btn btn-danger" type="button">
+						<button id="btnSalvarSemMarcar" class="btn btn-danger btn-sm" type="button">
 							<i class="ace-icon fa fa-times"></i>
 							Não marcar, irei editar mais tarde!
+						</button>
+						<button id="btnCancelarModal" class="btn btn-default btn-sm" type="button" data-dismiss="modal">
+							<i class="ace-icon fa fa-ban"></i>
+							Cancelar
 						</button>
 					</div>
 				</div>
@@ -778,6 +859,21 @@
 				bindEvents();
 			}
 		})();
+		// Garante que o botão Cancelar feche o modal corretamente
+			document.addEventListener("DOMContentLoaded", function(){
+				var btnCancelar = document.getElementById("btnCancelarModal");
+				var modal = document.getElementById("modalEvolucaoNaoFinalizada");
+				
+				if(btnCancelar && modal){
+					btnCancelar.addEventListener("click", function(){
+						if(window.jQuery && jQuery.fn.modal){
+							jQuery(modal).modal("hide");
+						} else {
+							modal.style.display = "none";
+						}
+					});
+				}
+			});
 		</script>
 		
 	</body>

@@ -7,6 +7,7 @@ const manualClass = require("../models/manual");
 const usuarioClass = require("../models/usuario");
 const estadoClass = require("../models/estado");
 
+var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
 // Função auxiliar para formatar data como dd/mm/yyyy hHH:MM
 function formatDateToBR(date) {
     if (!date) return "--/--/---- h--:--";
@@ -27,7 +28,6 @@ module.exports = {
         let db = req.cookies['PortalDoUsuario'];
 
         Manual = getModel(db, 'tb_manual', manualClass.ManualSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
         // Função auxiliar para formatar data como dd/mm/yyyy hhh:mm
         function formatDateToBR(date) {

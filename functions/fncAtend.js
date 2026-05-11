@@ -14951,7 +14951,6 @@ listaCalendarioMensal(req, res, resposta) {
     const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
     const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
     const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
     let flash = new Resposta();
     if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
@@ -15059,7 +15058,6 @@ filtraCalendarioMensal(req, res) {
     const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
     const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
     const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
     const Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
 
     try {

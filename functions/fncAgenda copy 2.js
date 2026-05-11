@@ -1509,7 +1509,6 @@ carregaTabdimAgendaMes(req, res) {
     Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
     Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
     // 🗓️ Define a data base (usa data do form ou data atual)
     let dataBase = new Date(req.body.dataFinal || new Date());
@@ -1667,7 +1666,6 @@ carregaAgendaMesFixo(req, res) {
     Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
     Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
     // 🗓️ Define a data base (usa data do form ou data atual)
     let dataBase = new Date(req.body.dataFinal || new Date());
@@ -5725,7 +5723,7 @@ carregaAgendaFilSFixo(req,res){
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
 
         let isAgendaTerapeuta = false;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -6081,7 +6079,7 @@ carregaAgendaFilSFixo(req,res){
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
 
         let isAgendaTerapeuta = false;
         let lvlUsu = req.cookies['lvlUsu'];
@@ -6478,7 +6476,7 @@ carregaAgendaPessoalquasela(req, res) {
     Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
     Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+    
     Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
 
     const idTerapeuta = req.cookies['idUsu'];
@@ -6774,7 +6772,7 @@ carregaAgendaPessoalquasela(req, res) {
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
         Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
 
         const idTerapeuta = req.cookies['idUsu'];
@@ -7096,7 +7094,7 @@ carregaAgendaPessoalquasela(req, res) {
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
         Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
 
         const idTerapeuta = req.cookies['idUsu'];
@@ -7440,7 +7438,7 @@ carregaAgendaPessoalquasela(req, res) {
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        
 
         let idTerapeuta = req.cookies['idUsu'];
         let isSemanal = "true";

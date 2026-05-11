@@ -58,7 +58,6 @@ module.exports = {
     Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
     Convdeb = getModel(db, 'tb_convdeb', convdebClass.ConvdebSchema);
     Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); // ← Adicionar
 
     function formatDateToBR(date) {
         const d = new Date(date);

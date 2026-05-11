@@ -73,7 +73,6 @@ module.exports = {FiltroEvoatend,
         const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema); // ✅ CORRETO
         const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
         const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); // ✅ Para populate aninhado
         const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema); // ✅ Não esquecer
 
         if (!resposta || typeof resposta !== 'object') {
@@ -446,7 +445,6 @@ filtragestaoGuialote(req, res, resposta) {
     const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
     const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
     const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
-    const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
     const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
 
     if (!resposta || typeof resposta !== 'object') {

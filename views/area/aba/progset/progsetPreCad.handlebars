@@ -8,15 +8,29 @@
 		<script>
 			function carregaBody() {
 
-			// ✅ Campos chosen-select: use jQuery + trigger
-			$('#progsetBeneid').val($('#progBene').val()).trigger('chosen:updated');
+			// ✅ Para Select2: use .trigger('change.select2')
+			var beneVal = $('#progBene').val();
+			$('#progsetBeneid').val(beneVal).trigger('change.select2');
 			
-			$('#progsetProgtipoid').val($('#progTipo').val()).trigger('chosen:updated');
+			$('#progsetProgtipoid').val($('#progTipo').val()).trigger('change.select2');
+			$('#progsetPrognivelid').val($('#progNivel').val()).trigger('change.select2');
 			
-			$('#progsetPrognivelid').val($('#progNivel').val()).trigger('chosen:updated');
-			
-			$('#progStatus').val($('#progStatusEdi').val()).trigger('chosen:updated');
+			// Se progStatus também for Select2:
+			$('#progStatus').val($('#progStatusEdi').val()).trigger('change.select2');
 
+			}
+
+			 // ✅ Preenche o Técnico Aplicador com o usuário atual
+			var usuarioAtualId = document.getElementById("usuarioAtual")?.value;
+			if(usuarioAtualId){
+				var $select = jQuery('#folregUsuid');
+				
+				$('#folregUsuid').val(usuarioAtualId).trigger('change');
+				
+				// 2. Notifica o Select2 (se já estiver inicializado) - teoricamente a operacao acima ja faz isso.
+				if($select.data('select2')){
+					$select.val(usuarioAtualId).trigger('change.select2');
+				}
 			}
 			// ✅ Função para atualizar campos de estímulo (reutilizável)
 			function updateStimulusFields() {
@@ -34,23 +48,23 @@
 
 			// ✅ Função para mudar tipo de registro (exemplo — ajuste conforme sua lógica)
 			function mudaRegistro() {
-			const tipoReg = $('#progsetTiporeg').val();
-			// Exemplo: se for "Duplo", habilita campos extras...
-			console.log("Tipo de registro selecionado:", tipoReg);
-			// Sua lógica aqui...
-			}
+				const tipoReg = $('#progsetTiporeg').val();
+				// Exemplo: se for "Duplo", habilita campos extras...
+				console.log("Tipo de registro selecionado:", tipoReg);
+				// Sua lógica aqui...
+				}
 
-			// ✅ Inicializa ao carregar a página (após DOM pronto + Chosen)
-			$(document).ready(function() {
-			// Assegura que o Chosen já foi inicializado (você tem initChosen() no main)
-			initChosen(); // ← opcional, se ainda não rodou
+				// ✅ Inicializa ao carregar a página (após DOM pronto + Chosen)
+				$(document).ready(function() {
+				// Assegura que o Chosen já foi inicializado (você tem initChosen() no main)
+				initChosen(); // ← opcional, se ainda não rodou
 
-			// ✅ Conecta os eventos aos selects via jQuery (funciona com Chosen)
-			$('#progsetQtest').on('change', updateStimulusFields);
-			$('#progsetTiporeg').on('change', mudaRegistro);
+				// ✅ Conecta os eventos aos selects via jQuery (funciona com Chosen)
+				$('#progsetQtest').on('change', updateStimulusFields);
+				$('#progsetTiporeg').on('change', mudaRegistro);
 
-			// Inicializa visualmente
-			updateStimulusFields();
+				// Inicializa visualmente
+				updateStimulusFields();
 			});
 		</script>
 	</head>
@@ -78,6 +92,7 @@
 									<input name="progTipo" id="progTipo" value="{{prog.prog_tipo}}" />
 									<input name="progNivel" id="progNivel" value="{{prog.prog_nivel}}" />
 									<input name="usuarioAtual" id="usuarioAtual"value="{{usuarioAtual}}" />
+									<input name="folregUsuid_sync" id="folregUsuid_sync" value="{{usuarioAtual._id}}" />
 								</div>
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box" id="cabecset">
@@ -480,6 +495,21 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container --><!-- basic scripts -->
-		
+		<script>
+			$(document).ready(function() {
+			// Inicializa Select2 para o Técnico Aplicador
+			if(jQuery.fn.select2){
+				jQuery('#folregUsuid').select2({
+					placeholder: "Escolha...",
+					allowClear: false,
+					width: 'resolve',
+					dropdownParent: jQuery('#folregUsuid').closest('.widget-box') || jQuery(document.body)
+				});
+				
+				// Só depois chama carregaBody() com delay mínimo
+				setTimeout(carregaBody, 50);
+			}
+		});
+		</script>
 	</body>
 </html>

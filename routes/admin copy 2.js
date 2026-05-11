@@ -656,7 +656,6 @@ router.post('/login/backup',
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
         let aux = 1;
         let agendaFinal = [];
