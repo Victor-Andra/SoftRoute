@@ -22,36 +22,76 @@
             box-sizing: border-box;
 			rows: 12px; /* Número de linhas padrão */
         }
-		/* --- CSS CONVERTIDO PARA SELECT2 --- */
+		/* ============================================
+   SELECT2 - ESTILOS GERAIS
+   ============================================ */
+.select2-container {
+    min-width: 120px !important;
+}
 
-		/* Força todos os containers do Select2 para 200px */
-		.select2-container,
-		.select2-container--default {
-			width: 200px !important;
-		}
+/* Campo principal do Select2 (a "caixa" visível) */
+.select2-container--default .select2-selection--single {
+    height: 30px !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    background: white !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 8px !important;
+    font-size: 12px !important;
+}
 
-		/* Garante que o select original também respeite a largura */
-		select.select2 {
-			width: 200px !important;
-		}
+/* Seta do dropdown */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 28px !important;
+    right: 5px !important;
+}
 
-		/* --- EXCEÇÃO PARA O BENEFICIÁRIO --- */
-		/* Força o container do select Beneficiário a ter 30vw */
-		#tratBeneid + .select2-container,
-		.select2-container[aria-owns*="tratBeneid"] {
-			width: 30vw !important;
-		}
+/* Texto selecionado */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 28px !important;
+    padding-left: 0 !important;
+    color: #333 !important;
+}
 
-		/* Garante que o dropdown (lista de opções) acompanhe a largura do container */
-		#tratBeneid + .select2-container .select2-dropdown,
-		#tratBeneid + .select2-container .select2-results {
-			width: 100% !important;
-		}
+/* Placeholder */
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #999 !important;
+}
 
-		/* Ajuste opcional: largura mínima para o dropdown não ficar muito estreito */
-		#tratBeneid + .select2-container .select2-dropdown {
-			min-width: 300px;
-		}
+/* Dropdown (lista de opções) */
+.select2-dropdown {
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+
+/* Campo de busca dentro do dropdown */
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #ced4da !important;
+    border-radius: 4px !important;
+    padding: 4px 8px !important;
+    font-size: 12px !important;
+    margin: 4px !important;
+}
+
+/* Itens da lista */
+.select2-container--default .select2-results__option {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+}
+
+/* Item selecionado/hover */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #2196f3 !important;
+    color: white !important;
+}
+
+/* Foco no select */
+.select2-container--default.select2-container--focus .select2-selection--single {
+    border-color: #2196f3 !important;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2) !important;
+}
 		</style>
 		<script >
 		

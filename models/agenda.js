@@ -144,18 +144,11 @@ module.exports = {
     AgendaModel,
     AgendaSchema,
 
-    // Editar Agenda
-    // Criado por: Wagner Cintra
-    // Criado em: 2022/03/20
-    // Editado em: 2025/10/03
     agendaEditar: async (req, res) => {
-
-        //Estrura Multiempresa
         let db = req.cookies['preferredDb'];
         AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
-        //;
 
-        let agendamento = await Agenda.findById(req.body.id);
+        let agendamento = await AgendaModel.findById(req.body.id);
         if (!agendamento) {
             console.log("Agendamento não encontrado");
             return false;
@@ -975,51 +968,128 @@ module.exports = {
                         }
                         if (agendaS == "true"){
                             arrayAgendasNovas.push(a);
-                            AgendaModel.findByIdAndUpdate(a._id, 
-                                {$set: {
-                                    agenda_categoria : req.body.agendaCateg ,
-                                    agenda_org : "Administrativo" ,
-                                    agenda_usucad : usuarioAtual ,
-                                    agenda_dataedi : dataAtual ,
-                                    agenda_faltaId : req.body.agendaFaltaId ,
-                                    agenda_falta : req.body.agendaAlvoFalta ,
-                                    agenda_turnoFalta : req.body.agendaTurnoFalta 
-                                }}
-                            ).then((res) =>{
-                                //console.log("Salvo")
-                                resultado = true;
-                            }).catch((err) =>{
-                                console.log("erro mongo:")
-                                console.log(err)
-                                resultado = err;
-                                //res.redirect('admin/branco')
-                            })
+                            let agendaFixa = agenda.find(ag => ag._id.toString() === a.agenda_tempId.toString());
+                            let trocaUpdate = false;
+                            if (agendaFixa.agenda_selo != undefined && agendaFixa.agenda_selo != "undefined" && agendaFixa.agenda_selo != null && agendaFixa.agenda_selo != "null") {
+                                if (a.agenda_selo != undefined && a.agenda_selo != "undefined" && a.agenda_selo != null && a.agenda_selo != "null"){
+                                    if (agendaFixa.agenda_selo && !a.agenda_selo){
+                                        trocaUpdate = true;
+                                    }
+                                } else {
+                                    trocaUpdate = true;
+                                }
+                            }
+                            if (trocaUpdate) {
+                                let evolucaoFinal = (agendaFixa.agenda_evolucao?.toString() || "") + (a.agenda_evolucao?.toString() || "");
+                                AgendaModel.findByIdAndUpdate(a._id, 
+                                    {$set: {
+                                        agenda_categoria : req.body.agendaCateg ,
+                                        agenda_org : "Administrativo" ,
+                                        agenda_usucad : usuarioAtual ,
+                                        agenda_dataedi : dataAtual ,
+                                        agenda_faltaId : req.body.agendaFaltaId ,
+                                        agenda_falta : req.body.agendaAlvoFalta ,
+                                        agenda_turnoFalta : req.body.agendaTurnoFalta ,
+                                        agenda_evolucao : evolucaoFinal ,
+                                        agenda_selo : true ,
+                                        agenda_dataSelo : agendaFixa.agenda_dataSelo 
+                                    }}
+                                ).then((res) =>{
+                                    //console.log("Salvo")
+                                    resultado = true;
+                                }).catch((err) =>{
+                                    console.log("erro mongo:")
+                                    console.log(err)
+                                    resultado = err;
+                                    //res.redirect('admin/branco')
+                                })
+                            } else {
+                                AgendaModel.findByIdAndUpdate(a._id, 
+                                    {$set: {
+                                        agenda_categoria : req.body.agendaCateg ,
+                                        agenda_org : "Administrativo" ,
+                                        agenda_usucad : usuarioAtual ,
+                                        agenda_dataedi : dataAtual ,
+                                        agenda_faltaId : req.body.agendaFaltaId ,
+                                        agenda_falta : req.body.agendaAlvoFalta ,
+                                        agenda_turnoFalta : req.body.agendaTurnoFalta 
+                                    }}
+                                ).then((res) =>{
+                                    //console.log("Salvo")
+                                    resultado = true;
+                                }).catch((err) =>{
+                                    console.log("erro mongo:")
+                                    console.log(err)
+                                    resultado = err;
+                                    //res.redirect('admin/branco')
+                                })
+                            }
                         } else {
+                            if (agendaFixa.agenda_selo != undefined && agendaFixa.agenda_selo != "undefined" && agendaFixa.agenda_selo != null && agendaFixa.agenda_selo != "null") {
+                                if (a.agenda_selo != undefined && a.agenda_selo != "undefined" && a.agenda_selo != null && a.agenda_selo != "null"){
+                                    if (agendaFixa.agenda_selo && !a.agenda_selo){
+                                        trocaUpdate = true;
+                                    }
+                                } else {
+                                    trocaUpdate = true;
+                                }
+                            }
                             if (a.agenda_mergeterapeutaid != undefined){
-                                let newAgenda = new AgendaModel({
-                                    agenda_data : a.agenda_data ,
-                                    agenda_beneid : a.agenda_beneid ,
-                                    agenda_convid : a.agenda_convid ,
-                                    agenda_salaid : a.agenda_salaid ,
-                                    agenda_terapiaid : a.agenda_terapiaid ,
-                                    agenda_usuid : a.agenda_usuid ,
-                                    agenda_mergeterapeutaid : a.agenda_mergeterapeutaid ,
-                                    agenda_mergeterapiaid : a.agenda_mergeterapiaid ,
-                                    agenda_migrado : false ,
-                                    agenda_categoria : req.body.agendaCateg ,
-                                    agenda_org : "Administrativo" ,
-                                    agenda_obs : a.agenda_obs ,
-                                    agenda_temp : true ,
-                                    agenda_tempId : new mongoose.mongo.ObjectId(a._id) ,
-                                    agenda_tempmotivo : a.agenda_tempmotivo ,
-                                    agenda_selo : false ,
-                                    agenda_copia : false,
-                                    agenda_faltaId : req.body.agendaFaltaId,
-                                    agenda_falta : req.body.agendaAlvoFalta ,
-                                    agenda_turnoFalta : req.body.agendaTurnoFalta,
-                                    agenda_usucad : usuarioAtual,
-                                    agenda_datacad : dataAtual
-                                });
+                                if (trocaUpdate) {
+                                    let newAgenda = new AgendaModel({
+                                        agenda_data : a.agenda_data ,
+                                        agenda_beneid : a.agenda_beneid ,
+                                        agenda_convid : a.agenda_convid ,
+                                        agenda_salaid : a.agenda_salaid ,
+                                        agenda_terapiaid : a.agenda_terapiaid ,
+                                        agenda_usuid : a.agenda_usuid ,
+                                        agenda_mergeterapeutaid : a.agenda_mergeterapeutaid ,
+                                        agenda_mergeterapiaid : a.agenda_mergeterapiaid ,
+                                        agenda_migrado : false ,
+                                        agenda_categoria : req.body.agendaCateg ,
+                                        agenda_org : "Administrativo" ,
+                                        agenda_obs : a.agenda_obs ,
+                                        agenda_temp : true ,
+                                        agenda_tempId : new mongoose.mongo.ObjectId(a._id) ,
+                                        agenda_tempmotivo : a.agenda_tempmotivo ,
+                                        agenda_selo : false ,
+                                        agenda_copia : false,
+                                        agenda_evolucao : a.agenda_evolucao ,
+                                        agenda_selo : a.agenda_selo ,
+                                        agenda_dataSelo : a.agenda_dataSelo ,
+                                        agenda_faltaId : req.body.agendaFaltaId,
+                                        agenda_falta : req.body.agendaAlvoFalta ,
+                                        agenda_turnoFalta : req.body.agendaTurnoFalta,
+                                        agenda_usucad : usuarioAtual,
+                                        agenda_datacad : dataAtual
+                                    });
+                                } else {
+                                    let newAgenda = new AgendaModel({
+                                        agenda_data : a.agenda_data ,
+                                        agenda_beneid : a.agenda_beneid ,
+                                        agenda_convid : a.agenda_convid ,
+                                        agenda_salaid : a.agenda_salaid ,
+                                        agenda_terapiaid : a.agenda_terapiaid ,
+                                        agenda_usuid : a.agenda_usuid ,
+                                        agenda_mergeterapeutaid : a.agenda_mergeterapeutaid ,
+                                        agenda_mergeterapiaid : a.agenda_mergeterapiaid ,
+                                        agenda_migrado : false ,
+                                        agenda_categoria : req.body.agendaCateg ,
+                                        agenda_org : "Administrativo" ,
+                                        agenda_obs : a.agenda_obs ,
+                                        agenda_temp : true ,
+                                        agenda_tempId : new mongoose.mongo.ObjectId(a._id) ,
+                                        agenda_tempmotivo : a.agenda_tempmotivo ,
+                                        agenda_selo : false ,
+                                        agenda_copia : false,
+                                        agenda_faltaId : req.body.agendaFaltaId,
+                                        agenda_falta : req.body.agendaAlvoFalta ,
+                                        agenda_turnoFalta : req.body.agendaTurnoFalta,
+                                        agenda_usucad : usuarioAtual,
+                                        agenda_datacad : dataAtual
+                                    });
+                                }
+                                
                                 arrayAgendasNovas.push(newAgenda)
                                 newAgenda.save().then((resultado)=>{
                                     console.log("Resultado: "+resultado)
@@ -1028,28 +1098,58 @@ module.exports = {
                                 })
                                 console.log("salvo!")
                             } else {
-                                let newAgenda = new AgendaModel({
-                                    agenda_data : a.agenda_data ,
-                                    agenda_beneid : a.agenda_beneid ,
-                                    agenda_convid : a.agenda_convid ,
-                                    agenda_salaid : a.agenda_salaid ,
-                                    agenda_terapiaid : a.agenda_terapiaid ,
-                                    agenda_usuid : a.agenda_usuid ,
-                                    agenda_migrado : false ,
-                                    agenda_categoria : req.body.agendaCateg ,
-                                    agenda_org : "Administrativo" ,
-                                    agenda_obs : a.agenda_obs ,
-                                    agenda_temp : true ,
-                                    agenda_tempId : new mongoose.mongo.ObjectId(a._id) ,
-                                    agenda_tempmotivo : a.agenda_tempmotivo ,
-                                    agenda_selo : false ,
-                                    agenda_copia : false,
-                                    agenda_faltaId : req.body.agendaFaltaId,
-                                    agenda_falta : req.body.agendaAlvoFalta ,
-                                    agenda_turnoFalta : req.body.agendaTurnoFalta,
-                                    agenda_usucad : usuarioAtual,
-                                    agenda_datacad : dataAtual
-                                });
+                                if (trocaUpdate) {
+                                    let newAgenda = new AgendaModel({
+                                        agenda_data : a.agenda_data ,
+                                        agenda_beneid : a.agenda_beneid ,
+                                        agenda_convid : a.agenda_convid ,
+                                        agenda_salaid : a.agenda_salaid ,
+                                        agenda_terapiaid : a.agenda_terapiaid ,
+                                        agenda_usuid : a.agenda_usuid ,
+                                        agenda_migrado : false ,
+                                        agenda_categoria : req.body.agendaCateg ,
+                                        agenda_org : "Administrativo" ,
+                                        agenda_obs : a.agenda_obs ,
+                                        agenda_temp : true ,
+                                        agenda_tempId : new mongoose.mongo.ObjectId(a._id) ,
+                                        agenda_tempmotivo : a.agenda_tempmotivo ,
+                                        agenda_selo : false ,
+                                        agenda_selo : a.agenda_selo ,
+                                        agenda_dataSelo : a.agenda_dataSelo ,
+                                        agenda_copia : false,
+                                        agenda_evolucao : a.agenda_evolucao,
+                                        agenda_faltaId : req.body.agendaFaltaId,
+                                        agenda_falta : req.body.agendaAlvoFalta ,
+                                        agenda_turnoFalta : req.body.agendaTurnoFalta,
+                                        agenda_usucad : usuarioAtual,
+                                        agenda_datacad : dataAtual
+                                    });
+                                } else {
+                                    let newAgenda = new AgendaModel({
+                                        agenda_data : a.agenda_data ,
+                                        agenda_beneid : a.agenda_beneid ,
+                                        agenda_convid : a.agenda_convid ,
+                                        agenda_salaid : a.agenda_salaid ,
+                                        agenda_terapiaid : a.agenda_terapiaid ,
+                                        agenda_usuid : a.agenda_usuid ,
+                                        agenda_migrado : false ,
+                                        agenda_categoria : req.body.agendaCateg ,
+                                        agenda_org : "Administrativo" ,
+                                        agenda_obs : a.agenda_obs ,
+                                        agenda_temp : true ,
+                                        agenda_tempId : new mongoose.mongo.ObjectId(a._id) ,
+                                        agenda_tempmotivo : a.agenda_tempmotivo ,
+                                        agenda_selo : false ,
+                                        agenda_copia : false,
+                                        agenda_evolucao : a.agenda_evolucao,
+                                        agenda_faltaId : req.body.agendaFaltaId,
+                                        agenda_falta : req.body.agendaAlvoFalta ,
+                                        agenda_turnoFalta : req.body.agendaTurnoFalta,
+                                        agenda_usucad : usuarioAtual,
+                                        agenda_datacad : dataAtual
+                                    });
+                                }
+                                
                                 arrayAgendasNovas.push(newAgenda)
                                 newAgenda.save().then((resultado)=>{
                                     console.log("Resultado: "+resultado)
