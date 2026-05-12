@@ -636,12 +636,11 @@ module.exports = {
 
     //Old
     agendaEditarTemp: async (req, res) => {
-
          //Estrura Multiempresa
         let db = req.cookies['preferredDb'];
         AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
         //;
-
+        let agendamento = await AgendaModel.findById(req.body.agendaId);
         let agora = new Date();
         let doisMesesAtras = new Date();
         doisMesesAtras.setMonth(agora.getMonth() - 2);
@@ -1025,18 +1024,17 @@ module.exports = {
                                 })
                             }
                         } else {
-                            if (agendaFixa.agenda_selo != undefined && agendaFixa.agenda_selo != "undefined" && agendaFixa.agenda_selo != null && agendaFixa.agenda_selo != "null") {
-                                if (a.agenda_selo != undefined && a.agenda_selo != "undefined" && a.agenda_selo != null && a.agenda_selo != "null"){
-                                    if (agendaFixa.agenda_selo && !a.agenda_selo){
-                                        trocaUpdate = true;
-                                    }
-                                } else {
+                            if (a.agenda_selo != undefined && a.agenda_selo != "undefined" && a.agenda_selo != null && a.agenda_selo != "null"){
+                                if (a.agenda_selo){
                                     trocaUpdate = true;
                                 }
+                            } else {
+                                trocaUpdate = true;
                             }
+                            let newAgenda = {};
                             if (a.agenda_mergeterapeutaid != undefined){
                                 if (trocaUpdate) {
-                                    let newAgenda = new AgendaModel({
+                                    newAgenda = new AgendaModel({
                                         agenda_data : a.agenda_data ,
                                         agenda_beneid : a.agenda_beneid ,
                                         agenda_convid : a.agenda_convid ,
@@ -1064,7 +1062,7 @@ module.exports = {
                                         agenda_datacad : dataAtual
                                     });
                                 } else {
-                                    let newAgenda = new AgendaModel({
+                                    newAgenda = new AgendaModel({
                                         agenda_data : a.agenda_data ,
                                         agenda_beneid : a.agenda_beneid ,
                                         agenda_convid : a.agenda_convid ,
@@ -1098,8 +1096,16 @@ module.exports = {
                                 })
                                 console.log("salvo!")
                             } else {
+                                if (a.agenda_selo != undefined && a.agenda_selo != "undefined" && a.agenda_selo != null && a.agenda_selo != "null"){
+                                    if (a.agenda_selo){
+                                        trocaUpdate = true;
+                                    }
+                                } else {
+                                    trocaUpdate = true;
+                                }
+                                let newAgenda = {};
                                 if (trocaUpdate) {
-                                    let newAgenda = new AgendaModel({
+                                    newAgenda = new AgendaModel({
                                         agenda_data : a.agenda_data ,
                                         agenda_beneid : a.agenda_beneid ,
                                         agenda_convid : a.agenda_convid ,
@@ -1125,7 +1131,7 @@ module.exports = {
                                         agenda_datacad : dataAtual
                                     });
                                 } else {
-                                    let newAgenda = new AgendaModel({
+                                    newAgenda = new AgendaModel({
                                         agenda_data : a.agenda_data ,
                                         agenda_beneid : a.agenda_beneid ,
                                         agenda_convid : a.agenda_convid ,

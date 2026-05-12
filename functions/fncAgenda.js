@@ -4897,7 +4897,7 @@ carregaAgendaFilS(req, res) {
 
                         // ===== CONSULTA: SALAS =====
                         console.log('   🏢 Buscando salas...');
-                        Sala.find().then((sala) => {
+                        Sala.find({sala_status: "Ativo"}).then((sala) => {
                             console.log('   ✅ Sala: Encontrados', sala.length, 'registros');
                             sala.sort((a,b) => (a.sala_nome||'').localeCompare(b.sala_nome||''));
 
