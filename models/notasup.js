@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
-const notaSupObsClass = require("../models/notasupobs")
+const notaSupObsClass = require("./notasupobs")
 const { getModel } = require('../functions/fncGeral');
 const { Resposta } = require('../functions/fncGeral');
 
@@ -163,7 +163,7 @@ class Notasup{
 }
 
 NotasupSchema.loadClass(Notasup)
-var Notasupobs = getModel("softroute", 'tb_notasupobs', notaSupObsClass.NotaSupObsSchema)
+var Notasupobs = getModel("softroute", 'tb_notasupobs', notaSupObsClass.notasupobsSchema)
 var NotasupModel = getModel("softroute", 'tb_notasup', NotasupSchema)
 module.exports = {
     NotasupModel,
@@ -244,7 +244,7 @@ module.exports = {
                 //acompanhamento de ações
                 notasup_acompprog : req.body.notasupAcompprog,
                 notasup_acompgeral : req.body.notasupAcompgeral,
-                //NotaSupObs
+                //notasupobs
                 notasup_obs : observacoes,
                 //Atributos de controle
                 notasup_usuidedi : idUsu,
@@ -319,7 +319,7 @@ module.exports = {
             //acompanhamento de ações
             notasup_acompprog : req.body.notasupAcompprog,
             notasup_acompgeral : req.body.notasupAcompgeral,
-            //NotaSupObs
+            //notasupobs
             notasup_obs : observacoes,
             //Atributos de controle
             notasup_usuidcad : idUsu,
@@ -409,7 +409,7 @@ module.exports = {
             // Acompanhamento de ações
             notasup_acompprog: req.body.notasupAcompprog, // Acompanhamento de programação
             notasup_acompgeral: req.body.notasupAcompgeral, // Acompanhamento geral
-            //NotaSupObs
+            //notasupobs
             notasup_obs : observacoes,
             // ID do usuário que cadastrou
             notasup_usuidcad: idUsu,

@@ -33,7 +33,7 @@ var Progtipo = getModel("SoftRoute", 'tb_progtipo', progtipoClass.ProgtipoSchema
 
 var Folreg = getModel("SoftRoute", 'tb_folreg', folregClass.FolregSchema)
 var Notasup = getModel("SoftRoute", 'tb_notasup', notasupClass.NotasupSchema)
-var Notasupobs = getModel("SoftRoute", 'tb_notasupobs', notasupobsClass.NotaSupObsSchema)
+var Notasupobs = getModel("SoftRoute", 'tb_notasupobs', notasupobsClass.notasupobsSchema)
 
 const fncGeral = require("./fncGeral");
 const Resposta = fncGeral.Resposta;
@@ -655,7 +655,7 @@ module.exports = {
         Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
         Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema)
         Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema)
-        Notasupobs = getModel(db, 'tb_notasupobs', notasupobsClass.NotaSupObsSchema)
+        Notasupobs = getModel(db, 'tb_notasupobs', notasupobsClass.notasupobsSchema)
         flash = flash || {};
         flash.sucesso = "true";
 

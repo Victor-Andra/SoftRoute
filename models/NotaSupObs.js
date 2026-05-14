@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 const { getModel } = require('../functions/fncGeral');
 
-const NotaSupObsSchema = mongoose.Schema({
+const notasupobsSchema = mongoose.Schema({
     notaSupObs_beneid :{
         type: ObjectId,
         required: true
@@ -25,7 +25,7 @@ const NotaSupObsSchema = mongoose.Schema({
     }
 })
 
-class NotaSupObs{
+class notasupobs{
     constructor(
         notaSupObs_beneid,
         notaSupObs_progid,
@@ -41,17 +41,17 @@ class NotaSupObs{
     }
 }
 
-NotaSupObsSchema.loadClass(NotaSupObs)
-var NotaSupObsModel = getModel("softroute", 'tb_notasupobs', NotaSupObsSchema)
+notasupobsSchema.loadClass(notasupobs)
+var notasupobsModel = getModel("softroute", 'tb_notasupobs', notasupobsSchema)
 module.exports = {
-    NotaSupObsModel,
-    NotaSupObsSchema,
+    notasupobsModel,
+    notasupobsSchema,
 
     notaSupObsEditar: async (req, res) => {
 
         //Estrutura Multiempresa
         let db = req.cookies['preferredDb'];
-        NotaSupObsModel = getModel(db, 'tb_notasupobs', NotaSupObsSchema)
+        notasupobsModel = getModel(db, 'tb_notasupobs', notasupobsSchema)
         //;
 
         let dataAtual = new Date();
@@ -59,7 +59,7 @@ module.exports = {
         //Pega data atual
         
         //Realiza Atualização
-        await NotaSupObsModel.findByIdAndUpdate(req.body.notaSupObsId, 
+        await notasupobsModel.findByIdAndUpdate(req.body.notaSupObsId, 
             {$set: {
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notaSupObsProgid,
@@ -80,7 +80,7 @@ module.exports = {
 
         //Estrutura Multiempresa
         let db = req.cookies['preferredDb'];
-        NotaSupObsModel = getModel(db, 'tb_notasupobs', NotaSupObsSchema)
+        notasupobsModel = getModel(db, 'tb_notasupobs', notasupobsSchema)
         //;
 
         let dataAtual = new Date();
@@ -96,7 +96,7 @@ module.exports = {
             newidId = new ObjectId();
             arrayNewIds = ""+newidId+"";
 
-            const newNotaSupObs = new NotaSupObsModel({
+            const newnotasupobs = new notasupobsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_1,
@@ -105,8 +105,8 @@ module.exports = {
                 notaSup_id : notaSup_id
             });
 
-            console.log("newNotaSupObs save1");
-            await newNotaSupObs.save().then(()=>{
+            console.log("newnotasupobs save1");
+            await newnotasupobs.save().then(()=>{
                 
             }).catch((err) => {
                 console.log("ERRO: "+err);
@@ -119,7 +119,7 @@ module.exports = {
             newidId = new ObjectId();
             arrayNewIds = arrayNewIds+","+newidId+"";
 
-            const newNotaSupObs = new NotaSupObsModel({
+            const newnotasupobs = new notasupobsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_2,
@@ -128,8 +128,8 @@ module.exports = {
                 notaSup_id : notaSup_id
             });
 
-            console.log("newNotaSupObs save2");
-            await newNotaSupObs.save().then(()=>{
+            console.log("newnotasupobs save2");
+            await newnotasupobs.save().then(()=>{
                 
             }).catch((err) => {
                 console.log("ERRO: "+err);
@@ -142,7 +142,7 @@ module.exports = {
             newidId = new ObjectId();
             arrayNewIds = arrayNewIds+","+newidId+"";
 
-            const newNotaSupObs = new NotaSupObsModel({
+            const newnotasupobs = new notasupobsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_3,
@@ -151,8 +151,8 @@ module.exports = {
                 notaSup_id : notaSup_id
             });
 
-            console.log("newNotaSupObs save3");
-            await newNotaSupObs.save().then(()=>{
+            console.log("newnotasupobs save3");
+            await newnotasupobs.save().then(()=>{
                 
             }).catch((err) => {
                 console.log("ERRO: "+err);
@@ -165,7 +165,7 @@ module.exports = {
             newidId = new ObjectId();
             arrayNewIds = arrayNewIds+","+newidId+"";
             
-            const newNotaSupObs = new NotaSupObsModel({
+            const newnotasupobs = new notasupobsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_4,
@@ -174,8 +174,8 @@ module.exports = {
                 notaSup_id : notaSup_id
             });
 
-            console.log("newNotaSupObs save4");
-            await newNotaSupObs.save().then(()=>{
+            console.log("newnotasupobs save4");
+            await newnotasupobs.save().then(()=>{
                 
             }).catch((err) => {
                 console.log("ERRO: "+err);
@@ -188,7 +188,7 @@ module.exports = {
             newidId = new ObjectId();
             arrayNewIds = arrayNewIds+","+newidId+"";
             
-            const newNotaSupObs = new NotaSupObsModel({
+            const newnotasupobs = new notasupobsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_5,
@@ -197,8 +197,8 @@ module.exports = {
                 notaSup_id : notaSup_id
             });
 
-            console.log("newNotaSupObs save5");
-            await newNotaSupObs.save().then(()=>{
+            console.log("newnotasupobs save5");
+            await newnotasupobs.save().then(()=>{
                 
             }).catch((err) => {
                 console.log("ERRO: "+err);
@@ -211,7 +211,7 @@ module.exports = {
             newidId = new ObjectId();
             arrayNewIds = arrayNewIds+","+newidId+"";
             
-            const newNotaSupObs = new NotaSupObsModel({
+            const newnotasupobs = new notasupobsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_6,
@@ -220,8 +220,8 @@ module.exports = {
                 notaSup_id : notaSup_id
             });
 
-            console.log("newNotaSupObs save6");
-            await newNotaSupObs.save().then(()=>{
+            console.log("newnotasupobs save6");
+            await newnotasupobs.save().then(()=>{
                 
             }).catch((err) => {
                 console.log("ERRO: "+err);
@@ -234,7 +234,7 @@ module.exports = {
             newidId = new ObjectId();
             arrayNewIds = arrayNewIds+","+newidId+"";
             
-            const newNotaSupObs = new NotaSupObsModel({
+            const newnotasupobs = new notasupobsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_7,
@@ -243,8 +243,8 @@ module.exports = {
                 notaSup_id : notaSup_id
             });
 
-            console.log("newNotaSupObs save7");
-            await newNotaSupObs.save().then(()=>{
+            console.log("newnotasupobs save7");
+            await newnotasupobs.save().then(()=>{
                 
             }).catch((err) => {
                 console.log("ERRO: "+err);
@@ -257,7 +257,7 @@ module.exports = {
             newidId = new ObjectId();
             arrayNewIds = arrayNewIds+","+newidId+"";
             
-            const newNotaSupObs = new NotaSupObsModel({
+            const newnotasupobs = new notasupobsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_8,
@@ -266,8 +266,8 @@ module.exports = {
                 notaSup_id : notaSup_id
             });
 
-            console.log("newNotaSupObs save8");
-            await newNotaSupObs.save().then(()=>{
+            console.log("newnotasupobs save8");
+            await newnotasupobs.save().then(()=>{
                 
             }).catch((err) => {
                 console.log("ERRO: "+err);
@@ -280,7 +280,7 @@ module.exports = {
             newidId = new ObjectId();
             arrayNewIds = arrayNewIds+","+newidId+"";
             
-            const newNotaSupObs = new NotaSupObsModel({
+            const newnotasupobs = new notasupobsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_9,
@@ -289,8 +289,8 @@ module.exports = {
                 notaSup_id : notaSup_id
             });
 
-            console.log("newNotaSupObs save9");
-            await newNotaSupObs.save().then(()=>{
+            console.log("newnotasupobs save9");
+            await newnotasupobs.save().then(()=>{
                 
             }).catch((err) => {
                 console.log("ERRO: "+err);
@@ -303,7 +303,7 @@ module.exports = {
             newidId = new ObjectId();
             arrayNewIds = arrayNewIds+","+newidId+"";
             
-            const newNotaSupObs = new NotaSupObsModel({
+            const newnotasupobs = new notasupobsModel({
                 _id: newidId,
                 notaSupObs_beneid : req.body.notasupBeneid,
                 notaSupObs_progid: req.body.notasupObsprogid_10,
@@ -312,8 +312,8 @@ module.exports = {
                 notaSup_id : notaSup_id
             });
 
-            console.log("newNotaSupObs save10");
-            await newNotaSupObs.save().then(()=>{
+            console.log("newnotasupobs save10");
+            await newnotasupobs.save().then(()=>{
                 
             }).catch((err) => {
                 console.log("ERRO: "+err);

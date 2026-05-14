@@ -26,7 +26,7 @@ var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSche
 var Prog = getModel("SoftRoute", 'tb_prog', progClass.ProgSchema)
 var Progtipo = getModel("SoftRoute", 'tb_progtipo', progtipoClass.ProgtipoSchema)
 var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
-var Notasupobs = getModel("SoftRoute", 'tb_notasupobs', notaSupObsClass.NotaSupObsSchema)
+var Notasupobs = getModel("SoftRoute", 'tb_notasupobs', notaSupObsClass.notasupobsSchema)
 
 const fncGeral = require("./fncGeral");
 const Resposta = fncGeral.Resposta;
@@ -152,7 +152,7 @@ module.exports = {
         Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
         Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema)
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
-        Notasupobs = getModel(db, 'tb_notasupobs', notaSupObsClass.NotaSupObsSchema)
+        Notasupobs = getModel(db, 'tb_notasupobs', notaSupObsClass.notasupobsSchema)
 
         let idBene = "";
         Notasup.findById(req.params.id).then((notasup) =>{
