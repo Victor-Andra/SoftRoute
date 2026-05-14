@@ -304,7 +304,7 @@ var Notasup = getModel("softroute", 'tb_notasup', notasupClass.NotasupSchema);//
 const fncNotasup = require("../functions/fncNotasup")
 
 //NotaSup
-const notasupobsClass = require("../models/notasupobs")
+const notasupobsClass = require("../models/notasupobs.js")
 var Notasupobs = getModel("softroute", 'tb_notasupobs', notasupobsClass.notasupobsSchema);//getModel("softroute", 'tb_notasupobs', notasupobsClass.notasupobsSchema)
 const fncNotasupobs = require("../functions/fncNotasupobs")
 

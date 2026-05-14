@@ -16,7 +16,7 @@ const progtipoClass = require("../models/progtipo")
 
 const folregClass = require("../models/folreg")
 const notasupClass = require("../models/notasup")
-const notasupobsClass = require("../models/notasupobs")
+const notasupobsClass = require("../models/notasupobs.js")
 
 //prog, tipos de prog 
 var Prog = getModel("SoftRoute", 'tb_prog', progClass.ProgSchema)
