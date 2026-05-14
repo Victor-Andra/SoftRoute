@@ -1834,12 +1834,36 @@ module.exports = {FiltroEvoatend,
         })
     },
     listaEvoatendgeral(req, res, resposta) {
-        let db = req.cookies['preferredDb'];
-        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
-        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        const db = req.cookies['preferredDb'];
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
 
-        let flash = new Resposta();
-        let atendConcluido = req.body.AtendConcluido;
+       // Na captura dos filtros:
+        const filtroTela = {
+            tipoData: req.body.tipoData || "Ano/Mes",
+            // ✅ Corrige a prioridade dos campos de data
+            dataFinal: req.body.dataFinal || req.body.dataFinal || "",
+            anoAtend: req.body.anoAtend || "",
+            mesAtend: req.body.mesAtend || "",
+            tipoPessoa: req.body.atendTipoPessoa || "Geral",
+            atendTerapeuta: req.body.atendTerapeuta || "",
+            atendBeneficiario: req.body.atendBeneficiario || "",
+            // ✅ Verifica se o campo existe na view antes de usar
+            atendConcluido: req.body.AtendConcluido || "Todos", 
+            atendSelo: req.body.atendSelo || "Todos"
+        };
+
+        // ===== LOG DE DEBUG (ajuda a identificar o problema) =====
+        console.log('🔍 [DEBUG] Filtros recebidos:', JSON.stringify(filtroTela, null, 2));
+
+        let dataIni = null;
+        let dataFim = null;
+        const flash = new Resposta();
     
         if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
             flash.texto = resposta.texto;
@@ -2098,7 +2122,7 @@ module.exports = {FiltroEvoatend,
             res.redirect('admin/erro')
         })
     },
-async filtraEvoatendgeral(req, res) {
+async filtraEvoatendgeral_140526(req, res) {
     try {
         // ===== CONFIGURAÇÃO =====
         const db = req.cookies['preferredDb'];
@@ -2123,14 +2147,13 @@ async filtraEvoatendgeral(req, res) {
             atendSelo: req.body.atendSelo || "Todos" // <-- NOVO: filtro de selo
         };
 
-        const flash = new Resposta();
+       // ===== CÁLCULO DO PERÍODO (UTC para evitar timezone) =====
         let dataIni = null;
         let dataFim = null;
 
-        // ===== CÁLCULO DO PERÍODO (UTC para evitar timezone) =====
         switch (filtroTela.tipoData) {
             case "Ano/Mes": {
-                const mes = parseInt(filtroTela.mesAtend);
+                const mes = parseInt(filtroTela.mesAtend);   // 0-11 do select
                 const ano = parseInt(filtroTela.anoAtend);
                 if (!isNaN(mes) && !isNaN(ano)) {
                     dataIni = new Date(Date.UTC(ano, mes, 1, 0, 0, 0));
@@ -2138,46 +2161,34 @@ async filtraEvoatendgeral(req, res) {
                 }
                 break;
             }
-            case "Semana": {
-                const d = filtroTela.dataFinal;
-                if (d) {
-                    const [ano, mes, dia] = [
-                        parseInt(d.substring(0,4)),
-                        parseInt(d.substring(5,7)), 
-                        parseInt(d.substring(8,10))
-                    ];
-                    let seg = new Date(Date.UTC(ano, mes, dia, 0, 0, 0));
-                    let sex = new Date(Date.UTC(ano, mes, dia, 23, 59, 59));
-                    
-                    const ajustes = {
-                        0: { seg: +1, sex: +5 }, 1: { seg: 0, sex: +4 },
-                        2: { seg: -1, sex: +3 }, 3: { seg: -2, sex: +2 },
-                        4: { seg: -3, sex: +1 }, 5: { seg: -4, sex: 0 },
-                        6: { seg: -5, sex: -1 }
-                    };
-                    const aj = ajustes[seg.getUTCDay()] || ajustes[0];
-                    seg.setUTCDate(seg.getUTCDate() + aj.seg);
-                    sex.setUTCDate(sex.getUTCDate() + aj.sex);
-                    
-                    dataIni = seg;
-                    dataFim = sex;
-                }
-                break;
-            }
+            
+            case "Semana":
             case "Dia": {
-                const d = filtroTela.dataFinal;
-                if (d) {
-                    const [ano, mes, dia] = [
-                        parseInt(d.substring(0,4)),
-                        parseInt(d.substring(5,7)),
-                        parseInt(d.substring(8,10))
-                    ];
-                    dataIni = new Date(Date.UTC(ano, mes, dia, 0, 0, 0));
-                    dataFim = new Date(Date.UTC(ano, mes, dia, 23, 59, 59));
+                // ✅ Usa dataFil direto do form (formato: YYYY-MM-DD)
+                const dataStr = req.body.dataFil || filtroTela.dataFinal;
+                if (dataStr && dataStr.length >= 10) {
+                    const [ano, mes, dia] = dataStr.substring(0, 10).split('-').map(Number);
+                    
+                    // input date retorna mês 1-12, Date.UTC espera 0-11 → subtrai 1
+                    const dataBase = new Date(Date.UTC(ano, mes - 1, dia, 12, 0, 0));
+                    
+                    if (filtroTela.tipoData === "Dia") {
+                        dataIni = new Date(Date.UTC(ano, mes - 1, dia, 0, 0, 0));
+                        dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59));
+                    } else {
+                        // ===== Lógica da semana (segunda a sexta) =====
+                        const diaSemana = dataBase.getUTCDay(); // 0=dom, 1=seg, ..., 6=sab
+                        const diffs = { 0: -6, 1: 0, 2: -1, 3: -2, 4: -3, 5: -4, 6: -5 }; // ajuste pra segunda
+                        const diffSeg = diffs[diaSemana] ?? 0;
+                        
+                        dataIni = new Date(Date.UTC(ano, mes - 1, dia + diffSeg, 0, 0, 0));
+                        dataFim = new Date(Date.UTC(ano, mes - 1, dia + diffSeg + 4, 23, 59, 59)); // +4 = sexta
+                    }
                 }
                 break;
             }
         }
+           
 
         // ===== MONTAGEM DA QUERY =====
         const busca = {};
@@ -2271,6 +2282,233 @@ async filtraEvoatendgeral(req, res) {
     } catch (err) {
         console.error('Erro em filtraEvoatendgeral:', err);
         req.flash("error_message", "Houve um erro ao listar as evoluções!");
+        res.redirect('/admin/erro');
+    }
+},
+async filtraEvoatendgeral(req, res) {
+    try {
+        // ===== CONFIGURAÇÃO =====
+        const db = req.cookies['preferredDb'];
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+
+       // Na captura dos filtros:
+        const filtroTela = {
+            tipoData: req.body.tipoData || "Ano/Mes",
+            // ✅ Corrige a prioridade dos campos de data
+            dataFinal: req.body.dataFil || req.body.dataFinal || "",
+            anoAtend: req.body.anoAtend || "",
+            mesAtend: req.body.mesAtend || "",
+            tipoPessoa: req.body.atendTipoPessoa || "Geral",
+            atendTerapeuta: req.body.atendTerapeuta || "",
+            atendBeneficiario: req.body.atendBeneficiario || "",
+            // ✅ Verifica se o campo existe na view antes de usar
+            atendConcluido: req.body.AtendConcluido || "Todos", 
+            atendSelo: req.body.atendSelo || "Todos"
+        };
+
+        // ===== LOG DE DEBUG (ajuda a identificar o problema) =====
+        console.log('🔍 [DEBUG] Filtros recebidos:', JSON.stringify(filtroTela, null, 2));
+
+        let dataIni = null;
+        let dataFim = null;
+        const flash = new Resposta();
+
+        // ===== CÁLCULO DO PERÍODO (UTC consistente) =====
+        switch (filtroTela.tipoData) {
+            case "Ano/Mes": {
+                const mes = parseInt(filtroTela.mesAtend);   // 0-11 do select
+                const ano = parseInt(filtroTela.anoAtend);
+                if (!isNaN(mes) && !isNaN(ano) && mes >= 0 && mes <= 11) {
+                    dataIni = new Date(Date.UTC(ano, mes, 1, 0, 0, 0));
+                    dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59));
+                    console.log(`📅 [Ano/Mês] Período: ${dataIni.toISOString()} até ${dataFim.toISOString()}`);
+                }
+                break;
+            }
+            
+            case "Semana":
+            case "Dia": {
+                // ✅ Usa dataFil direto (formato: YYYY-MM-DD do input type="date")
+                const dataStr = filtroTela.dataFinal?.substring(0, 10); // Garante só a parte da data
+                if (dataStr && /^\d{4}-\d{2}-\d{2}$/.test(dataStr)) {
+                    const [ano, mesInput, dia] = dataStr.split('-').map(Number);
+                    
+                    // ⚠️ input date retorna mês 1-12, Date.UTC espera 0-11 → subtrai 1
+                    const mesUTC = mesInput - 1;
+                    
+                    if (filtroTela.tipoData === "Dia") {
+                        dataIni = new Date(Date.UTC(ano, mesUTC, dia, 0, 0, 0));
+                        dataFim = new Date(Date.UTC(ano, mesUTC, dia, 23, 59, 59));
+                        console.log(`📅 [Dia] Período: ${dataIni.toISOString()} até ${dataFim.toISOString()}`);
+                    } else {
+                        // ===== Lógica da semana (segunda a sexta) =====
+                        const dataBase = new Date(Date.UTC(ano, mesUTC, dia, 12, 0, 0)); // meio-dia pra evitar timezone
+                        const diaSemana = dataBase.getUTCDay(); // 0=dom, 1=seg, ..., 6=sab
+                        
+                        // Calcula quantos dias voltar pra chegar na segunda-feira
+                        const diasParaSegunda = diaSemana === 0 ? -6 : 1 - diaSemana;
+                        const segunda = new Date(Date.UTC(ano, mesUTC, dia + diasParaSegunda, 0, 0, 0));
+                        const sexta = new Date(Date.UTC(ano, mesUTC, dia + diasParaSegunda + 4, 23, 59, 59));
+                        
+                        dataIni = segunda;
+                        dataFim = sexta;
+                        console.log(`📅 [Semana] Segunda: ${segunda.toISOString()} | Sexta: ${sexta.toISOString()}`);
+                    }
+                } else {
+                    console.warn('⚠️ Data inválida para Semana/Dia:', dataStr);
+                }
+                break;
+            }
+        }
+
+        // ===== MONTAGEM DA QUERY =====
+        const busca = {};
+
+        // Filtro de data (só aplica se as datas forem válidas)
+        if (dataIni && dataFim && !isNaN(dataIni.getTime()) && !isNaN(dataFim.getTime())) {
+            busca.agenda_data = { $gte: dataIni, $lte: dataFim };
+        } else {
+            console.warn('⚠️ Datas inválidas - query sem filtro de data!');
+        }
+
+        // Filtro por tipo de pessoa
+        if (filtroTela.tipoPessoa === "Beneficiario" && filtroTela.atendBeneficiario) {
+            busca.agenda_beneid = filtroTela.atendBeneficiario;
+        } else if (filtroTela.tipoPessoa === "Terapeuta" && filtroTela.atendTerapeuta) {
+            busca.agenda_usuid = filtroTela.atendTerapeuta;
+        }
+
+        // Filtro "Concluído" (legacy - mantido por compatibilidade)
+        if (filtroTela.atendConcluido === "Sim") {
+            busca.agenda_selo = { $in: [true, "true", 1, "1"] };
+        } else if (filtroTela.atendConcluido === "Não") {
+            busca.agenda_selo = { $in: [false, "false", 0, "0", null, undefined] };
+        }
+
+        // Filtro atendSelo (sobrescreve o Concluído se estiver ativo)
+        if (filtroTela.atendSelo && filtroTela.atendSelo !== "Todos") {
+            busca.agenda_selo = (filtroTela.atendSelo === "Sim");
+            console.log(`🏷️ Filtro Selo aplicado: ${filtroTela.atendSelo}`);
+        }
+
+        console.log('🔎 [DEBUG] Query MongoDB:', JSON.stringify(busca, null, 2));
+
+        // ===== CONSULTA PRINCIPAL (com timeout pra evitar travamento) =====
+        let agenda = [];
+        try {
+            agenda = await Agenda.find(busca)
+                .lean()
+                .maxTimeMS(60000); // Timeout de 60 segundos
+            console.log(`✅ Encontrados ${agenda.length} registros`);
+        } catch (queryErr) {
+            console.error('❌ Erro na query do Agenda:', queryErr);
+            throw new Error('Erro ao buscar agendamentos. Verifique os filtros ou contate o suporte.');
+        }
+
+        // ===== PROCESSAMENTO DOS DADOS =====
+        const agendaTempIds = new Set();
+        
+        agenda.forEach(e => {
+            try {
+                const dat = new Date(e.agenda_data);
+                if (!isNaN(dat.getTime())) {
+                    e.agenda_data_dia = fncGeral.getDataFMT(dat);
+                    e.agenda_hora = `${String(dat.getUTCHours()).padStart(2,'0')}:${String(dat.getMinutes()).padStart(2,'0')}`;
+                    e.agenda_data_semana = ["dom","seg","ter","qua","qui","sex","sab"][dat.getUTCDay()] || "";
+                }
+                if (String(e.agenda_temp) === "true") {
+                    agendaTempIds.add(String(e.agenda_tempId));
+                }
+            } catch (procErr) {
+                console.warn('⚠️ Erro ao processar registro:', e._id, procErr.message);
+            }
+        });
+
+        // Remove agendas temporárias e ordena
+        const agendasFiltradas = agenda
+            .filter(a => !agendaTempIds.has(String(a._id)))
+            .sort((a, b) => (a.agenda_benenome || "").localeCompare(b.agenda_benenome || "", 'pt-BR'));
+
+        // ===== BUSCAS AUXILIARES EM PARALELO =====
+        const [bene, usuario, horaage, sala, terapia, ano, conv] = await Promise.all([
+            Bene.find().lean(),
+            Usuario.find({
+                usuario_status: "Ativo",
+                $or: [
+                    { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                    { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"] }}
+                ]
+            }).lean(),
+            Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }).lean(),
+            Sala.find().lean(),
+            Terapia.find().lean(),
+            Ano.find().sort({ ano_nome: 1 }).lean(),
+            Conv.find().lean()
+        ]);
+
+        // Ordenações auxiliares
+        const sortPtBr = (a, b, field) => (a[field]||"").localeCompare(b[field]||"", 'pt-BR');
+        bene.sort((a,b) => sortPtBr(a,b,'bene_nome'));
+        usuario.sort((a,b) => sortPtBr(a,b,'usuario_nome'));
+        sala.sort((a,b) => sortPtBr(a,b,'sala_nome'));
+        conv.sort((a,b) => sortPtBr(a,b,'conv_nome'));
+
+        // ===== PREPARA FILTROS FORMATADOS PARA EXIBIÇÃO NO HEADER =====
+        const filtrosDisplay = {
+            periodo: "",
+            pessoa: "",
+            nome: ""
+        };
+        
+        if (filtroTela.tipoData === "Ano/Mes" && filtroTela.anoAtend && filtroTela.mesAtend) {
+            const meses = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+            filtrosDisplay.periodo = `${meses[filtroTela.mesAtend]}/${filtroTela.anoAtend}`;
+        } else if (filtroTela.tipoData === "Dia" && filtroTela.dataFinal) {
+            filtrosDisplay.periodo = fncGeral.getDataFMT(new Date(filtroTela.dataFinal));
+        } else if (filtroTela.tipoData === "Semana" && dataIni && dataFim) {
+            const ini = fncGeral.getDataFMT(dataIni);
+            const fim = fncGeral.getDataFMT(dataFim);
+            filtrosDisplay.periodo = `${ini} a ${fim}`;
+        }
+        
+        if (filtroTela.tipoPessoa === "Beneficiario" && filtroTela.atendBeneficiario) {
+            const beneSel = bene.find(b => String(b._id) === filtroTela.atendBeneficiario);
+            filtrosDisplay.pessoa = "Beneficiário";
+            filtrosDisplay.nome = beneSel?.bene_nome || "Selecionado";
+        } else if (filtroTela.tipoPessoa === "Terapeuta" && filtroTela.atendTerapeuta) {
+            const teraSel = usuario.find(u => String(u._id) === filtroTela.atendTerapeuta);
+            filtrosDisplay.pessoa = "Terapeuta";
+            filtrosDisplay.nome = teraSel?.usuario_nome || "Selecionado";
+        } else {
+            filtrosDisplay.pessoa = "Geral";
+            filtrosDisplay.nome = "";
+        }
+
+        // ===== RENDER COM PERSISTÊNCIA GARANTIDA =====
+        res.render('area/evol/evoatendgeralLis', {
+            agendas: agendasFiltradas,
+            anos: ano,
+            terapeutas: usuario,
+            benes: bene,
+            salas: sala,
+            terapias: terapia,
+            convs: conv,
+            horaages: horaage,
+            filtroTela,              // ✅ Persistência dos valores brutos
+            filtrosDisplay,          // ✅ Dados formatados pra exibir no header
+            flash,
+            carregaFiltro: { carregaFiltro: "true" }
+        });
+
+    } catch (err) {
+        console.error('❌ Erro CRÍTICO em filtraEvoatendgeral:', err);
+        req.flash("error_message", "Houve um erro ao listar as evoluções: " + err.message);
         res.redirect('/admin/erro');
     }
 },

@@ -412,7 +412,21 @@
 .label-black.label-arrow {
     border-left: 3px solid #00838f !important;
 }
+/* ============================================
+   UTILITÁRIOS - VISIBILIDADE
+   ============================================ */
+.hidden-div {
+    display: none !important;
+}
 
+/* Garante que elementos dentro de col-sm-2 ocultos não ocupem espaço */
+.col-sm-2.hidden-div {
+    visibility: hidden !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+}
     </style>
 	<script type="text/javascript">
 		// ===== FUNÇÕES DE AÇÃO =====
@@ -436,7 +450,7 @@
 
 		// ===== FORMATA DATA PARA O HIDDEN dataFinal =====
 		function formataData(){
-			const tipo = document.getElementById("tipoPeriodo").value;
+			const tipo = document.getElementById("tipoData").value;
 			const hiddenDataFinal = document.getElementById('dataFinal');
 			
 			if(tipo === "Ano/Mes"){
@@ -451,7 +465,7 @@
 				}
 			} else {
 				// Semana ou Dia: input date já retorna YYYY-MM-DD
-				const dataFil = document.getElementById('dataFinal').value;
+				const dataFil = document.getElementById('dataFilnal').value;
 				if(dataFil){
 					hiddenDataFinal.value = `${dataFil}T12:00:00.000Z`;
 				}
@@ -461,31 +475,30 @@
 
 		// ===== LÓGICA DE VISIBILIDADE: TIPO DE DATA =====
 		function trocaFiltroData() {
-			const tipo = $('#tipoPeriodo').val();
+			const tipo = $('#tipoData').val();
 			const isAnoMes = (tipo === 'Ano/Mes');
 			
-			// Visibilidade dos campos
-			$('#divAnoAtend').toggleClass('hidden-div', !isAnoMes);
-			$('#divMesAtend').toggleClass('hidden-div', !isAnoMes);
-			$('#divdataFinal').toggleClass('hidden-div', isAnoMes);
+			// ✅ Regra: Ano/Mês → mostra Ano+Mês, esconde Data | Semana/Dia → mostra Data, esconde Ano+Mês
+			$('#divAnoAtend').toggle(isAnoMes);
+			$('#divMesAtend').toggle(isAnoMes);
+			// ✅ CORREÇÃO: usa isAnoMes direto (sem !), pois queremos esconder dataFilnal quando for Ano/Mês
+			$('#divdataFilnal').toggleClass('hidden-div', isAnoMes);
 			
-			// Só re-inicializa Select2 dos campos que mudaram de visibilidade
+			// Recalcula Select2 após mudar visibilidade
 			setTimeout(() => {
 				if(isAnoMes){
 					['#anoAtend', '#mesAtend'].forEach(sel => {
 						const $el = $(sel);
-						// Só recria se já existir instância
-						if($el.data('select2')) {
-							const val = $el.val(); // Salva valor atual
-							$el.select2('destroy');
-							$el.select2({ width: 'resolve', placeholder: "Selecione...", allowClear: false });
-							if(val) $el.val(val).trigger('change.select2'); // Restaura valor
-						}
+						if($el.data('select2')) $el.select2('destroy');
+						$el.select2({ width: 'resolve', placeholder: "Selecione...", allowClear: false });
 					});
 				}
+				// dataFilnal é input type="date", não precisa de Select2
 			}, 30);
 			
+			// Atualiza o hidden dataFinal ao mudar o tipo
 			formataData();
+			console.log('[DEBUG] trocaFiltroData:', tipo, '| isAnoMes:', isAnoMes);
 		}
 
 		// ===== LÓGICA DE VISIBILIDADE: TIPO DE PESSOA =====
@@ -513,101 +526,90 @@
 		}
 
 		// ===== CARREGA FILTROS AO INICIAR A PÁGINA =====
-function carregaBody(){
-    console.log('[DEBUG] carregaBody iniciado');
-    
-    if(document.getElementById("carregaFiltro")?.value === "true"){
-        
-        // === 1. Tipo de Período ===
-        const tipoPeriodoVal = document.getElementById("tipoPeriodoFil")?.value || "Ano/Mes";
-        $('#tipoPeriodo').val(tipoPeriodoVal).trigger('change.select2');
-        
-        if(tipoPeriodoVal === "Ano/Mes"){
-            const anoVal = document.getElementById("anoAtendFil")?.value || "";
-            const mesVal = document.getElementById("mesAtendFil")?.value || "";
-            $('#anoAtend').val(anoVal).trigger('change.select2');
-            $('#mesAtend').val(mesVal).trigger('change.select2');
-        } else if(tipoPeriodoVal === "Semana" || tipoPeriodoVal === "Dia"){
-            const dataRaw = document.getElementById("dataFinalFil")?.value;
-            if(dataRaw){
-                const dat = new Date(dataRaw);
-                if(!isNaN(dat.getTime())){
-                    const mes = String(dat.getUTCMonth() + 1).padStart(2, '0');
-                    const dia = String(dat.getUTCDate()).padStart(2, '0');
-                    document.getElementById("dataFinal").value = `${dat.getFullYear()}-${mes}-${dia}`;
-                }
-            }
-        }
-        
-        // === 2. Tipo de Pessoa ===
-        const tipoPessoaVal = document.getElementById("tipoPessoaFil")?.value || "Geral";
-        $('#atendTipoPessoa').val(tipoPessoaVal).trigger('change.select2');
-        
-        if(tipoPessoaVal === "Beneficiario"){
-            const beneVal = document.getElementById("atendBeneficiarioFil")?.value || "";
-            $('#atendBeneficiario').val(beneVal).trigger('change.select2');
-        } else if(tipoPessoaVal === "Terapeuta"){
-            const teraVal = document.getElementById("atendTerapeutaFil")?.value || "";
-            $('#atendTerapeuta').val(teraVal).trigger('change.select2');
-        }
-        
-        // === 3. Concluído e Selo ===
-        const concluidoVal = document.getElementById("AtendConcluidoFil")?.value || "Todos";
-        const seloVal = document.getElementById("atendSeloFil")?.value || "Todos";
-        $('#AtendConcluido').val(concluidoVal).trigger('change.select2');
-        $('#atendSelo').val(seloVal).trigger('change.select2');
-    }
-    
-    // === Carregamento via edição ===
-    const tipoPeriodoEdi = document.getElementById("tipoPeriodoEdi")?.value;
-    const tipoPessoaEdi = document.getElementById("tipoPessoaEdi")?.value;
-    
-    if(tipoPeriodoEdi){
-        $('#tipoPeriodo').val(tipoPeriodoEdi).trigger('change.select2');
-        if(tipoPeriodoEdi === "Ano/Mes"){
-            $('#anoAtend').val(document.getElementById("anoAtendEdi")?.value || "").trigger('change.select2');
-            $('#mesAtend').val(document.getElementById("mesAtendEdi")?.value || "").trigger('change.select2');
-        } else if(tipoPeriodoEdi === "Semana" || tipoPeriodoEdi === "Dia"){
-            const dataEdi = document.getElementById("dataFinalEdi")?.value;
-            if(dataEdi){
-                const dat = new Date(dataEdi);
-                if(!isNaN(dat.getTime())){
-                    const mes = String(dat.getUTCMonth() + 1).padStart(2, '0');
-                    const dia = String(dat.getUTCDate()).padStart(2, '0');
-                    document.getElementById("dataFinal").value = `${dat.getFullYear()}-${mes}-${dia}`;
-                }
-            }
-        }
-    }
-    
-    if(tipoPessoaEdi){
-        $('#atendTipoPessoa').val(tipoPessoaEdi).trigger('change.select2');
-        if(tipoPessoaEdi === "Beneficiario"){
-            $('#atendBeneficiario').val(document.getElementById("atendBeneficiarioEdi")?.value || "").trigger('change.select2');
-        } else if(tipoPessoaEdi === "Terapeuta"){
-            $('#atendTerapeuta').val(document.getElementById("atendTerapeutaEdi")?.value || "").trigger('change.select2');
-        }
-    }
-    
-    // === Aplica visibilidade ===
-    trocaFiltroData();
-    trocaFilpessoa();
-    
-    // === Inicializa Select2 (apenas se não existir) ===
-    $('.select2').each(function(){
-        const $el = $(this);
-        if(!$el.data('select2')){
-            $el.select2({ 
-                width: 'resolve', 
-                placeholder: $el.data('placeholder') || "Selecione...", 
-                allowClear: $el.attr('allowClear') !== 'false' 
-            });
-        }
-    });
-    
-    console.log('✅ carregaBody finalizado');
-}
-		</script>
+		function carregaBody(){
+			// Só carrega se veio com flag de persistência
+			if(document.getElementById("carregaFiltro")?.value === "true"){
+				
+				// === 1. Tipo de Data ===
+				const tipoDataVal = document.getElementById("tipodataFilnal")?.value || "Ano/Mes";
+				document.getElementById("tipoData").value = tipoDataVal;
+				
+				if(tipoDataVal === "Ano/Mes"){
+					document.getElementById("anoAtend").value = document.getElementById("anoAtendFil")?.value || "";
+					document.getElementById("mesAtend").value = document.getElementById("mesAtendFil")?.value || "";
+				} else if(tipoDataVal === "Semana" || tipoDataVal === "Dia"){
+					const dataRaw = document.getElementById("dataFinalFil")?.value;
+					if(dataRaw){
+						const dat = new Date(dataRaw);
+						// ✅ Converte UTC month (0-11) → input date month (1-12)
+						const mes = String(dat.getUTCMonth() + 1).padStart(2, '0');
+						const dia = String(dat.getUTCDate()).padStart(2, '0');
+						document.getElementById("dataFilnal").value = `${dat.getFullYear()}-${mes}-${dia}`;
+					}
+				}
+				
+				// === 2. Tipo de Pessoa ===
+				const tipoPessoaVal = document.getElementById("tipoPessoaFil")?.value || "Geral";
+				document.getElementById("atendTipoPessoa").value = tipoPessoaVal;
+				
+				if(tipoPessoaVal === "Beneficiario"){
+					document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil")?.value || "";
+				} else if(tipoPessoaVal === "Terapeuta"){
+					document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil")?.value || "";
+				}
+				// Se for "Geral", os campos ficam vazios e ocultos (lógica no trocaFilpessoa)
+				
+				// === 3. Concluído e Selo ===
+				document.getElementById("AtendConcluido").value = document.getElementById("AtendConcluidoFil")?.value || "Todos";
+				document.getElementById("atendSelo").value = document.getElementById("atendSeloFil")?.value || "Todos";
+			}
+			
+			// === Carregamento via edição (fluxo alternativo) ===
+			const tipoDataEdi = document.getElementById("tipoDataEdi")?.value;
+			const tipoPessoaEdi = document.getElementById("tipoPessoaEdi")?.value;
+			
+			if(tipoDataEdi){
+				document.getElementById("tipoData").value = tipoDataEdi;
+				if(tipoDataEdi === "Ano/Mes"){
+					document.getElementById("anoAtend").value = document.getElementById("anoAtendEdi")?.value || "";
+					document.getElementById("mesAtend").value = document.getElementById("mesAtendEdi")?.value || "";
+				} else if(tipoDataEdi === "Semana" || tipoDataEdi === "Dia"){
+					const dataEdi = document.getElementById("dataFinalEdi")?.value;
+					if(dataEdi){
+						const dat = new Date(dataEdi);
+						const mes = String(dat.getUTCMonth() + 1).padStart(2, '0');
+						const dia = String(dat.getUTCDate()).padStart(2, '0');
+						document.getElementById("dataFilnal").value = `${dat.getFullYear()}-${mes}-${dia}`;
+					}
+				}
+			}
+			
+			if(tipoPessoaEdi){
+				document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
+				if(tipoPessoaEdi === "Beneficiario"){
+					document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioEdi")?.value || "";
+				} else if(tipoPessoaEdi === "Terapeuta"){
+					document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaEdi")?.value || "";
+				}
+			}
+			
+			// === APLICA VISIBILIDADE INICIAL ===
+			trocaFiltroData();
+			trocaFilpessoa();
+			
+			// === INICIALIZA SELECT2 (apenas uma vez) ===
+			$('.select2:not(.select2-hidden-accessible)').each(function(){
+				if(!$(this).data('select2')){
+					$(this).select2({ width: 'resolve', placeholder: "Selecione...", allowClear: true });
+				}
+			});
+			
+			// Força o Select2 a refletir os valores já definidos
+			$('.select2').trigger('change');
+			
+			console.log('✅ carregaBody finalizado');
+		}
+	</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -657,23 +659,23 @@ function carregaBody(){
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/evol/evoatendgeralFil" method="POST">
 							<div class="toolbar-pesquisa noprint">
 								<div class="hidden">
-										<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
-										<input id="atendTerapeutaFil" value="{{filtroTela.atendTerapeuta}}" />
-										<input id="atendBeneficiarioFil" value="{{filtroTela.atendBeneficiario}}" />
-										<input id="dataFinalFil" value="{{filtroTela.dataFinal}}" />
-										<input id="mesAtendFil" value="{{filtroTela.mesAtend}}" />
-										<input id="anoAtendFil" value="{{filtroTela.anoAtend}}" />
-										<input id="tipoPessoaFil" value="{{filtroTela.tipoPessoa}}" />
-										<input id="tipoPeriodoFil" value="{{filtroTela.tipoPeriodo}}" />
-										<input id="dataIniFil" value="{{filtroTela.dataIni}}" />
-										<input id="dataFimFil" value="{{filtroTela.dataFim}}" />
-										<input id="idsChecked" value="" />
-									</div>
+									<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+									<input id="atendTerapeutaFil" value="{{atendTerapeuta.atendTerapeuta}}" />
+									<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
+									<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
+									<input id="mesAtendFil" value="{{mesAtend.mesAtend}}" />
+									<input id="anoAtendFil" value="{{anoAtend.anoAtend}}" />
+									<input id="tipoPessoaFil" value="{{tipoPessoa.tipoPessoa}}" />
+									<input id="tipodataFilnal" value="{{tipoData.tipoData}}" />
+									<input id="dataIniFil" value="{{dataIni.dataIni}}" />
+									<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+									<input id="idsChecked" value="" />
+								</div>
 								<div class="col-sm-2">
 									<div class="row">
 										<div class="input-group">
-											<label>Tipo Período:&nbsp;</label>
-											<select name="tipoPeriodo" id="tipoPeriodo" class="select2" value="Ano/Mes" onchange="trocaFiltroData()">
+											<label>Tipo Filtro:&nbsp;</label>
+											<select name="tipoData" id="tipoData" class="select2" value="Ano/Mes" >
 												<option value="Ano/Mes">Ano/Mês</option>
 												<option value="Semana">Semana</option>
 												<option value="Dia">Dia</option>
@@ -728,17 +730,17 @@ function carregaBody(){
 										</div>
 									</div>
 								</div>
-								<div id="divdataFinal" class="col-sm-2">
+								<div id="divdataFilnal" class="col-sm-2">
 									<div class="input-group">
 										<label>Data:&nbsp;</label>
-										<input style="height: 30px;" id="dataFinal" name="dataFinal" type="date" onchange="javascript:formataData();">
+										<input style="height: 30px;" id="dataFilnal" name="dataFilnal" type="date" onchange="javascript:formataData();">
 										
 									</div>
 								</div>
 								<div id="divTipoFil" class="col-sm-2">
 									<div class="row">
 										<div class="input-group">
-											<label>Tipo Pessoa:&nbsp;</label>
+											<label>Tipo Filtro:&nbsp;</label>
 											<select name="atendTipoPessoa" id="atendTipoPessoa" class="select2" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
 												<option value="Geral">Geral</option>
 												<option value="Beneficiario">Beneficiário</option>
@@ -800,7 +802,7 @@ function carregaBody(){
 								<input type="hidden" id="carregaFiltro" name="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
 								
 								<!-- Filtros para persistência (TODOS vindos de filtroTela) -->
-								<input type="hidden" id="tipoPeriodoFil" name="tipoPeriodoFil" value="{{filtroTela.tipoPeriodo}}" />
+								<input type="hidden" id="tipodataFilnal" name="tipodataFilnal" value="{{filtroTela.tipoData}}" />
 								<input type="hidden" id="anoAtendFil" name="anoAtendFil" value="{{filtroTela.anoAtend}}" />
 								<input type="hidden" id="mesAtendFil" name="mesAtendFil" value="{{filtroTela.mesAtend}}" />
 								<input type="hidden" id="dataFinalFil" name="dataFinalFil" value="{{filtroTela.dataFinal}}" />
@@ -1010,8 +1012,8 @@ function carregaBody(){
 				}, 100);
 
 				// ✅ PASSO 3: Eventos para quando o usuário mudar os selects
-				$('#tipoPeriodo').on('change.select2', function() {
-					console.log('🔄 tipoPeriodo mudou para:', $(this).val());
+				$('#tipoData').on('change.select2', function() {
+					console.log('🔄 tipoData mudou para:', $(this).val());
 					trocaFiltroData();
 				});
 
