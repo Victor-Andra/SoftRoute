@@ -3,91 +3,8 @@
 	<head>
 		<title>Atendimentos</title>
 		<style>
-			/* --- REGRA GERAL: mantém 200px para selects comuns (se houver) --- */
-			.chosen-container,
-			.chosen-container-single {
-				width: 200px !important;
-			}
-			
-			/* Garante que o dropdown acompanhe */
-			.chosen-drop,
-			.chosen-results {
-				width: 100% !important;
-			}
-			
-			/* --- EXCEÇÃO: campos de terapia e terapeuta com 100% do container --- */
-			/* Lista dos containers Chosen gerados para esses selects */
-			#atendTerapeutaid_chosen,
-			#atendBeneid_chosen,
-			#atendConvid_chosen,
-			#atendTerapiaid_chosen,
-			#atendFixoTerapeutaid_chosen,
-			#atendFixoTerapiaid_chosen,
-			#atendMergeTerapeutaid_chosen,
-			#atendMergeTerapiaid_chosen {
-				width: 100% !important;           /* Ocupa toda a largura do .col-sm-4 */
-				max-width: 100% !important;
-				min-width: 0 !important;          /* Remove restrições mínimas */
-			}
-
-			/* Dropdown acompanha 100% */
-			#atendTerapeutaid_chosen .chosen-drop,
-			#atendTerapiaid_chosen .chosen-drop,
-			#atendBeneid_chosen .chosen-drop,
-			#atendConvid_chosen .chosen-drop,
-			#atendFixoTerapeutaid_chosen .chosen-drop,
-			#atendFixoTerapiaid_chosen .chosen-drop,
-			#atendMergeTerapeutaid_chosen .chosen-drop,
-			#atendMergeTerapiaid_chosen .chosen-drop {
-				width: 100% !important;
-			}
-
-			/* Trunca texto longo nos selects personalizados */
-			#atendTerapeutaid_chosen .chosen-single span,
-			#atendTerapiaid_chosen .chosen-single span,
-			#atendBeneid_chosen .chosen-single span,
-			#atendConvid_chosen .chosen-single span,
-			#atendFixoTerapeutaid_chosen .chosen-single span,
-			#atendFixoTerapiaid_chosen .chosen-single span,
-			#atendMergeTerapeutaid_chosen .chosen-single span,
-			#atendMergeTerapiaid_chosen .chosen-single span {
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				display: block;
-			}
 		</style>
 		<script type="text/javascript">
-			// === INICIALIZAÇÃO DO CHOSEN (executar após DOM carregar) ===
-function inicializaChosen() {
-    // Inicializa todos os selects com a classe chosen-select
-    if (typeof jQuery !== 'undefined' && jQuery.fn.chosen) {
-        jQuery('.chosen-select').chosen({
-            width: '100%',
-            allow_single_deselect: true,
-            no_results_text: 'Nenhum resultado encontrado...'
-        });
-        
-        // Bind dos eventos change para garantir que funcionem com Chosen
-        jQuery('#atendBeneid').on('change', function() {
-            selectConv();
-        });
-        
-        jQuery('#atendTerapiaid').on('change', function() {
-            carregaValores();
-        });
-        
-        jQuery('#atendMergeTerapiaid').on('change', function() {
-            carregaValoresMerge();
-        });
-        
-        jQuery('#atendTerapeutaid').on('change', function() {
-            atualizaTerapeutaId();
-        });
-    }
-}
-
-// === FUNÇÃO PARA SINCRONIZAR CONVÊNIO ===
 function selectConv(){
     var beneId = document.getElementById("atendBeneid").value;
     
@@ -95,9 +12,7 @@ function selectConv(){
     if (!beneId || beneId === "766f69643132333435366964") {
         document.getElementById("atendConvid").value = "766f69643132333435366964";
         document.getElementById("tabilConvid").value = "";
-        if (typeof jQuery !== 'undefined') {
-            jQuery('#atendConvid').trigger('chosen:updated');
-        }
+
         return;
     }
     
@@ -109,11 +24,6 @@ function selectConv(){
         // Atualiza os campos
         document.getElementById("atendConvid").value = convId;
         document.getElementById("tabilConvid").value = convId;
-        
-        // === IMPORTANTE: Atualiza a UI do Chosen ===
-        if (typeof jQuery !== 'undefined' && jQuery('#atendConvid').data('chosen')) {
-            jQuery('#atendConvid').trigger('chosen:updated');
-        }
         
         // Recarrega valores da terapia automaticamente
         carregaValores();
@@ -197,11 +107,18 @@ function toggleDivSubFixo(){
 
 // === CARREGA BODY ===
 function carregaBody(){
-    // Aguarda um tick para garantir que o DOM esteja pronto
-    setTimeout(function() {
-        inicializaChosen();
-        carregaValores();
-    }, 100);
+	const select = document.getElementById("atendConvid");
+
+	// bloqueia abertura do dropdown
+	select.addEventListener("mousedown", function(e) {
+	e.preventDefault();
+	});
+
+	// bloqueia mudança via teclado
+	select.addEventListener("keydown", function(e) {
+	e.preventDefault();
+	});
+  
 }
 		</script>
 	</head>
@@ -278,6 +195,7 @@ function carregaBody(){
 												<div class="form-group">
 													<div class="col-sm-9">
 														<select id="atendCategoria" name="atendCategoria" class="select2" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption();" onchange="javascript:atualizaSubFixo();">
+															<option id="-" value="-">-</option>
 															<option id="Apoio" value="Apoio">Apoio</option>
 															<option id="Extra" value="Extra">Extra</option>
 															<option id="Falta" value="Falta">Falta</option>
@@ -321,7 +239,7 @@ function carregaBody(){
 												</div>
 												<div class="form-group">
 														<div class="col-sm-8">
-															<select id="atendConvid" name="atendConvid" class="select2" data-placeholder="Escolha...">{{#compareThis lvlUsu "624218f5a12aa557219a0fd0"}}<!--style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true"-->{{/compareThis}}
+															<select id="atendConvid" name="atendConvid">{{#compareThis lvlUsu "624218f5a12aa557219a0fd0"}}<!--style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true"-->{{/compareThis}}
 																	<option value="766f69643132333435366964">-</option>
 																	{{#each benes}}
 																		{{#each ../convs}}

@@ -417,9 +417,9 @@
             transition: background-color 0.5s;
         }
 
-       /* ============================================
-   SELECT2 - ESTILOS GERAIS
-   ============================================ */
+/* ============================================
+SELECT2 - ESTILOS GERAIS
+============================================ */
 .select2-container {
     min-width: 120px !important;
   
@@ -1105,7 +1105,7 @@
 							<!-- 🔹 Tipo de Filtro -->
 							<div class="form-group">
 								<label>Tipo Filtro</label>
-								<select name="tipoData" id="tipoData" class="select2">
+								<select name="tipoData" id="tipoData" class="form-control select">
 									<option value="Ano/Mes" {{#ifEqual filtroTipo "Ano/Mes"}}selected{{/ifEqual}}>Ano/Mês</option>
 									<option value="Semana" {{#ifEqual filtroTipo "Semana"}}selected{{/ifEqual}}>Semana</option>
 									<option value="Dia" {{#ifEqual filtroTipo "Dia"}}selected{{/ifEqual}}>Dia</option>
@@ -1115,7 +1115,7 @@
 							<!-- 🔹 Ano -->
 							<div id="divAnoAtend" class="form-group">
 								<label>Ano</label>
-								<select name="anoAtend" id="anoAtend" class="select2" >
+								<select name="anoAtend" id="anoAtend" class="form-control select" >
 									<option value="">Selecione...</option>
 									{{#each anos}}
 										<option value="{{this.ano_nome}}" 
@@ -1129,7 +1129,7 @@
 							 <!-- 🔹 Mês -->
 							<div id="divMesAtend" class="form-group">
 								<label>Mês</label>
-								<select name="mesAtend" id="mesAtend" class="select2" data-placeholder="Escolha...">
+								<select name="mesAtend" id="mesAtend" class="form-control select" data-placeholder="Escolha...">
 									<option value="0" {{#ifEqual filtroMes "0"}}selected{{/ifEqual}}>Janeiro</option>
 									<option value="1" {{#ifEqual filtroMes "1"}}selected{{/ifEqual}}>Fevereiro</option>
 									<option value="2" {{#ifEqual filtroMes "2"}}selected{{/ifEqual}}>Março</option>
@@ -1163,7 +1163,7 @@
 							<!-- 🔹 Tipo de Pessoa -->
 							<div class="form-group">
 								<label>Tipo</label>
-								<select name="atendTipoPessoa" id="atendTipoPessoa" class="select2" data-placeholder="Escolha...">
+								<select name="atendTipoPessoa" id="atendTipoPessoa" class="select" data-placeholder="Escolha...">
 									<option value="Geral" {{#ifEqual filtroTipoPessoa "Geral"}}selected{{/ifEqual}}>Geral</option>
 									<option value="Beneficiario" {{#ifEqual filtroTipoPessoa "Beneficiario"}}selected{{/ifEqual}}>Beneficiário</option>
 									<option value="Terapeuta" {{#ifEqual filtroTipoPessoa "Terapeuta"}}selected{{/ifEqual}}>Terapeuta</option>
@@ -1173,7 +1173,7 @@
 							<!-- 🔹 Beneficiário - visível apenas quando tipoPessoa = "Beneficiario" -->
 							<div id="divAtendBeneficiario" class="form-group{{#ifEqual filtroTipoPessoa "Beneficiario"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Beneficiário</label>
-								<select name="atendBeneficiario" id="atendBeneficiario" class="select2" data-placeholder="Escolha...">
+								<select name="atendBeneficiario" id="atendBeneficiario"class="form-control select" data-placeholder="Escolha...">
 									<option value=""></option>
 									{{#each benes}}
 										<option value="{{this._id}}" 
@@ -1187,7 +1187,7 @@
 							<!-- 🔹 Terapeuta - visível apenas quando tipoPessoa = "Terapeuta" -->
 							<div id="divAtendTerapeuta" class="form-group{{#ifEqual filtroTipoPessoa "Terapeuta"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Terapeuta</label>
-								<select name="atendTerapeuta" id="atendTerapeuta" class="select2" data-placeholder="Escolha...">
+								<select name="atendTerapeuta" id="atendTerapeuta" class="form-control select" data-placeholder="Escolha...">
 									<option value=""></option>
 									{{#each terapeutas}}
 										<option value="{{this._id}}" 

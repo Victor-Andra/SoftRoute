@@ -88,51 +88,6 @@
         box-shadow: 0 2px 4px rgba(0,0,0,0.15);
     }
 </style>
-<style>
-	/* Configurações de Colunas por Dispositivo */
-
-/* 1. TV 40" e Monitores Ultra-Wide (Telas muito grandes) */
-@media (min-width: 1900px) {
-    .container-agenda { max-width: 98%; }
-    .col-dia { width: 20%; float: left; padding: 5px; }
-    .badge-agenda { font-size: 11px !important; }
-}
-
-/* 2. Monitor 32" e Notebooks (Desktop Padrão) */
-@media (min-width: 992px) and (max-width: 1899px) {
-    .col-dia { width: 20%; float: left; padding: 4px; }
-}
-
-/* 3. Tablets */
-@media (min-width: 768px) and (max-width: 991px) {
-    .col-dia { width: 50%; float: left; } /* Fica 2 dias por linha */
-}
-
-/* 4. Celular (Sua exigência: um dia abaixo do outro/por página) */
-@media (max-width: 767px) {
-    .col-dia { width: 100%; margin-bottom: 30px; border-bottom: 2px solid #eee; }
-    .header-dia { 
-        background: #438eb9; 
-        color: white; 
-        padding: 10px; 
-        border-radius: 5px;
-        text-align: center;
-        font-size: 16px !important;
-    }
-    .tabela-responsiva { margin-top: 10px; }
-}
-
-/* Ajustes Gerais para manter o design AceAdmin */
-.tabela-agenda { width: 100%; border-collapse: collapse; background: white; }
-.tabela-agenda th, .tabela-agenda td { 
-    border: 1px solid #ddd; 
-    padding: 4px; 
-    text-align: center; 
-    vertical-align: middle;
-}
-.header-dia { font-weight: bold; background: #f9f9f9; }
-.hora-col { background: #f2f2f2; font-weight: bold; width: 50px; }
-</style>
 		<title>Agenda Pessoal Semanal </title>
 		<script type="text/javascript">
 			function atualizaData(){
@@ -287,63 +242,63 @@
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
-	<div class="main-container ace-save-state" id="main-container">
-		<div class="main-content">
-			<div class="main-content-inner">
-				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-					<ul class="breadcrumb">
-						<li>
-							<i class="ace-icon fa fa-home home-icon"></i>
-							<a href="#">Home</a>
-						</li>
-						<li class="active">Agenda Pessoal Semanal</li>
-					</ul><!-- /.breadcrumb -->
-				</div>
-				{{#if error}}
-					<div class="alert alert-danger">{{error}}</div>
-				{{/if}}
-				<div class="hidden" id="divCarrega" name="divCarrega">
-					<input id="766f69643132333435366964" value="&nbsp;" />
-					{{#each agendas}}
-						{{#compareThis agenda_terapiaid "766f69643132333435366964"}}
-						{{else}}
-						<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_beneid}}" />
-						<input id="{{agenda_data_semana}}SalaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
-						{{#isTrue agenda_temp}}
-							<input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" value="{{agenda_categoria}}">
-							<input name="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" value="{{agenda_categoria}}">
-							<div style="display: block;padding-top:2px;padding-bottom:2px;"
-							     id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}"
-							     name="{{agenda_data_semana}}"
-							     data-categoria="{{agenda_categoria}}"
-							     data-id="{{_id}}">
-								<a class="blue" href="/menu/agenda/evolucaoTemp/{{_id}}">
-									<i class="ace-icon fa fa-pencil bigger-130"></i>
-								</a>
-							</div>
-						{{else}}
-							<div style="display: block;padding-top:2px;padding-bottom:2px;"
-							     id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}"
-							     name="{{agenda_data_semana}}"
-							     data-categoria="{{agenda_categoria}}"
-							     data-id="{{_id}}">
-								<a class="blue" href="/menu/agenda/evolucao/{{_id}}">
-									<i class="ace-icon fa fa-pencil bigger-130"></i>
-								</a>
-							</div>
-						{{/isTrue}}
-						{{/compareThis}}
-					{{/each}}
-					{{#each benes}}
-						<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{bene_apelido}}<br/></label>
-					{{/each}}
-					{{#each salas}}
-						<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{sala_nome}}<br/></label>
-					{{/each}}
-				</div>
-				
-				<!-- ✅ Adicionado container-agenda e corrigido typo 'clss' -> 'class' -->
-				<div class="col-xs-12 container-agenda">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Agenda Pessoal Semanal</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					{{#if error}}
+						<div class="alert alert-danger">{{error}}</div>
+					{{else}}
+					{{/if}}
+					<div class="hidden" id="divCarrega" name="divCarrega">
+						<input id="766f69643132333435366964" value="&nbsp;" />
+						{{#each agendas}}
+							{{#compareThis agenda_terapiaid "766f69643132333435366964"}}
+							{{else}}
+							<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_beneid}}" />
+							<input id="{{agenda_data_semana}}SalaId_{{agenda_hora}}" name="{{agenda_data_semana}}" value="{{agenda_salaid}}" />
+							{{#isTrue agenda_temp}}
+								<input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" value="{{agenda_categoria}}">
+								<input name="{{agenda_data_semana}}SalaId_{{agenda_hora}}_{{agenda_salaid}}" value="{{agenda_categoria}}">
+								<!-- ➕ ADICIONADO: data-categoria e data-id -->
+								<div style="display: block;padding-top:2px;padding-bottom:2px;"
+								     id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}"
+								     name="{{agenda_data_semana}}"
+								     data-categoria="{{agenda_categoria}}"
+								     data-id="{{_id}}">
+									<a class="blue" href="/menu/agenda/evolucaoTemp/{{_id}}">
+										<i class="ace-icon fa fa-pencil bigger-130"></i>
+									</a>
+								</div>
+							{{else}}
+								<!-- ➕ ADICIONADO: data-categoria e data-id -->
+								<div style="display: block;padding-top:2px;padding-bottom:2px;"
+								     id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}"
+								     name="{{agenda_data_semana}}"
+								     data-categoria="{{agenda_categoria}}"
+								     data-id="{{_id}}">
+									<a class="blue" href="/menu/agenda/evolucao/{{_id}}">
+										<i class="ace-icon fa fa-pencil bigger-130"></i>
+									</a>
+								</div>
+							{{/isTrue}}
+							{{/compareThis}}
+						{{/each}}
+						{{#each benes}}
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{bene_apelido}}<br/></label>
+						{{/each}}
+						{{#each salas}}
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{sala_nome}}<br/></label>
+						{{/each}}
+					</div>
 					<form class="form-horizontal" role="form" action="/menu/agenda/filPessoalSemanal" method="POST">
 						<div class="breadcrumbs" id="pesquisaAge" >
 							<div style="text-align: center;">
@@ -358,16 +313,14 @@
 					</form>
 					<div class="tab-content">
 						<div class="row">
-							<div class="col-xs-12">
+							<div class="col-xs-16 col-sm-9">
 								<div id="seg" class="tab-pane fade active in">
-									<!-- ✅ Adicionada classe 'tabela-agenda' -->
-									<table class="table table-sm table-bordered tabela-agenda" style="font-size: 9px;" id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
+									<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
 										<thead>
-											<!-- Alerta da Agenda -->
 											<tr role="row">
-												<th class="center colgroup" aria-controls="dynamic-table" colspan="15">
+												<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
 													<div id="divAlertas">
-														<div class="col-xs-12" style="padding-top: 2px;">
+														<div class="col-xs-12 col-sm-7" style="padding-top: 2px;">
 															<div class="alert alert-danger">
 																<strong>Agenda</strong><br>
 																{{#each agendas}}
@@ -383,11 +336,10 @@
 													</div>
 												</th>
 											</tr>
-											<!-- Alerta do Terapeuta -->
 											<tr role="row">
-												<th class="center colgroup" aria-controls="dynamic-table" colspan="15">
+												<th class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16">
 													<div id="divAlertas">
-														<div class="col-xs-12" style="padding-top: 2px;">
+														<div class="col-xs-14 col-sm-5" style="padding-top: 2px;">
 															<div class="alert alert-warning">
 																<strong>Terapeuta</strong><br>
 																{{usu.usuario_obs}}<br>
@@ -396,61 +348,40 @@
 													</div>
 												</th>
 											</tr>
-											<!-- Cabeçalho dos Dias -->
 											<tr role="row">
-												<!-- ✅ Adicionada classe 'header-dia' -->
-												<th id="thsegr" name="tabela" tabindex="1" aria-controls="dynamic-table" colspan="3" class="header-dia">{{segunda}}</th>
-												<th id="thterr" name="tabela" tabindex="1" aria-controls="dynamic-table" colspan="3" class="header-dia">{{terca}}</th>
-												<th id="thquar" name="tabela" tabindex="1" aria-controls="dynamic-table" colspan="3" class="header-dia">{{quarta}}</th>
-												<th id="thquir" name="tabela" tabindex="1" aria-controls="dynamic-table" colspan="3" class="header-dia">{{quinta}}</th>
-												<th id="thsexr" name="tabela" tabindex="1" aria-controls="dynamic-table" colspan="3" class="header-dia">{{sexta}}</th>
+												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" >&nbsp;</th>
+												<th id="thsegr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{segunda}}</th>
+												<th id="thterr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{terca}}</th>
+												<th id="thquar" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{quarta}}</th>
+												<th id="thquir" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{quinta}}</th>
+												<th id="thsexr" name="tabela" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="2" >{{sexta}}</th>
 											</tr>
-											<!-- Sub-cabeçalho: Hora, Sala, Beneficiário -->
 											<tr role="row">	
-												<!-- ✅ Adicionada classe 'hora-col' nos cabeçalhos de hora -->
-												<th style="width: 50px;" tabindex="0" colspan="1" class="hora-col"><b>Hora</b></th>
-												<th id="thseg1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" colspan="1">Sala</th>
-												<th id="thseg2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" colspan="1">Beneficiário</th>
-												
-												<th style="width: 50px;" tabindex="0" colspan="1" class="hora-col"><b>Hora</b></th>
-												<th id="thter1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" colspan="1">Sala</th>
-												<th id="thter2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" colspan="1">Beneficiário</th>
-												
-												<th style="width: 50px;" tabindex="0" colspan="1" class="hora-col"><b>Hora</b></th>
-												<th id="thqua1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" colspan="1">Sala</th>
-												<th id="thqua2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" colspan="1">Beneficiário</th>
-												
-												<th style="width: 50px;" tabindex="0" colspan="1" class="hora-col"><b>Hora</b></th>
-												<th id="thqui1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" colspan="1">Sala</th>
-												<th id="thqui2" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" colspan="1">Beneficiário</th>
-												
-												<th style="width: 50px;" tabindex="0" colspan="1" class="hora-col"><b>Hora</b></th>
-												<th id="thsex1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" colspan="1">Sala</th>
-												<th id="thsex2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" colspan="1">Beneficiário</th>
+												<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" ><b>Hora</b></th>
+												<th id="thseg1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thseg2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thter1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thter2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thqua1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thqua2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thqui1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thqui2" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+												<th id="thsex1" name="tabela" style="width: 50px;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Sala</th>
+												<th id="thsex2" name="tabela" style="width: 50px;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
 											</tr>
 										</thead>
-										
 										{{#each horaages}}
 										<tbody>
 											<tr role="row" class="odd">
-												<!-- ✅ Adicionada classe 'hora-col' nas células de hora -->
-												<td style="width: 50px;" class="hora-col">{{horaage_hora}}</td>
+												<td style="width: 50px;">{{horaage_hora}}</td>
 												<td name="tabela" id="horasegSalaId_{{horaage_hora}}"></td>
 												<td name="tabela" id="horasegBeneId_{{horaage_hora}}"></td>
-												
-												<td style="width: 50px;" class="hora-col">{{horaage_hora}}</td>
 												<td name="tabela" id="horaterSalaId_{{horaage_hora}}"></td>
 												<td name="tabela" id="horaterBeneId_{{horaage_hora}}"></td>
-												
-												<td style="width: 50px;" class="hora-col">{{horaage_hora}}</td>
 												<td name="tabela" id="horaquaSalaId_{{horaage_hora}}"></td>
 												<td name="tabela" id="horaquaBeneId_{{horaage_hora}}"></td>
-												
-												<td style="width: 50px;" class="hora-col">{{horaage_hora}}</td>
 												<td name="tabela" id="horaquiSalaId_{{horaage_hora}}"></td>
 												<td name="tabela" id="horaquiBeneId_{{horaage_hora}}"></td>
-												
-												<td style="width: 50px;" class="hora-col">{{horaage_hora}}</td>
 												<td name="tabela" id="horasexSalaId_{{horaage_hora}}"></td>
 												<td name="tabela" id="horasexBeneId_{{horaage_hora}}"></td>
 											</tr>
@@ -462,7 +393,7 @@
 							<div id="ocultaIds" class="hidden">
 								<input id="hoje" name="hoje" value="{{hoje}}" />
 							</div>
-							<div class="col-xs-12 col-sm-3">	
+							<div class="col-xs-16 col-sm-3">	
 								<div class="alert alert">
 									<br><br><br>
 								</div>
@@ -472,6 +403,5 @@
 				</div>
 			</div>
 		</div>
-	</div>
-</body>
+	</body>
 </html>

@@ -2407,9 +2407,20 @@ router.post('/atendimento/tabdimConvBeneTeraAtendvalFiltro', fncGeral.IsAuthenti
     router.get('/atendimento/relatendbeneAT', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoBeneAT(req,res);
     })
-    router.post('/atendimento/relatendbenesAT', fncGeral.IsAuthenticated,(req,res) =>{
+    router.post('/atendimento/relatendbeneAT', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoBeneFiltroAT(req,res);
     })
+
+    router.get('/atendimento/relatendbeneATNovo', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneATNovo(req,res);
+    })
+    router.post('/atendimento/relatendbeneFiltroATNovo', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneFiltroATNovo(req,res);
+    })
+
+
+
+
 //Relatório Individual de Atendimentos por Beneficiário Atualizado para horario AT.
 //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo 
 //com espaço para assinataura individual, tanto responsável quanto do terapeuta

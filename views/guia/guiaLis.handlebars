@@ -573,12 +573,7 @@
 				document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaEdi").value || "766f69643132333435366964";
 			}
 			
-			// Atualiza Chosen após 100ms para garantir renderização
-			setTimeout(() => {
-				if (typeof $.fn.chosen !== 'undefined') {
-					$('.chosen-select').trigger('chosen:updated');
-				}
-			}, 100);
+			
 		}
 		
 		// ============================================
@@ -878,7 +873,7 @@
 							<!-- 🔹 Tipo de Filtro -->
 							<div class="form-group">
 								<label>Tipo Filtro</label>
-								<select name="tipoData" id="tipoData" class="chosen-select" data-placeholder="Escolha...">
+								<select name="tipoData" id="tipoData" class="form-control select" data-placeholder="Escolha...">
 									<option value="Ano/Mes" {{#ifEqual filtroTipo "Ano/Mes"}}selected{{/ifEqual}}>Ano/Mês</option>
 									<option value="Semana" {{#ifEqual filtroTipo "Semana"}}selected{{/ifEqual}}>Semana</option>
 									<option value="Dia" {{#ifEqual filtroTipo "Dia"}}selected{{/ifEqual}}>Dia</option>
@@ -888,7 +883,7 @@
 														<!-- 🔹 Ano -->
 							<div id="divAnoAtend" class="form-group">
 								<label>Ano</label>
-								<select name="anoAtend" id="anoAtend" class="chosen-select" data-placeholder="Escolha...">
+								<select name="anoAtend" id="anoAtend" class="form-control select" data-placeholder="Escolha...">
 									<option value="">Selecione...</option>
 									{{#each anos}}
 										<option value="{{this.ano_nome}}" 
@@ -902,7 +897,7 @@
 							 <!-- 🔹 Mês -->
 							<div id="divMesAtend" class="form-group">
 								<label>Mês</label>
-								<select name="mesAtend" id="mesAtend" class="chosen-select" data-placeholder="Escolha...">
+								<select name="mesAtend" id="mesAtend" class="form-control select" data-placeholder="Escolha...">
 									<option value="0" {{#ifEqual filtroMes "0"}}selected{{/ifEqual}}>Janeiro</option>
 									<option value="1" {{#ifEqual filtroMes "1"}}selected{{/ifEqual}}>Fevereiro</option>
 									<option value="2" {{#ifEqual filtroMes "2"}}selected{{/ifEqual}}>Março</option>
@@ -936,7 +931,7 @@
 							<!-- 🔹 Tipo de Pessoa -->
 							<div class="form-group">
 								<label>Tipo</label>
-								<select name="atendTipoPessoa" id="atendTipoPessoa" class="chosen-select" data-placeholder="Escolha...">
+								<select name="atendTipoPessoa" id="atendTipoPessoa" class="form-control select" data-placeholder="Escolha...">
 									<option value="Geral" {{#ifEqual filtroTipoPessoa "Geral"}}selected{{/ifEqual}}>Geral</option>
 									<option value="Beneficiario" {{#ifEqual filtroTipoPessoa "Beneficiario"}}selected{{/ifEqual}}>Beneficiário</option>
 									<option value="Terapeuta" {{#ifEqual filtroTipoPessoa "Terapeuta"}}selected{{/ifEqual}}>Terapeuta</option>
@@ -946,7 +941,7 @@
 							<!-- 🔹 Beneficiário - visível apenas quando tipoPessoa = "Beneficiario" -->
 							<div id="divAtendBeneficiario" class="form-group{{#ifEqual filtroTipoPessoa "Beneficiario"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Beneficiário</label>
-								<select name="atendBeneficiario" id="atendBeneficiario" class="chosen-select" data-placeholder="Escolha...">
+								<select name="atendBeneficiario" id="atendBeneficiario" class="form-control select" data-placeholder="Escolha...">
 									<option value=""></option>
 									{{#each benes}}
 										<option value="{{this._id}}" 
@@ -960,7 +955,7 @@
 							<!-- 🔹 Terapeuta - visível apenas quando tipoPessoa = "Terapeuta" -->
 							<div id="divAtendTerapeuta" class="form-group{{#ifEqual filtroTipoPessoa "Terapeuta"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Terapeuta</label>
-								<select name="atendTerapeuta" id="atendTerapeuta" class="chosen-select" data-placeholder="Escolha...">
+								<select name="atendTerapeuta" id="atendTerapeuta" class="form-control select" data-placeholder="Escolha...">
 									<option value=""></option>
 									{{#each terapeutas}}
 										<option value="{{this._id}}" 
@@ -1261,12 +1256,6 @@
 
 	<script type="text/javascript">
 		$(document).ready(function() {
-			// Inicializar Chosen Select
-			$(".chosen-select").chosen({
-				no_results_text: "Não encontrado...",
-				search_contains: true,
-				disable_search_threshold: 10
-			});
 
 			// ✅ Listeners para Chosen Select (crucial para funcionar)
 			$("#tipoData").on("change", function() {

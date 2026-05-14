@@ -22,11 +22,8 @@ const terapiaClass = require("../models/terapia")
 const creditClass = require("../models/credit")
 const debitClass = require("../models/debit")
 const salaClass = require("../models/sala")
-
 const perfilClass = require("../models/perfil")
 const funcaoClass = require("../models/funcao")
-
-
 //Tabelas Extrangeiras
 var Agenda = getModel("SoftRoute", 'tb_agenda', agendaClass.AgendaSchema)
 var Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
@@ -39,7 +36,6 @@ var Credit = getModel("SoftRoute", 'tb_credit', creditClass.CreditSchema)
 var Debit = getModel("SoftRoute", 'tb_debit', debitClass.DebitSchema)
 var Tabil = getModel("SoftRoute", 'tb_tabil', tabilClass.TabilSchema)
 const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
-
 var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 var Sala = getModel("SoftRoute", 'tb_sala', salaClass.SalaSchema)
 
@@ -64,7 +60,6 @@ class Pesquisa{
         this.terapeuta = terapeuta
     }
 }
-
 class RelAtend{
     constructor(
         nomecid,
@@ -80,7 +75,6 @@ class RelAtend{
         this.total = total
     }
 }
-
 class RelAtendBene{
     constructor(
         dt,
@@ -104,7 +98,6 @@ class RelAtendBene{
         this.horaFim = horaFim
     }
 }
-
 class RelAtendTerapeuta{
     constructor(
         dt,
@@ -118,7 +111,6 @@ class RelAtendTerapeuta{
         this.quantidade = quantidade
     }
 }
-
 class AtendCopia{
     constructor(
         nextNum,
@@ -130,7 +122,6 @@ class AtendCopia{
         this.dataAtend = dataAtend
     }
 }
-
 module.exports = {
     carregaAtend(req,res){
         let db = req.cookies['preferredDb'];
@@ -703,7 +694,7 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-     filtraAtend(req, res){
+    filtraAtend(req, res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
         Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
@@ -957,7 +948,6 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-
     carregaAtendIndBene(req, res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
@@ -1261,509 +1251,508 @@ module.exports = {
             })
         })
     },
-relAtendimentoValFiltroOLD3: async (req, res) => {
-    try {
-        // === 🗄️ Configuração Multiempresa e Modelos ===
-        const db = req.cookies['preferredDb'];
-        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
-        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
-        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-
-        // === 🔒 Sanitização e Validação de Datas ===
-        const rawIni = req.body.dataIni;
-        const rawFim = req.body.dataFim;
-        const rawConv = req.body.relConvid;
-        const hojeStr = new Date().toISOString().replace('T', ' ').substring(0, 23) + 'Z';
-        
-        const safeDataIni = (typeof rawIni === 'string' && rawIni.trim() !== '') ? rawIni : hojeStr;
-        const safeDataFim = (typeof rawFim === 'string' && rawFim.trim() !== '') ? rawFim : hojeStr;
-
-        let seg, sex;
+    relAtendimentoValFiltroOLD3: async (req, res) => {
         try {
-            seg = fncGeral.getDateFromString(safeDataIni, "ini");
-            sex = fncGeral.getDateFromString(safeDataFim, "fim");
+            // === 🗄️ Configuração Multiempresa e Modelos ===
+            const db = req.cookies['preferredDb'];
+            const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
+            // === 🔒 Sanitização e Validação de Datas ===
+            const rawIni = req.body.dataIni;
+            const rawFim = req.body.dataFim;
+            const rawConv = req.body.relConvid;
+            const hojeStr = new Date().toISOString().replace('T', ' ').substring(0, 23) + 'Z';
             
-            if (!seg || isNaN(seg.getTime())) throw new Error('Data inicial inválida');
-            if (!sex || isNaN(sex.getTime())) throw new Error('Data final inválida');
-        } catch (err) {
-            console.error('[ERRO conversão data]', { 
-                error: err.message,
-                rawIni, rawFim,
-                safeDataIni, safeDataFim 
-            });
-            return res.status(400).send(`<script>alert("Erro ao processar as datas: ${err.message}"); history.back();</script>`);
-        }
+            const safeDataIni = (typeof rawIni === 'string' && rawIni.trim() !== '') ? rawIni : hojeStr;
+            const safeDataFim = (typeof rawFim === 'string' && rawFim.trim() !== '') ? rawFim : hojeStr;
 
-        // === 🎯 Lógica para "Todos os Convênios" ===
-        const ID_PLACEHOLDER = '766f69643132333435366964';
-        const buscarTodosConvenios = !rawConv || rawConv === ID_PLACEHOLDER || rawConv.trim() === '';
+            let seg, sex;
+            try {
+                seg = fncGeral.getDateFromString(safeDataIni, "ini");
+                sex = fncGeral.getDateFromString(safeDataFim, "fim");
+                
+                if (!seg || isNaN(seg.getTime())) throw new Error('Data inicial inválida');
+                if (!sex || isNaN(sex.getTime())) throw new Error('Data final inválida');
+            } catch (err) {
+                console.error('[ERRO conversão data]', { 
+                    error: err.message,
+                    rawIni, rawFim,
+                    safeDataIni, safeDataFim 
+                });
+                return res.status(400).send(`<script>alert("Erro ao processar as datas: ${err.message}"); history.back();</script>`);
+            }
 
-        // === 📦 Query de Atendimentos com Filtro Correto ===
-        // ✅ CORREÇÃO PRINCIPAL: atend_atenddata (conforme schema)
-        const filtroAtend = {
-            atend_atenddata: { $gte: seg, $lte: sex },
-            atend_categoria: { $nin: ["Feriado", "Falta Absoluta"] }
-        };
-        
-        // Aplica filtro de convênio apenas se não for "todos"
-        if (!buscarTodosConvenios) {
-            filtroAtend.atend_convid = rawConv;
-        }
+            // === 🎯 Lógica para "Todos os Convênios" ===
+            const ID_PLACEHOLDER = '766f69643132333435366964';
+            const buscarTodosConvenios = !rawConv || rawConv === ID_PLACEHOLDER || rawConv.trim() === '';
 
-        console.log('[Filtro Atendimentos]', JSON.stringify(filtroAtend, null, 2));
-
-        // === 📦 Busca Paralela dos Dados ===
-        const [convs, terapias, atendimentos] = await Promise.all([
-            Conv.find({ conv_lixo: { $ne: "true" } }).sort({ conv_nome: 1 }).lean(),
-            Terapia.find({ terapia_lixo: { $ne: "true" } }).sort({ terapia_nome: 1 }).lean(),
-            Atend.find(filtroAtend).lean()
-        ]);
-
-        // === 🔧 Helpers Internos ===
-        
-        // Determina o valor de crédito correto baseado nas regras de negócio
-        const getValorCredito = (atend) => {
-            const origem = (atend.atend_org || '').trim();
-            const fixo = atend.atend_fixo === "true";
-            const cat = atend.atend_categoria;
+            // === 📦 Query de Atendimentos com Filtro Correto ===
+            // ✅ CORREÇÃO PRINCIPAL: atend_atenddata (conforme schema)
+            const filtroAtend = {
+                atend_atenddata: { $gte: seg, $lte: sex },
+                atend_categoria: { $nin: ["Feriado", "Falta Absoluta"] }
+            };
             
-            if (origem === "Administrativo" && fixo) {
-                return atend.atend_fixovalorcre || atend.atend_valorcre || "0,00";
+            // Aplica filtro de convênio apenas se não for "todos"
+            if (!buscarTodosConvenios) {
+                filtroAtend.atend_convid = rawConv;
             }
-            if (origem === "Administrativo" && cat === "Substituição") {
-                return atend.atend_mergevalorcre || atend.atend_valorcre || "0,00";
-            }
-            if (["Falta Justificada", "Substituição", "SubstitutoFixo"].includes(cat)) {
-                return atend.atend_mergevalorcre || atend.atend_valorcre || "0,00";
-            }
-            return atend.atend_valorcre || "0,00";
-        };
 
-        // Converte string "1.234,56" para centavos (number)
-        const toCentavos = (valorStr) => {
-            if (!valorStr || typeof valorStr !== 'string') return 0;
-            const limpo = valorStr.replace(/\./g, '').replace(',', '.');
-            const num = parseFloat(limpo);
-            return isNaN(num) ? 0 : Math.round(num * 100);
-        };
+            console.log('[Filtro Atendimentos]', JSON.stringify(filtroAtend, null, 2));
 
-        // === 📈 Agregação por Terapia ===
-        const rel = [];
-        let sessaoTot = 0;
-        let valTotCentavos = 0;
-        const categoriasMerge = ["Falta Justificada", "Substituição", "SubstitutoFixo"];
+            // === 📦 Busca Paralela dos Dados ===
+            const [convs, terapias, atendimentos] = await Promise.all([
+                Conv.find({ conv_lixo: { $ne: "true" } }).sort({ conv_nome: 1 }).lean(),
+                Terapia.find({ terapia_lixo: { $ne: "true" } }).sort({ terapia_nome: 1 }).lean(),
+                Atend.find(filtroAtend).lean()
+            ]);
 
-        terapias.forEach((t) => {
-            let qtdIds = 0;
-            let somaCredCentavos = 0;
+            // === 🔧 Helpers Internos ===
+            
+            // Determina o valor de crédito correto baseado nas regras de negócio
+            const getValorCredito = (atend) => {
+                const origem = (atend.atend_org || '').trim();
+                const fixo = atend.atend_fixo === "true";
+                const cat = atend.atend_categoria;
+                
+                if (origem === "Administrativo" && fixo) {
+                    return atend.atend_fixovalorcre || atend.atend_valorcre || "0,00";
+                }
+                if (origem === "Administrativo" && cat === "Substituição") {
+                    return atend.atend_mergevalorcre || atend.atend_valorcre || "0,00";
+                }
+                if (["Falta Justificada", "Substituição", "SubstitutoFixo"].includes(cat)) {
+                    return atend.atend_mergevalorcre || atend.atend_valorcre || "0,00";
+                }
+                return atend.atend_valorcre || "0,00";
+            };
 
-            atendimentos.forEach((ats) => {
-                // Define qual campo de terapia usar baseado na categoria
-                const terapiaAtend = categoriasMerge.includes(ats.atend_categoria)
-                    ? ats.atend_mergeterapiaid
-                    : ats.atend_terapiaid;
+            // Converte string "1.234,56" para centavos (number)
+            const toCentavos = (valorStr) => {
+                if (!valorStr || typeof valorStr !== 'string') return 0;
+                const limpo = valorStr.replace(/\./g, '').replace(',', '.');
+                const num = parseFloat(limpo);
+                return isNaN(num) ? 0 : Math.round(num * 100);
+            };
 
-                // Compara IDs como string para evitar problemas de ObjectId
-                if (terapiaAtend && ("" + terapiaAtend) === ("" + t._id)) {
-                    const valorCred = getValorCredito(ats);
-                    const vCredCent = toCentavos(valorCred);
-                    
-                    qtdIds++;
-                    somaCredCentavos += vCredCent;
+            // === 📈 Agregação por Terapia ===
+            const rel = [];
+            let sessaoTot = 0;
+            let valTotCentavos = 0;
+            const categoriasMerge = ["Falta Justificada", "Substituição", "SubstitutoFixo"];
+
+            terapias.forEach((t) => {
+                let qtdIds = 0;
+                let somaCredCentavos = 0;
+
+                atendimentos.forEach((ats) => {
+                    // Define qual campo de terapia usar baseado na categoria
+                    const terapiaAtend = categoriasMerge.includes(ats.atend_categoria)
+                        ? ats.atend_mergeterapiaid
+                        : ats.atend_terapiaid;
+
+                    // Compara IDs como string para evitar problemas de ObjectId
+                    if (terapiaAtend && ("" + terapiaAtend) === ("" + t._id)) {
+                        const valorCred = getValorCredito(ats);
+                        const vCredCent = toCentavos(valorCred);
+                        
+                        qtdIds++;
+                        somaCredCentavos += vCredCent;
+                    }
+                });
+
+                if (qtdIds > 0) {
+                    const valorUnitarioCentavos = Math.round(somaCredCentavos / qtdIds);
+                    const totalCredCentavos = somaCredCentavos;
+
+                    rel.push({
+                        sessoes: qtdIds,
+                        valor: fncGeral.formatarReal(valorUnitarioCentavos),
+                        total: fncGeral.formatarReal(totalCredCentavos),
+                        nomecid: t._id
+                    });
+
+                    sessaoTot += qtdIds;
+                    valTotCentavos += totalCredCentavos;
                 }
             });
 
-            if (qtdIds > 0) {
-                const valorUnitarioCentavos = Math.round(somaCredCentavos / qtdIds);
-                const totalCredCentavos = somaCredCentavos;
+            // === 🧾 Totais e Formatação para View ===
+            const total = {
+                sessoes: sessaoTot,
+                total: fncGeral.formatarReal(valTotCentavos)
+            };
 
-                rel.push({
-                    sessoes: qtdIds,
-                    valor: fncGeral.formatarReal(valorUnitarioCentavos),
-                    total: fncGeral.formatarReal(totalCredCentavos),
-                    nomecid: t._id
-                });
-
-                sessaoTot += qtdIds;
-                valTotCentavos += totalCredCentavos;
+            const periodoDe = fncGeral.getDataInvert(safeDataIni);
+            const periodoAte = fncGeral.getDataInvert(safeDataFim);
+            
+            let conv_nome = '-';
+            if (!buscarTodosConvenios) {
+                const convEncontrado = convs.find(c => ("" + c._id) === ("" + rawConv));
+                conv_nome = convEncontrado?.conv_nome || '-';
+            } else {
+                conv_nome = 'Todos os Convênios';
             }
-        });
 
-        // === 🧾 Totais e Formatação para View ===
-        const total = {
-            sessoes: sessaoTot,
-            total: fncGeral.formatarReal(valTotCentavos)
-        };
-
-        const periodoDe = fncGeral.getDataInvert(safeDataIni);
-        const periodoAte = fncGeral.getDataInvert(safeDataFim);
-        
-        let conv_nome = '-';
-        if (!buscarTodosConvenios) {
-            const convEncontrado = convs.find(c => ("" + c._id) === ("" + rawConv));
-            conv_nome = convEncontrado?.conv_nome || '-';
-        } else {
-            conv_nome = 'Todos os Convênios';
-        }
-
-        // === 📦 Renderiza a View ===
-        res.render("atendimento/relatendval", {
-            convs,
-            anos: [],
-            terapias,
-            rels: rel,
-            total,
-            periodoDe,
-            periodoAte,
-            conv_nome,
-            filtro: {
-                dataIni: safeDataIni,
-                dataFim: safeDataFim,
-                convId: buscarTodosConvenios ? ID_PLACEHOLDER : rawConv
-            }
-        });
-
-    } catch (err) {
-        console.error('["atendimento/relatendval"] ERRO CRÍTICO:', err);
-        res.status(500).send(`<script>alert("Erro interno ao carregar relatório."); history.back();</script>`);
-    }
-},
-relAtendimentoValFiltroOK: async (req, res) => {
-    try {
-        // === 🗄️ Configuração Multiempresa e Modelos ===
-        const db = req.cookies['preferredDb'];
-        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
-        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
-        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-
-        // === 🔒 Sanitização e Validação de Datas ===
-        const rawIni = req.body.dataIni;
-        const rawFim = req.body.dataFim;
-        const rawConv = req.body.relConvid;
-        const hojeStr = new Date().toISOString().replace('T', ' ').substring(0, 23) + 'Z';
-        
-        const safeDataIni = (typeof rawIni === 'string' && rawIni.trim() !== '') ? rawIni : hojeStr;
-        const safeDataFim = (typeof rawFim === 'string' && rawFim.trim() !== '') ? rawFim : hojeStr;
-
-        let seg, sex;
-        try {
-            seg = fncGeral.getDateFromString(safeDataIni, "ini");
-            sex = fncGeral.getDateFromString(safeDataFim, "fim");
-            
-            if (!seg || isNaN(seg.getTime())) throw new Error('Data inicial inválida');
-            if (!sex || isNaN(sex.getTime())) throw new Error('Data final inválida');
-        } catch (err) {
-            console.error('[ERRO conversão data]', { 
-                error: err.message, rawIni, rawFim, safeDataIni, safeDataFim 
-            });
-            return res.status(400).send(`<script>alert("Erro ao processar as datas: ${err.message}"); history.back();</script>`);
-        }
-
-        // === 🎯 Lógica para "Todos os Convênios" ===
-        const ID_PLACEHOLDER = '766f69643132333435366964';
-        const buscarTodosConvenios = !rawConv || rawConv === ID_PLACEHOLDER || rawConv.trim() === '';
-
-        // === 📦 Query de Atendimentos ===
-        const filtroAtend = {
-            atend_atenddata: { $gte: seg, $lte: sex },
-            atend_categoria: { $nin: ["Feriado", "Falta Absoluta"] }
-        };
-        
-        if (!buscarTodosConvenios) {
-            filtroAtend.atend_convid = rawConv;
-        }
-
-        console.log('[Filtro Atendimentos]', JSON.stringify(filtroAtend, null, 2));
-
-        // === 📦 Busca Paralela dos Dados ===
-        const [convs, terapias, atendimentos] = await Promise.all([
-            Conv.find({ conv_lixo: { $ne: "true" } }).sort({ conv_nome: 1 }).lean(),
-            Terapia.find({ terapia_lixo: { $ne: "true" } }).sort({ terapia_nome: 1 }).lean(),
-            Atend.find(filtroAtend).lean()
-        ]);
-
-        // === 🔧 Helpers Internos - Lógica de Negócio Refatorada ===
-        
-        // 👑 Determina qual campo de terapiaId usar
-        const getTerapiaIdField = (atend) => {
-            const cat = atend.atend_categoria;
-            // ✅ CORREÇÃO: Converte para string antes de usar .trim() para evitar erro com ObjectId
-            const fixoId = atend.atend_fixoterapiaid ? String(atend.atend_fixoterapiaid).trim() : '';
-            const hasFixo = fixoId !== '';
-            
-            if (cat === "SubstitutoFixo") return 'atend_fixoterapiaid';                    // 👑 Sempre fixo
-            if (cat === "Substituição" && hasFixo) return 'atend_fixoterapiaid';          // 👑 Substituição sobre Fixo
-            if (cat === "Substituição" && !hasFixo) return 'atend_mergeterapiaid';        // Merge
-            return 'atend_terapiaid';                                                     // Padrão
-        };
-
-        // 👑 Determina qual campo de valor de crédito usar
-        const getValorCreditoField = (atend) => {
-            const cat = atend.atend_categoria;
-            // ✅ CORREÇÃO: Converte para string antes de usar .trim() para evitar erro com ObjectId
-            const fixoId = atend.atend_fixoterapiaid ? String(atend.atend_fixoterapiaid).trim() : '';
-            const hasFixo = fixoId !== '';
-            
-            if (cat === "SubstitutoFixo") return 'atend_fixovalorcre';                    // 👑 Sempre fixo
-            if (cat === "Substituição" && hasFixo) return 'atend_fixovalorcre';          // 👑 Substituição sobre Fixo
-            if (cat === "Substituição" && !hasFixo) return 'atend_mergevalorcre';        // Merge
-            return 'atend_valorcre';                                                      // Padrão
-        };
-
-        // Converte string "1.234,56" para centavos (number)
-        const toCentavos = (valorStr) => {
-            if (!valorStr || typeof valorStr !== 'string') return 0;
-            const limpo = valorStr.replace(/\./g, '').replace(',', '.');
-            const num = parseFloat(limpo);
-            return isNaN(num) ? 0 : Math.round(num * 100);
-        };
-
-        // === 📈 Agregação por Terapia ===
-        const rel = [];
-        let sessaoTot = 0;
-        let valTotCentavos = 0;
-
-        terapias.forEach((t) => {
-            let qtdIds = 0;
-            let somaCredCentavos = 0;
-
-            atendimentos.forEach((ats) => {
-                // 🔥 Aplica a lógica de negócio para obter o campo correto
-                const terapiaField = getTerapiaIdField(ats);
-                const terapiaAtend = ats[terapiaField];
-
-                // Compara IDs como string para evitar problemas de ObjectId
-                if (terapiaAtend && ("" + terapiaAtend) === ("" + t._id)) {
-                    const valorField = getValorCreditoField(ats);
-                    const valorCred = ats[valorField] || "0,00";
-                    const vCredCent = toCentavos(valorCred);
-                    
-                    qtdIds++;
-                    somaCredCentavos += vCredCent;
+            // === 📦 Renderiza a View ===
+            res.render("atendimento/relatendval", {
+                convs,
+                anos: [],
+                terapias,
+                rels: rel,
+                total,
+                periodoDe,
+                periodoAte,
+                conv_nome,
+                filtro: {
+                    dataIni: safeDataIni,
+                    dataFim: safeDataFim,
+                    convId: buscarTodosConvenios ? ID_PLACEHOLDER : rawConv
                 }
             });
 
-            if (qtdIds > 0) {
-                const valorUnitarioCentavos = Math.round(somaCredCentavos / qtdIds);
-                const totalCredCentavos = somaCredCentavos;
+        } catch (err) {
+            console.error('["atendimento/relatendval"] ERRO CRÍTICO:', err);
+            res.status(500).send(`<script>alert("Erro interno ao carregar relatório."); history.back();</script>`);
+        }
+    },
+    relAtendimentoValFiltroOK: async (req, res) => {
+        try {
+            // === 🗄️ Configuração Multiempresa e Modelos ===
+            const db = req.cookies['preferredDb'];
+            const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
 
-                rel.push({
-                    sessoes: qtdIds,
-                    valor: fncGeral.formatarReal(valorUnitarioCentavos),
-                    total: fncGeral.formatarReal(totalCredCentavos),
-                    nomecid: t._id
+            // === 🔒 Sanitização e Validação de Datas ===
+            const rawIni = req.body.dataIni;
+            const rawFim = req.body.dataFim;
+            const rawConv = req.body.relConvid;
+            const hojeStr = new Date().toISOString().replace('T', ' ').substring(0, 23) + 'Z';
+            
+            const safeDataIni = (typeof rawIni === 'string' && rawIni.trim() !== '') ? rawIni : hojeStr;
+            const safeDataFim = (typeof rawFim === 'string' && rawFim.trim() !== '') ? rawFim : hojeStr;
+
+            let seg, sex;
+            try {
+                seg = fncGeral.getDateFromString(safeDataIni, "ini");
+                sex = fncGeral.getDateFromString(safeDataFim, "fim");
+                
+                if (!seg || isNaN(seg.getTime())) throw new Error('Data inicial inválida');
+                if (!sex || isNaN(sex.getTime())) throw new Error('Data final inválida');
+            } catch (err) {
+                console.error('[ERRO conversão data]', { 
+                    error: err.message, rawIni, rawFim, safeDataIni, safeDataFim 
+                });
+                return res.status(400).send(`<script>alert("Erro ao processar as datas: ${err.message}"); history.back();</script>`);
+            }
+
+            // === 🎯 Lógica para "Todos os Convênios" ===
+            const ID_PLACEHOLDER = '766f69643132333435366964';
+            const buscarTodosConvenios = !rawConv || rawConv === ID_PLACEHOLDER || rawConv.trim() === '';
+
+            // === 📦 Query de Atendimentos ===
+            const filtroAtend = {
+                atend_atenddata: { $gte: seg, $lte: sex },
+                atend_categoria: { $nin: ["Feriado", "Falta Absoluta"] }
+            };
+            
+            if (!buscarTodosConvenios) {
+                filtroAtend.atend_convid = rawConv;
+            }
+
+            console.log('[Filtro Atendimentos]', JSON.stringify(filtroAtend, null, 2));
+
+            // === 📦 Busca Paralela dos Dados ===
+            const [convs, terapias, atendimentos] = await Promise.all([
+                Conv.find({ conv_lixo: { $ne: "true" } }).sort({ conv_nome: 1 }).lean(),
+                Terapia.find({ terapia_lixo: { $ne: "true" } }).sort({ terapia_nome: 1 }).lean(),
+                Atend.find(filtroAtend).lean()
+            ]);
+
+            // === 🔧 Helpers Internos - Lógica de Negócio Refatorada ===
+            
+            // 👑 Determina qual campo de terapiaId usar
+            const getTerapiaIdField = (atend) => {
+                const cat = atend.atend_categoria;
+                // ✅ CORREÇÃO: Converte para string antes de usar .trim() para evitar erro com ObjectId
+                const fixoId = atend.atend_fixoterapiaid ? String(atend.atend_fixoterapiaid).trim() : '';
+                const hasFixo = fixoId !== '';
+                
+                if (cat === "SubstitutoFixo") return 'atend_fixoterapiaid';                    // 👑 Sempre fixo
+                if (cat === "Substituição" && hasFixo) return 'atend_fixoterapiaid';          // 👑 Substituição sobre Fixo
+                if (cat === "Substituição" && !hasFixo) return 'atend_mergeterapiaid';        // Merge
+                return 'atend_terapiaid';                                                     // Padrão
+            };
+
+            // 👑 Determina qual campo de valor de crédito usar
+            const getValorCreditoField = (atend) => {
+                const cat = atend.atend_categoria;
+                // ✅ CORREÇÃO: Converte para string antes de usar .trim() para evitar erro com ObjectId
+                const fixoId = atend.atend_fixoterapiaid ? String(atend.atend_fixoterapiaid).trim() : '';
+                const hasFixo = fixoId !== '';
+                
+                if (cat === "SubstitutoFixo") return 'atend_fixovalorcre';                    // 👑 Sempre fixo
+                if (cat === "Substituição" && hasFixo) return 'atend_fixovalorcre';          // 👑 Substituição sobre Fixo
+                if (cat === "Substituição" && !hasFixo) return 'atend_mergevalorcre';        // Merge
+                return 'atend_valorcre';                                                      // Padrão
+            };
+
+            // Converte string "1.234,56" para centavos (number)
+            const toCentavos = (valorStr) => {
+                if (!valorStr || typeof valorStr !== 'string') return 0;
+                const limpo = valorStr.replace(/\./g, '').replace(',', '.');
+                const num = parseFloat(limpo);
+                return isNaN(num) ? 0 : Math.round(num * 100);
+            };
+
+            // === 📈 Agregação por Terapia ===
+            const rel = [];
+            let sessaoTot = 0;
+            let valTotCentavos = 0;
+
+            terapias.forEach((t) => {
+                let qtdIds = 0;
+                let somaCredCentavos = 0;
+
+                atendimentos.forEach((ats) => {
+                    // 🔥 Aplica a lógica de negócio para obter o campo correto
+                    const terapiaField = getTerapiaIdField(ats);
+                    const terapiaAtend = ats[terapiaField];
+
+                    // Compara IDs como string para evitar problemas de ObjectId
+                    if (terapiaAtend && ("" + terapiaAtend) === ("" + t._id)) {
+                        const valorField = getValorCreditoField(ats);
+                        const valorCred = ats[valorField] || "0,00";
+                        const vCredCent = toCentavos(valorCred);
+                        
+                        qtdIds++;
+                        somaCredCentavos += vCredCent;
+                    }
                 });
 
-                sessaoTot += qtdIds;
-                valTotCentavos += totalCredCentavos;
-            }
-        });
+                if (qtdIds > 0) {
+                    const valorUnitarioCentavos = Math.round(somaCredCentavos / qtdIds);
+                    const totalCredCentavos = somaCredCentavos;
 
-        // === 🧾 Totais e Formatação para View ===
-        const total = {
-            sessoes: sessaoTot,
-            total: fncGeral.formatarReal(valTotCentavos)
-        };
+                    rel.push({
+                        sessoes: qtdIds,
+                        valor: fncGeral.formatarReal(valorUnitarioCentavos),
+                        total: fncGeral.formatarReal(totalCredCentavos),
+                        nomecid: t._id
+                    });
 
-        const periodoDe = fncGeral.getDataInvert(safeDataIni);
-        const periodoAte = fncGeral.getDataInvert(safeDataFim);
-        
-        let conv_nome = buscarTodosConvenios 
-            ? 'Todos os Convênios' 
-            : (convs.find(c => ("" + c._id) === ("" + rawConv))?.conv_nome || '-');
-
-        // === 📦 Renderiza a View ===
-        res.render("atendimento/relatendval", {
-            convs,
-            anos: [],
-            terapias,
-            rels: rel,
-            total,
-            periodoDe,
-            periodoAte,
-            conv_nome,
-            filtro: {
-                dataIni: safeDataIni,
-                dataFim: safeDataFim,
-                convId: buscarTodosConvenios ? ID_PLACEHOLDER : rawConv
-            }
-        });
-
-    } catch (err) {
-        console.error('["atendimento/relatendval"] ERRO CRÍTICO:', err);
-        res.status(500).send(`<script>alert("Erro interno ao carregar relatório."); history.back();</script>`);
-    }
-},
-relAtendimentoValFiltro: async (req, res) => {
-    try {
-        // === 🗄️ Configuração Multiempresa e Modelos ===
-        const db = req.cookies['preferredDb'];
-        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
-        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
-        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-
-        // === 🔒 Sanitização e Validação de Datas ===
-        const rawIni = req.body.dataIni;
-        const rawFim = req.body.dataFim;
-        const rawConv = req.body.relConvid;
-        const hojeStr = new Date().toISOString().replace('T', ' ').substring(0, 23) + 'Z';
-        
-        const safeDataIni = (typeof rawIni === 'string' && rawIni.trim() !== '') ? rawIni : hojeStr;
-        const safeDataFim = (typeof rawFim === 'string' && rawFim.trim() !== '') ? rawFim : hojeStr;
-
-        let seg, sex;
-        try {
-            seg = fncGeral.getDateFromString(safeDataIni, "ini");
-            sex = fncGeral.getDateFromString(safeDataFim, "fim");
-            
-            if (!seg || isNaN(seg.getTime())) throw new Error('Data inicial inválida');
-            if (!sex || isNaN(sex.getTime())) throw new Error('Data final inválida');
-        } catch (err) {
-            console.error('[ERRO conversão data]', { 
-                error: err.message, rawIni, rawFim, safeDataIni, safeDataFim 
-            });
-            return res.status(400).send(`<script>alert("Erro ao processar as datas: ${err.message}"); history.back();</script>`);
-        }
-
-        // === 🎯 Lógica para "Todos os Convênios" ===
-        const ID_PLACEHOLDER = '766f69643132333435366964';
-        const buscarTodosConvenios = !rawConv || rawConv === ID_PLACEHOLDER || rawConv.trim() === '';
-
-        // === 📦 Query de Atendimentos ===
-        const filtroAtend = {
-            atend_atenddata: { $gte: seg, $lte: sex },
-            atend_categoria: { $nin: ["Feriado", "Falta Absoluta"] }
-        };
-        
-        if (!buscarTodosConvenios) {
-            filtroAtend.atend_convid = rawConv;
-        }
-
-        console.log('[Filtro Atendimentos]', JSON.stringify(filtroAtend, null, 2));
-
-        // === 📦 Busca Paralela dos Dados ===
-        const [convs, terapias, atendimentos] = await Promise.all([
-            Conv.find({ conv_lixo: { $ne: "true" } }).sort({ conv_nome: 1 }).lean(),
-            Terapia.find({ terapia_lixo: { $ne: "true" } }).sort({ terapia_nome: 1 }).lean(),
-            Atend.find(filtroAtend).lean()
-        ]);
-
-        // === 🔧 Helpers Internos - Lógica de Negócio Refatorada ===
-        
-        // 👑 Determina qual campo de terapiaId usar
-        const getTerapiaIdField = (atend) => {
-            const cat = atend.atend_categoria;
-            // ✅ CORREÇÃO: Converte para string antes de usar .trim() para evitar erro com ObjectId
-            const fixoId = atend.atend_fixoterapiaid ? String(atend.atend_fixoterapiaid).trim() : '';
-            const hasFixo = fixoId !== '';
-            
-            if (cat === "SubstitutoFixo") return 'atend_fixoterapiaid';                    // 👑 Sempre fixo
-            if (cat === "Substituição" && hasFixo) return 'atend_fixoterapiaid';          // 👑 Substituição sobre Fixo
-            if (cat === "Substituição" && !hasFixo) return 'atend_mergeterapiaid';        // Merge
-            return 'atend_terapiaid';                                                     // Padrão
-        };
-
-        // 👑 Determina qual campo de valor de crédito usar
-        const getValorCreditoField = (atend) => {
-            const cat = atend.atend_categoria;
-            // ✅ CORREÇÃO: Converte para string antes de usar .trim() para evitar erro com ObjectId
-            const fixoId = atend.atend_fixoterapiaid ? String(atend.atend_fixoterapiaid).trim() : '';
-            const hasFixo = fixoId !== '';
-            
-            if (cat === "SubstitutoFixo") return 'atend_fixovalorcre';                    // 👑 Sempre fixo
-            if (cat === "Substituição" && hasFixo) return 'atend_fixovalorcre';          // 👑 Substituição sobre Fixo
-            if (cat === "Substituição" && !hasFixo) return 'atend_mergevalorcre';        // Merge
-            return 'atend_valorcre';                                                      // Padrão
-        };
-
-        // Converte string "1.234,56" para centavos (number)
-        const toCentavos = (valorStr) => {
-            if (!valorStr || typeof valorStr !== 'string') return 0;
-            const limpo = valorStr.replace(/\./g, '').replace(',', '.');
-            const num = parseFloat(limpo);
-            return isNaN(num) ? 0 : Math.round(num * 100);
-        };
-
-        // === 📈 Agregação por Terapia ===
-        const rel = [];
-        let sessaoTot = 0;
-        let valTotCentavos = 0;
-
-        terapias.forEach((t) => {
-            let qtdIds = 0;
-            let somaCredCentavos = 0;
-
-            atendimentos.forEach((ats) => {
-                // 🔥 Aplica a lógica de negócio para obter o campo correto
-                const terapiaField = getTerapiaIdField(ats);
-                const terapiaAtend = ats[terapiaField];
-
-                // Compara IDs como string para evitar problemas de ObjectId
-                if (terapiaAtend && ("" + terapiaAtend) === ("" + t._id)) {
-                    const valorField = getValorCreditoField(ats);
-                    const valorCred = ats[valorField] || "0,00";
-                    const vCredCent = toCentavos(valorCred);
-                    
-                    qtdIds++;
-                    somaCredCentavos += vCredCent;
+                    sessaoTot += qtdIds;
+                    valTotCentavos += totalCredCentavos;
                 }
             });
 
-            if (qtdIds > 0) {
-                const valorUnitarioCentavos = Math.round(somaCredCentavos / qtdIds);
-                const totalCredCentavos = somaCredCentavos;
+            // === 🧾 Totais e Formatação para View ===
+            const total = {
+                sessoes: sessaoTot,
+                total: fncGeral.formatarReal(valTotCentavos)
+            };
 
-                rel.push({
-                    sessoes: qtdIds,
-                    valor: fncGeral.formatarReal(valorUnitarioCentavos),
-                    total: fncGeral.formatarReal(totalCredCentavos),
-                    nomecid: t._id
+            const periodoDe = fncGeral.getDataInvert(safeDataIni);
+            const periodoAte = fncGeral.getDataInvert(safeDataFim);
+            
+            let conv_nome = buscarTodosConvenios 
+                ? 'Todos os Convênios' 
+                : (convs.find(c => ("" + c._id) === ("" + rawConv))?.conv_nome || '-');
+
+            // === 📦 Renderiza a View ===
+            res.render("atendimento/relatendval", {
+                convs,
+                anos: [],
+                terapias,
+                rels: rel,
+                total,
+                periodoDe,
+                periodoAte,
+                conv_nome,
+                filtro: {
+                    dataIni: safeDataIni,
+                    dataFim: safeDataFim,
+                    convId: buscarTodosConvenios ? ID_PLACEHOLDER : rawConv
+                }
+            });
+
+        } catch (err) {
+            console.error('["atendimento/relatendval"] ERRO CRÍTICO:', err);
+            res.status(500).send(`<script>alert("Erro interno ao carregar relatório."); history.back();</script>`);
+        }
+    },
+    relAtendimentoValFiltro: async (req, res) => {
+        try {
+            // === 🗄️ Configuração Multiempresa e Modelos ===
+            const db = req.cookies['preferredDb'];
+            const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
+            // === 🔒 Sanitização e Validação de Datas ===
+            const rawIni = req.body.dataIni;
+            const rawFim = req.body.dataFim;
+            const rawConv = req.body.relConvid;
+            const hojeStr = new Date().toISOString().replace('T', ' ').substring(0, 23) + 'Z';
+            
+            const safeDataIni = (typeof rawIni === 'string' && rawIni.trim() !== '') ? rawIni : hojeStr;
+            const safeDataFim = (typeof rawFim === 'string' && rawFim.trim() !== '') ? rawFim : hojeStr;
+
+            let seg, sex;
+            try {
+                seg = fncGeral.getDateFromString(safeDataIni, "ini");
+                sex = fncGeral.getDateFromString(safeDataFim, "fim");
+                
+                if (!seg || isNaN(seg.getTime())) throw new Error('Data inicial inválida');
+                if (!sex || isNaN(sex.getTime())) throw new Error('Data final inválida');
+            } catch (err) {
+                console.error('[ERRO conversão data]', { 
+                    error: err.message, rawIni, rawFim, safeDataIni, safeDataFim 
+                });
+                return res.status(400).send(`<script>alert("Erro ao processar as datas: ${err.message}"); history.back();</script>`);
+            }
+
+            // === 🎯 Lógica para "Todos os Convênios" ===
+            const ID_PLACEHOLDER = '766f69643132333435366964';
+            const buscarTodosConvenios = !rawConv || rawConv === ID_PLACEHOLDER || rawConv.trim() === '';
+
+            // === 📦 Query de Atendimentos ===
+            const filtroAtend = {
+                atend_atenddata: { $gte: seg, $lte: sex },
+                atend_categoria: { $nin: ["Feriado", "Falta Absoluta"] }
+            };
+            
+            if (!buscarTodosConvenios) {
+                filtroAtend.atend_convid = rawConv;
+            }
+
+            console.log('[Filtro Atendimentos]', JSON.stringify(filtroAtend, null, 2));
+
+            // === 📦 Busca Paralela dos Dados ===
+            const [convs, terapias, atendimentos] = await Promise.all([
+                Conv.find({ conv_lixo: { $ne: "true" } }).sort({ conv_nome: 1 }).lean(),
+                Terapia.find({ terapia_lixo: { $ne: "true" } }).sort({ terapia_nome: 1 }).lean(),
+                Atend.find(filtroAtend).lean()
+            ]);
+
+            // === 🔧 Helpers Internos - Lógica de Negócio Refatorada ===
+            
+            // 👑 Determina qual campo de terapiaId usar
+            const getTerapiaIdField = (atend) => {
+                const cat = atend.atend_categoria;
+                // ✅ CORREÇÃO: Converte para string antes de usar .trim() para evitar erro com ObjectId
+                const fixoId = atend.atend_fixoterapiaid ? String(atend.atend_fixoterapiaid).trim() : '';
+                const hasFixo = fixoId !== '';
+                
+                if (cat === "SubstitutoFixo") return 'atend_fixoterapiaid';                    // 👑 Sempre fixo
+                if (cat === "Substituição" && hasFixo) return 'atend_fixoterapiaid';          // 👑 Substituição sobre Fixo
+                if (cat === "Substituição" && !hasFixo) return 'atend_mergeterapiaid';        // Merge
+                return 'atend_terapiaid';                                                     // Padrão
+            };
+
+            // 👑 Determina qual campo de valor de crédito usar
+            const getValorCreditoField = (atend) => {
+                const cat = atend.atend_categoria;
+                // ✅ CORREÇÃO: Converte para string antes de usar .trim() para evitar erro com ObjectId
+                const fixoId = atend.atend_fixoterapiaid ? String(atend.atend_fixoterapiaid).trim() : '';
+                const hasFixo = fixoId !== '';
+                
+                if (cat === "SubstitutoFixo") return 'atend_fixovalorcre';                    // 👑 Sempre fixo
+                if (cat === "Substituição" && hasFixo) return 'atend_fixovalorcre';          // 👑 Substituição sobre Fixo
+                if (cat === "Substituição" && !hasFixo) return 'atend_mergevalorcre';        // Merge
+                return 'atend_valorcre';                                                      // Padrão
+            };
+
+            // Converte string "1.234,56" para centavos (number)
+            const toCentavos = (valorStr) => {
+                if (!valorStr || typeof valorStr !== 'string') return 0;
+                const limpo = valorStr.replace(/\./g, '').replace(',', '.');
+                const num = parseFloat(limpo);
+                return isNaN(num) ? 0 : Math.round(num * 100);
+            };
+
+            // === 📈 Agregação por Terapia ===
+            const rel = [];
+            let sessaoTot = 0;
+            let valTotCentavos = 0;
+
+            terapias.forEach((t) => {
+                let qtdIds = 0;
+                let somaCredCentavos = 0;
+
+                atendimentos.forEach((ats) => {
+                    // 🔥 Aplica a lógica de negócio para obter o campo correto
+                    const terapiaField = getTerapiaIdField(ats);
+                    const terapiaAtend = ats[terapiaField];
+
+                    // Compara IDs como string para evitar problemas de ObjectId
+                    if (terapiaAtend && ("" + terapiaAtend) === ("" + t._id)) {
+                        const valorField = getValorCreditoField(ats);
+                        const valorCred = ats[valorField] || "0,00";
+                        const vCredCent = toCentavos(valorCred);
+                        
+                        qtdIds++;
+                        somaCredCentavos += vCredCent;
+                    }
                 });
 
-                sessaoTot += qtdIds;
-                valTotCentavos += totalCredCentavos;
-            }
-        });
+                if (qtdIds > 0) {
+                    const valorUnitarioCentavos = Math.round(somaCredCentavos / qtdIds);
+                    const totalCredCentavos = somaCredCentavos;
 
-        // === 🧾 Totais e Formatação para View ===
-        const total = {
-            sessoes: sessaoTot,
-            total: fncGeral.formatarReal(valTotCentavos)
-        };
+                    rel.push({
+                        sessoes: qtdIds,
+                        valor: fncGeral.formatarReal(valorUnitarioCentavos),
+                        total: fncGeral.formatarReal(totalCredCentavos),
+                        nomecid: t._id
+                    });
 
-        const periodoDe = fncGeral.getDataInvert(safeDataIni);
-        const periodoAte = fncGeral.getDataInvert(safeDataFim);
-        
-        let conv_nome = buscarTodosConvenios 
-            ? 'Todos os Convênios' 
-            : (convs.find(c => ("" + c._id) === ("" + rawConv))?.conv_nome || '-');
+                    sessaoTot += qtdIds;
+                    valTotCentavos += totalCredCentavos;
+                }
+            });
 
-        // === 📦 Renderiza a View ===
-        res.render("atendimento/relatendval", {
-            convs,
-            anos: [],
-            terapias,
-            rels: rel,
-            total,
-            periodoDe,
-            periodoAte,
-            conv_nome,
-            filtro: {
-                dataIni: safeDataIni,
-                dataFim: safeDataFim,
-                convId: buscarTodosConvenios ? ID_PLACEHOLDER : rawConv
-            }
-        });
+            // === 🧾 Totais e Formatação para View ===
+            const total = {
+                sessoes: sessaoTot,
+                total: fncGeral.formatarReal(valTotCentavos)
+            };
 
-    } catch (err) {
-        console.error('["atendimento/relatendval"] ERRO CRÍTICO:', err);
-        res.status(500).send(`<script>alert("Erro interno ao carregar relatório."); history.back();</script>`);
-    }
-},
+            const periodoDe = fncGeral.getDataInvert(safeDataIni);
+            const periodoAte = fncGeral.getDataInvert(safeDataFim);
+            
+            let conv_nome = buscarTodosConvenios 
+                ? 'Todos os Convênios' 
+                : (convs.find(c => ("" + c._id) === ("" + rawConv))?.conv_nome || '-');
 
+            // === 📦 Renderiza a View ===
+            res.render("atendimento/relatendval", {
+                convs,
+                anos: [],
+                terapias,
+                rels: rel,
+                total,
+                periodoDe,
+                periodoAte,
+                conv_nome,
+                filtro: {
+                    dataIni: safeDataIni,
+                    dataFim: safeDataFim,
+                    convId: buscarTodosConvenios ? ID_PLACEHOLDER : rawConv
+                }
+            });
+
+        } catch (err) {
+            console.error('["atendimento/relatendval"] ERRO CRÍTICO:', err);
+            res.status(500).send(`<script>alert("Erro interno ao carregar relatório."); history.back();</script>`);
+        }
+    },
     /**
      * TABDIM - Tabelas Dinâmicas de Atendimento
      * Criado por: Wagner Cintra
@@ -2190,7 +2179,6 @@ relAtendimentoValFiltro: async (req, res) => {
             `);
         });
     },
-
     // ============================================
     // 2. Beneficiário e Terapeuta
     // ============================================
@@ -2553,7 +2541,6 @@ relAtendimentoValFiltro: async (req, res) => {
             `);
         });
     },
-
     // ============================================
     // 3. Terapeuta e Beneficiário
     // ============================================
@@ -2897,7 +2884,6 @@ relAtendimentoValFiltro: async (req, res) => {
             `);
         });
     },
-
     // ============================================
     // 4. Convênio e Beneficiário
     // ============================================
@@ -3312,8 +3298,7 @@ relAtendimentoValFiltro: async (req, res) => {
             `);
         });
     },
-
-       // ============================================
+    // ============================================
     // 5. Beneficiário e Terapia (semelhante ao Ana. beneficiario so que consolida também)
     // ============================================
     tabdimBeneVal(req,res){
@@ -3342,404 +3327,404 @@ relAtendimentoValFiltro: async (req, res) => {
             console.log(err)
         })
     },
-tabdimBeneValFiltro(req, res) {
-    const db = req.cookies['preferredDb'];
-    const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
-    const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
-    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+    tabdimBeneValFiltro(req, res) {
+        const db = req.cookies['preferredDb'];
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
 
-    const rawIni = req.body.dataIni;
-    const rawFim = req.body.dataFim;
-    const rawBene = req.body.relBeneid;
+        const rawIni = req.body.dataIni;
+        const rawFim = req.body.dataFim;
+        const rawBene = req.body.relBeneid;
 
-    const hojeStr = new Date().toISOString().replace('T', ' ').substring(0, 23) + 'Z';
-    const safeDataIni = (typeof rawIni === 'string' && rawIni.trim() !== '') ? rawIni : hojeStr;
-    const safeDataFim = (typeof rawFim === 'string' && rawFim.trim() !== '') ? rawFim : hojeStr;
+        const hojeStr = new Date().toISOString().replace('T', ' ').substring(0, 23) + 'Z';
+        const safeDataIni = (typeof rawIni === 'string' && rawIni.trim() !== '') ? rawIni : hojeStr;
+        const safeDataFim = (typeof rawFim === 'string' && rawFim.trim() !== '') ? rawFim : hojeStr;
 
-    let seg, sex;
-    try {
-        seg = fncGeral.getDateFromString(safeDataIni, "ini");
-        sex = fncGeral.getDateFromString(safeDataFim, "fim");
-        if (!seg || isNaN(seg.getTime())) throw new Error('Data inicial inválida');
-        if (!sex || isNaN(sex.getTime())) throw new Error('Data final inválida');
-    } catch (err) {
-        console.error('[ERRO data]', { rawIni, rawFim, error: err.message });
-        return res.status(400).send(`
-            <script>
-                alert("Erro nas datas. Verifique o período selecionado.");
-                history.back();
-            </script>
-        `);
-    }
+        let seg, sex;
+        try {
+            seg = fncGeral.getDateFromString(safeDataIni, "ini");
+            sex = fncGeral.getDateFromString(safeDataFim, "fim");
+            if (!seg || isNaN(seg.getTime())) throw new Error('Data inicial inválida');
+            if (!sex || isNaN(sex.getTime())) throw new Error('Data final inválida');
+        } catch (err) {
+            console.error('[ERRO data]', { rawIni, rawFim, error: err.message });
+            return res.status(400).send(`
+                <script>
+                    alert("Erro nas datas. Verifique o período selecionado.");
+                    history.back();
+                </script>
+            `);
+        }
 
-    const filtro = {
-        dataIni: safeDataIni,
-        dataFim: safeDataFim,
-        beneId: rawBene || '766f69643132333435366964'
-    };
-
-    const periodoDe = fncGeral.getDataInvert(safeDataIni.split(' ')[0]);
-    const periodoAte = fncGeral.getDataInvert(safeDataFim.split(' ')[0]);
-
-    Promise.all([
-        Atend.find({
-            atend_beneid: rawBene,
-            atend_atenddata: { $gte: seg, $lte: sex },
-            atend_categoria: { 
-                $nin: ["Feriado", "Falta Absoluta", "Reunião", "Bloqueado para Agendar"] 
-            }
-        }).exec(),
-        Conv.find().exec(),
-        Bene.findById(rawBene).exec(),
-        Terapia.find().exec(),
-        Ano.find().exec(),
-        Usuario.find().exec(),
-        Bene.find().exec()
-    ])
-    .then(([atRaw, convs, beneSelecionado, terapias, anos, usuarios, listaBenes]) => {
-        console.log('[DEBUG tabdimBeneValFiltro] Total de beneficiários encontrados:', listaBenes.length);
-        console.log('[DEBUG tabdimBeneValFiltro] Primeiros 3 beneficiários:', listaBenes.slice(0, 3).map(b => ({ _id: b._id, nome: b.bene_nome })));
-        console.log('[DEBUG tabdimBeneValFiltro] Beneficiário selecionado (raw):', rawBene);
-        console.log('[DEBUG tabdimBeneValFiltro] Atendimentos encontrados:', atRaw.length);
-
-        const lookupTerapia = {};
-        terapias.forEach(t => { lookupTerapia[t._id] = t.terapia_nome; });
-
-        // ✅ NOVO: Lookup para terapia_nomecid
-        const lookupTerapiaCid = {};
-        terapias.forEach(t => { lookupTerapiaCid[t._id] = t.terapia_nomecid || t.terapia_nome; });
-
-        const lookupUsuario = {};
-        usuarios.forEach(u => { lookupUsuario[u._id] = u.usuario_nome; });
-
-        const lookupBene = {};
-        listaBenes.forEach(b => { lookupBene[b._id] = b.bene_nome; });
-
-        const lookupConv = {};
-        convs.forEach(c => { lookupConv[c._id] = c.conv_nome; });
-
-        const toCentavos = (str) => {
-            if (!str || typeof str !== 'string') return 0;
-            const clean = str.replace(/\D/g, '');
-            return clean.length >= 2
-                ? parseInt(clean.slice(0, -2) + clean.slice(-2), 10)
-                : parseInt(clean.padStart(2, '0'), 10);
+        const filtro = {
+            dataIni: safeDataIni,
+            dataFim: safeDataFim,
+            beneId: rawBene || '766f69643132333435366964'
         };
 
-        // ✅ Função para determinar quais valores usar baseado em atend_org
-        const getValoresAtendimento = (at) => {
-            const origem = (at.atend_org || '').trim();
-            const ehSubstitutoFixo = 
-                (at.atend_fixo === "true") || 
-                (at.atend_categoria === "SubstitutoFixo");
-            const categoria = at.atend_categoria;
+        const periodoDe = fncGeral.getDataInvert(safeDataIni.split(' ')[0]);
+        const periodoAte = fncGeral.getDataInvert(safeDataFim.split(' ')[0]);
 
-            if (origem === "Padrão") {
-                return {
-                cred: at.atend_valorcre || "0,00",
-                deb: at.atend_valordeb || "0,00",
-                tipo: "Padrão"
-                };
-            } else if (origem === "Administrativo") {
-                if (ehSubstitutoFixo) {
-                return {
-                    cred: at.atend_fixovalorcre || "0,00",  // ✅ FIXO
-                    deb: at.atend_valordeb || "0,00",       // ✅ PADRÃO (não fixo!)
-                    tipo: "Fixo"
-                };
-                } else if (categoria === "Substituição") {
-                return {
-                    cred: at.atend_mergevalorcre || "0,00",
-                    deb: at.atend_mergevalordeb || "0,00",
-                    tipo: "Substituição"
-                };
-                } else {
-                return {
-                    cred: at.atend_valorcre || "0,00",
-                    deb: at.atend_valordeb || "0,00",
-                    tipo: "Administrativo"
-                };
+        Promise.all([
+            Atend.find({
+                atend_beneid: rawBene,
+                atend_atenddata: { $gte: seg, $lte: sex },
+                atend_categoria: { 
+                    $nin: ["Feriado", "Falta Absoluta", "Reunião", "Bloqueado para Agendar"] 
                 }
-            } else {
-                return {
-                cred: at.atend_valorcre || "0,00",
-                deb: at.atend_valordeb || "0,00",
-                tipo: "Outro"
-                };
-            }
-        };
+            }).exec(),
+            Conv.find().exec(),
+            Bene.findById(rawBene).exec(),
+            Terapia.find().exec(),
+            Ano.find().exec(),
+            Usuario.find().exec(),
+            Bene.find().exec()
+        ])
+        .then(([atRaw, convs, beneSelecionado, terapias, anos, usuarios, listaBenes]) => {
+            console.log('[DEBUG tabdimBeneValFiltro] Total de beneficiários encontrados:', listaBenes.length);
+            console.log('[DEBUG tabdimBeneValFiltro] Primeiros 3 beneficiários:', listaBenes.slice(0, 3).map(b => ({ _id: b._id, nome: b.bene_nome })));
+            console.log('[DEBUG tabdimBeneValFiltro] Beneficiário selecionado (raw):', rawBene);
+            console.log('[DEBUG tabdimBeneValFiltro] Atendimentos encontrados:', atRaw.length);
 
-        const bene_nome = lookupBene[rawBene] || "(nenhum)";
-        terapias.sort((a, b) => (a.terapia_nomecid || a.terapia_nome).localeCompare(b.terapia_nomecid || b.terapia_nome));
-        listaBenes.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome));
+            const lookupTerapia = {};
+            terapias.forEach(t => { lookupTerapia[t._id] = t.terapia_nome; });
 
-        const rel = [];
-        let sessaoTot = 0;
-        let valTotCredCentavos = 0;
-        let valTotDebCentavos = 0;
+            // ✅ NOVO: Lookup para terapia_nomecid
+            const lookupTerapiaCid = {};
+            terapias.forEach(t => { lookupTerapiaCid[t._id] = t.terapia_nomecid || t.terapia_nome; });
 
-        // ✅ Ordena globalmente ANTES do agrupamento
-        const atOrdenado = atRaw
-            .filter(a => a.atend_atenddata)
-            .sort((a, b) => {
-                const d1 = new Date(a.atend_atenddata).getTime();
-                const d2 = new Date(b.atend_atenddata).getTime();
-                if (d1 !== d2) return d1 - d2;
-                return (a.atend_atendhora || '').localeCompare(b.atend_atendhora || '');
-            });
+            const lookupUsuario = {};
+            usuarios.forEach(u => { lookupUsuario[u._id] = u.usuario_nome; });
 
-        // ✅ NOVO: Agrupamento por terapia_nomecid - CONSOLIDA TUDO!
-        const cidsUnicos = {};
+            const lookupBene = {};
+            listaBenes.forEach(b => { lookupBene[b._id] = b.bene_nome; });
 
-        // ✅ Processa cada atendimento e agrupa pelo CID CORRETO
-        atOrdenado.forEach(at => {
-            let terapiaId, terapiaNomecid, terapiaNome;
-            
-            // ✅ DETERMINA QUAL CAMPO USAR COM BASE NA CATEGORIA
-            switch (at.atend_categoria) {
-                case "Substituição":
-                    terapiaId = at.atend_mergeterapiaid;
-                    terapiaCid = lookupTerapiaCid[at.atend_mergeterapiaid] || '-';
-                    terapiaNome = lookupTerapia[at.atend_mergeterapiaid] || '-';
-                    break;
-                case "SubstitutoFixo":
-                    terapiaId = at.atend_fixoterapiaid;
-                    terapiaCid = lookupTerapiaCid[at.atend_fixoterapiaid] || '-';
-                    terapiaNome = lookupTerapia[at.atend_fixoterapiaid] || '-';
-                    break;
-                default:
-                    terapiaId = at.atend_terapiaid;
-                    terapiaCid = lookupTerapiaCid[at.atend_terapiaid] || '-';
-                    terapiaNome = lookupTerapia[at.atend_terapiaid] || '-';
-                    break;
-            }
+            const lookupConv = {};
+            convs.forEach(c => { lookupConv[c._id] = c.conv_nome; });
 
-            // ✅ Encontra ou cria o grupo pelo CID
-            if (!cidsUnicos[terapiaCid]) {
-                cidsUnicos[terapiaCid] = {
-                    terapiaId: terapiaId,
-                    terapiaNome: terapiaNome,
-                    terapiaCid: terapiaCid,
-                    detalhes: [],
-                    qtd: 0,
-                    // ✅ Armazena TODOS os valores para detectar variações
-                    valoresCred: [],
-                    valoresDeb: [],
-                    somaCredTotal: 0,
-                    somaDebTotal: 0
-                };
-            }
-
-            const grupo = cidsUnicos[terapiaCid];
-
-            // ✅ Determina quais valores usar
-            const valores = getValoresAtendimento(at);
-            
-            const vCredCent = toCentavos(valores.cred);
-            const vDebCent = toCentavos(valores.deb);
-            
-            // ✅ Armazena todos os valores para detectar variações
-            if (vCredCent > 0) grupo.valoresCred.push(vCredCent);
-            if (vDebCent > 0) grupo.valoresDeb.push(vDebCent);
-            
-            // ✅ Soma totais
-            grupo.somaCredTotal += vCredCent;
-            grupo.somaDebTotal += vDebCent;
-            
-            grupo.qtd++;
-
-            let dataFmt = '-';
-            if (at.atend_atenddata) {
-                try {
-                    const d = new Date(at.atend_atenddata);
-                    if (!isNaN(d.getTime())) {
-                        dataFmt = fncGeral.getDataInvert(d.toISOString().split('T')[0]);
-                    }
-                } catch (e) {
-                    dataFmt = '-';
-                }
-            }
-
-            const origemLabel = (() => {
-                const valor = (at.atend_org || '').trim();
-                if (valor === "Administrativo") {
-                    return '<span class="label label-sm label-warning">ADM</span>';
-                } else if (valor === "Padrão") {
-                    return '<span class="label label-sm label-info">PAD</span>';
-                } else {
-                    return '<span class="label label-sm label-default">-</span>';
-                }
-            })();
-
-            const categoriaLabel = (() => {
-                const c = at.atend_categoria;
-                if (c === "Nenhuma Observação") return '<span class="label label-sm label-warning">Sem Evento</span>';
-                if (c === "Substituição" || c === "Substituto") return '<span class="label label-sm label-pink">Substituição</span>';
-                if (c === "Extra") return '<span class="label label-sm label-purple">Extra</span>';
-                if (c === "Falta") return '<span class="label label-sm label-yellow">Falta</span>';
-                if (c === "Padrão" || c === "SubstitutoFixo") return '<span class="label label-sm label-success">Sem Evento</span>';
-                return c || '-';
-            })();
-
-            const eventoLabel = at.atend_fixo === "true"
-                ? '<span class="label label-sm label-danger">Substituto Fixo</span>'
-                : '<span class="label label-sm label-success">Padrão</span>';
-
-            const formatValor = (v) => {
-                if (!v || v.trim() === '' || v === '0,00') {
-                    return '-';
-                }
-                return v;
+            const toCentavos = (str) => {
+                if (!str || typeof str !== 'string') return 0;
+                const clean = str.replace(/\D/g, '');
+                return clean.length >= 2
+                    ? parseInt(clean.slice(0, -2) + clean.slice(-2), 10)
+                    : parseInt(clean.padStart(2, '0'), 10);
             };
 
-            const beneNome = lookupBene[at.atend_beneid] || '-';
-            const convNome = lookupConv[at.atend_convid] || '-';
-            const terapiaOrig = lookupTerapia[at.atend_terapiaid] || '-';
-            const terapeutaOrig = lookupUsuario[at.atend_terapeutaid] || '-';
+            // ✅ Função para determinar quais valores usar baseado em atend_org
+            const getValoresAtendimento = (at) => {
+                const origem = (at.atend_org || '').trim();
+                const ehSubstitutoFixo = 
+                    (at.atend_fixo === "true") || 
+                    (at.atend_categoria === "SubstitutoFixo");
+                const categoria = at.atend_categoria;
 
-            const terapiaFixa = at.atend_fixoterapiaid && at.atend_fixoterapiaid !== '766f69643132333435366964'
-                ? lookupTerapia[at.atend_fixoterapiaid] || '-'
-                : '-';
-
-            const terapeutaFixo = at.atend_fixoterapeutaid && at.atend_fixoterapeutaid !== '766f69643132333435366964'
-                ? lookupUsuario[at.atend_fixoterapeutaid] || '-'
-                : '-';
-
-            const terapiaSubst = at.atend_mergeterapiaid && at.atend_mergeterapiaid !== '766f69643132333435366964'
-                ? lookupTerapia[at.atend_mergeterapiaid] || '-'
-                : '-';
-
-            const terapeutaSubst = at.atend_mergeterapeutaid && at.atend_mergeterapeutaid !== '766f69643132333435366964'
-                ? lookupUsuario[at.atend_mergeterapeutaid] || '-'
-                : '-';
-
-            grupo.detalhes.push({
-                ordem: (grupo.detalhes.length + 1).toString(),
-                _id: at._id,
-                data: dataFmt,
-                hora: at.atend_atendhora || '-',
-                beneNome,
-                convNome,
-                origemLabel,
-                categoriaLabel,
-                eventoLabel,
-                terapiaOrig,
-                terapeutaOrig,
-                credOrig: formatValor(at.atend_valorcre || "0,00"),
-                debOrig: formatValor(at.atend_valordeb || "0,00"),
-                terapiaFixa,
-                terapeutaFixo,
-                credFixo: at.atend_fixovalorcre ? formatValor(at.atend_fixovalorcre) : '-',
-                debFixo: at.atend_fixovalordeb ? formatValor(at.atend_fixovalordeb) : '-',
-                terapiaSubst,
-                terapeutaSubst,
-                credSubst: at.atend_mergevalorcre ? formatValor(at.atend_mergevalorcre) : '-',
-                debSubst: at.atend_mergevalordeb ? formatValor(at.atend_mergevalordeb) : '-',
-                credUsado: formatValor(valores.cred),  // ✅ Valor realmente usado no cálculo
-                debUsado: formatValor(valores.deb),    // ✅ Valor realmente usado no cálculo
-                tipoCalculo: valores.tipo,             // ✅ Tipo de cálculo aplicado
-                permiteEdicao: true
-            });
-        });
-
-        // ✅ Converte os grupos em resultados finais
-        Object.keys(cidsUnicos).forEach(cid => {
-            const grupo = cidsUnicos[cid];
-            
-            if (grupo.qtd === 0) return;
-
-            // ✅ Verifica se há múltiplos valores diferentes
-            const temMultiplosCred = new Set(grupo.valoresCred).size > 1;
-            const temMultiplosDeb = new Set(grupo.valoresDeb).size > 1;
-            const temValoresDiferentes = temMultiplosCred || temMultiplosDeb;
-
-            // ✅ Calcula média apenas se houver um único valor
-            let valorUnitarioCred = "0,00";
-            let valorUnitarioDeb = "0,00";
-            
-            if (!temValoresDiferentes) {
-                // ✅ Se todos os valores são iguais, mostra o valor unitário
-                if (grupo.valoresCred.length > 0) {
-                    const mediaCred = grupo.somaCredTotal / grupo.qtd;
-                    valorUnitarioCred = fncGeral.formatarReal(mediaCred);
+                if (origem === "Padrão") {
+                    return {
+                    cred: at.atend_valorcre || "0,00",
+                    deb: at.atend_valordeb || "0,00",
+                    tipo: "Padrão"
+                    };
+                } else if (origem === "Administrativo") {
+                    if (ehSubstitutoFixo) {
+                    return {
+                        cred: at.atend_fixovalorcre || "0,00",  // ✅ FIXO
+                        deb: at.atend_valordeb || "0,00",       // ✅ PADRÃO (não fixo!)
+                        tipo: "Fixo"
+                    };
+                    } else if (categoria === "Substituição") {
+                    return {
+                        cred: at.atend_mergevalorcre || "0,00",
+                        deb: at.atend_mergevalordeb || "0,00",
+                        tipo: "Substituição"
+                    };
+                    } else {
+                    return {
+                        cred: at.atend_valorcre || "0,00",
+                        deb: at.atend_valordeb || "0,00",
+                        tipo: "Administrativo"
+                    };
+                    }
+                } else {
+                    return {
+                    cred: at.atend_valorcre || "0,00",
+                    deb: at.atend_valordeb || "0,00",
+                    tipo: "Outro"
+                    };
                 }
-                if (grupo.valoresDeb.length > 0) {
-                    const mediaDeb = grupo.somaDebTotal / grupo.qtd;
-                    valorUnitarioDeb = fncGeral.formatarReal(mediaDeb);
+            };
+
+            const bene_nome = lookupBene[rawBene] || "(nenhum)";
+            terapias.sort((a, b) => (a.terapia_nomecid || a.terapia_nome).localeCompare(b.terapia_nomecid || b.terapia_nome));
+            listaBenes.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome));
+
+            const rel = [];
+            let sessaoTot = 0;
+            let valTotCredCentavos = 0;
+            let valTotDebCentavos = 0;
+
+            // ✅ Ordena globalmente ANTES do agrupamento
+            const atOrdenado = atRaw
+                .filter(a => a.atend_atenddata)
+                .sort((a, b) => {
+                    const d1 = new Date(a.atend_atenddata).getTime();
+                    const d2 = new Date(b.atend_atenddata).getTime();
+                    if (d1 !== d2) return d1 - d2;
+                    return (a.atend_atendhora || '').localeCompare(b.atend_atendhora || '');
+                });
+
+            // ✅ NOVO: Agrupamento por terapia_nomecid - CONSOLIDA TUDO!
+            const cidsUnicos = {};
+
+            // ✅ Processa cada atendimento e agrupa pelo CID CORRETO
+            atOrdenado.forEach(at => {
+                let terapiaId, terapiaNomecid, terapiaNome;
+                
+                // ✅ DETERMINA QUAL CAMPO USAR COM BASE NA CATEGORIA
+                switch (at.atend_categoria) {
+                    case "Substituição":
+                        terapiaId = at.atend_mergeterapiaid;
+                        terapiaCid = lookupTerapiaCid[at.atend_mergeterapiaid] || '-';
+                        terapiaNome = lookupTerapia[at.atend_mergeterapiaid] || '-';
+                        break;
+                    case "SubstitutoFixo":
+                        terapiaId = at.atend_fixoterapiaid;
+                        terapiaCid = lookupTerapiaCid[at.atend_fixoterapiaid] || '-';
+                        terapiaNome = lookupTerapia[at.atend_fixoterapiaid] || '-';
+                        break;
+                    default:
+                        terapiaId = at.atend_terapiaid;
+                        terapiaCid = lookupTerapiaCid[at.atend_terapiaid] || '-';
+                        terapiaNome = lookupTerapia[at.atend_terapiaid] || '-';
+                        break;
                 }
-            } else {
-                // ✅ Se há valores diferentes, oculta os unitários
-                valorUnitarioCred = "-";
-                valorUnitarioDeb = "-";
-            }
 
-            // ✅ Totais sempre são calculados
-            const totalCred = grupo.somaCredTotal;
-            const totalDeb = grupo.somaDebTotal;
+                // ✅ Encontra ou cria o grupo pelo CID
+                if (!cidsUnicos[terapiaCid]) {
+                    cidsUnicos[terapiaCid] = {
+                        terapiaId: terapiaId,
+                        terapiaNome: terapiaNome,
+                        terapiaCid: terapiaCid,
+                        detalhes: [],
+                        qtd: 0,
+                        // ✅ Armazena TODOS os valores para detectar variações
+                        valoresCred: [],
+                        valoresDeb: [],
+                        somaCredTotal: 0,
+                        somaDebTotal: 0
+                    };
+                }
 
-            rel.push({
-                terapiaId: grupo.terapiaId,
-                terapiaNome: grupo.terapiaCid,  // ✅ Exibe o CID como nome (ex: "ABA")
-                terapiaCid: grupo.terapiaCid,
-                sessoes: grupo.qtd,
-                valorUnitarioCred: valorUnitarioCred,
-                valorUnitarioDeb: valorUnitarioDeb,
-                valorTotalCred: fncGeral.formatarReal(totalCred),
-                valorTotalDeb: fncGeral.formatarReal(totalDeb),
-                temValoresDiferentes: temValoresDiferentes,  // ✅ Flag para a view
-                atendimentos: grupo.detalhes
+                const grupo = cidsUnicos[terapiaCid];
+
+                // ✅ Determina quais valores usar
+                const valores = getValoresAtendimento(at);
+                
+                const vCredCent = toCentavos(valores.cred);
+                const vDebCent = toCentavos(valores.deb);
+                
+                // ✅ Armazena todos os valores para detectar variações
+                if (vCredCent > 0) grupo.valoresCred.push(vCredCent);
+                if (vDebCent > 0) grupo.valoresDeb.push(vDebCent);
+                
+                // ✅ Soma totais
+                grupo.somaCredTotal += vCredCent;
+                grupo.somaDebTotal += vDebCent;
+                
+                grupo.qtd++;
+
+                let dataFmt = '-';
+                if (at.atend_atenddata) {
+                    try {
+                        const d = new Date(at.atend_atenddata);
+                        if (!isNaN(d.getTime())) {
+                            dataFmt = fncGeral.getDataInvert(d.toISOString().split('T')[0]);
+                        }
+                    } catch (e) {
+                        dataFmt = '-';
+                    }
+                }
+
+                const origemLabel = (() => {
+                    const valor = (at.atend_org || '').trim();
+                    if (valor === "Administrativo") {
+                        return '<span class="label label-sm label-warning">ADM</span>';
+                    } else if (valor === "Padrão") {
+                        return '<span class="label label-sm label-info">PAD</span>';
+                    } else {
+                        return '<span class="label label-sm label-default">-</span>';
+                    }
+                })();
+
+                const categoriaLabel = (() => {
+                    const c = at.atend_categoria;
+                    if (c === "Nenhuma Observação") return '<span class="label label-sm label-warning">Sem Evento</span>';
+                    if (c === "Substituição" || c === "Substituto") return '<span class="label label-sm label-pink">Substituição</span>';
+                    if (c === "Extra") return '<span class="label label-sm label-purple">Extra</span>';
+                    if (c === "Falta") return '<span class="label label-sm label-yellow">Falta</span>';
+                    if (c === "Padrão" || c === "SubstitutoFixo") return '<span class="label label-sm label-success">Sem Evento</span>';
+                    return c || '-';
+                })();
+
+                const eventoLabel = at.atend_fixo === "true"
+                    ? '<span class="label label-sm label-danger">Substituto Fixo</span>'
+                    : '<span class="label label-sm label-success">Padrão</span>';
+
+                const formatValor = (v) => {
+                    if (!v || v.trim() === '' || v === '0,00') {
+                        return '-';
+                    }
+                    return v;
+                };
+
+                const beneNome = lookupBene[at.atend_beneid] || '-';
+                const convNome = lookupConv[at.atend_convid] || '-';
+                const terapiaOrig = lookupTerapia[at.atend_terapiaid] || '-';
+                const terapeutaOrig = lookupUsuario[at.atend_terapeutaid] || '-';
+
+                const terapiaFixa = at.atend_fixoterapiaid && at.atend_fixoterapiaid !== '766f69643132333435366964'
+                    ? lookupTerapia[at.atend_fixoterapiaid] || '-'
+                    : '-';
+
+                const terapeutaFixo = at.atend_fixoterapeutaid && at.atend_fixoterapeutaid !== '766f69643132333435366964'
+                    ? lookupUsuario[at.atend_fixoterapeutaid] || '-'
+                    : '-';
+
+                const terapiaSubst = at.atend_mergeterapiaid && at.atend_mergeterapiaid !== '766f69643132333435366964'
+                    ? lookupTerapia[at.atend_mergeterapiaid] || '-'
+                    : '-';
+
+                const terapeutaSubst = at.atend_mergeterapeutaid && at.atend_mergeterapeutaid !== '766f69643132333435366964'
+                    ? lookupUsuario[at.atend_mergeterapeutaid] || '-'
+                    : '-';
+
+                grupo.detalhes.push({
+                    ordem: (grupo.detalhes.length + 1).toString(),
+                    _id: at._id,
+                    data: dataFmt,
+                    hora: at.atend_atendhora || '-',
+                    beneNome,
+                    convNome,
+                    origemLabel,
+                    categoriaLabel,
+                    eventoLabel,
+                    terapiaOrig,
+                    terapeutaOrig,
+                    credOrig: formatValor(at.atend_valorcre || "0,00"),
+                    debOrig: formatValor(at.atend_valordeb || "0,00"),
+                    terapiaFixa,
+                    terapeutaFixo,
+                    credFixo: at.atend_fixovalorcre ? formatValor(at.atend_fixovalorcre) : '-',
+                    debFixo: at.atend_fixovalordeb ? formatValor(at.atend_fixovalordeb) : '-',
+                    terapiaSubst,
+                    terapeutaSubst,
+                    credSubst: at.atend_mergevalorcre ? formatValor(at.atend_mergevalorcre) : '-',
+                    debSubst: at.atend_mergevalordeb ? formatValor(at.atend_mergevalordeb) : '-',
+                    credUsado: formatValor(valores.cred),  // ✅ Valor realmente usado no cálculo
+                    debUsado: formatValor(valores.deb),    // ✅ Valor realmente usado no cálculo
+                    tipoCalculo: valores.tipo,             // ✅ Tipo de cálculo aplicado
+                    permiteEdicao: true
+                });
             });
 
-            sessaoTot += grupo.qtd;
-            valTotCredCentavos += totalCred;
-            valTotDebCentavos += totalDeb;
+            // ✅ Converte os grupos em resultados finais
+            Object.keys(cidsUnicos).forEach(cid => {
+                const grupo = cidsUnicos[cid];
+                
+                if (grupo.qtd === 0) return;
+
+                // ✅ Verifica se há múltiplos valores diferentes
+                const temMultiplosCred = new Set(grupo.valoresCred).size > 1;
+                const temMultiplosDeb = new Set(grupo.valoresDeb).size > 1;
+                const temValoresDiferentes = temMultiplosCred || temMultiplosDeb;
+
+                // ✅ Calcula média apenas se houver um único valor
+                let valorUnitarioCred = "0,00";
+                let valorUnitarioDeb = "0,00";
+                
+                if (!temValoresDiferentes) {
+                    // ✅ Se todos os valores são iguais, mostra o valor unitário
+                    if (grupo.valoresCred.length > 0) {
+                        const mediaCred = grupo.somaCredTotal / grupo.qtd;
+                        valorUnitarioCred = fncGeral.formatarReal(mediaCred);
+                    }
+                    if (grupo.valoresDeb.length > 0) {
+                        const mediaDeb = grupo.somaDebTotal / grupo.qtd;
+                        valorUnitarioDeb = fncGeral.formatarReal(mediaDeb);
+                    }
+                } else {
+                    // ✅ Se há valores diferentes, oculta os unitários
+                    valorUnitarioCred = "-";
+                    valorUnitarioDeb = "-";
+                }
+
+                // ✅ Totais sempre são calculados
+                const totalCred = grupo.somaCredTotal;
+                const totalDeb = grupo.somaDebTotal;
+
+                rel.push({
+                    terapiaId: grupo.terapiaId,
+                    terapiaNome: grupo.terapiaCid,  // ✅ Exibe o CID como nome (ex: "ABA")
+                    terapiaCid: grupo.terapiaCid,
+                    sessoes: grupo.qtd,
+                    valorUnitarioCred: valorUnitarioCred,
+                    valorUnitarioDeb: valorUnitarioDeb,
+                    valorTotalCred: fncGeral.formatarReal(totalCred),
+                    valorTotalDeb: fncGeral.formatarReal(totalDeb),
+                    temValoresDiferentes: temValoresDiferentes,  // ✅ Flag para a view
+                    atendimentos: grupo.detalhes
+                });
+
+                sessaoTot += grupo.qtd;
+                valTotCredCentavos += totalCred;
+                valTotDebCentavos += totalDeb;
+            });
+
+            // ✅ Ordena os resultados por terapiaCid
+            rel.sort((a, b) => a.terapiaCid.localeCompare(b.terapiaCid));
+
+            const total = {
+                sessoes: sessaoTot,
+                valorCred: fncGeral.formatarReal(valTotCredCentavos),
+                valorDeb: fncGeral.formatarReal(valTotDebCentavos),
+                totalCred: fncGeral.formatarReal(valTotCredCentavos),
+                totalDeb: fncGeral.formatarReal(valTotDebCentavos)
+            };
+
+            console.log('[DEBUG tabdimBeneValFiltro] Total de CIDs no relatório:', rel.length);
+            console.log('[DEBUG tabdimBeneValFiltro] CIDs agrupados:', rel.map(r => ({
+                cid: r.terapiaCid,
+                sessoes: r.sessoes,
+                temValoresDiferentes: r.temValoresDiferentes,
+                totalCred: r.valorTotalCred,
+                totalDeb: r.valorTotalDeb
+            })));
+            console.log('[DEBUG tabdimBeneValFiltro] Lista de beneficiários para render:', listaBenes.length, 'itens');
+            
+            res.render("atendimento/tabdimbeneval", {
+                usuarios,
+                anos,
+                benes: listaBenes,
+                rels: rel,
+                total,
+                periodoDe,
+                periodoAte,
+                bene_nome,
+                filtro
+            });
+        })
+        .catch(err => {
+            console.error('[ERRO tabdimBeneValFiltro]', err);
+            res.status(500).send(`
+                <script>
+                    alert("Erro ao carregar relatório. Tente novamente.");
+                    history.back();
+                </script>
+            `);
         });
-
-        // ✅ Ordena os resultados por terapiaCid
-        rel.sort((a, b) => a.terapiaCid.localeCompare(b.terapiaCid));
-
-        const total = {
-            sessoes: sessaoTot,
-            valorCred: fncGeral.formatarReal(valTotCredCentavos),
-            valorDeb: fncGeral.formatarReal(valTotDebCentavos),
-            totalCred: fncGeral.formatarReal(valTotCredCentavos),
-            totalDeb: fncGeral.formatarReal(valTotDebCentavos)
-        };
-
-        console.log('[DEBUG tabdimBeneValFiltro] Total de CIDs no relatório:', rel.length);
-        console.log('[DEBUG tabdimBeneValFiltro] CIDs agrupados:', rel.map(r => ({
-            cid: r.terapiaCid,
-            sessoes: r.sessoes,
-            temValoresDiferentes: r.temValoresDiferentes,
-            totalCred: r.valorTotalCred,
-            totalDeb: r.valorTotalDeb
-        })));
-        console.log('[DEBUG tabdimBeneValFiltro] Lista de beneficiários para render:', listaBenes.length, 'itens');
-        
-        res.render("atendimento/tabdimbeneval", {
-            usuarios,
-            anos,
-            benes: listaBenes,
-            rels: rel,
-            total,
-            periodoDe,
-            periodoAte,
-            bene_nome,
-            filtro
-        });
-    })
-    .catch(err => {
-        console.error('[ERRO tabdimBeneValFiltro]', err);
-        res.status(500).send(`
-            <script>
-                alert("Erro ao carregar relatório. Tente novamente.");
-                history.back();
-            </script>
-        `);
-    });
-},
+    },
     relAtendimentoBene(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
@@ -3768,392 +3753,258 @@ tabdimBeneValFiltro(req, res) {
             console.log(err)
         })
     },
-        relAtendimentoBeneFiltroAT(req, res)  {
+    relAtendimentoBeneFiltro(req,res){// 
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
         Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
         Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
-        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
 
         let rel = [];
         let conv_nome;
         let conv_id;
         let bene_nome;
-        let porSala;
-        let porHoras;
-        let ultimoHorarioSala = {};
+        let terapiaAtend;
+        let terapeutaAtend;
         
+        //Filtro persistente
         let filtro = {
             dataIni: req.body.dataIni || '',
             dataFim: req.body.dataFim || '',
-            beneId: req.body.relBeneid || ''
+            convId: req.body.relConvid || ''
         };
+        console.log("req.body.dataIni: "+req.body.dataIni)
         
-        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);
-        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);
-        
-        porSala = (req.body.porSala == "sim") ? "sim" : "nao";
-        porHoras = (req.body.porHoras == "sim") ? "sim" : "nao";
-        
-        let rab = new RelAtendBene();
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
+        console.log("periodoDe:? "+periodoDe)
+        console.log("periodoAte:? "+periodoAte)
+
+        let porHoras;
+        console.log("req.body.porHoras: "+req.body.porHoras)
+        if (req.body.porHoras == "sim"){
+            porHoras = "sim";
+        } else {
+            porHoras = "nao";
+        }
+        let rab = new RelAtendBene();//objeto para fazer push em relatendimento
         let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
         let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+        console.log("seg: "+seg)
+        console.log("sex: "+sex)
         seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
         sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        
+        console.log("seg:"+seg)
+        console.log("sex:"+sex)
         let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
-        
-        Atend.find(filtroAtend).then((at) => {
-            console.log("at? "+at)
-            
-            // 1️⃣ FILTRAR Feriado
+
+        Atend.find(filtroAtend).then((at)=>{console.log("at>"+at.length)
             at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
-            
-            // ✅ 2️⃣ ORDENAR IMEDIATAMENTE: data + hora NUMÉRICA
-            at.sort((a, b) => {
-                let d1 = new Date(a.atend_atenddata).getTime();
-                let d2 = new Date(b.atend_atenddata).getTime();
-                if (d1 !== d2) return d1 - d2;
-                let [h1, m1] = (a.atend_atendhora || "00:00").split(":").map(Number);
-                let [h2, m2] = (b.atend_atendhora || "00:00").split(":").map(Number);
-                return (h1 * 60 + m1) - (h2 * 60 + m2);
-            });
-            
-            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta) => {
-                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
-                
-                const lookupPerfilTerapeuta = {};
-                terapeuta.forEach(t => {
-                    lookupPerfilTerapeuta[t._id.toString()] = t.usuario_perfilid ? t.usuario_perfilid.toString() : null;
-                });
-                
-                Terapia.find().then((terapias) => {
-                    terapias.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));
-                    
-                    const lookupTerapiaABAAT = {};
-                    terapias.forEach(t => {
-                        const nomeNormalizado = (t.terapia_nome || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-                        lookupTerapiaABAAT[t._id.toString()] = nomeNormalizado.includes("ABA AT");
-                    });
-                    
-                    Sala.find().then((sala) => {
-                        Ano.find().sort({ ano_nome: 1 }).then((ano) => {
-                            Bene.find().then((bene) => {
-                                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
-                                bene.some((b) => {
-                                    if((""+b._id) === (""+req.body.relBeneid)){
-                                        bene_nome = b.bene_nome;
-                                        conv_id = b.bene_convid;
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
+                Terapia.find().then((terapia)=>{
+                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
+                    Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
+                        Bene.find().then((bene)=>{
+                            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                            bene.some((b)=>{
+                                if((""+b._id) === (""+req.body.relBeneid)){
+                                    bene_nome = b.bene_nome;
+                                    conv_id = b.bene_convid;
+                                    return true;
+                                }
+                                return false;
+                            })
+                            Conv.findOne({_id: conv_id}).then((conv)=>{
+                                conv_nome = conv.conv_nome;
+                                at.sort(function(a, b) {
+                                    let d1 = new Date(a.atend_atenddata);
+                                    let d2 = new Date(b.atend_atenddata);
+                                    //d1.setHours(0);
+                                    //d1.setMinutes(0);
+                                    //d1.setSeconds(0);
+                                    //d2.setHours(0);
+                                    //d2.setMinutes(0);
+                                    //d2.setSeconds(0);
+                                    if(d1 == d2){
                                         return true;
+                                    } else {
+                                        if(d1 < d2){
+                                            return -1;
+                                        } else {
+                                            return true;
+                                        }
                                     }
-                                    return false;
-                                })
-                                Conv.findOne({_id: conv_id}).then((conv) => {
-                                    conv_nome = conv.conv_nome;
-                                    
-                                    // ✅ 3️⃣ PRÉ-ANÁLISE: Contar sessões por período/beneficiário/dia
-                                    const SALA_ESCOLA = "6368fe35c2cdb92ac6d914be";
-                                    const contadorSessoes = {};
-                                    
-                                    at.forEach(atend => {
-                                        if (String(atend.atend_salaid) === SALA_ESCOLA) {
-                                            const dataAtend = fncGeral.getData(atend.atend_atenddata);
-                                            const beneId = atend.atend_beneid.toString();
-                                            const [hora] = atend.atend_atendhora.split(":").map(Number);
-                                            
-                                            const periodo = hora < 13 ? 'manha' : 'tarde';
-                                            const chave = `${beneId}_${dataAtend}_${periodo}`;
-                                            
-                                            if (!contadorSessoes[chave]) {
-                                                contadorSessoes[chave] = 0;
-                                            }
-                                            contadorSessoes[chave]++;
-                                        }
-                                    });
-                                    
-                                    console.log("📊 Contador de sessões:", contadorSessoes);
-                                    
-                                    // ✅ 4️⃣ TRACKER DE ÍNDICE POR PERÍODO
-                                    const indicePorPeriodo = {};
-                                    
-                                    // ✅ 5️⃣ PROCESSAR
-                                    at.forEach((atend) => {
-                                        const categorias = (atend.atend_categoria || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                                        const org = (atend.atend_org || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                                        const ehFixo = atend.atend_fixo === true || atend.atend_fixo === "true";
-                                        const dataAtend = fncGeral.getData(atend.atend_atenddata);
-                                        
-                                        let terapeutaIdUsado;
-                                        if (ehFixo) {
-                                            terapeutaIdUsado = atend.atend_fixoterapeutaid;
-                                        } else {
-                                            switch (categorias) {
-                                                case "Substituicao":
-                                                case "Substituição":
-                                                    terapeutaIdUsado = atend.atend_mergeterapeutaid;
-                                                    break;
-                                                case "SubstitutoFixo":
-                                                    terapeutaIdUsado = atend.atend_fixoterapeutaid;
-                                                    break;
-                                                default:
-                                                    terapeutaIdUsado = atend.atend_terapeutaid;
-                                                    break;
-                                            }
-                                        }
-                                        
-                                        const perfilId = terapeutaIdUsado ? lookupPerfilTerapeuta[terapeutaIdUsado.toString()] : null;
-                                        const ehTerapeutaAT = perfilId === "6242191fa12aa557219a0fd9" || perfilId === "644742e378166939169f82a1" || perfilId === "62dea752ea444f5b7a02b449";
-                                        
-                                        let terapiaIdParaVerificar;
-                                        if (org === "Padrão") {
-                                            terapiaIdParaVerificar = atend.atend_terapiaid;
-                                        } else if (org === "Administrativo") {
-                                            if (categorias === "Substituicao" || categorias === "Substituição") {
-                                                terapiaIdParaVerificar = atend.atend_mergeterapiaid;
-                                            } else if (categorias === "SubstitutoFixo") {
-                                                terapiaIdParaVerificar = atend.atend_fixoterapiaid;
-                                            } else {
-                                                terapiaIdParaVerificar = atend.atend_terapiaid;
-                                            }
-                                        } else {
-                                            terapiaIdParaVerificar = atend.atend_terapiaid;
-                                        }
-                                        
-                                        const ehTerapiaABAAT = terapiaIdParaVerificar ? lookupTerapiaABAAT[terapiaIdParaVerificar.toString()] : false;
-                                        
-                                        // ▼▼▼ AJUSTAR HORÁRIO PARA EXIBIÇÃO ▼▼▼
-                                        if (porHoras === "sim") {
-                                            const ehSalaEscola = String(atend.atend_salaid) === SALA_ESCOLA;
-                                            const dataBase = new Date(atend.atend_atenddata);
-                                            let [horaIni, minutoIni] = atend.atend_atendhora.split(":").map(Number);
-                                            
-                                            const beneId = atend.atend_beneid.toString();
-                                            const [horaCheck] = atend.atend_atendhora.split(":").map(Number);
-                                            const periodo = horaCheck < 13 ? 'manha' : 'tarde';
-                                            const chaveContador = `${beneId}_${dataAtend}_${periodo}`;
-                                            const totalSessoesPeriodo = contadorSessoes[chaveContador] || 0;
-                                            
-                                        // ▼▼▼ DENTRO DO LOOP PRINCIPAL, QUANDO porHoras === "sim" ▼▼▼
-  // ▼▼▼ DENTRO DO LOOP PRINCIPAL, QUANDO porHoras === "sim" E ehSalaEscola === true ▼▼▼
-if (ehSalaEscola) {
-    const turnoSet = (req.body.turnoSet || '').toLowerCase().trim();
-    
-    // 1️⃣ Parse MANHÃ (Campos padrão - usados sempre para manhã)
-    let hIniSetM = null, hFimSetM = null;
-    if (req.body.horaInicialSet && req.body.horaInicialSet.includes(':')) {
-        const [hi, mi] = req.body.horaInicialSet.split(':').map(Number);
-        if (!isNaN(hi) && !isNaN(mi)) hIniSetM = hi * 60 + mi;
-    }
-    if (req.body.horaFinalSet && req.body.horaFinalSet.includes(':')) {
-        const [hf, mf] = req.body.horaFinalSet.split(':').map(Number);
-        if (!isNaN(hf) && !isNaN(mf)) hFimSetM = hf * 60 + mf;
-    }
-
-    // 2️⃣ Parse TARDE (Campos com 'D' - usados apenas se turnoSet === 'dia')
-    let hIniSetD = null, hFimSetD = null;
-    if (turnoSet === 'dia') {
-        if (req.body.horaInicialSetD && req.body.horaInicialSetD.includes(':')) {
-            const [hi, mi] = req.body.horaInicialSetD.split(':').map(Number);
-            if (!isNaN(hi) && !isNaN(mi)) hIniSetD = hi * 60 + mi;
-        }
-        if (req.body.horaFinalSetD && req.body.horaFinalSetD.includes(':')) {
-            const [hf, mf] = req.body.horaFinalSetD.split(':').map(Number);
-            if (!isNaN(hf) && !isNaN(mf)) hFimSetD = hf * 60 + mf;
-        }
-    }
-
-    const periodo = horaCheck < 13 ? 'manha' : 'tarde';
-
-    // 3️⃣ Definir Janela de Tempo Base conforme turno e período
-    let inicioBase, limiteBase;
-    
-    if (turnoSet === 'dia') {
-        // Se for dia inteiro: manhã usa campos padrão, tarde usa campos 'D'
-        if (periodo === 'manha') {
-            inicioBase = (hIniSetM !== null) ? hIniSetM : 480;  // Fallback: 08:00
-            limiteBase = (hFimSetM !== null) ? hFimSetM : 780;  // Fallback: 13:00 (300min = 5 sessões)
-        } else {
-            inicioBase = (hIniSetD !== null) ? hIniSetD : 780;  // Fallback: 13:00
-            limiteBase = (hFimSetD !== null) ? hFimSetD : 1080; // Fallback: 18:00 (300min = 5 sessões)
-        }
-    } else {
-        // Lógica original para 'manha' ou 'tarde' isolados
-        inicioBase = (hIniSetM !== null) ? hIniSetM : (turnoSet === 'manha' ? 480 : 780);
-        limiteBase = (hFimSetM !== null) ? hFimSetM : (turnoSet === 'manha' ? 720 : 1020);
-    }
-
-    const indiceAtual = indicePorPeriodo[chaveContador] || 0;
-
-    // ✅ CÁLCULO: 60 minutos por sessão (Sala Escola)
-    let iniCalc = inicioBase + (indiceAtual * 60);
-    let fimCalc = iniCalc + 60;
-
-    // 🔒 VALIDAÇÃO: garante que última sessão não ultrapasse o limite da janela
-    if (fimCalc > limiteBase) {
-        iniCalc = limiteBase - 60;
-        fimCalc = limiteBase;
-    }
-
-    // Aplica ao processamento
-    horaIni = Math.floor(iniCalc / 60);
-    minutoIni = iniCalc % 60;
-
-    // 📌 Atualiza trackers (contadores independentes por manhã/tarde via chaveContador)
-    indicePorPeriodo[chaveContador] = (indicePorPeriodo[chaveContador] || 0) + 1;
-    const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${periodo}`;
-    ultimoHorarioSala[chaveSala] = { hora: horaIni, minuto: minutoIni };
-}
-                                            // ✅ CÁLCULO DO HORÁRIO DE FIM (DEPOIS de todas as modificações)
-                                            const inicio = new Date(dataBase);
-                                            inicio.setHours(horaIni, minutoIni, 0, 0);
-
-                                            let fim;
-                                            if (ehSalaEscola) {
-                                                fim = new Date(inicio);
-                                                fim.setMinutes(fim.getMinutes() + 60);
-                                            } else {
-                                                fim = new Date(inicio);
-                                                fim.setMinutes(fim.getMinutes() + 40);
-                                            }
-
-                                            // ✅ FORMATAÇÃO (garantido que todas as variáveis existem)
-                                            const horaIniFmt = horaIni.toString().padStart(2, "0");
-                                            const minutoIniFmt = minutoIni.toString().padStart(2, "0");
-                                            const horaFimFmt = fim.getHours().toString().padStart(2, "0");
-                                            const minutoFimFmt = fim.getMinutes().toString().padStart(2, "0");
-
-                                            rab.dt = fncGeral.getData(atend.atend_atenddata) + " - " + 
-                                                    horaIniFmt + ":" + minutoIniFmt + "/" + 
-                                                    horaFimFmt + ":" + minutoFimFmt;
-                                            rab.horaIni = horaIniFmt + ":" + minutoIniFmt;
-                                            rab.horaFim = horaFimFmt + ":" + minutoFimFmt;
-                                        } else {
-                                            rab.dt = fncGeral.getData(atend.atend_atenddata);
-                                        }
-                                        rab.dataDia = fncGeral.getData(atend.atend_atenddata);
-
-                                        // ▼▼▼ LÓGICA DE TERAPIA/TERAPEUTA ▼▼▼
-                                        let terapiaAtend, terapeutaAtend;
-
-                                        if (ehFixo) {
-                                            terapiaAtend = atend.atend_fixoterapiaid;
-                                            terapeutaAtend = atend.atend_fixoterapeutaid;
-                                            switch (categorias) {
-                                                case "SubstitutoFixo":
-                                                    terapiaAtend = atend.atend_fixoterapiaid;
-                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
-                                                    break;
-                                                case "Substituicao":
-                                                case "Substituição":
-                                                    terapiaAtend = atend.atend_fixoterapiaid || atend.atend_mergeterapiaid;
-                                                    terapeutaAtend = atend.atend_fixoterapeutaid || atend.atend_mergeterapeutaid;
-                                                    break;
-                                                case "Feriado":
-                                                case "Falta Absoluta":
-                                                    terapiaAtend = "break";
-                                                    terapeutaAtend = "break";
-                                                    break;
-                                                default:
-                                                    terapiaAtend = atend.atend_fixoterapiaid;
-                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
-                                                    break;
-                                            }
-                                        } else {
-                                            terapiaAtend = atend.atend_terapiaid;
-                                            terapeutaAtend = atend.atend_terapeutaid;
-                                            switch (categorias) {
-                                                case "Feriado":
-                                                case "Falta Absoluta":
-                                                    terapiaAtend = "break";
-                                                    terapeutaAtend = "break";
-                                                    break;
-                                                case "Substituicao":
-                                                case "Substituição":
-                                                    terapiaAtend = atend.atend_mergeterapiaid;
-                                                    terapeutaAtend = atend.atend_mergeterapeutaid;
-                                                    break;
-                                                case "SubstitutoFixo":
-                                                    terapiaAtend = atend.atend_fixoterapiaid;
-                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
-                                                    break;
-                                                default:
-                                                    terapiaAtend = atend.atend_terapiaid;
-                                                    terapeutaAtend = atend.atend_terapeutaid;
-                                                    break;
-                                            }
-                                        }
-
-                                        // ▼▼▼ INCLUSÃO NO RELATÓRIO ▼▼▼
-                                        if (categorias !== "Feriado" && categorias !== "Falta Absoluta" && terapiaAtend !== "break") {
-                                            if (porSala == "sim"){
-                                                sala.forEach((s) => {
-                                                    if (("" + atend.atend_salaid + "") == ("" + s._id + "")){
-                                                        if (("" + s.sala_nome + "").includes("Escola")){
-                                                            rab.sala = "Escola ou Domicílio";
-                                                        } else {
-                                                            rab.sala = "Clínica";
-                                                        }
-                                                    }
-                                                })
-                                            }
-                                            
-                                            rab.especialidade = terapiaAtend;
-                                            rab.profissional = terapeutaAtend;
-                                            
-                                            rel.push(Object.assign({}, rab));
-                                            rab = new RelAtendBene();
-                                        }
-                                    });
-                                    
-                                    rel.sort(function(a, b){
-                                        let dataODiaA = a.dataDia || fncGeral.getData(a.dt);
-                                        let dataODiaB = b.dataDia || fncGeral.getData(b.dt);
-                                        
-                                        const [diaA, mesA, anoA] = dataODiaA.split('/').map(Number);
-                                        const [diaB, mesB, anoB] = dataODiaB.split('/').map(Number);
-                                        
-                                        const dataA = new Date(anoA, mesA - 1, diaA);
-                                        const dataB = new Date(anoB, mesB - 1, diaB);
-                                        
-                                        if (dataA.getTime() !== dataB.getTime()) {
-                                            return dataA - dataB;
-                                        }
-                                        
-                                        return (a.horaIni || '').localeCompare(b.horaIni || '');
-                                    });
-                                    
-                                    res.render("atendimento/relatendvalBeneAT", {
-                                        benes: bene, 
-                                        anos: ano, 
-                                        terapeutas: terapeuta, 
-                                        salas: sala,
-                                        terapias: terapias, 
-                                        rels: rel, 
-                                        periodoDe, 
-                                        periodoAte, 
-                                        conv_nome, 
-                                        bene_nome, 
-                                        porHoras, 
-                                        porSala,
-                                        filtro
-                                    });
                                 });
-                            });
-                        });
-                    });
-                });
-            });
-        }).catch((err) => {
-            console.error('[ERRO relAtendimentoBeneassinFiltroAT]', err);
-            res.status(500).send("Erro ao gerar relatório");
-        });
-    }, 
+                                at.forEach((atend) => {
+                                    // ▼▼▼ (1) Formatação de data/hora — mantida como estava ▼▼▼
+                                    if (porHoras === "sim") {
+                                        let horaFim = parseInt(atend.atend_atendhora.substring(0,2));
+                                        let minutoFim = atend.atend_atendhora.substring(3,5);
+                                        switch (minutoFim) {
+                                            case "00":
+                                                horaFim = ("" + horaFim).length === 1 ? "0" + horaFim : "" + horaFim;
+                                                minutoFim = "40";
+                                                break;
+                                            case "20":
+                                                minutoFim = "00";
+                                                horaFim = ("" + (horaFim + 1)).length === 1 ? "0" + (horaFim + 1) : "" + (horaFim + 1);
+                                                break;
+                                            case "40":
+                                                horaFim = ("" + (horaFim + 1)).length === 1 ? "0" + (horaFim + 1) : "" + (horaFim + 1);
+                                                minutoFim = "20";
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                        rab.dt = fncGeral.getData(atend.atend_atenddata) + " - " + atend.atend_atendhora + "/" + horaFim + ":" + minutoFim;
+                                        rab.hora = horaFim + ":" + minutoFim;
+                                        rab.horaIni = atend.atend_atendhora;
+                                        rab.horaFim = horaFim + ":" + minutoFim;
+                                    } else {
+                                        rab.dt = fncGeral.getData(atend.atend_atenddata);
+                                    }
+                                    rab.dataDia = fncGeral.getData(atend.atend_atenddata);
+
+                                    // ▼▼▼ (2) Normaliza categoria (opcional, mas evita bugs) ▼▼▼
+                                    const categorias = (atend.atend_categoria || "")
+                                        .trim()
+                                        .normalize("NFD")
+                                        .replace(/[\u0300-\u036f]/g, ""); // remove acentos
+
+                                    // ▼▼▼ (3) DETECÇÃO CORRETA: só "true" ou "false" ▼▼▼
+                                    const ehFixo = atend.atend_fixo === true || atend.atend_fixo === "true"; // ✅ exatamente "true" ou true
+
+                                    // ▼▼▼ (4) LÓGICA PRINCIPAL — prioridade para FIXO ▼▼▼
+                                    let terapiaAtend, terapeutaAtend;
+
+                                    if (ehFixo) {
+                                        // ✅ PRIORIDADE MÁXIMA: se for fixo, usa fixo* SEMPRE
+                                        terapiaAtend = atend.atend_fixoterapiaid;
+                                        terapeutaAtend = atend.atend_fixoterapeutaid;
+                                        switch (categorias) {
+                                           /* case "Falta":
+                                                terapiaAtend = atend.atend_fixoterapiaid;
+                                                terapeutaAtend = atend.atend_fixoterapiaid;
+                                                break;
+                                            */
+                                            case "SubstitutoFixo":
+                                                terapiaAtend = atend.atend_fixoterapiaid;
+                                                terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                break;
+                                            case "Substituição":
+                                                terapiaAtend = atend.atend_fixoterapiaid || atend.atend_mergeterapiaid;
+                                                terapeutaAtend = atend.atend_fixoterapeutaid || atend.atend_mergeterapeutaid;
+                                                break;
+                                            case "Substituicao": // sem acento (depois da normalização)
+                                                terapiaAtend = atend.atend_fixoterapiaid || atend.atend_mergeterapiaid;
+                                                terapeutaAtend = atend.atend_fixoterapeutaid || atend.atend_mergeterapeutaid;
+                                                break;
+                                            
+                                            case "Feriado":
+                                                terapiaAtend = "break";
+                                                terapeutaAtend = "break";
+                                                break;
+                                            /*case "FaltaAbsoluta":
+                                                terapiaAtend = "break";
+                                                terapeutaAtend = "break";
+                                                break;
+                                            */
+                                            default:
+                                                terapiaAtend = atend.atend_fixoterapiaid;
+                                                terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                break;
+                                        }
+                                    } else {
+                                        console.log("categorias: "+categorias);
+                                        // ❌ Não é fixo: aplica switch (mantendo sua estrutura original)
+                                        terapiaAtend = atend.atend_terapiaid;
+                                        terapeutaAtend = atend.atend_terapeutaid;
+                                        switch (categorias) {
+                                            /* case "Falta":
+                                                terapiaAtend = atend.atend_terapiaid;
+                                                terapeutaAtend = atend.atend_terapeutaid;
+                                                break;
+                                            */
+                                            case "Feriado":
+                                                terapiaAtend = "break";
+                                                terapeutaAtend = "break";
+                                                break;
+                                            /*case "FaltaAbsoluta":
+                                                terapiaAtend = "break";
+                                                terapeutaAtend = "break";
+                                                break;
+                                            */
+                                            case "Substituição":
+                                            case "Substituicao":
+                                                terapiaAtend = atend.atend_mergeterapiaid;
+                                                terapeutaAtend = atend.atend_mergeterapeutaid;
+                                                break;
+                                            case "SubstitutoFixo":
+                                                terapiaAtend = atend.atend_fixoterapiaid;
+                                                terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                break;
+                                            /*case "Substituicao": // sem acento (depois da normalização)
+                                                terapiaAtend = atend.atend_fixoterapiaid;
+                                                terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                break;
+                                            */
+                                            default:
+                                                terapiaAtend = atend.atend_terapiaid;
+                                                terapeutaAtend = atend.atend_terapeutaid;
+                                                break;
+                                        }
+                                    }
+
+                                    // ▼▼▼ (5) Inclusão no relatório ▼▼▼
+                                    if (categorias !== "Feriado" && categorias !== "Falta Absoluta" && terapiaAtend !== "break") {
+                                        rab.especialidade = terapiaAtend;
+                                        rab.profissional = terapeutaAtend;
+
+                                        rel.push(rab);
+                                        rab = new RelAtendBene();
+                                    }
+                                });
+                                rel.sort(function(a, b){
+                                    let dataODiaA = "";
+                                    let dataODiaB = "";
+                                    if (a.dataDia == undefined || a.dataDia == "undefined" || a.dataDia == null){
+                                        dataODiaA = fncGeral.getData(a.dt);
+                                    } else {
+                                        dataODiaA = a.dataDia;
+                                    }
+                                    if (b.dataDia == undefined || b.dataDia == "undefined" || b.dataDia == null){
+                                        dataODiaB = fncGeral.getData(b.dt);
+                                    } else {
+                                        dataODiaB = b.dataDia;
+                                    }
+                                    let provHourA = a.hora+":0:0";
+                                    let provHourB = b.hora+":0:0";
+                                    const [diaA, mesA, anoA] = dataODiaA.split('/').map(Number);
+                                    const [diaB, mesB, anoB] = dataODiaB.split('/').map(Number);
+                                    const [horaA, minA, segA, mSegA] = provHourA.split(':');
+                                    const [horaB, minB, segB, mSegB] = provHourB.split(':');
+                                    const dataA = new Date(anoA, mesA - 1, diaA, horaA, minA, segA, mSegA);
+                                    const dataB = new Date(anoB, mesB - 1, diaB, horaB, minB, segB, mSegB);
+
+                                    return dataA - dataB;
+                                })
+                                
+                                res.render("atendimento/relatendvalBene", {benes: bene, anos: ano, terapeutas: terapeuta, terapias: terapia, rels: rel, periodoDe, periodoAte, conv_nome, bene_nome, porHoras, filtro})
+                            })
+                        })
+                    })
+                })
+            })
+        }).catch((err) =>{
+            console.log(err)
+        })
+    },
     relAtendimentoBeneassin(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
@@ -4426,17 +4277,40 @@ if (ehSalaEscola) {
         })
     },
     // ============================================
-    // Novo Relatorio Analitico, com auto ajuste de 60Min para ATs
+    // Novos Relatorio Analiticos, com auto ajuste de 60Min para ATs
     // ============================================
-    relAtendimentoBeneAT(req,res){
+    relAtendimentoBeneFiltroAT_OK(req, res) {
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
 
-        let seg = new Date();
-        let sex = new Date();
         let rel = [];
+        let conv_nome;
+        let conv_id;
+        let bene_nome;
+        let porSala;
+        let porHoras;
+        let ultimoHorarioSala = {};
+        
+        let filtro = {
+            dataIni: req.body.dataIni || '',
+            dataFim: req.body.dataFim || '',
+            beneId: req.body.relBeneid || ''
+        };
+        
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);
+        
+        porSala = (req.body.porSala == "sim") ? "sim" : "nao";
+        porHoras = (req.body.porHoras == "sim") ? "sim" : "nao";
+        
+        let rab = new RelAtendBene();
+        let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
+        let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
         seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -4444,390 +4318,339 @@ if (ehSalaEscola) {
         sex.setMinutes(59);
         sex.setSeconds(59);
         
-        Bene.find().then((bene)=>{
-            Bene.findOne().then((b)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Terapia.find().then((terapia)=>{
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
-                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                            Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
-                        res.render("atendimento/relatendvalBeneAT", {terapeutas: terapeuta, terapias: terapia, benes: bene, anos: ano})
-        })})})})}).catch((err) =>{
-            console.log(err)
-        })
-    },
-    relAtendimentoBeneFiltroAT_OK(req, res) {
-    let db = req.cookies['preferredDb'];
-    Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
-    Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
-    Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
-    Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
-    Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
-    Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
-
-    let rel = [];
-    let conv_nome;
-    let conv_id;
-    let bene_nome;
-    let porSala;
-    let porHoras;
-    let ultimoHorarioSala = {};
-    
-    let filtro = {
-        dataIni: req.body.dataIni || '',
-        dataFim: req.body.dataFim || '',
-        beneId: req.body.relBeneid || ''
-    };
-    
-    let periodoDe = fncGeral.getDataInvert(req.body.dataIni);
-    let periodoAte = fncGeral.getDataInvert(req.body.dataFim);
-    
-    porSala = (req.body.porSala == "sim") ? "sim" : "nao";
-    porHoras = (req.body.porHoras == "sim") ? "sim" : "nao";
-    
-    let rab = new RelAtendBene();
-    let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
-    let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
-    seg.setHours(0);
-    seg.setMinutes(0);
-    seg.setSeconds(0);
-    sex.setHours(23);
-    sex.setMinutes(59);
-    sex.setSeconds(59);
-    
-    let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
-    
-    Atend.find(filtroAtend).then((at) => {
-        console.log("at? "+at)
+        let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
         
-        // 1️⃣ FILTRAR Feriado
-        at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
-        
-        // ✅ 2️⃣ ORDENAR IMEDIATAMENTE: data + hora NUMÉRICA
-        at.sort((a, b) => {
-            let d1 = new Date(a.atend_atenddata).getTime();
-            let d2 = new Date(b.atend_atenddata).getTime();
-            if (d1 !== d2) return d1 - d2;
-            let [h1, m1] = (a.atend_atendhora || "00:00").split(":").map(Number);
-            let [h2, m2] = (b.atend_atendhora || "00:00").split(":").map(Number);
-            return (h1 * 60 + m1) - (h2 * 60 + m2);
-        });
-        
-        Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta) => {
-            terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+        Atend.find(filtroAtend).then((at) => {
+            console.log("at? "+at)
             
-            const lookupPerfilTerapeuta = {};
-            terapeuta.forEach(t => {
-                lookupPerfilTerapeuta[t._id.toString()] = t.usuario_perfilid ? t.usuario_perfilid.toString() : null;
+            // 1️⃣ FILTRAR Feriado
+            at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
+            
+            // ✅ 2️⃣ ORDENAR IMEDIATAMENTE: data + hora NUMÉRICA
+            at.sort((a, b) => {
+                let d1 = new Date(a.atend_atenddata).getTime();
+                let d2 = new Date(b.atend_atenddata).getTime();
+                if (d1 !== d2) return d1 - d2;
+                let [h1, m1] = (a.atend_atendhora || "00:00").split(":").map(Number);
+                let [h2, m2] = (b.atend_atendhora || "00:00").split(":").map(Number);
+                return (h1 * 60 + m1) - (h2 * 60 + m2);
             });
             
-            Terapia.find().then((terapias) => {
-                terapias.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta) => {
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
                 
-                const lookupTerapiaABAAT = {};
-                terapias.forEach(t => {
-                    const nomeNormalizado = (t.terapia_nome || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-                    lookupTerapiaABAAT[t._id.toString()] = nomeNormalizado.includes("ABA AT");
+                const lookupPerfilTerapeuta = {};
+                terapeuta.forEach(t => {
+                    lookupPerfilTerapeuta[t._id.toString()] = t.usuario_perfilid ? t.usuario_perfilid.toString() : null;
                 });
                 
-                Sala.find().then((sala) => {
-                    Ano.find().sort({ ano_nome: 1 }).then((ano) => {
-                        Bene.find().then((bene) => {
-                            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
-                            bene.some((b) => {
-                                if((""+b._id) === (""+req.body.relBeneid)){
-                                    bene_nome = b.bene_nome;
-                                    conv_id = b.bene_convid;
-                                    return true;
-                                }
-                                return false;
-                            })
-                            Conv.findOne({_id: conv_id}).then((conv) => {
-                                conv_nome = conv.conv_nome;
-                                
-                                // ✅ 3️⃣ PRÉ-ANÁLISE: Contar sessões por período/beneficiário/dia
-                                const SALA_ESCOLA = "6368fe35c2cdb92ac6d914be";
-                                const contadorSessoes = {};
-                                
-                                at.forEach(atend => {
-                                    if (String(atend.atend_salaid) === SALA_ESCOLA) {
+                Terapia.find().then((terapias) => {
+                    terapias.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));
+                    
+                    const lookupTerapiaABAAT = {};
+                    terapias.forEach(t => {
+                        const nomeNormalizado = (t.terapia_nome || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+                        lookupTerapiaABAAT[t._id.toString()] = nomeNormalizado.includes("ABA AT");
+                    });
+                    
+                    Sala.find().then((sala) => {
+                        Ano.find().sort({ ano_nome: 1 }).then((ano) => {
+                            Bene.find().then((bene) => {
+                                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+                                bene.some((b) => {
+                                    if((""+b._id) === (""+req.body.relBeneid)){
+                                        bene_nome = b.bene_nome;
+                                        conv_id = b.bene_convid;
+                                        return true;
+                                    }
+                                    return false;
+                                })
+                                Conv.findOne({_id: conv_id}).then((conv) => {
+                                    conv_nome = conv.conv_nome;
+                                    
+                                    // ✅ 3️⃣ PRÉ-ANÁLISE: Contar sessões por período/beneficiário/dia
+                                    const SALA_ESCOLA = "6368fe35c2cdb92ac6d914be";
+                                    const contadorSessoes = {};
+                                    
+                                    at.forEach(atend => {
+                                        if (String(atend.atend_salaid) === SALA_ESCOLA) {
+                                            const dataAtend = fncGeral.getData(atend.atend_atenddata);
+                                            const beneId = atend.atend_beneid.toString();
+                                            const [hora] = atend.atend_atendhora.split(":").map(Number);
+                                            
+                                            const periodo = hora < 13 ? 'manha' : 'tarde';
+                                            const chave = `${beneId}_${dataAtend}_${periodo}`;
+                                            
+                                            if (!contadorSessoes[chave]) {
+                                                contadorSessoes[chave] = 0;
+                                            }
+                                            contadorSessoes[chave]++;
+                                        }
+                                    });
+                                    
+                                    console.log("📊 Contador de sessões:", contadorSessoes);
+                                    
+                                    // ✅ 4️⃣ TRACKER DE ÍNDICE POR PERÍODO
+                                    const indicePorPeriodo = {};
+                                    
+                                    // ✅ 5️⃣ PROCESSAR
+                                    at.forEach((atend) => {
+                                        const categorias = (atend.atend_categoria || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                        const org = (atend.atend_org || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                        const ehFixo = atend.atend_fixo === true || atend.atend_fixo === "true";
                                         const dataAtend = fncGeral.getData(atend.atend_atenddata);
-                                        const beneId = atend.atend_beneid.toString();
-                                        const [hora] = atend.atend_atendhora.split(":").map(Number);
                                         
-                                        const periodo = hora < 13 ? 'manha' : 'tarde';
-                                        const chave = `${beneId}_${dataAtend}_${periodo}`;
+                                        let terapeutaIdUsado;
+                                        if (ehFixo) {
+                                            terapeutaIdUsado = atend.atend_fixoterapeutaid;
+                                        } else {
+                                            switch (categorias) {
+                                                case "Substituicao":
+                                                case "Substituição":
+                                                    terapeutaIdUsado = atend.atend_mergeterapeutaid;
+                                                    break;
+                                                case "SubstitutoFixo":
+                                                    terapeutaIdUsado = atend.atend_fixoterapeutaid;
+                                                    break;
+                                                default:
+                                                    terapeutaIdUsado = atend.atend_terapeutaid;
+                                                    break;
+                                            }
+                                        }
                                         
-                                        if (!contadorSessoes[chave]) {
-                                            contadorSessoes[chave] = 0;
-                                        }
-                                        contadorSessoes[chave]++;
-                                    }
-                                });
-                                
-                                console.log("📊 Contador de sessões:", contadorSessoes);
-                                
-                                // ✅ 4️⃣ TRACKER DE ÍNDICE POR PERÍODO
-                                const indicePorPeriodo = {};
-                                
-                                // ✅ 5️⃣ PROCESSAR
-                                at.forEach((atend) => {
-                                    const categorias = (atend.atend_categoria || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                                    const org = (atend.atend_org || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                                    const ehFixo = atend.atend_fixo === true || atend.atend_fixo === "true";
-                                    const dataAtend = fncGeral.getData(atend.atend_atenddata);
-                                    
-                                    let terapeutaIdUsado;
-                                    if (ehFixo) {
-                                        terapeutaIdUsado = atend.atend_fixoterapeutaid;
-                                    } else {
-                                        switch (categorias) {
-                                            case "Substituicao":
-                                            case "Substituição":
-                                                terapeutaIdUsado = atend.atend_mergeterapeutaid;
-                                                break;
-                                            case "SubstitutoFixo":
-                                                terapeutaIdUsado = atend.atend_fixoterapeutaid;
-                                                break;
-                                            default:
-                                                terapeutaIdUsado = atend.atend_terapeutaid;
-                                                break;
-                                        }
-                                    }
-                                    
-                                    const perfilId = terapeutaIdUsado ? lookupPerfilTerapeuta[terapeutaIdUsado.toString()] : null;
-                                    const ehTerapeutaAT = perfilId === "6242191fa12aa557219a0fd9" || perfilId === "644742e378166939169f82a1" || perfilId === "62dea752ea444f5b7a02b449";
-                                    
-                                    let terapiaIdParaVerificar;
-                                    if (org === "Padrão") {
-                                        terapiaIdParaVerificar = atend.atend_terapiaid;
-                                    } else if (org === "Administrativo") {
-                                        if (categorias === "Substituicao" || categorias === "Substituição") {
-                                            terapiaIdParaVerificar = atend.atend_mergeterapiaid;
-                                        } else if (categorias === "SubstitutoFixo") {
-                                            terapiaIdParaVerificar = atend.atend_fixoterapiaid;
+                                        const perfilId = terapeutaIdUsado ? lookupPerfilTerapeuta[terapeutaIdUsado.toString()] : null;
+                                        const ehTerapeutaAT = perfilId === "6242191fa12aa557219a0fd9" || perfilId === "644742e378166939169f82a1" || perfilId === "62dea752ea444f5b7a02b449";
+                                        
+                                        let terapiaIdParaVerificar;
+                                        if (org === "Padrão") {
+                                            terapiaIdParaVerificar = atend.atend_terapiaid;
+                                        } else if (org === "Administrativo") {
+                                            if (categorias === "Substituicao" || categorias === "Substituição") {
+                                                terapiaIdParaVerificar = atend.atend_mergeterapiaid;
+                                            } else if (categorias === "SubstitutoFixo") {
+                                                terapiaIdParaVerificar = atend.atend_fixoterapiaid;
+                                            } else {
+                                                terapiaIdParaVerificar = atend.atend_terapiaid;
+                                            }
                                         } else {
                                             terapiaIdParaVerificar = atend.atend_terapiaid;
                                         }
-                                    } else {
-                                        terapiaIdParaVerificar = atend.atend_terapiaid;
-                                    }
-                                    
-                                    const ehTerapiaABAAT = terapiaIdParaVerificar ? lookupTerapiaABAAT[terapiaIdParaVerificar.toString()] : false;
-                                    
-                                    // ▼▼▼ AJUSTAR HORÁRIO PARA EXIBIÇÃO ▼▼▼
-                                    if (porHoras === "sim") {
-                                        const ehSalaEscola = String(atend.atend_salaid) === SALA_ESCOLA;
-                                        const dataBase = new Date(atend.atend_atenddata);
-                                        let [horaIni, minutoIni] = atend.atend_atendhora.split(":").map(Number);
                                         
-                                        const beneId = atend.atend_beneid.toString();
-                                        const [horaCheck] = atend.atend_atendhora.split(":").map(Number);
-                                        const periodo = horaCheck < 13 ? 'manha' : 'tarde';
-                                        const chaveContador = `${beneId}_${dataAtend}_${periodo}`;
-                                        const totalSessoesPeriodo = contadorSessoes[chaveContador] || 0;
+                                        const ehTerapiaABAAT = terapiaIdParaVerificar ? lookupTerapiaABAAT[terapiaIdParaVerificar.toString()] : false;
                                         
-                                        if (ehSalaEscola) {
-                                            // 🔥 Inicializar índice do período se não existir
-                                            if (indicePorPeriodo[chaveContador] === undefined) {
-                                                indicePorPeriodo[chaveContador] = 0;
-                                            }
-                                            const indiceAtual = indicePorPeriodo[chaveContador];
+                                        // ▼▼▼ AJUSTAR HORÁRIO PARA EXIBIÇÃO ▼▼▼
+                                        if (porHoras === "sim") {
+                                            const ehSalaEscola = String(atend.atend_salaid) === SALA_ESCOLA;
+                                            const dataBase = new Date(atend.atend_atenddata);
+                                            let [horaIni, minutoIni] = atend.atend_atendhora.split(":").map(Number);
                                             
-                                            // 🔥 PADRONIZAÇÃO: Manhã = 4 sessões
-                                            if (periodo === 'manha' && totalSessoesPeriodo === 4) {
-                                                const horariosPadraoManha = [
-                                                    { ini: 8,  fim: 9  },
-                                                    { ini: 9,  fim: 10 },
-                                                    { ini: 10, fim: 11 },
-                                                    { ini: 11, fim: 12 }
-                                                ];
-                                                horaIni = horariosPadraoManha[indiceAtual].ini;
-                                                minutoIni = 0;
-                                            }
-                                            // 🔥 PADRONIZAÇÃO: Tarde = 4 ou 5 sessões
-                                            else if (periodo === 'tarde' && (totalSessoesPeriodo === 4 || totalSessoesPeriodo === 5)) {
-                                                const horariosPadraoTarde = [
-                                                    { ini: 13, fim: 14 },
-                                                    { ini: 14, fim: 15 },
-                                                    { ini: 15, fim: 16 },
-                                                    { ini: 16, fim: 17 },
-                                                    { ini: 17, fim: 18 }
-                                                ];
-                                                horaIni = horariosPadraoTarde[indiceAtual].ini;
-                                                minutoIni = 20;
-                                            }
-                                            // 🔥 EXCEÇÃO: Usa cascata com tolerância
-                                            else {
-                                                const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${periodo}`;
+                                            const beneId = atend.atend_beneid.toString();
+                                            const [horaCheck] = atend.atend_atendhora.split(":").map(Number);
+                                            const periodo = horaCheck < 13 ? 'manha' : 'tarde';
+                                            const chaveContador = `${beneId}_${dataAtend}_${periodo}`;
+                                            const totalSessoesPeriodo = contadorSessoes[chaveContador] || 0;
+                                            
+                                            if (ehSalaEscola) {
+                                                // 🔥 Inicializar índice do período se não existir
+                                                if (indicePorPeriodo[chaveContador] === undefined) {
+                                                    indicePorPeriodo[chaveContador] = 0;
+                                                }
+                                                const indiceAtual = indicePorPeriodo[chaveContador];
                                                 
-                                                if (ultimoHorarioSala[chaveSala]) {
-                                                    const ultimo = ultimoHorarioSala[chaveSala];
-                                                    const ultimoTotalMinutos = ultimo.hora * 60 + ultimo.minuto;
-                                                    const atualTotalMinutos = horaIni * 60 + minutoIni;
-                                                    const intervaloMinutos = atualTotalMinutos - ultimoTotalMinutos;
+                                                // 🔥 PADRONIZAÇÃO: Manhã = 4 sessões
+                                                if (periodo === 'manha' && totalSessoesPeriodo === 4) {
+                                                    const horariosPadraoManha = [
+                                                        { ini: 8,  fim: 9  },
+                                                        { ini: 9,  fim: 10 },
+                                                        { ini: 10, fim: 11 },
+                                                        { ini: 11, fim: 12 }
+                                                    ];
+                                                    horaIni = horariosPadraoManha[indiceAtual].ini;
+                                                    minutoIni = 0;
+                                                }
+                                                // 🔥 PADRONIZAÇÃO: Tarde = 4 ou 5 sessões
+                                                else if (periodo === 'tarde' && (totalSessoesPeriodo === 4 || totalSessoesPeriodo === 5)) {
+                                                    const horariosPadraoTarde = [
+                                                        { ini: 13, fim: 14 },
+                                                        { ini: 14, fim: 15 },
+                                                        { ini: 15, fim: 16 },
+                                                        { ini: 16, fim: 17 },
+                                                        { ini: 17, fim: 18 }
+                                                    ];
+                                                    horaIni = horariosPadraoTarde[indiceAtual].ini;
+                                                    minutoIni = 20;
+                                                }
+                                                // 🔥 EXCEÇÃO: Usa cascata com tolerância
+                                                else {
+                                                    const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${periodo}`;
                                                     
-                                                    if (Math.abs(intervaloMinutos) <= 50) {
-                                                        horaIni = ultimo.hora;
-                                                        minutoIni = ultimo.minuto;
+                                                    if (ultimoHorarioSala[chaveSala]) {
+                                                        const ultimo = ultimoHorarioSala[chaveSala];
+                                                        const ultimoTotalMinutos = ultimo.hora * 60 + ultimo.minuto;
+                                                        const atualTotalMinutos = horaIni * 60 + minutoIni;
+                                                        const intervaloMinutos = atualTotalMinutos - ultimoTotalMinutos;
+                                                        
+                                                        if (Math.abs(intervaloMinutos) <= 50) {
+                                                            horaIni = ultimo.hora;
+                                                            minutoIni = ultimo.minuto;
+                                                        }
                                                     }
+                                                    
+                                                    ultimoHorarioSala[chaveSala] = {
+                                                        hora: horaIni,
+                                                        minuto: minutoIni
+                                                    };
                                                 }
                                                 
-                                                ultimoHorarioSala[chaveSala] = {
-                                                    hora: horaIni,
-                                                    minuto: minutoIni
-                                                };
+                                                // Incrementar índice do período
+                                                indicePorPeriodo[chaveContador]++;
+                                            }
+
+                                            // ✅ CÁLCULO DO HORÁRIO DE FIM (DEPOIS de todas as modificações)
+                                            const inicio = new Date(dataBase);
+                                            inicio.setHours(horaIni, minutoIni, 0, 0);
+
+                                            let fim;
+                                            if (ehSalaEscola) {
+                                                fim = new Date(inicio);
+                                                fim.setMinutes(fim.getMinutes() + 60);
+                                            } else {
+                                                fim = new Date(inicio);
+                                                fim.setMinutes(fim.getMinutes() + 40);
+                                            }
+
+                                            // ✅ FORMATAÇÃO (garantido que todas as variáveis existem)
+                                            const horaIniFmt = horaIni.toString().padStart(2, "0");
+                                            const minutoIniFmt = minutoIni.toString().padStart(2, "0");
+                                            const horaFimFmt = fim.getHours().toString().padStart(2, "0");
+                                            const minutoFimFmt = fim.getMinutes().toString().padStart(2, "0");
+
+                                            rab.dt = fncGeral.getData(atend.atend_atenddata) + " - " + 
+                                                    horaIniFmt + ":" + minutoIniFmt + "/" + 
+                                                    horaFimFmt + ":" + minutoFimFmt;
+                                            rab.horaIni = horaIniFmt + ":" + minutoIniFmt;
+                                            rab.horaFim = horaFimFmt + ":" + minutoFimFmt;
+                                        } else {
+                                            rab.dt = fncGeral.getData(atend.atend_atenddata);
+                                        }
+                                        rab.dataDia = fncGeral.getData(atend.atend_atenddata);
+
+                                        // ▼▼▼ LÓGICA DE TERAPIA/TERAPEUTA ▼▼▼
+                                        let terapiaAtend, terapeutaAtend;
+
+                                        if (ehFixo) {
+                                            terapiaAtend = atend.atend_fixoterapiaid;
+                                            terapeutaAtend = atend.atend_fixoterapeutaid;
+                                            switch (categorias) {
+                                                case "SubstitutoFixo":
+                                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                    break;
+                                                case "Substituicao":
+                                                case "Substituição":
+                                                    terapiaAtend = atend.atend_fixoterapiaid || atend.atend_mergeterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid || atend.atend_mergeterapeutaid;
+                                                    break;
+                                                case "Feriado":
+                                                case "Falta Absoluta":
+                                                    terapiaAtend = "break";
+                                                    terapeutaAtend = "break";
+                                                    break;
+                                                default:
+                                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                    break;
+                                            }
+                                        } else {
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            terapeutaAtend = atend.atend_terapeutaid;
+                                            switch (categorias) {
+                                                case "Feriado":
+                                                case "Falta Absoluta":
+                                                    terapiaAtend = "break";
+                                                    terapeutaAtend = "break";
+                                                    break;
+                                                case "Substituicao":
+                                                case "Substituição":
+                                                    terapiaAtend = atend.atend_mergeterapiaid;
+                                                    terapeutaAtend = atend.atend_mergeterapeutaid;
+                                                    break;
+                                                case "SubstitutoFixo":
+                                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                    break;
+                                                default:
+                                                    terapiaAtend = atend.atend_terapiaid;
+                                                    terapeutaAtend = atend.atend_terapeutaid;
+                                                    break;
+                                            }
+                                        }
+
+                                        // ▼▼▼ INCLUSÃO NO RELATÓRIO ▼▼▼
+                                        if (categorias !== "Feriado" && categorias !== "Falta Absoluta" && terapiaAtend !== "break") {
+                                            if (porSala == "sim"){
+                                                sala.forEach((s) => {
+                                                    if (("" + atend.atend_salaid + "") == ("" + s._id + "")){
+                                                        if (("" + s.sala_nome + "").includes("Escola")){
+                                                            rab.sala = "Escola ou Domicílio";
+                                                        } else {
+                                                            rab.sala = "Clínica";
+                                                        }
+                                                    }
+                                                })
                                             }
                                             
-                                            // Incrementar índice do período
-                                            indicePorPeriodo[chaveContador]++;
+                                            rab.especialidade = terapiaAtend;
+                                            rab.profissional = terapeutaAtend;
+                                            
+                                            rel.push(Object.assign({}, rab));
+                                            rab = new RelAtendBene();
                                         }
-
-                                        // ✅ CÁLCULO DO HORÁRIO DE FIM (DEPOIS de todas as modificações)
-                                        const inicio = new Date(dataBase);
-                                        inicio.setHours(horaIni, minutoIni, 0, 0);
-
-                                        let fim;
-                                        if (ehSalaEscola) {
-                                            fim = new Date(inicio);
-                                            fim.setMinutes(fim.getMinutes() + 60);
-                                        } else {
-                                            fim = new Date(inicio);
-                                            fim.setMinutes(fim.getMinutes() + 40);
-                                        }
-
-                                        // ✅ FORMATAÇÃO (garantido que todas as variáveis existem)
-                                        const horaIniFmt = horaIni.toString().padStart(2, "0");
-                                        const minutoIniFmt = minutoIni.toString().padStart(2, "0");
-                                        const horaFimFmt = fim.getHours().toString().padStart(2, "0");
-                                        const minutoFimFmt = fim.getMinutes().toString().padStart(2, "0");
-
-                                        rab.dt = fncGeral.getData(atend.atend_atenddata) + " - " + 
-                                                horaIniFmt + ":" + minutoIniFmt + "/" + 
-                                                horaFimFmt + ":" + minutoFimFmt;
-                                        rab.horaIni = horaIniFmt + ":" + minutoIniFmt;
-                                        rab.horaFim = horaFimFmt + ":" + minutoFimFmt;
-                                    } else {
-                                        rab.dt = fncGeral.getData(atend.atend_atenddata);
-                                    }
-                                    rab.dataDia = fncGeral.getData(atend.atend_atenddata);
-
-                                    // ▼▼▼ LÓGICA DE TERAPIA/TERAPEUTA ▼▼▼
-                                    let terapiaAtend, terapeutaAtend;
-
-                                    if (ehFixo) {
-                                        terapiaAtend = atend.atend_fixoterapiaid;
-                                        terapeutaAtend = atend.atend_fixoterapeutaid;
-                                        switch (categorias) {
-                                            case "SubstitutoFixo":
-                                                terapiaAtend = atend.atend_fixoterapiaid;
-                                                terapeutaAtend = atend.atend_fixoterapeutaid;
-                                                break;
-                                            case "Substituicao":
-                                            case "Substituição":
-                                                terapiaAtend = atend.atend_fixoterapiaid || atend.atend_mergeterapiaid;
-                                                terapeutaAtend = atend.atend_fixoterapeutaid || atend.atend_mergeterapeutaid;
-                                                break;
-                                            case "Feriado":
-                                            case "Falta Absoluta":
-                                                terapiaAtend = "break";
-                                                terapeutaAtend = "break";
-                                                break;
-                                            default:
-                                                terapiaAtend = atend.atend_fixoterapiaid;
-                                                terapeutaAtend = atend.atend_fixoterapeutaid;
-                                                break;
-                                        }
-                                    } else {
-                                        terapiaAtend = atend.atend_terapiaid;
-                                        terapeutaAtend = atend.atend_terapeutaid;
-                                        switch (categorias) {
-                                            case "Feriado":
-                                            case "Falta Absoluta":
-                                                terapiaAtend = "break";
-                                                terapeutaAtend = "break";
-                                                break;
-                                            case "Substituicao":
-                                            case "Substituição":
-                                                terapiaAtend = atend.atend_mergeterapiaid;
-                                                terapeutaAtend = atend.atend_mergeterapeutaid;
-                                                break;
-                                            case "SubstitutoFixo":
-                                                terapiaAtend = atend.atend_fixoterapiaid;
-                                                terapeutaAtend = atend.atend_fixoterapeutaid;
-                                                break;
-                                            default:
-                                                terapiaAtend = atend.atend_terapiaid;
-                                                terapeutaAtend = atend.atend_terapeutaid;
-                                                break;
-                                        }
-                                    }
-
-                                    // ▼▼▼ INCLUSÃO NO RELATÓRIO ▼▼▼
-                                    if (categorias !== "Feriado" && categorias !== "Falta Absoluta" && terapiaAtend !== "break") {
-                                        if (porSala == "sim"){
-                                            sala.forEach((s) => {
-                                                if (("" + atend.atend_salaid + "") == ("" + s._id + "")){
-                                                    if (("" + s.sala_nome + "").includes("Escola")){
-                                                        rab.sala = "Escola ou Domicílio";
-                                                    } else {
-                                                        rab.sala = "Clínica";
-                                                    }
-                                                }
-                                            })
+                                    });
+                                    
+                                    rel.sort(function(a, b){
+                                        let dataODiaA = a.dataDia || fncGeral.getData(a.dt);
+                                        let dataODiaB = b.dataDia || fncGeral.getData(b.dt);
+                                        
+                                        const [diaA, mesA, anoA] = dataODiaA.split('/').map(Number);
+                                        const [diaB, mesB, anoB] = dataODiaB.split('/').map(Number);
+                                        
+                                        const dataA = new Date(anoA, mesA - 1, diaA);
+                                        const dataB = new Date(anoB, mesB - 1, diaB);
+                                        
+                                        if (dataA.getTime() !== dataB.getTime()) {
+                                            return dataA - dataB;
                                         }
                                         
-                                        rab.especialidade = terapiaAtend;
-                                        rab.profissional = terapeutaAtend;
-                                        
-                                        rel.push(Object.assign({}, rab));
-                                        rab = new RelAtendBene();
-                                    }
-                                });
-                                
-                                rel.sort(function(a, b){
-                                    let dataODiaA = a.dataDia || fncGeral.getData(a.dt);
-                                    let dataODiaB = b.dataDia || fncGeral.getData(b.dt);
+                                        return (a.horaIni || '').localeCompare(b.horaIni || '');
+                                    });
                                     
-                                    const [diaA, mesA, anoA] = dataODiaA.split('/').map(Number);
-                                    const [diaB, mesB, anoB] = dataODiaB.split('/').map(Number);
-                                    
-                                    const dataA = new Date(anoA, mesA - 1, diaA);
-                                    const dataB = new Date(anoB, mesB - 1, diaB);
-                                    
-                                    if (dataA.getTime() !== dataB.getTime()) {
-                                        return dataA - dataB;
-                                    }
-                                    
-                                    return (a.horaIni || '').localeCompare(b.horaIni || '');
-                                });
-                                
-                                res.render("atendimento/relatendvalBeneAT", {
-                                    benes: bene, 
-                                    anos: ano, 
-                                    terapeutas: terapeuta, 
-                                    salas: sala,
-                                    terapias: terapias, 
-                                    rels: rel, 
-                                    periodoDe, 
-                                    periodoAte, 
-                                    conv_nome, 
-                                    bene_nome, 
-                                    porHoras, 
-                                    porSala,
-                                    filtro
+                                    res.render("atendimento/relatendvalBeneAT", {
+                                        benes: bene, 
+                                        anos: ano, 
+                                        terapeutas: terapeuta, 
+                                        salas: sala,
+                                        terapias: terapias, 
+                                        rels: rel, 
+                                        periodoDe, 
+                                        periodoAte, 
+                                        conv_nome, 
+                                        bene_nome, 
+                                        porHoras, 
+                                        porSala,
+                                        filtro
+                                    });
                                 });
                             });
                         });
                     });
                 });
             });
+        }).catch((err) => {
+            console.error('[ERRO relAtendimentoBeneassinFiltroAT]', err);
+            res.status(500).send("Erro ao gerar relatório");
         });
-    }).catch((err) => {
-        console.error('[ERRO relAtendimentoBeneassinFiltroAT]', err);
-        res.status(500).send("Erro ao gerar relatório");
-    });
-},
+    }, 
     relAtendimentoBeneFiltroAT_OK_manhaetarde(req, res) {
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
@@ -5227,7 +5050,7 @@ if (ehSalaEscola) {
             res.status(500).send("Erro ao gerar relatório");
         });
     },
-    relAtendimentoBeneFiltro(req, res) {
+    relAtendimentoBeneFiltroAT_err(req, res) {
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
         Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
@@ -5399,75 +5222,88 @@ if (ehSalaEscola) {
                                             const totalSessoesPeriodo = contadorSessoes[chaveContador] || 0;
                                             
                                         // ▼▼▼ DENTRO DO LOOP PRINCIPAL, QUANDO porHoras === "sim" ▼▼▼
-  // ▼▼▼ DENTRO DO LOOP PRINCIPAL, QUANDO porHoras === "sim" E ehSalaEscola === true ▼▼▼
-if (ehSalaEscola) {
-    const turnoSet = (req.body.turnoSet || '').toLowerCase().trim();
-    
-    // 1️⃣ Parse MANHÃ (Campos padrão - usados sempre para manhã)
-    let hIniSetM = null, hFimSetM = null;
-    if (req.body.horaInicialSet && req.body.horaInicialSet.includes(':')) {
-        const [hi, mi] = req.body.horaInicialSet.split(':').map(Number);
-        if (!isNaN(hi) && !isNaN(mi)) hIniSetM = hi * 60 + mi;
-    }
-    if (req.body.horaFinalSet && req.body.horaFinalSet.includes(':')) {
-        const [hf, mf] = req.body.horaFinalSet.split(':').map(Number);
-        if (!isNaN(hf) && !isNaN(mf)) hFimSetM = hf * 60 + mf;
-    }
-
-    // 2️⃣ Parse TARDE (Campos com 'D' - usados apenas se turnoSet === 'dia')
-    let hIniSetD = null, hFimSetD = null;
-    if (turnoSet === 'dia') {
-        if (req.body.horaInicialSetD && req.body.horaInicialSetD.includes(':')) {
-            const [hi, mi] = req.body.horaInicialSetD.split(':').map(Number);
-            if (!isNaN(hi) && !isNaN(mi)) hIniSetD = hi * 60 + mi;
+    if (ehSalaEscola) {
+        const turnoSet = (req.body.turnoSet || '').toLowerCase().trim();
+        
+        // 🔹 SE TURNO NÃO ESTIVER SETADO → USA LÓGICA ANTIGA (fallback seguro)
+        if (!turnoSet || (turnoSet !== 'manha' && turnoSet !== 'tarde')) {
+            // === LÓGICA ORIGINAL MANTIDA ===
+            if (periodo === 'manha' && totalSessoesPeriodo === 4) {
+                const horariosPadraoManha = [
+                    { ini: 8, fim: 9 }, { ini: 9, fim: 10 },
+                    { ini: 10, fim: 11 }, { ini: 11, fim: 12 }
+                ];
+                horaIni = horariosPadraoManha[indiceAtual].ini;
+                minutoIni = 0;
+            }
+            else if (periodo === 'tarde' && (totalSessoesPeriodo === 4 || totalSessoesPeriodo === 5)) {
+                const horariosPadraoTarde = [
+                    { ini: 13, fim: 14 }, { ini: 14, fim: 15 },
+                    { ini: 15, fim: 16 }, { ini: 16, fim: 17 },
+                    { ini: 17, fim: 18 }
+                ];
+                horaIni = horariosPadraoTarde[indiceAtual].ini;
+                minutoIni = 20; // mantém seu comportamento original
+            }
+            else {
+                // === CASO NÃO PADRÃO: mantém lógica de cascata original ===
+                const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${periodo}`;
+                if (ultimoHorarioSala[chaveSala]) {
+                    const ultimo = ultimoHorarioSala[chaveSala];
+                    const ultimoTotalMinutos = ultimo.hora * 60 + ultimo.minuto;
+                    const atualTotalMinutos = horaIni * 60 + minutoIni;
+                    const intervaloMinutos = atualTotalMinutos - ultimoTotalMinutos;
+                    if (Math.abs(intervaloMinutos) <= 50) {
+                        horaIni = ultimo.hora;
+                        minutoIni = ultimo.minuto;
+                    }
+                }
+                ultimoHorarioSala[chaveSala] = { hora: horaIni, minuto: minutoIni };
+            }
+        } 
+        // 🔹 SE TURNO ESTIVER SETADO → USA NOVA LÓGICA COM HORÁRIOS PERSONALIZADOS
+        else {
+            // 📥 Lê os campos (tratamento inline, sem helper)
+            let hIniSet = null, hFimSet = null;
+            
+            if (req.body.horaInicialSet && req.body.horaInicialSet.includes(':')) {
+                const [hi, mi] = req.body.horaInicialSet.split(':').map(Number);
+                if (!isNaN(hi) && !isNaN(mi)) hIniSet = hi * 60 + mi;
+            }
+            if (req.body.horaFinalSet && req.body.horaFinalSet.includes(':')) {
+                const [hf, mf] = req.body.horaFinalSet.split(':').map(Number);
+                if (!isNaN(hf) && !isNaN(mf)) hFimSet = hf * 60 + mf;
+            }
+            
+            // 📅 Define janela base conforme turnoSet
+            const fallbackIni = (turnoSet === 'manha') ? 480 : 780;  // 08:00 ou 13:00
+            const fallbackFim = (turnoSet === 'manha') ? 720 : 1020; // 12:00 ou 17:00
+            
+            const inicioBase = (hIniSet !== null) ? hIniSet : fallbackIni;
+            const limiteBase = (hFimSet !== null) ? hFimSet : fallbackFim;
+            
+            const indiceAtual = indicePorPeriodo[chaveContador] || 0;
+            
+            // ✅ DURAÇÃO FIXA: 60 minutos para Sala Escola
+            let iniCalc = inicioBase + (indiceAtual * 60);
+            let fimCalc = iniCalc + 60;
+            
+            // 🔒 VALIDAÇÃO: garante que última sessão não passe do limite
+            if (fimCalc > limiteBase) {
+                iniCalc = limiteBase - 60;
+                fimCalc = limiteBase;
+            }
+            
+            // Aplica ao processamento
+            horaIni = Math.floor(iniCalc / 60);
+            minutoIni = iniCalc % 60;
+            
+            // 📌 Atualiza trackers
+            indicePorPeriodo[chaveContador] = (indicePorPeriodo[chaveContador] || 0) + 1;
+            const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${turnoSet}`;
+            ultimoHorarioSala[chaveSala] = { hora: horaIni, minuto: minutoIni };
         }
-        if (req.body.horaFinalSetD && req.body.horaFinalSetD.includes(':')) {
-            const [hf, mf] = req.body.horaFinalSetD.split(':').map(Number);
-            if (!isNaN(hf) && !isNaN(mf)) hFimSetD = hf * 60 + mf;
-        }
     }
-
-    const periodo = horaCheck < 13 ? 'manha' : 'tarde';
-
-    // 3️⃣ Definir Janela de Tempo Base conforme turno e período
-    let inicioBase, limiteBase;
-    
-    if (turnoSet === 'dia') {
-        // Se for dia inteiro: manhã usa campos padrão, tarde usa campos 'D'
-        if (periodo === 'manha') {
-            inicioBase = (hIniSetM !== null) ? hIniSetM : 480;  // Fallback: 08:00
-            limiteBase = (hFimSetM !== null) ? hFimSetM : 780;  // Fallback: 13:00 (300min = 5 sessões)
-        } else {
-            inicioBase = (hIniSetD !== null) ? hIniSetD : 780;  // Fallback: 13:00
-            limiteBase = (hFimSetD !== null) ? hFimSetD : 1080; // Fallback: 18:00 (300min = 5 sessões)
-        }
-    } else {
-        // Lógica original para 'manha' ou 'tarde' isolados
-        inicioBase = (hIniSetM !== null) ? hIniSetM : (turnoSet === 'manha' ? 480 : 780);
-        limiteBase = (hFimSetM !== null) ? hFimSetM : (turnoSet === 'manha' ? 720 : 1020);
-    }
-
-    const indiceAtual = indicePorPeriodo[chaveContador] || 0;
-
-    // ✅ CÁLCULO: 60 minutos por sessão (Sala Escola)
-    let iniCalc = inicioBase + (indiceAtual * 60);
-    let fimCalc = iniCalc + 60;
-
-    // 🔒 VALIDAÇÃO: garante que última sessão não ultrapasse o limite da janela
-    if (fimCalc > limiteBase) {
-        iniCalc = limiteBase - 60;
-        fimCalc = limiteBase;
-    }
-
-    // Aplica ao processamento
-    horaIni = Math.floor(iniCalc / 60);
-    minutoIni = iniCalc % 60;
-
-    // 📌 Atualiza trackers (contadores independentes por manhã/tarde via chaveContador)
-    indicePorPeriodo[chaveContador] = (indicePorPeriodo[chaveContador] || 0) + 1;
-    const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${periodo}`;
-    ultimoHorarioSala[chaveSala] = { hora: horaIni, minuto: minutoIni };
-}
                                             // ✅ CÁLCULO DO HORÁRIO DE FIM (DEPOIS de todas as modificações)
                                             const inicio = new Date(dataBase);
                                             inicio.setHours(horaIni, minutoIni, 0, 0);
@@ -5612,8 +5448,8 @@ if (ehSalaEscola) {
             console.error('[ERRO relAtendimentoBeneassinFiltroAT]', err);
             res.status(500).send("Erro ao gerar relatório");
         });
-    }, 
-    relAtendimentoBeneFiltro(req, res) {
+    },
+    relAtendimentoBeneassinFiltroATOLD(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
         Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
@@ -5726,8 +5562,6 @@ if (ehSalaEscola) {
                                     
                                     // ✅ 4️⃣ TRACKER DE ÍNDICE POR PERÍODO
                                     const indicePorPeriodo = {};
-                                    // ✅ SET para coletar terapeutas únicos que aparecem no relatório
-                                    const terapeutasNoRelatorio = new Set();
                                     
                                     // ✅ 5️⃣ PROCESSAR
                                     at.forEach((atend) => {
@@ -5786,76 +5620,62 @@ if (ehSalaEscola) {
                                             const chaveContador = `${beneId}_${dataAtend}_${periodo}`;
                                             const totalSessoesPeriodo = contadorSessoes[chaveContador] || 0;
                                             
-                                        // ▼▼▼ DENTRO DO LOOP PRINCIPAL, QUANDO porHoras === "sim" ▼▼▼
-  // ▼▼▼ DENTRO DO LOOP PRINCIPAL, QUANDO porHoras === "sim" E ehSalaEscola === true ▼▼▼
-if (ehSalaEscola) {
-    const turnoSet = (req.body.turnoSet || '').toLowerCase().trim();
-    
-    // 1️⃣ Parse MANHÃ (Campos padrão - usados sempre para manhã)
-    let hIniSetM = null, hFimSetM = null;
-    if (req.body.horaInicialSet && req.body.horaInicialSet.includes(':')) {
-        const [hi, mi] = req.body.horaInicialSet.split(':').map(Number);
-        if (!isNaN(hi) && !isNaN(mi)) hIniSetM = hi * 60 + mi;
-    }
-    if (req.body.horaFinalSet && req.body.horaFinalSet.includes(':')) {
-        const [hf, mf] = req.body.horaFinalSet.split(':').map(Number);
-        if (!isNaN(hf) && !isNaN(mf)) hFimSetM = hf * 60 + mf;
-    }
+                                            if (ehSalaEscola) {
+                                                // 🔥 Inicializar índice do período se não existir
+                                                if (indicePorPeriodo[chaveContador] === undefined) {
+                                                    indicePorPeriodo[chaveContador] = 0;
+                                                }
+                                                const indiceAtual = indicePorPeriodo[chaveContador];
+                                                
+                                                // 🔥 PADRONIZAÇÃO: Manhã = 4 sessões
+                                                if (periodo === 'manha' && totalSessoesPeriodo === 4) {
+                                                    const horariosPadraoManha = [
+                                                        { ini: 8,  fim: 9  },
+                                                        { ini: 9,  fim: 10 },
+                                                        { ini: 10, fim: 11 },
+                                                        { ini: 11, fim: 12 }
+                                                    ];
+                                                    horaIni = horariosPadraoManha[indiceAtual].ini;
+                                                    minutoIni = 0;
+                                                }
+                                                // 🔥 PADRONIZAÇÃO: Tarde = 4 ou 5 sessões
+                                                else if (periodo === 'tarde' && (totalSessoesPeriodo === 4 || totalSessoesPeriodo === 5)) {
+                                                    const horariosPadraoTarde = [
+                                                        { ini: 13, fim: 14 },
+                                                        { ini: 14, fim: 15 },
+                                                        { ini: 15, fim: 16 },
+                                                        { ini: 16, fim: 17 },
+                                                        { ini: 17, fim: 18 }
+                                                    ];
+                                                    horaIni = horariosPadraoTarde[indiceAtual].ini;
+                                                    minutoIni = 20;
+                                                }
+                                                // 🔥 EXCEÇÃO: Usa cascata com tolerância
+                                                else {
+                                                    const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${periodo}`;
+                                                    
+                                                    if (ultimoHorarioSala[chaveSala]) {
+                                                        const ultimo = ultimoHorarioSala[chaveSala];
+                                                        const ultimoTotalMinutos = ultimo.hora * 60 + ultimo.minuto;
+                                                        const atualTotalMinutos = horaIni * 60 + minutoIni;
+                                                        const intervaloMinutos = atualTotalMinutos - ultimoTotalMinutos;
+                                                        
+                                                        if (Math.abs(intervaloMinutos) <= 50) {
+                                                            horaIni = ultimo.hora;
+                                                            minutoIni = ultimo.minuto;
+                                                        }
+                                                    }
+                                                    
+                                                    ultimoHorarioSala[chaveSala] = {
+                                                        hora: horaIni,
+                                                        minuto: minutoIni
+                                                    };
+                                                }
+                                                
+                                                // Incrementar índice do período
+                                                indicePorPeriodo[chaveContador]++;
+                                            }
 
-    // 2️⃣ Parse TARDE (Campos com 'D' - usados apenas se turnoSet === 'dia')
-    let hIniSetD = null, hFimSetD = null;
-    if (turnoSet === 'dia') {
-        if (req.body.horaInicialSetD && req.body.horaInicialSetD.includes(':')) {
-            const [hi, mi] = req.body.horaInicialSetD.split(':').map(Number);
-            if (!isNaN(hi) && !isNaN(mi)) hIniSetD = hi * 60 + mi;
-        }
-        if (req.body.horaFinalSetD && req.body.horaFinalSetD.includes(':')) {
-            const [hf, mf] = req.body.horaFinalSetD.split(':').map(Number);
-            if (!isNaN(hf) && !isNaN(mf)) hFimSetD = hf * 60 + mf;
-        }
-    }
-
-    const periodo = horaCheck < 13 ? 'manha' : 'tarde';
-
-    // 3️⃣ Definir Janela de Tempo Base conforme turno e período
-    let inicioBase, limiteBase;
-    
-    if (turnoSet === 'dia') {
-        // Se for dia inteiro: manhã usa campos padrão, tarde usa campos 'D'
-        if (periodo === 'manha') {
-            inicioBase = (hIniSetM !== null) ? hIniSetM : 480;  // Fallback: 08:00
-            limiteBase = (hFimSetM !== null) ? hFimSetM : 780;  // Fallback: 13:00 (300min = 5 sessões)
-        } else {
-            inicioBase = (hIniSetD !== null) ? hIniSetD : 780;  // Fallback: 13:00
-            limiteBase = (hFimSetD !== null) ? hFimSetD : 1080; // Fallback: 18:00 (300min = 5 sessões)
-        }
-    } else {
-        // Lógica original para 'manha' ou 'tarde' isolados
-        inicioBase = (hIniSetM !== null) ? hIniSetM : (turnoSet === 'manha' ? 480 : 780);
-        limiteBase = (hFimSetM !== null) ? hFimSetM : (turnoSet === 'manha' ? 720 : 1020);
-    }
-
-    const indiceAtual = indicePorPeriodo[chaveContador] || 0;
-
-    // ✅ CÁLCULO: 60 minutos por sessão (Sala Escola)
-    let iniCalc = inicioBase + (indiceAtual * 60);
-    let fimCalc = iniCalc + 60;
-
-    // 🔒 VALIDAÇÃO: garante que última sessão não ultrapasse o limite da janela
-    if (fimCalc > limiteBase) {
-        iniCalc = limiteBase - 60;
-        fimCalc = limiteBase;
-    }
-
-    // Aplica ao processamento
-    horaIni = Math.floor(iniCalc / 60);
-    minutoIni = iniCalc % 60;
-
-    // 📌 Atualiza trackers (contadores independentes por manhã/tarde via chaveContador)
-    indicePorPeriodo[chaveContador] = (indicePorPeriodo[chaveContador] || 0) + 1;
-    const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${periodo}`;
-    ultimoHorarioSala[chaveSala] = { hora: horaIni, minuto: minutoIni };
-}
                                             // ✅ CÁLCULO DO HORÁRIO DE FIM (DEPOIS de todas as modificações)
                                             const inicio = new Date(dataBase);
                                             inicio.setHours(horaIni, minutoIni, 0, 0);
@@ -5954,10 +5774,6 @@ if (ehSalaEscola) {
                                             rab.profissional = terapeutaAtend;
                                             
                                             rel.push(Object.assign({}, rab));
-                                            // ✅ Registra terapeuta que apareceu no relatório (para lista de assinatura)
-                                            if (terapeutaAtend) {
-                                                terapeutasNoRelatorio.add(terapeutaAtend.toString());
-                                            }
                                             rab = new RelAtendBene();
                                         }
                                     });
@@ -5978,20 +5794,8 @@ if (ehSalaEscola) {
                                         
                                         return (a.horaIni || '').localeCompare(b.horaIni || '');
                                     });
-
-                                    // ✅ Gera lista única de terapeutas do relatório, ordenada alfabeticamente
-                                    const listaterapeutaunic = terapeuta
-                                        .filter(t => terapeutasNoRelatorio.has(t._id.toString()))
-                                        .sort((a, b) => {
-                                            const nomeA = (a.usuario_nome || "").normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                                            const nomeB = (b.usuario_nome || "").normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase();
-                                            return nomeA.localeCompare(nomeB);
-                                        });
-                                    // ✅ NOVO: Console log pra você acompanhar (lista pequena, então não polui)
-                                    console.log("✅ Terapeutas no relatório (listaterapeutaunic):", listaterapeutaunic.map(t => t.usuario_nome));
-                                    console.log("🔢 Total de terapeutas únicos:", listaterapeutaunic.length);
-
-                                    res.render("atendimento/relatendvalBeneAT", {
+                                    
+                                    res.render("atendimento/relatendvalBeneassinAT", {
                                         benes: bene, 
                                         anos: ano, 
                                         terapeutas: terapeuta, 
@@ -6004,8 +5808,7 @@ if (ehSalaEscola) {
                                         bene_nome, 
                                         porHoras, 
                                         porSala,
-                                        filtro,
-                                        listaterapeutaunic  // ✅ NOVO: lista de terapeutas que aparecem no relatório
+                                        filtro
                                     });
                                 });
                             });
@@ -6017,408 +5820,6 @@ if (ehSalaEscola) {
             console.error('[ERRO relAtendimentoBeneassinFiltroAT]', err);
             res.status(500).send("Erro ao gerar relatório");
         });
-    }, 
-                               
-    relAtendimentoBeneassinAT(req,res){
-        let db = req.cookies['preferredDb'];
-        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
-        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
-        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
-
-        let seg = new Date();
-        let sex = new Date();
-        let rel = [];
-        seg.setHours(0);
-        seg.setMinutes(0);
-        seg.setSeconds(0);
-        sex.setHours(23);
-        sex.setMinutes(59);
-        sex.setSeconds(59);
-        
-        Bene.find().then((bene)=>{
-            Bene.findOne().then((b)=>{
-                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                Terapia.find().then((terapia)=>{
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
-                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
-                        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
-                            res.render("atendimento/relatendvalBeneassinAT", {terapeutas: terapeuta, anos: ano, terapias: terapia, benes: bene})
-        })})})})}).catch((err) =>{
-            console.log(err)
-        })
-    },
-   
-    relAtendimentoBeneassinFiltroATOLD(req,res){
-            let db = req.cookies['preferredDb'];
-    Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
-    Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
-    Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
-    Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
-    Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
-    Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
-
-    let rel = [];
-    let conv_nome;
-    let conv_id;
-    let bene_nome;
-    let porSala;
-    let porHoras;
-    let ultimoHorarioSala = {};
-    
-    let filtro = {
-        dataIni: req.body.dataIni || '',
-        dataFim: req.body.dataFim || '',
-        beneId: req.body.relBeneid || ''
-    };
-    
-    let periodoDe = fncGeral.getDataInvert(req.body.dataIni);
-    let periodoAte = fncGeral.getDataInvert(req.body.dataFim);
-    
-    porSala = (req.body.porSala == "sim") ? "sim" : "nao";
-    porHoras = (req.body.porHoras == "sim") ? "sim" : "nao";
-    
-    let rab = new RelAtendBene();
-    let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
-    let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
-    seg.setHours(0);
-    seg.setMinutes(0);
-    seg.setSeconds(0);
-    sex.setHours(23);
-    sex.setMinutes(59);
-    sex.setSeconds(59);
-    
-    let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
-    
-    Atend.find(filtroAtend).then((at) => {
-        console.log("at? "+at)
-        
-        // 1️⃣ FILTRAR Feriado
-        at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
-        
-        // ✅ 2️⃣ ORDENAR IMEDIATAMENTE: data + hora NUMÉRICA
-        at.sort((a, b) => {
-            let d1 = new Date(a.atend_atenddata).getTime();
-            let d2 = new Date(b.atend_atenddata).getTime();
-            if (d1 !== d2) return d1 - d2;
-            let [h1, m1] = (a.atend_atendhora || "00:00").split(":").map(Number);
-            let [h2, m2] = (b.atend_atendhora || "00:00").split(":").map(Number);
-            return (h1 * 60 + m1) - (h2 * 60 + m2);
-        });
-        
-        Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta) => {
-            terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
-            
-            const lookupPerfilTerapeuta = {};
-            terapeuta.forEach(t => {
-                lookupPerfilTerapeuta[t._id.toString()] = t.usuario_perfilid ? t.usuario_perfilid.toString() : null;
-            });
-            
-            Terapia.find().then((terapias) => {
-                terapias.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));
-                
-                const lookupTerapiaABAAT = {};
-                terapias.forEach(t => {
-                    const nomeNormalizado = (t.terapia_nome || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-                    lookupTerapiaABAAT[t._id.toString()] = nomeNormalizado.includes("ABA AT");
-                });
-                
-                Sala.find().then((sala) => {
-                    Ano.find().sort({ ano_nome: 1 }).then((ano) => {
-                        Bene.find().then((bene) => {
-                            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
-                            bene.some((b) => {
-                                if((""+b._id) === (""+req.body.relBeneid)){
-                                    bene_nome = b.bene_nome;
-                                    conv_id = b.bene_convid;
-                                    return true;
-                                }
-                                return false;
-                            })
-                            Conv.findOne({_id: conv_id}).then((conv) => {
-                                conv_nome = conv.conv_nome;
-                                
-                                // ✅ 3️⃣ PRÉ-ANÁLISE: Contar sessões por período/beneficiário/dia
-                                const SALA_ESCOLA = "6368fe35c2cdb92ac6d914be";
-                                const contadorSessoes = {};
-                                
-                                at.forEach(atend => {
-                                    if (String(atend.atend_salaid) === SALA_ESCOLA) {
-                                        const dataAtend = fncGeral.getData(atend.atend_atenddata);
-                                        const beneId = atend.atend_beneid.toString();
-                                        const [hora] = atend.atend_atendhora.split(":").map(Number);
-                                        
-                                        const periodo = hora < 13 ? 'manha' : 'tarde';
-                                        const chave = `${beneId}_${dataAtend}_${periodo}`;
-                                        
-                                        if (!contadorSessoes[chave]) {
-                                            contadorSessoes[chave] = 0;
-                                        }
-                                        contadorSessoes[chave]++;
-                                    }
-                                });
-                                
-                                console.log("📊 Contador de sessões:", contadorSessoes);
-                                
-                                // ✅ 4️⃣ TRACKER DE ÍNDICE POR PERÍODO
-                                const indicePorPeriodo = {};
-                                
-                                // ✅ 5️⃣ PROCESSAR
-                                at.forEach((atend) => {
-                                    const categorias = (atend.atend_categoria || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                                    const org = (atend.atend_org || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                                    const ehFixo = atend.atend_fixo === true || atend.atend_fixo === "true";
-                                    const dataAtend = fncGeral.getData(atend.atend_atenddata);
-                                    
-                                    let terapeutaIdUsado;
-                                    if (ehFixo) {
-                                        terapeutaIdUsado = atend.atend_fixoterapeutaid;
-                                    } else {
-                                        switch (categorias) {
-                                            case "Substituicao":
-                                            case "Substituição":
-                                                terapeutaIdUsado = atend.atend_mergeterapeutaid;
-                                                break;
-                                            case "SubstitutoFixo":
-                                                terapeutaIdUsado = atend.atend_fixoterapeutaid;
-                                                break;
-                                            default:
-                                                terapeutaIdUsado = atend.atend_terapeutaid;
-                                                break;
-                                        }
-                                    }
-                                    
-                                    const perfilId = terapeutaIdUsado ? lookupPerfilTerapeuta[terapeutaIdUsado.toString()] : null;
-                                    const ehTerapeutaAT = perfilId === "6242191fa12aa557219a0fd9" || perfilId === "644742e378166939169f82a1" || perfilId === "62dea752ea444f5b7a02b449";
-                                    
-                                    let terapiaIdParaVerificar;
-                                    if (org === "Padrão") {
-                                        terapiaIdParaVerificar = atend.atend_terapiaid;
-                                    } else if (org === "Administrativo") {
-                                        if (categorias === "Substituicao" || categorias === "Substituição") {
-                                            terapiaIdParaVerificar = atend.atend_mergeterapiaid;
-                                        } else if (categorias === "SubstitutoFixo") {
-                                            terapiaIdParaVerificar = atend.atend_fixoterapiaid;
-                                        } else {
-                                            terapiaIdParaVerificar = atend.atend_terapiaid;
-                                        }
-                                    } else {
-                                        terapiaIdParaVerificar = atend.atend_terapiaid;
-                                    }
-                                    
-                                    const ehTerapiaABAAT = terapiaIdParaVerificar ? lookupTerapiaABAAT[terapiaIdParaVerificar.toString()] : false;
-                                    
-                                    // ▼▼▼ AJUSTAR HORÁRIO PARA EXIBIÇÃO ▼▼▼
-                                    if (porHoras === "sim") {
-                                        const ehSalaEscola = String(atend.atend_salaid) === SALA_ESCOLA;
-                                        const dataBase = new Date(atend.atend_atenddata);
-                                        let [horaIni, minutoIni] = atend.atend_atendhora.split(":").map(Number);
-                                        
-                                        const beneId = atend.atend_beneid.toString();
-                                        const [horaCheck] = atend.atend_atendhora.split(":").map(Number);
-                                        const periodo = horaCheck < 13 ? 'manha' : 'tarde';
-                                        const chaveContador = `${beneId}_${dataAtend}_${periodo}`;
-                                        const totalSessoesPeriodo = contadorSessoes[chaveContador] || 0;
-                                        
-                                        if (ehSalaEscola) {
-                                            // 🔥 Inicializar índice do período se não existir
-                                            if (indicePorPeriodo[chaveContador] === undefined) {
-                                                indicePorPeriodo[chaveContador] = 0;
-                                            }
-                                            const indiceAtual = indicePorPeriodo[chaveContador];
-                                            
-                                            // 🔥 PADRONIZAÇÃO: Manhã = 4 sessões
-                                            if (periodo === 'manha' && totalSessoesPeriodo === 4) {
-                                                const horariosPadraoManha = [
-                                                    { ini: 8,  fim: 9  },
-                                                    { ini: 9,  fim: 10 },
-                                                    { ini: 10, fim: 11 },
-                                                    { ini: 11, fim: 12 }
-                                                ];
-                                                horaIni = horariosPadraoManha[indiceAtual].ini;
-                                                minutoIni = 0;
-                                            }
-                                            // 🔥 PADRONIZAÇÃO: Tarde = 4 ou 5 sessões
-                                            else if (periodo === 'tarde' && (totalSessoesPeriodo === 4 || totalSessoesPeriodo === 5)) {
-                                                const horariosPadraoTarde = [
-                                                    { ini: 13, fim: 14 },
-                                                    { ini: 14, fim: 15 },
-                                                    { ini: 15, fim: 16 },
-                                                    { ini: 16, fim: 17 },
-                                                    { ini: 17, fim: 18 }
-                                                ];
-                                                horaIni = horariosPadraoTarde[indiceAtual].ini;
-                                                minutoIni = 20;
-                                            }
-                                            // 🔥 EXCEÇÃO: Usa cascata com tolerância
-                                            else {
-                                                const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${periodo}`;
-                                                
-                                                if (ultimoHorarioSala[chaveSala]) {
-                                                    const ultimo = ultimoHorarioSala[chaveSala];
-                                                    const ultimoTotalMinutos = ultimo.hora * 60 + ultimo.minuto;
-                                                    const atualTotalMinutos = horaIni * 60 + minutoIni;
-                                                    const intervaloMinutos = atualTotalMinutos - ultimoTotalMinutos;
-                                                    
-                                                    if (Math.abs(intervaloMinutos) <= 50) {
-                                                        horaIni = ultimo.hora;
-                                                        minutoIni = ultimo.minuto;
-                                                    }
-                                                }
-                                                
-                                                ultimoHorarioSala[chaveSala] = {
-                                                    hora: horaIni,
-                                                    minuto: minutoIni
-                                                };
-                                            }
-                                            
-                                            // Incrementar índice do período
-                                            indicePorPeriodo[chaveContador]++;
-                                        }
-
-                                        // ✅ CÁLCULO DO HORÁRIO DE FIM (DEPOIS de todas as modificações)
-                                        const inicio = new Date(dataBase);
-                                        inicio.setHours(horaIni, minutoIni, 0, 0);
-
-                                        let fim;
-                                        if (ehSalaEscola) {
-                                            fim = new Date(inicio);
-                                            fim.setMinutes(fim.getMinutes() + 60);
-                                        } else {
-                                            fim = new Date(inicio);
-                                            fim.setMinutes(fim.getMinutes() + 40);
-                                        }
-
-                                        // ✅ FORMATAÇÃO (garantido que todas as variáveis existem)
-                                        const horaIniFmt = horaIni.toString().padStart(2, "0");
-                                        const minutoIniFmt = minutoIni.toString().padStart(2, "0");
-                                        const horaFimFmt = fim.getHours().toString().padStart(2, "0");
-                                        const minutoFimFmt = fim.getMinutes().toString().padStart(2, "0");
-
-                                        rab.dt = fncGeral.getData(atend.atend_atenddata) + " - " + 
-                                                horaIniFmt + ":" + minutoIniFmt + "/" + 
-                                                horaFimFmt + ":" + minutoFimFmt;
-                                        rab.horaIni = horaIniFmt + ":" + minutoIniFmt;
-                                        rab.horaFim = horaFimFmt + ":" + minutoFimFmt;
-                                    } else {
-                                        rab.dt = fncGeral.getData(atend.atend_atenddata);
-                                    }
-                                    rab.dataDia = fncGeral.getData(atend.atend_atenddata);
-
-                                    // ▼▼▼ LÓGICA DE TERAPIA/TERAPEUTA ▼▼▼
-                                    let terapiaAtend, terapeutaAtend;
-
-                                    if (ehFixo) {
-                                        terapiaAtend = atend.atend_fixoterapiaid;
-                                        terapeutaAtend = atend.atend_fixoterapeutaid;
-                                        switch (categorias) {
-                                            case "SubstitutoFixo":
-                                                terapiaAtend = atend.atend_fixoterapiaid;
-                                                terapeutaAtend = atend.atend_fixoterapeutaid;
-                                                break;
-                                            case "Substituicao":
-                                            case "Substituição":
-                                                terapiaAtend = atend.atend_fixoterapiaid || atend.atend_mergeterapiaid;
-                                                terapeutaAtend = atend.atend_fixoterapeutaid || atend.atend_mergeterapeutaid;
-                                                break;
-                                            case "Feriado":
-                                            case "Falta Absoluta":
-                                                terapiaAtend = "break";
-                                                terapeutaAtend = "break";
-                                                break;
-                                            default:
-                                                terapiaAtend = atend.atend_fixoterapiaid;
-                                                terapeutaAtend = atend.atend_fixoterapeutaid;
-                                                break;
-                                        }
-                                    } else {
-                                        terapiaAtend = atend.atend_terapiaid;
-                                        terapeutaAtend = atend.atend_terapeutaid;
-                                        switch (categorias) {
-                                            case "Feriado":
-                                            case "Falta Absoluta":
-                                                terapiaAtend = "break";
-                                                terapeutaAtend = "break";
-                                                break;
-                                            case "Substituicao":
-                                            case "Substituição":
-                                                terapiaAtend = atend.atend_mergeterapiaid;
-                                                terapeutaAtend = atend.atend_mergeterapeutaid;
-                                                break;
-                                            case "SubstitutoFixo":
-                                                terapiaAtend = atend.atend_fixoterapiaid;
-                                                terapeutaAtend = atend.atend_fixoterapeutaid;
-                                                break;
-                                            default:
-                                                terapiaAtend = atend.atend_terapiaid;
-                                                terapeutaAtend = atend.atend_terapeutaid;
-                                                break;
-                                        }
-                                    }
-
-                                    // ▼▼▼ INCLUSÃO NO RELATÓRIO ▼▼▼
-                                    if (categorias !== "Feriado" && categorias !== "Falta Absoluta" && terapiaAtend !== "break") {
-                                        if (porSala == "sim"){
-                                            sala.forEach((s) => {
-                                                if (("" + atend.atend_salaid + "") == ("" + s._id + "")){
-                                                    if (("" + s.sala_nome + "").includes("Escola")){
-                                                        rab.sala = "Escola ou Domicílio";
-                                                    } else {
-                                                        rab.sala = "Clínica";
-                                                    }
-                                                }
-                                            })
-                                        }
-                                        
-                                        rab.especialidade = terapiaAtend;
-                                        rab.profissional = terapeutaAtend;
-                                        
-                                        rel.push(Object.assign({}, rab));
-                                        rab = new RelAtendBene();
-                                    }
-                                });
-                                
-                                rel.sort(function(a, b){
-                                    let dataODiaA = a.dataDia || fncGeral.getData(a.dt);
-                                    let dataODiaB = b.dataDia || fncGeral.getData(b.dt);
-                                    
-                                    const [diaA, mesA, anoA] = dataODiaA.split('/').map(Number);
-                                    const [diaB, mesB, anoB] = dataODiaB.split('/').map(Number);
-                                    
-                                    const dataA = new Date(anoA, mesA - 1, diaA);
-                                    const dataB = new Date(anoB, mesB - 1, diaB);
-                                    
-                                    if (dataA.getTime() !== dataB.getTime()) {
-                                        return dataA - dataB;
-                                    }
-                                    
-                                    return (a.horaIni || '').localeCompare(b.horaIni || '');
-                                });
-                                
-                                res.render("atendimento/relatendvalBeneassinAT", {
-                                    benes: bene, 
-                                    anos: ano, 
-                                    terapeutas: terapeuta, 
-                                    salas: sala,
-                                    terapias: terapias, 
-                                    rels: rel, 
-                                    periodoDe, 
-                                    periodoAte, 
-                                    conv_nome, 
-                                    bene_nome, 
-                                    porHoras, 
-                                    porSala,
-                                    filtro
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    }).catch((err) => {
-        console.error('[ERRO relAtendimentoBeneassinFiltroAT]', err);
-        res.status(500).send("Erro ao gerar relatório");
-    });
     },
     relAtendimentoBeneassinFiltroAT_OK_manhatarde(req, res) {
         let db = req.cookies['preferredDb'];
@@ -6820,6 +6221,448 @@ if (ehSalaEscola) {
             res.status(500).send("Erro ao gerar relatório");
         });
     },
+    relAtendimentoBeneAT(req,res){
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
+        let seg = new Date();
+        let sex = new Date();
+        let rel = [];
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        
+        Bene.find().then((bene)=>{
+            Bene.findOne().then((b)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                Terapia.find().then((terapia)=>{
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                            Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
+                        res.render("atendimento/relatendvalBeneAT", {terapeutas: terapeuta, terapias: terapia, benes: bene, anos: ano})
+        })})})})}).catch((err) =>{
+            console.log(err)
+        })
+    },
+    relAtendimentoBeneFiltroAT(req, res) {
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
+        let rel = [];
+        let conv_nome;
+        let conv_id;
+        let bene_nome;
+        let porSala;
+        let porHoras;
+        let ultimoHorarioSala = {};
+        
+        let filtro = {
+            dataIni: req.body.dataIni || '',
+            dataFim: req.body.dataFim || '',
+            beneId: req.body.relBeneid || ''
+        };
+        
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);
+        
+        porSala = (req.body.porSala == "sim") ? "sim" : "nao";
+        porHoras = (req.body.porHoras == "sim") ? "sim" : "nao";
+        
+        let rab = new RelAtendBene();
+        let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
+        let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        
+        let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
+        
+        Atend.find(filtroAtend).then((at) => {
+            console.log("at? "+at)
+            
+            // 1️⃣ FILTRAR Feriado
+            at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
+            
+            // ✅ 2️⃣ ORDENAR IMEDIATAMENTE: data + hora NUMÉRICA
+            at.sort((a, b) => {
+                let d1 = new Date(a.atend_atenddata).getTime();
+                let d2 = new Date(b.atend_atenddata).getTime();
+                if (d1 !== d2) return d1 - d2;
+                let [h1, m1] = (a.atend_atendhora || "00:00").split(":").map(Number);
+                let [h2, m2] = (b.atend_atendhora || "00:00").split(":").map(Number);
+                return (h1 * 60 + m1) - (h2 * 60 + m2);
+            });
+            
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta) => {
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+                
+                const lookupPerfilTerapeuta = {};
+                terapeuta.forEach(t => {
+                    lookupPerfilTerapeuta[t._id.toString()] = t.usuario_perfilid ? t.usuario_perfilid.toString() : null;
+                });
+                
+                Terapia.find().then((terapias) => {
+                    terapias.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));
+                    
+                    const lookupTerapiaABAAT = {};
+                    terapias.forEach(t => {
+                        const nomeNormalizado = (t.terapia_nome || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+                        lookupTerapiaABAAT[t._id.toString()] = nomeNormalizado.includes("ABA AT");
+                    });
+                    
+                    Sala.find().then((sala) => {
+                        Ano.find().sort({ ano_nome: 1 }).then((ano) => {
+                            Bene.find().then((bene) => {
+                                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+                                bene.some((b) => {
+                                    if((""+b._id) === (""+req.body.relBeneid)){
+                                        bene_nome = b.bene_nome;
+                                        conv_id = b.bene_convid;
+                                        return true;
+                                    }
+                                    return false;
+                                })
+                                Conv.findOne({_id: conv_id}).then((conv) => {
+                                    conv_nome = conv.conv_nome;
+                                    
+                                    // ✅ 3️⃣ PRÉ-ANÁLISE: Contar sessões por período/beneficiário/dia
+                                    const SALA_ESCOLA = "6368fe35c2cdb92ac6d914be";
+                                    const contadorSessoes = {};
+                                    
+                                    at.forEach(atend => {
+                                        if (String(atend.atend_salaid) === SALA_ESCOLA) {
+                                            const dataAtend = fncGeral.getData(atend.atend_atenddata);
+                                            const beneId = atend.atend_beneid.toString();
+                                            const [hora] = atend.atend_atendhora.split(":").map(Number);
+                                            
+                                            const periodo = hora < 13 ? 'manha' : 'tarde';
+                                            const chave = `${beneId}_${dataAtend}_${periodo}`;
+                                            
+                                            if (!contadorSessoes[chave]) {
+                                                contadorSessoes[chave] = 0;
+                                            }
+                                            contadorSessoes[chave]++;
+                                        }
+                                    });
+                                    
+                                    console.log("📊 Contador de sessões:", contadorSessoes);
+                                    
+                                    // ✅ 4️⃣ TRACKER DE ÍNDICE POR PERÍODO
+                                    const indicePorPeriodo = {};
+                                    
+                                    // ✅ 5️⃣ PROCESSAR
+                                    at.forEach((atend) => {
+                                        const categorias = (atend.atend_categoria || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                        const org = (atend.atend_org || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                        const ehFixo = atend.atend_fixo === true || atend.atend_fixo === "true";
+                                        const dataAtend = fncGeral.getData(atend.atend_atenddata);
+                                        
+                                        let terapeutaIdUsado;
+                                        if (ehFixo) {
+                                            terapeutaIdUsado = atend.atend_fixoterapeutaid;
+                                        } else {
+                                            switch (categorias) {
+                                                case "Substituicao":
+                                                case "Substituição":
+                                                    terapeutaIdUsado = atend.atend_mergeterapeutaid;
+                                                    break;
+                                                case "SubstitutoFixo":
+                                                    terapeutaIdUsado = atend.atend_fixoterapeutaid;
+                                                    break;
+                                                default:
+                                                    terapeutaIdUsado = atend.atend_terapeutaid;
+                                                    break;
+                                            }
+                                        }
+                                        
+                                        const perfilId = terapeutaIdUsado ? lookupPerfilTerapeuta[terapeutaIdUsado.toString()] : null;
+                                        const ehTerapeutaAT = perfilId === "6242191fa12aa557219a0fd9" || perfilId === "644742e378166939169f82a1" || perfilId === "62dea752ea444f5b7a02b449";
+                                        
+                                        let terapiaIdParaVerificar;
+                                        if (org === "Padrão") {
+                                            terapiaIdParaVerificar = atend.atend_terapiaid;
+                                        } else if (org === "Administrativo") {
+                                            if (categorias === "Substituicao" || categorias === "Substituição") {
+                                                terapiaIdParaVerificar = atend.atend_mergeterapiaid;
+                                            } else if (categorias === "SubstitutoFixo") {
+                                                terapiaIdParaVerificar = atend.atend_fixoterapiaid;
+                                            } else {
+                                                terapiaIdParaVerificar = atend.atend_terapiaid;
+                                            }
+                                        } else {
+                                            terapiaIdParaVerificar = atend.atend_terapiaid;
+                                        }
+                                        
+                                        const ehTerapiaABAAT = terapiaIdParaVerificar ? lookupTerapiaABAAT[terapiaIdParaVerificar.toString()] : false;
+                                        
+                                        // ▼▼▼ AJUSTAR HORÁRIO PARA EXIBIÇÃO ▼▼▼
+                                        if (porHoras === "sim") {
+                                            const ehSalaEscola = String(atend.atend_salaid) === SALA_ESCOLA;
+                                            const dataBase = new Date(atend.atend_atenddata);
+                                            let [horaIni, minutoIni] = atend.atend_atendhora.split(":").map(Number);
+                                            
+                                            const beneId = atend.atend_beneid.toString();
+                                            const [horaCheck] = atend.atend_atendhora.split(":").map(Number);
+                                            const periodo = horaCheck < 13 ? 'manha' : 'tarde';
+                                            const chaveContador = `${beneId}_${dataAtend}_${periodo}`;
+                                            const totalSessoesPeriodo = contadorSessoes[chaveContador] || 0;
+                                            
+                                        // ▼▼▼ DENTRO DO LOOP PRINCIPAL, QUANDO porHoras === "sim" ▼▼▼
+    // ▼▼▼ DENTRO DO LOOP PRINCIPAL, QUANDO porHoras === "sim" E ehSalaEscola === true ▼▼▼
+if (ehSalaEscola) {
+    const turnoSet = (req.body.turnoSet || '').toLowerCase().trim();
+    
+    // 1️⃣ Parse MANHÃ (Campos padrão - usados sempre para manhã)
+    let hIniSetM = null, hFimSetM = null;
+    if (req.body.horaInicialSet && req.body.horaInicialSet.includes(':')) {
+        const [hi, mi] = req.body.horaInicialSet.split(':').map(Number);
+        if (!isNaN(hi) && !isNaN(mi)) hIniSetM = hi * 60 + mi;
+    }
+    if (req.body.horaFinalSet && req.body.horaFinalSet.includes(':')) {
+        const [hf, mf] = req.body.horaFinalSet.split(':').map(Number);
+        if (!isNaN(hf) && !isNaN(mf)) hFimSetM = hf * 60 + mf;
+    }
+
+    // 2️⃣ Parse TARDE (Campos com 'D' - usados apenas se turnoSet === 'dia')
+    let hIniSetD = null, hFimSetD = null;
+    if (turnoSet === 'dia') {
+        if (req.body.horaInicialSetD && req.body.horaInicialSetD.includes(':')) {
+            const [hi, mi] = req.body.horaInicialSetD.split(':').map(Number);
+            if (!isNaN(hi) && !isNaN(mi)) hIniSetD = hi * 60 + mi;
+        }
+        if (req.body.horaFinalSetD && req.body.horaFinalSetD.includes(':')) {
+            const [hf, mf] = req.body.horaFinalSetD.split(':').map(Number);
+            if (!isNaN(hf) && !isNaN(mf)) hFimSetD = hf * 60 + mf;
+        }
+    }
+
+    const periodo = horaCheck < 13 ? 'manha' : 'tarde';
+
+    // 3️⃣ Definir Janela de Tempo Base conforme turno e período
+    let inicioBase, limiteBase;
+    
+    if (turnoSet === 'dia') {
+        // Se for dia inteiro: manhã usa campos padrão, tarde usa campos 'D'
+        if (periodo === 'manha') {
+            inicioBase = (hIniSetM !== null) ? hIniSetM : 480;  // Fallback: 08:00
+            limiteBase = (hFimSetM !== null) ? hFimSetM : 780;  // Fallback: 13:00 (300min = 5 sessões)
+        } else {
+            inicioBase = (hIniSetD !== null) ? hIniSetD : 780;  // Fallback: 13:00
+            limiteBase = (hFimSetD !== null) ? hFimSetD : 1080; // Fallback: 18:00 (300min = 5 sessões)
+        }
+    } else {
+        // Lógica original para 'manha' ou 'tarde' isolados
+        inicioBase = (hIniSetM !== null) ? hIniSetM : (turnoSet === 'manha' ? 480 : 780);
+        limiteBase = (hFimSetM !== null) ? hFimSetM : (turnoSet === 'manha' ? 720 : 1020);
+    }
+
+    const indiceAtual = indicePorPeriodo[chaveContador] || 0;
+
+    // ✅ CÁLCULO: 60 minutos por sessão (Sala Escola)
+    let iniCalc = inicioBase + (indiceAtual * 60);
+    let fimCalc = iniCalc + 60;
+
+    // 🔒 VALIDAÇÃO: garante que última sessão não ultrapasse o limite da janela
+    if (fimCalc > limiteBase) {
+        iniCalc = limiteBase - 60;
+        fimCalc = limiteBase;
+    }
+
+    // Aplica ao processamento
+    horaIni = Math.floor(iniCalc / 60);
+    minutoIni = iniCalc % 60;
+
+    // 📌 Atualiza trackers (contadores independentes por manhã/tarde via chaveContador)
+    indicePorPeriodo[chaveContador] = (indicePorPeriodo[chaveContador] || 0) + 1;
+    const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${periodo}`;
+    ultimoHorarioSala[chaveSala] = { hora: horaIni, minuto: minutoIni };
+}
+                                            // ✅ CÁLCULO DO HORÁRIO DE FIM (DEPOIS de todas as modificações)
+                                            const inicio = new Date(dataBase);
+                                            inicio.setHours(horaIni, minutoIni, 0, 0);
+
+                                            let fim;
+                                            if (ehSalaEscola) {
+                                                fim = new Date(inicio);
+                                                fim.setMinutes(fim.getMinutes() + 60);
+                                            } else {
+                                                fim = new Date(inicio);
+                                                fim.setMinutes(fim.getMinutes() + 40);
+                                            }
+
+                                            // ✅ FORMATAÇÃO (garantido que todas as variáveis existem)
+                                            const horaIniFmt = horaIni.toString().padStart(2, "0");
+                                            const minutoIniFmt = minutoIni.toString().padStart(2, "0");
+                                            const horaFimFmt = fim.getHours().toString().padStart(2, "0");
+                                            const minutoFimFmt = fim.getMinutes().toString().padStart(2, "0");
+
+                                            rab.dt = fncGeral.getData(atend.atend_atenddata) + " - " + 
+                                                    horaIniFmt + ":" + minutoIniFmt + "/" + 
+                                                    horaFimFmt + ":" + minutoFimFmt;
+                                            rab.horaIni = horaIniFmt + ":" + minutoIniFmt;
+                                            rab.horaFim = horaFimFmt + ":" + minutoFimFmt;
+                                        } else {
+                                            rab.dt = fncGeral.getData(atend.atend_atenddata);
+                                        }
+                                        rab.dataDia = fncGeral.getData(atend.atend_atenddata);
+
+                                        // ▼▼▼ LÓGICA DE TERAPIA/TERAPEUTA ▼▼▼
+                                        let terapiaAtend, terapeutaAtend;
+
+                                        if (ehFixo) {
+                                            terapiaAtend = atend.atend_fixoterapiaid;
+                                            terapeutaAtend = atend.atend_fixoterapeutaid;
+                                            switch (categorias) {
+                                                case "SubstitutoFixo":
+                                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                    break;
+                                                case "Substituicao":
+                                                case "Substituição":
+                                                    terapiaAtend = atend.atend_fixoterapiaid || atend.atend_mergeterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid || atend.atend_mergeterapeutaid;
+                                                    break;
+                                                case "Feriado":
+                                                case "Falta Absoluta":
+                                                    terapiaAtend = "break";
+                                                    terapeutaAtend = "break";
+                                                    break;
+                                                default:
+                                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                    break;
+                                            }
+                                        } else {
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            terapeutaAtend = atend.atend_terapeutaid;
+                                            switch (categorias) {
+                                                case "Feriado":
+                                                case "Falta Absoluta":
+                                                    terapiaAtend = "break";
+                                                    terapeutaAtend = "break";
+                                                    break;
+                                                case "Substituicao":
+                                                case "Substituição":
+                                                    terapiaAtend = atend.atend_mergeterapiaid;
+                                                    terapeutaAtend = atend.atend_mergeterapeutaid;
+                                                    break;
+                                                case "SubstitutoFixo":
+                                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                    break;
+                                                default:
+                                                    terapiaAtend = atend.atend_terapiaid;
+                                                    terapeutaAtend = atend.atend_terapeutaid;
+                                                    break;
+                                            }
+                                        }
+
+                                        // ▼▼▼ INCLUSÃO NO RELATÓRIO ▼▼▼
+                                        if (categorias !== "Feriado" && categorias !== "Falta Absoluta" && terapiaAtend !== "break") {
+                                            if (porSala == "sim"){
+                                                sala.forEach((s) => {
+                                                    if (("" + atend.atend_salaid + "") == ("" + s._id + "")){
+                                                        if (("" + s.sala_nome + "").includes("Escola")){
+                                                            rab.sala = "Escola ou Domicílio";
+                                                        } else {
+                                                            rab.sala = "Clínica";
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                            
+                                            rab.especialidade = terapiaAtend;
+                                            rab.profissional = terapeutaAtend;
+                                            
+                                            rel.push(Object.assign({}, rab));
+                                            rab = new RelAtendBene();
+                                        }
+                                    });
+                                    
+                                    rel.sort(function(a, b){
+                                        let dataODiaA = a.dataDia || fncGeral.getData(a.dt);
+                                        let dataODiaB = b.dataDia || fncGeral.getData(b.dt);
+                                        
+                                        const [diaA, mesA, anoA] = dataODiaA.split('/').map(Number);
+                                        const [diaB, mesB, anoB] = dataODiaB.split('/').map(Number);
+                                        
+                                        const dataA = new Date(anoA, mesA - 1, diaA);
+                                        const dataB = new Date(anoB, mesB - 1, diaB);
+                                        
+                                        if (dataA.getTime() !== dataB.getTime()) {
+                                            return dataA - dataB;
+                                        }
+                                        
+                                        return (a.horaIni || '').localeCompare(b.horaIni || '');
+                                    });
+                                    
+                                    res.render("atendimento/relatendvalBeneAT", {
+                                        benes: bene, 
+                                        anos: ano, 
+                                        terapeutas: terapeuta, 
+                                        salas: sala,
+                                        terapias: terapias, 
+                                        rels: rel, 
+                                        periodoDe, 
+                                        periodoAte, 
+                                        conv_nome, 
+                                        bene_nome, 
+                                        porHoras, 
+                                        porSala,
+                                        filtro
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        }).catch((err) => {
+            console.error('[ERRO relAtendimentoBeneassinFiltroAT]', err);
+            res.status(500).send("Erro ao gerar relatório");
+        });
+    },
+    relAtendimentoBeneassinAT(req,res){
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
+        let seg = new Date();
+        let sex = new Date();
+        let rel = [];
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        
+        Bene.find().then((bene)=>{
+            Bene.findOne().then((b)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                Terapia.find().then((terapia)=>{
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
+                            res.render("atendimento/relatendvalBeneassinAT", {terapeutas: terapeuta, anos: ano, terapias: terapia, benes: bene})
+        })})})})}).catch((err) =>{
+            console.log(err)
+        })
+    },
     relAtendimentoBeneassinFiltroAT(req, res) {
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
@@ -7204,6 +7047,419 @@ if (ehSalaEscola) {
             res.status(500).send("Erro ao gerar relatório");
         });
     },
+    relAtendimentoBeneATNovo(req,res){
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
+        let seg = new Date();
+        let sex = new Date();
+        let rel = [];
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        
+        Bene.find().then((bene)=>{
+            Bene.findOne().then((b)=>{
+                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                Terapia.find().then((terapia)=>{
+                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
+                        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
+                            res.render("atendimento/relatendvalBeneATNovo", {terapeutas: terapeuta, anos: ano, terapias: terapia, benes: bene})
+        })})})})}).catch((err) =>{
+            console.log(err)
+        })
+    },
+    relAtendimentoBeneFiltroATNovo(req, res) {
+        let db = req.cookies['preferredDb'];
+        Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+        Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
+
+        let rel = [];
+        let conv_nome;
+        let conv_id;
+        let bene_nome;
+        let porSala;
+        let porHoras;
+        let ultimoHorarioSala = {};
+        
+        let filtro = {
+            dataIni: req.body.dataIni || '',
+            dataFim: req.body.dataFim || '',
+            beneId: req.body.relBeneid || ''
+        };
+        
+        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);
+        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);
+        
+        porSala = (req.body.porSala == "sim") ? "sim" : "nao";
+        porHoras = (req.body.porHoras == "sim") ? "sim" : "nao";
+        
+        let rab = new RelAtendBene();
+        let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
+        let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+        seg.setHours(0);
+        seg.setMinutes(0);
+        seg.setSeconds(0);
+        sex.setHours(23);
+        sex.setMinutes(59);
+        sex.setSeconds(59);
+        
+        let filtroAtend = {atend_beneid: req.body.relBeneid, atend_atenddata: { $gte: seg, $lte: sex}}
+        
+        Atend.find(filtroAtend).then((at) => {
+            console.log("at? "+at)
+            
+            // 1️⃣ FILTRAR Feriado
+            at = at.filter(a => (""+a.atend_categoria) !== "Feriado");
+            
+            // ✅ 2️⃣ ORDENAR IMEDIATAMENTE: data + hora NUMÉRICA
+            at.sort((a, b) => {
+                let d1 = new Date(a.atend_atenddata).getTime();
+                let d2 = new Date(b.atend_atenddata).getTime();
+                if (d1 !== d2) return d1 - d2;
+                let [h1, m1] = (a.atend_atendhora || "00:00").split(":").map(Number);
+                let [h2, m2] = (b.atend_atendhora || "00:00").split(":").map(Number);
+                return (h1 * 60 + m1) - (h2 * 60 + m2);
+            });
+            
+            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta) => {
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+                
+                const lookupPerfilTerapeuta = {};
+                terapeuta.forEach(t => {
+                    lookupPerfilTerapeuta[t._id.toString()] = t.usuario_perfilid ? t.usuario_perfilid.toString() : null;
+                });
+                
+                Terapia.find().then((terapias) => {
+                    terapias.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));
+                    
+                    const lookupTerapiaABAAT = {};
+                    terapias.forEach(t => {
+                        const nomeNormalizado = (t.terapia_nome || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+                        lookupTerapiaABAAT[t._id.toString()] = nomeNormalizado.includes("ABA AT");
+                    });
+                    
+                    Sala.find().then((sala) => {
+                        Ano.find().sort({ ano_nome: 1 }).then((ano) => {
+                            Bene.find().then((bene) => {
+                                bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+                                bene.some((b) => {
+                                    if((""+b._id) === (""+req.body.relBeneid)){
+                                        bene_nome = b.bene_nome;
+                                        conv_id = b.bene_convid;
+                                        return true;
+                                    }
+                                    return false;
+                                })
+                                Conv.findOne({_id: conv_id}).then((conv) => {
+                                    conv_nome = conv.conv_nome;
+                                    
+                                    // ✅ 3️⃣ PRÉ-ANÁLISE: Contar sessões por período/beneficiário/dia
+                                    const SALA_ESCOLA = "6368fe35c2cdb92ac6d914be";
+                                    const contadorSessoes = {};
+                                    
+                                    at.forEach(atend => {
+                                        if (String(atend.atend_salaid) === SALA_ESCOLA) {
+                                            const dataAtend = fncGeral.getData(atend.atend_atenddata);
+                                            const beneId = atend.atend_beneid.toString();
+                                            const [hora] = atend.atend_atendhora.split(":").map(Number);
+                                            
+                                            const periodo = hora < 13 ? 'manha' : 'tarde';
+                                            const chave = `${beneId}_${dataAtend}_${periodo}`;
+                                            
+                                            if (!contadorSessoes[chave]) {
+                                                contadorSessoes[chave] = 0;
+                                            }
+                                            contadorSessoes[chave]++;
+                                        }
+                                    });
+                                    
+                                    console.log("📊 Contador de sessões:", contadorSessoes);
+                                    
+                                    // ✅ 4️⃣ TRACKER DE ÍNDICE POR PERÍODO
+                                    const indicePorPeriodo = {};
+                                    
+                                    // ✅ 5️⃣ PROCESSAR
+                                    at.forEach((atend) => {
+                                        const categorias = (atend.atend_categoria || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                        const org = (atend.atend_org || "").trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                                        const ehFixo = atend.atend_fixo === true || atend.atend_fixo === "true";
+                                        const dataAtend = fncGeral.getData(atend.atend_atenddata);
+                                        
+                                        let terapeutaIdUsado;
+                                        if (ehFixo) {
+                                            terapeutaIdUsado = atend.atend_fixoterapeutaid;
+                                        } else {
+                                            switch (categorias) {
+                                                case "Substituicao":
+                                                case "Substituição":
+                                                    terapeutaIdUsado = atend.atend_mergeterapeutaid;
+                                                    break;
+                                                case "SubstitutoFixo":
+                                                    terapeutaIdUsado = atend.atend_fixoterapeutaid;
+                                                    break;
+                                                default:
+                                                    terapeutaIdUsado = atend.atend_terapeutaid;
+                                                    break;
+                                            }
+                                        }
+                                        
+                                        const perfilId = terapeutaIdUsado ? lookupPerfilTerapeuta[terapeutaIdUsado.toString()] : null;
+                                        const ehTerapeutaAT = perfilId === "6242191fa12aa557219a0fd9" || perfilId === "644742e378166939169f82a1" || perfilId === "62dea752ea444f5b7a02b449";
+                                        
+                                        let terapiaIdParaVerificar;
+                                        if (org === "Padrão") {
+                                            terapiaIdParaVerificar = atend.atend_terapiaid;
+                                        } else if (org === "Administrativo") {
+                                            if (categorias === "Substituicao" || categorias === "Substituição") {
+                                                terapiaIdParaVerificar = atend.atend_mergeterapiaid;
+                                            } else if (categorias === "SubstitutoFixo") {
+                                                terapiaIdParaVerificar = atend.atend_fixoterapiaid;
+                                            } else {
+                                                terapiaIdParaVerificar = atend.atend_terapiaid;
+                                            }
+                                        } else {
+                                            terapiaIdParaVerificar = atend.atend_terapiaid;
+                                        }
+                                        
+                                        const ehTerapiaABAAT = terapiaIdParaVerificar ? lookupTerapiaABAAT[terapiaIdParaVerificar.toString()] : false;
+                                        
+                                        // ▼▼▼ AJUSTAR HORÁRIO PARA EXIBIÇÃO ▼▼▼
+                                        if (porHoras === "sim") {
+                                            const ehSalaEscola = String(atend.atend_salaid) === SALA_ESCOLA;
+                                            const dataBase = new Date(atend.atend_atenddata);
+                                            let [horaIni, minutoIni] = atend.atend_atendhora.split(":").map(Number);
+                                            
+                                            const beneId = atend.atend_beneid.toString();
+                                            const [horaCheck] = atend.atend_atendhora.split(":").map(Number);
+                                            const periodo = horaCheck < 13 ? 'manha' : 'tarde';
+                                            const chaveContador = `${beneId}_${dataAtend}_${periodo}`;
+                                            const totalSessoesPeriodo = contadorSessoes[chaveContador] || 0;
+                                            
+                                            // ▼▼▼ DENTRO DO LOOP PRINCIPAL, QUANDO porHoras === "sim" E ehSalaEscola === true ▼▼▼
+                                            if (ehSalaEscola) {
+                                                const turnoSet = (req.body.turnoSet || '').toLowerCase().trim();
+                                                
+                                                // 1️⃣ Parse MANHÃ (Campos padrão - usados sempre para manhã)
+                                                let hIniSetM = null, hFimSetM = null;
+                                                if (req.body.horaInicialSet && req.body.horaInicialSet.includes(':')) {
+                                                    const [hi, mi] = req.body.horaInicialSet.split(':').map(Number);
+                                                    if (!isNaN(hi) && !isNaN(mi)) hIniSetM = hi * 60 + mi;
+                                                }
+                                                if (req.body.horaFinalSet && req.body.horaFinalSet.includes(':')) {
+                                                    const [hf, mf] = req.body.horaFinalSet.split(':').map(Number);
+                                                    if (!isNaN(hf) && !isNaN(mf)) hFimSetM = hf * 60 + mf;
+                                                }
+
+                                                // 2️⃣ Parse TARDE (Campos com 'D' - usados apenas se turnoSet === 'dia')
+                                                let hIniSetD = null, hFimSetD = null;
+                                                if (turnoSet === 'dia') {
+                                                    if (req.body.horaInicialSetD && req.body.horaInicialSetD.includes(':')) {
+                                                        const [hi, mi] = req.body.horaInicialSetD.split(':').map(Number);
+                                                        if (!isNaN(hi) && !isNaN(mi)) hIniSetD = hi * 60 + mi;
+                                                    }
+                                                    if (req.body.horaFinalSetD && req.body.horaFinalSetD.includes(':')) {
+                                                        const [hf, mf] = req.body.horaFinalSetD.split(':').map(Number);
+                                                        if (!isNaN(hf) && !isNaN(mf)) hFimSetD = hf * 60 + mf;
+                                                    }
+                                                }
+
+                                                // 3️⃣ Definir Janela de Tempo Base conforme turno e período
+                                                let inicioBase, limiteBase;
+                                                
+                                                if (turnoSet === 'dia') {
+                                                    // Se for dia inteiro: manhã usa campos padrão, tarde usa campos 'D'
+                                                    if (periodo === 'manha') {
+                                                        inicioBase = (hIniSetM !== null) ? hIniSetM : 480;  // Fallback: 08:00
+                                                        limiteBase = (hFimSetM !== null) ? hFimSetM : 780;  // Fallback: 13:00 (300min = 5 sessões)
+                                                    } else {
+                                                        inicioBase = (hIniSetD !== null) ? hIniSetD : 780;  // Fallback: 13:00
+                                                        limiteBase = (hFimSetD !== null) ? hFimSetD : 1080; // Fallback: 18:00 (300min = 5 sessões)
+                                                    }
+                                                } else {
+                                                    // Lógica original para 'manha' ou 'tarde' isolados
+                                                    inicioBase = (hIniSetM !== null) ? hIniSetM : (turnoSet === 'manha' ? 480 : 780);
+                                                    limiteBase = (hFimSetM !== null) ? hFimSetM : (turnoSet === 'manha' ? 720 : 1020);
+                                                }
+
+                                                const indiceAtual = indicePorPeriodo[chaveContador] || 0;
+
+                                                // ✅ CÁLCULO: 60 minutos por sessão (Sala Escola)
+                                                let iniCalc = inicioBase + (indiceAtual * 60);
+                                                let fimCalc = iniCalc + 60;
+
+                                                // 🔒 VALIDAÇÃO: garante que última sessão não ultrapasse o limite da janela
+                                                if (fimCalc > limiteBase) {
+                                                    iniCalc = limiteBase - 60;
+                                                    fimCalc = limiteBase;
+                                                }
+
+                                                // Aplica ao processamento
+                                                horaIni = Math.floor(iniCalc / 60);
+                                                minutoIni = iniCalc % 60;
+
+                                                // 📌 Atualiza trackers (contadores independentes por manhã/tarde via chaveContador)
+                                                indicePorPeriodo[chaveContador] = (indicePorPeriodo[chaveContador] || 0) + 1;
+                                                const chaveSala = `${atend.atend_salaid}_${beneId}_${dataAtend}_${periodo}`;
+                                                ultimoHorarioSala[chaveSala] = { hora: horaIni, minuto: minutoIni };
+                                            }
+                                            
+                                            // ✅ CÁLCULO DO HORÁRIO DE FIM (DEPOIS de todas as modificações)
+                                            const inicio = new Date(dataBase);
+                                            inicio.setHours(horaIni, minutoIni, 0, 0);
+
+                                            let fim;
+                                            if (ehSalaEscola) {
+                                                fim = new Date(inicio);
+                                                fim.setMinutes(fim.getMinutes() + 60);
+                                            } else {
+                                                fim = new Date(inicio);
+                                                fim.setMinutes(fim.getMinutes() + 40);
+                                            }
+
+                                            // ✅ FORMATAÇÃO (garantido que todas as variáveis existem)
+                                            const horaIniFmt = horaIni.toString().padStart(2, "0");
+                                            const minutoIniFmt = minutoIni.toString().padStart(2, "0");
+                                            const horaFimFmt = fim.getHours().toString().padStart(2, "0");
+                                            const minutoFimFmt = fim.getMinutes().toString().padStart(2, "0");
+
+                                            rab.dt = fncGeral.getData(atend.atend_atenddata) + " - " + 
+                                                    horaIniFmt + ":" + minutoIniFmt + "/" + 
+                                                    horaFimFmt + ":" + minutoFimFmt;
+                                            rab.horaIni = horaIniFmt + ":" + minutoIniFmt;
+                                            rab.horaFim = horaFimFmt + ":" + minutoFimFmt;
+                                        } else {
+                                            rab.dt = fncGeral.getData(atend.atend_atenddata);
+                                        }
+                                        rab.dataDia = fncGeral.getData(atend.atend_atenddata);
+
+                                        // ▼▼▼ LÓGICA DE TERAPIA/TERAPEUTA ▼▼▼
+                                        let terapiaAtend, terapeutaAtend;
+
+                                        if (ehFixo) {
+                                            terapiaAtend = atend.atend_fixoterapiaid;
+                                            terapeutaAtend = atend.atend_fixoterapeutaid;
+                                            switch (categorias) {
+                                                case "SubstitutoFixo":
+                                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                    break;
+                                                case "Substituicao":
+                                                case "Substituição":
+                                                    terapiaAtend = atend.atend_fixoterapiaid || atend.atend_mergeterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid || atend.atend_mergeterapeutaid;
+                                                    break;
+                                                case "Feriado":
+                                                case "Falta Absoluta":
+                                                    terapiaAtend = "break";
+                                                    terapeutaAtend = "break";
+                                                    break;
+                                                default:
+                                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                    break;
+                                            }
+                                        } else {
+                                            terapiaAtend = atend.atend_terapiaid;
+                                            terapeutaAtend = atend.atend_terapeutaid;
+                                            switch (categorias) {
+                                                case "Feriado":
+                                                case "Falta Absoluta":
+                                                    terapiaAtend = "break";
+                                                    terapeutaAtend = "break";
+                                                    break;
+                                                case "Substituicao":
+                                                case "Substituição":
+                                                    terapiaAtend = atend.atend_mergeterapiaid;
+                                                    terapeutaAtend = atend.atend_mergeterapeutaid;
+                                                    break;
+                                                case "SubstitutoFixo":
+                                                    terapiaAtend = atend.atend_fixoterapiaid;
+                                                    terapeutaAtend = atend.atend_fixoterapeutaid;
+                                                    break;
+                                                default:
+                                                    terapiaAtend = atend.atend_terapiaid;
+                                                    terapeutaAtend = atend.atend_terapeutaid;
+                                                    break;
+                                            }
+                                        }
+
+                                        // ▼▼▼ INCLUSÃO NO RELATÓRIO ▼▼▼
+                                        if (categorias !== "Feriado" && categorias !== "Falta Absoluta" && terapiaAtend !== "break") {
+                                            if (porSala == "sim"){
+                                                sala.forEach((s) => {
+                                                    if (("" + atend.atend_salaid + "") == ("" + s._id + "")){
+                                                        if (("" + s.sala_nome + "").includes("Escola")){
+                                                            rab.sala = "Escola ou Domicílio";
+                                                        } else {
+                                                            rab.sala = "Clínica";
+                                                        }
+                                                    }
+                                                })
+                                            }
+                                            
+                                            rab.especialidade = terapiaAtend;
+                                            rab.profissional = terapeutaAtend;
+                                            
+                                            rel.push(Object.assign({}, rab));
+                                            rab = new RelAtendBene();
+                                        }
+                                    });
+                                    
+                                    rel.sort(function(a, b){
+                                        let dataODiaA = a.dataDia || fncGeral.getData(a.dt);
+                                        let dataODiaB = b.dataDia || fncGeral.getData(b.dt);
+                                        
+                                        const [diaA, mesA, anoA] = dataODiaA.split('/').map(Number);
+                                        const [diaB, mesB, anoB] = dataODiaB.split('/').map(Number);
+                                        
+                                        const dataA = new Date(anoA, mesA - 1, diaA);
+                                        const dataB = new Date(anoB, mesB - 1, diaB);
+                                        
+                                        if (dataA.getTime() !== dataB.getTime()) {
+                                            return dataA - dataB;
+                                        }
+                                        
+                                        return (a.horaIni || '').localeCompare(b.horaIni || '');
+                                    });
+                                    
+                                    res.render("atendimento/relatendvalBeneATNovo", {
+                                        benes: bene, 
+                                        anos: ano, 
+                                        terapeutas: terapeuta, 
+                                        salas: sala,
+                                        terapias: terapias, 
+                                        rels: rel, 
+                                        periodoDe, 
+                                        periodoAte, 
+                                        conv_nome, 
+                                        bene_nome, 
+                                        porHoras, 
+                                        porSala,
+                                        filtro
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        }).catch((err) => {
+            console.error('[ERRO relAtendimentoBeneFiltroATNovo]', err);
+            res.status(500).send("Erro ao gerar relatório");
+        });
+    },
+    // ============================================
     relAtendimentoBeneCons(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
@@ -7441,7 +7697,6 @@ if (ehSalaEscola) {
             })
         })
     },
-
     //
     relAtendimentoBeneConsFiltroOLD(req,res){
         let db = req.cookies['preferredDb'];
@@ -8936,7 +9191,6 @@ if (ehSalaEscola) {
     relAtendterapiacons(req,res){
         res.render("atendimento/atendreltera/relatendterapiacons")
     },
-   
     relAtendterapiaconsFiltro(req,res){
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
@@ -9205,7 +9459,7 @@ if (ehSalaEscola) {
             console.log(err)
         })
     },
-      /* Analitico*/
+    /* Analitico*/
     relAtendteraana: async (req, res) => {
         try {
             const db = req.cookies['preferredDb'];
@@ -9566,7 +9820,6 @@ if (ehSalaEscola) {
             console.log(err)
         })
     },
-
     relAtendteraanaFiltro2(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
@@ -10038,7 +10291,6 @@ if (ehSalaEscola) {
             console.log(err)
         })
     },
-
     relAtendteraanaFiltro: function (req, res) {
         let db = req.cookies['preferredDb'];
         const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
@@ -10548,7 +10800,6 @@ if (ehSalaEscola) {
             contagemPorTerapeuta: {}
         });
     },
-   
     async relAtendteraanafiltrotodos(req, res) {
     try {
         let db = req.cookies['preferredDb'];
@@ -10746,7 +10997,7 @@ if (ehSalaEscola) {
         console.error(err);
         res.status(500).send("Erro ao gerar relatório");
     }
-},
+    },
     relAtendteraanaFiltro2(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
@@ -10974,7 +11225,7 @@ if (ehSalaEscola) {
             console.log(err)
         })
     },
-      /* consolidado por Valor*/
+    /* consolidado por Valor*/
     relAtendteracons(req,res){
         let seg = new Date();
         let sex = new Date();
@@ -10998,7 +11249,6 @@ if (ehSalaEscola) {
             console.log(err)
         })
     },
-
     relatendgestaoana: async (req, res) => {
         try {
             const db = req.cookies['preferredDb'];
@@ -11252,7 +11502,6 @@ if (ehSalaEscola) {
             res.status(500).send("Erro ao gerar relatório analítico.");
         }
     },
-   
     relatendgestaocons: async (req, res) => {
         try {
             const db = req.cookies['preferredDb'];
@@ -11612,7 +11861,7 @@ if (ehSalaEscola) {
         }
     },
     relatendgestaoconsfechadoNEO: async (req, res) => {
-        a;
+        
     },
     relatendgestaoconsfechadoOLD_ErroSubsfixo: async (req, res) => {
         try {
@@ -13559,439 +13808,439 @@ if (ehSalaEscola) {
             res.status(500).send("Erro ao gerar relatório consolidado.");
         }
     },
-relterapiaconvfecdet: async (req, res) => {
-    try {
-        const db = req.cookies['preferredDb'];
-        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
-        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+    relterapiaconvfecdet: async (req, res) => {
+        try {
+            const db = req.cookies['preferredDb'];
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
 
-        // --- Normalização das datas (aceita query ou body, array ou string) ---
-        const dataIniStr = Array.isArray(req.query.dataIni) ? req.query.dataIni[0] : (req.query.dataIni || req.body.dataIni);
-        const dataFimStr = Array.isArray(req.query.dataFim) ? req.query.dataFim[0] : (req.query.dataFim || req.body.dataFim);
+            // --- Normalização das datas (aceita query ou body, array ou string) ---
+            const dataIniStr = Array.isArray(req.query.dataIni) ? req.query.dataIni[0] : (req.query.dataIni || req.body.dataIni);
+            const dataFimStr = Array.isArray(req.query.dataFim) ? req.query.dataFim[0] : (req.query.dataFim || req.body.dataFim);
 
-        if (!dataIniStr || !dataFimStr) {
-            return res.render("atendimento/atendreltera/gestao/relatendgestaoconsdet", {
-                rels: [], subtotaisPorConvenio: [], periodoDe: '', periodoAte: '',
-                pesquisa: { dataIni: '', dataFim: '' }
-            });
-        }
+            if (!dataIniStr || !dataFimStr) {
+                return res.render("atendimento/atendreltera/gestao/relatendgestaoconsdet", {
+                    rels: [], subtotaisPorConvenio: [], periodoDe: '', periodoAte: '',
+                    pesquisa: { dataIni: '', dataFim: '' }
+                });
+            }
 
-        const dataIni = new Date(dataIniStr);
-        const dataFim = new Date(dataFimStr);
-        if (isNaN(dataIni.getTime()) || isNaN(dataFim.getTime())) {
-            return res.status(400).send("Datas inválidas.");
-        }
-        dataFim.setUTCHours(23, 59, 59, 999);
+            const dataIni = new Date(dataIniStr);
+            const dataFim = new Date(dataFimStr);
+            if (isNaN(dataIni.getTime()) || isNaN(dataFim.getTime())) {
+                return res.status(400).send("Datas inválidas.");
+            }
+            dataFim.setUTCHours(23, 59, 59, 999);
 
-        const diffDays = Math.ceil((dataFim - dataIni) / (1000 * 60 * 60 * 24));
-        if (diffDays > 31 || diffDays < 0) {
-            return res.status(400).send("O intervalo máximo permitido é de 31 dias.");
-        }
+            const diffDays = Math.ceil((dataFim - dataIni) / (1000 * 60 * 60 * 24));
+            if (diffDays > 31 || diffDays < 0) {
+                return res.status(400).send("O intervalo máximo permitido é de 31 dias.");
+            }
 
-        // ========================================================================
-        // 🔄 PIPELINE DE AGREGAÇÃO - REGRAS TABDIM
-        // ========================================================================
-        const pipeline = [
-            // 1. FILTRO INICIAL: período + EXCLUIR categorias indesejadas
-            {
-                $match: {
-                    atend_atenddata: { $gte: dataIni, $lte: dataFim },
-                    atend_categoria: { $nin: ["Feriado", "Falta Absoluta"] }
-                }
-            },
+            // ========================================================================
+            // 🔄 PIPELINE DE AGREGAÇÃO - REGRAS TABDIM
+            // ========================================================================
+            const pipeline = [
+                // 1. FILTRO INICIAL: período + EXCLUIR categorias indesejadas
+                {
+                    $match: {
+                        atend_atenddata: { $gte: dataIni, $lte: dataFim },
+                        atend_categoria: { $nin: ["Feriado", "Falta Absoluta"] }
+                    }
+                },
 
-            // ====================================================================
-            // 2. DEFINIR TERAPIA EFETIVA (regra TABDIM com versão por ano + atend_fixo híbrido)
-            // ====================================================================
-            {
-                $addFields: {
-                    // 🎯 NORMALIZAÇÃO PRÉVIA: Converte boolean/string para "true", "false" ou "indefinido"
-                    _fixo_norm: {
-                        $switch: {
-                            branches: [
-                                { case: { $in: ["$atend_fixo", [true, "true"]] }, then: "true" },
-                                { case: { $in: ["$atend_fixo", [false, "false"]] }, then: "false" }
-                            ],
-                            default: "indefinido" // null, undefined, vazio ou valor desconhecido
-                        }
-                    },
+                // ====================================================================
+                // 2. DEFINIR TERAPIA EFETIVA (regra TABDIM com versão por ano + atend_fixo híbrido)
+                // ====================================================================
+                {
+                    $addFields: {
+                        // 🎯 NORMALIZAÇÃO PRÉVIA: Converte boolean/string para "true", "false" ou "indefinido"
+                        _fixo_norm: {
+                            $switch: {
+                                branches: [
+                                    { case: { $in: ["$atend_fixo", [true, "true"]] }, then: "true" },
+                                    { case: { $in: ["$atend_fixo", [false, "false"]] }, then: "false" }
+                                ],
+                                default: "indefinido" // null, undefined, vazio ou valor desconhecido
+                            }
+                        },
 
-                    terapia_efetiva_id: {
-                        $switch: {
-                            branches: [
-                                // =====================================================
-                                // 📅 PERÍODO FUTURO: >= 2026 (Estrutura isolada para mudanças)
-                                // =====================================================
-                                {
-                                    case: { $gte: [{ $ifNull: [{ $year: "$atend_datacad" }, 2000] }, 2026] },
-                                    then: {
-                                        $switch: {
-                                            branches: [
-                                                // ✅ Tem atend_fixo válido? → Usa regra com fixo
-                                                {
-                                                    case: { $ne: ["$_fixo_norm", "indefinido"] },
-                                                    then: {
-                                                        $switch: {
-                                                            branches: [
-                                                                { case: { $and: [{ $eq: ["$_fixo_norm", "true"] }, { $in: ["$atend_categoria", ["SubstitutoFixo", "Falta", "Falta Justificada", "Substituição"]] }] }, then: "$atend_fixoterapiaid" },
-                                                                { case: { $and: [{ $eq: ["$_fixo_norm", "false"] }, { $eq: ["$atend_categoria", "SubstitutoFixo"] }] }, then: "$atend_fixoterapiaid" },
-                                                                { case: { $and: [{ $eq: ["$_fixo_norm", "false"] }, { $in: ["$atend_categoria", ["Falta", "Falta Justificada"]] }] }, then: "$atend_terapiaid" },
-                                                                { case: { $and: [{ $eq: ["$_fixo_norm", "false"] }, { $eq: ["$atend_categoria", "Substituição"] }] }, then: "$atend_mergeterapiaid" }
-                                                            ],
-                                                            default: "$atend_terapiaid"
+                        terapia_efetiva_id: {
+                            $switch: {
+                                branches: [
+                                    // =====================================================
+                                    // 📅 PERÍODO FUTURO: >= 2026 (Estrutura isolada para mudanças)
+                                    // =====================================================
+                                    {
+                                        case: { $gte: [{ $ifNull: [{ $year: "$atend_datacad" }, 2000] }, 2026] },
+                                        then: {
+                                            $switch: {
+                                                branches: [
+                                                    // ✅ Tem atend_fixo válido? → Usa regra com fixo
+                                                    {
+                                                        case: { $ne: ["$_fixo_norm", "indefinido"] },
+                                                        then: {
+                                                            $switch: {
+                                                                branches: [
+                                                                    { case: { $and: [{ $eq: ["$_fixo_norm", "true"] }, { $in: ["$atend_categoria", ["SubstitutoFixo", "Falta", "Falta Justificada", "Substituição"]] }] }, then: "$atend_fixoterapiaid" },
+                                                                    { case: { $and: [{ $eq: ["$_fixo_norm", "false"] }, { $eq: ["$atend_categoria", "SubstitutoFixo"] }] }, then: "$atend_fixoterapiaid" },
+                                                                    { case: { $and: [{ $eq: ["$_fixo_norm", "false"] }, { $in: ["$atend_categoria", ["Falta", "Falta Justificada"]] }] }, then: "$atend_terapiaid" },
+                                                                    { case: { $and: [{ $eq: ["$_fixo_norm", "false"] }, { $eq: ["$atend_categoria", "Substituição"] }] }, then: "$atend_mergeterapiaid" }
+                                                                ],
+                                                                default: "$atend_terapiaid"
+                                                            }
+                                                        }
+                                                    },
+                                                    // ❌ Sem atend_fixo? → Fallback seguro
+                                                    { case: true, then: "$atend_terapiaid" }
+                                                ]
+                                            }
+                                        }
+                                    },
+
+                                    // =====================================================
+                                    // 📅 PERÍODO ATUAL/LEGADO: < 2026
+                                    // =====================================================
+                                    {
+                                        case: { $lt: [{ $ifNull: [{ $year: "$atend_datacad" }, 2000] }, 2026] },
+                                        then: {
+                                            $switch: {
+                                                branches: [
+                                                    // ✅ CASO A: atend_fixo EXISTE e é válido (boolean ou string)
+                                                    {
+                                                        case: { $ne: ["$_fixo_norm", "indefinido"] },
+                                                        then: {
+                                                            $switch: {
+                                                                branches: [
+                                                                    { case: { $and: [{ $eq: ["$_fixo_norm", "true"] }, { $in: ["$atend_categoria", ["SubstitutoFixo", "Falta", "Falta Justificada", "Substituição"]] }] }, then: "$atend_fixoterapiaid" },
+                                                                    { case: { $and: [{ $eq: ["$_fixo_norm", "false"] }, { $eq: ["$atend_categoria", "SubstitutoFixo"] }] }, then: "$atend_fixoterapiaid" },
+                                                                    { case: { $and: [{ $eq: ["$_fixo_norm", "false"] }, { $in: ["$atend_categoria", ["Falta", "Falta Justificada"]] }] }, then: "$atend_terapiaid" },
+                                                                    { case: { $and: [{ $eq: ["$_fixo_norm", "false"] }, { $eq: ["$atend_categoria", "Substituição"]} ] }, then: "$atend_mergeterapiaid" }
+                                                                ],
+                                                                default: "$atend_terapiaid"
+                                                            }
+                                                        }
+                                                    },
+                                                    // ❌ CASO B: atend_fixo NÃO EXISTE ou é inválido (Legado)
+                                                    {
+                                                        case: true,
+                                                        then: {
+                                                            $switch: {
+                                                                branches: [
+                                                                    { case: { $eq: ["$atend_categoria", "SubstitutoFixo"] }, then: "$atend_fixoterapiaid" },
+                                                                    { case: { $eq: ["$atend_categoria", "Substituição"] }, then: "$atend_mergeterapiaid" }
+                                                                    // Falta, Falta Justificada, outros → default
+                                                                ],
+                                                                default: "$atend_terapiaid"
+                                                            }
                                                         }
                                                     }
-                                                },
-                                                // ❌ Sem atend_fixo? → Fallback seguro
-                                                { case: true, then: "$atend_terapiaid" }
-                                            ]
+                                                ]
+                                            }
                                         }
                                     }
-                                },
+                                ],
+                                default: "$atend_terapiaid"
+                            }
+                        },
 
-                                // =====================================================
-                                // 📅 PERÍODO ATUAL/LEGADO: < 2026
-                                // =====================================================
-                                {
-                                    case: { $lt: [{ $ifNull: [{ $year: "$atend_datacad" }, 2000] }, 2026] },
-                                    then: {
-                                        $switch: {
-                                            branches: [
-                                                // ✅ CASO A: atend_fixo EXISTE e é válido (boolean ou string)
-                                                {
-                                                    case: { $ne: ["$_fixo_norm", "indefinido"] },
-                                                    then: {
-                                                        $switch: {
-                                                            branches: [
-                                                                { case: { $and: [{ $eq: ["$_fixo_norm", "true"] }, { $in: ["$atend_categoria", ["SubstitutoFixo", "Falta", "Falta Justificada", "Substituição"]] }] }, then: "$atend_fixoterapiaid" },
-                                                                { case: { $and: [{ $eq: ["$_fixo_norm", "false"] }, { $eq: ["$atend_categoria", "SubstitutoFixo"] }] }, then: "$atend_fixoterapiaid" },
-                                                                { case: { $and: [{ $eq: ["$_fixo_norm", "false"] }, { $in: ["$atend_categoria", ["Falta", "Falta Justificada"]] }] }, then: "$atend_terapiaid" },
-                                                                { case: { $and: [{ $eq: ["$_fixo_norm", "false"] }, { $eq: ["$atend_categoria", "Substituição"]} ] }, then: "$atend_mergeterapiaid" }
-                                                            ],
-                                                            default: "$atend_terapiaid"
-                                                        }
-                                                    }
-                                                },
-                                                // ❌ CASO B: atend_fixo NÃO EXISTE ou é inválido (Legado)
-                                                {
-                                                    case: true,
-                                                    then: {
-                                                        $switch: {
-                                                            branches: [
-                                                                { case: { $eq: ["$atend_categoria", "SubstitutoFixo"] }, then: "$atend_fixoterapiaid" },
-                                                                { case: { $eq: ["$atend_categoria", "Substituição"] }, then: "$atend_mergeterapiaid" }
-                                                                // Falta, Falta Justificada, outros → default
-                                                            ],
-                                                            default: "$atend_terapiaid"
-                                                        }
-                                                    }
-                                                }
+                        // =====================================================
+                        // CAMPOS AUXILIARES (atualizados para usar _fixo_norm)
+                        // =====================================================
+                        
+                        // ORIGEM DO ATENDIMENTO
+                        origem_atend: { $ifNull: ["$atend_org", ""] },
+
+                        // EH SUBSTITUTO FIXO? (AGORA USA _fixo_norm para aceitar boolean/string)
+                        eh_substituto_fixo: {
+                            $or: [
+                                { $eq: ["$_fixo_norm", "true"] },  // ✅ Aceita true (bool) OU "true" (string)
+                                { $eq: ["$atend_categoria", "SubstitutoFixo"] }
+                            ]
+                        }
+                    }
+                },
+
+                // 3. DEFINIR VALORES EFETIVOS - REGRAS TABDIM
+                {
+                    $addFields: {
+                        // 💰 VALOR CRE EFETIVO
+                        valorcre_correto: {
+                            $switch: {
+                                branches: [
+                                    // ORIGEM PADRÃO
+                                    {
+                                        case: { $eq: ["$origem_atend", "Padrão"] },
+                                        then: { $ifNull: ["$atend_valorcre", "0,00"] }
+                                    },
+                                    // ORIGEM ADMINISTRATIVO - SUBSTITUTO FIXO
+                                    {
+                                        case: {
+                                            $and: [
+                                                { $eq: ["$origem_atend", "Administrativo"] },
+                                                "$eh_substituto_fixo"
                                             ]
-                                        }
+                                        },
+                                        then: { $ifNull: ["$atend_fixovalorcre", "0,00"] }
+                                    },
+                                    // ORIGEM ADMINISTRATIVO - SUBSTITUIÇÃO
+                                    {
+                                        case: {
+                                            $and: [
+                                                { $eq: ["$origem_atend", "Administrativo"] },
+                                                { $eq: ["$atend_categoria", "Substituição"] }
+                                            ]
+                                        },
+                                        then: { $ifNull: ["$atend_mergevalorcre", "0,00"] }
+                                    },
+                                    // ORIGEM ADMINISTRATIVO - DEMAIS CASOS
+                                    {
+                                        case: { $eq: ["$origem_atend", "Administrativo"] },
+                                        then: { $ifNull: ["$atend_valorcre", "0,00"] }
+                                    }
+                                ],
+                                default: { $ifNull: ["$atend_valorcre", "0,00"] }
+                            }
+                        },
+
+                        // 💳 VALOR DEB EFETIVO
+                        valordeb_correto: {
+                            $switch: {
+                                branches: [
+                                    // ORIGEM PADRÃO
+                                    {
+                                        case: { $eq: ["$origem_atend", "Padrão"] },
+                                        then: { $ifNull: ["$atend_valordeb", "0,00"] }
+                                    },
+                                    // ORIGEM ADMINISTRATIVO - SUBSTITUTO FIXO (USAR PADRÃO, NÃO FIXO!)
+                                    {
+                                        case: {
+                                            $and: [
+                                                { $eq: ["$origem_atend", "Administrativo"] },
+                                                "$eh_substituto_fixo"
+                                            ]
+                                        },
+                                        then: { $ifNull: ["$atend_valordeb", "0,00"] } // ⚠️ NÃO É atend_fixovalordeb!
+                                    },
+                                    // ORIGEM ADMINISTRATIVO - SUBSTITUIÇÃO
+                                    {
+                                        case: {
+                                            $and: [
+                                                { $eq: ["$origem_atend", "Administrativo"] },
+                                                { $eq: ["$atend_categoria", "Substituição"] }
+                                            ]
+                                        },
+                                        then: { $ifNull: ["$atend_mergevalordeb", "0,00"] }
+                                    },
+                                    // ORIGEM ADMINISTRATIVO - DEMAIS CASOS
+                                    {
+                                        case: { $eq: ["$origem_atend", "Administrativo"] },
+                                        then: { $ifNull: ["$atend_valordeb", "0,00"] }
+                                    }
+                                ],
+                                default: { $ifNull: ["$atend_valordeb", "0,00"] }
+                            }
+                        }
+                    }
+                },
+
+                // 4. CONVERTER VALORES PARA NÚMERO (com trim e tratamento de erro)
+                {
+                    $addFields: {
+                        _valorcre: {
+                            $cond: {
+                                if: { $or: [{ $eq: ["$valorcre_correto", ""] }, { $eq: ["$valorcre_correto", null] }] },
+                                then: 0,
+                                else: {
+                                    $convert: {
+                                        input: {
+                                            $replaceAll: {
+                                                input: { $trim: { input: { $toString: "$valorcre_correto" } } },
+                                                find: ",",
+                                                replacement: "."
+                                            }
+                                        },
+                                        to: "double",
+                                        onError: 0,  // ✅ Retorna 0 se falhar a conversão
+                                        onNull: 0
                                     }
                                 }
-                            ],
-                            default: "$atend_terapiaid"
+                            }
+                        },
+                        _valordeb: {
+                            $cond: {
+                                if: { $or: [{ $eq: ["$valordeb_correto", ""] }, { $eq: ["$valordeb_correto", null] }] },
+                                then: 0,
+                                else: {
+                                    $convert: {
+                                        input: {
+                                            $replaceAll: {
+                                                input: { $trim: { input: { $toString: "$valordeb_correto" } } },
+                                                find: ",",
+                                                replacement: "."
+                                            }
+                                        },
+                                        to: "double",
+                                        onError: 0,  // ✅ Retorna 0 se falhar a conversão
+                                        onNull: 0
+                                    }
+                                }
+                            }
                         }
-                    },
+                    }
+                },
 
-                    // =====================================================
-                    // CAMPOS AUXILIARES (atualizados para usar _fixo_norm)
-                    // =====================================================
-                    
-                    // ORIGEM DO ATENDIMENTO
-                    origem_atend: { $ifNull: ["$atend_org", ""] },
+                // 5. LOOKUP: Convênio
+                {
+                    $lookup: {
+                        from: Conv.collection.name,
+                        localField: "atend_convid",
+                        foreignField: "_id",
+                        as: "conv"
+                    }
+                },
+                { $unwind: { path: "$conv", preserveNullAndEmptyArrays: true } },
 
-                    // EH SUBSTITUTO FIXO? (AGORA USA _fixo_norm para aceitar boolean/string)
-                    eh_substituto_fixo: {
+                // 6. EXCLUIR CONVÊNIO ADMINISTRATIVO
+                {
+                    $match: {
                         $or: [
-                            { $eq: ["$_fixo_norm", "true"] },  // ✅ Aceita true (bool) OU "true" (string)
-                            { $eq: ["$atend_categoria", "SubstitutoFixo"] }
+                            { "conv.conv_nome": { $ne: "Administrativo" } },
+                            { "conv.conv_nome": { $exists: false } }
                         ]
                     }
-                }
-            },
+                },
 
-            // 3. DEFINIR VALORES EFETIVOS - REGRAS TABDIM
-            {
-                $addFields: {
-                    // 💰 VALOR CRE EFETIVO
-                    valorcre_correto: {
-                        $switch: {
-                            branches: [
-                                // ORIGEM PADRÃO
-                                {
-                                    case: { $eq: ["$origem_atend", "Padrão"] },
-                                    then: { $ifNull: ["$atend_valorcre", "0,00"] }
-                                },
-                                // ORIGEM ADMINISTRATIVO - SUBSTITUTO FIXO
-                                {
-                                    case: {
-                                        $and: [
-                                            { $eq: ["$origem_atend", "Administrativo"] },
-                                            "$eh_substituto_fixo"
-                                        ]
-                                    },
-                                    then: { $ifNull: ["$atend_fixovalorcre", "0,00"] }
-                                },
-                                // ORIGEM ADMINISTRATIVO - SUBSTITUIÇÃO
-                                {
-                                    case: {
-                                        $and: [
-                                            { $eq: ["$origem_atend", "Administrativo"] },
-                                            { $eq: ["$atend_categoria", "Substituição"] }
-                                        ]
-                                    },
-                                    then: { $ifNull: ["$atend_mergevalorcre", "0,00"] }
-                                },
-                                // ORIGEM ADMINISTRATIVO - DEMAIS CASOS
-                                {
-                                    case: { $eq: ["$origem_atend", "Administrativo"] },
-                                    then: { $ifNull: ["$atend_valorcre", "0,00"] }
-                                }
-                            ],
-                            default: { $ifNull: ["$atend_valorcre", "0,00"] }
-                        }
-                    },
-
-                    // 💳 VALOR DEB EFETIVO
-                    valordeb_correto: {
-                        $switch: {
-                            branches: [
-                                // ORIGEM PADRÃO
-                                {
-                                    case: { $eq: ["$origem_atend", "Padrão"] },
-                                    then: { $ifNull: ["$atend_valordeb", "0,00"] }
-                                },
-                                // ORIGEM ADMINISTRATIVO - SUBSTITUTO FIXO (USAR PADRÃO, NÃO FIXO!)
-                                {
-                                    case: {
-                                        $and: [
-                                            { $eq: ["$origem_atend", "Administrativo"] },
-                                            "$eh_substituto_fixo"
-                                        ]
-                                    },
-                                    then: { $ifNull: ["$atend_valordeb", "0,00"] } // ⚠️ NÃO É atend_fixovalordeb!
-                                },
-                                // ORIGEM ADMINISTRATIVO - SUBSTITUIÇÃO
-                                {
-                                    case: {
-                                        $and: [
-                                            { $eq: ["$origem_atend", "Administrativo"] },
-                                            { $eq: ["$atend_categoria", "Substituição"] }
-                                        ]
-                                    },
-                                    then: { $ifNull: ["$atend_mergevalordeb", "0,00"] }
-                                },
-                                // ORIGEM ADMINISTRATIVO - DEMAIS CASOS
-                                {
-                                    case: { $eq: ["$origem_atend", "Administrativo"] },
-                                    then: { $ifNull: ["$atend_valordeb", "0,00"] }
-                                }
-                            ],
-                            default: { $ifNull: ["$atend_valordeb", "0,00"] }
-                        }
+                // 7. LOOKUP: Terapia EFETIVA
+                {
+                    $lookup: {
+                        from: Terapia.collection.name,
+                        localField: "terapia_efetiva_id",
+                        foreignField: "_id",
+                        as: "terapia"
                     }
-                }
-            },
+                },
+                { $unwind: { path: "$terapia", preserveNullAndEmptyArrays: true } },
 
-            // 4. CONVERTER VALORES PARA NÚMERO (com trim e tratamento de erro)
-            {
-                $addFields: {
-                    _valorcre: {
-                        $cond: {
-                            if: { $or: [{ $eq: ["$valorcre_correto", ""] }, { $eq: ["$valorcre_correto", null] }] },
-                            then: 0,
-                            else: {
-                                $convert: {
-                                    input: {
-                                        $replaceAll: {
-                                            input: { $trim: { input: { $toString: "$valorcre_correto" } } },
-                                            find: ",",
-                                            replacement: "."
-                                        }
-                                    },
-                                    to: "double",
-                                    onError: 0,  // ✅ Retorna 0 se falhar a conversão
-                                    onNull: 0
-                                }
-                            }
-                        }
-                    },
-                    _valordeb: {
-                        $cond: {
-                            if: { $or: [{ $eq: ["$valordeb_correto", ""] }, { $eq: ["$valordeb_correto", null] }] },
-                            then: 0,
-                            else: {
-                                $convert: {
-                                    input: {
-                                        $replaceAll: {
-                                            input: { $trim: { input: { $toString: "$valordeb_correto" } } },
-                                            find: ",",
-                                            replacement: "."
-                                        }
-                                    },
-                                    to: "double",
-                                    onError: 0,  // ✅ Retorna 0 se falhar a conversão
-                                    onNull: 0
-                                }
-                            }
-                        }
+                // 8. AGRUPAR por Convênio + Terapia + Valores
+                {
+                    $group: {
+                        _id: {
+                            conv_nome: "$conv.conv_nome",
+                            terapia_nome: "$terapia.terapia_nome",
+                            valor_credito: "$_valorcre",  // ✅ Considera o valor no agrupamento
+                            valor_debito: "$_valordeb"    // ✅ Considera o valor no agrupamento
+                        },
+                        qtd: { $sum: 1 },
+                        total_valorcre: { $sum: "$_valorcre" },
+                        total_valordeb: { $sum: "$_valordeb" }
                     }
-                }
-            },
+                },
+                { $sort: { "_id.conv_nome": 1, "_id.terapia_nome": 1 } }
+            ];
 
-            // 5. LOOKUP: Convênio
-            {
-                $lookup: {
-                    from: Conv.collection.name,
-                    localField: "atend_convid",
-                    foreignField: "_id",
-                    as: "conv"
-                }
-            },
-            { $unwind: { path: "$conv", preserveNullAndEmptyArrays: true } },
+            // --- EXECUÇÃO ---
+            const rels = await Atend.aggregate(pipeline).exec();
 
-            // 6. EXCLUIR CONVÊNIO ADMINISTRATIVO
-            {
-                $match: {
-                    $or: [
-                        { "conv.conv_nome": { $ne: "Administrativo" } },
-                        { "conv.conv_nome": { $exists: false } }
-                    ]
-                }
-            },
+            // --- FORMATAR RESULTADOS ---
+            const relsFormatado = rels.map(r => {
+                const valorcreNum = r.total_valorcre;
+                const valordebNum = r.total_valordeb;
+                const saldoNum = valorcreNum - valordebNum;
 
-            // 7. LOOKUP: Terapia EFETIVA
-            {
-                $lookup: {
-                    from: Terapia.collection.name,
-                    localField: "terapia_efetiva_id",
-                    foreignField: "_id",
-                    as: "terapia"
-                }
-            },
-            { $unwind: { path: "$terapia", preserveNullAndEmptyArrays: true } },
+                const nomeTerapia = (r._id.terapia_nome || "").trim();
+                const isABA_AT = /aba\s+at/i.test(nomeTerapia);
 
-            // 8. AGRUPAR por Convênio + Terapia + Valores
-            {
-                $group: {
-                    _id: {
-                        conv_nome: "$conv.conv_nome",
-                        terapia_nome: "$terapia.terapia_nome",
-                        valor_credito: "$_valorcre",  // ✅ Considera o valor no agrupamento
-                        valor_debito: "$_valordeb"    // ✅ Considera o valor no agrupamento
-                    },
-                    qtd: { $sum: 1 },
-                    total_valorcre: { $sum: "$_valorcre" },
-                    total_valordeb: { $sum: "$_valordeb" }
-                }
-            },
-            { $sort: { "_id.conv_nome": 1, "_id.terapia_nome": 1 } }
-        ];
+                // ✅ VALORES UNITÁRIOS (para debUsado e credUsado)
+                const valorUnitarioCred = r.qtd > 0 ? valorcreNum / r.qtd : 0;
+                const valorUnitarioDeb = r.qtd > 0 ? valordebNum / r.qtd : 0;
 
-        // --- EXECUÇÃO ---
-        const rels = await Atend.aggregate(pipeline).exec();
-
-        // --- FORMATAR RESULTADOS ---
-        const relsFormatado = rels.map(r => {
-            const valorcreNum = r.total_valorcre;
-            const valordebNum = r.total_valordeb;
-            const saldoNum = valorcreNum - valordebNum;
-
-            const nomeTerapia = (r._id.terapia_nome || "").trim();
-            const isABA_AT = /aba\s+at/i.test(nomeTerapia);
-
-            // ✅ VALORES UNITÁRIOS (para debUsado e credUsado)
-            const valorUnitarioCred = r.qtd > 0 ? valorcreNum / r.qtd : 0;
-            const valorUnitarioDeb = r.qtd > 0 ? valordebNum / r.qtd : 0;
-
-            return {
-                conv_nome: r._id.conv_nome,
-                terapia_nome: nomeTerapia,
-                qtd: r.qtd,
-                tempo: isABA_AT ? "60 min" : "40 min",
-                
-                // ✅ VALORES UNITÁRIOS PARA VIEW (debUsado e credUsado)
-                valor_unitario_cred_ref: fncGeral.formatarReal(Math.round(valorUnitarioCred * 100)),
-                valor_unitario_deb_ref: fncGeral.formatarReal(Math.round(valorUnitarioDeb * 100)),
-                
-                // ✅ TOTAIS
-                total_valorcre: fncGeral.formatarReal(Math.round(valorcreNum * 100)),
-                total_valordeb: fncGeral.formatarReal(Math.round(valordebNum * 100)),
-                total_saldo: fncGeral.formatarReal(Math.round(saldoNum * 100)),
-                
-                _valorcre_num: valorcreNum,
-                _valordeb_num: valordebNum,
-                _saldo_num: saldoNum
-            };
-        });
-
-        // --- SUBTOTAIS POR CONVÊNIO ---
-        const subtotaisMap = {};
-        relsFormatado.forEach(item => {
-            const key = item.conv_nome;
-            if (!subtotaisMap[key]) {
-                subtotaisMap[key] = {
-                    conv_nome: key,
-                    qtd: 0,
-                    total_valorcre: 0,
-                    total_valordeb: 0
+                return {
+                    conv_nome: r._id.conv_nome,
+                    terapia_nome: nomeTerapia,
+                    qtd: r.qtd,
+                    tempo: isABA_AT ? "60 min" : "40 min",
+                    
+                    // ✅ VALORES UNITÁRIOS PARA VIEW (debUsado e credUsado)
+                    valor_unitario_cred_ref: fncGeral.formatarReal(Math.round(valorUnitarioCred * 100)),
+                    valor_unitario_deb_ref: fncGeral.formatarReal(Math.round(valorUnitarioDeb * 100)),
+                    
+                    // ✅ TOTAIS
+                    total_valorcre: fncGeral.formatarReal(Math.round(valorcreNum * 100)),
+                    total_valordeb: fncGeral.formatarReal(Math.round(valordebNum * 100)),
+                    total_saldo: fncGeral.formatarReal(Math.round(saldoNum * 100)),
+                    
+                    _valorcre_num: valorcreNum,
+                    _valordeb_num: valordebNum,
+                    _saldo_num: saldoNum
                 };
-            }
-            subtotaisMap[key].qtd += item.qtd;
-            subtotaisMap[key].total_valorcre += item._valorcre_num;
-            subtotaisMap[key].total_valordeb += item._valordeb_num;
-        });
+            });
 
-        const subtotaisPorConvenio = Object.values(subtotaisMap).map(sub => {
-            const saldoNum = sub.total_valorcre - sub.total_valordeb;
-            return {
-                conv_nome: sub.conv_nome,
-                qtd: sub.qtd,
-                total_valorcre: fncGeral.formatarReal(Math.round(sub.total_valorcre * 100)),
-                total_valordeb: fncGeral.formatarReal(Math.round(sub.total_valordeb * 100)),
-                total_saldo: fncGeral.formatarReal(Math.round(saldoNum * 100))
-            };
-        });
+            // --- SUBTOTAIS POR CONVÊNIO ---
+            const subtotaisMap = {};
+            relsFormatado.forEach(item => {
+                const key = item.conv_nome;
+                if (!subtotaisMap[key]) {
+                    subtotaisMap[key] = {
+                        conv_nome: key,
+                        qtd: 0,
+                        total_valorcre: 0,
+                        total_valordeb: 0
+                    };
+                }
+                subtotaisMap[key].qtd += item.qtd;
+                subtotaisMap[key].total_valorcre += item._valorcre_num;
+                subtotaisMap[key].total_valordeb += item._valordeb_num;
+            });
 
-        // --- GRAND TOTAL ---
-        const grandTotal = relsFormatado.reduce((acc, item) => {
-            acc.qtd += item.qtd;
-            acc.total_valorcre += item._valorcre_num;
-            acc.total_valordeb += item._valordeb_num;
-            return acc;
-        }, { qtd: 0, total_valorcre: 0, total_valordeb: 0 });
+            const subtotaisPorConvenio = Object.values(subtotaisMap).map(sub => {
+                const saldoNum = sub.total_valorcre - sub.total_valordeb;
+                return {
+                    conv_nome: sub.conv_nome,
+                    qtd: sub.qtd,
+                    total_valorcre: fncGeral.formatarReal(Math.round(sub.total_valorcre * 100)),
+                    total_valordeb: fncGeral.formatarReal(Math.round(sub.total_valordeb * 100)),
+                    total_saldo: fncGeral.formatarReal(Math.round(saldoNum * 100))
+                };
+            });
 
-        const grandSaldo = grandTotal.total_valorcre - grandTotal.total_valordeb;
+            // --- GRAND TOTAL ---
+            const grandTotal = relsFormatado.reduce((acc, item) => {
+                acc.qtd += item.qtd;
+                acc.total_valorcre += item._valorcre_num;
+                acc.total_valordeb += item._valordeb_num;
+                return acc;
+            }, { qtd: 0, total_valorcre: 0, total_valordeb: 0 });
 
-        grandTotal.total_valorcre = fncGeral.formatarReal(Math.round(grandTotal.total_valorcre * 100));
-        grandTotal.total_valordeb = fncGeral.formatarReal(Math.round(grandTotal.total_valordeb * 100));
-        grandTotal.total_saldo = fncGeral.formatarReal(Math.round(grandSaldo * 100));
+            const grandSaldo = grandTotal.total_valorcre - grandTotal.total_valordeb;
 
-        // --- RENDER ---
-        const periodoDe = fncGeral.getDataInvert(dataIni.toISOString().substring(0, 10));
-        const periodoAte = fncGeral.getDataInvert(dataFim.toISOString().substring(0, 10));
+            grandTotal.total_valorcre = fncGeral.formatarReal(Math.round(grandTotal.total_valorcre * 100));
+            grandTotal.total_valordeb = fncGeral.formatarReal(Math.round(grandTotal.total_valordeb * 100));
+            grandTotal.total_saldo = fncGeral.formatarReal(Math.round(grandSaldo * 100));
 
-        res.render("atendimento/atendreltera/gestao/relterapiaconvfecdet", {
-            rels: relsFormatado,
-            subtotaisPorConvenio,
-            grandTotal,
-            periodoDe,
-            periodoAte,
-            pesquisa: {
-                dataIni: dataIni.toISOString().substring(0, 10),
-                dataFim: dataFim.toISOString().substring(0, 10)
-            }
-        });
+            // --- RENDER ---
+            const periodoDe = fncGeral.getDataInvert(dataIni.toISOString().substring(0, 10));
+            const periodoAte = fncGeral.getDataInvert(dataFim.toISOString().substring(0, 10));
 
-    } catch (err) {
-        console.error("[relterapiaconvfecdet] Erro:", err);
-        res.status(500).send("Erro ao gerar relatório consolidado detalhado.");
-    }
-},
-   relfaltasbene_FaltaTerapiaTerapeuta_OK: async (req, res) => {
+            res.render("atendimento/atendreltera/gestao/relterapiaconvfecdet", {
+                rels: relsFormatado,
+                subtotaisPorConvenio,
+                grandTotal,
+                periodoDe,
+                periodoAte,
+                pesquisa: {
+                    dataIni: dataIni.toISOString().substring(0, 10),
+                    dataFim: dataFim.toISOString().substring(0, 10)
+                }
+            });
+
+        } catch (err) {
+            console.error("[relterapiaconvfecdet] Erro:", err);
+            res.status(500).send("Erro ao gerar relatório consolidado detalhado.");
+        }
+    },
+    relfaltasbene_FaltaTerapiaTerapeuta_OK: async (req, res) => {
         try {
             console.log("\n======================");
             console.log("🔍 INICIANDO relfaltasbene");
@@ -14169,7 +14418,7 @@ relterapiaconvfecdet: async (req, res) => {
             return res.status(500).send("Erro ao gerar relatório de faltas.");
         }
     },
-   relfaltasbene_FaltaTerapiaTerapeuta: async (req, res) => {
+    relfaltasbene_FaltaTerapiaTerapeuta: async (req, res) => {
         try {
             console.log("\n======================");
             console.log("🔍 INICIANDO relfaltasbene");
@@ -14349,8 +14598,7 @@ relterapiaconvfecdet: async (req, res) => {
             return res.status(500).send("Erro ao gerar relatório de faltas.");
         }
     },
-
-   relfaltasbene_Ok: async (req, res) => {
+    relfaltasbene_Ok: async (req, res) => {
         try {
             console.log("\n======================");
             console.log("🔍 INICIANDO relfaltasbene");
@@ -14542,7 +14790,7 @@ console.log(terapeutas);
             return res.status(500).send("Erro ao gerar relatório de faltas.");
         }
     },
-       relfaltasbene: async (req, res) => {
+    relfaltasbene: async (req, res) => {
         try {
             console.log("\n======================");
             console.log("🔍 INICIANDO relfaltasbene");
@@ -15336,7 +15584,6 @@ const id = a._id;
             console.log(err)
         })
     },
-
     relAtendimentoBenesecFiltroOLD(req, res) {
         let db = req.cookies['preferredDb'];
         const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
@@ -15863,280 +16110,96 @@ const id = a._id;
             res.status(500).send("Erro ao gerar relatório.");
         });
     },
+    listaCalendarioMensal(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        const Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
 
-listaCalendarioMensal(req, res, resposta) {
-    let db = req.cookies['preferredDb'];
-    const Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
-    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        let flash = new Resposta();
+        if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
+            flash.texto = resposta.texto;
+            flash.sucesso = resposta.sucesso;
+        }
 
-    let flash = new Resposta();
-    if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
-        flash.texto = resposta.texto;
-        flash.sucesso = resposta.sucesso;
-    }
-
-    const hoje = new Date();
-    const dataHoje = hoje.toISOString().split('T')[0];
-    const anoAtual = hoje.getFullYear();
-    const mesAtual = hoje.getMonth();
-    const nomeMesAtual = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][mesAtual] || '';
-
-    console.log("=========================================");
-    console.log("🔍 [GET] listaCalendarioMensal - INÍCIO");
-    console.log("→ Data padrão:", dataHoje);
-    console.log("→ Ano:", anoAtual, "| Mês:", mesAtual);
-    console.log("=========================================");
-
-    Usuario.find({
-        usuario_status: "Ativo",
-        $or: [
-            { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-            { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-        ]
-    })
-    .then((terapeutas) => {
-        terapeutas.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
-
-        console.log("→ Terapeutas carregados:", terapeutas.length);
-
-        Bene.find({ bene_status: "Ativo" })
-        .then((benes) => {
-            benes.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
-
-            console.log("→ Beneficiários carregados:", benes.length);
-            console.log("→ Primeiros 3:", benes.slice(0, 3).map(b => ({ _id: b._id, nome: b.bene_nome })));
-
-            Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
-            .then((horaages) => {
-                Sala.find()
-                .then((salas) => {
-                    salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
-                    
-                    Terapia.find()
-                    .then((terapias) => {
-                        Conv.find()
-                        .then((convs) => {
-                            convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
-                            
-                            Ano.find()
-                            .then((anos) => {
-                                console.log("=========================================");
-                                console.log("✅ [GET] TODOS DADOS CARREGADOS");
-                                console.log("→ Beneficiários:", benes.length);
-                                console.log("→ Terapeutas:", terapeutas.length);
-                                console.log("→ Terapias:", terapias.length);
-                                console.log("→ Convênios:", convs.length);
-                                console.log("→ Salas:", salas.length);
-                                console.log("→ Horários:", horaages.length);
-                                console.log("→ Anos:", anos.length);
-                                console.log("=========================================");
-
-                                res.render('agenda/calendar/listaCalendarioMensal', {
-                                    extras: [],
-                                    benes: benes,
-                                    terapeutas: terapeutas,
-                                    horaages: horaages,
-                                    salas: salas,
-                                    terapias: terapias,
-                                    convs: convs,
-                                    anos: anos,
-                                    flash,
-
-                                    filtroData: dataHoje,
-                                    filtroBeneficiario: "",
-                                    
-                                    agendasCal: [],
-                                    mesAtend: mesAtual.toString(),
-                                    anoAtend: anoAtual.toString(),
-                                    beneSelecionado: "",
-                                    nomeMes: nomeMesAtual
-                                });
-                            });
-                        });
-                    });
-                });
-            });
-        });
-    })
-    .catch((err) => {
-        console.error("=========================================");
-        console.error("💥 [GET] ERRO em listaCalendarioMensal:");
-        console.error(err);
-        console.error("=========================================");
-        req.flash("error_message", "Houve um erro ao carregar o calendário.");
-        res.redirect('/admin/erro');
-    });
-},
-filtraCalendarioMensal(req, res) {
-    let db = req.cookies['preferredDb'];
-    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    const Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
-
-    try {
-        const dataFil = req.body.dataFil;
-        const beneId = req.body.atendBeneficiario || '';
+        const hoje = new Date();
+        const dataHoje = hoje.toISOString().split('T')[0];
+        const anoAtual = hoje.getFullYear();
+        const mesAtual = hoje.getMonth();
+        const nomeMesAtual = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][mesAtual] || '';
 
         console.log("=========================================");
-        console.log("🔍 [POST] filtraCalendarioMensal - INÍCIO");
-        console.log("→ Data recebida:", dataFil);
-        console.log("→ Beneficiário recebido:", beneId);
+        console.log("🔍 [GET] listaCalendarioMensal - INÍCIO");
+        console.log("→ Data padrão:", dataHoje);
+        console.log("→ Ano:", anoAtual, "| Mês:", mesAtual);
         console.log("=========================================");
 
-        if (!dataFil) {
-            throw new Error("Data não informada");
-        }
+        Usuario.find({
+            usuario_status: "Ativo",
+            $or: [
+                { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+            ]
+        })
+        .then((terapeutas) => {
+            terapeutas.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
 
-        const [anoStr, mesStr] = dataFil.split('-');
-        const anoAtend = parseInt(anoStr);
-        const mesAtend = parseInt(mesStr) - 1;
-
-        if (isNaN(anoAtend) || isNaN(mesAtend)) {
-            throw new Error("Data inválida");
-        }
-
-        const dataIni = new Date(Date.UTC(anoAtend, mesAtend, 1)).toISOString();
-        const dataFim = new Date(Date.UTC(anoAtend, mesAtend + 1, 0, 23, 59, 59, 999)).toISOString();
-
-        console.log("→ Ano:", anoAtend, "| Mês:", mesAtend);
-        console.log("→ Período:", dataIni, "até", dataFim);
-
-        let agendaQuery = {
-            agenda_data: { $gte: dataIni, $lte: dataFim }  // ← AQUI ESTAVA O ERRO
-        };
-
-        if (beneId) {
-            agendaQuery.agenda_beneid = beneId;
-            console.log("→ Filtro por beneficiário:", beneId);
-        }
-
-        Agenda.find(agendaQuery)
-        .then((agendas) => {
-            console.log("→ Agendas encontradas:", agendas.length);
+            console.log("→ Terapeutas carregados:", terapeutas.length);
 
             Bene.find({ bene_status: "Ativo" })
             .then((benes) => {
                 benes.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
 
                 console.log("→ Beneficiários carregados:", benes.length);
+                console.log("→ Primeiros 3:", benes.slice(0, 3).map(b => ({ _id: b._id, nome: b.bene_nome })));
 
-                Terapia.find()
-                .then((terapias) => {
-                    terapias.sort((a, b) => a.terapia_nome.localeCompare(b.terapia_nome, 'pt-BR'));
+                Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
+                .then((horaages) => {
+                    Sala.find()
+                    .then((salas) => {
+                        salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
+                        
+                        Terapia.find()
+                        .then((terapias) => {
+                            Conv.find()
+                            .then((convs) => {
+                                convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
+                                
+                                Ano.find()
+                                .then((anos) => {
+                                    console.log("=========================================");
+                                    console.log("✅ [GET] TODOS DADOS CARREGADOS");
+                                    console.log("→ Beneficiários:", benes.length);
+                                    console.log("→ Terapeutas:", terapeutas.length);
+                                    console.log("→ Terapias:", terapias.length);
+                                    console.log("→ Convênios:", convs.length);
+                                    console.log("→ Salas:", salas.length);
+                                    console.log("→ Horários:", horaages.length);
+                                    console.log("→ Anos:", anos.length);
+                                    console.log("=========================================");
 
-                    Conv.find()
-                    .then((convs) => {
-                        convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
+                                    res.render('agenda/calendar/listaCalendarioMensal', {
+                                        extras: [],
+                                        benes: benes,
+                                        terapeutas: terapeutas,
+                                        horaages: horaages,
+                                        salas: salas,
+                                        terapias: terapias,
+                                        convs: convs,
+                                        anos: anos,
+                                        flash,
 
-                        Sala.find()
-                        .then((salas) => {
-                            salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
-
-                            Horaage.find()
-                            .then((horaages) => {
-                                horaages.sort((a, b) => {
-                                    if (a.horaage_turno !== b.horaage_turno) {
-                                        return a.horaage_turno.localeCompare(b.horaage_turno);
-                                    }
-                                    return a.horaage_ordem - b.horaage_ordem;
-                                });
-
-                                Usuario.find({
-                                    usuario_status: "Ativo",
-                                    $or: [
-                                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                                    ]
-                                })
-                                .then((terapeutas) => {
-                                    terapeutas.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
-
-                                    Ano.find()
-                                    .then((anos) => {
-                                        anos.sort((a, b) => a.ano_nome.localeCompare(b.ano_nome));
-
-                                        console.log("=========================================");
-                                        console.log("✅ [POST] TODOS DADOS CARREGADOS");
-                                        console.log("→ Agendas:", agendas.length);
-                                        console.log("→ Beneficiários:", benes.length);
-                                        console.log("→ Terapeutas:", terapeutas.length);
-                                        console.log("→ Terapias:", terapias.length);
-                                        console.log("→ Convênios:", convs.length);
-                                        console.log("→ Salas:", salas.length);
-                                        console.log("→ Horários:", horaages.length);
-                                        console.log("→ Anos:", anos.length);
-                                        console.log("=========================================");
-
-                                        // Criar mapas
-                                        const terapiaMap = {};
-                                        terapias.forEach(t => {
-                                            terapiaMap[t._id.toString()] = t.terapia_nomecid || t.terapia_nome || '—';
-                                        });
-
-                                        const terapeutaMap = {};
-                                        terapeutas.forEach(u => {
-                                            terapeutaMap[u._id.toString()] = u.usuario_nome || '—';
-                                        });
-
-                                        const beneMap = {};
-                                        benes.forEach(b => {
-                                            beneMap[b._id.toString()] = b.bene_nome || '—';
-                                        });
-
-                                        // Formatar agendas para calendário
-                                        const agendasParaCalendario = agendas.map(a => {
-                                            const data = new Date(a.agenda_data);
-                                            const hora = data.getUTCHours().toString().padStart(2, '0');
-                                            const minuto = data.getUTCMinutes().toString().padStart(2, '0');
-                                            
-                                            return {
-                                                agenda_data: a.agenda_data,
-                                                agenda_hora: `${hora}:${minuto}`,
-                                                agenda_terapiaid: a.agenda_terapiaid,
-                                                agenda_usuid: a.agenda_usuid,
-                                                agenda_beneid: a.agenda_beneid,
-                                                agenda_categoria: a.agenda_categoria || '',
-                                                agenda_tipodia: a.agenda_tipodia,
-                                                agenda_fixoterapeutaid: a.agenda_fixoterapeutaid,
-                                                agenda_fixoterapiaid: a.agenda_fixoterapiaid,
-                                                terapiaNome: terapiaMap[a.agenda_terapiaid?.toString()] || '—',
-                                                terapeutaNome: terapeutaMap[a.agenda_usuid?.toString()] || '—',
-                                                beneNome: beneMap[a.agenda_beneid?.toString()] || '—',
-                                                substitutoFixoTerapeuta: terapeutaMap[a.agenda_fixoterapeutaid?.toString()] || '',
-                                                substitutoFixoTerapia: terapiaMap[a.agenda_fixoterapiaid?.toString()] || ''
-                                            };
-                                        });
-
-                                        const nomeMes = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][mesAtend] || '';
-
-                                        res.render('agenda/calendar/listaCalendarioMensal', {
-                                            extras: agendas,
-                                            benes: benes,
-                                            terapeutas: terapeutas,
-                                            horaages: horaages,
-                                            salas: salas,
-                                            terapias: terapias,
-                                            convs: convs,
-                                            anos: anos,
-                                            flash: { texto: '', sucesso: false },
-
-                                            filtroData: dataFil,
-                                            filtroBeneficiario: beneId,
-                                            
-                                            agendasCal: agendasParaCalendario,
-                                            mesAtend: mesAtend.toString(),
-                                            anoAtend: anoAtend.toString(),
-                                            beneSelecionado: beneId,
-                                            nomeMes: nomeMes
-                                        });
+                                        filtroData: dataHoje,
+                                        filtroBeneficiario: "",
+                                        
+                                        agendasCal: [],
+                                        mesAtend: mesAtual.toString(),
+                                        anoAtend: anoAtual.toString(),
+                                        beneSelecionado: "",
+                                        nomeMes: nomeMesAtual
                                     });
                                 });
                             });
@@ -16145,662 +16208,203 @@ filtraCalendarioMensal(req, res) {
                 });
             });
         })
-        .catch(err => {
+        .catch((err) => {
             console.error("=========================================");
-            console.error("💥 [POST] Erro ao buscar dados:");
+            console.error("💥 [GET] ERRO em listaCalendarioMensal:");
+            console.error(err);
+            console.error("=========================================");
+            req.flash("error_message", "Houve um erro ao carregar o calendário.");
+            res.redirect('/admin/erro');
+        });
+    },
+    filtraCalendarioMensal(req, res) {
+        let db = req.cookies['preferredDb'];
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
+
+        try {
+            const dataFil = req.body.dataFil;
+            const beneId = req.body.atendBeneficiario || '';
+
+            console.log("=========================================");
+            console.log("🔍 [POST] filtraCalendarioMensal - INÍCIO");
+            console.log("→ Data recebida:", dataFil);
+            console.log("→ Beneficiário recebido:", beneId);
+            console.log("=========================================");
+
+            if (!dataFil) {
+                throw new Error("Data não informada");
+            }
+
+            const [anoStr, mesStr] = dataFil.split('-');
+            const anoAtend = parseInt(anoStr);
+            const mesAtend = parseInt(mesStr) - 1;
+
+            if (isNaN(anoAtend) || isNaN(mesAtend)) {
+                throw new Error("Data inválida");
+            }
+
+            const dataIni = new Date(Date.UTC(anoAtend, mesAtend, 1)).toISOString();
+            const dataFim = new Date(Date.UTC(anoAtend, mesAtend + 1, 0, 23, 59, 59, 999)).toISOString();
+
+            console.log("→ Ano:", anoAtend, "| Mês:", mesAtend);
+            console.log("→ Período:", dataIni, "até", dataFim);
+
+            let agendaQuery = {
+                agenda_data: { $gte: dataIni, $lte: dataFim }  // ← AQUI ESTAVA O ERRO
+            };
+
+            if (beneId) {
+                agendaQuery.agenda_beneid = beneId;
+                console.log("→ Filtro por beneficiário:", beneId);
+            }
+
+            Agenda.find(agendaQuery)
+            .then((agendas) => {
+                console.log("→ Agendas encontradas:", agendas.length);
+
+                Bene.find({ bene_status: "Ativo" })
+                .then((benes) => {
+                    benes.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
+
+                    console.log("→ Beneficiários carregados:", benes.length);
+
+                    Terapia.find()
+                    .then((terapias) => {
+                        terapias.sort((a, b) => a.terapia_nome.localeCompare(b.terapia_nome, 'pt-BR'));
+
+                        Conv.find()
+                        .then((convs) => {
+                            convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
+
+                            Sala.find()
+                            .then((salas) => {
+                                salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
+
+                                Horaage.find()
+                                .then((horaages) => {
+                                    horaages.sort((a, b) => {
+                                        if (a.horaage_turno !== b.horaage_turno) {
+                                            return a.horaage_turno.localeCompare(b.horaage_turno);
+                                        }
+                                        return a.horaage_ordem - b.horaage_ordem;
+                                    });
+
+                                    Usuario.find({
+                                        usuario_status: "Ativo",
+                                        $or: [
+                                            { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                                            { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                                        ]
+                                    })
+                                    .then((terapeutas) => {
+                                        terapeutas.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
+
+                                        Ano.find()
+                                        .then((anos) => {
+                                            anos.sort((a, b) => a.ano_nome.localeCompare(b.ano_nome));
+
+                                            console.log("=========================================");
+                                            console.log("✅ [POST] TODOS DADOS CARREGADOS");
+                                            console.log("→ Agendas:", agendas.length);
+                                            console.log("→ Beneficiários:", benes.length);
+                                            console.log("→ Terapeutas:", terapeutas.length);
+                                            console.log("→ Terapias:", terapias.length);
+                                            console.log("→ Convênios:", convs.length);
+                                            console.log("→ Salas:", salas.length);
+                                            console.log("→ Horários:", horaages.length);
+                                            console.log("→ Anos:", anos.length);
+                                            console.log("=========================================");
+
+                                            // Criar mapas
+                                            const terapiaMap = {};
+                                            terapias.forEach(t => {
+                                                terapiaMap[t._id.toString()] = t.terapia_nomecid || t.terapia_nome || '—';
+                                            });
+
+                                            const terapeutaMap = {};
+                                            terapeutas.forEach(u => {
+                                                terapeutaMap[u._id.toString()] = u.usuario_nome || '—';
+                                            });
+
+                                            const beneMap = {};
+                                            benes.forEach(b => {
+                                                beneMap[b._id.toString()] = b.bene_nome || '—';
+                                            });
+
+                                            // Formatar agendas para calendário
+                                            const agendasParaCalendario = agendas.map(a => {
+                                                const data = new Date(a.agenda_data);
+                                                const hora = data.getUTCHours().toString().padStart(2, '0');
+                                                const minuto = data.getUTCMinutes().toString().padStart(2, '0');
+                                                
+                                                return {
+                                                    agenda_data: a.agenda_data,
+                                                    agenda_hora: `${hora}:${minuto}`,
+                                                    agenda_terapiaid: a.agenda_terapiaid,
+                                                    agenda_usuid: a.agenda_usuid,
+                                                    agenda_beneid: a.agenda_beneid,
+                                                    agenda_categoria: a.agenda_categoria || '',
+                                                    agenda_tipodia: a.agenda_tipodia,
+                                                    agenda_fixoterapeutaid: a.agenda_fixoterapeutaid,
+                                                    agenda_fixoterapiaid: a.agenda_fixoterapiaid,
+                                                    terapiaNome: terapiaMap[a.agenda_terapiaid?.toString()] || '—',
+                                                    terapeutaNome: terapeutaMap[a.agenda_usuid?.toString()] || '—',
+                                                    beneNome: beneMap[a.agenda_beneid?.toString()] || '—',
+                                                    substitutoFixoTerapeuta: terapeutaMap[a.agenda_fixoterapeutaid?.toString()] || '',
+                                                    substitutoFixoTerapia: terapiaMap[a.agenda_fixoterapiaid?.toString()] || ''
+                                                };
+                                            });
+
+                                            const nomeMes = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][mesAtend] || '';
+
+                                            res.render('agenda/calendar/listaCalendarioMensal', {
+                                                extras: agendas,
+                                                benes: benes,
+                                                terapeutas: terapeutas,
+                                                horaages: horaages,
+                                                salas: salas,
+                                                terapias: terapias,
+                                                convs: convs,
+                                                anos: anos,
+                                                flash: { texto: '', sucesso: false },
+
+                                                filtroData: dataFil,
+                                                filtroBeneficiario: beneId,
+                                                
+                                                agendasCal: agendasParaCalendario,
+                                                mesAtend: mesAtend.toString(),
+                                                anoAtend: anoAtend.toString(),
+                                                beneSelecionado: beneId,
+                                                nomeMes: nomeMes
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            })
+            .catch(err => {
+                console.error("=========================================");
+                console.error("💥 [POST] Erro ao buscar dados:");
+                console.error(err);
+                console.error("=========================================");
+                res.status(500).send(`Erro ao carregar calendário: ${err.message}`);
+            });
+
+        } catch (err) {
+            console.error("=========================================");
+            console.error("💥 [POST] ERRO em filtraCalendarioMensal:");
             console.error(err);
             console.error("=========================================");
             res.status(500).send(`Erro ao carregar calendário: ${err.message}`);
-        });
-
-    } catch (err) {
-        console.error("=========================================");
-        console.error("💥 [POST] ERRO em filtraCalendarioMensal:");
-        console.error(err);
-        console.error("=========================================");
-        res.status(500).send(`Erro ao carregar calendário: ${err.message}`);
+        }
     }
 }
-}
-/*
-let ig = 0
-atend.forEach(a=>{
-    ig++;
-    Atend.deleteOne({//_id: a._id}).then(()=>{//console.log("DELETED!"+ig)})
-})
-*/
-/*
-let dataIni2 = dataIni;
-        let dataFim2 = dataFim;
-        //dataIni2;
-        //dataFim2.setUTCMonth(6);
-        dataIni2.setUTCMonth(6);
-        dataFim2.setUTCMonth(12);
-        console.log("dataIni2? "+dataIni2);
-        console.log("dataFim2? "+dataFim2);
-        let busca2 = { atend_atenddata: { $gte : new Date(dataIni2), $lte:  new Date(dataFim2) } };
-        
-        Atend.find(busca2).then((atend2) =>{
-            console.log("atendlength: "+atend2.length)
-            let i=0;
-            /*
-            AtendArquivo.insertMany(atend2).then(()=>{
-                console.log("FOI!");
-            }).finally(()=>{
-                console.log("Finally");
-            });
-            */
-            /*
-            atend2.forEach((ate)=>{
-                i++;
-                let arquivo = atendArquivoClass;
-                
-                Atend.findByIdAndDelete(ate._id).then(()=>{
-                    console.log("deleted! "+i);
-                }).finally(()=>{
-                    console.log("Finally");
-                });
-            })
-            */
-           /*
-           relAtendteraconsFiltro(req,res){
-        let rel = [];
-        let agendaFinal = [];
-        let terapiaAtend;
-        let convidAtend;
-        let beneAtend;
-        let terapeutaAtend;
-        let periodoDe = fncGeral.getDataInvert(req.body.dataIni);//yyyy-mm-dd -> dd-mm-yyyy
-        let periodoAte = fncGeral.getDataInvert(req.body.dataFim);//yyyy-mm-dd -> dd-mm-yyyy
-        let rab = new RelAtend();//objeto para fazer push em relatendimento
-        let count;
-        let continuar = false;
-        let pesquisa = new Pesquisa();
-        let idsToRemove = [];
-        let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
-        let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
-        let totalFinal = 0;
-        let totalSessoes = 0
-        seg.setHours(0);
-        seg.setMinutes(0);
-        seg.setSeconds(0);
-        sex.setHours(23);
-        sex.setMinutes(59);
-        sex.setSeconds(59);
-        console.log("seg:"+seg)
-        console.log("sex:"+sex)
-        filtroAgendaFixo = {agenda_data: { $gte: seg, $lte: sex }, agenda_temp: false, agenda_usuid: req.body.relTeraid}
-        pesquisa.dataIni = req.body.dataIni;
-        pesquisa.dataFim = req.body.dataFim;
-        pesquisa.terapeuta = req.body.relTeraid;
-
-        Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
-        Agenda.find(filtroAgendaFixo).then((agendaFixa)=>{
-            console.log("agendaFixa: "+agendaFixa.length)
-            let idsTemp =[];
-            agendaFixa.forEach((af)=>{
-                idsTemp.push(af._id);
-            })
-            filtroAgendaSemanal = { $or: [ {agenda_tempId: { $in: idsTemp }},{agenda_data: { $gte: seg, $lte: sex },agenda_temp: true,agenda_usuid: req.body.relTeraid} ] };
-            Agenda.find(filtroAgendaSemanal).then((agendaSemanal)=>{
-                console.log("agendaSemanal: "+agendaSemanal.length)
-                Bene.find().then((bene)=>{
-                    bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
-                    Convcre.find().then((convcre) => {
-                        console.log("Listagem Realizada de Convenios")
-                        Convdeb.find().then((convdeb) => {
-                            console.log("Listagem Realizada de Convenios")
-                            Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
-                                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
-                                terapeuta.some((t)=>{
-                                    if((""+t._id) === (""+req.body.relTeraid)){
-                                        terapeuta_nome = t.usuario_nome;
-                                        return true;
-                                    }
-                                    return false;
-                                })
-                                agendaFinal = agendaSemanal;
-                                agendaFixa.forEach((af)=>{
-                                    continuar = "true";
-                                    agendaSemanal.forEach((as)=>{
-                                        if ((""+af._id) == (""+as.agenda_tempId)){
-                                            continuar = "false";
-                                        }
-                                    })
-
-                                    if (continuar == "true"){
-                                        agendaFinal.push(af);
-                                    }
-                                })
-                                
-                                Terapia.find().then((terapia)=>{
-                                    terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena por ordem alfabética 
-                                    //console.log("at.length:"+at.length)
-                                    agendaFinal.sort(function(a, b) {
-                                        let d1 = new Date(a.agenda_data);
-                                        let d2 = new Date(b.agenda_data);
-                                        d1.setHours(0);
-                                        d1.setMinutes(0);
-                                        d1.setSeconds(0);
-                                        d2.setHours(0);
-                                        d2.setMinutes(0);
-                                        d2.setSeconds(0);
-                                        if(d1 == d2){
-                                            return true;
-                                        } else {
-                                            if(d1 < d2){
-                                                return -1;
-                                            } else {
-                                                return true;
-                                            }
-                                        }
-                                    });
-
-                                    terapia.forEach((t)=>{
-                                        let rab = new RelAtend();
-                                        count = 0;
-                                    
-                                        agendaFinal.forEach((agenda)=>{
-                                            continuar = "true";
-                                            if (agenda.agenda_data.getTimezoneOffset() == 180){
-                                                agenda.agenda_data.setHours(agenda.agenda_data.getHours()+3);
-                                            }
-                                            rab.dt = agenda.agenda_data;
-
-                                            let hours = (""+agenda.agenda_data.getHours());
-                                            let mins = (""+agenda.agenda_data.getMinutes());
-                                            if (hours.length == 1){
-                                                hours = "0"+hours;
-                                            }
-                                            if (mins.length == 1){
-                                                mins = "0"+mins;
-                                            }
-
-                                            rab.hora = (hours+":"+mins);
-                                            categorias = agenda.agenda_categoria;
-                                            //console.log("categorias: "+categorias)
-                                            switch (categorias){
-                                                case "Apoio":// aparece nos 2
-                                                    if (agenda.agenda_usuid == req.body.relTeraid){
-                                                        terapiaAtend = agenda.agenda_terapiaid;
-                                                        terapeutaAtend = agenda.agenda_usuid;
-                                                    } else {
-                                                        terapiaAtend = agenda.agenda_terapiaid;
-                                                        terapeutaAtend = agenda.agenda_usuid;
-                                                    }
-                                                    beneAtend = agenda.agenda_beneid;
-                                                    break;
-                                                case "Extra":
-                                                    if (agenda.agenda_usuid == req.body.relTeraid){
-                                                        terapiaAtend = agenda.agenda_terapiaid;
-                                                        terapeutaAtend = agenda.agenda_usuid;
-                                                    } else {
-                                                        continuar = "false";
-                                                    }
-                                                    beneAtend = agenda.agenda_beneid;
-                                                    break;
-                                                case "Falta":
-                                                    if (agenda.agenda_usuid == req.body.relTeraid){
-                                                        terapiaAtend = agenda.agenda_terapiaid;
-                                                        terapeutaAtend = agenda.agenda_usuid;
-                                                    } else {
-                                                        continuar = "false";
-                                                    }
-                                                    beneAtend = agenda.agenda_beneid;
-                                                    break;
-                                                case "Falta Justificada":
-                                                    continuar = "false";
-                                                    //terapiaAtend = agenda.agenda_terapiaid;
-                                                    //terapeutaAtend = agenda.agenda_usuid;
-                                                    break;
-                                                case "Falta Absoluta":
-                                                    continuar = "false";
-                                                    //terapiaAtend = agenda.agenda_terapiaid;
-                                                    //terapeutaAtend = agenda.agenda_usuid;
-                                                    break;
-                                                case "Feriado":
-                                                    continuar = "false";
-                                                    //terapiaAtend = agenda.agenda_terapiaid;
-                                                    //terapeutaAtend = agenda.agenda_usuid;
-                                                    break;
-                                                case "Glosa":
-                                                    continuar = "false";
-                                                    break;
-                                                case "Padrão":
-                                                    terapiaAtend = agenda.agenda_terapiaid;
-                                                    terapeutaAtend = agenda.agenda_usuid;
-                                                    beneAtend = agenda.agenda_beneid;
-                                                    break;
-                                                case "Substituição":// so sub
-                                                    if (agenda.agenda_usuid == req.body.relTeraid){
-                                                        terapiaAtend = agenda.agenda_terapiaid;
-                                                        terapeutaAtend = agenda.agenda_usuid;
-                                                    } else {
-                                                        continuar = "false";
-                                                    }
-                                                    beneAtend = agenda.agenda_beneid;
-                                                    break;
-                                                case "SubstitutoFixo":
-                                                    terapiaAtend = agenda.agenda_terapiaid;
-                                                    terapeutaAtend = agenda.agenda_usuid;
-                                                    beneAtend = agenda.agenda_beneid;
-                                                    break;
-                                                case "Supervisão":
-                                                    terapiaAtend = agenda.agenda_terapiaid;
-                                                    terapeutaAtend = agenda.agenda_usuid;
-                                                    beneAtend = agenda.agenda_beneid;
-                                                    break;
-                                                default:
-                                                    terapiaAtend = agenda.agenda_terapiaid;
-                                                    terapeutaAtend = agenda.agenda_usuid;
-                                                    beneAtend = agenda.agenda_beneid;
-                                                    break;
-                                            }
-
-                                            if (continuar == "true"){
-                                                let teraTemp;
-                                                terapia.some((temp)=>{
-                                                    if ((""+temp._id) == (""+terapiaAtend)){
-                                                        teraTemp = temp;
-                                                        teranome = temp.terapia_nomecid;
-                                                    }
-                                                })
-                                                if ((""+t.terapia_nomecid) == (""+teraTemp.terapia_nomecid)){
-                                                    count++;
-                                                    //if (count == 1){
-                                                        //conv_bene + terapia = valor cre e deb
-                                                        let benetemp;
-                                                        let valdeb;
-
-                                                        bene.some((b)=>{
-                                                            if((""+b._id) === (""+beneAtend)){
-                                                                bene_nome = b.bene_nome;
-                                                                benetemp = b.bene_convid;
-        
-                                                                return true;
-                                                            }
-                                                            return false;
-                                                        })
-    
-                                                        convdeb.forEach((cdeb)=>{
-                                                            if ((""+cdeb.convdeb_convid) == (""+benetemp) && (""+cdeb.convdeb_terapiaid)  == (""+terapiaAtend)){
-                                                                valdeb = cdeb.convdeb_valor;
-                                                            }
-                                                        })
-
-                                                        rab.nomecid = teranome;
-                                                        rab.valor = valdeb;
-                                                    //}
-                                                    let existe = rel.find(r => (""+r.nomecid+"") === (""+teranome+"") && r.valor === valdeb);
-                                                    
-                                                    if (existe) {
-                                                        existe.sessoes += 1;
-                                                    } else {
-                                                        rel.push({
-                                                            nomecid: teranome,
-                                                            valor: valdeb,
-                                                            sessoes: 1,
-                                                        });
-                                                    }
-                                                    
-                                                    //rab.sessoes = count;
-                                                    idsToRemove.push(agenda._id);
-                                                }
-                                            }
-                                        })
-                                        
-                                        idsToRemove.forEach((itr)=>{
-                                            agendaFinal = agendaFinal.filter(af => (""+af._id) !== (""+itr));
-                                        })
-                                    })
-                                    rel.forEach((r)=>{
-                                        if (!r.valor || r.valor === "undefined" || r.valor === "N,aN") {
-                                            const ccre = convcre.find(c =>
-                                                "" + c.convcre_convid === "" + r.convid &&
-                                                "" + c.convcre_terapiaid === "" + r.nomecid
-                                            );
-                                            console.log("convid: "+r.convid)
-                                            console.log("nomecid: "+r.nomecid)
-                                            r.valor = ccre ? ccre.convcre_valor : "0,00";
-                                        }
-                                        terapia.some((t)=>{
-                                            if (t.terapia_nomecid == r.nomecid){
-                                                r.nomecid = t._id;
-                                            }
-                                        })
-                                        r.total = fncGeral.mascaraValores(parseInt(r.valor.toString().replace(",","").replace(".","")) * r.sessoes);
-                                        totalFinal += parseInt(r.valor.toString().replace(",","").replace(".","")) * r.sessoes;
-                                        totalSessoes += r.sessoes;
-                                    })
-                                    totalFinal = fncGeral.mascaraValores(totalFinal);
-                                    res.render("atendimento/atendreltera/relatendteracons", {anos: ano, terapeutas: terapeuta, terapias: terapia, benes: bene, rels: rel, periodoDe, periodoAte, terapeuta_nome, totalFinal, pesquisa, totalSessoes})
-                                })
-                                })
-                            })
-                        })
-                    })
-                })
-            })
-        }).catch((err) =>{
-            console.log(err)
-        })
-    }
-}
-           */
-          /*
-          Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
-        Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
-        const ini = (new Date("2000-01-01T00:00:00.000Z")).toISOString();
-        const fim = (new Date("2000-01-02T23:59:59.999Z")).toISOString();
-       
-        let updates = [
-        { teraId: "68b88a29a741852d6f4653fb", beneId: "68a3795873ff2bb80b0a4605", piaId: "6915879621d8779aa12a7251", valorCre: "140,00", valorDeb: "52,42" },
-        ...
-        ];
-
-        updates.forEach(u => {
-            //let u = updates[0];
-
-            Atend.updateMany({
-                atend_atenddata: {$gte: ini,$lte: fim},
-                atend_terapeutaid: new ObjectId(u.teraId),
-                atend_beneid: new ObjectId(u.beneId)
-            },
-            {
-                $set: {
-                    atend_terapiaid: new ObjectId(u.piaId),
-                    atend_valorcre: u.valorCre,
-                    atend_valordeb: u.valorDeb
-                }
-            }).then((res) =>{
-                //console.log("Salvo")
-                resultado = true;
-            }).catch((err) =>{
-                console.log("erro mongo:")
-                console.log(err)
-                resultado = err;
-                //res.redirect('admin/branco')
-            }).finally(()=>{
-                console.log("FINISH");
-            });
-            Agenda.updateMany({
-                agenda_data: {$gte: ini,$lte: fim},
-                agenda_usuid: new ObjectId(u.teraId),
-                agenda_beneid: new ObjectId(u.beneId),
-            }, {$set: {
-                agenda_terapiaid: new ObjectId(u.piaId)
-            }}).then((res) =>{
-                //console.log("Salvo")
-                resultado = true;
-            }).catch((err) =>{
-                console.log("erro mongo:")
-                console.log(err)
-                resultado = err;
-                //res.redirect('admin/branco')
-            }).finally(()=>{
-                console.log("FINISH");
-            });
-        });
-          */
-         /*
-
-         // PRE ERRO antes das duplicatas
-
-         Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
-
-        let inicioDia = new Date(2025, 7, 1, 0, 0, 0, 0);   // 29/09/2025
-        let fimDia    = new Date(2025, 9, 31, 23, 59, 59, 999); // 03/10/2025
-
-        console.log("inicioDia: " + inicioDia);
-        console.log("fimDia: " + fimDia);
-
-        Atend.find({
-            atend_atenddata: { $gte: inicioDia, $lte: fimDia },
-            atend_agenda_f_id_orig: { $ne: null }
-        })
-        .then((atendimentos) => {
-            console.log("atendimentos? " + atendimentos.length);
-
-            // Agrupar por atend_agenda_f_id_orig
-            let mapa = {};
-            atendimentos.forEach(at => {
-                var chave = at.atend_agenda_f_id_orig ? at.atend_agenda_f_id_orig.toString() : null;
-                if (!chave) return; // evita null
-                if (!mapa[chave]) mapa[chave] = [];
-                mapa[chave].push(at);
-            });
-
-            // Processar cada grupo
-            for (var chave in mapa) {
-                let grupo = mapa[chave];
-
-                if (grupo.length > 1) {
-
-                    // Separar corretos x defeituosos
-                    var corretos     = grupo.filter(a => a.atend_agenda_s_id_orig); // tem s_id_orig → válido
-                    var defeituosos  = grupo.filter(a => !a.atend_agenda_s_id_orig); // NÃO tem → defeituoso
-
-                    console.log(`\n📌 Grupo ${chave}: ${grupo.length} registros`);
-                    console.log(`✔ Correto(s):    ${corretos.map(a => a._id).join(", ")}`);
-                    console.log(`❌ Defeituoso(s): ${defeituosos.map(a => a._id).join(", ")}`);
-
-                    // Garantir que sempre fique apenas 1 registro VÁLIDO
-                    if (corretos.length > 1) {
-                        // Ordenar para deixar apenas o mais antigo
-                        corretos.sort((a, b) => new Date(a.atend_datacad) - new Date(b.atend_datacad));
-                        var manter = corretos[0];
-                        var removerCorretos = corretos.slice(1); // descartar os excedentes
-
-                        console.log(`Mantendo apenas o mais antigo: ${manter._id}`);
-                        for (var item of removerCorretos) {
-                            Atend.deleteOne({ _id: item._id });
-                            console.log("🗑️ Duplicata válida removida:", item._id);
-                        }
-                    }
-
-                    // Remover todos os defeituosos SEMPRE
-                    for (var item of defeituosos) {
-                        Atend.deleteOne({ _id: item._id }).then((del) => {
-                            console.log("🗑️ Defeituoso removido:", item._id);
-                        }).catch(err => {
-                            console.log("❌ Erro: " + err);
-                        });;
-                    }
-                }
-            }
-
-            console.log("\n✔ Finalizado com sucesso!");
-        })
-        .catch(err => {
-            console.log("❌ Erro: " + err);
-        });
-         */
-        /*
-    
-            // POS ERRO para as duplicatas
-
-         Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
-
-        let inicioDia = new Date(2025, 7, 1, 0, 0, 0, 0);   // 29/09/2025
-        let fimDia    = new Date(2025, 9, 31, 23, 59, 59, 999); // 03/10/2025
-
-        console.log("inicioDia: " + inicioDia);
-        console.log("fimDia: " + fimDia);
-
-        Atend.find({
-            atend_atenddata: { $gte: inicioDia, $lte: fimDia },
-            atend_agenda_f_id_orig: { $ne: null }
-        })
-        .then((atendimentos) => {
-            console.log("atendimentos? " + atendimentos.length);
-
-            // Agrupar por atend_agenda_f_id_orig
-            let mapa = {};
-            atendimentos.forEach(at => {
-                var chave = at.atend_agenda_f_id_orig ? at.atend_agenda_f_id_orig.toString() : null;
-                if (!chave) return; // evita null
-                if (!mapa[chave]) mapa[chave] = [];
-                mapa[chave].push(at);
-            });
-
-            // Processar cada grupo
-            for (var chave in mapa) {
-                let grupo = mapa[chave];
-
-                if (grupo.length > 1) {
-
-                    // Separar corretos x defeituosos
-                    var corretos     = grupo.filter(a => a.atend_agenda_s_id_orig); // tem s_id_orig → válido
-
-                    console.log(`\n📌 Grupo ${chave}: ${grupo.length} registros`);
-                    console.log(`✔ Correto(s):    ${corretos.map(a => a._id).join(", ")}`);
-
-                    // Garantir que sempre fique apenas 1 registro VÁLIDO
-                    if (corretos.length > 1) {
-                        // Ordenar para deixar apenas o mais antigo
-                        corretos.sort((a, b) => a.atend_num - b.atend_num);
-                        var manter = corretos[0];
-                        var removerCorretos = corretos.slice(1); // descartar os excedentes
-
-                        console.log(`Mantendo apenas o mais antigo: ${manter._id}`);
-                        for (var item of removerCorretos) {
-                            Atend.deleteOne({ _id: item._id }).then((del) => {
-                                console.log("🗑️ Defeituoso removido:", item._id);
-                            }).catch(err => {
-                                console.log("❌ Erro: " + err);
-                            });;
-                            console.log("🗑️ Duplicata válida removida:", item._id);
-                        }
-                    }
-                }
-            }
-
-            console.log("\n✔ Finalizado com sucesso!");
-        })
-        .catch(err => {
-            console.log("❌ Erro: " + err);
-        });
-        */
-       /*
-       //DESTRUIÇÃO
-        let inicioDia = new Date(2024, 0, 1, 0, 0, 0, 0); // 29/09/2025
-        let fimDia    = new Date(2025, 11, 31, 23, 59, 59, 999); // 03/10/2025
-
-        console.log("inicioDia: " + inicioDia);
-        console.log("fimDia: " + fimDia);
-
-        Atend.aggregate([{
-    $match: {
-      atend_atenddata: { $gte: inicioDia, $lte: fimDia }
-    }
-  },{
-            $group: {
-            _id: {
-                atend_categoria: "$atend_categoria",
-                atend_org: "$atend_org",
-                atend_beneid: "$atend_beneid",
-                atend_convid: "$atend_convid",
-                atend_agenda_s_id_orig: "$atend_agenda_s_id_orig",
-                atend_atenddata: "$atend_atenddata",
-                atend_atendhora: "$atend_atendhora",
-                atend_terapeutaid: "$atend_terapeutaid",
-                atend_terapiaid: "$atend_terapiaid",
-                atend_salaid: "$atend_salaid"
-            },
-            count: { $sum: 1 },
-            docs: { $push: "$_id" }
-            }
-        },
-        { $match: { count: { $gt: 1 } } }
-        ])
-.then(async (dups) => {
-  console.log("TOTAL DE GRUPOS DUPLICADOS:", dups.length);
-
-  // PROCESSAR CADA GRUPO DE DUPLICADOS
-  for (const grupo of dups) {
-    // ordenar os documentos por data (mais antigo primeiro)
-    const ordenados = grupo.docs.sort((a, b) => new Date(a.atend_datacad) - new Date(b.atend_datacad));
-
-    const manter = ordenados[0]._id; // Mantém o mais antigo
-    const deletar = ordenados.slice(1).map(d => d._id); // apaga os demais
-
-    if (deletar.length > 0) {
-      await Atend.deleteMany({ _id: { $in: deletar } });
-      console.log(`Grupo removido -> manteve ${manter}, deletou:`, deletar);
-    }
-  }
-
-  console.log("FINALIZADO ✔");
-}).catch(err => {
-  console.error("ERRO:", err);
-});
-
-       */
-      /*
-      //gambiarra atend lisF
-      Atend.find(busca).then((atend) =>{
-            let agendaIds = [];
-            atend.forEach((b)=>{
-                let data;
-                if(b.atend_atenddata){
-                    data = new Date(b.atend_atenddata);
-                } else {
-                    data = new Date();
-                }
-                
-                let mes = (data.getMonth()+1).toString();
-                let dia = (data.getUTCDate()).toString();
-
-                if (mes.length == 1){
-                    mes = "0"+mes;
-                }
-                if (dia.length == 1){
-                    dia = "0"+dia;
-                }
-
-                let hora = (data.getHours()).toString();
-                let minuto = (data.getMinutes()).toString();
-
-                if (hora.length == 1){
-                    hora = "0"+hora;
-                }
-                if (minuto.length == 1){
-                    minuto = "0"+minuto;
-                }
-
-                fulldate=(data.getFullYear()+"-"+mes+"-"+dia).toString();
-                b.data=fulldate;
-                b.hora = hora + ":" + minuto;
-                if(b.atend_org == "Administrativo"){
-                    b.atend_org = "ADM";
-                }
-
-                agendaIds.push(new ObjectId(b.atend_agenda_f_id_orig));
-                if (b.atend_agenda_s_id_orig) {
-                    agendaIds.push(new ObjectId(b.atend_agenda_s_id_orig));
-                }
-            })
-
-            Agenda.updateMany({
-                _id: { $in: agendaIds } },
-                {
-                $set: {
-                    agenda_selo: false, agenda_migrado: false
-                }
-            }).then((updaites)=>{
-                
-                Atend.deleteMany(busca).then((del)=>{
-                    console.log("DELETED")
-                    fncAgenda.converteAgendaEmAtend(req,res).then((abs)=>{
-                        console.log("ALOW");
-                    }).catch((err2)=>{
-                        console.log(err2);
-                    });
-                }).catch((err2)=>{
-                    console.log(err2);
-                });
-                
-            }).catch((err2)=>{
-                console.log(err2);
-            });
-      */

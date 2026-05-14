@@ -22,6 +22,24 @@
       font-size: 12px;
     }
   </style>
+  <style>
+    /* Tooltip personalizado */
+    .custom-tooltip { position: relative; display: inline-block; cursor: pointer; }
+    .tooltip-text {
+      visibility: hidden; width: max-content; background-color: #f3dfdf; color: red;
+      font-size: 8px; text-align: left; border-radius: 4px; padding: 8px 12px;
+      position: absolute; z-index: 9999; bottom: 125%; left: 50%;
+      transform: translateX(-50%); opacity: 0.9; white-space: normal;
+      min-width: 150px; max-width: 300px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: opacity 0.3s;
+    }
+    .tooltip-text::after {
+      content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+      border-width: 5px; border-style: solid;
+      border-color: #f3dfdf transparent transparent transparent;
+    }
+    .custom-tooltip:hover .tooltip-text { visibility: visible; }
+  </style>
 </head>
 
 <body onload="javascript:controlaNave(); carregaBody();" class="no-skin">
@@ -82,11 +100,24 @@
                               <th style="width: 30px;"></th>
                               <th>Beneficiário</th>
                               <th>Convênio</th>
-                              <th class="text-right">Registros</th>
-                              <th class="text-right">F. Justificada</th>
-                              <th class="text-right">F. Absoluta</th>
-                              <th class="text-right">Feriado</th>
-                              <th class="text-right">Índice</th>
+                              <th class="text-right"><span style="white-space: wrap;" class="badge badge-info">Registros</span></th>
+                              <th class="text-right"><span style="white-space: wrap;" class="badge badge-yellow">Faltas</span></th>
+                              <th class="text-right"><span style="white-space: wrap;" class="badge badge-danger">F. Justificada</span></th>
+                              <th class="text-right"><span style="white-space: wrap;" class="badge badge-warning">F. Absoluta</span></th>
+                              <th class="text-right"><span style="white-space: wrap;" class="badge badge-black">Feriado</span></th>
+                              <th class="text-right">
+                                <a class="purple custom-tooltip"><i class="ace-icon fa fa-eye bigger-130"></i>
+                                  <span class="tooltip-text">
+                                    <strong>Obs:</strong><br>
+                                    O índice é gerado pela soma dos campos:<br>
+                                    Faltas + F.Justificadas + F.Absolutas<br>
+                                    Dividido pelo Total de Registros
+                                  </span>
+                                </a>
+                                &nbsp;&nbsp;
+                                <span style="white-space: wrap;" class="badge badge-purple">Índice</span>
+                                
+                              </th>
                             </tr>
                           </thead>
 
@@ -99,6 +130,7 @@
                               <td>{{bene_nome}}</td>
                               <td>{{convenio}}</td>
                               <td class="text-right">{{total_registros}}</td>
+                              <td class="text-right">{{qt_falta}}</td>
                               <td class="text-right">{{qt_falta_jus}}</td>
                               <td class="text-right">{{qt_falta_abs}}</td>
                               <td class="text-right">{{qt_feriado}}</td>
@@ -113,11 +145,11 @@
 
                             <!-- DETALHES -->
                             <tr class="detalhe-linha">
-                              <td colspan="8">
+                              <td colspan="9">
                                 <div class="detalhe-conteudo">
                                   <h5>
                                     <i class="ace-icon fa fa-exclamation-triangle orange"></i>
-                                    Faltas de "{{bene_nome}}" — Convênio: "{{convenio}}"
+                                    Lista de agendamentos, com faltas "{{bene_nome}}" — Convênio: "{{convenio}}"
                                   </h5>
 
                                   {{#if detalhes.length}}
@@ -205,5 +237,6 @@
       });
     });
   </script>
+    
 </body>
 </html>
