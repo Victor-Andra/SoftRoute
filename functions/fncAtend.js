@@ -762,7 +762,7 @@ module.exports = {
             case "Semana":
                 data = req.body.dataFinal;
                 ano = data.substring(0,4);
-                mes = data.substring(5,7);
+                mes = parseInt(data.substring(5,7))-1;
                 dia = data.substring(8,10);
 
                 seg = new Date();
@@ -798,6 +798,7 @@ module.exports = {
                         sex.setUTCDate(sex.getUTCDate() + 2);
                         break;
                     case 4://QUI
+                    console.log("Quinta")
                         seg.setUTCDate(seg.getUTCDate() - 3);
                         sex.setUTCDate(sex.getUTCDate() + 1);
                         break;
@@ -813,8 +814,8 @@ module.exports = {
                         sex.setUTCDate(sex.getUTCDate() + 5);
                         break;
                 }
-                dataIni = seg.toISOString();
-                dataFim = sex.toISOString();
+                dataIni = seg;
+                dataFim = sex;
 
                 //console.log("req.body.dataFinal:"+req.body.dataFinal)
                 //console.log("seg:"+seg);
@@ -824,7 +825,7 @@ module.exports = {
             case "Dia":
                 data = req.body.dataFinal;
                 ano = data.substring(0,4);
-                mes = data.substring(5,7);
+                mes = parseInt(data.substring(5,7))-1;
                 dia = data.substring(8,10);
 
                 dataIni = new Date();
@@ -849,12 +850,15 @@ module.exports = {
                 break;
         }
 
+        console.log("dataIni: "+dataIni);
+        console.log("dataFim: "+dataFim);
+        
         switch (tipoPessoa){
             case "Geral":
                 busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
                 break;
             case "Beneficiario":
-                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } , atend_beneid: req.body.atendBeneficiario };
+                busca = { atend_atenddata: { $gte : dataIni, $lte:  dataFim } , atend_beneid: req.body.atendBeneficiario };
                 break;
             case "Terapeuta":
                 busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } ,  $or: [{ atend_terapeutaid: req.body.atendTerapeuta },{ atend_mergeterapeutaid: req.body.atendTerapeuta }] };

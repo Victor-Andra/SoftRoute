@@ -2299,9 +2299,10 @@ async filtraEvoatendgeral(req, res) {
 
        // Na captura dos filtros:
         const filtroTela = {
-            tipoData: req.body.tipoData || "Ano/Mes",
+            tipoData: req.body.tipoPeriodo || "Ano/Mes",
             // ✅ Corrige a prioridade dos campos de data
-            dataFinal: req.body.dataFil || req.body.dataFinal || "",
+            dataFinal: req.body.dataFinal || "",
+            dataFil: req.body.dataFil || "",
             anoAtend: req.body.anoAtend || "",
             mesAtend: req.body.mesAtend || "",
             tipoPessoa: req.body.atendTipoPessoa || "Geral",
@@ -2312,59 +2313,126 @@ async filtraEvoatendgeral(req, res) {
             atendSelo: req.body.atendSelo || "Todos"
         };
 
-        // ===== LOG DE DEBUG (ajuda a identificar o problema) =====
-        console.log('🔍 [DEBUG] Filtros recebidos:', JSON.stringify(filtroTela, null, 2));
+        // console.log('🔍 [DEBUG] Filtros recebidos:', JSON.stringify(filtroTela, null, 2));
 
         let dataIni = null;
         let dataFim = null;
+        let seg;
+        let sex;
+        let data;
+        let anoAtend;
+        let mes;
+        let dia;
         const flash = new Resposta();
 
-        // ===== CÁLCULO DO PERÍODO (UTC consistente) =====
-        switch (filtroTela.tipoData) {
-            case "Ano/Mes": {
-                const mes = parseInt(filtroTela.mesAtend);   // 0-11 do select
-                const ano = parseInt(filtroTela.anoAtend);
-                if (!isNaN(mes) && !isNaN(ano) && mes >= 0 && mes <= 11) {
-                    dataIni = new Date(Date.UTC(ano, mes, 1, 0, 0, 0));
-                    dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59));
-                    console.log(`📅 [Ano/Mês] Período: ${dataIni.toISOString()} até ${dataFim.toISOString()}`);
-                }
+        switch (filtroTela.tipoData){
+            case "Ano/Mes":
+                dataIni = new Date();
+                let mesIni = parseInt(req.body.mesAtend);//UTCMonth = 0-11
+                let anoIni = parseInt(req.body.anoAtend);
+                
+                dataIni.setDate(01);
+                dataIni.setFullYear(anoIni);
+                dataIni.setUTCMonth(mesIni);
+                dataIni.setSeconds(00);
+                dataIni.setMinutes(00);
+                dataIni.setHours(00);
+                
+                dataFim = new Date();
+                dataFim.setFullYear(anoIni);
+                dataFim.setUTCMonth(mesIni+1);
+                dataFim.setDate(01);
+                dataFim.setDate(dataFim.getDate()-1);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
                 break;
-            }
-            
             case "Semana":
-            case "Dia": {
-                // ✅ Usa dataFil direto (formato: YYYY-MM-DD do input type="date")
-                const dataStr = filtroTela.dataFinal?.substring(0, 10); // Garante só a parte da data
-                if (dataStr && /^\d{4}-\d{2}-\d{2}$/.test(dataStr)) {
-                    const [ano, mesInput, dia] = dataStr.split('-').map(Number);
-                    
-                    // ⚠️ input date retorna mês 1-12, Date.UTC espera 0-11 → subtrai 1
-                    const mesUTC = mesInput - 1;
-                    
-                    if (filtroTela.tipoData === "Dia") {
-                        dataIni = new Date(Date.UTC(ano, mesUTC, dia, 0, 0, 0));
-                        dataFim = new Date(Date.UTC(ano, mesUTC, dia, 23, 59, 59));
-                        console.log(`📅 [Dia] Período: ${dataIni.toISOString()} até ${dataFim.toISOString()}`);
-                    } else {
-                        // ===== Lógica da semana (segunda a sexta) =====
-                        const dataBase = new Date(Date.UTC(ano, mesUTC, dia, 12, 0, 0)); // meio-dia pra evitar timezone
-                        const diaSemana = dataBase.getUTCDay(); // 0=dom, 1=seg, ..., 6=sab
-                        
-                        // Calcula quantos dias voltar pra chegar na segunda-feira
-                        const diasParaSegunda = diaSemana === 0 ? -6 : 1 - diaSemana;
-                        const segunda = new Date(Date.UTC(ano, mesUTC, dia + diasParaSegunda, 0, 0, 0));
-                        const sexta = new Date(Date.UTC(ano, mesUTC, dia + diasParaSegunda + 4, 23, 59, 59));
-                        
-                        dataIni = segunda;
-                        dataFim = sexta;
-                        console.log(`📅 [Semana] Segunda: ${segunda.toISOString()} | Sexta: ${sexta.toISOString()}`);
-                    }
-                } else {
-                    console.warn('⚠️ Data inválida para Semana/Dia:', dataStr);
+                data = req.body.dataFinal;
+                anoAtend = data.substring(0,4);
+                mes = parseInt(data.substring(5,7))-1;
+                dia = data.substring(8,10);
+
+                seg = new Date();
+                seg.setFullYear(anoAtend);
+                seg.setUTCMonth(mes);
+                seg.setUTCDate(dia);
+                seg.setHours(0);
+                seg.setMinutes(0);
+                seg.setSeconds(0);
+
+                sex = new Date();
+                sex.setFullYear(anoAtend);
+                sex.setUTCMonth(mes);
+                sex.setUTCDate(dia);
+                sex.setHours(23);
+                sex.setMinutes(59);
+                sex.setSeconds(59);
+
+                switch (seg.getUTCDay()){
+                    case 0://DOM
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                    case 1://SEG
+                        sex.setUTCDate(sex.getUTCDate() + 4);
+                        break;
+                    case 2://TER
+                        seg.setUTCDate(seg.getUTCDate() - 1);
+                        sex.setUTCDate(sex.getUTCDate() + 3);
+                        break;
+                    case 3://QUA
+                        seg.setUTCDate(seg.getUTCDate() - 2);
+                        sex.setUTCDate(sex.getUTCDate() + 2);
+                        break;
+                    case 4://QUI
+                    console.log("Quinta")
+                        seg.setUTCDate(seg.getUTCDate() - 3);
+                        sex.setUTCDate(sex.getUTCDate() + 1);
+                        break;
+                    case 5://SEX
+                        seg.setUTCDate(seg.getUTCDate() - 4);
+                        break;
+                    case 6://SAB
+                        seg.setUTCDate(seg.getUTCDate() - 5);
+                        sex.setUTCDate(sex.getUTCDate() - 1);
+                        break;
+                    default:
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
                 }
+                dataIni = seg;
+                dataFim = sex;
+                
                 break;
-            }
+            case "Dia":
+                data = req.body.dataFinal;
+                anoAtend = data.substring(0,4);
+                mes = parseInt(data.substring(5,7))-1;
+                dia = data.substring(8,10);
+
+                dataIni = new Date();
+                dataIni.setFullYear(anoAtend);
+                dataIni.setUTCMonth(mes);
+                dataIni.setUTCDate(dia);
+                dataIni.setHours(0);
+                dataIni.setMinutes(0);
+                dataIni.setSeconds(0);
+
+                dataFim = new Date();
+                dataFim.setFullYear(anoAtend);
+                dataFim.setUTCMonth(mes);
+                dataFim.setUTCDate(dia);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
+                break;
+            default:
+                
+                break;
         }
 
         // ===== MONTAGEM DA QUERY =====

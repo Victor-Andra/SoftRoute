@@ -60,74 +60,110 @@
 		<script type="text/javascript">
 			// ===== SELECT CONVÊNIO =====
 			function selectConv(){
-				var beneId = $('#atendBeneid').val();
-				console.log('Beneficiário:', beneId);
-				
-				var convId = $('input[name="refBeneConv"][value="' + beneId + '"]').val();
-				if (!convId) convId = 'X';
-				
-				console.log('Convênio:', convId);
-				$('#atendConvid').val(convId).trigger('chosen:updated');
-				$('#tabilConvid').val(convId);
-				
-				// Já carrega os valores financeiros automaticamente
-				if (convId !== 'X' && $('#atendTerapiaid').val()) {
-					carregaValores();
-				}
-			}
+    var beneId = document.getElementById("atendBeneid").value;
+    
+    // Validação: se não selecionou beneficiário, limpa convênio
+    if (!beneId || beneId === "766f69643132333435366964") {
+        document.getElementById("atendConvid").value = "766f69643132333435366964";
+        document.getElementById("tabilConvid").value = "";
+
+        return;
+    }
+    
+    // Pega o input hidden que contém o ID do convênio vinculado ao beneficiário
+    var convInput = document.getElementById(beneId);
+    if (convInput && convInput.value) {
+        var convId = convInput.value.toString();
+        
+        // Atualiza os campos
+        document.getElementById("atendConvid").value = convId;
+        document.getElementById("tabilConvid").value = convId;
+        
+        // Recarrega valores da terapia automaticamente
+        carregaValores();
+		carregaValoresFixo();
+		carregaValoresMerge();
+    }
+}
 
 			// ===== CARREGA VALORES PRINCIPAIS =====
 			function carregaValores(){
-				let teraId = $('#atendTerapiaid').val();
-				$('#creditTerapiaid').val(teraId);
-				$('#debitTerapiaid').val(teraId);
+    let teraId = document.getElementById("atendTerapiaid").value;
+    document.getElementById("creditTerapiaid").value = teraId;
+    document.getElementById("debitTerapiaid").value = teraId;
+    
+    try {
+        let convId = document.getElementById("atendConvid").value;
+        if (convId && teraId && convId !== "766f69643132333435366964" && teraId !== "766f69643132333435366964") {
+            let elCre = document.getElementById(convId+"/"+teraId+"/cre");
+            let elDeb = document.getElementById(convId+"/"+teraId+"/deb");
+            
+            let valorCre = (elCre && elCre.value) ? elCre.value : "0,00";
+            let valorDeb = (elDeb && elDeb.value) ? elDeb.value : "0,00";
+            
+            document.getElementById("atendValorcre").value = valorCre;
+            document.getElementById("atendValordeb").value = valorDeb;
+            document.getElementById("tabilValorcredit").value = valorCre;
+            document.getElementById("tabilValordebit").value = valorDeb;
+        }
+    } catch(err) {
+        console.log("Erro ao carregar valores:", err);
+        document.getElementById("atendValorcre").value = "0,00";
+        document.getElementById("atendValordeb").value = "0,00";
+        document.getElementById("tabilValorcredit").value = "0,00";
+        document.getElementById("tabilValordebit").value = "0,00";
+    }
+}
+	function carregaValoresFixo(){
+		let teraId = document.getElementById("atendFixoTerapiaid").value;
+		document.getElementById("creditFixoTerapiaid").value = teraId;
+		document.getElementById("debitFixoTerapiaid").value = teraId;
+		
+		try {
+			let convId = document.getElementById("atendConvid").value;
+			console.log(convId)
+			if (convId && teraId && convId !== "766f69643132333435366964" && teraId !== "766f69643132333435366964") {
+				let elCre = document.getElementById(convId+"/"+teraId+"/cre");
+				let elDeb = document.getElementById(convId+"/"+teraId+"/deb");
 				
-				let convId = $('#atendConvid').val();
-				if (convId && convId !== 'X' && teraId) {
-					try {
-						$('#atendValorcre').val($('#' + convId + '/' + teraId + '/cre').val() || '0,00');
-						$('#atendValordeb').val($('#' + convId + '/' + teraId + '/deb').val() || '0,00');
-						$('#tabilValorcredit').val($('#' + convId + '/' + teraId + '/cre').val() || '0,00');
-						$('#tabilValordebit').val($('#' + convId + '/' + teraId + '/deb').val() || '0,00');
-					} catch(err) {
-						$('#atendValorcre, #atendValordeb, #tabilValorcredit, #tabilValordebit').val('0,00');
-					}
-				}
-				// Não chama mais atualizaSubFixo - tudo fica visível sempre
+				let valorCre = (elCre && elCre.value) ? elCre.value : "0,00";
+				let valorDeb = (elDeb && elDeb.value) ? elDeb.value : "0,00";
+				console.log("valorCre"+valorCre)
+				
+				document.getElementById("atendFixovalorcre").value = valorCre;
+				document.getElementById("atendFixovalordeb").value = valorDeb;
 			}
+		} catch(err) {
+			console.log("Erro ao carregar valores:", err);
+			document.getElementById("atendValorcre").value = "0,00";
+			document.getElementById("atendValordeb").value = "0,00";
+			document.getElementById("tabilValorcredit").value = "0,00";
+			document.getElementById("tabilValordebit").value = "0,00";
+		}
+	}
 
-			// ===== CARREGA VALORES MERGE =====
-			function carregaValoresMerge(){
-				let teraId = $('#atendMergeTerapiaid').val();
-				$('#creditMergeTerapiaid').val(teraId);
-				$('#debitMergeTerapiaid').val(teraId);
-				$('#tabilMergeTerapiaid').val(teraId);
+	function carregaValoresMerge(){
+		let teraId = document.getElementById("atendMergeTerapiaid").value;
+		document.getElementById("creditMergeTerapiaid").value = teraId;
+		document.getElementById("debitMergeTerapiaid").value = teraId;
+		
+		try {
+			let convId = document.getElementById("atendConvid").value;
+			if (convId && teraId && convId !== "766f69643132333435366964" && teraId !== "766f69643132333435366964") {
+				let elCre = document.getElementById(convId+"/"+teraId+"/cre");
+				let elDeb = document.getElementById(convId+"/"+teraId+"/deb");
 				
-				let convId = $('#atendConvid').val();
-				if (convId && convId !== 'X' && teraId) {
-					try {
-						$('#atendMergevalorcre').val($('#' + convId + '/' + teraId + '/cre').val() || '0,00');
-						$('#atendMergevalordeb').val($('#' + convId + '/' + teraId + '/deb').val() || '0,00');
-					} catch(err) {
-						$('#atendMergevalorcre, #atendMergevalordeb').val('0,00');
-					}
-				}
+				document.getElementById("atendMergevalorcre").value = (elCre && elCre.value) ? elCre.value : "0,00";
+				document.getElementById("atendMergevalordeb").value = (elDeb && elDeb.value) ? elDeb.value : "0,00";
 			}
+		} catch(err) {
+			console.log("Erro ao carregar valores merge:", err);
+			document.getElementById("atendMergevalorcre").value = "0,00";
+			document.getElementById("atendMergevalordeb").value = "0,00";
+		}
+	}
 
-			// ===== CARREGA VALORES FIXO (sempre executado, sem condicionais de exibição) =====
-			function carregaValoresFixo(){
-				let teraId = $('#atendFixoTerapiaid').val();
-				let convId = $('#atendConvid').val();
-				
-				if (convId && convId !== 'X' && teraId) {
-					try {
-						$('#atendFixovalorcre').val($('#' + convId + '/' + teraId + '/cre').val() || '0,00');
-						$('#atendFixovalordeb').val($('#' + convId + '/' + teraId + '/deb').val() || '0,00');
-					} catch(err) {
-						$('#atendFixovalorcre, #atendFixovalordeb').val('0,00');
-					}
-				}
-			}
+			
 
 			// ===== ATUALIZAÇÕES SIMPLES =====
 			function atualizaTerapeutaId(){
@@ -189,12 +225,13 @@
 				$('#tabilConvid').val($('#atendConvid').val());
 				$('#tabilCategoria').val($('#atendCategoria').val());
 				
-				// --- Data ISO ---
 				atualizaData();
-				
-				
+				toggleDivSubFixo();
 				
 				console.log("=== FINISH carregaBody ===");
+			}
+			function toggleDivSubFixo(){
+				document.getElementById("atendFixo").value = document.getElementById("atendFixoCheck").checked ? "true" : "false";
 			}
 
 			// ===== FUNÇÕES DE DATA =====
@@ -352,9 +389,9 @@
 													<input class="hidden" id="tabilConvid" name="tabilConvid" value="" />
 												</div>
 												<div class="form-group">
-														<div class="col-sm-4">
-															<select id="atendConvid" name="atendConvid" class="select2" data-placeholder="Escolha...">
-																	<option value="766f69643132333435366964"></option>
+														<div class="col-sm-8">
+															<select id="atendConvid" name="atendConvid">{{#compareThis lvlUsu "624218f5a12aa557219a0fd0"}}<!--style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true"-->{{/compareThis}}
+																	<option value="766f69643132333435366964">-</option>
 																	{{#each benes}}
 																		{{#each ../convs}}
 																			{{#ifEqual ../bene_convid _id}}
@@ -407,7 +444,7 @@
 																		<label>Terapeuta</label>
 																		<div class="form-group">
 																			<div class="col-sm-8">
-																				<select id="atendTerapeutaid" name="atendTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+																				<select id="atendTerapeutaid" name="atendTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId();carregaValores();">
 																						<option value="766f69643132333435366964"></option>
 																						{{#each usuarios}}
 																						<option value="{{_id}}">{{usuario_nome}}</option>
@@ -436,8 +473,20 @@
 																			<input class="hidden" id="creditTerapiaid" name="creditTerapiaid" value="" />
 																			<input class="hidden" id="debitTerapiaid" name="debitTerapiaid" value="" />
 																			
+																			<input class="hidden" id="creditTerapeutaid" name="debitTerapeutaid" value="" />
 																			<input class="hidden" id="debitTerapeutaid" name="debitTerapeutaid" value="" />
+																			
+																			<input class="hidden" id="creditFixoTerapiaid" name="creditFixoTerapiaid" value="" />
+																			<input class="hidden" id="debitFixoTerapiaid" name="debitFixoTerapiaid" value="" />
+																			
+																			<input class="hidden" id="creditFixoTerapeutaid" name="debitFixoTerapeutaid" value="" />
+																			<input class="hidden" id="debitFixoTerapeutaid" name="debitFixoTerapeutaid" value="" />
 
+																			<input class="hidden" id="creditMergeTerapiaid" name="creditMergeTerapiaid" value="" />
+																			<input class="hidden" id="debitMergeTerapiaid" name="debitMergeTerapiaid" value="" />
+																			
+																			<input class="hidden" id="creditTerapeutaid" name="debitTerapeutaid" value="" />
+																			<input class="hidden" id="debitTerapeutaid" name="debitTerapeutaid" value="" />
 
 																		</div>
 																		<div class="form-group">
@@ -489,7 +538,7 @@
 																				<label>Terapeuta Fixo</label>
 																				<div class="form-group">
 																					<div class="col-sm-8">
-																						<select id="atendFixoTerapeutaid" name="atendFixoTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:carregaValoresFixo()">
+																						<select id="atendFixoTerapeutaid" name="atendFixoTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:carregaValoresFixo();">
 																							<option value="766f69643132333435366964"></option>
 																							{{#each usuarios}}
 																							<option value="{{_id}}">{{usuario_nome}}</option>
@@ -500,7 +549,7 @@
 																				<label>Terapia Fixa</label>
 																				<div class="form-group">
 																					<div class="col-sm-8">
-																						<select id="atendFixoTerapiaid" name="atendFixoTerapiaid" class="select2" data-placeholder="Escolha..." onclick="javascript:carregaValoresFixo()">
+																						<select id="atendFixoTerapiaid" name="atendFixoTerapiaid" class="select2" data-placeholder="Escolha..." onchange="javascript:carregaValoresFixo();">
 																								<option value="766f69643132333435366964"></option>
 																								{{#each terapias}}
 																								<option value="{{_id}}">{{terapia_nome}}</option>
@@ -547,7 +596,7 @@
 																		<label>Terapeuta</label>
 																		<div class="form-group">
 																			<div class="col-sm-8">
-																				<select id="atendMergeTerapeutaid" name="atendMergeTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
+																				<select id="atendMergeTerapeutaid" name="atendMergeTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId();carregaValoresMerge();">
 																						<option value="766f69643132333435366964"></option>
 																						{{#each usuarios}}
 																						<option value="{{_id}}">{{usuario_nome}}</option>
@@ -563,7 +612,7 @@
 																		</div>
 																		<div class="form-group">
 																				<div class="col-sm-8">
-																					<select id="atendMergeTerapiaid" name="atendMergeTerapiaid" class="select2" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
+																					<select id="atendMergeTerapiaid" name="atendMergeTerapiaid" class="select2" data-placeholder="Escolha..." onchange="javascript:carregaValoresMerge();">
 																							<option value="766f69643132333435366964"></option>
 																							{{#each terapias}}
 																							<option value="{{_id}}">{{terapia_nome}}</option>

@@ -30,7 +30,6 @@ function selectConv(){
     }
 }
 
-// === CARREGA VALORES DE CRÉDITO/DÉBITO DA TERAPIA ===
 function carregaValores(){
     let teraId = document.getElementById("atendTerapiaid").value;
     document.getElementById("creditTerapiaid").value = teraId;
@@ -59,7 +58,34 @@ function carregaValores(){
     }
 }
 
-// === CARREGA VALORES DO MERGE ===
+function carregaValoresFixo(){
+    let teraId = document.getElementById("atendFixoTerapiaid").value;
+    document.getElementById("creditTerapiaid").value = teraId;
+    document.getElementById("debitTerapiaid").value = teraId;
+    
+    try {
+        let convId = document.getElementById("atendConvid").value;
+        if (convId && teraId && convId !== "766f69643132333435366964" && teraId !== "766f69643132333435366964") {
+            let elCre = document.getElementById(convId+"/"+teraId+"/cre");
+            let elDeb = document.getElementById(convId+"/"+teraId+"/deb");
+            
+            let valorCre = (elCre && elCre.value) ? elCre.value : "0,00";
+            let valorDeb = (elDeb && elDeb.value) ? elDeb.value : "0,00";
+            
+            document.getElementById("atendFixovalorcre").value = valorCre;
+            document.getElementById("atendFixovalordeb").value = valorDeb;
+            document.getElementById("tabilValorcredit").value = valorCre;
+            document.getElementById("tabilValordebit").value = valorDeb;
+        }
+    } catch(err) {
+        console.log("Erro ao carregar valores:", err);
+        document.getElementById("atendValorcre").value = "0,00";
+        document.getElementById("atendValordeb").value = "0,00";
+        document.getElementById("tabilValorcredit").value = "0,00";
+        document.getElementById("tabilValordebit").value = "0,00";
+    }
+}
+
 function carregaValoresMerge(){
     let teraId = document.getElementById("atendMergeTerapiaid").value;
     document.getElementById("creditMergeTerapiaid").value = teraId;
@@ -82,7 +108,6 @@ function carregaValoresMerge(){
     }
 }
 
-// === ATUALIZA ID DO TERAPEUTA NOS CAMPOS OCULTOS ===
 function atualizaTerapeutaId(){
     let ati = document.getElementById("atendTerapeutaid").value;
     document.getElementById("tabilTerapeutaId").value = ati;
@@ -92,7 +117,6 @@ function atualizaMergeTerapeutaId(){
     console.log("Merge terapeuta:", document.getElementById("atendMergeTerapeutaid").value);
 }
 
-// === FORMATA DATA PARA ISO ===
 function atualizaData(){
     var hora = document.getElementById("atendHora").value;
     var data = document.getElementById("atenddata").value + "T" + hora + ":00.000Z";
@@ -100,7 +124,6 @@ function atualizaData(){
     document.getElementById("atendAtenddata").value = datafmt.toISOString();
 }
 
-// === TOGGLE SUBSTITUTO FIXO ===
 function toggleDivSubFixo(){
     document.getElementById("atendFixo").value = document.getElementById("atendFixoCheck").checked ? "true" : "false";
 }
@@ -108,7 +131,7 @@ function toggleDivSubFixo(){
 // === CARREGA BODY ===
 function carregaBody(){
 	const select = document.getElementById("atendConvid");
-
+	toggleDivSubFixo();
 	// bloqueia abertura do dropdown
 	select.addEventListener("mousedown", function(e) {
 	e.preventDefault();
@@ -262,7 +285,7 @@ function carregaBody(){
 														</select>
 													</div>
 												</div>
-												<label {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}} >Substituto Fixo <input id="atendFixoCheck" id="atendFixoCheck" type="checkbox" onchange="javascript:toggleDivSubFixo()"></label>
+												<label {{#ifIncludes lvlUsu "['62421801a12aa557219a0fb9','62421857a12aa557219a0fc1']"}}{{else}} hidden {{/ifIncludes}} >Substituto Fixo <input id="atendFixoCheck" id="atendFixoCheck" type="checkbox" onchange="javascript:toggleDivSubFixo();"></label>
 												<div class="row">
 													<div class="col-xs-12">
 														<!-- PAGE CONTENT BEGINS -->
@@ -291,7 +314,7 @@ function carregaBody(){
 																				<label>Terapeuta</label>
 																				<div class="form-group">
 																					<div class="col-sm-8">
-																						<select id="atendTerapeutaid" name="atendTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId()">
+																						<select id="atendTerapeutaid" name="atendTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId();carregaValores();">
 																							<option value="766f69643132333435366964">-</option>
 																							{{#each usuarios}}
 																								<option value="{{_id}}">{{usuario_nome}}</option>
@@ -326,7 +349,7 @@ function carregaBody(){
 																				</div>
 																				<div class="form-group">
 																					<div class="col-sm-8">
-																						<select id="atendTerapiaid" name="atendTerapiaid" class="select2" data-placeholder="Escolha..." onchange="javascript:carregaValores();">
+																						<select id="atendTerapiaid" name="atendTerapiaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaTerapeutaId();carregaValores();">
 																								<option value="766f69643132333435366964">-</option>
 																								{{#each terapias}}
 																								<option value="{{_id}}">{{terapia_nome}}</option>
@@ -384,7 +407,7 @@ function carregaBody(){
 																				<label>Terapia Fixa</label>
 																				<div class="form-group">
 																					<div class="col-sm-8">
-																						<select id="atendFixoTerapiaid" name="atendFixoTerapiaid" class="select2" data-placeholder="Escolha..." onclick="javascript:carregaValoresFixo()">
+																						<select id="atendFixoTerapiaid" name="atendFixoTerapiaid" class="select2" data-placeholder="Escolha..." onchange="javascript:carregaValoresFixo()">
 																								<option value="766f69643132333435366964"></option>
 																								{{#each terapias}}
 																								<option value="{{_id}}">{{terapia_nome}}</option>
@@ -431,7 +454,7 @@ function carregaBody(){
 																		<label>Terapeuta</label>
 																		<div class="form-group">
 																			<div class="col-sm-8">
-																				<select id="atendMergeTerapeutaid" name="atendMergeTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId()">
+																				<select id="atendMergeTerapeutaid" name="atendMergeTerapeutaid" class="select2" data-placeholder="Escolha..." onchange="javascript:atualizaMergeTerapeutaId();carregaValoresMerge();">
 																						<option value="766f69643132333435366964">-</option>
 																						{{#each usuarios}}
 																						<option value="{{_id}}">{{usuario_nome}}</option>
@@ -447,7 +470,7 @@ function carregaBody(){
 																		</div>
 																		<div class="form-group">
 																				<div class="col-sm-8">
-																					<select id="atendMergeTerapiaid" name="atendMergeTerapiaid" class="select2" data-placeholder="Escolha..." onclick="javascript:carregaValoresMerge()">
+																					<select id="atendMergeTerapiaid" name="atendMergeTerapiaid" class="select2" data-placeholder="Escolha..." onchange="javascript:carregaValoresMerge()">
 																							<option value="766f69643132333435366964">-</option>
 																							{{#each terapias}}
 																							<option value="{{_id}}">{{terapia_nome}}</option>

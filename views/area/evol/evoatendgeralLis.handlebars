@@ -413,201 +413,129 @@
     border-left: 3px solid #00838f !important;
 }
 
-    </style>
-	<script type="text/javascript">
-		// ===== FUNÇÕES DE AÇÃO =====
-		function evolucaoEditar(id){
-			document.getElementById("idEdi").value = id;
-			let form = document.getElementById("divFormPesquisa");
-			form.action = "/menu/agenda/evolucaosup";
-			form.submit();
-		}
-		
-		function evolucaoRemover(id){
-			let form = document.getElementById("divFormPesquisa");
-			if(confirm("Quer mesmo deletar esta evolução?")){
-				document.getElementById("idDeletar").value = id;
-				form.action = "/menu/agenda/evolucaoRemoverGeral";
-				form.submit();
-			}
-		}
-		
-		function retornar(){ history.back(); }
+   </style>
+	 <script type="text/javascript">
+     const $id = (id) => document.getElementById(id);
 
-		// ===== FORMATA DATA PARA O HIDDEN dataFinal =====
-		function formataData(){
-			const tipo = document.getElementById("tipoPeriodo").value;
-			const hiddenDataFinal = document.getElementById('dataFinal');
-			
-			if(tipo === "Ano/Mes"){
-				const ano = document.getElementById('anoAtend').value;
-				const mesIndex = parseInt(document.getElementById('mesAtend').value); // 0-11
-				if(ano && !isNaN(mesIndex)){
-					// Date.UTC espera mês 0-11, então usamos direto
-					const dat = new Date(Date.UTC(ano, mesIndex, 1));
-					const mesFmt = String(mesIndex + 1).padStart(2, '0'); // pra exibir
-					const diaFmt = String(dat.getUTCDate()).padStart(2, '0');
-					hiddenDataFinal.value = `${dat.getFullYear()}-${mesFmt}-${diaFmt}T00:00:00.000Z`;
-				}
-			} else {
-				// Semana ou Dia: input date já retorna YYYY-MM-DD
-				const dataFil = document.getElementById('dataFinal').value;
-				if(dataFil){
-					hiddenDataFinal.value = `${dataFil}T12:00:00.000Z`;
-				}
-			}
-			console.log('[DEBUG] dataFinal formatado:', hiddenDataFinal.value);
-		}
+function formataData(){
+        let tipo = $id("tipoPeriodo").value;
+        if(tipo == "Ano/Mes"){
+          let dat = new Date($id('anoAtend').value+"-"+$id('mesAtend').value+"-01 00:00:00.000Z");
+          let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
+          let dia = (dat.getUTCDate()).toString().padStart(2,'0');
+          let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
+          $id('dataFinal').value = fulldate;
+        } else {
+          let dat = new Date($id('dataFil').value);
+          let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
+          let dia = (dat.getUTCDate()).toString().padStart(2,'0');
+          let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
+          $id('dataFinal').value = fulldate;
+        }
+      }
 
-		// ===== LÓGICA DE VISIBILIDADE: TIPO DE DATA =====
-		function trocaFiltroData() {
-			const tipo = $('#tipoPeriodo').val();
-			const isAnoMes = (tipo === 'Ano/Mes');
-			
-			// Visibilidade dos campos
-			$('#divAnoAtend').toggleClass('hidden-div', !isAnoMes);
-			$('#divMesAtend').toggleClass('hidden-div', !isAnoMes);
-			$('#divdataFinal').toggleClass('hidden-div', isAnoMes);
-			
-			// Só re-inicializa Select2 dos campos que mudaram de visibilidade
-			setTimeout(() => {
-				if(isAnoMes){
-					['#anoAtend', '#mesAtend'].forEach(sel => {
-						const $el = $(sel);
-						// Só recria se já existir instância
-						if($el.data('select2')) {
-							const val = $el.val(); // Salva valor atual
-							$el.select2('destroy');
-							$el.select2({ width: 'resolve', placeholder: "Selecione...", allowClear: false });
-							if(val) $el.val(val).trigger('change.select2'); // Restaura valor
-						}
-					});
-				}
-			}, 30);
-			
-			formataData();
-		}
-
-		// ===== LÓGICA DE VISIBILIDADE: TIPO DE PESSOA =====
-		function trocaFilpessoa() {
-			const tipo = $('#atendTipoPessoa').val();
-			
-			// ✅ Regra: Beneficiário → mostra bene, esconde tera | Terapeuta → mostra tera, esconde bene | Geral → esconde ambos
-			const showBene = (tipo === 'Beneficiario');
-			const showTera = (tipo === 'Terapeuta');
-			
-			// ✅ CORREÇÃO: usa !showBene e !showTera para adicionar hidden-div quando NÃO deve mostrar
-			$('#divAtendBeneficiario').toggleClass('hidden-div', !showBene);
-			$('#divAtendTerapeuta').toggleClass('hidden-div', !showTera);
-			
-			// Recalcula Select2 após mudar visibilidade
-			setTimeout(() => {
-				['#atendBeneficiario', '#atendTerapeuta'].forEach(sel => {
-					const $el = $(sel);
-					if($el.data('select2')) $el.select2('destroy');
-					$el.select2({ width: 'resolve', placeholder: "Selecione...", allowClear: true });
-				});
-			}, 30);
-			
-			console.log('[DEBUG] trocaFilpessoa:', tipo);
-		}
-
-		// ===== CARREGA FILTROS AO INICIAR A PÁGINA =====
-function carregaBody(){
-    console.log('[DEBUG] carregaBody iniciado');
-    
-    if(document.getElementById("carregaFiltro")?.value === "true"){
-        
-        // === 1. Tipo de Período ===
-        const tipoPeriodoVal = document.getElementById("tipoPeriodoFil")?.value || "Ano/Mes";
-        $('#tipoPeriodo').val(tipoPeriodoVal).trigger('change.select2');
-        
-        if(tipoPeriodoVal === "Ano/Mes"){
-            const anoVal = document.getElementById("anoAtendFil")?.value || "";
-            const mesVal = document.getElementById("mesAtendFil")?.value || "";
-            $('#anoAtend').val(anoVal).trigger('change.select2');
-            $('#mesAtend').val(mesVal).trigger('change.select2');
-        } else if(tipoPeriodoVal === "Semana" || tipoPeriodoVal === "Dia"){
-            const dataRaw = document.getElementById("dataFinalFil")?.value;
-            if(dataRaw){
-                const dat = new Date(dataRaw);
-                if(!isNaN(dat.getTime())){
-                    const mes = String(dat.getUTCMonth() + 1).padStart(2, '0');
-                    const dia = String(dat.getUTCDate()).padStart(2, '0');
-                    document.getElementById("dataFinal").value = `${dat.getFullYear()}-${mes}-${dia}`;
-                }
-            }
-        }
-        
-        // === 2. Tipo de Pessoa ===
-        const tipoPessoaVal = document.getElementById("tipoPessoaFil")?.value || "Geral";
-        $('#atendTipoPessoa').val(tipoPessoaVal).trigger('change.select2');
-        
-        if(tipoPessoaVal === "Beneficiario"){
-            const beneVal = document.getElementById("atendBeneficiarioFil")?.value || "";
-            $('#atendBeneficiario').val(beneVal).trigger('change.select2');
-        } else if(tipoPessoaVal === "Terapeuta"){
-            const teraVal = document.getElementById("atendTerapeutaFil")?.value || "";
-            $('#atendTerapeuta').val(teraVal).trigger('change.select2');
-        }
-        
-        // === 3. Concluído e Selo ===
-        const concluidoVal = document.getElementById("AtendConcluidoFil")?.value || "Todos";
-        const seloVal = document.getElementById("atendSeloFil")?.value || "Todos";
-        $('#AtendConcluido').val(concluidoVal).trigger('change.select2');
-        $('#atendSelo').val(seloVal).trigger('change.select2');
-    }
-    
-    // === Carregamento via edição ===
-    const tipoPeriodoEdi = document.getElementById("tipoPeriodoEdi")?.value;
-    const tipoPessoaEdi = document.getElementById("tipoPessoaEdi")?.value;
-    
-    if(tipoPeriodoEdi){
-        $('#tipoPeriodo').val(tipoPeriodoEdi).trigger('change.select2');
-        if(tipoPeriodoEdi === "Ano/Mes"){
-            $('#anoAtend').val(document.getElementById("anoAtendEdi")?.value || "").trigger('change.select2');
-            $('#mesAtend').val(document.getElementById("mesAtendEdi")?.value || "").trigger('change.select2');
-        } else if(tipoPeriodoEdi === "Semana" || tipoPeriodoEdi === "Dia"){
-            const dataEdi = document.getElementById("dataFinalEdi")?.value;
-            if(dataEdi){
-                const dat = new Date(dataEdi);
-                if(!isNaN(dat.getTime())){
-                    const mes = String(dat.getUTCMonth() + 1).padStart(2, '0');
-                    const dia = String(dat.getUTCDate()).padStart(2, '0');
-                    document.getElementById("dataFinal").value = `${dat.getFullYear()}-${mes}-${dia}`;
-                }
-            }
-        }
-    }
-    
-    if(tipoPessoaEdi){
-        $('#atendTipoPessoa').val(tipoPessoaEdi).trigger('change.select2');
-        if(tipoPessoaEdi === "Beneficiario"){
-            $('#atendBeneficiario').val(document.getElementById("atendBeneficiarioEdi")?.value || "").trigger('change.select2');
-        } else if(tipoPessoaEdi === "Terapeuta"){
-            $('#atendTerapeuta').val(document.getElementById("atendTerapeutaEdi")?.value || "").trigger('change.select2');
-        }
-    }
-    
-    // === Aplica visibilidade ===
-    trocaFiltroData();
-    trocaFilpessoa();
-    
-    // === Inicializa Select2 (apenas se não existir) ===
-    $('.select2').each(function(){
-        const $el = $(this);
-        if(!$el.data('select2')){
-            $el.select2({ 
-                width: 'resolve', 
-                placeholder: $el.data('placeholder') || "Selecione...", 
-                allowClear: $el.attr('allowClear') !== 'false' 
-            });
-        }
+function trocaFiltroData() {
+  const tipo = $('#tipoPeriodo').val();
+  const isAnoMes = (tipo === 'Ano/Mes');
+  
+  $('#divAnoAtend, #divMesAtend').toggle(isAnoMes);
+  $('#divdataFinal').toggle(!isAnoMes);
+  
+  setTimeout(() => {
+    ['#anoAtend', '#mesAtend', '#dataFinal'].forEach(sel => {
+      const $el = $(sel);
+      if ($el.length && $el.data('select2')) {
+        $el.select2('destroy').select2({ 
+          width: 'resolve', 
+          placeholder: "Selecione...", 
+          allowClear: false 
+        });
+      }
     });
-    
-    console.log('✅ carregaBody finalizado');
+  }, 50);
 }
-		</script>
+
+function trocaFilpessoa() {
+  const tipo = $('#atendTipoPessoa').val();
+  
+  $('#divAtendBeneficiario, #divAtendTerapeuta, #divAtendConv').hide();
+  
+  if(tipo === 'Beneficiario') $('#divAtendBeneficiario').show();
+  else if(tipo === 'Terapeuta') $('#divAtendTerapeuta').show();
+  else if(tipo === 'Convenio') $('#divAtendConv').show();
+  
+  setTimeout(() => {
+    $('#atendBeneficiario, #atendTerapeuta, #atendConv').each(function() {
+      if ($(this).data('select2')) {
+        $(this).select2('destroy').select2({ 
+          width: 'resolve', 
+          allowClear: true, 
+          placeholder: "Selecione..." 
+        });
+      }
+    });
+  }, 50);
+}
+
+// ✅ FUNÇÃO AUXILIAR: Define valor no Select2 corretamente
+function setSelect2Value(id, value) {
+  const $el = $(`#${id}`);
+  if ($el.length) {
+    $el.val(value).trigger('change.select2');
+  }
+}
+
+function carregaBody(){
+  // Valores padrão APENAS se não vier do backend
+  if(!$id("tipoPeriodo").value) $id("tipoPeriodo").value = "Ano/Mes";
+  if(!$id("atendTipoPessoa").value) $id("atendTipoPessoa").value = "Geral";
+  
+  // ✅ PRIORIDADE: Se tem filtro salvo, carrega ANTES de aplicar visibilidade
+  if($id("carregaFiltro")?.value === "true") {
+    carregarFiltros();
+  }
+  
+  // ✅ SÓ DEPOIS aplica a visibilidade com os valores já definidos
+  trocaFiltroData();
+  trocaFilpessoa();
+  
+  $id("atualizaValores").value = "false";
+}
+
+function carregarFiltros() {
+  const tipoPeriodo = $id("tipoPeriodoFil")?.value || "Ano/Mes";
+  const tipoPessoa = $id("tipoPessoaFil")?.value || "Geral";
+
+  // ✅ 1º: Define os valores PRIMEIRO (usando método correto para Select2)
+  setSelect2Value('tipoPeriodo', tipoPeriodo);
+  setSelect2Value('atendTipoPessoa', tipoPessoa);
+
+  if(tipoPeriodo === "Ano/Mes") {
+    setSelect2Value('anoAtend', $id("anoAtendFil")?.value || "");
+    setSelect2Value('mesAtend', $id("mesAtendFil")?.value || "0");
+  } else {
+    const data = $id("dataFinalFil")?.value;
+    if(data) {
+      // Formata data para YYYY-MM-DD (formato do input date)
+      const dataFormatada = data.split('T')[0];
+      setSelect2Value('dataFinal', dataFormatada);
+    }
+  }
+
+  if(tipoPessoa === "Beneficiario") {
+    setSelect2Value('atendBeneficiario', $id("atendBeneficiarioFil")?.value || "");
+  }
+  if(tipoPessoa === "Terapeuta") {
+    setSelect2Value('atendTerapeuta', $id("atendTerapeutaFil")?.value || "");
+  }
+  
+  // ✅ 2º: SÓ AGORA aplica a visibilidade com os valores já carregados
+  trocaFiltroData();
+  trocaFilpessoa();
+}
+
+     </script>
+	
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">
@@ -681,20 +609,7 @@ function carregaBody(){
 										</div>
 									</div>
 								</div>
-								<div class="hidden col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label> Filial:&nbsp;</label>
-											<select name="empresaFilial" id="empresaFilial" class="select2" value="Natriz">
-												<option value="Matriz">Matriz</option>
-												<option value="Filial 1">Filial 1</option>
-												<option value="Filial 2">Filial 2</option>
-												<option value="Filial 3">Filial 3</option>
-												<option value="Filial 4">Filial 4</option>
-											</select>
-										</div>
-									</div>
-								</div>
+								
 								<div id="divAnoAtend" class="col-sm-2">
 									<div class="row">
 										<div class="input-group">
