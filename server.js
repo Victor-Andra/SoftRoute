@@ -767,7 +767,7 @@ const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSc
 
     app.use('/menu', menu);
 //Outros
-const PORT = 8081
+const PORT = 3000
 app.listen(PORT, () => {
     //console.log("Servidor rodando")
 })
