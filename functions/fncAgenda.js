@@ -1105,6 +1105,7 @@ module.exports = {
         let quinta;
         let sexta;
         let beneConvid;
+        let agenda = [];
         let seg = new Date();
         let sex = new Date();
         seg.setHours(0);
@@ -1166,49 +1167,7 @@ module.exports = {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
-            //console.log("Listagem Realizada de agendamentos!")
-            //console.log(agenda)
-            agenda.forEach((e)=>{
-                let dat = new Date(e.agenda_data);
-                e.agenda_data_dia = this.getDataFMT(dat);
-                let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
-                let min = ""+dat.getMinutes();
-                if (hora.length == 1){hora = "0" + hora + "";}
-                if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
-                e.agenda_aux = aux;
-                aux++;
-
-                switch (dat.getUTCDay()){
-                    case 0:
-                        e.agenda_data_semana = "dom"
-                        break;
-                    case 1:
-                        e.agenda_data_semana = "seg"
-                        break;
-                    case 2:
-                        e.agenda_data_semana = "ter"
-                        break;
-                    case 3:
-                        e.agenda_data_semana = "qua"
-                        break;
-                    case 4:
-                        e.agenda_data_semana = "qui"
-                        break;
-                    case 5:
-                        e.agenda_data_semana = "sex"
-                        break;
-                    case 6:
-                        e.agenda_data_semana = "sab"
-                        break;
-                    default:
-                        
-                        //console.log("erro");
-                        break;
-                }
-            })
-            //console.log(agenda)
+        
             Bene.find({bene_status: "Ativo"}).then((benef) => {
                 benef.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
             Bene.find({_id: b._id}).then((bene)=>{
@@ -1264,7 +1223,7 @@ module.exports = {
                                     let benenomeconv = nomeBene+" / "+nomeConv + " ("+nomeSup+")";
                                     //console.log("benenomeconv:"+benenomeconv)
                                     res.render("agenda/agendaBeneficiario", {salas: sala, horaages: horaage, agendas: agenda, benes: benef, convs: conv, terapeutas: terapeuta, terapias: terapia, semanas: semana, dtFill, benenomeconv, segunda, terca, quarta, quinta, sexta})
-        })})})})})})})})}).catch((err) =>{
+        })})})})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')

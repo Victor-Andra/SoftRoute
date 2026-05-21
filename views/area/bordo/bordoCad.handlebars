@@ -19,7 +19,18 @@
    			}
 			
 			function carregaBody(){
-				document.getElementById("usuarioAtual").value = document.getElementById(document.getElementById("bordoTerapeutaid").value).value;
+			document.getElementById("usuarioAtual").value = document.getElementById(document.getElementById("bordoTerapeutaid").value).value;
+			
+			const terapeutaIdField = document.getElementById("bordoTerapeutaid");
+			const usuarioAtualField = document.getElementById("usuarioAtual");
+			
+			if(terapeutaIdField?.value && usuarioAtualField) {
+				const nomeElement = document.getElementById(terapeutaIdField.value);
+				if(nomeElement) {
+					usuarioAtualField.value = nomeElement.value;
+				}
+			}
+			
 			}
 		</script>
 <script>
@@ -34,6 +45,12 @@ function validarFormulario(event) {
     if (!beneId || beneId === '766f69643132333435366964') {
         erros.push("O campo <strong>Beneficiário</strong> não pode ser nulo.");
     }
+
+	// === Validar Terapeuta ===
+		const terapeutaId = document.getElementById('bordoTerapeutaid')?.value;
+		if (!terapeutaId || terapeutaId === '766f69643132333435366964') {
+			erros.push("O campo <strong>Terapeuta</strong> não foi identificado. Por favor, recarregue a página ou faça login novamente.");
+		}
 
     // === 2. Validar Local do Atendimento ===
     const atendem = document.getElementById('bordoAtendem').value;
@@ -219,11 +236,12 @@ document.addEventListener('DOMContentLoaded', function () {
 											</span>
 										</div>
 										<div class="widget-body">
+											<input type="hidden" id="usuarioAtual" name="usuarioAtual" value="{{usuarioAtual}}" />
 											<div class="widget-main">
 												<label> Terapeuta</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input style="width: 400px;" type="text" id="usuarioAtual" name="usuarioAtual" readonly="true"  value="" />
+														<input style="width: 400px;" type="text" id="usuarioAtual" name="usuarioAtual" readonly="true"/>
 													</div>
 												</div>
 												<label> Beneficiário</label>

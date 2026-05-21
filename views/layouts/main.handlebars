@@ -72,9 +72,6 @@
 			}
 		</style>	
 	
-		<!--<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>-->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -127,14 +124,14 @@
 		<!-- Carrega div Conteudo com paginas html -->
 		<script type = "text/javascript">
  			function carregar(pagina){ $("#conteudo").load(pagina);	}
-			function formatar(mask,doc){
-				var i = doc.value.length;
-				var saida = mask.substring(0,1);
-				var texto = mask.substring(i);
+				function formatar(mask,doc){
+					var i = doc.value.length;
+					var saida = mask.substring(0,1);
+					var texto = mask.substring(i);
 
-				if(texto.substring(0,1) != saida){
-					doc.value += texto.substring(0,1);
-				}
+					if(texto.substring(0,1) != saida){
+						doc.value += texto.substring(0,1);
+					}
 			}
 			function procuraBiscoito(name){//apenas se estiver desabilitado httpOnly
 				var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));

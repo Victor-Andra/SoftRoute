@@ -88,12 +88,12 @@ module.exports = {
     filtraBordo(req, res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
+        Atend = getModel(db, 'tb_atend', anoClass.Atend)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
         Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
 
         let usuarioAtual = req.cookies['idUsu'];
-        console.log("usuarioAtual: "+usuarioAtual)
         let tipoPessoa = req.body.bordoTipoPessoa;
         let tipoData = req.body.tipoData;
         let dataIni;
@@ -106,6 +106,12 @@ module.exports = {
         let mes;
         let dia;
         let isAgendaTerapeuta = false;
+        let carregaFiltro = "true";
+        let bordoTerapeuta = new ObjectId(usuarioAtual);
+        let bordoBeneficiario = req.body.bordoBeneficiario;
+        let dataFinal = req.body.dataFinal;
+        let mesBordo = req.body.mesBordo;
+        let anoBordo = req.body.anoBordo;
         let lvlUsu = req.cookies['lvlUsu'];
         let arrayIds = ['62421903a12aa557219a0fd3','6242191fa12aa557219a0fd9','6242190fa12aa557219a0fd6','624218f5a12aa557219a0fd0'];//,'62421857a12aa557219a0fc1','624218f5a12aa557219a0fd0'
         arrayIds.forEach((id)=>{
@@ -139,58 +145,58 @@ module.exports = {
                 dataFim = fncGeral.getDateToIsostring(dataFim);
 
                 break;
-            case "Semana":
-                data = req.body.dataFinal;
-                ano = data.substring(0,4);
-                mes = data.substring(5,7);
-                dia = data.substring(8,10);
+                case "Semana":
+                    data = req.body.dataFinal;
+                    ano = data.substring(0,4);
+                    mes = data.substring(5,7);
+                    dia = data.substring(8,10);
 
-                seg = new Date();
-                seg.setFullYear(ano);
-                seg.setUTCMonth(mes);
-                seg.setDate(dia);
-                seg.setHours(0, 0, 0, 0);
+                    seg = new Date();
+                    seg.setFullYear(ano);
+                    seg.setUTCMonth(mes);
+                    seg.setDate(dia);
+                    seg.setHours(0, 0, 0, 0);
 
-                sex = new Date();
-                sex.setFullYear(ano);
-                sex.setUTCMonth(mes);
-                sex.setDate(dia);
-                sex.setHours(23, 59, 59, 0);
+                    sex = new Date();
+                    sex.setFullYear(ano);
+                    sex.setUTCMonth(mes);
+                    sex.setDate(dia);
+                    sex.setHours(23, 59, 59, 0);
 
-                switch (seg.getUTCDay()){
-                    case 0://DOM
-                        seg.setUTCDate(seg.getUTCDate() + 1);
-                        sex.setUTCDate(sex.getUTCDate() + 5);
-                        break;
-                    case 1://SEG
-                        sex.setUTCDate(sex.getUTCDate() + 4);
-                        break;
-                    case 2://TER
-                        seg.setUTCDate(seg.getUTCDate() - 1);
-                        sex.setUTCDate(sex.getUTCDate() + 3);
-                        break;
-                    case 3://QUA
-                        seg.setUTCDate(seg.getUTCDate() - 2);
-                        sex.setUTCDate(sex.getUTCDate() + 2);
-                        break;
-                    case 4://QUI
-                        seg.setUTCDate(seg.getUTCDate() - 3);
-                        sex.setUTCDate(sex.getUTCDate() + 1);
-                        break;
-                    case 5://SEX
-                        seg.setUTCDate(seg.getUTCDate() - 4);
-                        break;
-                    case 6://SAB
-                        seg.setUTCDate(seg.getUTCDate() - 5);
-                        sex.setUTCDate(sex.getUTCDate() - 1);
-                        break;
-                    default:
-                        seg.setUTCDate(seg.getUTCDate() + 1);
-                        sex.setUTCDate(sex.getUTCDate() + 5);
-                        break;
-                }
-                dataIni = fncGeral.getDateToIsostring(seg);
-                dataFim = fncGeral.getDateToIsostring(sex);
+                    switch (seg.getUTCDay()){
+                        case 0://DOM
+                            seg.setUTCDate(seg.getUTCDate() + 1);
+                            sex.setUTCDate(sex.getUTCDate() + 5);
+                            break;
+                        case 1://SEG
+                            sex.setUTCDate(sex.getUTCDate() + 4);
+                            break;
+                        case 2://TER
+                            seg.setUTCDate(seg.getUTCDate() - 1);
+                            sex.setUTCDate(sex.getUTCDate() + 3);
+                            break;
+                        case 3://QUA
+                            seg.setUTCDate(seg.getUTCDate() - 2);
+                            sex.setUTCDate(sex.getUTCDate() + 2);
+                            break;
+                        case 4://QUI
+                            seg.setUTCDate(seg.getUTCDate() - 3);
+                            sex.setUTCDate(sex.getUTCDate() + 1);
+                            break;
+                        case 5://SEX
+                            seg.setUTCDate(seg.getUTCDate() - 4);
+                            break;
+                        case 6://SAB
+                            seg.setUTCDate(seg.getUTCDate() - 5);
+                            sex.setUTCDate(sex.getUTCDate() - 1);
+                            break;
+                        default:
+                            seg.setUTCDate(seg.getUTCDate() + 1);
+                            sex.setUTCDate(sex.getUTCDate() + 5);
+                            break;
+                    }
+                    dataIni = fncGeral.getDateToIsostring(seg);
+                    dataFim = fncGeral.getDateToIsostring(sex);
 
                 break;
             case "Dia":
@@ -259,12 +265,12 @@ module.exports = {
                     bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                     Escola.find().then((escola) =>{
                         escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena a escola por nome
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                        Usuario.find().then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                             terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
                             Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeutasina)=>{//Usuário c/ filtro de função = Terapeutas
                                 terapeutasina.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                                 console.log("Listagem Realizada Usuário!")
-                                res.render('area/bordo/bordoLis', {escolas: escola, anos: ano, bordos: bordo, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene, usuarioAtual, isAgendaTerapeuta})
+                                res.render('area/bordo/bordoLis', {escolas: escola, anos: ano, bordos: bordo, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene, usuarioAtual, isAgendaTerapeuta, carregaFiltro, bordoTerapeuta, bordoBeneficiario, dataFinal, mesBordo, anoBordo})
         })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")
@@ -278,8 +284,9 @@ module.exports = {
 
         let usuarioAtual = req.cookies['idUsu'];
         console.log("usuarioAtual:"+usuarioAtual)
-        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
-            terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
+        //Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+        Usuario.find().then((terapeuta)=>{//Usuário Sem filtro de função = Terapeutas
+        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
             Bene.find({bene_status: "Ativo", bene_nome: { $not: /\./ } }).then((bene) => {
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
                 Escola.find().sort({escola_nome: 1}).then((escola)=>{
@@ -390,9 +397,150 @@ module.exports = {
         sex.setHours(23);
         sex.setMinutes(59);
         sex.setSeconds(59);
-        let filtroBordoMapa= {bordo_beneid: req.body.bordoBeneid, bordo_datacad: { $gte: seg, $lte: sex}}
+        //let filtroBordoMapa= {bordo_beneid: req.body.bordoBeneid, bordo_datacad: { $gte: seg, $lte: sex}}
 
-        Atend.find(filtroBordoMapa).then((at)=>{
+        let atendConv = req.body.atendConv; // ← adicione logo após os outros 'let'
+        let dataFinal = req.body.dataFinal;
+        let mesAtend = req.body.mesAtend;
+        let anoAtend = req.body.anoAtend;
+
+        switch (tipoData){
+            case "Ano/Mes":
+                dataIni = new Date();
+                let mesIni = parseInt(req.body.mesAtend);//UTCMonth = 0-11
+                let anoIni = parseInt(req.body.anoAtend);
+                
+                dataIni.setDate(01);
+                dataIni.setFullYear(anoIni);
+                dataIni.setUTCMonth(mesIni);
+                dataIni.setSeconds(00);
+                dataIni.setMinutes(00);
+                dataIni.setHours(00);
+                
+                dataFim = new Date();
+                dataFim.setFullYear(anoIni);
+                dataFim.setUTCMonth(mesIni+1);
+                dataFim.setDate(01);
+                dataFim.setDate(dataFim.getDate()-1);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
+                break;
+            case "Semana":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = parseInt(data.substring(5,7))-1;
+                dia = data.substring(8,10);
+
+                seg = new Date();
+                seg.setFullYear(ano);
+                seg.setUTCMonth(mes);
+                seg.setUTCDate(dia);
+                seg.setHours(0);
+                seg.setMinutes(0);
+                seg.setSeconds(0);
+
+                sex = new Date();
+                sex.setFullYear(ano);
+                sex.setUTCMonth(mes);
+                sex.setUTCDate(dia);
+                sex.setHours(23);
+                sex.setMinutes(59);
+                sex.setSeconds(59);
+
+                switch (seg.getUTCDay()){
+                    case 0://DOM
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                    case 1://SEG
+                        sex.setUTCDate(sex.getUTCDate() + 4);
+                        break;
+                    case 2://TER
+                        seg.setUTCDate(seg.getUTCDate() - 1);
+                        sex.setUTCDate(sex.getUTCDate() + 3);
+                        break;
+                    case 3://QUA
+                        seg.setUTCDate(seg.getUTCDate() - 2);
+                        sex.setUTCDate(sex.getUTCDate() + 2);
+                        break;
+                    case 4://QUI
+                        seg.setUTCDate(seg.getUTCDate() - 3);
+                        sex.setUTCDate(sex.getUTCDate() + 1);
+                        break;
+                    case 5://SEX
+                        seg.setUTCDate(seg.getUTCDate() - 4);
+                        break;
+                    case 6://SAB
+                        seg.setUTCDate(seg.getUTCDate() - 5);
+                        sex.setUTCDate(sex.getUTCDate() - 1);
+                        break;
+                    default:
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                }
+                dataIni = seg;
+                dataFim = sex;
+
+                //console.log("req.body.dataFinal:"+req.body.dataFinal)
+                //console.log("seg:"+seg);
+                //console.log("sex:"+sex);
+                
+                break;
+            case "Dia":
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = parseInt(data.substring(5,7))-1;
+                dia = data.substring(8,10);
+
+                dataIni = new Date();
+                dataIni.setFullYear(ano);
+                dataIni.setUTCMonth(mes);
+                dataIni.setUTCDate(dia);
+                dataIni.setHours(0);
+                dataIni.setMinutes(0);
+                dataIni.setSeconds(0);
+
+                dataFim = new Date();
+                dataFim.setFullYear(ano);
+                dataFim.setUTCMonth(mes);
+                dataFim.setUTCDate(dia);
+                dataFim.setHours(23);
+                dataFim.setMinutes(59);
+                dataFim.setSeconds(59);
+
+                break;
+            default:
+                
+                break;
+        }
+
+        console.log("dataIni: "+dataIni);
+        console.log("dataFim: "+dataFim);
+        
+        switch (tipoPessoa){
+            case "Geral":
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                break;
+            case "Beneficiario":
+                busca = { atend_atenddata: { $gte : dataIni, $lte:  dataFim } , atend_beneid: req.body.atendBeneficiario };
+                break;
+            case "Terapeuta":
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } ,  $or: [{ atend_terapeutaid: req.body.atendTerapeuta },{ atend_mergeterapeutaid: req.body.atendTerapeuta }] };
+                //console.log("req.body.atendTerapeuta:"+req.body.atendTerapeuta);
+                break;
+            case "Convenio": // ← novo caso — note o acento no valor, pois vem da view como "Convenio" Wagner cintra 25/11/2025
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, atend_convid: req.body.atendConv };
+                //console.log("req.body.atendConv:"+req.body.atendConv);
+                break;
+            default:
+                busca = { atend_atenddata: { $gte : new Date(dataIni), $lte:  new Date(dataFim) } }
+                break;
+        }
+
+        Atend.find(busca).then((at)=>{
             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética     
                 Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeutasina)=>{//Usuário c/ filtro de função = Terapeutas

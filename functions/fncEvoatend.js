@@ -2387,7 +2387,6 @@ async filtraEvoatendgeral(req, res) {
                         sex.setUTCDate(sex.getUTCDate() + 2);
                         break;
                     case 4://QUI
-                    console.log("Quinta")
                         seg.setUTCDate(seg.getUTCDate() - 3);
                         sex.setUTCDate(sex.getUTCDate() + 1);
                         break;

@@ -2,6 +2,85 @@
 <html lang="pt-br">
 	<head>
 		<title>Visualizar Diário de Bordo</title>
+		<script>
+			function atualizaData() {
+				const dataInput = document.getElementById("bordoDataativ").value;
+				if (!dataInput) return;
+				const datafmt = new Date(dataInput + "T00:00:00.000Z");
+				console.log(datafmt.toISOString());
+				// Se tiver um hidden input para data final, descomente a linha abaixo:
+				// document.getElementById("bordoDataativFinal").value = datafmt.toISOString();
+			}
+
+			function carregaBody() {
+				const dataEdi = document.getElementById("bordoDataativEdi")?.value;
+				if (dataEdi && dataEdi.length >= 10) {
+					// Remove hora se vier ISO: 2024-05-10T03:00:00.000Z → 2024-05-10
+					const dataLimpa = dataEdi.includes('T') ? dataEdi.split('T')[0] : dataEdi.substring(0, 10);
+					document.getElementById("bordoDataativ").value = dataLimpa;
+				} else {
+					console.warn('⚠️ Data não encontrada ou inválida:', dataEdi);
+				}
+				
+				const mapaCampos = [
+					["bordoBeneid", "bordoBeneidEdi"], ["bordoAtendem", "bordoAtendemEdi"],
+					["bordoOndefoi", "bordoOndefoiEdi"], ["bordoEscolaid", "bordoEscolaidEdi"],
+					["bordoEscolanome", "bordoEscolanomeEdi"], ["bordoFrequencia", "bordofrequenciaEdi"],
+					["bordoSeguerotina", "bordoSeguerotinaEdi"], ["bordoEstereotipas", "bordoEstereotipasEdi"],
+					["bordoFoco", "bordoFocoEdi"], ["bordoAutocuidado", "bordoAutocuidadoEdi"],
+					["bordoAliindepende", "bordoAliindependeEdi"], ["bordoEscolalia", "bordoEscolaliaEdi"],
+					["bordoParticipa", "bordoParticipaEdi"], ["bordoSegue", "bordoSegueEdi"],
+					["bordoRepertorio", "bordoRepertorioEdi"], ["bordoDesorganiza", "bordoDesorganizaEdi"],
+					["bordoDesorganizadesc", "bordoDesorganizadescEdi"], ["bordoAutoagressao", "bordoAutoagressaoEdi"],
+					["bordoAgrideadulto", "bordoAgrideadultoEdi"], ["bordoAgridepares", "bordoAgrideparesEdi"],
+					["bordoDestruir", "bordoDestruirEdi"], ["bordoGritos", "bordoGritosEdi"],
+					["bordoChoros", "bordoChorosEdi"], ["bordoBirras", "bordoBirrasEdi"],
+					["bordoBirrasdesc", "bordoBirrasdescEdi"], ["bordoMandosadulto", "bordoMandosadultoEdi"],
+					["bordoMandospares", "bordoMandosparesEdi"], ["bordoPergunta", "bordoPerguntaEdi"],
+					["bordoResponde", "bordoRespondeEdi"], ["bordoImita", "bordoImitaEdi"],
+					["bordoInteracaoverbal", "bordoInteracaoverbalEdi"], ["bordoVerbaldesc", "bordoVerbaldescEdi"],
+					["bordoColabtodotempo", "bordoColabtodotempoEdi"], ["bordoColabmaiortempo", "bordoColabmaiortempoEdi"],
+					["bordoColabmetadetempo", "bordoColabmetadetempoEdi"], ["bordoColabmenosmetadetempo", "bordoColabmenosmetadetempoEdi"],
+					["bordoColabnao", "bordoColabnaoEdi"], ["bordoColabnaodesc", "bordoColabnaodescEdi"],
+					["bordoAtivsucedido", "bordoAtivsucedidoEdi"], ["bordoAtivnaosucedido", "bordoAtivnaosucedidoEdi"],
+					["bordoAdequadodificil", "bordoAdequadodificilEdi"], ["bordoAdequadodifacil", "bordoAdequadodifacilEdi"],
+					["bordoSemativ", "bordoSemativEdi"], ["bordoMediacao", "bordoMediacaoEdi"],
+					["bordoAdaptacao", "bordoAdaptacaoEdi"], ["bordoAtivsaladesc", "bordoAtivsaladescEdi"],
+					["bordoBrincousolonge", "bordoBrincousolongeEdi"], ["bordoBrincousoperto", "bordoBrincousopertoEdi"],
+					["bordoTentoubrincar", "bordoTentoubrincarEdi"], ["bordoBrincouparesindep", "bordoBrincouparesindepEdi"],
+					["bordoBrincouparesterapeuta", "bordoBrincouparesterapeutaEdi"], ["bordoNaobrincar", "bordoNaobrincarEdi"],
+					["bordoBrincardesc", "bordoBrincardescEdi"], ["bordoLerso", "bordoLersoEdi"],
+					["bordoLerajuda", "bordoLerajudaEdi"], ["bordoFazsoma", "bordoFazsomaEdi"],
+					["bordoFazsomaqtnum", "bordoFazsomaqtnumEdi"], ["bordoSubtrai", "bordoSubtraiEdi"],
+					["bordoSubtraiqtnum", "bordoSubtraiqtnumEdi"], ["bordoDividir", "bordoDividirEdi"],
+					["bordoMultiplicar", "bordoMultiplicarEdi"], ["bordoEscolardesc", "bordoEscolardescEdi"],
+					["bordoForanormal", "bordoForanormalEdi"], ["bordoHabilnova", "bordoHabilnovaEdi"],
+					["bordoIncidente", "bordoIncidenteEdi"], ["bordoLercompreende", "bordoLercompreendeEdi"],
+					["bordoObs", "bordoObsEdi"]
+				];
+
+				mapaCampos.forEach(([dest, orig]) => {
+					const val = document.getElementById(orig);
+					console.log(dest + " - " + orig)
+					const elemento = document.getElementById(dest);
+					if (elemento && elemento.tagName === "SELECT") {
+						console.log("Valro campo? "+document.getElementById(orig).value)
+						$("#"+dest).val(val.value).trigger('change.select2');
+					} else {
+						$(dest).value = val.value;
+					}
+				});
+
+				const terapeutaId = document.getElementById("bordoTerapeutaid")?.value;
+				$("#bordoTerapeutaidEdi").val(document.getElementById("bordoTerapeutaidEdi").value).trigger('change.select2');
+				if (terapeutaId) {
+					const nomeTerapeuta = document.getElementById(terapeutaId)?.value;
+					$("usuarioAtual").value = nomeTerapeuta;
+				}
+
+				atualizaData();
+			}
+		</script>
 	</head>
 
 	<body class="no-skin" onload="javascript:controlaNave();carregaBody();" >
@@ -293,26 +372,26 @@
 																		</select>
 																	</td>
 																</tr>																		
-															<tbody>
+															
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. Foco atencional</td>
 																	<td name="Pontua">
 																		<select name="bordoFoco" id="bordoFoco" class="select2" >
-																					<option value="-">-</option>
-																					<option value="00">00</option>
-																					<option value="01">01</option>
-																					<option value="02">02</option>
-																					<option value="03">03</option>
-																					<option value="04">04</option>
-																					<option value="05">05</option>
-																					<option value="06">06</option>
-																					<option value="07">07</option>
-																					<option value="08">08</option>
-																					<option value="09">09</option>
-																					<option value="10">10</option>
-																				</select>
+																			<option value="-">-</option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																		</select>
 																	</td>
-																</tr>	
+																</tr>
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. Necessita de auto cuidado</td>
 																	<td name="Pontua">
@@ -1263,107 +1342,5 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
-		<!-- basic scripts -->
-		<script type="text/javascript">
-			// Helper que atualiza qualquer campo, com suporte automático ao Chosen
-			const setField = (targetId, value) => {
-				const el = document.getElementById(targetId);
-				if (!el) return;
-				
-				if (el.tagName === 'SELECT') {
-					// ✅ SELECT2: define valor e dispara evento 'change'
-					$(el).val(value).trigger('change');
-				} else {
-					el.value = value || '';
-				}
-			};
-
-			function atualizaData() {
-				const dataInput = document.getElementById("bordoDataativ").value;
-				if (!dataInput) return;
-				const datafmt = new Date(dataInput + "T00:00:00.000Z");
-				console.log(datafmt.toISOString());
-				// Se tiver um hidden input para data final, descomente a linha abaixo:
-				// document.getElementById("bordoDataativFinal").value = datafmt.toISOString();
-			}
-
-			function carregaBody() {
-			// 1️⃣ Data - garante formato YYYY-MM-DD
-				// 1️⃣ Data - garante formato YYYY-MM-DD com segurança
-					const dataEdi = document.getElementById("bordoDataativEdi")?.value;
-					if (dataEdi && dataEdi.length >= 10) {
-						// Remove hora se vier ISO: 2024-05-10T03:00:00.000Z → 2024-05-10
-						const dataLimpa = dataEdi.includes('T') ? dataEdi.split('T')[0] : dataEdi.substring(0, 10);
-						document.getElementById("bordoDataativ").value = dataLimpa;
-					} else {
-						console.warn('⚠️ Data não encontrada ou inválida:', dataEdi);
-					}
-				
-			
-				// 2️⃣ Mapeamento completo: [ID_DESTINO, ID_ORIGEM]
-				const mapaCampos = [
-					["bordoBeneid", "bordoBeneidEdi"], ["bordoAtendem", "bordoAtendemEdi"],
-					["bordoOndefoi", "bordoOndefoiEdi"], ["bordoEscolaid", "bordoEscolaidEdi"],
-					["bordoEscolanome", "bordoEscolanomeEdi"], ["bordoFrequencia", "bordofrequenciaEdi"],
-					["bordoSeguerotina", "bordoSeguerotinaEdi"], ["bordoEstereotipas", "bordoEstereotipasEdi"],
-					["bordoFoco", "bordoFocoEdi"], ["bordoAutocuidado", "bordoAutocuidadoEdi"],
-					["bordoAliindepende", "bordoAliindependeEdi"], ["bordoEscolalia", "bordoEscolaliaEdi"],
-					["bordoParticipa", "bordoParticipaEdi"], ["bordoSegue", "bordoSegueEdi"],
-					["bordoRepertorio", "bordoRepertorioEdi"], ["bordoDesorganiza", "bordoDesorganizaEdi"],
-					["bordoDesorganizadesc", "bordoDesorganizadescEdi"], ["bordoAutoagressao", "bordoAutoagressaoEdi"],
-					["bordoAgrideadulto", "bordoAgrideadultoEdi"], ["bordoAgridepares", "bordoAgrideparesEdi"],
-					["bordoDestruir", "bordoDestruirEdi"], ["bordoGritos", "bordoGritosEdi"],
-					["bordoChoros", "bordoChorosEdi"], ["bordoBirras", "bordoBirrasEdi"],
-					["bordoBirrasdesc", "bordoBirrasdescEdi"], ["bordoMandosadulto", "bordoMandosadultoEdi"],
-					["bordoMandospares", "bordoMandosparesEdi"], ["bordoPergunta", "bordoPerguntaEdi"],
-					["bordoResponde", "bordoRespondeEdi"], ["bordoImita", "bordoImitaEdi"],
-					["bordoInteracaoverbal", "bordoInteracaoverbalEdi"], ["bordoVerbaldesc", "bordoVerbaldescEdi"],
-					["bordoColabtodotempo", "bordoColabtodotempoEdi"], ["bordoColabmaiortempo", "bordoColabmaiortempoEdi"],
-					["bordoColabmetadetempo", "bordoColabmetadetempoEdi"], ["bordoColabmenosmetadetempo", "bordoColabmenosmetadetempoEdi"],
-					["bordoColabnao", "bordoColabnaoEdi"], ["bordoColabnaodesc", "bordoColabnaodescEdi"],
-					["bordoAtivsucedido", "bordoAtivsucedidoEdi"], ["bordoAtivnaosucedido", "bordoAtivnaosucedidoEdi"],
-					["bordoAdequadodificil", "bordoAdequadodificilEdi"], ["bordoAdequadodifacil", "bordoAdequadodifacilEdi"],
-					["bordoSemativ", "bordoSemativEdi"], ["bordoMediacao", "bordoMediacaoEdi"],
-					["bordoAdaptacao", "bordoAdaptacaoEdi"], ["bordoAtivsaladesc", "bordoAtivsaladescEdi"],
-					["bordoBrincousolonge", "bordoBrincousolongeEdi"], ["bordoBrincousoperto", "bordoBrincousopertoEdi"],
-					["bordoTentoubrincar", "bordoTentoubrincarEdi"], ["bordoBrincouparesindep", "bordoBrincouparesindepEdi"],
-					["bordoBrincouparesterapeuta", "bordoBrincouparesterapeutaEdi"], ["bordoNaobrincar", "bordoNaobrincarEdi"],
-					["bordoBrincardesc", "bordoBrincardescEdi"], ["bordoLerso", "bordoLersoEdi"],
-					["bordoLerajuda", "bordoLerajudaEdi"], ["bordoFazsoma", "bordoFazsomaEdi"],
-					["bordoFazsomaqtnum", "bordoFazsomaqtnumEdi"], ["bordoSubtrai", "bordoSubtraiEdi"],
-					["bordoSubtraiqtnum", "bordoSubtraiqtnumEdi"], ["bordoDividir", "bordoDividirEdi"],
-					["bordoMultiplicar", "bordoMultiplicarEdi"], ["bordoEscolardesc", "bordoEscolardescEdi"],
-					["bordoForanormal", "bordoForanormalEdi"], ["bordoHabilnova", "bordoHabilnovaEdi"],
-					["bordoIncidente", "bordoIncidenteEdi"], ["bordoLercompreende", "bordoLercompreendeEdi"],
-					["bordoObs", "bordoObsEdi"]
-				];
-
-				// 3️⃣ Aplica todos os valores de uma vez
-				mapaCampos.forEach(([dest, orig]) => {
-					const val = document.getElementById(orig)?.value;
-					setField(dest, val);
-				});
-
-				// 4️⃣ Campo especial: Nome do Terapeuta (busca dinâmica pelo ID)
-				const terapeutaId = document.getElementById("bordoTerapeutaid")?.value;
-				if (terapeutaId) {
-					const nomeTerapeuta = document.getElementById(terapeutaId)?.value;
-					setField("usuarioAtual", nomeTerapeuta);
-				}
-
-				// 5️⃣ Atualiza data (se necessário)
-				atualizaData();
-			}
-
-			// 🚀 Executa APÓS o DOM e o Chosen estarem prontos
-			$(document).ready(function() {
-				
-				// Carrega os dados salvos
-				carregaBody();
-
-				// Inicializa navegação do Ace Admin (se existir)
-				if (typeof controlaNave === 'function') controlaNave();
-			});
-		</script>
 	</body>
 </html>

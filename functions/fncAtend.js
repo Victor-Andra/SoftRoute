@@ -731,7 +731,7 @@ module.exports = {
         let carregaFiltro = "true";
         let atendTerapeuta = req.body.atendTerapeuta;
         let atendBeneficiario = req.body.atendBeneficiario;
-        let atendConv = req.body.atendConv; // ← adicione logo após os outros 'let'
+        let atendConv = req.body.atendConv;
         let dataFinal = req.body.dataFinal;
         let mesAtend = req.body.mesAtend;
         let anoAtend = req.body.anoAtend;
@@ -798,7 +798,6 @@ module.exports = {
                         sex.setUTCDate(sex.getUTCDate() + 2);
                         break;
                     case 4://QUI
-                    console.log("Quinta")
                         seg.setUTCDate(seg.getUTCDate() - 3);
                         sex.setUTCDate(sex.getUTCDate() + 1);
                         break;
