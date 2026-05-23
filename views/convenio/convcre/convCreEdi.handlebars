@@ -6,7 +6,6 @@
 
 	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
 		<!-- Inputs hidden para valores de edição -->
-		<input id="convcreId" name="convcreId" class="hidden" value="{{convcre._id}}"/>
 		<input id="convcreStatusEdi" name="convcreStatusEdi" class="hidden" value="{{convcre.convcre_status}}"/>
 		<input id="convIdEdi" name="convIdEdi" class="hidden" value="{{convcre.convcre_convid}}"/>
 		<input id="terapiaIdEdi" name="terapiaIdEdi" class="hidden" value="{{convcre.convcre_terapiaid}}"/>
@@ -25,6 +24,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<form class="form-horizontal" role="form" action="/menu/convenio/convcre/atualizar" method="POST">
+								<input id="convcreId" name="convcreId" class="hidden" value="{{convcre._id}}"/>
 								<div class="col-sm-12">
 									<div class="widget-box">
 										<div class="widget-header">
