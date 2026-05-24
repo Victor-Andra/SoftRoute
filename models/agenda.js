@@ -1392,7 +1392,7 @@ module.exports = {
                 // Unir pais + filhos na lista final
                 agendaSemanal.forEach(as => { agendaFinal.push(as); });
                 
-                agenda.forEach((a) => {
+                AgendaModel.forEach((a) => {
                     let add = "true";
                     agendaSemanal.forEach(as => {
                         if ("" + as.agenda_tempId + "" == "" + a._id + "") {
