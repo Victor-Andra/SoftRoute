@@ -3,6 +3,47 @@
 	<head>
 		<title>Diário de Bordo</title>
 		<style>
+			
+			/* Estilos para impressão */
+			@media print {
+				.noprint {
+					display: none !important;
+				}
+
+				/* Cabeçalho fixo com paginação no topo */
+				.print-header {
+					position: fixed;
+					top: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 4px 0;
+					background: white;
+					z-index: 9999;
+					content: "Página " counter(page) " de " counter(pages);
+				}
+
+				/* Margem superior para não sobrepor conteúdo */
+				body {
+					margin-top: 12mm; /* suficiente para o cabeçalho */
+					margin-bottom: 10mm;
+				}
+
+				/* Configuração da página: permite retrato ou paisagem conforme escolha do usuário */
+				@page {
+					margin: 1cm;
+					/* NÃO defina `size` aqui — isso bloqueia a orientação! */
+					@top-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 11px;
+						color: black;
+					}
+					@bottom-center {
+						content: ""; /* remove qualquer rodapé automático */
+					}
+				}
+			}
 			 /* ============================================
       SELECT2 - ESTILOS GERAIS
       ============================================ */

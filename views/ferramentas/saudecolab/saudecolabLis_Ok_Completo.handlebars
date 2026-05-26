@@ -108,6 +108,7 @@
 														 <tr>
 															<th rowspan="2" style="width: 15%;">Nome</th>
 															<th rowspan="2" style="width: 5%;">Data <br>Atualização</th>
+															<th colspan="8">Principais Pontuações</th>
 															<th colspan="2">Em Caso de Urgência</th>
 															<th rowspan="2" style="width: 1%;">Ações<br>
 																<a hidden class="red" href="/menu/ferramentas/saudecolab/cad">
@@ -116,9 +117,25 @@
 															</th>
 														</tr>
 														<tr>
+															<th style="width: 5%;">Tipo<br>Sanguíneo</th>
+															<th style="width: 5%;">Plano Saúde</th>
+															<th style="width: 5%;">Alérgico&nbsp;&nbsp;<a class="pink"><i class="ace-icon fa fa-podcast small"></i></a></th>
+															<th style="width: 5%;">Medicamentos&nbsp;&nbsp;<a class="red"><i class="ace-icon fa fa-ban small" title="Não pode tomar."></i></a><br>
+															não pode tomar.</th>
+															<th style="width: 5%;">Hipertensão&nbsp;&nbsp;<a class="red"><i class="ace-icon fa fa-heartbeat small"></i></a></th>
+															<th style="width: 5%;">Cardíaco&nbsp;&nbsp;<a class="purple"><i class="ace-icon fa fa-heart small"></i></a></th>
+															<th style="width: 5%;">Diabetes&nbsp;&nbsp;<a class="orange"><i class="ace-icon fa fa-tint small"></i></a></th>
+															<!-- /.row 
+															<th style="width: 5%;">Mendicamentos&nbsp;&nbsp;<a class="green"><i class="ace-icon fa fa-plus small" title="Deve tomar regularmente."></i></a> </th>
+															-->
+															<th style="width: 5%; white-space: wrap;">Hospital</th>
 															<th colspan="2" style="width: 5%;">Contatos</th>
 														</tr>
+														
+														
 													</tr>
+													
+													
 												</thead>
 												
 												<tbody>
@@ -136,7 +153,69 @@
 															<td  style="width: 5%;">
 																<span class="badge badge-info">{{saudecolab_saudecolabdata}}</span>
 															</td>
-														
+															<td  style="width: 5%;">
+																<span class="badge badge-warning">{{saudecolab_tiposangue}}</span>
+															</td>
+															<td  style="width: 5%; white-space: wrap;">
+																{{#ifEqual this.saudecolab_planosaude "Sim"}}
+																	<span style="white-space: wrap;" class="badge badge-info">{{saudecolab_planosaudequal}}</span>
+																	{{else}}
+																	<span style="white-space: wrap;" class="badge badge-danger">{{saudecolab_planosaude}}</span>
+																{{/ifEqual}}
+															</td>
+															<td style="width: 5%; white-space: wrap;">
+																{{#ifEqual this.saudecolab_alergia "Sim"}}
+																	<span style="white-space: wrap;" class="badge badge-danger">{{saudecolab_alergia}}</span>
+																	<a class="red">
+																		<i class="ace-icon fa fa-search bigger-130" title="{{saudecolab_alergiaqual}}"></i>
+																	</a>
+																	{{else}}
+																	<span style="white-space: wrap;" class="badge badge-success">{{saudecolab_alergia}}</span>
+																{{/ifEqual}}
+															</td>
+															<td  style="width: 5%;">
+																{{#ifEqual this.saudecolab_medicamentonao "Sim"}}
+																	<span style="white-space: wrap;" class="badge badge-danger">{{saudecolab_medicamentonaoqual}}</span>
+																	{{else}}
+																	<span style="white-space: wrap;" class="badge badge-success">{{saudecolab_medicamentonao}}</span>
+																{{/ifEqual}}
+																
+															</td>
+															<td  style="width: 5%;">
+																{{#ifEqual this.saudecolab_hipertenso "Sim"}}
+																	<span class="badge badge-danger">{{saudecolab_hipertenso}}</span>
+																	
+																	{{else}}
+																	<span class="badge badge-success">{{saudecolab_hipertenso}}</span>
+																{{/ifEqual}}
+																
+															</td>
+															<td  style="width: 5%;">
+																{{#ifEqual this.saudecolab_cardiaco "Sim"}}
+																	<span class="badge badge-danger">{{saudecolab_cardiaco}}</span>
+																	
+																	{{else}}
+																	<span class="badge badge-success">{{saudecolab_cardiaco}}</span>
+																{{/ifEqual}}
+																
+															</td>
+															<td  style="width: 5%;">
+																{{#ifEqual this.saudecolab_diabetico "Sim"}}
+																	<span class="badge badge-danger">{{saudecolab_diabetico}}</span><br>
+																		{{#ifEqual this.saudecolab_insulina "Sim"}}
+																		<a class="black">
+																			<i class="ace-icon fa fa-toggle-on bigger-130" title="Toma Insulina"></i>
+																		</a>
+																		{{else}}
+																		
+																		{{/ifEqual}}
+																	{{else}}
+																	<span class="badge badge-success">{{saudecolab_diabetico}}</span>
+																{{/ifEqual}}
+															</td>
+															<td>
+																<span style="white-space: wrap;" class="badge badge-warning">{{saudecolab_hospitalqual}}</span>
+															</td>
 															<td>
 																<span style="white-space: wrap;" class="badge badge-info">{{saudecolab_contato1}}</span><br>
 																<span class="badge badge-info">{{saudecolab_parentesco1}}</span><br>
@@ -148,22 +227,12 @@
 																<span class="badge badge-info">{{saudecolab_celular2}}</span>
 															</td>
 															<td>
-    {{!-- 🔹 Usa ../ para acessar variável do contexto pai + compareString para segurança --}}
-    {{#compareString ../podeVerLupa "true"}}
-        <div class="action-buttons">
-            <a class="blue" href="/menu/ferramentas/saudecolab/edi/{{_id}}" title="Ver ficha completa">
-                <i class="ace-icon fa fa-search bigger-130"></i>
-            </a>
-        </div>
-    {{else}}
-       <div class="action-buttons">
-<a class="red" title="Acesso restrito">
-<i class="ace-icon fa fa-ban bigger-130"></i>
-</a>
-</div>
-    {{/compareString}}
-</td>
-															
+																<div class="action-buttons">
+																	<a class="blue" href="/menu/ferramentas/saudecolab/edi/{{_id}}">
+																		<i class="ace-icon fa fa-search bigger-130"></i>
+																	</a>
+																</div>
+															</td>
 														</tr>
 													{{/each}}
 												</tbody>
@@ -195,7 +264,7 @@
 			$("#dynamic-table").DataTable({
 			"language": { "url": "/js/lang/datatable-pt-br.json" },
 			"aaSorting": [],
-			"aoColumns": [ null, null,null, null, null, null, null,{ "bSortable": false }],
+			"aoColumns": [null, null, null, null, null, null, null,null, null, null, null, null,{ "bSortable": false }],
 			"responsive": true,
 			"lengthMenu": [200, 500],
 			"lengthChange": true,

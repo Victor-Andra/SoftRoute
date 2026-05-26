@@ -108,6 +108,7 @@
 														 <tr>
 															<th rowspan="2" style="width: 15%;">Nome</th>
 															<th rowspan="2" style="width: 5%;">Data <br>Atualização</th>
+															<th colspan="3">Principais Pontuações</th>
 															<th colspan="2">Em Caso de Urgência</th>
 															<th rowspan="2" style="width: 1%;">Ações<br>
 																<a hidden class="red" href="/menu/ferramentas/saudecolab/cad">
@@ -116,6 +117,9 @@
 															</th>
 														</tr>
 														<tr>
+															<th style="width: 5%;">Tipo<br>Sanguíneo</th>
+															<th style="width: 5%;">Plano Saúde</th>
+															<th style="width: 5%; white-space: wrap;">Hospital</th>
 															<th colspan="2" style="width: 5%;">Contatos</th>
 														</tr>
 													</tr>
@@ -136,7 +140,23 @@
 															<td  style="width: 5%;">
 																<span class="badge badge-info">{{saudecolab_saudecolabdata}}</span>
 															</td>
-														
+															<td  style="width: 5%;">
+																<span class="badge badge-warning">{{saudecolab_tiposangue}}</span>
+															</td>
+															<td  style="width: 5%; white-space: wrap;">
+																{{#ifEqual this.saudecolab_planosaude "Sim"}}
+																	<span style="white-space: wrap;" class="badge badge-info">{{saudecolab_planosaudequal}}</span>
+																	{{else}}
+																	<span style="white-space: wrap;" class="badge badge-danger">{{saudecolab_planosaude}}</span>
+																{{/ifEqual}}
+															</td>
+															
+															
+															
+															
+															<td>
+																<span style="white-space: wrap;" class="badge badge-warning">{{saudecolab_hospitalqual}}</span>
+															</td>
 															<td>
 																<span style="white-space: wrap;" class="badge badge-info">{{saudecolab_contato1}}</span><br>
 																<span class="badge badge-info">{{saudecolab_parentesco1}}</span><br>
@@ -148,22 +168,12 @@
 																<span class="badge badge-info">{{saudecolab_celular2}}</span>
 															</td>
 															<td>
-    {{!-- 🔹 Usa ../ para acessar variável do contexto pai + compareString para segurança --}}
-    {{#compareString ../podeVerLupa "true"}}
-        <div class="action-buttons">
-            <a class="blue" href="/menu/ferramentas/saudecolab/edi/{{_id}}" title="Ver ficha completa">
-                <i class="ace-icon fa fa-search bigger-130"></i>
-            </a>
-        </div>
-    {{else}}
-       <div class="action-buttons">
-<a class="red" title="Acesso restrito">
-<i class="ace-icon fa fa-ban bigger-130"></i>
-</a>
-</div>
-    {{/compareString}}
-</td>
-															
+																<div class="action-buttons">
+																	<a class="blue" href="/menu/ferramentas/saudecolab/edi/{{_id}}">
+																		<i class="ace-icon fa fa-search bigger-130"></i>
+																	</a>
+																</div>
+															</td>
 														</tr>
 													{{/each}}
 												</tbody>
