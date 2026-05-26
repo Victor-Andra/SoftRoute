@@ -2,73 +2,6 @@
 <html lang="pt-br">
 	<head>
 		<title>Visualizar Diário de Bordo</title>
-		<style>
-			 /* ============================================
-      SELECT2 - ESTILOS GERAIS
-      ============================================ */
-    .select2-container { min-width: 120px !important; }
-    .select2-container--default .select2-selection--single {
-      height: 30px !important; border: 1px solid #ced4da !important;
-      border-radius: 4px !important; background: white !important;
-      display: flex !important; align-items: center !important;
-      padding: 0 8px !important; font-size: 12px !important;
-    }
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-      height: 28px !important; right: 5px !important;
-    }
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-      line-height: 28px !important; padding-left: 0 !important; color: #333 !important;
-    }
-    .select2-container--default .select2-selection--single .select2-selection__placeholder {
-      color: #999 !important;
-    }
-    .select2-dropdown {
-      border: 1px solid #ced4da !important; border-radius: 4px !important;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-    }
-    .select2-container--default .select2-search--dropdown .select2-search__field {
-      border: 1px solid #ced4da !important; border-radius: 4px !important;
-      padding: 4px 8px !important; font-size: 12px !important; margin: 4px !important;
-    }
-    .select2-container--default .select2-results__option {
-      padding: 6px 10px !important; font-size: 12px !important;
-    }
-    .select2-container--default .select2-results__option--highlighted[aria-selected] {
-      background-color: #2196f3 !important; color: white !important;
-    }
-    .select2-container--default.select2-container--focus .select2-selection--single {
-      border-color: #2196f3 !important;
-      box-shadow: 0 0 0 2px rgba(33,150,243,0.2) !important;
-    }
-
-    /* ============================================
-      SELECT2 NA BARRA DE PESQUISA
-      ============================================ */
-    .toolbar-pesquisa .select2-container { width: 140px !important; }
-    .toolbar-pesquisa .select2-container .select2-selection--single {
-      width: 138px !important;
-    }
-    .toolbar-pesquisa .select2-dropdown { min-width: 140px !important; }
-
-    /* ============================================
-      SELECT2 BENEFICIÁRIO, TERAPEUTA E CONVÊNIO - LARGURA MAIOR
-      ============================================ */
-    #divAtendBeneficiario .select2-container,
-    #divAtendTerapeuta .select2-container,
-    #divAtendConv .select2-container {
-      width: 280px !important;
-    }
-    #divAtendBeneficiario .select2-selection--single,
-    #divAtendTerapeuta .select2-selection--single,
-    #divAtendConv .select2-selection--single {
-      width: 278px !important;
-    }
-    #divAtendBeneficiario .select2-dropdown,
-    #divAtendTerapeuta .select2-dropdown,
-    #divAtendConv .select2-dropdown {
-      min-width: 280px !important;
-    }
-		</style>
 		<script>
 			function atualizaData() {
 				const dataInput = document.getElementById("bordoDataativ").value;
@@ -78,92 +11,75 @@
 				// Se tiver um hidden input para data final, descomente a linha abaixo:
 				// document.getElementById("bordoDataativFinal").value = datafmt.toISOString();
 			}
-function carregaBody() {
-    // 1️⃣ Formata data
-    const dataEdi = document.getElementById("bordoDataativEdi")?.value;
-    if (dataEdi && dataEdi.length >= 10) {
-        const dataLimpa = dataEdi.includes('T') ? dataEdi.split('T')[0] : dataEdi.substring(0, 10);
-        document.getElementById("bordoDataativ").value = dataLimpa;
-    }
-    
-    // 2️⃣ Mapeamento de campos
-    const mapaCampos = [
-        ["bordoBeneid", "bordoBeneidEdi"], ["bordoAtendem", "bordoAtendemEdi"],
-        ["bordoOndefoi", "bordoOndefoiEdi"], ["bordoEscolaid", "bordoEscolaidEdi"],
-        ["bordoEscolanome", "bordoEscolanomeEdi"], ["bordoFrequencia", "bordofrequenciaEdi"],
-        ["bordoSeguerotina", "bordoSeguerotinaEdi"], ["bordoEstereotipas", "bordoEstereotipasEdi"],
-        ["bordoFoco", "bordoFocoEdi"], ["bordoAutocuidado", "bordoAutocuidadoEdi"],
-        ["bordoAliindepende", "bordoAliindependeEdi"], ["bordoEscolalia", "bordoEscolaliaEdi"],
-        ["bordoParticipa", "bordoParticipaEdi"], ["bordoSegue", "bordoSegueEdi"],
-        ["bordoRepertorio", "bordoRepertorioEdi"], ["bordoDesorganiza", "bordoDesorganizaEdi"],
-        ["bordoDesorganizadesc", "bordoDesorganizadescEdi"], ["bordoAutoagressao", "bordoAutoagressaoEdi"],
-        ["bordoAgrideadulto", "bordoAgrideadultoEdi"], ["bordoAgridepares", "bordoAgrideparesEdi"],
-        ["bordoDestruir", "bordoDestruirEdi"], ["bordoGritos", "bordoGritosEdi"],
-        ["bordoChoros", "bordoChorosEdi"], ["bordoBirras", "bordoBirrasEdi"],
-        ["bordoBirrasdesc", "bordoBirrasdescEdi"], ["bordoMandosadulto", "bordoMandosadultoEdi"],
-        ["bordoMandospares", "bordoMandosparesEdi"], ["bordoPergunta", "bordoPerguntaEdi"],
-        ["bordoResponde", "bordoRespondeEdi"], ["bordoImita", "bordoImitaEdi"],
-        ["bordoInteracaoverbal", "bordoInteracaoverbalEdi"], ["bordoVerbaldesc", "bordoVerbaldescEdi"],
-        ["bordoColabtodotempo", "bordoColabtodotempoEdi"], ["bordoColabmaiortempo", "bordoColabmaiortempoEdi"],
-        ["bordoColabmetadetempo", "bordoColabmetadetempoEdi"], ["bordoColabmenosmetadetempo", "bordoColabmenosmetadetempoEdi"],
-        ["bordoColabnao", "bordoColabnaoEdi"], ["bordoColabnaodesc", "bordoColabnaodescEdi"],
-        ["bordoAtivsucedido", "bordoAtivsucedidoEdi"], ["bordoAtivnaosucedido", "bordoAtivnaosucedidoEdi"],
-        ["bordoAdequadodificil", "bordoAdequadodificilEdi"], ["bordoAdequadodifacil", "bordoAdequadodifacilEdi"],
-        ["bordoSemativ", "bordoSemativEdi"], ["bordoMediacao", "bordoMediacaoEdi"],
-        ["bordoAdaptacao", "bordoAdaptacaoEdi"], ["bordoAtivsaladesc", "bordoAtivsaladescEdi"],
-        ["bordoBrincousolonge", "bordoBrincousolongeEdi"], ["bordoBrincousoperto", "bordoBrincousopertoEdi"],
-        ["bordoTentoubrincar", "bordoTentoubrincarEdi"], ["bordoBrincouparesindep", "bordoBrincouparesindepEdi"],
-        ["bordoBrincouparesterapeuta", "bordoBrincouparesterapeutaEdi"], ["bordoNaobrincar", "bordoNaobrincarEdi"],
-        ["bordoBrincardesc", "bordoBrincardescEdi"], ["bordoLerso", "bordoLersoEdi"],
-        ["bordoLerajuda", "bordoLerajudaEdi"], ["bordoFazsoma", "bordoFazsomaEdi"],
-        ["bordoFazsomaqtnum", "bordoFazsomaqtnumEdi"], ["bordoSubtrai", "bordoSubtraiEdi"],
-        ["bordoSubtraiqtnum", "bordoSubtraiqtnumEdi"], ["bordoDividir", "bordoDividirEdi"],
-        ["bordoMultiplicar", "bordoMultiplicarEdi"], ["bordoEscolardesc", "bordoEscolardescEdi"],
-        ["bordoForanormal", "bordoForanormalEdi"], ["bordoHabilnova", "bordoHabilnovaEdi"],
-        ["bordoIncidente", "bordoIncidenteEdi"], ["bordoLercompreende", "bordoLercompreendeEdi"],
-        ["bordoObs", "bordoObsEdi"]
-    ];
 
-    // 3️⃣ Popula campos com verificação de segurança
-    mapaCampos.forEach(([dest, orig]) => {
-        const elOrig = document.getElementById(orig);
-        const elDest = document.getElementById(dest);
-        
-        if (!elOrig || !elDest) return; // Pula se algum elemento não existir
-        
-        const valor = elOrig.value;
-        
-        if (elDest.tagName === "SELECT") {
-            // Para Select2: define valor e dispara evento de atualização
-            $(elDest).val(valor).trigger('change');
-        } else {
-            // Para inputs/textareas normais: usa JS puro
-            elDest.value = valor;
-        }
-    });
-
-    // Dentro de carregaBody(), na parte do terapeuta:
-		const terapeutaEdi = document.getElementById("bordoTerapeutaidEdi")?.value;
-			if (terapeutaEdi && terapeutaEdi !== "-" && terapeutaEdi !== "766f69643132333435366964") {
-				const $select = $("#bordoTerapeutaid");
+			function carregaBody() {
+				const dataEdi = document.getElementById("bordoDataativEdi")?.value;
+				if (dataEdi && dataEdi.length >= 10) {
+					// Remove hora se vier ISO: 2024-05-10T03:00:00.000Z → 2024-05-10
+					const dataLimpa = dataEdi.includes('T') ? dataEdi.split('T')[0] : dataEdi.substring(0, 10);
+					document.getElementById("bordoDataativ").value = dataLimpa;
+				} else {
+					console.warn('⚠️ Data não encontrada ou inválida:', dataEdi);
+				}
 				
-				// Aguarda o Select2 estar totalmente inicializado
-				setTimeout(() => {
-					$select.val(terapeutaEdi).trigger('change');
-					
-					// Atualiza campo de nome (se existir)
-					const nomeTerapeuta = document.getElementById(terapeutaEdi)?.value;
-					const campoUsuario = document.getElementById("usuarioAtual");
-					if (campoUsuario && nomeTerapeuta) {
-						campoUsuario.value = nomeTerapeuta;
+				const mapaCampos = [
+					["bordoBeneid", "bordoBeneidEdi"], ["bordoAtendem", "bordoAtendemEdi"],
+					["bordoOndefoi", "bordoOndefoiEdi"], ["bordoEscolaid", "bordoEscolaidEdi"],
+					["bordoEscolanome", "bordoEscolanomeEdi"], ["bordoFrequencia", "bordofrequenciaEdi"],
+					["bordoSeguerotina", "bordoSeguerotinaEdi"], ["bordoEstereotipas", "bordoEstereotipasEdi"],
+					["bordoFoco", "bordoFocoEdi"], ["bordoAutocuidado", "bordoAutocuidadoEdi"],
+					["bordoAliindepende", "bordoAliindependeEdi"], ["bordoEscolalia", "bordoEscolaliaEdi"],
+					["bordoParticipa", "bordoParticipaEdi"], ["bordoSegue", "bordoSegueEdi"],
+					["bordoRepertorio", "bordoRepertorioEdi"], ["bordoDesorganiza", "bordoDesorganizaEdi"],
+					["bordoDesorganizadesc", "bordoDesorganizadescEdi"], ["bordoAutoagressao", "bordoAutoagressaoEdi"],
+					["bordoAgrideadulto", "bordoAgrideadultoEdi"], ["bordoAgridepares", "bordoAgrideparesEdi"],
+					["bordoDestruir", "bordoDestruirEdi"], ["bordoGritos", "bordoGritosEdi"],
+					["bordoChoros", "bordoChorosEdi"], ["bordoBirras", "bordoBirrasEdi"],
+					["bordoBirrasdesc", "bordoBirrasdescEdi"], ["bordoMandosadulto", "bordoMandosadultoEdi"],
+					["bordoMandospares", "bordoMandosparesEdi"], ["bordoPergunta", "bordoPerguntaEdi"],
+					["bordoResponde", "bordoRespondeEdi"], ["bordoImita", "bordoImitaEdi"],
+					["bordoInteracaoverbal", "bordoInteracaoverbalEdi"], ["bordoVerbaldesc", "bordoVerbaldescEdi"],
+					["bordoColabtodotempo", "bordoColabtodotempoEdi"], ["bordoColabmaiortempo", "bordoColabmaiortempoEdi"],
+					["bordoColabmetadetempo", "bordoColabmetadetempoEdi"], ["bordoColabmenosmetadetempo", "bordoColabmenosmetadetempoEdi"],
+					["bordoColabnao", "bordoColabnaoEdi"], ["bordoColabnaodesc", "bordoColabnaodescEdi"],
+					["bordoAtivsucedido", "bordoAtivsucedidoEdi"], ["bordoAtivnaosucedido", "bordoAtivnaosucedidoEdi"],
+					["bordoAdequadodificil", "bordoAdequadodificilEdi"], ["bordoAdequadodifacil", "bordoAdequadodifacilEdi"],
+					["bordoSemativ", "bordoSemativEdi"], ["bordoMediacao", "bordoMediacaoEdi"],
+					["bordoAdaptacao", "bordoAdaptacaoEdi"], ["bordoAtivsaladesc", "bordoAtivsaladescEdi"],
+					["bordoBrincousolonge", "bordoBrincousolongeEdi"], ["bordoBrincousoperto", "bordoBrincousopertoEdi"],
+					["bordoTentoubrincar", "bordoTentoubrincarEdi"], ["bordoBrincouparesindep", "bordoBrincouparesindepEdi"],
+					["bordoBrincouparesterapeuta", "bordoBrincouparesterapeutaEdi"], ["bordoNaobrincar", "bordoNaobrincarEdi"],
+					["bordoBrincardesc", "bordoBrincardescEdi"], ["bordoLerso", "bordoLersoEdi"],
+					["bordoLerajuda", "bordoLerajudaEdi"], ["bordoFazsoma", "bordoFazsomaEdi"],
+					["bordoFazsomaqtnum", "bordoFazsomaqtnumEdi"], ["bordoSubtrai", "bordoSubtraiEdi"],
+					["bordoSubtraiqtnum", "bordoSubtraiqtnumEdi"], ["bordoDividir", "bordoDividirEdi"],
+					["bordoMultiplicar", "bordoMultiplicarEdi"], ["bordoEscolardesc", "bordoEscolardescEdi"],
+					["bordoForanormal", "bordoForanormalEdi"], ["bordoHabilnova", "bordoHabilnovaEdi"],
+					["bordoIncidente", "bordoIncidenteEdi"], ["bordoLercompreende", "bordoLercompreendeEdi"],
+					["bordoObs", "bordoObsEdi"]
+				];
+
+				mapaCampos.forEach(([dest, orig]) => {
+					const val = document.getElementById(orig);
+					console.log(dest + " - " + orig)
+					const elemento = document.getElementById(dest);
+					if (elemento && elemento.tagName === "SELECT") {
+						console.log("Valro campo? "+document.getElementById(orig).value)
+						$("#"+dest).val(val.value).trigger('change.select2');
+					} else {
+						$(dest).value = val.value;
 					}
-				}, 100);
+				});
+
+				const terapeutaId = document.getElementById("bordoTerapeutaid")?.value;
+				$("#bordoTerapeutaidEdi").val(document.getElementById("bordoTerapeutaidEdi").value).trigger('change.select2');
+				if (terapeutaId) {
+					const nomeTerapeuta = document.getElementById(terapeutaId)?.value;
+					$("usuarioAtual").value = nomeTerapeuta;
+				}
+
+				atualizaData();
 			}
-
-    // 6️⃣ Formata data final
-    atualizaData();
-}
-
 		</script>
 	</head>
 
@@ -189,7 +105,7 @@ function carregaBody() {
 							<input id="bordoEscolanomeEdi" name="bordoEscolanomeEdi" value="{{bordo.bordo_escolanome}}"/>
 							<input id="bordoAtendemEdi" name="bordoAtendemEdi" value="{{bordo.bordo_atendem}}"/>
 							<input id="bordoOndefoiEdi" name="bordoOndefoiEdi" value="{{bordo.bordo_ondefoi}}"/>
-							<input id="bordoTerapeutaidEdi" name="bordoTerapeutaidEdi" value="{{bordo.bordo_terapeutaid}}" />
+
 							<input id="bordoDatacadEdi" name="bordoDatacadEdi" value="{{bordo.bordo_datacad}}"/>
 							<input id="bordofrequenciaEdi" name="bordofrequenciaEdi" value="{{bordo.bordo_frequencia}}"/>
 							<input id="bordoSeguerotinaEdi" name="bordoSeguerotinaEdi" value="{{bordo.bordo_seguerotina}}"/>
@@ -275,6 +191,7 @@ function carregaBody() {
 							<input id="bordoSeloEdi" name="bordoSeloEdi" value="{{bordo.bordo_selo}}"/>
 							<input id="bordoUsuidcadEdi" name="bordoUsuidcadEdi" value="{{bordo.bordo_usuidcad}}"/>
 							<input id="bordoUsuidediEdi" name="bordoUsuidediEdi" value="{{bordo.bordo_usuidedi}}"/>
+							<input id="bordoTerapeutaid" name="bordoTerapeutaid" readonly="true" value="{{bordo.bordo_terapeutaid}}" />
 							{{#each terapeutas}}
 								<input id="{{_id}}" value="{{usuario_nomecompleto}}" />
 							{{/each}}
@@ -332,7 +249,7 @@ function carregaBody() {
 												<label> Atendimento realizado em:</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<select name="bordoAtendem" id="bordoAtendem" class="select" >
+														<select name="bordoAtendem" id="bordoAtendem" class="select2" >
 															<option value="-">-</option>
 															<option value="Escola">Escola</option>
 															<option value="Casa">Casa</option>
@@ -371,7 +288,7 @@ function carregaBody() {
 												
 												<div class="form-group" hidden>
 													<div class="col-sm-6">
-														<select name="bordoFrequencia" id="bordoFrequencia" class="select" >
+														<select name="bordoFrequencia" id="bordoFrequencia" class="select2" >
 															<option value="-">-</option>
 															<option value="Ausente">Ausente</option>
 															<option value="Presente">Presente</option>
@@ -420,7 +337,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. Segue rotina</td>
 																	<td name="Pontua">
-																		<select name="bordoSeguerotina" id="bordoSeguerotina" class="select" >
+																		<select name="bordoSeguerotina" id="bordoSeguerotina" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -439,7 +356,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. Apresentou extereotipias</td>
 																	<td name="Pontua">
-																		<select name="bordoEstereotipas" id="bordoEstereotipas" class="select" >
+																		<select name="bordoEstereotipas" id="bordoEstereotipas" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -459,7 +376,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. Foco atencional</td>
 																	<td name="Pontua">
-																		<select name="bordoFoco" id="bordoFoco" class="select" >
+																		<select name="bordoFoco" id="bordoFoco" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -478,7 +395,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. Necessita de auto cuidado</td>
 																	<td name="Pontua">
-																		<select name="bordoAutocuidado" id="bordoAutocuidado" class="select" >
+																		<select name="bordoAutocuidado" id="bordoAutocuidado" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -497,7 +414,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">5. Se alimenta com independência</td>
 																	<td name="Pontua">
-																		<select name="bordoAliindepende" id="bordoAliindepende" class="select" >
+																		<select name="bordoAliindepende" id="bordoAliindepende" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -516,7 +433,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">6. Ecolalia</td>
 																	<td name="Pontua">
-																		<select name="bordoEscolalia" id="bordoEscolalia" class="select" >
+																		<select name="bordoEscolalia" id="bordoEscolalia" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -535,7 +452,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">7. Participação no grupo</td>
 																	<td name="Pontua">
-																		<select name="bordoParticipa" id="bordoParticipa" class="select" >
+																		<select name="bordoParticipa" id="bordoParticipa" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -554,7 +471,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">8. Segue instruções do professor</td>
 																	<td name="Pontua">
-																		<select name="bordoSegue" id="bordoSegue" class="select" >
+																		<select name="bordoSegue" id="bordoSegue" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -573,7 +490,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">9. Repertório de comunicação social</td>
 																	<td name="Pontua">
-																		<select name="bordoRepertorio" id="bordoRepertorio" class="select" >
+																		<select name="bordoRepertorio" id="bordoRepertorio" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -591,7 +508,7 @@ function carregaBody() {
 																	<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;"> 10. Se desorganiza ao trocar de atividade ou de ambiente</td>
 																	<td name="Pontua">
-																		<select name="bordoDesorganiza" id="bordoDesorganiza" class="select" >
+																		<select name="bordoDesorganiza" id="bordoDesorganiza" class="select2" >
 																			<option value="-">-</option>
 																			<option value="00">00</option>
 																			<option value="01">01</option>
@@ -673,7 +590,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. Autoagressão (bater em si mesmo)</td>
 																	<td name="Pontua">
-																		<select name="bordoAutoagressao" id="bordoAutoagressao" class="select" >
+																		<select name="bordoAutoagressao" id="bordoAutoagressao" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -683,7 +600,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. Agride adultos</td>
 																	<td name="Pontua">
-																		<select name="bordoAgrideadulto" id="bordoAgrideadulto" class="select" >
+																		<select name="bordoAgrideadulto" id="bordoAgrideadulto" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -694,7 +611,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. Agride pares</td>
 																	<td name="Pontua">
-																		<select name="bordoAgridepares" id="bordoAgridepares" class="select" >
+																		<select name="bordoAgridepares" id="bordoAgridepares" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -704,7 +621,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. Destruição de objetos</td>
 																	<td name="Pontua">
-																		<select name="bordoDestruir" id="bordoDestruir" class="select" >
+																		<select name="bordoDestruir" id="bordoDestruir" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -714,7 +631,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">5. Gritos</td>
 																	<td name="Pontua">
-																		<select name="bordoGritos" id="bordoGritos" class="select" >
+																		<select name="bordoGritos" id="bordoGritos" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -724,7 +641,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">6. Choros</td>
 																	<td name="Pontua">
-																		<select name="bordoChoros" id="bordoChoros" class="select" >
+																		<select name="bordoChoros" id="bordoChoros" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -734,7 +651,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">7. Birras</td>
 																	<td name="Pontua">
-																		<select name="bordoBirras" id="bordoBirras" class="select" >
+																		<select name="bordoBirras" id="bordoBirras" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -786,7 +703,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. O beneficiário emitiu mandos para os adultos?</td>
 																	<td name="Pontua">
-																		<select name="bordoMandosadulto" id="bordoMandosadulto" class="select" >
+																		<select name="bordoMandosadulto" id="bordoMandosadulto" class="select2" >
 																			<option value="-">-</option>
 																			<option value="I">I</option>
 																			<option value="A">A</option>
@@ -796,7 +713,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. O beneficiário emitiu mandos para os pares?</td>
 																	<td name="Pontua">
-																		<select name="bordoMandospares" id="bordoMandospares" class="select" >
+																		<select name="bordoMandospares" id="bordoMandospares" class="select2" >
 																			<option value="-">-</option>
 																			<option value="I">I</option>
 																			<option value="A">A</option>
@@ -807,7 +724,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. O beneficiário fez perguntas?</td>
 																	<td name="Pontua">
-																		<select name="bordoPergunta" id="bordoPergunta" class="select" >
+																		<select name="bordoPergunta" id="bordoPergunta" class="select2" >
 																			<option value="-">-</option>
 																			<option value="I">I</option>
 																			<option value="A">A</option>
@@ -817,7 +734,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. O beneficiário respondeu perguntas?</td>
 																	<td name="Pontua">
-																		<select name="bordoResponde" id="bordoResponde" class="select" >
+																		<select name="bordoResponde" id="bordoResponde" class="select2" >
 																			<option value="-">-</option>
 																			<option value="I">I</option>
 																			<option value="A">A</option>
@@ -827,7 +744,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">5. O beneficiário imitou os colegas?</td>
 																	<td name="Pontua">
-																		<select name="bordoImita" id="bordoImita" class="select" >
+																		<select name="bordoImita" id="bordoImita" class="select2" >
 																			<option value="-">-</option>
 																			<option value="I">I</option>
 																			<option value="A">A</option>
@@ -837,7 +754,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">6. O beneficiário iniciou interações verbais?</td>
 																	<td name="Pontua">
-																		<select name="bordoInteracaoverbal" id="bordoInteracaoverbal" class="select" >
+																		<select name="bordoInteracaoverbal" id="bordoInteracaoverbal" class="select2" >
 																			<option value="-">-</option>
 																			<option value="I">I</option>
 																			<option value="A">A</option>
@@ -888,7 +805,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. O beneficiário foi colaborativo todo o tempo?</td>
 																	<td name="Pontua">
-																		<select name="bordoColabtodotempo" id="bordoColabtodotempo" class="select" >
+																		<select name="bordoColabtodotempo" id="bordoColabtodotempo" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -899,7 +816,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. O beneficiário foi colaborativo maior parte do tempo?</td>
 																	<td name="Pontua">
-																		<select name="bordoColabmaiortempo" id="bordoColabmaiortempo" class="select" >
+																		<select name="bordoColabmaiortempo" id="bordoColabmaiortempo" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -909,7 +826,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. O beneficiário foi colaborativo metade do tempo?</td>
 																	<td name="Pontua">
-																		<select name="bordoColabmetadetempo" id="bordoColabmetadetempo" class="select" >
+																		<select name="bordoColabmetadetempo" id="bordoColabmetadetempo" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -919,7 +836,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. O beneficiário foi colaborativo menos da metade do tempo?</td>
 																	<td name="Pontua">
-																		<select name="bordoColabmenosmetadetempo" id="bordoColabmenosmetadetempo" class="select" >
+																		<select name="bordoColabmenosmetadetempo" id="bordoColabmenosmetadetempo" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -929,7 +846,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">5. O beneficiário não colaborou em nenhum momento?</td>
 																	<td name="Pontua">
-																		<select name="bordoColabnao" id="bordoColabnao" class="select" >
+																		<select name="bordoColabnao" id="bordoColabnao" class="select2" >
 																			<option value="-">-</option>
 																			<option value="Sim">Sim</option>
 																			<option value="Não">Não</option>
@@ -980,7 +897,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. Mesmas atividades que a turma e foi bem sucedida.</td>
 																	<td name="Pontua">
-																		<select name="bordoAtivsucedido" id="bordoAtivsucedido" class="select" >
+																		<select name="bordoAtivsucedido" id="bordoAtivsucedido" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -990,7 +907,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. Mesma atividade que a turma e não conseguiu realizar.</td>
 																	<td name="Pontua">
-																		<select name="bordoAtivnaosucedido" id="bordoAtivnaosucedido" class="select" >
+																		<select name="bordoAtivnaosucedido" id="bordoAtivnaosucedido" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1002,7 +919,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. A professora passou atividade adaptada, mas era muito difícil.</td>
 																	<td name="Pontua">
-																		<select name="bordoAdequadodificil" id="bordoAdequadodificil" class="select" >
+																		<select name="bordoAdequadodificil" id="bordoAdequadodificil" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1012,7 +929,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. A professora passou atividade adaptada, mas era muito fácil.</td>
 																	<td name="Pontua">
-																		<select name="bordoAdequadodifacil" id="bordoAdequadodifacil" class="select" >
+																		<select name="bordoAdequadodifacil" id="bordoAdequadodifacil" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1022,7 +939,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">5. A professora não passou nenhuma atividade para o beneficiário.</td>
 																	<td name="Pontua">
-																		<select name="bordoSemativ" id="bordoSemativ" class="select" >
+																		<select name="bordoSemativ" id="bordoSemativ" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1032,7 +949,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">6. Com mediação da terapeuta para realizar a atividade.</td>
 																	<td name="Pontua">
-																		<select name="bordoMediacao" id="bordoMediacao" class="select" >
+																		<select name="bordoMediacao" id="bordoMediacao" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1042,7 +959,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">7. Com adaptação de material da terapeuta para realizar.</td>
 																	<td name="Pontua">
-																		<select name="bordoAdaptacao" id="bordoAdaptacao" class="select" >
+																		<select name="bordoAdaptacao" id="bordoAdaptacao" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1092,7 +1009,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. Brincou sozinho e longe dos pares.</td>
 																	<td name="Pontua">
-																		<select name="bordoBrincousolonge" id="bordoBrincousolonge" class="select" >
+																		<select name="bordoBrincousolonge" id="bordoBrincousolonge" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1102,7 +1019,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. Brincou sozinho, mas perto dos pares.</td>
 																	<td name="Pontua">
-																		<select name="bordoBrincousoperto" id="bordoBrincousoperto" class="select" >
+																		<select name="bordoBrincousoperto" id="bordoBrincousoperto" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1113,7 +1030,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. Tentou brincar com os pares.</td>
 																	<td name="Pontua">
-																		<select name="bordoTentoubrincar" id="bordoTentoubrincar" class="select" >
+																		<select name="bordoTentoubrincar" id="bordoTentoubrincar" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1123,7 +1040,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. Brincou com os pares de forma independente.</td>
 																	<td name="Pontua">
-																		<select name="bordoBrincouparesindep" id="bordoBrincouparesindep" class="select" >
+																		<select name="bordoBrincouparesindep" id="bordoBrincouparesindep" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1133,7 +1050,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">5. Iniciou brincadeira com ajuda do terapeuta.</td>
 																	<td name="Pontua">
-																		<select name="bordoBrincouparesterapeuta" id="bordoBrincouparesterapeuta" class="select" >
+																		<select name="bordoBrincouparesterapeuta" id="bordoBrincouparesterapeuta" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1143,7 +1060,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">6. Não quer brincar.</td>
 																	<td name="Pontua">
-																		<select name="bordoNaobrincar" id="bordoNaobrincar" class="select" >
+																		<select name="bordoNaobrincar" id="bordoNaobrincar" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1193,7 +1110,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">1. O beneficiário consegue ler texto sozinho?</td>
 																	<td name="Pontua">
-																		<select name="bordoLerso" id="bordoLerso" class="select" >
+																		<select name="bordoLerso" id="bordoLerso" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1203,7 +1120,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">2. O beneficiário precisa de ajuda na leitura?</td>
 																	<td name="Pontua">
-																		<select name="bordoLerajuda" id="bordoLerajuda" class="select" >
+																		<select name="bordoLerajuda" id="bordoLerajuda" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1213,7 +1130,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">3. O beneficiário compreende a leitura?</td>
 																	<td name="Pontua">
-																		<select name="bordoLercompreende" id="bordoLercompreende" class="select" >
+																		<select name="bordoLercompreende" id="bordoLercompreende" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1223,7 +1140,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">4. O beneficiário consegue fazer contas de somar?</td>
 																	<td name="Pontua">
-																		<select name="bordoFazsoma" id="bordoFazsoma" class="select" >
+																		<select name="bordoFazsoma" id="bordoFazsoma" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1239,7 +1156,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">6. O beneficiário consegue fazer conta de subtração?</td>
 																	<td name="Pontua">
-																		<select name="bordoSubtrai" id="bordoSubtrai" class="select" >
+																		<select name="bordoSubtrai" id="bordoSubtrai" class="select2" >
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1255,7 +1172,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">8. O beneficiário consegue fazer conta de dividir?</td>
 																	<td name="Pontua">
-																		<select name="bordoDividir" id="bordoDividir" class="select" placeholder="Escolha...">
+																		<select name="bordoDividir" id="bordoDividir" class="select2" placeholder="Escolha...">
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1265,7 +1182,7 @@ function carregaBody() {
 																<tr role="row" class="odd">
 																	<td name="Desc" rowspan="1" style="width: 400px;">9. O beneficiário consegue fazer conta de multiplicar?</td>
 																	<td name="Pontua">
-																		<select name="bordoMultiplicar" id="bordoMultiplicar" class="select" placeholder="Escolha...">
+																		<select name="bordoMultiplicar" id="bordoMultiplicar" class="select2" placeholder="Escolha...">
 																			<option value="-">-</option>
 																			<option value="01">Sim</option>
 																			<option value="02">Não</option>
@@ -1425,25 +1342,5 @@ function carregaBody() {
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
-		<script>
-			$(document).ready(function() {
-				// ✅ Inicializa Select2 em todos os selects com class="select2"
-				if (typeof $.fn.select2 === 'function') {
-					$('.select2').select2({
-						width: '100%',
-						placeholder: 'Escolha...',
-						allowClear: true,
-						dropdownParent: $(this).closest('.widget-box') // Evita problemas com modais/overlays
-					});
-				}
-				
-				// ✅ Só popula os valores DEPOIS que o Select2 estiver pronto
-				setTimeout(function() {
-					if (typeof carregaBody === 'function') {
-						carregaBody();
-					}
-				}, 150); // Delay um pouco maior para garantir
-			});
-		</script>
 	</body>
 </html>

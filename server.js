@@ -22,6 +22,8 @@ const multer = require('multer');
 const storage = multer.memoryStorage(); // ou escolha o storage adequado para o seu caso
 const upload = multer({ storage: storage });
 
+//Porta do servidor
+const PORT = 3000
 // ... outras configurações e middlewares ...
 
 // Exemplo de rota que usa o Multer para upload
@@ -767,7 +769,6 @@ const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSc
 
     app.use('/menu', menu);
 //Outros
-const PORT = 3000
 app.listen(PORT, () => {
     //console.log("Servidor rodando")
 })

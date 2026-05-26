@@ -24,10 +24,18 @@
 				document.getElementById("carsParentesco").value = document.getElementById("carsParentescoEdi").value;
 				document.getElementById("carsInfo").value = document.getElementById("carsInfoEdi").value;
 
-				// 3️⃣ Atualiza selects COM Chosen (usando função inline acima)
-				atualizaChosen('carsBeneid', document.getElementById("carsBeneidEdi").value);
-				atualizaChosen('carsBenesexo', document.getElementById("carsBenesexoEdi").value);
-				atualizaChosen('carsTerapeutaid', document.getElementById("carsTerapeutaidEdi").value);
+				// 3️⃣ ✅ Select2: define o valor e dispara 'change' para atualizar a UI
+				function atualizaSelect2(id, valor) {
+					const $el = $('#' + id);
+					if ($el.length) {
+						$el.val(valor).trigger('change');
+					}
+				}
+
+				// 3️⃣ Atualiza selects2
+				atualizaSelect2('carsBeneid', document.getElementById("carsBeneidEdi").value);
+				atualizaSelect2('carsBenesexo', document.getElementById("carsBenesexoEdi").value);
+				atualizaSelect2('carsTerapeutaid', document.getElementById("carsTerapeutaidEdi").value);
 
 				// 4️⃣ Atualiza campos de pontuação (inputs normais)
 				for (let i = 1; i <= 15; i++) {
@@ -223,7 +231,7 @@
 																<label>Beneficiário</label>
 																<div class="form-group">
 																	<div class="col-sm-6">
-																		<select name="carsBeneid" id="carsBeneid" class="chosen-select" dcars-placeholder="Escolha..." >
+																		<select name="carsBeneid" id="carsBeneid" class="select2"  >
 																			<option value="-">-</option>
 																			{{#each Benes}}
 																				<option value="{{_id}}">{{bene_nome}}</option>
@@ -238,7 +246,7 @@
 																<label> Sexo</label>
 																<div class="form-group">
 																	<div class="col-sm-6">
-																		<select name="carsBenesexo" id="carsBenesexo" class="chosen-select" value="-" >
+																		<select name="carsBenesexo" id="carsBenesexo" class="select2" value="-" >
 																			<option value="-">-</option>
 																			<option value="F">Feminino</option>
 																			<option value="M">Masculino</option>
@@ -294,7 +302,7 @@
 																<label>Técnico acompanhante</label>
 																<div class="form-group">
 																	<div class="col-sm-8">
-																		<select name="carsTerapeutaid" id="carsTerapeutaid" class="chosen-select" dcars-placeholder="Escolha..." value="-">
+																		<select name="carsTerapeutaid" id="carsTerapeutaid" class="select2" dcars-placeholder="Escolha..." value="-">
 																			<option value="-">-</option>
 																			{{#each Terapeutas}}
 																				<option value="{{_id}}">{{usuario_nome}}</option>
