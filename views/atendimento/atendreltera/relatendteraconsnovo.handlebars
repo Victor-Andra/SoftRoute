@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Relatório de Atendimentos e Valores por Terapia</title>
+		<style>
+			/* Estilos para tela */
+			@media screen {
+				.print-header {
+					display: none;
+				}
+			}
+
+			/* Estilos para impressão */
+			@media print {
+				.noprint {
+					display: none !important;
+				}
+
+				/* Cabeçalho fixo com paginação no topo */
+				.print-header {
+					position: fixed;
+					top: 0;
+					left: 0;
+					right: 0;
+					text-align: center;
+					font-size: 11px;
+					padding: 4px 0;
+					background: white;
+					z-index: 9999;
+					content: "Página " counter(page) " de " counter(pages);
+				}
+
+				/* Margem superior para não sobrepor conteúdo */
+				body {
+					margin-top: 12mm; /* suficiente para o cabeçalho */
+					margin-bottom: 10mm;
+				}
+
+				/* Configuração da página: permite retrato ou paisagem conforme escolha do usuário */
+				@page {
+					margin: 1cm;
+					/* NÃO defina `size` aqui — isso bloqueia a orientação! */
+					@top-center {
+						content: "Página " counter(page) " de " counter(pages);
+						font-size: 11px;
+						color: black;
+					}
+					@bottom-center {
+						content: ""; /* remove qualquer rodapé automático */
+					}
+				}
+
+				/* Garante que elementos grandes não quebrem mal */
+				table {
+					page-break-inside: avoid;
+				}
+			}
+			/* ============================================
+				BARRA DE PESQUISA - CLASSE SEPARADA
+			============================================ */
+			.toolbar-pesquisa {
+				background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
+				color: white;
+				padding: 15px;
+				border-radius: 8px;
+				margin: 0 12px 20px 12px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+				border: 1px solid #1976d2;
+			}
+			.toolbar-pesquisa h5 {
+				margin: 0 0 12px 0;
+				font-size: 14px;
+				font-weight: 600;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.toolbar-pesquisa h5 i {
+				font-size: 18px;
+			}
+			.toolbar-pesquisa .form-inline {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px;
+				align-items: flex-end;
+			}
+			.toolbar-pesquisa .form-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px;
+				width: 100%;
+				align-items: flex-end;
+			}
+			.toolbar-pesquisa .form-group {
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				min-width: 140px;
+				flex: 1;
+				max-width: 220px;
+			}
+			.toolbar-pesquisa label {
+				font-size: 11px;
+				font-weight: 500;
+				margin-bottom: 4px;
+				color: #f8f9fa;
+				white-space: nowrap;
+			}
+			.toolbar-pesquisa input[type="date"],
+			.toolbar-pesquisa input[type="time"],
+			.toolbar-pesquisa select {
+				padding: 6px 10px;
+				border: 2px solid #e2e8f0;
+				border-radius: 4px;
+				font-size: 12px;
+				width: 100%;
+				box-sizing: border-box;
+				background: white;
+				color: #333;
+				transition: all 0.3s;
+				height: 30px;
+			}
+			.toolbar-pesquisa input[type="date"]:focus,
+			.toolbar-pesquisa input[type="time"]:focus,
+			.toolbar-pesquisa select:focus {
+				border-color: #fff;
+				box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+				outline: none;
+			}
+			.toolbar-pesquisa .btn-pesquisar {
+				background: #dc3545;
+				color: white;
+				border: none;
+				padding: 8px 24px;
+				border-radius: 4px;
+				font-weight: 600;
+				font-size: 13px;
+				cursor: pointer;
+				transition: all 0.3s;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+				margin-left: auto;
+			}
+			.toolbar-pesquisa .btn-pesquisar:hover {
+				background: #c82333;
+				transform: translateY(-2px);
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+			}
+			
+			/* Grupo compacto para horário (turno + início + fim) */
+			.grupo-horario {
+				display: flex;
+				gap: 6px;
+				align-items: flex-end;
+				flex-wrap: wrap;
+			}
+			.grupo-horario .form-group {
+				min-width: 70px;
+				max-width: 90px;
+				flex: none;
+			}
+			.grupo-horario label {
+				font-size: 10px;
+			}
+			.grupo-horario .info-sala {
+				font-size: 9px;
+				color: #e0e0e0;
+				margin-left: 4px;
+				white-space: nowrap;
+			}
+			.grupo-horario .info-sala i {
+				margin-right: 2px;
+			}
+
+			
+		</style>
+		<script type="text/javascript">
+			function atualizaDataIni(){
+				let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataIni').value = fulldate;
+			}
+			function atualizaDataFim(){
+				let fulldate = (document.getElementById('dataFilAte').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataFim').value = fulldate;
+			}
+			// Função de validação
+			function validarConsAtendTera(event) {
+				const selectTerapia = document.getElementById('relTeraid');
+				const alertaErro = document.getElementById('alertaErro');
+
+				if (!selectTerapia || !selectTerapia.value) {
+					event.preventDefault();
+					alertaErro.style.display = 'block';
+					return false;
+				} else {
+					alertaErro.style.display = 'none';
+					return true;
+				}
+			}
+
+			// Esconde o alerta quando o usuário seleciona um beneficiário
+			function esconderAlertaAoSelecionarTerapia() {
+				const alertaErro = document.getElementById('alertaErro');
+				if (this.value) {
+					alertaErro.style.display = 'none';
+				}
+			}
+
+			// Inicializa os listeners quando o DOM estiver pronto
+			document.addEventListener('DOMContentLoaded', function () {
+				const form = document.getElementById('ConsAtendBene');
+				const selectTerapia = document.getElementById('relTeraid');
+
+				if (form) {
+					form.addEventListener('submit', validarConsAtendTera);
+				}
+				if (selectTerapia) {
+					selectTerapia.addEventListener('change', esconderAlertaAoSelecionarTerapia);
+				}
+			});
+			function carregaBody(){
+				/*
+				let sessoes = document.getElementsByName("sessoes")
+				let valores = document.getElementsByName("valor")
+				sessoes.forEach((s)=>{
+					let subTotal = s.value * (document.getElementById("valor"+s.id).value);
+					document.getElementById("subtotal"+s.id).value = subTotal;
+				})*/
+
+				//Filtro persistente
+				document.getElementById("relTeraid").value  = document.getElementById("teraFiltro").value || "766f69643132333435366964";
+				document.getElementById("dataFilDe").value = document.getElementById("dataIni").value.substring(0,10) || new Date().toISOString().split('T')[0];
+				document.getElementById("dataFilAte").value =  document.getElementById("dataFim").value.substring(0,10) || new Date().toISOString().split('T')[0];
+				
+				this.atualizaDataIni();
+				this.atualizaDataFim();
+			}
+		</script>
+	</head>
+<body onload="javascript:carregaBody();controlaNave();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner noprint">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs_home">
+						<ul class="breadcrumb">
+							<li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
+							<li class="active">Relatório Consolidado do Terapeuta - Terapia Tipo Contrato e Valores</li>
+						</ul>
+					</div>
+					<form id="ConsTerapia" name="ConsTerapia" role="form" action="/menu/atendimento/atendreltera/relatendteraconssnovo" method="POST">
+						<div id="alertaErro" style="display: none;" class="alert alert-danger">
+							<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>
+							<strong>Importante!</strong> Por favor escolha um Terapeuta.
+						</div>
+						<div class="toolbar-pesquisa noprint">
+							<h5><i class="ace-icon fa fa-file-text-o"></i><span>Filtros do Relatório</span></h5>
+							<div class="form-inline">
+								<div class="form-row">
+									<div class="form-group">
+										<label>Período de:</label>
+										<input id="dataFilDe" name="dataFilDe" type="date" onchange="atualizaDataIni()">
+										<input type="hidden" id="dataIni" name="dataIni" value="{{pesquisa.dataIni}}">
+									</div>
+									<div class="form-group">
+										<label>até:</label>
+										<input id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFim()">
+										<input type="hidden" id="dataFim" name="dataFim" value="{{pesquisa.dataFim}}">
+									</div>
+									<div class="form-group" style="min-width: 260px;">
+										<label>Terapeuta:</label>
+										<select name="relTeraid" id="relTeraid" class="select2" data-placeholder="Escolha...">
+											<option value="">-</option>
+											{{#each terapeutas}}<option value="{{_id}}">{{usuario_nome}}</option>{{/each}}
+										</select>
+										<input type="hidden" id="teraFiltro" name="teraFiltro" value="{{pesquisa.terapeuta}}">
+									</div>
+									<button class="btn-pesquisar" name="acaoPesquisar" id="acaoPesquisar" type="submit">
+										<i class="ace-icon fa fa-search"></i> Pesquisar
+									</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="space-6"></div>
+						<div class="row">
+							<div class="col-sm-10 col-sm-offset-1">
+								<div class="widget-box transparent">
+									<div style="text-align: center;">
+										<img width="140" height="60" alt="logo" src="/images/gallery/logo_route_centro.png">
+									</div>
+									<div class="widget-header widget-header-large">
+										<h3 class="widget-title grey lighter">
+											<i class="ace-icon fa fa-leaf green"></i> Atendimentos e Valores
+										</h3>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main padding-24">
+											<div class="row">
+												<div class="col-sm-12">
+													<div class="row">
+														<div class="col-xs-12 label label-lg label-info arrowed-in arrowed-right"><b>Informações do Prestador</b></div>
+													</div>
+													<ul class="list-unstyled">
+														<li><i class="ace-icon fa fa-caret-right blue"></i><b>Prestador: </b>Route Centro de Terapia e Apoio Infantil</li>
+														<li><i class="ace-icon fa fa-caret-right blue"></i><b>CNPJ: </b> 33.346.423/0001-17</li>
+													</ul>
+													<div class="row">
+														<div class="col-xs-12 label label-lg label-success arrowed-in arrowed-right"><b>Informações do Relatório</b></div>
+													</div>
+													<ul class="list-unstyled">
+														<li><i class="ace-icon fa fa-caret-right green"></i><b>Período de: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}</li>
+														<li><i class="ace-icon fa fa-caret-right green"></i><b>Terapeuta: </b>{{terapeuta_nome}}</li>
+													</ul>
+													<div class="row">
+														<div class="col-xs-12 label label-lg label-warning arrowed-in arrowed-right"><b>Resumo Financeiro</b></div>
+													</div>
+												</div>
+											</div>
+
+											<!-- [NOVA] Container centralizado com as duas tabelas -->
+											<div class="resumo-container noprint">
+												
+												<!-- Tabela 1: Resumo Simples (Quantitativo) -->
+												<div class="resumo-card">
+													<div class="widget-box transparent">
+														<div class="widget-header">
+															<h5 class="widget-title grey lighter" style="text-align: center;">
+																<i class="ace-icon fa fa-bar-chart green"></i> Resumo por Terapia
+															</h5>
+														</div>
+														<div class="widget-body">
+															<div class="widget-main">
+																<table class="table table-condensed table-bordered">
+																	<thead><tr class="info"><th>Terapia</th><th class="center">Qtd</th></tr></thead>
+																	<tbody>
+																		{{#each totaisMatriz}}
+																		<tr>
+																			<td>{{terapiaNome}}</td>
+																			<td class="center">{{sessoes}}</td>
+																		</tr>
+																		{{/each}}
+																	</tbody>
+																	<tfoot class="font-weight-bold">
+																		<tr class="info">
+																			<td><b>Total Geral</b></td>
+																			<td class="center"><b>{{totaisRodape.sessoes}}</b></td>
+																		</tr>
+																	</tfoot>
+																</table>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<!-- Tabela 2: Matriz com Valores (NOVA) -->
+												<div class="resumo-card">
+													<div class="widget-box transparent">
+														<div class="widget-header">
+															<h5 class="widget-title grey lighter" style="text-align: center;">
+																<i class="ace-icon fa fa-money green"></i> Valores por Tipo de Contrato
+															</h5>
+														</div>
+														<div class="widget-body">
+															<div class="widget-main">
+																<table class="table table-condensed table-bordered">
+																	<thead class="thead-light">
+																		<tr class="warning">
+																			<th>Terapia</th>
+																			<th>Tipo</th>
+																			<th class="text-right">Qtd</th>
+																			<th class="text-right">Valor Unit.</th>
+																			<th class="text-right">Total Débito</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		{{#each totaisMatriz}}
+																		<tr>
+																			<td>{{terapiaNome}}</td>
+																			<td>
+																				{{#ifEqual tipoContrato 'particular'}}<span class="badge-purple">Particular</span>{{/ifEqual}}
+																				{{#ifEqual tipoContrato 'liminar'}}<span class="badge-danger">Liminar</span>{{/ifEqual}}
+																				{{#ifEqual tipoContrato 'convenio'}}<span class="badge-info">Convênio</span>{{/ifEqual}}
+																			</td>
+																			<td class="text-right">{{sessoes}}</td>
+																			<td class="text-right">R$ {{valorUnitario}}</td>
+																			<td class="text-right font-weight-bold">R$ {{totalDebitoFormatado}}</td>
+																		</tr>
+																		{{/each}}
+																	</tbody>
+																	<tfoot class="font-weight-bold">
+																		<tr class="warning">
+																			<td colspan="2"><b>TOTAL GERAL</b></td>
+																			<td class="text-right"><b>{{totaisRodape.sessoes}}</b></td>
+																			<td class="text-right">-</td>
+																			<td class="text-right"><b>R$ {{totaisRodape.totalDebitoFormatado}}</b></td>
+																		</tr>
+																	</tfoot>
+																</table>
+															</div>
+														</div>
+													</div>
+												</div>
+
+											</div>
+											<!-- Fim do container centralizado -->
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Área de assinatura -->
+		<div class="row noprint">
+			<div class="space"></div>
+			<div class="col-xs-4 col-sm-4"><div class="hr"></div><label>Assinatura da Clínica</label></div>
+			<div class="col-xs-4 col-sm-4"></div>
+			<div class="col-xs-4 col-sm-4"></div>
+		</div>
+		<div class="print-footer" id="printFooter"></div>
+	</body>
+</html>

@@ -148,21 +148,21 @@
 																<span class="badge badge-info">{{saudecolab_celular2}}</span>
 															</td>
 															<td>
-    {{!-- 🔹 Usa ../ para acessar variável do contexto pai + compareString para segurança --}}
-    {{#compareString ../podeVerLupa "true"}}
-        <div class="action-buttons">
-            <a class="blue" href="/menu/ferramentas/saudecolab/edi/{{_id}}" title="Ver ficha completa">
-                <i class="ace-icon fa fa-search bigger-130"></i>
-            </a>
-        </div>
-    {{else}}
-       <div class="action-buttons">
-<a class="red" title="Acesso restrito">
-<i class="ace-icon fa fa-ban bigger-130"></i>
-</a>
-</div>
-    {{/compareString}}
-</td>
+																{{!-- 🔹 Usa ../ para acessar variável do contexto pai + compareString para segurança --}}
+																{{#compareString ../podeVerLupa "true"}}
+																	<div class="action-buttons">
+																		<a class="blue" href="/menu/ferramentas/saudecolab/edi/{{_id}}" title="Ver ficha completa">
+																			<i class="ace-icon fa fa-search bigger-130"></i>
+																		</a>
+																	</div>
+																{{else}}
+																<div class="action-buttons">
+																	<a class="red" title="Acesso restrito">
+																		<i class="ace-icon fa fa-ban bigger-130"></i>
+																	</a>
+																</div>
+																{{/compareString}}
+															</td>
 															
 														</tr>
 													{{/each}}

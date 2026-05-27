@@ -2472,6 +2472,13 @@ router.post('/atendimento/atendreltera/relatendteraanasfiltrotodos', fncGeral.Is
     fncAtend.relAtendteraanafiltrotodos(req,res)
 })
 
+router.get('/atendimento/atendreltera/relatendteraananovo', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendteraananovo(req,res);
+})
+router.post('/atendimento/atendreltera/relatendteraanasnovo', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendteraanaFiltronovo(req,res)
+})
+
 // Rota GET: carrega formulário vazio
 router.get('/atendimento/atendreltera/relatendteraanatodos', fncGeral.IsAuthenticated, (req, res) => {
     fncAtend.relAtendteraanatodos(req, res);
@@ -2484,6 +2491,14 @@ router.get('/atendimento/atendreltera/relatendteracons', fncGeral.IsAuthenticate
 
 router.post('/atendimento/atendreltera/relatendteraconss', fncGeral.IsAuthenticated,(req,res) =>{
     fncAtend.relAtendteraconsFiltro(req,res)
+})
+
+router.get('/atendimento/atendreltera/relatendteraconsnovo', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendteraconsnovo(req,res)
+})
+
+router.post('/atendimento/atendreltera/relatendteraconssnovo', fncGeral.IsAuthenticated,(req,res) =>{
+    fncAtend.relAtendteraconsFiltronovo(req,res)
 })
 
 //Gestão - Analitico dos Atendimentos por periodo
