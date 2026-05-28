@@ -10460,8 +10460,8 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
                                 //console.log("Listagem terapeutas!")
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                     console.log("Abre Edição Agenda Fixa")
-                                    Sessao.find().then((sessao)=>{
-                                        Excecao.find().then((excecao)=>{
+                                    Sessao.findOne().then((sessao)=>{
+                                        Excecao.findOne().then((excecao)=>{
                                     res.render('agenda/agendaEdi', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, isAgendaTerapeuta, selo, sessaos: sessao, excecaos: excecao})
         })})})})})})})})}).catch((err) =>{
             console.log(err)
