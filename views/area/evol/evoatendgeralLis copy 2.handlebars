@@ -3,8 +3,102 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
-		<title>agendamentos do Dia</title>
+		<title>Gestão das Evoluções</title>
 <style>
+	/* ============================================
+   REGRAS DE IMPRESSÃO - GARANTE QUE MENU E FILTROS NÃO APAREÇAM
+   ============================================ */
+@media print {
+    /* Esconde a barra de navegação/sidebar */
+    .sidebar,
+    .navbar,
+    #sidebar,
+    .main-container > .sidebar,
+    .ace-save-state > .sidebar,
+    nav,
+    .nav-menu,
+    .menu-container {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
+    
+    /* Esconde a toolbar de pesquisa */
+    .toolbar-pesquisa,
+    .noprint,
+    #divFormPesquisa {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    
+    /* Esconde breadcrumbs */
+    .breadcrumbs,
+    #breadcrumbs {
+        display: none !important;
+    }
+    
+    /* Esconde botões de ação */
+    .tableTools-container,
+    .action-buttons,
+    .btn-toolbar,
+    button[type="submit"],
+    .pull-right {
+        display: none !important;
+    }
+    
+    /* Ajusta o layout para impressão */
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .main-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+    
+    .main-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+    
+    .page-content {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Garante que a tabela ocupe toda a largura */
+    #dynamic-table {
+        width: 100% !important;
+        font-size: 9px !important;
+    }
+    
+    #dynamic-table th,
+    #dynamic-table td {
+        padding: 3px !important;
+        font-size: 9px !important;
+    }
+    
+    /* Remove sombras e efeitos visuais */
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    
+    /* Esconde checkboxes */
+    input[type="checkbox"] {
+        display: none !important;
+    }
+    
+    /* Ajusta margens para impressão */
+    @page {
+        margin: 1cm;
+    }
+}
 			/* Apenas tabela e conteúdo */
 		#dynamic-table,
 		#dynamic-table th,
@@ -413,126 +507,168 @@
     border-left: 3px solid #00838f !important;
 }
 
+/* Coluna de numeração */
+.col-numeracao {
+    font-weight: 600;
+    color: #666;
+    background-color: #f9f9f9;
+    font-size: 11px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.col-numeracao-header {
+    background-color: #f1f1f1 !important;
+    font-weight: 600;
+}
    </style>
 	 <script type="text/javascript">
-      function ajustaData(){
-        let fullDatas = document.getElementsByName("fullData");
-        fullDatas.forEach((elementox)=>{
-          let dat = new Date(elementox.value);
-          let mes = (dat.getMonth()+1).toString();
-          let dia = (dat.getUTCDate()).toString();
-          if (mes.length == 1) mes = "0"+mes;
-          if (dia.length == 1) dia = "0"+dia;
-          let fulldate = (dia+"/"+mes+"/"+dat.getFullYear()).toString();
-        });
-      }
-      
-      const $id = (id) => document.getElementById(id);
+     	const $id = (id) => document.getElementById(id);
 
-      function formataData(){
-        let tipo = $id("tipoData").value;
-        if(tipo == "Ano/Mes"){
-          let dat = new Date($id('anoAtend').value+"-"+$id('mesAtend').value+"-01 00:00:00.000Z");
-          let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
-          let dia = (dat.getUTCDate()).toString().padStart(2,'0');
-          let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
-          $id('dataFinal').value = fulldate;
-        } else {
-          let dat = new Date($id('dataFil').value);
-          let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
-          let dia = (dat.getUTCDate()).toString().padStart(2,'0');
-          let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
-          $id('dataFinal').value = fulldate;
-        }
-      }
+		function formataData(){
+				let tipo = $id("tipoData").value;
+				if(tipo == "Ano/Mes"){
+				let dat = new Date($id('anoAtend').value+"-"+$id('mesAtend').value+"-01 00:00:00.000Z");
+				let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
+				let dia = (dat.getUTCDate()).toString().padStart(2,'0');
+				let fulldate = `${dat.getFullYear()}-${mes}-${dia}T00:00:00.000Z`;
+				$id('dataFinal').value = fulldate;
+				} else {
+				let dat = new Date($id('dataFil').value);
+				let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
+				let dia = (dat.getUTCDate()).toString().padStart(2,'0');
+				let fulldate = `${dat.getFullYear()}-${mes}-${dia}`;
+				$id('dataFinal').value = fulldate;
+				}
+			}
 
 
-	  function trocaFiltroData() {
-		const tipo = $('#tipoData').val();
-		const isAnoMes = (tipo === 'Ano/Mes');
+		function trocaFiltroData() {
+			const tipo = $('#tipoData').val();
+			const isAnoMes = tipo === 'Ano/Mes';
+
+			$('#divAnoAtend').toggle(isAnoMes);
+			$('#divMesAtend').toggle(isAnoMes);
+
+			$('#divDataFil').toggle(!isAnoMes);
+
+			// Atualiza visualmente os select2
+			$(window).trigger('resize');
+		}
+
+		function trocaFilpessoa() {
+		const tipo = $('#atendTipoPessoa').val();
 		
-		// Mostra/oculta Ano e Mês
-		$('#divAnoAtend, #divMesAtend').toggle(isAnoMes);
+		$('#divAtendBeneficiario, #divAtendTerapeuta, #divAtendConv').hide();
 		
-		// Mostra/oculta dataFinal (inverte a lógica: mostra quando NÃO for Ano/Mês)
-		$('#divdataFinal').toggle(!isAnoMes);
+		if(tipo === 'Beneficiario') $('#divAtendBeneficiario').show();
+		else if(tipo === 'Terapeuta') $('#divAtendTerapeuta').show();
+		else if(tipo === 'Convenio') $('#divAtendConv').show();
 		
-		// Reinicializa Select2 apenas nos elementos que existem
 		setTimeout(() => {
-			['#anoAtend', '#mesAtend', '#dataFinal'].forEach(sel => {
-			const $el = $(sel);
-			if ($el.length && $el.data('select2')) {
-				$el.select2('destroy').select2({ 
+			$('#atendBeneficiario, #atendTerapeuta, #atendConv').each(function() {
+			if ($(this).data('select2')) {
+				$(this).select2('destroy').select2({ 
 				width: 'resolve', 
-				placeholder: "Selecione...", 
-				allowClear: false 
+				allowClear: true, 
+				placeholder: "Selecione..." 
 				});
 			}
 			});
 		}, 50);
 		}
 
-      function trocaFilpessoa() {
-        const tipo = $('#atendTipoPessoa').val();
-        
-        // Esconde todos primeiro
-        $('#divAtendBeneficiario, #divAtendTerapeuta, #divAtendConv').hide();
-        
-        // Mostra o selecionado
-        if(tipo === 'Beneficiario') $('#divAtendBeneficiario').show();
-        else if(tipo === 'Terapeuta') $('#divAtendTerapeuta').show();
-        else if(tipo === 'Convenio') $('#divAtendConv').show();
-        
-        // Força Select2 recalcular
-        setTimeout(() => {
-          $('#atendBeneficiario, #atendTerapeuta, #atendConv').each(function() {
-            if ($(this).data('select2')) {
-              $(this).select2('destroy').select2({ width: 'resolve', allowClear: true, placeholder: "Selecione..." });
-            }
-          });
-        }, 50);
-      }
-      
-      function carregaBody(){
-        
-        // Valores padrão
-        if(!$id("tipoData").value) $id("tipoData").value = "Ano/Mes";
-        if(!$id("atendTipoPessoa").value) $id("atendTipoPessoa").value = "Geral";
-        
-        // Aplica visibilidade inicial
-        trocaFiltroData();
-        trocaFilpessoa();
-        
-        // Carrega filtros salvos
-        if($id("carregaFiltro")?.value === "true") carregarFiltros();
-        
-        $id("atualizaValores").value = "false";
-      }
+		// ✅ FUNÇÃO AUXILIAR: Define valor no Select2 corretamente
+		function setSelect2Value(id, value) {
+		const $el = $(`#${id}`);
+		if ($el.length) {
+			$el.val(value).trigger('change.select2');
+		}
+		}
 
-      function carregarFiltros() {
-        const tipoData = $id("tipoDataFil")?.value || "Ano/Mes";
-        const tipoPessoa = $id("tipoPessoaFil")?.value || "Geral";
+		function carregaBody(){
+		if(!$id("tipoData").value) $id("tipoData").value = "Ano/Mes";
+		if(!$id("atendTipoPessoa").value) $id("atendTipoPessoa").value = "Geral";
+		
+		// ✅ PRIORIDADE: Se tem filtro salvo, carrega ANTES de aplicar visibilidade
+		if($id("carregaFiltro")?.value === "true") {
+			carregarFiltros();
+		}
+		
+		// ✅ SÓ DEPOIS aplica a visibilidade com os valores já definidos
+		trocaFiltroData();
+		trocaFilpessoa();
+		
+		}
 
-        $id("tipoData").value = tipoData;
-        trocaFiltroData();
+		function carregarFiltros() {
+		const tipoData = $id("tipoDataFil")?.value || "Ano/Mes";
+		const tipoPessoa = $id("tipoPessoaFil")?.value || "Geral";
 
-        if(tipoData === "Ano/Mes") {
-          $id("anoAtend").value = $id("anoAtendFil")?.value || "";
-          $id("mesAtend").value = $id("mesAtendFil")?.value || "0";
-        } else {
-          const data = $id("dataFinalFil")?.value;
-          if(data) $id("dataFil").value = data.split('T')[0];
-        }
+		// ✅ 1º: Define os valores PRIMEIRO (usando método correto para Select2)
+		setSelect2Value('tipoData', tipoData);
+		setSelect2Value('atendTipoPessoa', tipoPessoa);
 
-        $id("atendTipoPessoa").value = tipoPessoa;
-        trocaFilpessoa();
+		if(tipoData === "Ano/Mes") {
+			setSelect2Value('anoAtend', $id("anoAtendFil")?.value || "");
+			setSelect2Value('mesAtend', $id("mesAtendFil")?.value || "0");
+		} else {
+			const data = $id("dataFinalFil")?.value;
+			if(data) {
+			// Formata data para YYYY-MM-DD (formato do input date)
+			const dataFormatada = data.split('T')[0];
+			setSelect2Value('dataFinal', dataFormatada);
+			}
+		}
 
-        if(tipoPessoa === "Beneficiario") $id("atendBeneficiario").value = $id("atendBeneficiarioFil")?.value || "";
-        if(tipoPessoa === "Terapeuta") $id("atendTerapeuta").value = $id("atendTerapeutaFil")?.value || "";
-       
-      } 
+		if(tipoPessoa === "Beneficiario") {
+			setSelect2Value('atendBeneficiario', $id("atendBeneficiarioFil")?.value || "");
+		}
+		if(tipoPessoa === "Terapeuta") {
+			setSelect2Value('atendTerapeuta', $id("atendTerapeutaFil")?.value || "");
+		}
+		
+		// ✅ 2º: SÓ AGORA aplica a visibilidade com os valores já carregados
+		trocaFiltroData();
+		trocaFilpessoa();
+		}
 
-     </script>
+		// ============================================
+		// ✅ FUNÇÃO: PREENCHER NUMERAÇÃO SEQUENCIAL
+		// ============================================
+		function preencherNumeracao() {
+			// Preenche os <td> vazios (índice 1) com números sequenciais
+			$('#dynamic-table tbody tr').each(function(index) {
+				const $tdNumeracao = $(this).find('td').eq(1);
+				$tdNumeracao.text(index + 1).addClass('col-numeracao');
+			});
+		}
+
+		// ============================================
+		// ✅ FUNÇÃO: CONTROLAR VISIBILIDADE DA COLUNA EVOLUÇÃO
+		// ============================================
+		function controlarColunaEvolucao() {
+			const exibir = $('#ExibeEvolicao').val();
+			const table = $('#dynamic-table').DataTable();
+			
+			// Verifica se o DataTable já foi inicializado
+			if (!$.fn.DataTable.isDataTable('#dynamic-table')) {
+				return;
+			}
+			
+			// Estrutura das colunas:
+			// 0=Checkbox, 1=Numeração, 2=Data, 3=Hora, 4=Tipo, 5=Terapia, 
+			// 6=Terapeuta, 7=Beneficiário, 8=Evolução, 9=Concluiu, 10=No Prazo?, 11=Ação
+			
+			const colunaEvolucao = 8; // Índice da coluna Evolução
+			
+			if (exibir === 'Não') {
+				table.column(colunaEvolucao).visible(false);
+			} else {
+				table.column(colunaEvolucao).visible(true);
+			}
+		}
+	 </script>
 	
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
@@ -545,7 +681,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Route</a>
 							</li>
-							<li class="active">Lista das Evoluções</li>
+							<li class="active">Gestão das Evoluções</li>
 							<li class="active">Geral</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
@@ -593,13 +729,14 @@
 										<input id="tipoDataFil" value="{{filtroTela.tipoData}}" />
 										<input id="dataIniFil" value="{{filtroTela.dataIni}}" />
 										<input id="dataFimFil" value="{{filtroTela.dataFim}}" />
+										<input id="dataFinal" name="dataFinal" value="{{filtroTela.dataFinal}}" />
 										<input id="idsChecked" value="" />
 									</div>
 								<div class="col-sm-2">
 									<div class="row">
 										<div class="input-group">
 											<label>Tipo Período:&nbsp;</label>
-											<select name="tipoData" id="tipoData" class="select2" value="Ano/Mes" onchange="trocaFiltroData()">
+											<select name="tipoData" id="tipoData" class="select2" value="Ano/Mes" value="{{filtroTela.tipoData}}" onchange="trocaFiltroData()">
 												<option value="Ano/Mes">Ano/Mês</option>
 												<option value="Semana">Semana</option>
 												<option value="Dia">Dia</option>
@@ -644,8 +781,7 @@
 								<div id="divdataFinal" class="col-sm-2">
 									<div class="input-group">
 										<label>Data:&nbsp;</label>
-										<input style="height: 30px;" id="dataFinal" name="dataFinal" type="date" onchange="javascript:formataData();">
-										
+										<input style="height: 30px;" id="dataFil" name="dataFil" value="{{filtroTela.dataFil}}" type="date" onchange="javascript:formataData();">
 									</div>
 								</div>
 								<div id="divTipoFil" class="col-sm-2">
@@ -691,6 +827,17 @@
 											<label>Atend. Concluído:&nbsp;</label>
 											<select name="AtendConcluido" id="AtendConcluido" class="select2">
 												<option value="Todos">Todos</option>
+												<option value="Sim">Sim</option>
+												<option value="Não">Não</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div id="divExibeEvolicao" class="col-sm-2">
+									<div class="row">
+										<div class="input-group">
+											<label>Exibir Evolução:&nbsp;</label>
+											<select name="ExibeEvolicao" id="ExibeEvolicao" class="select2">
 												<option value="Sim">Sim</option>
 												<option value="Não">Não</option>
 											</select>
@@ -744,6 +891,8 @@
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info" style="font-size: 11px;">
 											<thead>
 												<tr role="row">
+													<th class="center"><label class="pos-rel"><input type="checkbox" id="marcar" name="marcar" class="ace" /><span class="lbl"></span></label></th>
+													<th class="center" width="40px">N</th>
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Data</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Hora</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Tipo</th>
@@ -760,12 +909,20 @@
 											<tbody>
 												{{#each agendas}}
 													<tr role="row" class="odd">
-														{{#dataIgual agenda_data_dia}}
-															<td><span class="label label-success arrowed">{{agenda_data_dia}}</span></td>
-														{{else}}
-															<td>{{agenda_data_dia}}</td>
-														{{/dataIgual}}
-
+														<td class="center">
+															<label class="pos-rel">
+																<input type="checkbox" class="ace" id="{{_id}}" name="chekId" onchange="javascript:alternarBotao()" />
+																<span class="lbl"></span>
+															</label>
+														</td>
+														<td class="col-numeracao"></td>
+														<td>
+																{{#dataIgual agenda_data_dia}}
+																	<span class="label label-success arrowed">{{agenda_data_dia}}</span>
+																{{else}}
+																	{{agenda_data_dia}}
+																{{/dataIgual}}
+															</td>
 														<td>{{agenda_hora}}</td>
 															<td>
 															{{#compareThis agenda_categoria "Padrão"}}
@@ -822,8 +979,6 @@
 															{{/ifEqual}}
 														{{/each}}
 														</td>
-													
-														
 														<td>
 															{{#each ../terapeutas}}
 																{{#ifEqual this._id ../agenda_usuid}}
@@ -910,50 +1065,100 @@
 
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
-		
-		
+		// ✅ Inicializa Select2 nos campos do filtro
+			
 			$(document).ready(function() {
-			 // ✅ PASSO 1: Inicializa TODOS os Select2 PRIMEIRO Já no meu Main
-			// ✅ PASSO 2: Agora sim, aplica o estado inicial dos filtros
-				// (força a lógica baseada nos valores atuais dos selects)
+				// ============================================
+				// ✅ PASSO 1: INICIALIZAÇÃO DE FILTROS
+				// ============================================
 				setTimeout(() => {
 					trocaFiltroData();
 					trocaFilpessoa();
 					console.log('✅ Estado inicial dos filtros aplicado');
 				}, 100);
 
-				// ✅ PASSO 3: Eventos para quando o usuário mudar os selects
+				// ============================================
+				// ✅ PASSO 2: EVENT LISTENERS DOS FILTROS
+				// ============================================
+				
+				// Evento: Mudança no Tipo de Período (Ano/Mês, Semana, Dia)
 				$('#tipoData').on('change.select2', function() {
 					console.log('🔄 tipoData mudou para:', $(this).val());
 					trocaFiltroData();
+					formataData();
 				});
 
+				// Evento: Mudança no Tipo de Pessoa (Geral, Beneficiário, Terapeuta)
 				$('#atendTipoPessoa').on('change.select2', function() {
 					console.log('🔄 atendTipoPessoa mudou para:', $(this).val());
 					trocaFilpessoa();
 				});
 
-				$("#dynamic-table").DataTable({
-				"language": { "url": "/js/lang/datatable-pt-br.json" },
-				"aaSorting": [],
-				"aoColumns": [null, null, null, null,null, null, null, null, null,{ "bSortable": false }],
-				"responsive": true,
-				"lengthMenu": [ 100, 200, 300, 500],
-				"lengthChange": true,
-				"autoWidth": false,
-				"paging": true,
-				"lengthChange": true,
-				"searching": true,
-				"ordering": true,
-				"info": true,
-				
-				select: {
-							style: 'multi'
-						}
+				// ============================================
+				// ✅ PASSO 3: INICIALIZAÇÃO DO DATATABLE
+				// ============================================
+				const table = $("#dynamic-table").DataTable({
+					"language": { "url": "/js/lang/datatable-pt-br.json" },
+					"aaSorting": [],
+					"aoColumns": [
+						{ "bSortable": false }, // 0 - Checkbox
+						{ "bSortable": false }, // 1 - Numeração
+						null,                   // 2 - Data
+						null,                   // 3 - Hora
+						null,                   // 4 - Tipo
+						null,                   // 5 - Terapia
+						null,                   // 6 - Terapeuta
+						null,                   // 7 - Beneficiário
+						null,                   // 8 - Evolução
+						null,                   // 9 - Concluiu
+						null,                   // 10 - No Prazo?
+						{ "bSortable": false }  // 11 - Ação
+					],
+					"responsive": true,
+					"lengthMenu": [300, 500, 1000, 2000, 5000],
+					"lengthChange": true,
+					"autoWidth": false,
+					"paging": true,
+					"searching": true,
+					"ordering": true,
+					"info": true,
+					select: {
+						style: 'multi'
+					},
+					"initComplete": function(settings, json) {
+						// ✅ Executa após a tabela ser completamente inicializada
+						console.log('✅ DataTable inicializado com sucesso');
+						
+						// Preenche numeração sequencial
+						preencherNumeracao();
+						
+						// Aplica estado inicial da coluna Evolução
+						controlarColunaEvolucao();
+					},
+					"drawCallback": function(settings) {
+						// ✅ Executa após cada redraw (paginação, ordenação, busca)
+						preencherNumeracao();
+					}
+				});
+
+				// ============================================
+				// ✅ PASSO 4: EVENT LISTENER - EXIBIR/OCULTAR COLUNA EVOLUÇÃO
+				// ============================================
+				$('#ExibeEvolicao').on('change', function() {
+					console.log('🔄 Exibir Evolução mudou para:', $(this).val());
+					controlarColunaEvolucao();
+				});
+
+				// ============================================
+				// ✅ PASSO 5: EVENT LISTENER - CHECKBOX MARCAR TODOS
+				// ============================================
+				$('#marcar').on('change', function() {
+					const isChecked = $(this).is(':checked');
+					$('input[name="chekId"]').prop('checked', isChecked);
+					alternarBotao();
 				});
 			});
 		</script>
-	
 
 	</body>
 

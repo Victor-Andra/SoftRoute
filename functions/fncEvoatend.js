@@ -2299,7 +2299,7 @@ async filtraEvoatendgeral(req, res) {
 
        // Na captura dos filtros:
         const filtroTela = {
-            tipoData: req.body.tipoPeriodo || "Ano/Mes",
+            tipoData: req.body.tipoData || "Ano/Mes",
             // ✅ Corrige a prioridade dos campos de data
             dataFinal: req.body.dataFinal || "",
             dataFil: req.body.dataFil || "",
