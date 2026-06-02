@@ -75,15 +75,17 @@
 																<td>{{bene_nome}}</td>
 															{{/ifEqual}}
 														{{/each}}
-														{{#each ../benes}}
+														<td>
+															{{#each ../benes}}
 															{{#ifEqual this._id ../cars_beneid}}
 																{{#ifEqual this.bene_status "Inativo"}}
-																	<td><span class="badge badge-danger">{{bene_status}}</span></td>
+																	<span class="badge badge-danger">{{bene_status}}</span>
 																	{{else}}
-																	<td><span class="badge badge-success">{{bene_status}}</span></td>
+																	<span class="badge badge-success">{{bene_status}}</span>
 																{{/ifEqual}}
 															{{/ifEqual}}
 														{{/each}}
+														</td>
 														<td>{{cars_preechido}}</td>
 														<td>{{cars_parentesco}}</td>
 														<td><span class="badge badge-warning">{{cars_tqt}}</span></td>

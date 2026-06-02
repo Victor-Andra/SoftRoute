@@ -421,5 +421,81 @@ module.exports = {Filtros, Resposta,
             default:
                 return { corBorda: "lightgreen", corFundo: "transparent", icone: "fa-pencil" };
         }
+    },
+    obterPeriodoMes(anoString, mesString) {
+        // mes: 0-11
+        let ano = parseInt(anoString);
+        let mes = parseInt(mesString);
+
+        const dataIni = new Date(Date.UTC(
+            ano, mes, 1,
+            0, 0, 0, 0
+        ));
+
+        mes = mes + 1;
+        const dataFim = new Date(Date.UTC(
+            ano, mes, 0,
+            23, 59, 59, 0
+        ));
+
+        return { dataIni, dataFim };
+    },
+    obterSemanaUtil(data) {
+        let dataBase = new Date(data);
+
+        // Sempre UTC
+        let diaSemana = dataBase.getUTCDay();
+
+        let segunda = new Date(dataBase);
+
+        switch (diaSemana) {
+            case 0: // domingo
+                segunda.setUTCDate(dataBase.getUTCDate() + 1);
+                break;
+            case 1: // segunda
+                break;
+            case 2: // terça
+                segunda.setUTCDate(dataBase.getUTCDate() - 1);
+                break;
+            case 3: // quarta
+                segunda.setUTCDate(dataBase.getUTCDate() - 2);
+                break;
+            case 4: // quinta
+                segunda.setUTCDate(dataBase.getUTCDate() - 3);
+                break;
+            case 5: // sexta
+                segunda.setUTCDate(dataBase.getUTCDate() - 4);
+                break;
+            case 6: // sábado
+                segunda.setUTCDate(dataBase.getUTCDate() - 5);
+                break;
+        }
+
+        segunda.setUTCHours(0, 0, 0, 0);
+
+        let sexta = new Date(segunda);
+        sexta.setUTCDate(segunda.getUTCDate() + 4);
+        sexta.setUTCHours(23, 59, 59, 999);
+
+        return {
+            dataIni: segunda,
+            dataFim: sexta
+        };
+    },
+    obterPeriodoDia(dataStr) {
+        let [ano, mes, dia] = dataStr.split('-').map(Number);
+        let mesInt = (mes - 1);
+
+        let dataIni = new Date(Date.UTC(
+            ano, mesInt, dia,
+            0, 0, 0, 0
+        ));
+
+        let dataFim = new Date(Date.UTC(
+            ano, mesInt, dia,
+            23, 59, 59, 999
+        ));
+
+        return { dataIni, dataFim };
     }
 }

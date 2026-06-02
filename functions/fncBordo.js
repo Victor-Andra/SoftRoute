@@ -270,7 +270,7 @@ module.exports = {
                             Usuario.find({"usuario_funcaoid":"6241030bfbcc51f47c720a0b"}).then((terapeutasina)=>{//Usuário c/ filtro de função = Terapeutas
                                 terapeutasina.sort((a,b) => (a.usuario_nome > b.usuario_nome) ? 1 : ((b.usuario_nome > a.usuario_nome) ? -1 : 0));//Ordena o terapeuta por nome
                                 console.log("Listagem Realizada Usuário!")
-                                res.render('area/bordo/bordoLis', {escolas: escola, anos: ano, bordos: bordo, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene, usuarioAtual, isAgendaTerapeuta, carregaFiltro, bordoTerapeuta, bordoBeneficiario, dataFinal, mesBordo, anoBordo})
+                                res.render('area/bordo/bordoLis', {escolas: escola, anos: ano, bordos: bordo, terapeutas: terapeuta, terapeutasinas: terapeutasina, benes: bene, usuarioAtual, isAgendaTerapeuta, carregaFiltro, bordoTerapeuta, bordoBeneficiario, dataFinal, mesBordo, anoBordo, lvlUsu})
         })})})})})}).catch((err) =>{
             console.log(err)
             req.flash("error_message", "houve um erro ao listar Diários de Bordo")

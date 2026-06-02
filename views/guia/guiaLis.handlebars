@@ -461,7 +461,7 @@
 				let dat = new Date(dataInput);
 				let mesStr = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
 				let diaStr = dat.getUTCDate().toString().padStart(2, '0');
-				let fulldate = `${dat.getUTCFullYear()}-${mesStr}-${diaStr}T00:00:00.000Z`;
+				let fulldate = `${dat.getUTCFullYear()}-${mesStr}-${diaStr}`;
 				document.getElementById('dataFinal').value = fulldate;
 			}
 		}
@@ -916,8 +916,8 @@
 							<!-- 🔹 Data (filtro Dia) - visível apenas quando tipoData = "Dia" -->
 							<div id="divDataFil" class="form-group{{#ifEqual filtroTipo "Dia"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Data</label>
-								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" value="{{filtroData}}">
-								<input class="hidden" id="dataFinal" name="dataFinal" />
+								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" value="{{filtroData}}" onchange="javascript:formataData();">
+								<input class="hidden" id="dataFinal" name="dataFinal" value="{{filtroTela.dataFinal}}" />
 								<input class="hidden" id="tipoDataEdi" name="tipoDataEdi" value="{{filtroTela.tipoData}}" />
 								<input class="hidden" id="anoAtendEdi" name="anoAtendEdi" value="{{filtroTela.anoAtend}}" />
 								<input class="hidden" id="mesAtendEdi" name="mesAtendEdi" value="{{filtroTela.mesAtend}}" />

@@ -617,31 +617,36 @@
 																<a class="blue" href="">
 																	<i class="ace-icon fa fa-map-o bigger-130"></i>
 																</a>
-																{{#compareThis usuario._id bordo_terapeutaid}}<!-- /.id do terapeuta que inseriu o Diário -->
+																{{#ifEqual ../../usuarioAtual ../bordo_terapeutaid}}<!-- /.id de perfil do Root -->
 																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
 																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																</a>
 																{{else}}
-																	{{#compareThis ../perfilAtual '644743aa78166939169f8486'}}<!-- /.id de perfil Supervisor -->
-																	{{../perfilAtual}}
-																	<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
-																		<i class="ace-icon fa fa-trash-o bigger-130"></i>
-																	</a>
-																	{{else}}
-																		{{#compareThis ../perfilAtual '644742e378166939169f82a1'}}<!-- /.id de perfil Coordenador -->
+																	{{#compareThis usuario._id bordo_terapeutaid}}<!-- /.id do terapeuta que inseriu o Diário -->
 																		<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
 																			<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																		</a>
-																		{{else}}
-																			{{#compareThis ../perfilAtual '62421801a12aa557219a0fb9'}}<!-- /.id de perfil do Root -->
+																	{{else}}
+																		{{#compareThis ../lvlUsu '644743aa78166939169f8486'}}<!-- /.id de perfil Supervisor -->
 																			<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
 																				<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																			</a>
+																		{{else}}
+																			{{#compareThis ../lvlUsu '644742e378166939169f82a1'}}<!-- /.id de perfil Coordenador -->
+																				<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																					<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																				</a>
 																			{{else}}
+																				{{#compareThis ../lvlUsu '62421801a12aa557219a0fb9'}}<!-- /.id de perfil do Root -->
+																					<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																						<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																					</a>
+																				{{else}}
+																				{{/compareThis}}
 																			{{/compareThis}}
 																		{{/compareThis}}
 																	{{/compareThis}}
-																{{/compareThis}}
+																{{/ifEqual}}
 															</div>
 														</td>
 													</tr>

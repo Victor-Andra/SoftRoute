@@ -90,28 +90,40 @@ module.exports = {FiltroEvoatend,
         const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
         const atendBeneficiario = req.body.atendBeneficiario;
 
-        let dataIni, dataFim;
+        const filtroTela = {
+            tipoData: req.body.tipoData || "Ano/Mes",
+            // ✅ Corrige a prioridade dos campos de data
+            dataFinal: req.body.dataFinal || "",
+            dataFil: req.body.dataFil || "",
+            anoAtend: req.body.anoAtend || "",
+            mesAtend: req.body.mesAtend || "",
+            tipoPessoa: req.body.atendTipoPessoa || "Geral",
+            atendTerapeuta: req.body.atendTerapeuta || "",
+            atendBeneficiario: req.body.atendBeneficiario || "",
+            // ✅ Verifica se o campo existe na view antes de usar
+            atendConcluido: req.body.AtendConcluido || "Todos", 
+            atendSelo: req.body.atendSelo || "Todos"
+        };
 
-        // ✅ Lógica de filtro de data (mantida igual)
-        if (tipoData === "Ano/Mes") {
-            const ano = parseInt(anoAtend);
-            const mes = parseInt(mesAtend);
-            if (isNaN(ano) || isNaN(mes)) {
-                return res.render('admin/erro', { message: "Ano ou mês inválido." });
-            }
-            dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
-            dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
-        } else if (tipoData === "Dia") {
-            if (!dataFil) {
-                return res.render('admin/erro', { message: "Data não informada." });
-            }
-            const [ano, mes, dia] = dataFil.split('-').map(Number);
-            dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
-            dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
-        } else if (tipoData === "Semana") {
-            return res.render('admin/erro', { message: "Filtro por semana ainda não implementado." });
-        } else {
-            return res.render('admin/erro', { message: "Tipo de filtro inválido." });
+        let dataIni, dataFim;
+                console.log(filtroTela.dataFinal);
+
+        switch (filtroTela.tipoData){
+            case "Ano/Mes":
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoMes(filtroTela.anoAtend, filtroTela.mesAtend));
+
+                break;
+            case "Semana":
+                ({ dataIni, dataFim } = fncGeral.obterSemanaUtil(filtroTela.dataFinal));
+                
+                break;
+            case "Dia":
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia(filtroTela.dataFinal));
+
+                break;
+            default:
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia('2000-01-01'));
+                break;
         }
 
         let agendaQuery = {
@@ -120,6 +132,10 @@ module.exports = {FiltroEvoatend,
 
         if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
             agendaQuery.agenda_beneid = atendBeneficiario;
+        }
+
+        if (atendTipoPessoa === "Terapeuta" && filtroTela.atendTerapeuta) {
+            agendaQuery.agenda_usuid = filtroTela.atendTerapeuta;
         }
 
         // ✅ QUERY PRINCIPAL COM POPULATE ANINHADO CORRETO (encadeado com .then)
@@ -336,7 +352,8 @@ module.exports = {FiltroEvoatend,
                                         filtroTipoPessoa: atendTipoPessoa,
                                         filtroBeneficiario: atendBeneficiario,
                                         // ✅ ADICIONAR ESTATÍSTICAS NO RENDER
-                                        estatisticas: estatisticas
+                                        estatisticas: estatisticas,
+                                        filtroTela: filtroTela
                                         });
                                     });
                                 }));

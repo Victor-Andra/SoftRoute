@@ -69,16 +69,25 @@
 												{{#each atecs}}
 
 													<tr role="row" class="odd">
-														{{#each ../benes}}
-															{{#ifEqual this._id ../atec_beneid}}
-																<td>{{bene_nome}}</td>
-															{{/ifEqual}}
-														{{/each}}
-														{{#each ../benes}}
-															{{#ifEqual this._id ../atec_beneid}}
-																<td>{{bene_status}}</td>
-															{{/ifEqual}}
-														{{/each}}
+														<td>
+															{{#each ../benes}}
+																{{#ifEqual this._id ../atec_beneid}}
+																	{{bene_nome}}
+																{{/ifEqual}}
+															{{/each}}
+														</td>
+														<td>
+															{{#each ../benes}}
+																{{#ifEqual this._id ../atec_beneid}}
+																	{{#ifEqual this.bene_status "Inativo"}}
+																		<span class="badge badge-danger">{{bene_status}}</span>
+																		{{else}}
+																		<span class="badge badge-success">{{bene_status}}</span>
+																	{{/ifEqual}}
+																{{/ifEqual}}
+															{{/each}}
+														</td>
+															
 														<td>{{datacad}}</td>
 														
 														<td>{{atec_preenchido}}</td>

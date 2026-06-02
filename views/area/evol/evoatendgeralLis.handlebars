@@ -418,41 +418,34 @@
      const $id = (id) => document.getElementById(id);
 
 function formataData(){
-        let tipo = $id("tipoPeriodo").value;
+        let tipo = $id("tipoData").value;
         if(tipo == "Ano/Mes"){
           let dat = new Date($id('anoAtend').value+"-"+$id('mesAtend').value+"-01 00:00:00.000Z");
           let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
           let dia = (dat.getUTCDate()).toString().padStart(2,'0');
-          let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
+          let fulldate = `${dat.getFullYear()}-${mes}-${dia}T00:00:00.000Z`;
           $id('dataFinal').value = fulldate;
         } else {
           let dat = new Date($id('dataFil').value);
           let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
           let dia = (dat.getUTCDate()).toString().padStart(2,'0');
-          let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
+          let fulldate = `${dat.getFullYear()}-${mes}-${dia}`;
           $id('dataFinal').value = fulldate;
         }
       }
 
+
 function trocaFiltroData() {
-  const tipo = $('#tipoPeriodo').val();
-  const isAnoMes = (tipo === 'Ano/Mes');
-  
-  $('#divAnoAtend, #divMesAtend').toggle(isAnoMes);
-  $('#divdataFinal').toggle(!isAnoMes);
-  
-  setTimeout(() => {
-    ['#anoAtend', '#mesAtend', '#dataFinal'].forEach(sel => {
-      const $el = $(sel);
-      if ($el.length && $el.data('select2')) {
-        $el.select2('destroy').select2({ 
-          width: 'resolve', 
-          placeholder: "Selecione...", 
-          allowClear: false 
-        });
-      }
-    });
-  }, 50);
+    const tipo = $('#tipoData').val();
+    const isAnoMes = tipo === 'Ano/Mes';
+
+    $('#divAnoAtend').toggle(isAnoMes);
+    $('#divMesAtend').toggle(isAnoMes);
+
+    $('#divDataFil').toggle(!isAnoMes);
+
+    // Atualiza visualmente os select2
+    $(window).trigger('resize');
 }
 
 function trocaFilpessoa() {
@@ -486,8 +479,7 @@ function setSelect2Value(id, value) {
 }
 
 function carregaBody(){
-  // Valores padrão APENAS se não vier do backend
-  if(!$id("tipoPeriodo").value) $id("tipoPeriodo").value = "Ano/Mes";
+  if(!$id("tipoData").value) $id("tipoData").value = "Ano/Mes";
   if(!$id("atendTipoPessoa").value) $id("atendTipoPessoa").value = "Geral";
   
   // ✅ PRIORIDADE: Se tem filtro salvo, carrega ANTES de aplicar visibilidade
@@ -499,18 +491,17 @@ function carregaBody(){
   trocaFiltroData();
   trocaFilpessoa();
   
-  $id("atualizaValores").value = "false";
 }
 
 function carregarFiltros() {
-  const tipoPeriodo = $id("tipoPeriodoFil")?.value || "Ano/Mes";
+  const tipoData = $id("tipoDataFil")?.value || "Ano/Mes";
   const tipoPessoa = $id("tipoPessoaFil")?.value || "Geral";
 
   // ✅ 1º: Define os valores PRIMEIRO (usando método correto para Select2)
-  setSelect2Value('tipoPeriodo', tipoPeriodo);
+  setSelect2Value('tipoData', tipoData);
   setSelect2Value('atendTipoPessoa', tipoPessoa);
 
-  if(tipoPeriodo === "Ano/Mes") {
+  if(tipoData === "Ano/Mes") {
     setSelect2Value('anoAtend', $id("anoAtendFil")?.value || "");
     setSelect2Value('mesAtend', $id("mesAtendFil")?.value || "0");
   } else {
@@ -592,16 +583,17 @@ function carregarFiltros() {
 										<input id="mesAtendFil" value="{{filtroTela.mesAtend}}" />
 										<input id="anoAtendFil" value="{{filtroTela.anoAtend}}" />
 										<input id="tipoPessoaFil" value="{{filtroTela.tipoPessoa}}" />
-										<input id="tipoPeriodoFil" value="{{filtroTela.tipoPeriodo}}" />
+										<input id="tipoDataFil" value="{{filtroTela.tipoData}}" />
 										<input id="dataIniFil" value="{{filtroTela.dataIni}}" />
 										<input id="dataFimFil" value="{{filtroTela.dataFim}}" />
+										<input id="dataFinal" name="dataFinal" value="{{filtroTela.dataFinal}}" />
 										<input id="idsChecked" value="" />
 									</div>
 								<div class="col-sm-2">
 									<div class="row">
 										<div class="input-group">
 											<label>Tipo Período:&nbsp;</label>
-											<select name="tipoPeriodo" id="tipoPeriodo" class="select2" value="Ano/Mes" onchange="trocaFiltroData()">
+											<select name="tipoData" id="tipoData" class="select2" value="Ano/Mes" value="{{filtroTela.tipoData}}" onchange="trocaFiltroData()">
 												<option value="Ano/Mes">Ano/Mês</option>
 												<option value="Semana">Semana</option>
 												<option value="Dia">Dia</option>
@@ -646,8 +638,7 @@ function carregarFiltros() {
 								<div id="divdataFinal" class="col-sm-2">
 									<div class="input-group">
 										<label>Data:&nbsp;</label>
-										<input style="height: 30px;" id="dataFinal" name="dataFinal" type="date" onchange="javascript:formataData();">
-										
+										<input style="height: 30px;" id="dataFil" name="dataFil" value="{{filtroTela.dataFil}}" type="date" onchange="javascript:formataData();">
 									</div>
 								</div>
 								<div id="divTipoFil" class="col-sm-2">
@@ -715,7 +706,7 @@ function carregarFiltros() {
 								<input type="hidden" id="carregaFiltro" name="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
 								
 								<!-- Filtros para persistência (TODOS vindos de filtroTela) -->
-								<input type="hidden" id="tipoPeriodoFil" name="tipoPeriodoFil" value="{{filtroTela.tipoPeriodo}}" />
+								<input type="hidden" id="tipoDataFil" name="tipoDataFil" value="{{filtroTela.tipoData}}" />
 								<input type="hidden" id="anoAtendFil" name="anoAtendFil" value="{{filtroTela.anoAtend}}" />
 								<input type="hidden" id="mesAtendFil" name="mesAtendFil" value="{{filtroTela.mesAtend}}" />
 								<input type="hidden" id="dataFinalFil" name="dataFinalFil" value="{{filtroTela.dataFinal}}" />
@@ -912,8 +903,8 @@ function carregarFiltros() {
 
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
-		
-		
+		// ✅ Inicializa Select2 nos campos do filtro
+			
 			$(document).ready(function() {
 			 // ✅ PASSO 1: Inicializa TODOS os Select2 PRIMEIRO Já no meu Main
 			// ✅ PASSO 2: Agora sim, aplica o estado inicial dos filtros
@@ -925,9 +916,10 @@ function carregarFiltros() {
 				}, 100);
 
 				// ✅ PASSO 3: Eventos para quando o usuário mudar os selects
-				$('#tipoPeriodo').on('change.select2', function() {
-					console.log('🔄 tipoPeriodo mudou para:', $(this).val());
+				$('#tipoData').on('change.select2', function() {
+					console.log('🔄 tipoData mudou para:', $(this).val());
 					trocaFiltroData();
+					formataData();
 				});
 
 				$('#atendTipoPessoa').on('change.select2', function() {

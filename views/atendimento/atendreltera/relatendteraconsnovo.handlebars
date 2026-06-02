@@ -384,9 +384,9 @@
 																		<tr>
 																			<td>{{terapiaNome}}</td>
 																			<td>
-																				{{#ifEqual tipoContrato 'particular'}}<span class="badge-purple">Particular</span>{{/ifEqual}}
-																				{{#ifEqual tipoContrato 'liminar'}}<span class="badge-danger">Liminar</span>{{/ifEqual}}
-																				{{#ifEqual tipoContrato 'convenio'}}<span class="badge-info">Convênio</span>{{/ifEqual}}
+																				{{#ifEqual tipoContrato 'particular'}}<span class="badge badge-purple">Particular</span>{{/ifEqual}}
+																				{{#ifEqual tipoContrato 'liminar'}}<span class="badge badge-danger">Liminar</span>{{/ifEqual}}
+																				{{#ifEqual tipoContrato 'convenio'}}<span class="badge badge-info">Convênio</span>{{/ifEqual}}
 																			</td>
 																			<td class="text-right">{{sessoes}}</td>
 																			<td class="text-right">R$ {{valorUnitario}}</td>
@@ -407,7 +407,53 @@
 														</div>
 													</div>
 												</div>
-
+												
+												<div class="widget-box">
+												<div class="widget-title">
+													<span class="icon"><i class="icon-list"></i></span>
+													<h5>🔍 Lista Analítica de Atendimentos <small>({{totalAlertas}} com alerta)</small></h5>
+												</div>
+												<div class="widget-content nopadding">
+													<table class="table table-bordered table-striped">
+													<thead>
+														<tr>
+														<th width="40">#</th>
+														<th>Data do Atendimento</th>
+														<th>Hora do Atendimento</th>
+														<th>Especialidade Detalhada</th>
+														<th>Especialidade</th>
+														<th>Tipo</th>
+														<th>Beneficiário</th>
+														<th width="100">Status</th>
+														</tr>
+													</thead>
+													<tbody>
+														{{#each registrosAnaliticos}}
+														<tr class="{{#if isInvalido}}error{{/if}}">
+														<td class="center">{{seq}}</td>
+														<td>{{dataAtendimento}}</td>
+														<td>{{horaAtendimento}}</td>
+														<td>{{especialidadeDetalhada}}</td>
+														<td>{{especialidade}}</td>
+														<td>{{tipoContrato}}</td>
+														<td>{{beneficiario}}</td>
+														<td class="center">
+															{{#if isInvalido}}
+															<span class="label label-important" 
+																	title="{{#each alertas}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}">
+																⚠️ {{alertas.length}}
+															</span>
+															{{else}}
+															<span class="label label-success">OK</span>
+															{{/if}}
+														</td>
+														</tr>
+														{{/each}}
+													</tbody>
+													</table>
+												</div>
+												</div>
+												
 											</div>
 											<!-- Fim do container centralizado -->
 

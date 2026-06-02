@@ -56,806 +56,6 @@ class FiltroEvoatend{
 }
 
 module.exports = {FiltroEvoatend,
-
-  
-    filtraGuialisOLD(req, res, resposta) {
-        let db = req.cookies['preferredDb'];
-        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        // Garanta que estas importações existem no topo do arquivo:
-        // const Usuario = require('../models/Usuario');
-        // const Ano = require('../models/Ano');
-
-        if (!resposta || typeof resposta !== 'object') {
-            resposta = { texto: '', sucesso: false };
-        }
-        let flash = new Resposta();
-        flash.texto = resposta.texto;
-        flash.sucesso = resposta.sucesso;
-
-        // Receber dados do formulário
-        const tipoData = req.body.tipoData;
-        const anoAtend = req.body.anoAtend;
-        const mesAtend = req.body.mesAtend;
-        const dataFil = req.body.dataFil;
-        const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
-        const atendBeneficiario = req.body.atendBeneficiario;
-
-        console.log("🔍 [INPUTS DO FORMULÁRIO]");
-        console.log("→ tipoData:", tipoData);
-        console.log("→ anoAtend:", anoAtend);
-        console.log("→ mesAtend:", mesAtend);
-        console.log("→ dataFil:", dataFil);
-        console.log("→ atendTipoPessoa:", atendTipoPessoa);
-        console.log("→ atendBeneficiario:", atendBeneficiario);
-
-        let dataIni, dataFim;
-
-        if (tipoData === "Ano/Mes") {
-            const ano = parseInt(anoAtend);
-            const mes = parseInt(mesAtend);
-            if (isNaN(ano) || isNaN(mes)) {
-                console.log("❌ Ano ou mês inválido");
-                return res.render('admin/erro', { message: "Ano ou mês inválido." });
-            }
-            dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
-            dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
-
-        } else if (tipoData === "Dia") {
-            if (!dataFil) {
-                console.log("❌ Data não informada para filtro 'Dia'");
-                return res.render('admin/erro', { message: "Data não informada." });
-            }
-            const [ano, mes, dia] = dataFil.split('-').map(Number);
-            dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
-            dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
-
-        } else if (tipoData === "Semana") {
-            console.log("❌ Filtro 'Semana' não implementado");
-            return res.render('admin/erro', { message: "Filtro por semana ainda não implementado." });
-        } else {
-            console.log("❌ Tipo de filtro desconhecido:", tipoData);
-            return res.render('admin/erro', { message: "Tipo de filtro inválido." });
-        }
-
-        console.log("📅 [INTERVALO DE DATAS GERADO]");
-        console.log("→ dataIni (ISO):", dataIni);
-        console.log("→ dataFim (ISO):", dataFim);
-
-        // Montar critérios de busca na Agenda
-        let agendaQuery = {
-            agenda_data: { $gte: dataIni, $lte: dataFim }
-        };
-
-        if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
-            agendaQuery.agenda_beneid = atendBeneficiario;
-            console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
-        }
-
-        console.log("🔎 [QUERY FINAL PARA AGENDA]");
-        console.log(agendaQuery);
-
-        // Buscar agendas
-        Agenda.find(agendaQuery)
-            .then((agendas) => {
-                console.log("✅ [RESULTADO DA AGENDA]");
-                console.log("→ Total de registros encontrados:", agendas.length);
-                // Carregar beneficiários
-                return Bene.find()
-                    .then((bene) => {
-                        bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
-
-                        // Carregar terapeutas (usuários)
-                        return Usuario.find({
-                            usuario_status: "Ativo",
-                            $or: [
-                                { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                                { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                            ]
-                        })
-                        .then((terapeuta) => {
-                            terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
-
-                            // Criar mapa de usuários por ID (para cadastro/edição)
-                            const usuarioMap = {};
-                            terapeuta.forEach(u => {
-                                usuarioMap[u._id.toString()] = u.usuario_nome;
-                            });
-
-                            // Enriquecer cada agenda com dados formatados
-                            agendas.forEach(a => {
-                                // Formatar data e hora da agenda
-                                const dataAgenda = new Date(a.agenda_data);
-                                const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
-                                const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
-                                a.agenda_hora = `${hor}:${min}`;
-                                a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
-
-                                // Evolução: Sim / Não
-                                a.evolucaoSimNao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '') ? 'Sim' : 'Não';
-
-                                // Dados de cadastro
-                                a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
-                                a.usuarioCadNome = usuarioMap[a.agenda_usucad] || 'Desconhecido';
-
-                                // Dados de edição
-                                a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
-                                a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
-
-                                // Data da senha no formato YYYY-MM-DD (para input date)
-                                a.agenda_datasenha_input = a.agenda_datasenha
-                                    ? new Date(a.agenda_datasenha).toISOString().split('T')[0]
-                                    : '';
-                            });
-
-                            // Carregar demais dados complementares
-                            return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
-                                .then((horaage) => {
-                                    return Sala.find()
-                                        .then((salas) => {
-                                            salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
-                                            return Terapia.find()
-                                                .then((terapias) => {
-                                                    return Conv.find()
-                                                        .then((convs) => {
-                                                            convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
-                                                            return Ano.find()
-                                                                .then((anos) => {
-                                                                    // ✅ Renderizar view com todos os dados
-                                                                    console.log("📤 [RENDERIZANDO VIEW]");
-                                                                    console.log("→ extras.length:", agendas.length);
-                                                                    console.log("→ benes.length:", bene.length);
-                                                                    console.log("→ terapeutas.length:", terapeuta.length);
-
-                                                                    res.render('guia/guiaLis', {
-                                                                        extras: agendas,
-                                                                        benes: bene,
-                                                                        terapeutas: terapeuta,
-                                                                        horaages: horaage,
-                                                                        salas: salas,
-                                                                        terapias: terapias,
-                                                                        convs: convs,
-                                                                        anos: anos,
-                                                                        flash,
-
-                                                                        filtroTipo: tipoData,
-                                                                        filtroAno: anoAtend,
-                                                                        filtroMes: mesAtend,
-                                                                        filtroData: dataFil,
-                                                                        filtroTipoPessoa: atendTipoPessoa,
-                                                                        filtroBeneficiario: atendBeneficiario
-                                                                    });
-                                                                });
-                                                        });
-                                                });
-                                        });
-                                });
-                        });
-                    });
-            })
-            .catch((err) => {
-                console.error("💥 ERRO EM filtraGuialis:", err);
-                req.flash("error_message", "Houve um erro ao listar os agendamentos.");
-                res.redirect('/admin/erro');
-            });
-    },
-filtraGuialisOLD(req, res, resposta) {
-    let db = req.cookies['preferredDb'];
-    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema); // ✅ ADICIONADO
-    const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema); // ✅ ADICIONADO
-
-    if (!resposta || typeof resposta !== 'object') {
-        resposta = { texto: '', sucesso: false };
-    }
-    let flash = new Resposta();
-    flash.texto = resposta.texto;
-    flash.sucesso = resposta.sucesso;
-
-    // Receber dados do formulário
-    const tipoData = req.body.tipoData;
-    const anoAtend = req.body.anoAtend;
-    const mesAtend = req.body.mesAtend;
-    const dataFil = req.body.dataFil;
-    const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
-    const atendBeneficiario = req.body.atendBeneficiario;
-
-    console.log("🔍 [INPUTS DO FORMULÁRIO]");
-    console.log("→ tipoData:", tipoData);
-    console.log("→ anoAtend:", anoAtend);
-    console.log("→ mesAtend:", mesAtend);
-    console.log("→ dataFil:", dataFil);
-    console.log("→ atendTipoPessoa:", atendTipoPessoa);
-    console.log("→ atendBeneficiario:", atendBeneficiario);
-
-    let dataIni, dataFim;
-
-    if (tipoData === "Ano/Mes") {
-        const ano = parseInt(anoAtend);
-        const mes = parseInt(mesAtend);
-        if (isNaN(ano) || isNaN(mes)) {
-            console.log("❌ Ano ou mês inválido");
-            return res.render('admin/erro', { message: "Ano ou mês inválido." });
-        }
-        dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
-        dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
-
-    } else if (tipoData === "Dia") {
-        if (!dataFil) {
-            console.log("❌ Data não informada para filtro 'Dia'");
-            return res.render('admin/erro', { message: "Data não informada." });
-        }
-        const [ano, mes, dia] = dataFil.split('-').map(Number);
-        dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
-        dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
-
-    } else if (tipoData === "Semana") {
-        console.log("❌ Filtro 'Semana' não implementado");
-        return res.render('admin/erro', { message: "Filtro por semana ainda não implementado." });
-    } else {
-        console.log("❌ Tipo de filtro desconhecido:", tipoData);
-        return res.render('admin/erro', { message: "Tipo de filtro inválido." });
-    }
-
-    console.log("📅 [INTERVALO DE DATAS GERADO]");
-    console.log("→ dataIni (ISO):", dataIni);
-    console.log("→ dataFim (ISO):", dataFim);
-
-    // Montar critérios de busca na Agenda
-    let agendaQuery = {
-        agenda_data: { $gte: dataIni, $lte: dataFim }
-    };
-
-    if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
-        agendaQuery.agenda_beneid = atendBeneficiario;
-        console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
-    }
-
-    console.log("🔎 [QUERY FINAL PARA AGENDA]");
-    console.log(agendaQuery);
-
-    // Buscar agendas
-    Agenda.find(agendaQuery)
-        .then((agendas) => {
-            console.log("✅ [RESULTADO DA AGENDA]");
-            console.log("→ Total de registros encontrados:", agendas.length);
-            
-            // ✅ CÁLCULO DAS ESTATÍSTICAS - NOVO!
-            const estatisticas = {
-                qa: 0,   // Total
-                qt: 0,   // Válidos
-                qac: 0,  // Cancelados
-                qtv: 0,  // Validados (c/ evolução)
-                qtse: 0, // Sem evolução
-                qace: 0, // Cancelados c/ evolução
-                atvo: 0, // Órfãos (sem guia OU senha)
-                qtva: 0  // Completos (c/ senha = pronto para lote)
-            };
-
-            agendas.forEach(a => {
-                estatisticas.qa++;
-                
-                const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
-                const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
-                const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
-                const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
-                
-                if (ehCancelado) {
-                    estatisticas.qac++;
-                    if (temEvolucao) estatisticas.qace++;
-                } else {
-                    estatisticas.qt++;
-                    if (temEvolucao) {
-                        estatisticas.qtv++;
-                        if (!temGuia || !temSenha) {
-                            estatisticas.atvo++; // Órfão
-                        } else if (temSenha) {
-                            estatisticas.qtva++; // Completo (senha implica guia)
-                        }
-                    } else {
-                        estatisticas.qtse++;
-                    }
-                }
-            });
-
-            // ✅ DEBUG DAS ESTATÍSTICAS (console.log detalhado)
-            console.log("📊 [ESTATÍSTICAS CALCULADAS]");
-            console.log("→ QA (Total Agendamentos):", estatisticas.qa);
-            console.log("→ QT (Atendimentos Válidos):", estatisticas.qt);
-            console.log("→ QAC (Cancelados):", estatisticas.qac);
-            console.log("→ QTV (Validados c/ Evolução):", estatisticas.qtv);
-            console.log("→ QTSE (Sem Evolução):", estatisticas.qtse);
-            console.log("→ QACE (Cancelados c/ Evolução):", estatisticas.qace);
-            console.log("→ ATVO (Órfãos de Guia/Senha):", estatisticas.atvo);
-            console.log("→ QTVA (Completos c/ Guia+Senha):", estatisticas.qtva);
-
-            // Carregar beneficiários
-            return Bene.find()
-                .then((bene) => {
-                    bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
-
-                    // Carregar terapeutas (usuários)
-                    return Usuario.find({
-                        usuario_status: "Ativo",
-                        $or: [
-                            { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                            { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                        ]
-                    })
-                    .then((terapeuta) => {
-                        terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
-
-                        // Criar mapa de usuários por ID (para cadastro/edição)
-                        const usuarioMap = {};
-                        terapeuta.forEach(u => {
-                            usuarioMap[u._id.toString()] = u.usuario_nome;
-                        });
-
-                        // Enriquecer cada agenda com dados formatados
-                        agendas.forEach(a => {
-                            // Formatar data e hora da agenda
-                            const dataAgenda = new Date(a.agenda_data);
-                            const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
-                            const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
-                            a.agenda_hora = `${hor}:${min}`;
-                            a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
-
-                            // Evolução: Sim / Não
-                            a.evolucaoSimNao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '') ? 'Sim' : 'Não';
-
-                            // Dados de cadastro
-                            a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
-                            a.usuarioCadNome = usuarioMap[a.agenda_usucad] || 'Desconhecido';
-
-                            // Dados de edição
-                            a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
-                            a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
-
-                            // Data da senha no formato YYYY-MM-DD (para input date)
-                            a.agenda_datasenha_input = a.agenda_datasenha
-                                ? new Date(a.agenda_datasenha).toISOString().split('T')[0]
-                                : '';
-                        });
-
-                        // Carregar demais dados complementares
-                        return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
-                            .then((horaage) => {
-                                return Sala.find()
-                                    .then((salas) => {
-                                        salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
-                                        return Terapia.find()
-                                            .then((terapias) => {
-                                                return Conv.find()
-                                                    .then((convs) => {
-                                                        convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
-                                                        return Ano.find()
-                                                            .then((anos) => {
-                                                                // ✅ Renderizar view com todos os dados + ESTATÍSTICAS
-                                                                console.log("📤 [RENDERIZANDO VIEW COM ESTATÍSTICAS]");
-                                                                console.log("→ extras.length:", agendas.length);
-                                                                console.log("→ benes.length:", bene.length);
-                                                                console.log("→ terapeutas.length:", terapeuta.length);
-                                                                console.log("→ estatisticas:", estatisticas); // ✅ DEBUG FINAL
-
-                                                                res.render('guia/guiaLis', {
-                                                                    extras: agendas,
-                                                                    benes: bene,
-                                                                    terapeutas: terapeuta,
-                                                                    horaages: horaage,
-                                                                    salas: salas,
-                                                                    terapias: terapias,
-                                                                    convs: convs,
-                                                                    anos: anos,
-                                                                    flash,
-
-                                                                    // ✅ Filtros mantidos com nomes exatos
-                                                                    filtroTipo: tipoData,
-                                                                    filtroAno: anoAtend,
-                                                                    filtroMes: mesAtend,
-                                                                    filtroData: dataFil,
-                                                                    filtroTipoPessoa: atendTipoPessoa,
-                                                                    filtroBeneficiario: atendBeneficiario,
-                                                                    
-                                                                    // ✅ NOVO: Estatísticas para a barra (FALTAVA ESTA LINHA!)
-                                                                    estatisticas: estatisticas
-                                                                });
-                                                            });
-                                                    });
-                                            });
-                                    });
-                            });
-                    });
-                });
-        })
-        .catch((err) => {
-            console.error("💥 ERRO EM filtraGuialis:", err);
-            req.flash("error_message", "Houve um erro ao listar os agendamentos.");
-            res.redirect('/admin/erro');
-        });
-},
-filtraGuialisMelhor(req, res, resposta) {
-    let db = req.cookies['preferredDb'];
-    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
-    const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
-
-    if (!resposta || typeof resposta !== 'object') {
-        resposta = { texto: '', sucesso: false };
-    }
-    let flash = new Resposta();
-    flash.texto = resposta.texto;
-    flash.sucesso = resposta.sucesso;
-
-    // Receber dados do formulário
-    const tipoData = req.body.tipoData;
-    const anoAtend = req.body.anoAtend;
-    const mesAtend = req.body.mesAtend;
-    const dataFil = req.body.dataFil;
-    const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
-    const atendBeneficiario = req.body.atendBeneficiario;
-
-    let dataIni, dataFim;
-
-    if (tipoData === "Ano/Mes") {
-        const ano = parseInt(anoAtend);
-        const mes = parseInt(mesAtend);
-        if (isNaN(ano) || isNaN(mes)) {
-            return res.render('admin/erro', { message: "Ano ou mês inválido." });
-        }
-        dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
-        dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
-
-    } else if (tipoData === "Dia") {
-        if (!dataFil) {
-            return res.render('admin/erro', { message: "Data não informada." });
-        }
-        const [ano, mes, dia] = dataFil.split('-').map(Number);
-        dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
-        dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
-
-    } else if (tipoData === "Semana") {
-        // Implementação opcional futura
-        return res.render('admin/erro', { message: "Filtro por semana ainda não implementado." });
-    } else {
-        return res.render('admin/erro', { message: "Tipo de filtro inválido." });
-    }
-
-    // Montar critérios de busca na Agenda
-    let agendaQuery = {
-        agenda_data: { $gte: dataIni, $lte: dataFim }
-    };
-
-    if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
-        agendaQuery.agenda_beneid = atendBeneficiario;
-    }
-
-    // Buscar agendas
-    Agenda.find(agendaQuery)
-        .then((agendas) => {
-            
-            // =====================================================
-            // 🔄 REGRAS DE NEGÓCIO: FILTRAGEM (Base: carregaAgendaFilS)
-            // =====================================================
-            
-            // 1️⃣ Coletar IDs dos agendamentos "Pai" que foram substituídos
-            let idsAgendasEx = [];
-            agendas.forEach((e) => {
-                // Se o registro é um "filho" de substituição (tem agenda_temp), 
-                // marcamos o "pai" (agenda_tempId) para exclusão
-                if (e.agenda_temp && e.agenda_tempId) {
-                    idsAgendasEx.push(e.agenda_tempId.toString());
-                }
-            });
-
-            // 2️⃣ Filtrar: remover os "Pais" que foram substituídos
-            agendas = agendas.filter(a => !idsAgendasEx.includes(a._id.toString()));
-
-            // 3️⃣ Filtrar: remover completamente "Falta Absoluta" e "Feriado"
-            agendas = agendas.filter(a => {
-                const cat = a.agenda_categoria;
-                return cat !== "Falta Absoluta" && cat !== "Feriado";
-            });
-
-            // =====================================================
-            // 📊 CÁLCULO DAS ESTATÍSTICAS (apenas sobre os filtrados)
-            // =====================================================
-            const estatisticas = {
-                qa: 0, qt: 0, qac: 0, qtv: 0, qtse: 0, qace: 0, atvo: 0, qtva: 0
-            };
-
-            agendas.forEach(a => {
-                estatisticas.qa++;
-                
-                // Nota: Como filtramos Falta Absoluta/Feriado acima, 
-                // qac e qace provavelmente serão 0 aqui, mas mantemos a lógica para consistência
-                const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
-                const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
-                const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
-                const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
-                
-                if (ehCancelado) {
-                    estatisticas.qac++;
-                    if (temEvolucao) estatisticas.qace++;
-                } else {
-                    estatisticas.qt++;
-                    if (temEvolucao) {
-                        estatisticas.qtv++;
-                        if (!temGuia || !temSenha) {
-                            estatisticas.atvo++;
-                        } else if (temSenha) {
-                            estatisticas.qtva++;
-                        }
-                    } else {
-                        estatisticas.qtse++;
-                    }
-                }
-            });
-
-            // =====================================================
-            // 🎨 FORMATAÇÃO DOS DADOS PARA EXIBIÇÃO
-            // =====================================================
-            agendas.forEach(a => {
-                const dataAgenda = new Date(a.agenda_data);
-                const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
-                const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
-                a.agenda_hora = `${hor}:${min}`;
-                a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
-
-                a.evolucaoSimNao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '') ? 'Sim' : 'Não';
-                a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
-                a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
-                a.agenda_datasenha_input = a.agenda_datasenha
-                    ? new Date(a.agenda_datasenha).toISOString().split('T')[0]
-                    : '';
-            });
-
-            // =====================================================
-            // 📦 CARREGAR DADOS COMPLEMENTARES E RENDERIZAR
-            // =====================================================
-            return Bene.find().then((bene) => {
-                bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
-                return Usuario.find({
-                    usuario_status: "Ativo",
-                    $or: [
-                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                    ]
-                }).then((terapeuta) => {
-                    terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
-                    
-                    const usuarioMap = {};
-                    terapeuta.forEach(u => { usuarioMap[u._id.toString()] = u.usuario_nome; });
-                    
-                    agendas.forEach(a => {
-                        a.usuarioCadNome = usuarioMap[a.agenda_usucad] || 'Desconhecido';
-                        a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
-                    });
-
-                    return Promise.all([
-                        Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }),
-                        Sala.find().then(s => { s.sort((a,b)=>a.sala_nome.localeCompare(b.sala_nome,'pt-BR')); return s; }),
-                        Terapia.find(),
-                        Conv.find().then(c => { c.sort((a,b)=>a.conv_nome.localeCompare(b.conv_nome,'pt-BR')); return c; }),
-                        Ano.find()
-                    ]).then(([horaage, salas, terapias, convs, anos]) => {
-                        
-                        res.render('guia/guiaLis', {
-                            extras: agendas,      // ✅ Agora com as regras de filtragem aplicadas
-                            benes: bene,
-                            terapeutas: terapeuta,
-                            horaages: horaage,
-                            salas: salas,
-                            terapias: terapias,
-                            convs: convs,
-                            anos: anos,
-                            flash,
-                            filtroTipo: tipoData,
-                            filtroAno: anoAtend,
-                            filtroMes: mesAtend,
-                            filtroData: dataFil,
-                            filtroTipoPessoa: atendTipoPessoa,
-                            filtroBeneficiario: atendBeneficiario,
-                            estatisticas: estatisticas
-                        });
-                    });
-                });
-            });
-        })
-        .catch((err) => {
-            console.error("💥 ERRO EM filtraGuialis:", err);
-            req.flash("error_message", "Houve um erro ao listar os agendamentos.");
-            res.redirect('/admin/erro');
-        });
-},
-filtraGuialis(req, res, resposta) {
-    let db = req.cookies['preferredDb'];
-    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
-    const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
-
-    if (!resposta || typeof resposta !== 'object') {
-        resposta = { texto: '', sucesso: false };
-    }
-    let flash = new Resposta();
-    flash.texto = resposta.texto;
-    flash.sucesso = resposta.sucesso;
-
-    // === RECEBER DADOS DO FORMULÁRIO ===
-    const tipoData = req.body.tipoData;
-    const anoAtend = req.body.anoAtend;
-    const mesAtend = req.body.mesAtend;
-    const dataFil = req.body.dataFil;
-    const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
-    const atendBeneficiario = req.body.atendBeneficiario;
-
-    let dataIni, dataFim;
-
-    if (tipoData === "Ano/Mes") {
-        const ano = parseInt(anoAtend);
-        const mes = parseInt(mesAtend);
-        if (isNaN(ano) || isNaN(mes)) return res.render('admin/erro', { message: "Ano ou mês inválido." });
-        dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
-        dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
-    } else if (tipoData === "Dia") {
-        if (!dataFil) return res.render('admin/erro', { message: "Data não informada." });
-        const [ano, mes, dia] = dataFil.split('-').map(Number);
-        dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
-        dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
-    } else if (tipoData === "Semana") {
-        return res.render('admin/erro', { message: "Filtro por semana ainda não implementado." });
-    } else {
-        return res.render('admin/erro', { message: "Tipo de filtro inválido." });
-    }
-
-    // === QUERY BASE ===
-    let agendaQuery = { agenda_data: { $gte: dataIni, $lte: dataFim } };
-    if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
-        agendaQuery.agenda_beneid = atendBeneficiario;
-    }
-
-    // === BUSCAR AGENDAS E DADOS COMPLEMENTARES ===
-    Agenda.find(agendaQuery)
-        .then((agendas) => {
-            
-            // 🔥 REGRAS DE NEGÓCIO: FILTRAGEM
-            let idsAgendasEx = [];
-            agendas.forEach(e => {
-                if (e.agenda_temp && e.agenda_tempId) {
-                    idsAgendasEx.push(e.agenda_tempId.toString());
-                }
-            });
-            agendas = agendas.filter(a => !idsAgendasEx.includes(a._id.toString()));
-            agendas = agendas.filter(a => {
-                const cat = a.agenda_categoria;
-                return cat !== "Falta Absoluta" && cat !== "Feriado";
-            });
-
-            // 📊 ESTATÍSTICAS (pós-filtragem)
-            const estatisticas = { qa:0, qt:0, qac:0, qtv:0, qtse:0, qace:0, atvo:0, qtva:0 };
-            agendas.forEach(a => {
-                estatisticas.qa++;
-                const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
-                const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
-                const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
-                const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
-                if (ehCancelado) { estatisticas.qac++; if (temEvolucao) estatisticas.qace++; }
-                else {
-                    estatisticas.qt++;
-                    if (temEvolucao) {
-                        estatisticas.qtv++;
-                        if (!temGuia || !temSenha) estatisticas.atvo++;
-                        else if (temSenha) estatisticas.qtva++;
-                    } else { estatisticas.qtse++; }
-                }
-            });
-
-            // === CARREGAR COLEÇÕES COMPLEMENTARES ===
-            return Promise.all([
-                Bene.find(),
-                Conv.find(),
-                Terapia.find(),
-                Usuario.find({
-                    usuario_status: "Ativo",
-                    $or: [
-                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                    ]
-                }),
-                Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }),
-                Sala.find(),
-                Ano.find()
-            ]).then(([bene, convs, terapias, terapeuta, horaage, salas, anos]) => {
-                
-                // 🗂️ CRIAR MAPAS DE CONSULTA RÁPIDA (ID → nome)
-                const beneMap = {}, convMap = {}, terapiaMap = {}, usuarioMap = {}, salaMap = {}, horaageMap = {};
-                bene.forEach(b => { beneMap[b._id.toString()] = b.bene_nome; });
-                convs.forEach(c => { convMap[c._id.toString()] = c.conv_nome; });
-                terapias.forEach(t => { terapiaMap[t._id.toString()] = t.terapia_nomecid; });
-                terapeuta.forEach(u => { usuarioMap[u._id.toString()] = u.usuario_nome; });
-                salas.forEach(s => { salaMap[s._id.toString()] = s.sala_nome; });
-                horaage.forEach(h => { horaageMap[h._id.toString()] = h.horaage_desc || h.horaage_hora; });
-
-                // 🎨 ORDENAR COLEÇÕES PARA SELECTS
-                bene.sort((a,b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
-                convs.sort((a,b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
-                terapeuta.sort((a,b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
-                salas.sort((a,b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
-
-                // ✨ ENRIQUECER AGENDAS COM CAMPOS _display
-                agendas.forEach(a => {
-                    // Formatação básica
-                    const dataAgenda = new Date(a.agenda_data);
-                    a.agenda_hora = dataAgenda.getUTCHours().toString().padStart(2,'0') + ':' + 
-                                    dataAgenda.getUTCMinutes().toString().padStart(2,'0');
-                    a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
-                    
-                    // Campos _display (sufixo padrão para identificar origem)
-                    a.bene_nome_display = beneMap[a.agenda_beneid?.toString()] || 'Não vinculado';
-                    a.conv_nome_display = convMap[a.agenda_convid?.toString()] || '-';
-                    a.terapeuta_nome_display = usuarioMap[a.agenda_usuid?.toString()] || '-';
-                    a.terapia_nomecid_display = terapiaMap[a.agenda_terapiaid?.toString()] || '-';
-                    a.sala_nome_display = salaMap[a.agenda_sala?.toString()] || '-';
-                    a.horaage_desc_display = horaageMap[a.agenda_horaageid?.toString()] || '-';
-                    
-                    // Tooltip: cadastro/edição
-                    a.evolucaoSimNao = (a.agenda_evolucao?.trim()) ? 'Sim' : 'Não';
-                    a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
-                    a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
-                    a.usuarioCadNome = usuarioMap[a.agenda_usucad?.toString()] || 'Desconhecido';
-                    a.usuarioEdiNome = usuarioMap[a.agenda_usuedi?.toString()] || 'Desconhecido';
-                    
-                    // Datas para inputs
-                    a.agenda_datasenha_input = a.agenda_datasenha ? new Date(a.agenda_datasenha).toISOString().split('T')[0] : '';
-                    a.guia_numdatacad_input = a.agenda_guia?.guia_numdatacad ? new Date(a.agenda_guia.guia_numdatacad).toISOString().split('T')[0] : '';
-                    a.guia_senhadatacad_input = a.agenda_guia?.guia_senhadatacad ? new Date(a.agenda_guia.guia_senhadatacad).toISOString().split('T')[0] : '';
-                });
-
-                // 📤 RENDERIZAR VIEW
-                res.render('guia/guiaLis', {
-                    extras: agendas,
-                    benes: bene,
-                    terapeutas: terapeuta,
-                    horaages: horaage,
-                    salas: salas,
-                    terapias: terapias,
-                    convs: convs,
-                    anos: anos,
-                    flash,
-                    filtroTipo: tipoData,
-                    filtroAno: anoAtend,
-                    filtroMes: mesAtend,
-                    filtroData: dataFil,
-                    filtroTipoPessoa: atendTipoPessoa,
-                    filtroBeneficiario: atendBeneficiario,
-                    estatisticas: estatisticas
-                });
-            });
-        })
-        .catch((err) => {
-            console.error("💥 ERRO EM filtraGuialis:", err);
-            req.flash("error_message", "Houve um erro ao listar os agendamentos.");
-            res.redirect('/admin/erro');
-        });
-},
     listaGuia(req, res, resposta) {
         let db = req.cookies['preferredDb'];
         Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
@@ -920,7 +120,8 @@ filtraGuialis(req, res, resposta) {
                                         filtroMes: mesAtual,
                                         filtroData: "",
                                         filtroTipoPessoa: "Geral",
-                                        filtroBeneficiario: ""
+                                        filtroBeneficiario: "",
+                                        filtroTerapeuta: ""
                                     });
                                 });
                             });
@@ -934,6 +135,204 @@ filtraGuialis(req, res, resposta) {
             req.flash("error_message", "Houve um erro ao carregar o formulário.");
             res.redirect('/admin/erro');
         });
+    },
+    filtraGuialis(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+        
+
+        if (!resposta || typeof resposta !== 'object') {
+            resposta = { texto: '', sucesso: false };
+        }
+        let flash = new Resposta();
+        flash.texto = resposta.texto;
+        flash.sucesso = resposta.sucesso;
+
+        // === RECEBER DADOS DO FORMULÁRIO ===
+        const tipoData = req.body.tipoData;
+        const anoAtend = req.body.anoAtend;
+        const mesAtend = req.body.mesAtend;
+        const dataFil = req.body.dataFil;
+        const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
+        const atendBeneficiario = req.body.atendBeneficiario;
+        const atendTerapeuta = req.body.atendTerapeuta; // ← ADICIONE ESTA LINHA
+
+        const filtroTela = {
+            tipoData: req.body.tipoData || "Ano/Mes",
+            // ✅ Corrige a prioridade dos campos de data
+            dataFinal: req.body.dataFinal || "",
+            dataFil: req.body.dataFil || "",
+            anoAtend: req.body.anoAtend || "",
+            mesAtend: req.body.mesAtend || "",
+            tipoPessoa: req.body.atendTipoPessoa || "Geral",
+            atendTerapeuta: req.body.atendTerapeuta || "",
+            atendBeneficiario: req.body.atendBeneficiario || "",
+            // ✅ Verifica se o campo existe na view antes de usar
+            atendConcluido: req.body.AtendConcluido || "Todos", 
+            atendSelo: req.body.atendSelo || "Todos"
+        };
+
+        let dataIni, dataFim;
+                console.log(filtroTela.dataFinal);
+
+        switch (filtroTela.tipoData){
+            case "Ano/Mes":
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoMes(filtroTela.anoAtend, filtroTela.mesAtend));
+
+                break;
+            case "Semana":
+                ({ dataIni, dataFim } = fncGeral.obterSemanaUtil(filtroTela.dataFinal));
+                
+                break;
+            case "Dia":
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia(filtroTela.dataFinal));
+
+                break;
+            default:
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia('2000-01-01'));
+                break;
+        }
+
+        // === QUERY BASE ===
+        let agendaQuery = { agenda_data: { $gte: dataIni, $lte: dataFim }, agenda_categoria: { $nin: ["Extra", "Reuniao", "Pais"] } };
+        if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
+            agendaQuery.agenda_beneid = atendBeneficiario;
+        }
+        else if (atendTipoPessoa === "Terapeuta" && atendTerapeuta) {
+            agendaQuery.agenda_usuid = atendTerapeuta; // Confirme se o campo é agenda_usuid no seu schema
+        }
+
+        // === BUSCAR AGENDAS E DADOS COMPLEMENTARES ===
+        Agenda.find(agendaQuery)
+            .then((agendas) => {
+                
+                // 🔥 REGRAS DE NEGÓCIO: FILTRAGEM
+                let idsAgendasEx = [];
+                agendas.forEach(e => {
+                    if (e.agenda_temp) {
+                        idsAgendasEx.push(e.agenda_tempId.toString());
+                    }
+                });
+                agendas = agendas.filter(a => !idsAgendasEx.includes(a._id.toString()));
+                agendas = agendas.filter(a => {
+                    const cat = a.agenda_categoria;
+                    return cat !== "Falta Absoluta" && cat !== "Feriado";
+                });
+
+                // 📊 ESTATÍSTICAS (pós-filtragem)
+                const estatisticas = { qa:0, qt:0, qac:0, qtv:0, qtse:0, qace:0, atvo:0, qtva:0 };
+                agendas.forEach(a => {
+                    estatisticas.qa++;
+                    const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
+                    const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
+                    const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
+                    const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
+                    if (ehCancelado) { estatisticas.qac++; if (temEvolucao) estatisticas.qace++; }
+                    else {
+                        estatisticas.qt++;
+                        if (temEvolucao) {
+                            estatisticas.qtv++;
+                            if (!temGuia || !temSenha) estatisticas.atvo++;
+                            else if (temSenha) estatisticas.qtva++;
+                        } else { estatisticas.qtse++; }
+                    }
+                });
+
+                // === CARREGAR COLEÇÕES COMPLEMENTARES ===
+                return Promise.all([
+                    Bene.find(),
+                    Conv.find(),
+                    Terapia.find(),
+                    Usuario.find({
+                        usuario_status: "Ativo",
+                        $or: [
+                            { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                            { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                        ]
+                    }),
+                    Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }),
+                    Sala.find(),
+                    Ano.find()
+                ]).then(([bene, convs, terapias, terapeuta, horaage, salas, anos]) => {
+                    
+                    // 🗂️ CRIAR MAPAS DE CONSULTA RÁPIDA (ID → nome)
+                    const beneMap = {}, convMap = {}, terapiaMap = {}, usuarioMap = {}, salaMap = {}, horaageMap = {};
+                    bene.forEach(b => { beneMap[b._id.toString()] = b.bene_nome; });
+                    convs.forEach(c => { convMap[c._id.toString()] = c.conv_nome; });
+                    terapias.forEach(t => { terapiaMap[t._id.toString()] = t.terapia_nomecid; });
+                    terapeuta.forEach(u => { usuarioMap[u._id.toString()] = u.usuario_nome; });
+                    salas.forEach(s => { salaMap[s._id.toString()] = s.sala_nome; });
+                    horaage.forEach(h => { horaageMap[h._id.toString()] = h.horaage_desc || h.horaage_hora; });
+
+                    // 🎨 ORDENAR COLEÇÕES PARA SELECTS
+                    bene.sort((a,b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
+                    convs.sort((a,b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
+                    terapeuta.sort((a,b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
+                    salas.sort((a,b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
+
+                    // ✨ ENRIQUECER AGENDAS COM CAMPOS _display
+                    agendas.forEach(a => {
+                        // Formatação básica
+                        const dataAgenda = new Date(a.agenda_data);
+                        a.agenda_hora = dataAgenda.getUTCHours().toString().padStart(2,'0') + ':' + 
+                                        dataAgenda.getUTCMinutes().toString().padStart(2,'0');
+                        a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
+                        
+                        // Campos _display (sufixo padrão para identificar origem)
+                        a.bene_nome_display = beneMap[a.agenda_beneid?.toString()] || 'Não vinculado';
+                        a.conv_nome_display = convMap[a.agenda_convid?.toString()] || '-';
+                        a.terapeuta_nome_display = usuarioMap[a.agenda_usuid?.toString()] || '-';
+                        a.terapia_nomecid_display = terapiaMap[a.agenda_terapiaid?.toString()] || '-';
+                        a.sala_nome_display = salaMap[a.agenda_sala?.toString()] || '-';
+                        a.horaage_desc_display = horaageMap[a.agenda_horaageid?.toString()] || '-';
+                        
+                        // Tooltip: cadastro/edição
+                        a.evolucaoSimNao = (a.agenda_evolucao?.trim()) ? 'Sim' : 'Não';
+                        a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
+                        a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
+                        a.usuarioCadNome = usuarioMap[a.agenda_usucad?.toString()] || 'Desconhecido';
+                        a.usuarioEdiNome = usuarioMap[a.agenda_usuedi?.toString()] || 'Desconhecido';
+                        
+                        // Datas para inputs
+                        a.agenda_datasenha_input = a.agenda_datasenha ? new Date(a.agenda_datasenha).toISOString().split('T')[0] : '';
+                        a.guia_numdatacad_input = a.agenda_guia?.guia_numdatacad ? new Date(a.agenda_guia.guia_numdatacad).toISOString().split('T')[0] : '';
+                        a.guia_senhadatacad_input = a.agenda_guia?.guia_senhadatacad ? new Date(a.agenda_guia.guia_senhadatacad).toISOString().split('T')[0] : '';
+                    });
+
+                    // 📤 RENDERIZAR VIEW
+                    res.render('guia/guiaLis', {
+                        extras: agendas,
+                        benes: bene,
+                        terapeutas: terapeuta,
+                        horaages: horaage,
+                        salas: salas,
+                        terapias: terapias,
+                        convs: convs,
+                        anos: anos,
+                        flash,
+                        filtroTipo: tipoData,
+                        filtroAno: anoAtend,
+                        filtroMes: mesAtend,
+                        filtroData: dataFil,
+                        filtroTipoPessoa: atendTipoPessoa,
+                        filtroBeneficiario: atendBeneficiario,
+                        estatisticas: estatisticas,
+                        filtroTela: filtroTela
+                    });
+                });
+            })
+            .catch((err) => {
+                console.error("💥 ERRO EM filtraGuialis:", err);
+                req.flash("error_message", "Houve um erro ao listar os agendamentos.");
+                res.redirect('/admin/erro');
+            });
     },
     adicionarGuia: async (req, res, resposta) => {
         let db = req.cookies['preferredDb'];

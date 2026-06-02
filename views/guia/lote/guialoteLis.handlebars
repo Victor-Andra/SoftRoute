@@ -582,53 +582,66 @@ SELECT2 - ESTILOS GERAIS
 				let dat = new Date(dataInput);
 				let mesStr = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
 				let diaStr = dat.getUTCDate().toString().padStart(2, '0');
-				let fulldate = `${dat.getUTCFullYear()}-${mesStr}-${diaStr}T00:00:00.000Z`;
+				let fulldate = `${dat.getUTCFullYear()}-${mesStr}-${diaStr}`;
 				document.getElementById('dataFinal').value = fulldate;
 			}
 		}
 
 		function trocaFiltroData() {
-    const tipo = $('#tipoData').val();
-    const isAnoMes = (tipo === 'Ano/Mes');
-    
-    // ✅ LÓGICA CORRIGIDA:
-    // Se for Ano/Mês → mostra Ano e Mês, OCULTA Data
-    // Se for Semana/Dia → oculta Ano e Mês, MOSTRA Data
-    $('#divAnoAtend').toggle(isAnoMes);
-    $('#divMesAtend').toggle(isAnoMes);
-    $('#divDataFil').toggleClass('hidden-div', isAnoMes); // ← CORREÇÃO: era !isAnoMes
-    
-    // ✅ Força Select2 recalcular após mudar visibilidade
-    setTimeout(() => {
-        if (isAnoMes) {
-            // Atualiza Ano e Mês
-            ['#anoAtend', '#mesAtend'].forEach(sel => {
-                const $el = $(sel);
-                if ($el.data('select2')) {
-                    $el.select2('destroy').select2({ 
-                        width: 'resolve', 
-                        placeholder: "Selecione...",
-                        allowClear: false  // ← Remove o X
-                    });
-                }
-            });
-        } else {
-            // Atualiza Data
-            const $el = $('#dataFil');
-            if ($el.data('select2')) {
-                $el.select2('destroy').select2({ 
-                    width: 'resolve', 
-                    placeholder: "Selecione...",
-                    allowClear: false  // ← Remove o X
-                });
-            }
-        }
-    }, 50);
-    
-    console.log('[DEBUG] Tipo Data:', tipo, '| isAnoMes:', isAnoMes);
-}
+			const tipo = $('#tipoData').val();
+			const isAnoMes = (tipo === 'Ano/Mes');
+			
+			// ✅ LÓGICA CORRIGIDA:
+			// Se for Ano/Mês → mostra Ano e Mês, OCULTA Data
+			// Se for Semana/Dia → oculta Ano e Mês, MOSTRA Data
+			$('#divAnoAtend').toggle(isAnoMes);
+			$('#divMesAtend').toggle(isAnoMes);
+			$('#divDataFil').toggleClass('hidden-div', isAnoMes); // ← CORREÇÃO: era !isAnoMes
+			
+			// ✅ Força Select2 recalcular após mudar visibilidade
+			setTimeout(() => {
+				if (isAnoMes) {
+					// Atualiza Ano e Mês
+					['#anoAtend', '#mesAtend'].forEach(sel => {
+						const $el = $(sel);
+						if ($el.data('select2')) {
+							$el.select2('destroy').select2({ 
+								width: 'resolve', 
+								placeholder: "Selecione...",
+								allowClear: false  // ← Remove o X
+							});
+						}
+					});
+				} else {
+					// Atualiza Data
+					const $el = $('#dataFil');
+					if ($el.data('select2')) {
+						$el.select2('destroy').select2({ 
+							width: 'resolve', 
+							placeholder: "Selecione...",
+							allowClear: false  // ← Remove o X
+						});
+					}
+				}
+			}, 50);
+			
+			console.log('[DEBUG] Tipo Data:', tipo, '| isAnoMes:', isAnoMes);
+		}
+		function trocaFilpessoa() {
+			let fillTipopessoa = document.getElementById("atendTipoPessoa").value;
+			if(fillTipopessoa == "Geral"){
+				document.getElementById("divAtendBeneficiario").hidden = true;
+				document.getElementById("divAtendTerapeuta").hidden = true;
+			} else if(fillTipopessoa == "Beneficiario"){
+				document.getElementById("divAtendBeneficiario").hidden = false;
+				document.getElementById("divAtendTerapeuta").hidden = true;
+			} else {
+				document.getElementById("divAtendBeneficiario").hidden = true;
+				document.getElementById("divAtendTerapeuta").hidden = false;
+			}
+		}
 
-		function trocFilpessoa() {
+		function trocaFilpessoa() {
 			const tipo = $('#atendTipoPessoa').val();
 
 			if (tipo === 'Geral') {
@@ -1148,8 +1161,8 @@ SELECT2 - ESTILOS GERAIS
 							<!-- 🔹 Data (filtro Dia) - visível apenas quando tipoData = "Dia" -->
 							<div id="divDataFil" class="form-group{{#ifEqual filtroTipo "Dia"}}{{else}} hidden-div{{/ifEqual}}">
 								<label>Data</label>
-								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" value="{{filtroData}}">
-								<input class="hidden" id="dataFinal" name="dataFinal" />
+								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" value="{{filtroData}}" onchange="javascript:formataData();" >
+								<input class="hidden" id="dataFinal" name="dataFinal" value="{{filtroTela.dataFinal}}" />
 								<input class="hidden" id="tipoDataEdi" name="tipoDataEdi" value="{{filtroTela.tipoData}}" />
 								<input class="hidden" id="anoAtendEdi" name="anoAtendEdi" value="{{filtroTela.anoAtend}}" />
 								<input class="hidden" id="mesAtendEdi" name="mesAtendEdi" value="{{filtroTela.mesAtend}}" />
@@ -1712,11 +1725,11 @@ SELECT2 - ESTILOS GERAIS
 
     // Quando mudar
 		$('#tipoData').on('change', trocaFiltroData);
-		$('#atendTipoPessoa').on('change', trocFilpessoa);
+		$('#atendTipoPessoa').on('change', trocaFilpessoa);
 
 		// Quando carregar a tela (ESSENCIAL)
 		trocaFiltroData();
-		trocFilpessoa();
+		trocaFilpessoa();
 
     // 🔹 DataTable
     $("#dynamic-table").DataTable({

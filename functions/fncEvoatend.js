@@ -2319,7 +2319,6 @@ async filtraEvoatendgeral(req, res) {
         let dataFim = null;
         let seg;
         let sex;
-        let data;
         let anoAtend;
         let mes;
         let dia;
@@ -2327,114 +2326,22 @@ async filtraEvoatendgeral(req, res) {
 
         switch (filtroTela.tipoData){
             case "Ano/Mes":
-                dataIni = new Date();
-                let mesIni = parseInt(req.body.mesAtend);//UTCMonth = 0-11
-                let anoIni = parseInt(req.body.anoAtend);
-                
-                dataIni.setDate(01);
-                dataIni.setFullYear(anoIni);
-                dataIni.setUTCMonth(mesIni);
-                dataIni.setSeconds(00);
-                dataIni.setMinutes(00);
-                dataIni.setHours(00);
-                
-                dataFim = new Date();
-                dataFim.setFullYear(anoIni);
-                dataFim.setUTCMonth(mesIni+1);
-                dataFim.setDate(01);
-                dataFim.setDate(dataFim.getDate()-1);
-                dataFim.setHours(23);
-                dataFim.setMinutes(59);
-                dataFim.setSeconds(59);
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoMes(req.body.anoAtend, req.body.mesAtend));
 
                 break;
             case "Semana":
-                data = req.body.dataFinal;
-                anoAtend = data.substring(0,4);
-                mes = parseInt(data.substring(5,7))-1;
-                dia = data.substring(8,10);
-
-                seg = new Date();
-                seg.setFullYear(anoAtend);
-                seg.setUTCMonth(mes);
-                seg.setUTCDate(dia);
-                seg.setHours(0);
-                seg.setMinutes(0);
-                seg.setSeconds(0);
-
-                sex = new Date();
-                sex.setFullYear(anoAtend);
-                sex.setUTCMonth(mes);
-                sex.setUTCDate(dia);
-                sex.setHours(23);
-                sex.setMinutes(59);
-                sex.setSeconds(59);
-
-                switch (seg.getUTCDay()){
-                    case 0://DOM
-                        seg.setUTCDate(seg.getUTCDate() + 1);
-                        sex.setUTCDate(sex.getUTCDate() + 5);
-                        break;
-                    case 1://SEG
-                        sex.setUTCDate(sex.getUTCDate() + 4);
-                        break;
-                    case 2://TER
-                        seg.setUTCDate(seg.getUTCDate() - 1);
-                        sex.setUTCDate(sex.getUTCDate() + 3);
-                        break;
-                    case 3://QUA
-                        seg.setUTCDate(seg.getUTCDate() - 2);
-                        sex.setUTCDate(sex.getUTCDate() + 2);
-                        break;
-                    case 4://QUI
-                        seg.setUTCDate(seg.getUTCDate() - 3);
-                        sex.setUTCDate(sex.getUTCDate() + 1);
-                        break;
-                    case 5://SEX
-                        seg.setUTCDate(seg.getUTCDate() - 4);
-                        break;
-                    case 6://SAB
-                        seg.setUTCDate(seg.getUTCDate() - 5);
-                        sex.setUTCDate(sex.getUTCDate() - 1);
-                        break;
-                    default:
-                        seg.setUTCDate(seg.getUTCDate() + 1);
-                        sex.setUTCDate(sex.getUTCDate() + 5);
-                        break;
-                }
-                dataIni = seg;
-                dataFim = sex;
+                ({ dataIni, dataFim } = fncGeral.obterSemanaUtil(new Date(req.body.dataFinal)));
                 
                 break;
             case "Dia":
-                data = req.body.dataFinal;
-                anoAtend = data.substring(0,4);
-                mes = parseInt(data.substring(5,7))-1;
-                dia = data.substring(8,10);
-
-                dataIni = new Date();
-                dataIni.setFullYear(anoAtend);
-                dataIni.setUTCMonth(mes);
-                dataIni.setUTCDate(dia);
-                dataIni.setHours(0);
-                dataIni.setMinutes(0);
-                dataIni.setSeconds(0);
-
-                dataFim = new Date();
-                dataFim.setFullYear(anoAtend);
-                dataFim.setUTCMonth(mes);
-                dataFim.setUTCDate(dia);
-                dataFim.setHours(23);
-                dataFim.setMinutes(59);
-                dataFim.setSeconds(59);
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia(req.body.dataFinal));
 
                 break;
             default:
-                
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia('2000-01-01'));
                 break;
         }
 
-        // ===== MONTAGEM DA QUERY =====
         const busca = {};
 
         // Filtro de data (só aplica se as datas forem válidas)
@@ -2489,7 +2396,7 @@ async filtraEvoatendgeral(req, res) {
                     e.agenda_hora = `${String(dat.getUTCHours()).padStart(2,'0')}:${String(dat.getMinutes()).padStart(2,'0')}`;
                     e.agenda_data_semana = ["dom","seg","ter","qua","qui","sex","sab"][dat.getUTCDay()] || "";
                 }
-                if (String(e.agenda_temp) === "true") {
+                if (e.agenda_temp) {
                     agendaTempIds.add(String(e.agenda_tempId));
                 }
             } catch (procErr) {
@@ -2567,7 +2474,7 @@ async filtraEvoatendgeral(req, res) {
             terapias: terapia,
             convs: conv,
             horaages: horaage,
-            filtroTela,              // ✅ Persistência dos valores brutos
+            filtroTela: filtroTela,              // ✅ Persistência dos valores brutos
             filtrosDisplay,          // ✅ Dados formatados pra exibir no header
             flash,
             carregaFiltro: { carregaFiltro: "true" }
