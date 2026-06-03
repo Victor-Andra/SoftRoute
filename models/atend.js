@@ -716,5 +716,130 @@ module.exports = {
                 return retorno;
             })
         }
+    },
+    atendFeriadoDia: async (req, res) => {
+
+        //Estrura Multiempresa
+        let db = req.cookies['preferredDb'];
+        AtendModel = getModel(db, 'tb_atend', AtendSchema);
+        //;
+
+        let usuarioAtual = req.cookies['idUsu'];
+        var retorno;
+        let arrayAgendasNovas = [];
+        let dataAtual = new Date();
+        let arrayIds =[];
+        let agendaFinal = [];
+        let resultado = "true";
+        let busca;
+        let agendaS;
+        let dataIni = fncGeral.getDateFromString(req.body.agendaData, "ini");
+        let dataFim = fncGeral.getDateFromString(req.body.agendaData, "fim");
+        let beneidx = req.body.agendaBeneid;//new ObjectId("62d814b1ea444f5b7a02687e");//beneficiario à localizar certo
+        let teraidx = req.body.agendaMergeterapeutaid;//new ObjectId("62d94c7fea444f5b7a0275fc");//terapeuta à localizar certoOk
+        //console.log("ini: "+fncGeral.getDateToIsostring(dataIni));
+        //console.log("fim: "+fncGeral.getDateToIsostring(dataFim));
+        let horasTurnoManha = ["08:00","08:40","09:20","10:00","10:40","11:20"];
+        let horasTurnoTarde = ["13:20","14:00","14:40","15:20","16:00","16:40","17:20","18:00"];
+        let horasTurnoCompleto = ["08:00","08:40","09:20","10:00","10:40","11:20","13:20","14:00","14:40","15:20","16:00","16:40","17:20","18:00"];
+        //Calculetodos
+        let turno = [];
+        
+        if (req.body.agendaTurnoFalta == "Manhã"){
+            turno = fncGeral.getDateHoursToIsostring(dataIni,horasTurnoManha);
+            
+            //console.log("dataIni? "+dataIni)
+            //console.log("dataFim? "+dataFim)
+            dataFim.setHours(12);
+            //console.log("dataIni? "+dataIni)
+            //console.log("dataFim? "+dataFim)
+            turnoIni = fncGeral.getDateToIsostring(dataIni);
+            turnoFim = fncGeral.getDateToIsostring(dataFim);
+            //console.log("turnoIni? "+turnoIni)
+            //console.log("turnoFim? "+turnoFim)
+        } else if (req.body.agendaTurnoFalta == "Tarde"){
+            //console.log("TARDE")
+            turno = fncGeral.getDateHoursToIsostring(dataIni,horasTurnoTarde);
+
+            //console.log("dataIni? "+dataIni)
+            //console.log("dataFim? "+dataFim)
+            dataIni.setHours(12);
+            //console.log("dataIni? "+dataIni)
+            //console.log("dataFim? "+dataFim)
+            turnoIni = fncGeral.getDateToIsostring(dataIni);
+            turnoFim = fncGeral.getDateToIsostring(dataFim);
+            //console.log("turnoIni? "+turnoIni)
+            //console.log("turnoFim? "+turnoFim)
+        } else {
+            turno = fncGeral.getDateHoursToIsostring(dataIni,horasTurnoCompleto);
+
+            turnoIni = fncGeral.getDateToIsostring(dataIni);
+            turnoFim = fncGeral.getDateToIsostring(dataFim);
+            //console.log("turnoIni? "+turnoIni)
+            //console.log("turnoFim? "+turnoFim)
+        }
+        //console.log("req.body.agendaCateg: "+req.body.agendaCateg);
+        if (beneidx == "-" && teraidx == "-") {
+            resultado = "false";
+        } else if (beneidx != "-" && teraidx == "-") {
+            console.log("CERTOP")
+            if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_beneid: beneidx , atend_atendhora: { $in: horasTurnoManha }};
+            } else if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_beneid: beneidx , atend_atendhora: { $in: horasTurnoTarde }};
+            } else{
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_beneid: beneidx };
+            }
+            
+        } else if (beneidx == "-" && teraidx != "-") {
+            console.log("falta terapeuta")
+            if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_atendhora: { $in: horasTurnoManha } };
+            } else if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_atendhora: { $in: horasTurnoTarde } };
+            } else{
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx };
+            }
+        } else if (beneidx != "-" && teraidx != "-") {
+            console.log("falta de um bene para um terapeuta")
+            if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_beneid: beneidx , atend_atendhora: { $in: horasTurnoManha } };
+            } else if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_beneid: beneidx , atend_atendhora: { $in: horasTurnoTarde } };
+            } else{
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_beneid: beneidx };
+            }
+        }
+        if (resultado != "false"){
+            await AtendModel.find(busca).then((atend)=>{
+                //console.log("atend:"+atend.length);
+                atend.forEach(a => {
+                    AtendModel.findByIdAndUpdate(a._id, 
+                        {$set: {
+                            atend_categoria : "Feriado" ,
+                            atend_org : "Administrativo" ,
+                            atend_usuidedi : usuarioAtual ,
+                            atend_dataedi : dataAtual 
+                        }}
+                    ).then((res) =>{
+                        //console.log("Salvo")
+                        resultado = true;
+                    }).catch((err) =>{
+                        console.log("erro mongo:")
+                        console.log(err)
+                        resultado = err;
+                        //res.redirect('admin/branco')
+                    })
+                })
+            }).catch((err) =>{
+                retorno = err
+                console.log("erro mongo:");
+                console.log(err);
+            }).finally(()=>{
+                //console.log("arrayAgendasNovas: "+arrayAgendasNovas.length)
+                retorno = "true";
+                return retorno;
+            })
+        }
     }
 };

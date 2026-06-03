@@ -12196,11 +12196,13 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
         console.log("req.body.agendaCateg: "+req.body.agendaCateg)
         if (req.body.agendaCateg == "Feriado"){
             resultado = agendaClass.agendaFeriado(req,res);
+            resultado = atendClass.atendFeriadoDia(req,res);
         } else if (req.body.agendaCateg == "Falta Absoluta"){
             resultado = agendaClass.agendaFaltaDia(req,res);
             resultado = atendClass.atendFaltaDia(req,res);
         } else {
             resultado = agendaClass.agendaFaltaDia(req,res);
+            resultado = atendClass.atendFaltaDia(req,res);
         }
         
         if (resultado = "true") {
