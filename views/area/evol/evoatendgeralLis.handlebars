@@ -734,129 +734,179 @@
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/evol/evoatendgeralFil" method="POST">
 							<div class="toolbar-pesquisa noprint">
-								<div class="hidden">
-										<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
-										<input id="atendTerapeutaFil" value="{{filtroTela.atendTerapeuta}}" />
-										<input id="atendBeneficiarioFil" value="{{filtroTela.atendBeneficiario}}" />
-										<input id="dataFinalFil" value="{{filtroTela.dataFinal}}" />
-										<input id="mesAtendFil" value="{{filtroTela.mesAtend}}" />
-										<input id="anoAtendFil" value="{{filtroTela.anoAtend}}" />
-										<input id="tipoPessoaFil" value="{{filtroTela.tipoPessoa}}" />
-										<input id="tipoDataFil" value="{{filtroTela.tipoData}}" />
-										<input id="dataIniFil" value="{{filtroTela.dataIni}}" />
-										<input id="dataFimFil" value="{{filtroTela.dataFim}}" />
-										<input id="idsChecked" value="" />
-									</div>
-								<div class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label>Tipo Período:&nbsp;</label>
-											<select name="tipoData" id="tipoData" class="select2" value="{{filtroTela.tipoData}}" onchange="trocaFiltroData()">
-												<option value="Ano/Mes">Ano/Mês</option>
-												<option value="Semana">Semana</option>
-												<option value="Dia">Dia</option>
-											</select>
+								<div class="row">
+									<div class="col-xs-12 col-sm-10">
+										<div class="hidden">
+											<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+											<input id="atendTerapeutaFil" value="{{filtroTela.atendTerapeuta}}" />
+											<input id="atendBeneficiarioFil" value="{{filtroTela.atendBeneficiario}}" />
+											<input id="dataFinalFil" value="{{filtroTela.dataFinal}}" />
+											<input id="mesAtendFil" value="{{filtroTela.mesAtend}}" />
+											<input id="anoAtendFil" value="{{filtroTela.anoAtend}}" />
+											<input id="tipoPessoaFil" value="{{filtroTela.tipoPessoa}}" />
+											<input id="tipoDataFil" value="{{filtroTela.tipoData}}" />
+											<input id="dataIniFil" value="{{filtroTela.dataIni}}" />
+											<input id="dataFimFil" value="{{filtroTela.dataFim}}" />
+											<input id="idsChecked" value="" />
+										</div>
+										<div class="col-sm-2">
+											<div class="row">
+												<div class="input-group">
+													<label>Tipo Período:&nbsp;</label>
+													<select name="tipoData" id="tipoData" class="select2" value="{{filtroTela.tipoData}}" onchange="trocaFiltroData()">
+														<option value="Ano/Mes">Ano/Mês</option>
+														<option value="Semana">Semana</option>
+														<option value="Dia">Dia</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div id="divAnoAtend" class="col-sm-2">
+											<div class="row">
+												<div class="input-group">
+													<label for="id-date-picker-1">Ano:&nbsp;</label>
+													<select name="anoAtend" id="anoAtend" class="select2" >
+														{{#each anos}}
+															<option value="{{ano_nome}}">{{ano_nome}}</option>
+														{{/each}}
+													</select>
+												</div>
+											</div>
+										</div>
+										<div id="divMesAtend" class="col-sm-2">
+											<div class="row">
+												<div class="input-group">
+													<label for="id-date-picker-1">Mês:&nbsp;</label>
+													<select name="mesAtend" id="mesAtend" class="select2" data-placeholder="Escolha..." value="Janeiro" >
+														<option value="0">Janeiro</option>
+														<option value="1">Fevereiro</option>
+														<option value="2">Março</option>
+														<option value="3">Abril</option>
+														<option value="4">Maio</option>
+														<option value="5">Junho</option>
+														<option value="6">Julho</option>
+														<option value="7">Agosto</option>
+														<option value="8">Setembro</option>
+														<option value="9">Outubro</option>
+														<option value="10">Novembro</option>
+														<option value="11">Dezembro</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div id="divdataFinal" class="col-sm-2">
+											<div class="input-group">
+												<label>Data:&nbsp;</label>
+												<input style="height: 30px;" id="dataFil" name="dataFil" value="" type="date" onchange="javascript:formataData();">
+												<input style="height: 30px;" id="dataFinal" name="dataFinal" type="text" value="{{filtroTela.dataFinal}}" >
+											</div>
+										</div>
+										<div id="divTipoFil" class="col-sm-2">
+											<div class="row">
+												<div class="input-group">
+													<label>Tipo Pessoa:&nbsp;</label>
+													<select name="atendTipoPessoa" id="atendTipoPessoa" class="select2" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
+														<option value="Geral">Geral</option>
+														<option value="Beneficiario">Beneficiário</option>
+														<option value="Terapeuta">Terapeuta</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div id="divAtendBeneficiario" class="col-sm-4">
+											<div class="row">
+												<div class="input-group">
+													<label>Beneficiário:&nbsp;</label>
+													<select name="atendBeneficiario" id="atendBeneficiario" class="select2" data-placeholder="Escolha...">
+														{{#each benes}}
+															<option value="{{_id}}">{{bene_nome}}</option>
+														{{/each}}
+													</select>
+												</div>
+											</div>
+										</div>
+										<div id="divAtendTerapeuta" class="col-sm-4">
+											<div class="row">
+												<div class="input-group">
+													<label>Terapeuta:&nbsp;</label>
+													<select name="atendTerapeuta" id="atendTerapeuta" class="select2" data-placeholder="Escolha..." >
+														{{#each terapeutas}}
+															<option value="{{_id}}">{{usuario_nome}}</option>
+														{{/each}}
+													</select>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
-								
-								<div id="divAnoAtend" class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label for="id-date-picker-1">Ano:&nbsp;</label>
-											<select name="anoAtend" id="anoAtend" class="select2" >
-												{{#each anos}}
-													<option value="{{ano_nome}}">{{ano_nome}}</option>
-												{{/each}}
-											</select>
+								<div class="row">
+									<br>
+									<div class="control-group" class="col-sm-12">
+										
+										<div id="divAtendConcluido" class="col-sm-2">
+											<div class="input-group">
+												<label>Atend. Concluído:&nbsp;</label>
+												<select name="AtendConcluido" id="AtendConcluido" class="select2">
+													<option value="Todos">Todos</option>
+													<option value="Sim">Sim</option>
+													<option value="Não">Não</option>
+												</select>
+											</div>
+										</div>
+										<div id="divOcultarAt" class="col-sm-2">
+												<div class="input-group">
+													<label>Ocultar AT:&nbsp;</label>
+													<select name="chkOcultarAt" id="chkOcultarAt" class="select2">
+														<option value="Não">Não</option>
+														<option value="Sim">Sim</option>
+													</select>
+												</div>
+											</div>
+										<label class="control-label bolder white">Tipo</label>
+										
+										<!-- Container flexível para disposição horizontal -->
+										<div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
+											
+											 <label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+												<input name="filtroTipo" value="Atendido" type="checkbox" class="ace filtro-tipo input-lg" checked>
+												<span class="lbl bigger-120"> Atendido</span>
+											</label>
+
+											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+												<input name="filtroTipo" value="Atendido por substituicao" type="checkbox" class="ace filtro-tipo input-lg" checked>
+												<span class="lbl bigger-120"> Atend. por substituição</span>
+											</label>
+
+											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+												<input name="filtroTipo" value="Planejamento" type="checkbox" class="ace filtro-tipo input-lg" checked>
+												<span class="lbl bigger-120"> Planejamento</span>
+											</label>
+
+											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+												<input name="filtroTipo" value="Falta Absoluta" type="checkbox" class="ace filtro-tipo input-lg" checked>
+												<span class="lbl bigger-120"> Falta Absoluta</span>
+											</label>
+
+											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+												<input name="filtroTipo" value="Feriado" type="checkbox" class="ace filtro-tipo input-lg" checked>
+												<span class="lbl bigger-120"> Feriado</span>
+											</label>
+
+											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+												<input name="filtroTipo" value="Glosa" type="checkbox" class="ace filtro-tipo input-lg" checked>
+												<span class="lbl bigger-120"> Glosa</span>
+											</label>
+											
 										</div>
 									</div>
 								</div>
-								<div id="divMesAtend" class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label for="id-date-picker-1">Mês:&nbsp;</label>
-											<select name="mesAtend" id="mesAtend" class="select2" data-placeholder="Escolha..." value="Janeiro" >
-												<option value="0">Janeiro</option>
-												<option value="1">Fevereiro</option>
-												<option value="2">Março</option>
-												<option value="3">Abril</option>
-												<option value="4">Maio</option>
-												<option value="5">Junho</option>
-												<option value="6">Julho</option>
-												<option value="7">Agosto</option>
-												<option value="8">Setembro</option>
-												<option value="9">Outubro</option>
-												<option value="10">Novembro</option>
-												<option value="11">Dezembro</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divdataFinal" class="col-sm-2">
-									<div class="input-group">
-										<label>Data:&nbsp;</label>
-										<input style="height: 30px;" id="dataFil" name="dataFil" value="" type="date" onchange="javascript:formataData();">
-										<input style="height: 30px;" id="dataFinal" name="dataFinal" type="text" value="{{filtroTela.dataFinal}}" >
-									</div>
-								</div>
-								<div id="divTipoFil" class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label>Tipo Pessoa:&nbsp;</label>
-											<select name="atendTipoPessoa" id="atendTipoPessoa" class="select2" data-placeholder="Escolha..." value="Geral" onchange="javascript:trocaFilpessoa()">
-												<option value="Geral">Geral</option>
-												<option value="Beneficiario">Beneficiário</option>
-												<option value="Terapeuta">Terapeuta</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divAtendBeneficiario" class="col-sm-4">
-									<div class="row">
-										<div class="input-group">
-											<label>Beneficiário:&nbsp;</label>
-											<select name="atendBeneficiario" id="atendBeneficiario" class="select2" data-placeholder="Escolha...">
-												{{#each benes}}
-													<option value="{{_id}}">{{bene_nome}}</option>
-												{{/each}}
-											</select>
-										</div>
-									</div>
-								</div>
-								<div id="divAtendTerapeuta" class="col-sm-4">
-									<div class="row">
-										<div class="input-group">
-											<label>Terapeuta:&nbsp;</label>
-											<select name="atendTerapeuta" id="atendTerapeuta" class="select2" data-placeholder="Escolha..." >
-												{{#each terapeutas}}
-													<option value="{{_id}}">{{usuario_nome}}</option>
-												{{/each}}
-											</select>
-										</div>
-									</div>
-								</div>
-								
-								<div id="divAtendConcluido" class="col-sm-2">
-									<div class="row">
-										<div class="input-group">
-											<label>Atend. Concluído:&nbsp;</label>
-											<select name="AtendConcluido" id="AtendConcluido" class="select2">
-												<option value="Todos">Todos</option>
-												<option value="Sim">Sim</option>
-												<option value="Não">Não</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								
 							<div class="row">
 								<div class="col-sm-12">
-								<hr>
-								<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-danger" style="margin-left: 25px;">
-									<i class="ace-icon fa fa-search-plus "></i>
-									Pesquisar
-								</button>
+									<hr>
+									<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-danger" style="margin-left: 25px;">
+										<i class="ace-icon fa fa-search-plus "></i>
+										Pesquisar
+									</button>
 								</div>
 							</div>
 							</div>
@@ -946,7 +996,7 @@
 																			{{/dataIgual}}
 																		</td>
 																	<td>{{agenda_hora}}</td>
-																		<td>
+																	<td>
 																		{{#compareThis agenda_categoria "Padrão"}}
 																			<span name="ageCateg" id="ageCateg" class="label label-success arrowed">Atendido</span>
 
@@ -994,10 +1044,10 @@
 																			{{/compareThis}}
 																		{{/compareThis}}
 																	</td>
-																	<td>
+																	<td class="col-nome-terapia">
 																	{{#each ../terapias}}<!-- Ok -->
 																		{{#ifEqual this._id ../agenda_terapiaid}}
-																			{{terapia_nomecid}}
+																			{{terapia_nome}}
 																		{{/ifEqual}}
 																	{{/each}}
 																	</td>
@@ -1134,7 +1184,7 @@
 						],
 						"aaSorting": [],
 						"responsive": true,
-						"lengthMenu": [[300, 500, 1000, 2000, 5000], [300, 500, 1000, 2000, 5000]],
+						"lengthMenu": [[ 500, 1000, 2000, 5000], [500, 1000, 2000, 5000]],
 						"lengthChange": true,
 						"autoWidth": false,
 						"paging": true,
@@ -1260,7 +1310,107 @@
 					$('input[name="chekId"]').prop('checked', isChecked);
 					alternarBotao();
 				});
-			});
+
+				
+    // 1. PREPARAÇÃO: Ler a tabela e adicionar "etiquetas" nas linhas para facilitar o filtro
+    $('tbody tr').each(function() {
+        var $tr = $(this);
+        var categorias = [];
+
+        // Pega o texto visível dentro do span de categoria (ex: "Atendido", "Planejamento")
+        var textoCategoria = $tr.find('span[name="ageCateg"]').text().trim().toLowerCase();
+
+        // Mapeia o texto visível para os valores exatos dos checkboxes
+        if (textoCategoria.includes('atendido') && !textoCategoria.includes('substitui')) {
+            categorias.push('Atendido'); // Cobre: Padrão, SubstitutoFixo, Extra, Nenhuma Observação
+        }
+        if (textoCategoria.includes('substitui')) {
+            categorias.push('Atendido por substituicao');
+        }
+        if (textoCategoria.includes('planejamento')) {
+            categorias.push('Planejamento'); // Cobre o "Falta" que renderiza como Planejamento
+        }
+        if (textoCategoria.includes('falta absoluta')) {
+            categorias.push('Falta Absoluta');
+        }
+        if (textoCategoria.includes('feriado')) {
+            categorias.push('Feriado');
+        }
+        if (textoCategoria.includes('glosa')) {
+            categorias.push('Glosa');
+        }
+
+        // Salva as categorias como um atributo na TR (ex: data-categorias="Atendido,Feriado")
+        $tr.attr('data-categorias', categorias.join(','));
+
+        // 2. PREPARAÇÃO DO FILTRO "ABA AT"
+        // Procura o texto dentro da célula específica da terapia (veja a observação no Passo 3)
+        var textoTerapia = $tr.find('.col-nome-terapia').text().toLowerCase();
+        
+        if (textoTerapia.includes('aba at')) {
+            $tr.attr('data-eh-aba-at', 'true');
+        } else {
+            $tr.attr('data-eh-aba-at', 'false');
+        }
+    });
+
+    // 3. FUNÇÃO PRINCIPAL DE FILTRAGEM
+    function aplicarFiltros() {
+        // Pega todos os checkboxes de tipo que estão MARCADOS
+        var tiposMarcados = [];
+        $('.filtro-tipo:checked').each(function() {
+            tiposMarcados.push($(this).val());
+        });
+
+        // Verifica se o checkbox "Ocultar AT" está marcado
+        var ocultarAt = $('#chkOcultarAt').is(':checked');
+
+        // Percorre cada linha da tabela para decidir se mostra ou esconde
+        $('tbody tr').each(function() {
+            var $tr = $(this);
+            var mostrarLinha = true;
+
+            // --- REGRA 1: Filtro de Tipo ---
+            var categoriasDaLinha = $tr.attr('data-categorias').split(',');
+            var temTipoValido = false;
+
+            // Se a linha tiver pelo menos uma categoria que esteja marcada no filtro, é válida
+            for (var i = 0; i < categoriasDaLinha.length; i++) {
+                if (categoriasDaLinha[i] && tiposMarcados.includes(categoriasDaLinha[i])) {
+                    temTipoValido = true;
+                    break;
+                }
+            }
+
+            if (!temTipoValido) {
+                mostrarLinha = false;
+            }
+
+            // --- REGRA 2: Filtro Ocultar AT ---
+            if (mostrarLinha && ocultarAt) {
+                if ($tr.attr('data-eh-aba-at') === 'true') {
+                    mostrarLinha = false; // Esconde porque é ABA AT e o filtro está ativo
+                }
+            }
+
+            // Aplica a visibilidade (show/hide)
+            if (mostrarLinha) {
+                $tr.show();
+            } else {
+                $tr.hide();
+            }
+        });
+    }
+
+    // 4. EVENTOS: Roda a função sempre que um checkbox for clicado
+    $('.filtro-tipo, #chkOcultarAt').on('change', function() {
+        aplicarFiltros();
+    });
+
+    // Aplica uma vez no carregamento para garantir o estado inicial correto
+    aplicarFiltros();
+});
+			
 		</script>
 	
 
