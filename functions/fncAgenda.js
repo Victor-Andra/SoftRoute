@@ -12190,6 +12190,7 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
                 break;
         }
     },
+    
     agendaFaltaDiaFill(req,res){
         let flash = new Resposta();
         let resultado;
