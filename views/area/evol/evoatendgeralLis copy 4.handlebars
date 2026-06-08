@@ -1131,132 +1131,6 @@
 		</div><!-- /.main-container ace-save-state  -->
 
 		<!-- inline scripts related to this page -->
-		<!-- ============================================ -->
-<!-- ✅ SCRIPT SEPARADO: FILTRO DE TIPO + OCULTAR ABA AT -->
-<!-- Não interfere nos outros filtros da página -->
-<!-- ============================================ -->
-<script type="text/javascript">
-$(document).ready(function() {
-    console.log('🔧 [FiltroTipoAT] Script isolado carregado');
-
-    // ============================================
-    // PASSO 1: ETIQUETAR AS LINHAS DA TABELA
-    // ============================================
-    function etiquetarLinhas() {
-        $('#dynamic-table tbody tr').each(function() {
-            var $tr = $(this);
-            var categorias = [];
-
-            // Pega o texto visível dentro do span de categoria
-            var textoCategoria = $tr.find('span[name="ageCateg"]').text().trim().toLowerCase();
-
-            // Mapeia o texto visível para os valores exatos dos checkboxes
-            if (textoCategoria.includes('atendido') && !textoCategoria.includes('substitui')) {
-                categorias.push('Atendido');
-            }
-            if (textoCategoria.includes('substitui')) {
-                categorias.push('Atendido por substituicao');
-            }
-            if (textoCategoria.includes('planejamento')) {
-                categorias.push('Planejamento');
-            }
-            if (textoCategoria.includes('falta absoluta')) {
-                categorias.push('Falta Absoluta');
-            }
-            if (textoCategoria.includes('feriado')) {
-                categorias.push('Feriado');
-            }
-            if (textoCategoria.includes('glosa')) {
-                categorias.push('Glosa');
-            }
-
-            $tr.attr('data-categorias', categorias.join(','));
-
-            // ✅ FILTRO ABA AT: verifica se o texto da terapia COMEÇA com "ABA AT"
-            var textoTerapia = $tr.find('.col-nome-terapia').text().trim().toLowerCase();
-            if (textoTerapia.indexOf('aba at') === 0) {
-                $tr.attr('data-eh-aba-at', 'true');
-            } else {
-                $tr.attr('data-eh-aba-at', 'false');
-            }
-        });
-        console.log('✅ [FiltroTipoAT] Linhas etiquetadas');
-    }
-
-    // ============================================
-    // PASSO 2: FUNÇÃO PRINCIPAL DE FILTRAGEM
-    // ============================================
-    function aplicarFiltros() {
-        // Pega todos os checkboxes de tipo que estão MARCADOS
-        var tiposMarcados = [];
-        $('.filtro-tipo:checked').each(function() {
-            tiposMarcados.push($(this).val());
-        });
-
-        // ✅ CORREÇÃO DO BUG: chkOcultarAt é um SELECT, não checkbox!
-        var ocultarAt = ($('#chkOcultarAt').val() === 'Sim');
-        console.log('🔍 [FiltroTipoAT] Ocultar AT:', ocultarAt, '| Tipos marcados:', tiposMarcados.length);
-
-        // Percorre cada linha da tabela
-        $('#dynamic-table tbody tr').each(function() {
-            var $tr = $(this);
-            var mostrarLinha = true;
-
-            // --- REGRA 1: Filtro de Tipo ---
-            var categoriasDaLinha = ($tr.attr('data-categorias') || '').split(',');
-            var temTipoValido = false;
-
-            for (var i = 0; i < categoriasDaLinha.length; i++) {
-                if (categoriasDaLinha[i] && tiposMarcados.includes(categoriasDaLinha[i])) {
-                    temTipoValido = true;
-                    break;
-                }
-            }
-
-            if (!temTipoValido) {
-                mostrarLinha = false;
-            }
-
-            // --- REGRA 2: Filtro Ocultar AT ---
-            if (mostrarLinha && ocultarAt) {
-                if ($tr.attr('data-eh-aba-at') === 'true') {
-                    mostrarLinha = false;
-                }
-            }
-
-            // Aplica a visibilidade
-            if (mostrarLinha) {
-                $tr.show();
-            } else {
-                $tr.hide();
-            }
-        });
-    }
-
-    // ============================================
-    // PASSO 3: INICIALIZAÇÃO E EVENTOS
-    // ============================================
-    
-    // Aguarda o DataTable estar pronto antes de etiquetar
-    setTimeout(function() {
-        etiquetarLinhas();
-        aplicarFiltros(); // Aplica no carregamento
-    }, 300);
-
-    // Evento: quando mudar qualquer checkbox de tipo
-    $('.filtro-tipo').on('change', function() {
-        aplicarFiltros();
-    });
-
-    // ✅ Evento: quando mudar o select "Ocultar AT"
-    $('#chkOcultarAt').on('change', function() {
-        console.log('🔄 [FiltroTipoAT] Ocultar AT mudou para:', $(this).val());
-        aplicarFiltros();
-    });
-
-    console.log('✅ [FiltroTipoAT] Event listeners registrados');
-});
-</script>
 		<script type="text/javascript">
 		// ✅ Inicializa Select2 nos campos do filtro
 			
@@ -1438,7 +1312,103 @@ $(document).ready(function() {
 				});
 
 				
-    
+    // 1. PREPARAÇÃO: Ler a tabela e adicionar "etiquetas" nas linhas para facilitar o filtro
+    $('tbody tr').each(function() {
+        var $tr = $(this);
+        var categorias = [];
+
+        // Pega o texto visível dentro do span de categoria (ex: "Atendido", "Planejamento")
+        var textoCategoria = $tr.find('span[name="ageCateg"]').text().trim().toLowerCase();
+
+        // Mapeia o texto visível para os valores exatos dos checkboxes
+        if (textoCategoria.includes('atendido') && !textoCategoria.includes('substitui')) {
+            categorias.push('Atendido'); // Cobre: Padrão, SubstitutoFixo, Extra, Nenhuma Observação
+        }
+        if (textoCategoria.includes('substitui')) {
+            categorias.push('Atendido por substituicao');
+        }
+        if (textoCategoria.includes('planejamento')) {
+            categorias.push('Planejamento'); // Cobre o "Falta" que renderiza como Planejamento
+        }
+        if (textoCategoria.includes('falta absoluta')) {
+            categorias.push('Falta Absoluta');
+        }
+        if (textoCategoria.includes('feriado')) {
+            categorias.push('Feriado');
+        }
+        if (textoCategoria.includes('glosa')) {
+            categorias.push('Glosa');
+        }
+
+        // Salva as categorias como um atributo na TR (ex: data-categorias="Atendido,Feriado")
+        $tr.attr('data-categorias', categorias.join(','));
+
+        // 2. PREPARAÇÃO DO FILTRO "ABA AT"
+        // Procura o texto dentro da célula específica da terapia (veja a observação no Passo 3)
+        var textoTerapia = $tr.find('.col-nome-terapia').text().toLowerCase();
+        
+        if (textoTerapia.includes('aba at')) {
+            $tr.attr('data-eh-aba-at', 'true');
+        } else {
+            $tr.attr('data-eh-aba-at', 'false');
+        }
+    });
+
+    // 3. FUNÇÃO PRINCIPAL DE FILTRAGEM
+    function aplicarFiltros() {
+        // Pega todos os checkboxes de tipo que estão MARCADOS
+        var tiposMarcados = [];
+        $('.filtro-tipo:checked').each(function() {
+            tiposMarcados.push($(this).val());
+        });
+
+        // Verifica se o checkbox "Ocultar AT" está marcado
+        var ocultarAt = $('#chkOcultarAt').is(':checked');
+
+        // Percorre cada linha da tabela para decidir se mostra ou esconde
+        $('tbody tr').each(function() {
+            var $tr = $(this);
+            var mostrarLinha = true;
+
+            // --- REGRA 1: Filtro de Tipo ---
+            var categoriasDaLinha = $tr.attr('data-categorias').split(',');
+            var temTipoValido = false;
+
+            // Se a linha tiver pelo menos uma categoria que esteja marcada no filtro, é válida
+            for (var i = 0; i < categoriasDaLinha.length; i++) {
+                if (categoriasDaLinha[i] && tiposMarcados.includes(categoriasDaLinha[i])) {
+                    temTipoValido = true;
+                    break;
+                }
+            }
+
+            if (!temTipoValido) {
+                mostrarLinha = false;
+            }
+
+            // --- REGRA 2: Filtro Ocultar AT ---
+            if (mostrarLinha && ocultarAt) {
+                if ($tr.attr('data-eh-aba-at') === 'true') {
+                    mostrarLinha = false; // Esconde porque é ABA AT e o filtro está ativo
+                }
+            }
+
+            // Aplica a visibilidade (show/hide)
+            if (mostrarLinha) {
+                $tr.show();
+            } else {
+                $tr.hide();
+            }
+        });
+    }
+
+    // 4. EVENTOS: Roda a função sempre que um checkbox for clicado
+    $('.filtro-tipo, #chkOcultarAt').on('change', function() {
+        aplicarFiltros();
+    });
+
+    // Aplica uma vez no carregamento para garantir o estado inicial correto
+    aplicarFiltros();
 });
 			
 		</script>
