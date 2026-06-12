@@ -500,5 +500,115 @@
 				setTimeout(carregaBody, 100);
 			});
 		</script>
+	{{!-- ============================================
+     MODAL DE EVOLUÇÕES PENDENTES (CUSTOMIZADO)
+     ============================================ --}}
+{{#if mostrarModalEvolucoes}}
+    {{#ifCond evolucoesPendentesMes ">" 0}}
+        <div id="modalEvolucoesPendentes" 
+             style="display: none; position: fixed !important; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 999999 !important; overflow: auto;">
+            <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;">
+                <div style="background: rgba(255, 255, 255, 0.95); border-radius: 20px; max-width: 500px; width: 100%; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; backdrop-filter: blur(10px);">
+                    
+                    <!-- Body - Texto no início -->
+                    <div style="padding: 40px 30px 20px 30px; text-align: center;">
+                        <p style="font-size: 18px; color: #333; margin-bottom: 10px; font-weight: 600; line-height: 1.4;">
+                            Olá! em breve vou ajudar você a lembrar de suas evoluções. Caso você esqueça!
+                        </p>
+                        <!-- Número de pendências em destaque -->
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);">
+                            <div style="font-size: 20px; font-weight: 700; line-height: 1;">
+                                {{evolucoesPendentesMes}}
+                            </div>
+                            <div style="font-size: 12px; margin-top: 5px; opacity: 0.9;">
+                                evolução(ões) pendente(s)
+                            </div>
+                        </div>
+                        
+                        
+                    </div>
+                    
+                    <!-- Imagem na base do modal -->
+                    <div style="padding: 0 20px 20px 20px; text-align: center;">
+                        <img src="/images/character.png"
+                             alt="Personagem" 
+                             style="max-width: 150px; width: 70%; height: 50%; display: inline-block;">
+                    </div>
+                    
+                    <!-- Footer com botão -->
+                    <div style="padding: 15px 30px 30px 30px; text-align: center; background: rgba(248, 249, 250, 0.8);">
+                        <button type="button" onclick="fecharModalEvolucoes()" 
+                                style="padding: 12px 60px; font-weight: 600; border-radius: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; cursor: pointer; font-size: 16px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); transition: transform 0.2s;">
+                            <i class="ace-icon fa fa-check"></i> OK
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            (function() {
+                const QUANTIDADE_PENDENTES = {{evolucoesPendentesMes}};
+                const INTERVALO_MINUTOS = 30;
+                const USUARIO_ID = '{{usuId}}';
+                const CHAVE_STORAGE = 'ultimoModalEvolucoes_' + USUARIO_ID;
+                
+                console.log('🔔 [MODAL] Pendentes:', QUANTIDADE_PENDENTES, '| Usuário:', USUARIO_ID);
+                
+                function mostrarModalAloMundo() {
+                    const modal = document.getElementById('modalEvolucoesPendentes');
+                    if (modal) {
+                        modal.style.display = 'block';
+                        localStorage.setItem(CHAVE_STORAGE, Date.now().toString());
+                        console.log('✅ [MODAL] Exibido');
+                    } else {
+                        console.error('❌ [MODAL] Elemento não encontrado!');
+                    }
+                }
+                
+                window.fecharModalEvolucoes = function() {
+                    const modal = document.getElementById('modalEvolucoesPendentes');
+                    if (modal) {
+                        modal.style.display = 'none';
+                        console.log('✅ [MODAL] Fechado');
+                    }
+                };
+                
+                // Fechar ao clicar fora do modal
+                document.addEventListener('click', function(event) {
+                    const modal = document.getElementById('modalEvolucoesPendentes');
+                    if (event.target === modal) {
+                        fecharModalEvolucoes();
+                    }
+                });
+                
+                // Mostrar automaticamente quando o DOM estiver pronto
+                if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                    setTimeout(mostrarModalAloMundo, 500);
+                } else {
+                    document.addEventListener('DOMContentLoaded', function() {
+                        setTimeout(mostrarModalAloMundo, 500);
+                    });
+                }
+                
+                // Reexibir a cada 30 minutos
+                setInterval(function() {
+                    if (QUANTIDADE_PENDENTES > 0) {
+                        const ultimo = localStorage.getItem(CHAVE_STORAGE);
+                        if (!ultimo) {
+                            mostrarModalAloMundo();
+                        } else {
+                            const diffMinutos = (Date.now() - parseInt(ultimo)) / (1000 * 60);
+                            if (diffMinutos >= INTERVALO_MINUTOS) {
+                                mostrarModalAloMundo();
+                            }
+                        }
+                    }
+                }, INTERVALO_MINUTOS * 60 * 1000);
+            })();
+        </script>
+    {{/ifCond}}
+{{/if}}
 	</body>
 </html>

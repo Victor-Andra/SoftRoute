@@ -231,7 +231,7 @@
 						</div>
 						<div class="page-header">
 							<h1>
-								Lista de Atendimentos
+								Lista de Atendimentos v.3
 							</h1>
 						</div><!-- /.page-header -->
 
@@ -635,7 +635,65 @@
 					}
 			});
 		});
-		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+
+		// ============================================
+				// ✅ CONFIGURAÇÃO DOS BOTÕES (ESTILO ACE ADMIN)
+				// ============================================
+				$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+
+				new $.fn.dataTable.Buttons(myTable, {
+					buttons: [
+						{
+							"extend": "colvis",
+							"text": "<i class='fa fa-search bigger-110 blue'></i> <span class='hidden'>Mostrar/Ocultar Colunas</span>",
+							"className": "btn btn-white btn-primary btn-bold",
+							columns: ':not(:first)'
+						},
+						{
+							"extend": "copy",
+							"text": "<i class='fa fa-copy bigger-110 pink'></i> <span class='hidden'>Copiar</span>",
+							"className": "btn btn-white btn-primary btn-bold",
+							exportOptions: {
+								columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+								modifier: { page: 'all' }
+							}
+						},
+						{
+							"extend": "csv",
+							"text": "<i class='fa fa-database bigger-110 orange'></i> <span class='hidden'>CSV</span>",
+							"className": "btn btn-white btn-primary btn-bold",
+							exportOptions: {
+								columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+								modifier: { page: 'all' }
+							}
+						},
+						{
+							"extend": "excel",
+							"text": "<i class='fa fa-file-excel-o bigger-110 green'></i> <span class='hidden'>Excel</span>",
+							"className": "btn btn-white btn-primary btn-bold",
+							exportOptions: {
+								columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+								modifier: { page: 'all' }
+							}
+						},
+						{
+							"extend": "pdf",
+							"text": "<i class='fa fa-file-pdf-o bigger-110 red'></i> <span class='hidden'>PDF</span>",
+							"className": "btn btn-white btn-primary btn-bold",
+							exportOptions: {
+								columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+								modifier: { page: 'all' }
+							},
+							orientation: 'landscape',
+							pageSize: 'A4'
+						},
+						
+					]
+				});
+
+				// Anexar os botões ao container (isso coloca os botões ACIMA da tabela)
+				myTable.buttons().container().appendTo($('.tableTools-container'));
+				$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
 		</script>
 	</body>
 </html>

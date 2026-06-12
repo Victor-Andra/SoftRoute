@@ -35,10 +35,7 @@ const ProgsetSchema = mongoose.Schema({
     progset_usuidedi :{ type: ObjectId, required: false },
     progset_datacad :{ type: String, required: false },
     progset_dataedi :{ type: String, required: false },
-    progset_lixo :{ type: String, required: false },
-    // ✅ NOVOS CAMPOS PARA CONTROLE DE EXCLUSÃO
-    progset_datalixo :{ type: String, required: false },
-    progset_usuidlixo :{ type: ObjectId, required: false }
+    progset_lixo :{ type: String, required: false }
 })
 
 class Progset{
@@ -75,9 +72,7 @@ class Progset{
         progset_usuidedi,
         progset_datacad,
         progset_dataedi,
-        progset_lixo,
-        progset_datalixo,
-        progset_usuidlixo
+        progset_lixo
         ){
             this.progset_progid = progset_progid,
             this.progset_beneid = progset_beneid,
@@ -111,9 +106,8 @@ class Progset{
             this.progset_usuidedi = progset_usuidedi,
             this.progset_datacad = progset_datacad,
             this.progset_dataedi = progset_dataedi,
-            this.progset_lixo = progset_lixo,
-            this.progset_datalixo = progset_datalixo,
-            this.progset_usuidlixo = progset_usuidlixo
+            this.progset_lixo = progset_lixo
+
     }
 }
 
@@ -130,90 +124,58 @@ module.exports = {
         //Estrutura Multiempresa
         let db = req.cookies['preferredDb'];
         ProgsetModel = getModel(db, 'tb_progset', ProgsetSchema)
+        //;
 
         // Pega data atual
         let dataAtual = new Date();
         // Pega Usuário Atual
         let usuarioAtual = req.cookies['idUsu'];
-        // ✅ Pega o perfil atual
-        let perfilAtual = req.cookies['lvlUsu'] || '';
-        
         let resultado;
-        
-        // ✅ IDs dos perfis master/supervisor/root
-        const perfisMaster = ['644743aa78166939169f8486', '62421801a12aa557219a0fb9', '644742e378166939169f82a1'];
-        
-        // ✅ Verifica se o usuário tem perfil master
-        const ehMaster = perfisMaster.some(perfil => perfilAtual.includes(perfil));
-        
-        console.log("Perfil atual:", perfilAtual);
-        console.log("É master?", ehMaster);
-        console.log("req.body.progsetBeneid:", req.body.progsetBeneid);
-        
-        // ✅ Se for master, atualiza TUDO
-        if (ehMaster) {
-            await ProgsetModel.findByIdAndUpdate(req.body.progsetId, 
-                {
-                    progset_progid: req.body.progsetProgid,
-                    progset_beneid: req.body.progsetBeneid,
-                    progset_teraid: req.body.progsetTeraid,
-                    progset_progtipoid: req.body.progsetProgtipoid,
-                    progset_prognivelid: req.body.progsetPrognivelid,
-                    progset_num: req.body.progsetNum,
-                    progset_dataset: req.body.progsetDataset,
-                    progset_dataini: req.body.progsetDataini,
-                    progset_datafin: req.body.progsetDatafin,
-                    progset_datameta: req.body.progsetDatameta,
-                    progset_status: req.body.progsetStatus,
-                    progset_tiporeg : req.body.progsetTiporeg,
-                    progset_modreg : req.body.progsetModreg,
-                    progset_desc: req.body.progsetDesc,
-                    progset_qtest: req.body.progsetQtest,
-                    progset_esta: req.body.progsetEsta,
-                    progset_estb: req.body.progsetEstb,
-                    progset_estc: req.body.progsetEstc,
-                    progset_estd: req.body.progsetEstd,
-                    progset_este: req.body.progsetEste,
-                    progset_estf: req.body.progsetEstf,
-                    progset_estg: req.body.progsetEstg,
-                    progset_esth: req.body.progsetEsth,
-                    progset_esti: req.body.progsetEsti,
-                    progset_estj: req.body.progsetEstj,
-                    progset_metatipo: req.body.progsetMetatipo,
-                    progset_obs: req.body.progsetObs,
-                    // Atributos de controle
-                    progset_usuidedi: usuarioAtual,
-                    progset_dataedi: dataAtual.toISOString(),
-                    progset_lixo: "false"
-                }
-            ).then((res) => {
-                console.log("Salvo como Master - Todos os campos atualizados");
-                resultado = true;
-            }).catch((err) => {
-                console.log("erro mongo:")
-                console.log(err)
-                resultado = err;
-            });
-        } 
-        // ✅ Se for terapeuta, atualiza APENAS o status
-        else {
-            await ProgsetModel.findByIdAndUpdate(req.body.progsetId, 
-                {
-                    progset_status: req.body.progsetStatus,
-                    // Atributos de controle
-                    progset_usuidedi: usuarioAtual,
-                    progset_dataedi: dataAtual.toISOString()
-                }
-            ).then((res) => {
-                console.log("Salvo como Terapeuta - Apenas status atualizado");
-                resultado = true;
-            }).catch((err) => {
-                console.log("erro mongo:")
-                console.log(err)
-                resultado = err;
-            });
-        }
-        
+        // Realiza Atualização
+        console.log("req.body.progsetBeneid: "+req.body.progsetBeneid)
+        await ProgsetModel.findByIdAndUpdate(req.body.progsetId, 
+            {
+                progset_progid: req.body.progsetProgid,
+                progset_beneid: req.body.progsetBeneid,
+                progset_teraid: req.body.progsetTeraid,
+                progset_progtipoid: req.body.progsetProgtipoid,
+                progset_prognivelid: req.body.progsetPrognivelid,
+                progset_num: req.body.progsetNum,
+                progset_dataset: req.body.progsetDataset,
+                progset_dataini: req.body.progsetDataini,
+                progset_datafin: req.body.progsetDatafin,
+                progset_datameta: req.body.progsetDatameta,
+                progset_status: req.body.progsetStatus,
+                progset_tiporeg : req.body.progsetTiporeg,
+                progset_modreg : req.body.progsetModreg,
+                progset_desc: req.body.progsetDesc,
+                progset_qtest: req.body.progsetQtest,
+                progset_esta: req.body.progsetEsta,
+                progset_estb: req.body.progsetEstb,
+                progset_estc: req.body.progsetEstc,
+                progset_estd: req.body.progsetEstd,
+                progset_este: req.body.progsetEste,
+                progset_estf: req.body.progsetEstf,
+                progset_estg: req.body.progsetEstg,
+                progset_esth: req.body.progsetEsth,
+                progset_esti: req.body.progsetEsti,
+                progset_estj: req.body.progsetEstj,
+                progset_metatipo: req.body.progsetMetatipo,
+                progset_obs: req.body.progsetObs,
+                // Atributos de controle
+                progset_usuidedi: usuarioAtual,
+                progset_dataedi: dataAtual.toISOString(),
+                progset_lixo: "false"
+            }
+        ).then((res) => {
+            console.log("Salvo")
+            resultado = true;
+        }).catch((err) => {
+            console.log("erro mongo:")
+            console.log(err)
+            resultado = err;
+            //res.redirect('admin/branco')
+        })
         return resultado;
     },
 
@@ -222,6 +184,7 @@ module.exports = {
         //Estrutura Multiempresa
         let db = req.cookies['preferredDb'];
         ProgsetModel = getModel(db, 'tb_progset', ProgsetSchema)
+        //;
 
         //Pega data atual
         let dataAtual = new Date();
@@ -261,9 +224,7 @@ module.exports = {
                 //Atributos de controle
                 progset_usuidcad : usuarioAtual,
                 progset_datacad : dataAtual.toISOString(),
-                progset_lixo : "false",
-                progset_datalixo : null,
-                progset_usuidlixo : null
+                progset_lixo : "false"
             });
             console.log("newProgset save");
             await newProgset.save().then(()=>{

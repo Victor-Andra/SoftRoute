@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>SET Editar</title>
+		<style>
+			.table-wrapper {
+				overflow-x: auto;
+				max-width: 100%;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			th, td {
+				border: 1px solid #dddddd;
+				text-align: left;
+				padding: 8px;
+			}
+			.container {
+				width: 100%;
+				max-width: 600px; /* Defina a largura máxima que deseja para o gráfico */
+				margin: 0 auto; /* Centralize o contêiner */
+			}
+			canvas {
+				width: 100% !important;
+				height: auto !important;
+				max-width: 100% !important;
+			}
+			
+		</style>
+		<script>
+			function carregaBody(){
+				document.getElementById("progsetProgid").value = document.getElementById("progsetProgidEdi").value;
+				document.getElementById("progsetTeraid").value = document.getElementById("progsetTeraidEdi").value;
+				//document.getElementById("progsetBeneid").value = document.getElementById("progsetBeneidEdi").value;
+				//document.getElementById("progsetPrognivelid").value = document.getElementById("progsetPrognivelidEdi").value;
+				//document.getElementById("progsetProgtipoid").value = document.getElementById("progsetProgtipoidEdi").value;
+				document.getElementById("progsetNum").value = document.getElementById("progsetNumEdi").value;
+				document.getElementById("progsetDataset").value = document.getElementById("progsetDatasetEdi").value;
+				document.getElementById("progsetDataini").value = document.getElementById("progsetDatainiEdi").value;
+				document.getElementById("progsetDatafin").value = document.getElementById("progsetDatafinEdi").value;
+				document.getElementById("progsetDatameta").value = document.getElementById("progsetDatametaEdi").value;
+				document.getElementById("progsetStatus").value = document.getElementById("progsetStatusEdi").value;
+				document.getElementById("progsetTiporeg").value = document.getElementById("progsetTiporegEdi").value;
+				document.getElementById("progsetDesc").value = document.getElementById("progsetDescEdi").value;
+				document.getElementById("progsetQtest").value = document.getElementById("progsetQtestEdi").value;
+				document.getElementById("progsetEsta").value = document.getElementById("progsetEstaEdi").value;
+				document.getElementById("progsetEstb").value = document.getElementById("progsetEstbEdi").value;
+				document.getElementById("progsetEstc").value = document.getElementById("progsetEstcEdi").value;
+				document.getElementById("progsetEstd").value = document.getElementById("progsetEstdEdi").value;
+				document.getElementById("progsetEste").value = document.getElementById("progsetEsteEdi").value;
+				document.getElementById("progsetEstf").value = document.getElementById("progsetEstfEdi").value;
+				document.getElementById("progsetEstg").value = document.getElementById("progsetEstgEdi").value;
+				document.getElementById("progsetEsth").value = document.getElementById("progsetEsthEdi").value;
+				document.getElementById("progsetEsti").value = document.getElementById("progsetEstiEdi").value;
+				document.getElementById("progsetEstj").value = document.getElementById("progsetEstjEdi").value;
+				document.getElementById("progsetMetatipo").value = document.getElementById("progsetMetatipoEdi").value;
+				document.getElementById("progsetObs").value = document.getElementById("progsetObsEdi").value;
+				updateStimulusFields(); // Chama a função após preencher os campos
+				// ✅ Atualiza TODOS os chosen-select com os novos valores (incluindo múltiplos)
+					$('.chosen-select').trigger('chosen:updated');
+				
+
+			}
+			 function updateStimulusFields() {
+				var select = document.getElementById('progsetQtest');
+				var value = parseInt(select.value, 10);
+
+				// Hide all stimulus fields
+				var fields = document.querySelectorAll('.stimulus-field');
+				fields.forEach(function(field) {
+					field.style.display = 'none';
+				});
+
+				// Show only the number of fields selected
+				for (var i = 0; i < value; i++) {
+					document.getElementById('stimulus' + String.fromCharCode(65 + i)).style.display = 'block';
+				}
+			}
+
+			document.addEventListener('DOMContentLoaded', function() {
+				// Initialize fields on page load
+				carregaBody();
+
+				// Add change event listener to the select element
+				document.getElementById('progsetQtest').addEventListener('change', updateStimulusFields);
+			});
+			function somaResEstSI() {
+				// Variáveis para armazenar os totais
+				let totalI = 0;
+				let totalE = 0;
+				let totalMaisD = 0;
+				let totalMenosD = 0;
+
+				// Encontra todos os inputs de rádio marcados
+				let inputs = document.querySelectorAll('input[name$="Ressimples"]:checked');
+
+				// Loop através de todos os inputs encontrados
+				inputs.forEach(function(input) {
+					// Verifica o valor do input
+					switch(input.value) {
+						case 'I':
+							totalI++;
+							break;
+						case 'E':
+							totalE++;
+							break;
+						case '+d':
+							totalMaisD++;
+							break;
+						case '-d':
+							totalMenosD++;
+							break;
+						default:
+							break;
+					}
+				});
+
+				// Atualiza os campos de input com os totais calculados
+				document.getElementById("folregTotalsimples1").value = totalI;
+				document.getElementById("folregTotalsimples2").value = totalE;
+				document.getElementById("folregTotalsimples3").value = totalMaisD;
+				document.getElementById("folregTotalsimples4").value = totalMenosD;
+			}
+
+			//###########################################################################
+			function somaResEstDuplo() {
+				// Variáveis para armazenar os totais do lado esquerdo
+				let totalEsqI = 0;
+				let totalEsqE = 0;
+				let totalEsqMaisD = 0;
+				let totalEsqMenosD = 0;
+
+				// Encontra todos os inputs de rádio marcados no lado esquerdo
+				let inputsEsq = document.querySelectorAll('input[name$="Resesqu"]:checked');
+
+				// Loop através de todos os inputs encontrados no lado esquerdo
+				inputsEsq.forEach(function(input) {
+					// Verifica o valor do input
+				switch(input.value) {
+					case 'I':
+						totalEsqI++;
+						break;
+					case 'E':
+						totalEsqE++;
+						break;
+					case '+d':
+						totalEsqMaisD++;
+						break;
+					case '-d':
+						totalEsqMenosD++;
+						break;
+					default:
+						break;
+				}
+			});
+
+				// Atualiza os campos de input com os totais calculados no lado esquerdo
+				document.getElementById("folregTotalduploesq_i").value = totalEsqI;
+				document.getElementById("folregTotalduploesq_e").value = totalEsqE;
+				document.getElementById("folregTotalduploesq_plusd").value = totalEsqMaisD;
+				document.getElementById("folregTotalduploesq_minusd").value = totalEsqMenosD;
+
+				// Variáveis para armazenar os totais do lado direito
+				let totalDirI = 0;
+				let totalDirE = 0;
+				let totalDirMaisD = 0;
+				let totalDirMenosD = 0;
+
+				// Encontra todos os inputs de rádio marcados no lado direito
+				let inputsDir = document.querySelectorAll('input[name$="Resdir"]:checked');
+
+				// Loop através de todos os inputs encontrados no lado direito
+				inputsDir.forEach(function(input) {
+					// Verifica o valor do input
+					switch(input.value) {
+						case 'I':
+							totalDirI++;
+							break;
+						case 'E':
+							totalDirE++;
+							break;
+						case '+d':
+							totalDirMaisD++;
+							break;
+						case '-d':
+							totalDirMenosD++;
+							break;
+						default:
+							break;
+					}
+				});
+
+				// Atualiza os campos de input com os totais calculados no lado direito
+				document.getElementById("folregTotalduplodir_i").value = totalDirI;
+				document.getElementById("folregTotalduplodir_e").value = totalDirE;
+				document.getElementById("folregTotalduplodir_plusd").value = totalDirMaisD;
+				document.getElementById("folregTotalduplodir_minusd").value = totalDirMenosD;
+			}
+
+			function atualizarGraficoDuplo() {
+				// Obtém os valores dos  campos de entrada e multiplica por 10 para o lado esquerdo
+				const valoresEsq = [
+					parseInt(document.getElementById("folregTotalduploesq_i").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq_e").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq_plusd").value) * 10,
+					parseInt(document.getElementById("folregTotalduploesq_minusd").value) * 10
+				];
+
+				// Obtém os valores dos campos de entrada e multiplica por 10 para o lado direito
+				const valoresDir = [
+					parseInt(document.getElementById("folregTotalduplodir_i").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir_e").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir_plusd").value) * 10,
+					parseInt(document.getElementById("folregTotalduplodir_minusd").value) * 10
+				];
+
+				// Atualiza os dados do gráfico duplo
+				dataDuplo.datasets[0].data = valoresEsq;
+				dataDuplo.datasets[1].data = valoresDir;
+
+				// Atualiza o gráfico duplo
+				if (graficoDuplo !== null) {
+					graficoDuplo.update();
+				} else {
+					console.error('O gráfico duplo não foi inicializado corretamente.');
+				}
+			}
+
+			// Chamar as funções para atualizar o gráfico duplo quando os radio buttons forem alterados
+			document.querySelectorAll('input[name$="Resesqu"]').forEach(function(input) {
+				input.addEventListener("change", function() {
+					somaResEstDuplo();
+					atualizarGraficoDuplo();
+				});
+			});
+
+			document.querySelectorAll('input[name$="Resdir"]').forEach(function(input) {
+				input.addEventListener("change", function() {
+					somaResEstDuplo();
+					atualizarGraficoDuplo();
+				});
+			});
+			function mudarstatusSet(selectElement) {
+				
+				// Obtém o status antigo do banco (simulando com um atributo data)
+				let statusAtual = document.getElementById("progsetStatusEdi").value;
+				console.log(statusAtual);
+				let novoStatus = document.getElementById("progsetStatus").value;
+
+				// Verifica se a mudança é permitida
+				if ((statusAtual === "Andamento" && novoStatus === "Meta") || (statusAtual === "Agendado" && novoStatus === "Andamento")) {
+					// Permite a mudança e atualiza o status no banco (se necessário)
+					document.getElementById("progsetStatus").value = novoStatus;
+					console.log(`Status alterado para: ${novoStatus}`);
+				} else {
+					// Reverte para o status anterior e avisa o usuário
+					alert("Mudança de status não permitida!");
+					document.getElementById("progsetStatus").value = statusAtual;
+				}
+			}
+
+		</script>
+	</head>
+	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+
+							<li class="active">SET Editar</li>
+						</ul><!-- /.breadcrumb -->
+					</div><!-- /.breadcrumbs ace-save-state -->
+					
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/area/aba/progset/atualizar" method="POST">
+								<div id="divCarrega" style="display: none;">
+									
+									<input type="text" id="progsetId" name="progsetId" value="{{progset._id}}"/>
+									perfil<input type="text" id="usuperfilId" name="usuperfilId" value="{{perfilAtual}}"/>
+									<input type="text" id="progsetProgid" name="progsetProgid" value="{{progset.progset_progid}}"/>
+									
+									<input type="text" id="progsetProgidEdi" name="progsetProgidEdi" value="{{progset.progset_progid}}"/>
+									<input type="text" id="progsetBeneidEdi" name="progsetBeneidEdi" value="{{progset.progset_beneid}}"/>
+									<input type="text" id="progsetTeraidEdi" name="progsetTeraidEdi" value="{{progset.progset_teraid}}"/>
+									<input type="text" id="progsetProgtipoidEdi" name="progsetProgtipoidEdi" value="{{progset.progset_progtipoid}}"/>
+									<input type="text" id="progsetPrognivelidEdi" name="progsetPrognivelidEdi" value="{{progset.progset_prognivelid}}"/>
+									<input type="text" id="progsetNumEdi" name="progsetNumEdi" value="{{progset.progset_num}}"/>
+									<input type="text" id="progsetDatasetEdi" name="progsetDatasetEdi" value="{{progset.progset_dataset}}"/>
+									<input type="text" id="progsetDatainiEdi" name="progsetDatainiEdi" value="{{progset.progset_dataini}}"/>
+									<input type="text" id="progsetDatafinEdi" name="progsetDatafinEdi" value="{{progset.progset_datafin}}"/>
+									<input type="text" id="progsetDatametaEdi" name="progsetDatametaEdi" value="{{progset.progset_datameta}}"/>
+									<input type="text" id="progsetStatusEdi" name="progsetStatusEdi" value="{{progset.progset_status}}"/>
+									<input type="text" id="progsetTiporegEdi" name="progsetTiporegEdi" value="{{progset.progset_tiporeg}}"/>
+									<input type="text" id="progsetDescEdi" name="progsetDescEdi" value="{{progset.progset_desc}}"/>
+									<input type="text" id="progsetQtestEdi" name="progsetQtestEdi" value="{{progset.progset_qtest}}"/>
+									<input type="text" id="progsetEstaEdi" name="progsetEstaEdi" value="{{progset.progset_esta}}"/>
+									<input type="text" id="progsetEstbEdi" name="progsetEstbEdi" value="{{progset.progset_estb}}"/>
+									<input type="text" id="progsetEstcEdi" name="progsetEstcEdi" value="{{progset.progset_estc}}"/>
+									<input type="text" id="progsetEstdEdi" name="progsetEstdEdi" value="{{progset.progset_estd}}"/>
+									<input type="text" id="progsetEsteEdi" name="progsetEsteEdi" value="{{progset.progset_este}}"/>
+									<input type="text" id="progsetEstfEdi" name="progsetEstfEdi" value="{{progset.progset_estf}}"/>
+									<input type="text" id="progsetEstgEdi" name="progsetEstgEdi" value="{{progset.progset_estg}}"/>
+									<input type="text" id="progsetEsthEdi" name="progsetEsthEdi" value="{{progset.progset_esth}}"/>
+									<input type="text" id="progsetEstiEdi" name="progsetEstiEdi" value="{{progset.progset_esti}}"/>
+									<input type="text" id="progsetEstjEdi" name="progsetEstjEdi" value="{{progset.progset_estj}}"/>
+									<input type="text" id="progsetMetatipoEdi" name="progsetMetatipoEdi" value="{{progset.progset_metatipo}}"/>
+									<input type="text" id="progsetObsEdi" name="progsetObsEdi" value="{{progset.progset_obs}}"/>
+
+								</div>
+								
+									<div class="col-sm-12"><!-- Widget Dados Básicos -->
+										<div class="widget-box" id="cabecset">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bookmark-o"></i>
+													Cabeçalho do SET e Índices 
+												</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-lg-6 col-md-12">
+															<label>Beneficiário</label>
+															<div class="form-group">
+																<div class="col-lg-6 col-md-12">
+																	<!-- Campo visual, não editável -->
+																	<input type="text"
+																		class="form-control"
+																		readonly
+																		value="{{beneNomeExibicao}}"
+																		style="background-color: #f5f5f5; opacity: 1; cursor: not-allowed; border: 1px solid #d5d5d5;"
+																	/>
+																	<!-- Campo oculto para submissão -->
+																	<input type="hidden" name="progsetBeneid" id="progsetBeneid" value="{{progset.progset_beneid}}" />
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<!-- Tipo de Programa -->
+														<div class="col-lg-4 col-md-12">
+															<label>Tipo de Programa</label>
+															<div class="form-group">
+																<div class="col-lg-12 col-md-12">
+																	<input type="text"
+																		class="form-control"
+																		readonly
+																		value="{{progtipoNomeExibicao}}"
+																		style="background-color: #f5f5f5; opacity: 1; cursor: not-allowed; border: 1px solid #d5d5d5;"
+																	/>
+																	<input type="hidden" name="progsetProgtipoid" id="progsetProgtipoid" value="{{progset.progset_progtipoid}}" />
+																</div>
+															</div>
+														</div>
+
+														<!-- Nível do Programa -->
+														<div class="col-lg-4 col-md-12">
+															<label>Nível do Programa</label>
+															<div class="form-group">
+																<div class="col-lg-12 col-md-12">
+																	<input type="text"
+																		class="form-control"
+																		readonly
+																		value="{{prognivelNomeExibicao}}"
+																		style="background-color: #f5f5f5; opacity: 1; cursor: not-allowed; border: 1px solid #d5d5d5;"
+																	/>
+																	<input type="hidden" name="progsetPrognivelid" id="progsetPrognivelid" value="{{progset.progset_prognivelid}}" />
+																</div>
+															</div>
+														</div>
+
+														<!-- Terapeuta Responsável -->
+														<div class="col-lg-4 col-md-12">
+															<label>Terapeuta Responsável</label>
+															<div class="form-group">
+																<div class="col-lg-12 col-md-12">
+																	<select name="progsetTeraid" id="progsetTeraid" class="select2">
+																		<option value="766f69643132333435366964">-</option>
+																		{{#each usuarios}}
+																			<option value="{{_id}}">{{usuario_nome}}</option>
+																		{{/each}}
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-4">
+															<label>Número do SET</label>
+															<div class="input-group">
+																<div class="input-group">
+																	<input type="text" id="progsetNum" name="progsetNum" placeholder="SET 01"/>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-xs-12 col-sm-2">
+															<label for="id-date-picker-1"> Data da criação do SET</label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-4" >
+																		<input id="progsetDataset" name="progsetDataset" type="date" >
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-2">
+															<label for="id-date-picker-1"> Data de início do SET</label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-4">
+																		<input id="progsetDataini" name="progsetDataini" type="date">
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-2">
+															<label for="id-date-picker-1"> Data de previsão para Meta</label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-4">
+																		<input id="progsetDatafin" name="progsetDatafin" type="date">
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-2">
+															<label for="id-date-picker-1"> Data da Meta </label>
+															<div class="row">
+																<div class="input-group">
+																	<div class="col-sm-4">
+																		<input id="progsetDatameta" name="progsetDatameta" type="date">
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-2">
+															<label>Tipo Meta</label>
+															<div class="input-group">
+																<div class="input-group">
+																	<select name="progsetMetatipo" id="progsetMetatipo" class="select2" >
+																		<option value="3">3</option>
+																		<option value="25">25</option>
+																	</select>
+																	<label>&nbsp;Vezes.</label>
+																</div>
+															</div>
+														</div>
+													</div>
+								
+													
+													<br>
+													<div class="row">
+														<div class="col-lg-4 col-md-12">
+															<label>Status do SET</label>
+															<div class="form-group">
+																<div class="col-lg-4 col-md-12">
+																	<select name="progsetStatus" id="progsetStatus" class="select2" onchange="">
+																		<option value="Agendado">Agendado</option>
+																		<option value="Andamento">Andamento</option>
+																		<option value="Pausado">Pausado</option>
+																		<option value="Meta">Meta</option>
+																		<option value="Manutenção">Manutenção</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-lg-4 col-md-12">
+															<label>Tipo do Registro para TODO o SET</label>
+															<div class="form-group">
+																<div class="col-lg-4 col-md-12">
+																	<select name="progsetTiporeg" id="progsetTiporeg" class="select2" onchange="javascript:mudaRegistro()">
+																		<option value="Não Informado">Não Informado</option>
+																		<option value="Simples">Simples</option>
+																		<option value="Duplo">Duplo</option>
+																	</select>
+																</div>
+															</div>
+														</div>
+													</div>
+													
+												</div>
+											</div>
+										</div>	
+									</div>
+									<div class="col-sm-12"><!-- Widget main Básicos -->
+										<div class="widget-box" id="mainset">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bullseye"></i>
+													SET
+												</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="reload">
+														<i class="ace-icon fa fa-refresh"></i>
+													</a>
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-xs-12">
+															<label> Descrição </label>
+															<div class="form-group">
+																<div class="col-sm-6">
+																	<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="3"></textarea>
+																</div>
+															</div>
+															<label> Quantidade de Estímulos para esse SET </label>
+															<div class="form-group">
+																<div class="col-sm-6">
+																	<select name="progsetQtest" id="progsetQtest" class="select2" onchange="updateStimulusFields()">
+																		<option value="1">1</option>
+																		<option value="2">2</option>
+																		<option value="3">3</option>
+																		<option value="4">4</option>
+																		<option value="5">5</option>
+																		<option value="6">6</option>
+																		<option value="7">7</option>
+																		<option value="8">8</option>
+																		<option value="9">9</option>
+																		<option value="10">10</option>
+																	</select>
+																</div>
+															</div>
+															
+															<div class="row">
+																<div class="col-sm-6 stimulus-field" id="stimulusA">
+																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																	<span class="label label-sm label-info arrowed arrowed-righ">A</span>
+																	<div class="row">
+																		<div class="col-sm-6">
+																				<input name="progsetEsta" id="progsetEsta" type="text" class="form-control" />
+																		</div>
+																	</div>
+																</div>
+
+																<div class="col-sm-6 stimulus-field" id="stimulusB">
+																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																	<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
+																	<div class="row">
+																		<div class="col-sm-6">
+																				<input name="progsetEstb" id="progsetEstb" type="text" class="form-control" />
+																		</div>
+																	</div>
+																</div>
+
+																<div class="col-sm-6 stimulus-field" id="stimulusC">
+																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																	<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
+																	<div class="row">
+																		<div class="col-sm-6">
+																				<input name="progsetEstc" id="progsetEstc" type="text" class="form-control" />
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-6 stimulus-field" id="stimulusD">
+																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																	<span class="label label-sm label-info arrowed arrowed-righ">D</span>
+																	<div class="row">
+																		<div class="col-sm-6">
+																				<input name="progsetEstd" id="progsetEstd" type="text" class="form-control" />
+																		</div>
+																	</div>
+																</div>
+
+																<div class="col-sm-6 stimulus-field" id="stimulusE">
+																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																	<span class="label label-sm label-warning arrowed arrowed-righ">E</span>
+																	<div class="row">
+																		<div class="col-sm-6">
+																				<input name="progsetEste" id="progsetEste" type="text" class="form-control" />
+																		</div>
+																	</div>
+																</div>
+
+																<div class="col-sm-6 stimulus-field" id="stimulusF">
+																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																	<span class="label label-sm label-pink arrowed arrowed-righ">F</span>
+																	<div class="row">
+																		<div class="col-sm-6">
+																				<input name="progsetEstf" id="progsetEstf" type="text" class="form-control" />
+																		</div>
+																	</div>
+																</div>																								
+															</div>
+															<div class="row">
+																<div class="col-sm-6 stimulus-field" id="stimulusG">
+																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																	<span class="label label-sm label-purple arrowed arrowed-righ">G</span>
+																	<div class="row">
+																		<div class="col-sm-6">
+																				<input name="progsetEstg" id="progsetEstg" type="text" class="form-control" />
+																		</div>
+																	</div>
+																</div>
+
+																<div class="col-sm-6 stimulus-field" id="stimulusH">
+																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																	<span class="label label-sm label-success arrowed arrowed-righ">H</span>
+																	<div class="row">
+																		<div class="col-sm-6">
+																				<input name="progsetEsth" id="progsetEsth" type="text" class="form-control" />
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="row">
+																<div class="col-sm-6 stimulus-field" id="stimulusI">
+																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																	<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;I</span>
+																	<div class="row">
+																		<div class="col-sm-6">
+																				<input name="progsetEsti" id="progsetEsti" type="text" class="form-control" />
+																		</div>
+																	</div>
+																</div>
+																<div class="col-sm-6 stimulus-field" id="stimulusJ">
+																	<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
+																	<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;J</span>
+																	<span class="label label-sm label-warning">&nbsp;Especial 10 tentativas</span>
+																	<div class="row">
+																		<div class="col-sm-6">
+																				<input name="progsetEstj" id="progsetEstj" type="text" class="form-control" />
+																		</div>
+																	</div>
+																</div>	
+															</div>
+															
+															<label> Observações</label>
+															<div class="form-group">
+																<div class="col-sm-6">
+																	<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="3" ></textarea>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>	
+									</div>
+								
+									<div class="col-sm-12"><!-- Widget Gráficos-->
+										<div class="widget-box" id="grafset">
+											<div class="widget-header">
+												<h4 class="widget-title">
+													<i class="ace-icon fa fa-bar-chart"></i>
+													Gráfico Consolidado do SET
+												</h4>
+												<span class="widget-toolbar">
+													<a href="#" data-action="fullscreen" class="orange2">
+														<i class="ace-icon fa fa-expand"></i>
+													</a>
+													<a href="#" data-action="collapse">
+														<i class="ace-icon fa fa-chevron-up"></i>
+													</a>
+												</span>
+											</div>
+											<div class="widget-body">
+												<div class="widget-main">
+													<div class="row">
+														<div class="col-xs-12">
+														<p class="alert alert-info">
+															Não há gráfico para Novos SET´s, apenas quando existirem registros para esse SET.
+														</p>
+														</div>
+														<div class="row" style="position: relative;">
+																<div class="col-xs-12">
+																	<!-- GRAFICO DUPLO-->
+																	<div class="container" style="width: 100%;">
+																		<canvas id="doubleBarChart" width="400" height="200"></canvas>
+																	</div>
+																</div>																		
+															</div>	
+														</div>
+													</div>
+											</div>
+										</div>
+									</div>
+									<div>
+										{{#ifIncludes perfilAtual "644743aa78166939169f8486,62421801a12aa557219a0fb9,644742e378166939169f82a1" }}
+										<div class="col-xs-12">
+											<button class="btn btn-info"  name="acao" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												Salvar
+											</button>
+											{{else}}
+											{{/ifIncludes}}
+											&nbsp; &nbsp; &nbsp;
+											<button class="btn btn-warning" href="/menu/area/aba/prog/proglis">
+												<i class="ace-icon fa fa-undo bigger-110"></i>
+												Voltar
+											</button>
+										</div>
+									</div>
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.main-content-inner -->
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container ace-save-state -->
+	</body>
+</html>

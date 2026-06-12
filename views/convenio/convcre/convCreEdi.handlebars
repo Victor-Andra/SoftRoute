@@ -4,172 +4,221 @@
 		<title>Créditos de Convênios Edição</title>
 	</head>
 
-	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
-		<!-- Inputs hidden para valores de edição -->
-		<input id="convcreStatusEdi" name="convcreStatusEdi" class="hidden" value="{{convcre.convcre_status}}"/>
-		<input id="convIdEdi" name="convIdEdi" class="hidden" value="{{convcre.convcre_convid}}"/>
-		<input id="terapiaIdEdi" name="terapiaIdEdi" class="hidden" value="{{convcre.convcre_terapiaid}}"/>
-		<input id="dataEdi" name="dataEdi" class="hidden" value="{{convcre.convcre_data}}"/>
+	<body onload="javascript:controlaNave();" class="no-skin">
 
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
-							<li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
 							<li class="active">Créditos de Convênios Edição</li>
-						</ul>
+						</ul><!-- /.breadcrumb -->
+					</div>
+
+					<!-- Dados para carregar -->
+					<div id="divCarrega" name="divCarrega" class="hidden">
+						<input id="convcreStatusEdi" name="convcreStatusEdi" value="{{convcre.convcre_status}}"/>
+						<input id="convcreTerapiaidEdi" name="convcreTerapiaidEdi" value="{{convcre.convcre_terapiaid}}"/>
+						<input id="convcreConvidEdi" name="convcreConvidEdi" value="{{convcre.convcre_convid}}"/>
+						<input id="convcreDataEdi" name="convcreDataEdi" value="{{convcre.convcre_data}}"/>
 					</div>
 
 					<div class="row">
 						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/convenio/convcre/atualizar" method="POST">
 								<input id="convcreId" name="convcreId" class="hidden" value="{{convcre._id}}"/>
+								
 								<div class="col-sm-12">
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Crédito de Convênios</h4>
 											<span class="widget-toolbar">
-												<a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
-												<a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
 											</span>
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
+												
 												<label>Convênio</label>
 												<div class="form-group">
 													<div class="col-sm-4">
 														<select name="convcreConvid" id="convcreConvid" class="select2" data-placeholder="Escolha...">
+															<option value=""></option>
 															{{#each convs}}
-															<option value="{{_id}}">{{conv_nome}}</option>
+																<option value="{{_id}}">{{conv_nome}}</option>
 															{{/each}}
 														</select>
 													</div>
 												</div>
-
+												
+												<div class="space space-8"></div>
+												
 												<label>Terapia</label>
 												<div class="form-group">
 													<div class="col-sm-4">
 														<select name="convcreTerapiaid" id="convcreTerapiaid" class="select2" data-placeholder="Escolha...">
+															<option value=""></option>
 															{{#each terapias}}
-															<option value="{{_id}}">{{terapia_nome}}</option>
+																<option value="{{_id}}">{{terapia_nome}}</option>
 															{{/each}}
 														</select>
 													</div>
 												</div>
-
-												<label for="id-date-picker-1">Data</label>
-												<div class="row">
+												
+												<div class="space space-8"></div>
+												
+												<label>Data</label>
+												<div class="form-group">
 													<div class="col-sm-3">
-														<div class="input-group">
-															<input name="convcreData" id="convcreData" type="date" onchange="javascript:atualizaData()" />
-															<input name="convcreDataFinal" id="convcreDataFinal" class="hidden" />
-														</div>
+														<input name="convcreData" id="convcreData" type="date" class="form-control"/>
 													</div>
 												</div>
-
+												
 												<div class="space space-8"></div>
+												
 												<label>Valor de Crédito</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="convcreValor" placeholder="" class="form-control" value="{{convcre.convcre_valor}}"/>
+														<input type="text" name="convcreValor" id="convcreValor" class="form-control" value="{{convcre.convcre_valor}}"/>
 													</div>
 												</div>
+												
+												<div class="space space-8"></div>
 												
 												<label>Status</label>
 												<div class="form-group">
 													<div class="col-sm-2">
-														<select name="convcreStatus" id="convcreStatus" class="select2" style="width: 100px;">
+														<select name="convcreStatus" id="convcreStatus" class="select2" style="width: 150px;">
 															<option value="Ativo">Ativo</option>
 															<option value="Inativo">Inativo</option>
 														</select>
 													</div>
 												</div>
-
+												
 												<div class="space space-8"></div>
+												
 												<label>Observações</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="convcreObs" id="convcreObs" placeholder="" class="form-control" value="{{convcre.convcre_obs}}"/>
+														<input type="text" name="convcreObs" id="convcreObs" class="form-control" value="{{convcre.convcre_obs}}"/>
 													</div>
 												</div>
+												
 											</div>
 										</div>
 									</div>
 								</div>
-							
+								
 								<div class="space-6"></div>
+								
 								<div class="form-actions">
 									<div class="col-xs-12" style="text-align: center;">
 										<button class="btn btn-info" name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i> Salvar
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
 										</button>
 										&nbsp; &nbsp; &nbsp;
-										<button type="button" class="btn btn-warning" onclick="window.location.href='/menu/convenio/convcre/lis'">
-											<i class="ace-icon fa fa-undo bigger-110"></i> Voltar
-										</button>
+										<a href="/menu/convenio/convcre/lis" class="btn btn-warning">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</a>
 									</div>
 								</div>
 							</form>
-						</div>
-					</div>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
 				</div>
-			</div>
-		</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
 
-		<!-- 🔹 SCRIPTS CORRIGIDOS -->
-		<script type="text/javascript">
-			function atualizaData(){
-				var dataInput = document.getElementById("convcreData").value;
-				if(!dataInput) return;
-				var datafmt = new Date(dataInput + "T00:00:00.000Z");
-				document.getElementById("convcreDataFinal").value = datafmt.toISOString();
-			}
-
-			function carregaBody(){
-				// 1️⃣ Pega valores dos hidden inputs
-				var convid = document.getElementById("convIdEdi").value;
-				var terapiaid = document.getElementById("terapiaIdEdi").value;
-				var status = document.getElementById("convcreStatusEdi").value;
-				var dataEdi = document.getElementById("dataEdi").value;
-
-				// 2️⃣ Formata e aplica data
-				if(dataEdi){
-					document.getElementById("convcreData").value = dataEdi.substring(0,10); // YYYY-MM-DD
-					atualizaData();
-				}
-
-				// 3️⃣ Atualiza selects COM suporte ao Chosen
-				if (typeof jQuery !== 'undefined' && jQuery.fn.chosen) {
-					$('#convcreConvid').val(convid).trigger('chosen:updated');
-					$('#convcreTerapiaid').val(terapiaid).trigger('chosen:updated');
-					$('#convcreStatus').val(status).trigger('chosen:updated');
-				} else {
-					// Fallback puro JS (caso Chosen falhe)
-					document.getElementById("convcreConvid").value = convid;
-					document.getElementById("convcreTerapiaid").value = terapiaid;
-					document.getElementById("convcreStatus").value = status;
-				}
-			}
-
-			// 🔒 Inicialização segura: roda APÓS o DOM e Chosen estarem prontos
+		<!-- Scripts -->
+		<script>
 			$(document).ready(function() {
-				// 1. Inicializa Chosen
-				if (typeof $.fn.chosen === 'function') {
-					$('.chosen-select').chosen({
+				console.log("🔍 Iniciando carregamento da view convCreEdi...");
+				
+				// 1️⃣ Inicializar Select2
+				if (typeof $.fn.select2 === 'function') {
+					$('.select2').select2({
 						width: '100%',
-						disable_search_threshold: 10,
-						allow_single_deselect: true,
-						no_results_text: 'Nenhum resultado encontrado'
+						placeholder: 'Escolha...',
+						allowClear: true
 					});
+					console.log("✅ Select2 inicializado");
+				} else {
+					console.error("❌ Select2 não está carregado!");
 				}
 				
-				// 2. Carrega os valores corretamente
+				// 2️⃣ Carregar valores salvos
 				carregaBody();
-				
-				// 3. Inicializa navegação do Ace Admin
-				if(typeof controlaNave === 'function') controlaNave();
 			});
+
+			function carregaBody() {
+				console.log("📋 Iniciando carregaBody...");
+				
+				// 1️⃣ Formatar data (converter ISO para yyyy-mm-dd)
+				const dataEdi = document.getElementById("convcreDataEdi")?.value;
+				console.log("📅 Data recebida do banco:", dataEdi);
+				
+				if (dataEdi) {
+					try {
+						const dataObj = new Date(dataEdi);
+						
+						if (!isNaN(dataObj.getTime())) {
+							const ano = dataObj.getFullYear();
+							const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
+							const dia = String(dataObj.getDate()).padStart(2, '0');
+							
+							const dataFormatada = `${ano}-${mes}-${dia}`;
+							console.log("✅ Data formatada:", dataFormatada);
+							
+							document.getElementById("convcreData").value = dataFormatada;
+						} else {
+							console.error("❌ Data inválida:", dataEdi);
+						}
+					} catch (error) {
+						console.error("❌ Erro ao formatar data:", error);
+					}
+				} else {
+					console.warn("⚠️ Campo de data vazio");
+				}
+				
+				// 2️⃣ Setar valores dos selects
+				const conveniosId = document.getElementById("convcreConvidEdi")?.value;
+				const terapiaId = document.getElementById("convcreTerapiaidEdi")?.value;
+				const status = document.getElementById("convcreStatusEdi")?.value;
+				
+				console.log("🔧 Valores recebidos:", { conveniosId, terapiaId, status });
+				
+				// Convênio
+				if (conveniosId) {
+					$('#convcreConvid').val(conveniosId).trigger('change');
+					console.log("✅ Convênio setado:", conveniosId);
+				}
+				
+				// Terapia
+				if (terapiaId) {
+					$('#convcreTerapiaid').val(terapiaId).trigger('change');
+					console.log("✅ Terapia setada:", terapiaId);
+				}
+				
+				// Status
+				if (status) {
+					$('#convcreStatus').val(status).trigger('change');
+					console.log("✅ Status setado:", status);
+				}
+				
+				console.log("✅ carregaBody concluído!");
+			}
 		</script>
 	</body>
 </html>

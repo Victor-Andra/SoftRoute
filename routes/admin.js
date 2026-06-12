@@ -51,6 +51,16 @@ const escolaClass = require("../models/escola")
 var Escola = getModel("softroute", 'tb_escola', escolaClass.EscolaSchema);//getModel("softroute", 'tb_escola', escolaClass.EscolaSchema)
 const fncEscola = require("../functions/fncEscola")
 
+//Compali - Escala LABIRINTO
+const compaliClass = require("../models/compali")
+var Compali = getModel("softroute", 'tb_compali', compaliClass.CompaliSchema)
+const fncCompali = require("../functions/fncCompali")
+
+//Ebai - Escala EBAI
+const ebaiClass = require("../models/ebai")
+var Ebai = getModel("softroute", 'tb_ebai', ebaiClass.EbaiSchema)
+const fncEbai = require("../functions/fncEbai")
+
 //funções, cargos dos funcionários
 const funcaoClass = require("../models/funcao")
 var Funcao = getModel("softroute", 'tb_funcao', funcaoClass.FuncaoSchema);//getModel("softroute", 'tb_funcao', funcaoClass.FuncaoSchema)
@@ -472,7 +482,226 @@ class PoteBiscoito{
     }
 }
 
+// ============================================
+// FUNÇÃO AUXILIAR: Buscar evoluções pendentes 
+// Período: Dia 01 do mês atual até a DATA ATUAL
+// ============================================
+async function buscarEvolucoesPendentesMes(db, idTerapeuta) {
+    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+    
+    // Calcular período: dia 01 do mês atual até HOJE (UTC)
+    const hoje = new Date();
+    const inicioMes = new Date(Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), 1, 0, 0, 0, 0));
+    
+    // ✅ AJUSTE: fimMes é HOJE (não mais o último dia do mês)
+    const fimMes = new Date(Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), hoje.getUTCDate(), 23, 59, 59, 999));
+    
+    console.log(`\n🔍 [EVOLUÇÕES PENDENTES] Período: ${inicioMes.toISOString()} até ${fimMes.toISOString()}`);
+    
+    try {
+        // 1️⃣ Buscar agendamentos PAIS do período (agenda_temp: false)
+        const agendasRaw = await Agenda.find({
+            agenda_data: { $gte: inicioMes, $lte: fimMes },
+            agenda_usuid: mongoose.Types.ObjectId(idTerapeuta),
+            agenda_temp: false  // Apenas pais
+        }).lean();
+        
+        console.log(`   📦 Pais encontrados no período: ${agendasRaw.length}`);
+        
+        if (agendasRaw.length === 0) {
+            console.log(`   ✅ Evoluções pendentes: 0 (sem agendamentos no período)`);
+            return 0;
+        }
+        
+        // 2️⃣ Buscar filhos (substituições) que apontam para esses pais
+        const idsPais = agendasRaw.map(a => a._id);
+        const filhosRaw = await Agenda.find({ 
+            agenda_tempId: { $in: idsPais } 
+        }).lean();
+        
+        console.log(`   🔗 Filhos (substituições) encontrados: ${filhosRaw.length}`);
+        
+        // 3️⃣ Montar mapa de filhos por pai
+        const mapaFilhos = new Map();
+        filhosRaw.forEach(f => {
+            const tempId = "" + f.agenda_tempId;
+            if (!mapaFilhos.has(tempId)) mapaFilhos.set(tempId, []);
+            mapaFilhos.get(tempId).push(f);
+        });
+        
+        // 4️⃣ Helper: normalizar boolean
+        const normalizeBoolean = (value) => {
+            if (typeof value === "boolean") return value;
+            if (typeof value === "string") return value.toLowerCase() === "true";
+            return false;
+        };
+        
+        // 5️⃣ Processar cada registro aplicando as 8 regras
+        let contadorPendentes = 0;
+        
+        for (const reg of agendasRaw) {
+            // REGRA 1: Já foi evoluído? → PULA
+            if (normalizeBoolean(reg.agenda_selo)) continue;
+            
+            // REGRA 2: Categoria bloqueada? → PULA
+            const cat = (reg.agenda_categoria || "").toString().trim();
+            if (cat === "Falta Absoluta" || cat === "Feriado") continue;
+            
+            // REGRA 3: Verificar cadeia de substituição
+            const filhos = mapaFilhos.get("" + reg._id) || [];
+            let registroResponsavel = reg; // por padrão, o pai é o responsável
+            
+            if (filhos.length > 0) {
+                // Existe cadeia → o responsável é o ÚLTIMO da cadeia
+                registroResponsavel = filhos[filhos.length - 1];
+            }
+            
+            // REGRA 4: Só conta se o terapeuta logado é o responsável atual
+            if (registroResponsavel.agenda_usuid?.toString() !== idTerapeuta) continue;
+            
+            // REGRA 5: Verificar categoria final (do responsável)
+            const catFinal = (registroResponsavel.agenda_categoria || "").toString().trim();
+            if (catFinal === "Falta Absoluta" || catFinal === "Feriado") continue;
+            
+            // REGRA 6: Verificar agenda_selo do RESPONSÁVEL FINAL
+            if (normalizeBoolean(registroResponsavel.agenda_selo)) continue;
+            
+            // Se passou em todas as regras → É PENDENTE
+            contadorPendentes++;
+        }
+        
+        console.log(`   ✅ Evoluções pendentes (01 até hoje): ${contadorPendentes}`);
+        
+        return contadorPendentes;
+    } catch (err) {
+        console.error("❌ Erro ao buscar evoluções pendentes:", err);
+        return 0;
+    }
+}
 
+async function buscarEvolucoesPendentesMesTemp(db, idTerapeuta) {
+    var Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+    
+    // Calcular período: dia 01 do mês atual até HOJE (UTC)
+    var hoje = new Date();
+    var inicioMes = new Date(Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), 1, 0, 0, 0, 0));
+    
+    // ✅ AJUSTE: fimMes é HOJE (não mais o último dia do mês)
+    var fimMes = new Date(Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), hoje.getUTCDate(), 23, 59, 59, 999));
+    
+    console.log(`\n🔍 [EVOLUÇÕES PENDENTES] Período: ${inicioMes.toISOString()} até ${fimMes.toISOString()}`);
+    
+    try {
+        // 1️⃣ Buscar agendamentos PAIS do período (agenda_temp: false)
+        var agendasRaw = await Agenda.find({
+            agenda_data: { $gte: inicioMes, $lte: fimMes },
+            agenda_usuid: mongoose.Types.ObjectId(idTerapeuta),
+            agenda_temp: false  // Apenas pais
+        }).lean();
+        
+        console.log(`   📦 Pais encontrados no período: ${agendasRaw.length}`);
+        
+        if (agendasRaw.length === 0) {
+            console.log(`   ✅ Evoluções pendentes: 0 (sem agendamentos no período)`);
+            return 0;
+        }
+        
+        // 2️⃣ Buscar filhos (substituições) que apontam para esses pais
+        var idsPais = agendasRaw.map(a => a._id);
+        var filhosRaw = await Agenda.find({
+            //agenda_tempId: { $in: idsPais }
+            $or: [
+                {
+                    agenda_data: { $gte: inicioMes, $lte: fimMes },
+                    agenda_usuid: mongoose.Types.ObjectId(idTerapeuta),
+                    agenda_temp: true,
+                    agenda_tempId: {
+                        $nin: idsPais
+                    }
+                },
+                {
+                    agenda_tempId: {
+                        $in: idsPais
+                    }
+                }
+            ]
+        }).lean();
+
+
+        agendasRaw = agendasRaw.filter(
+            agenda => !filhosRaw.some(
+                filho => String(filho.agenda_tempId) === String(agenda._id)
+            )
+        );
+
+        filhosRaw = filhosRaw.filter(f => String(f.agenda_usuid) === String(idTerapeuta));
+        
+        console.log(`   🔗 Filhos (substituições) encontrados: ${filhosRaw.length}`);
+        
+
+        // Refazer o trecho abaixo
+        // O codigo esta gerando informacoes com falso verdadeiro
+        // Deve ser alterado o for e este foreach, o filtro ja foi feito mas exige melhora.
+        // Lembrete !!!
+        // A estrutura acima nao deve ser alterada
+
+        // 3️⃣ Montar mapa de filhos por pai
+        var mapaFilhos = new Map();
+        filhosRaw.forEach(f => {
+            var tempId = "" + f.agenda_tempId;
+            if (!mapaFilhos.has(tempId)) mapaFilhos.set(tempId, []);
+            mapaFilhos.get(tempId).push(f);
+        });
+        
+        // 4️⃣ Helper: normalizar boolean
+        var normalizeBoolean = (value) => {
+            if (typeof value === "boolean") return value;
+            if (typeof value === "string") return value.toLowerCase() === "true";
+            return false;
+        };
+        
+        // 5️⃣ Processar cada registro aplicando as 8 regras
+        let contadorPendentes = 0;
+        
+        for (var reg of agendasRaw) {
+            // REGRA 1: Já foi evoluído? → PULA
+            if (normalizeBoolean(reg.agenda_selo)) continue;
+            
+            // REGRA 2: Categoria bloqueada? → PULA
+            var cat = (reg.agenda_categoria || "").toString().trim();
+            if (cat === "Falta Absoluta" || cat === "Feriado") continue;
+            
+            // REGRA 3: Verificar cadeia de substituição
+            var filhos = mapaFilhos.get("" + reg._id) || [];
+            let registroResponsavel = reg; // por padrão, o pai é o responsável
+            
+            if (filhos.length > 0) {
+                // Existe cadeia → o responsável é o ÚLTIMO da cadeia
+                registroResponsavel = filhos[filhos.length - 1];
+            }
+            
+            // REGRA 4: Só conta se o terapeuta logado é o responsável atual
+            if (registroResponsavel.agenda_usuid?.toString() !== idTerapeuta) continue;
+            
+            // REGRA 5: Verificar categoria final (do responsável)
+            var catFinal = (registroResponsavel.agenda_categoria || "").toString().trim();
+            if (catFinal === "Falta Absoluta" || catFinal === "Feriado") continue;
+            
+            // REGRA 6: Verificar agenda_selo do RESPONSÁVEL FINAL
+            if (normalizeBoolean(registroResponsavel.agenda_selo)) continue;
+            
+            // Se passou em todas as regras → É PENDENTE
+            contadorPendentes++;
+        }
+        
+        console.log(`   ✅ Evoluções pendentes (01 até hoje): ${contadorPendentes}`);
+        
+        return contadorPendentes;
+    } catch (err) {
+        console.error("❌ Erro ao buscar evoluções pendentes:", err);
+        return 0;
+    }
+}
 
 //Rota Base '/'
 router.get('/', (req,res) =>{
@@ -595,7 +824,130 @@ router.post("/ferramentas/usuario/esqueciMinhaSenha", (req,res) =>{//Direciona a
 router.post('/ferramentas/usuario/definirSenha', (req,res)=>{
     fncUsuario.definirSenha(req, res);
 })
-
+/**
+ * ============================================================================
+ * 🔍 FUNÇÃO AUXILIAR: Buscar Evoluções Faltantes (últimos 15 dias)
+ * ============================================================================
+ * Objetivo: Listar atendimentos passados que o terapeuta ainda não evoluiu
+ * Regras de negócio aplicadas:
+ *   - agenda_selo = false (não evoluído)
+ *   - agenda_categoria NÃO pode ser "Falta Absoluta" ou "Feriado" (bloqueados)
+ *   - Considera cadeia de substituição (só o atual responsável evolui)
+ *   - Filtra pelo terapeuta logado
+ *   - Ordena por data/hora (mais antigo primeiro)
+ * ============================================================================
+ */
+async function buscarEvolucoesFaltantes(db, idTerapeuta, benesFull, salas, terapias) {
+    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+    
+    // Intervalo de 15 dias para trás
+    const hoje = new Date();
+    hoje.setHours(23, 59, 59, 999);
+    const quinzeDiasAtras = new Date();
+    quinzeDiasAtras.setDate(hoje.getDate() - 15);
+    quinzeDiasAtras.setHours(0, 0, 0, 0);
+    
+    const dataIsoIni = fncGeral.getDateToIsostring(quinzeDiasAtras);
+    const dataIsoFim = fncGeral.getDateToIsostring(hoje);
+    
+    console.log("\n🔍 [buscarEvolucoesFaltantes] Buscando últimos 15 dias...");
+    console.log(`   📆 Período: ${dataIsoIni} até ${dataIsoFim}`);
+    
+    // 1️⃣ Buscar agendamentos do terapeuta no período
+    const agendasRaw = await Agenda.find({
+        agenda_data: { $gte: dataIsoIni, $lte: dataIsoFim },
+        agenda_usuid: mongoose.Types.ObjectId(idTerapeuta),
+        agenda_temp: false  // apenas os "pais" (registros originais)
+    }).lean();
+    
+    console.log(`   📦 Agendas brutas encontradas: ${agendasRaw.length}`);
+    
+    // 2️⃣ Buscar possíveis filhos (substituições) que apontam para essas agendas
+    const idsPais = agendasRaw.map(a => a._id);
+    const filhosRaw = idsPais.length > 0 
+        ? await Agenda.find({ agenda_tempId: { $in: idsPais } }).lean()
+        : [];
+    
+    console.log(`   🔗 Filhos (substituições) encontrados: ${filhosRaw.length}`);
+    
+    // 3️⃣ Montar mapa de filhos por pai
+    const mapaFilhos = new Map();
+    filhosRaw.forEach(f => {
+        const tempId = "" + f.agenda_tempId;
+        if (!mapaFilhos.has(tempId)) mapaFilhos.set(tempId, []);
+        mapaFilhos.get(tempId).push(f);
+    });
+    
+    // 4️⃣ Helper: normalizar boolean
+    const normalizeBoolean = (value) => {
+        if (typeof value === "boolean") return value;
+        if (typeof value === "string") return value.toLowerCase() === "true";
+        return false;
+    };
+    
+    // 5️⃣ Processar cada registro aplicando regras de negócio
+    const resultado = [];
+    
+    for (const reg of agendasRaw) {
+        // Regra 1: Já foi evoluído? → PULA
+        if (normalizeBoolean(reg.agenda_selo)) continue;
+        
+        // Regra 2: Categoria bloqueada? → PULA
+        const cat = (reg.agenda_categoria || "").toString().trim();
+        if (cat === "Falta Absoluta" || cat === "Feriado") continue;
+        
+        // Regra 3: Verificar cadeia de substituição
+        const filhos = mapaFilhos.get("" + reg._id) || [];
+        let registroResponsavel = reg; // por padrão, o pai é o responsável
+        
+        if (filhos.length > 0) {
+            // Existe cadeia → o responsável é o ÚLTIMO da cadeia
+            registroResponsavel = filhos[filhos.length - 1];
+        }
+        
+        // Regra 4: Só mostra se o terapeuta logado é o responsável atual
+        if (registroResponsavel.agenda_usuid?.toString() !== idTerapeuta) continue;
+        
+        // Regra 5: Verificar categoria final (do responsável)
+        const catFinal = (registroResponsavel.agenda_categoria || "").toString().trim();
+        if (catFinal === "Falta Absoluta" || catFinal === "Feriado") continue;
+        
+        // 6️⃣ Enriquecer com nomes (sala, beneficiário, terapia)
+        const dat = new Date(reg.agenda_data);
+        const hora = String(dat.getUTCHours()).padStart(2, '0');
+        const minuto = String(dat.getUTCMinutes()).padStart(2, '0');
+        
+        const sala = salas.find(s => String(s._id) === String(reg.agenda_salaid));
+        const bene = benesFull.find(b => String(b._id) === String(reg.agenda_beneid));
+        const terapia = terapias.find(t => String(t._id) === String(reg.agenda_terapiaid));
+        
+        // Chave de ordenação: YYYYMMDDHHmm
+        const chaveOrdem = `${dat.getUTCFullYear()}${String(dat.getUTCMonth() + 1).padStart(2, '0')}${String(dat.getUTCDate()).padStart(2, '0')}${hora}${minuto}`;
+        
+        resultado.push({
+            _id: reg._id,
+            agenda_data: fncGeral.getDataFMTOption ? fncGeral.getDataFMTOption(dat, "/") : dat.toLocaleDateString('pt-BR'),
+            agenda_hora: `${hora}:${minuto}`,
+            agenda_data_dia: fncGeral.getDataFMT(dat),
+            agenda_data_semana: ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][dat.getUTCDay()],
+            sala_nome: sala?.sala_nome || "Sala não encontrada",
+            bene_apelido: bene?.bene_apelido || bene?.bene_nome || "Beneficiário não encontrado",
+            terapia_nomecid: terapia?.terapia_nomecid || "Terapia não encontrada",
+            dia_hora_ordenação: chaveOrdem,
+            agenda_categoria: catFinal
+        });
+    }
+    
+    // 7️⃣ Ordenar: mais antigo primeiro (pendências mais urgentes no topo)
+    resultado.sort((a, b) => a.dia_hora_ordenação.localeCompare(b.dia_hora_ordenação));
+    
+    console.log(`   ✅ Evoluções faltantes: ${resultado.length}`);
+    if (resultado.length > 0) {
+        console.log(`   📋 Primeira: ${resultado[0].agenda_data} ${resultado[0].agenda_hora} - ${resultado[0].bene_apelido}`);
+    }
+    
+    return resultado;
+}
 /**
  * ============================================================================
  * 🔄 ROTAS DE LOGIN - BACKUP
@@ -1545,7 +1897,7 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
                                 { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
                             ]
                         }).lean()
-                    ]).then(([terapias2, benes2, usuarios2]) => {
+                    ]).then(async ([terapias2, benes2, usuarios2]) => {
                         
                         benes2.sort((a,b) => a.bene_nome?.localeCompare(b.bene_nome, 'pt-BR')||0);
                         usuarios2.sort((a,b) => a.usuario_nome?.localeCompare(b.usuario_nome, 'pt-BR')||0);
@@ -1558,19 +1910,64 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
                             flash.sucesso = "true";
                             flash.texto = "Logado com sucesso!";
                         }
-    
+                        
+                        // 🔍 BUSCAR EVOLUÇÕES FALTANTES (últimos 15 dias) - código existente
+                        let evolucaoFaltante = [];
+                        try {
+                            evolucaoFaltante = await buscarEvolucoesFaltantes(
+                                db, 
+                                idTerapeuta, 
+                                benesFull,
+                                salas,
+                                terapias2
+                            );
+                        } catch (err) {
+                            console.error("❌ Erro ao buscar evoluções faltantes:", err);
+                            evolucaoFaltante = [];
+                        }
+
+                        // ========================================================================
+                        // 🆕 NOVO: Contar evoluções pendentes do mês corrente + verificar perfil
+                        // ========================================================================
+                        console.log("\n🔔 [MODAL EVOLUÇÕES] Verificando pendências do mês");
+
+                        // IDs dos perfis que NÃO devem ver o modal (master/supervisor/root)
+                        const perfisSemModal = ['644743aa78166939169f8486', '62421801a12aa557219a0fb9', '644742e378166939169f82a1'];
+                        const mostrarModalEvolucoes = !perfisSemModal.includes(perfilId);
+
+                        let evolucoesPendentesMes = 0;
+                        if (mostrarModalEvolucoes) {
+                            try {
+                                evolucoesPendentesMes = await buscarEvolucoesPendentesMes(db, idTerapeuta);
+                                console.log(`   🔔 Modal será exibido: ${mostrarModalEvolucoes} | Pendências: ${evolucoesPendentesMes}`);
+                            } catch (err) {
+                                console.error("❌ Erro ao contar evoluções pendentes:", err);
+                                evolucoesPendentesMes = 0;
+                            }
+                        } else {
+                            console.log(`   ⏭️ Perfil ${perfilId} não exibe modal de evoluções`);
+                        }
+                        // ========================================================================
+
                         console.log("\n✅ [SUCESSO] Renderizando view branco");
                         let dataDeHoje = new Date();
                         res.render("branco", {
                             flash,
                             aniversariantesDaSemanaUsuario,
                             aniversariantesDaSemanaBene,
-                            agendas: agendasParaView, // ✅ Objetos simples com badgeStyle, ui, cadeia
+                            agendas: agendasParaView,
+                            evolucaoFaltante: evolucaoFaltante,
                             terapias: terapias2,
                             benes: benes2,
                             salas,
                             usuarios: usuarios2,
-                            dataDeHoje
+                            dataDeHoje,
+                            mostrarModalEvolucoes: mostrarModalEvolucoes,
+                            evolucoesPendentesMes: evolucoesPendentesMes,
+                            usuId: idTerapeuta,
+                            // ✅ ADICIONAR ESTAS LINHAS
+                            funcUsuario: usu.usuario_funcaoid,
+                            perfilUsuario: usu.usuario_perfilid
                         });
                     });
                 });
@@ -2841,6 +3238,58 @@ router.get('/financeiro/despesa/edi/:id', fncGeral.IsAuthenticated, (req,res) =>
 router.post('/financeiro/despesa/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Debitimento
     fncDebit.atualizar(req,res)
 })
+
+//Menu NUTRIÇÃO
+//Menu Compali - Escala LABIRINTO
+router.get('/nutricao/compali/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas as escalas LABIRINTO      
+    fncCompali.listaCompali(req,res);
+})
+
+router.get('/nutricao/compali/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de escala LABIRINTO
+    fncCompali.carregaCompali(req,res)
+})
+
+router.post('/nutricao/compali/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona escala LABIRINTO
+    fncCompali.cadastraCompali(req,res);
+})
+
+router.get('/nutricao/compali/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta escala LABIRINTO
+    fncCompali.deletaCompali(req,res)
+})
+
+router.get('/nutricao/compali/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de escala LABIRINTO
+    fncCompali.carregaCompaliEdi(req,res)
+})
+
+router.post('/nutricao/compali/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da escala LABIRINTO
+    fncCompali.atualizaCompali(req,res)
+})
+
+//Menu Ebai - Escala EBAI
+router.get('/nutricao/ebai/lis', fncGeral.IsAuthenticated, (req,res) =>{//lista todas as escalas EBAI      
+    fncEbai.listaEbai(req,res);
+})
+
+router.get('/nutricao/ebai/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de escala EBAI
+    fncEbai.carregaEbai(req,res)
+})
+
+router.post('/nutricao/ebai/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona escala EBAI
+    fncEbai.cadastraEbai(req,res);
+})
+
+router.get('/nutricao/ebai/del/:id', fncGeral.IsAuthenticated, (req,res) =>{//deleta escala EBAI
+    fncEbai.deletaEbai(req,res)
+})
+
+router.get('/nutricao/ebai/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição de escala EBAI
+    fncEbai.carregaEbaiEdi(req,res)
+})
+
+router.post('/nutricao/ebai/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da escala EBAI
+    fncEbai.atualizaEbai(req,res)
+})
+
 
 //Menu Beneficiario
 //Bene    

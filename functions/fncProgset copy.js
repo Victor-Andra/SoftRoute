@@ -36,15 +36,7 @@ module.exports = {
 
         let flash = new Resposta()
         console.log('listando progsets')
-        
-        // ✅ FILTRA APENAS registros que NÃO estão marcados como lixo
-        Progset.find({
-            $or: [
-                { progset_lixo: "false" },
-                { progset_lixo: { $exists: false } },
-                { progset_lixo: null }
-            ]
-        }).then((progset) =>{
+        Progset.find().then((progset) =>{
             console.log("Listagem Realizada!")
 
             if(resposta.sucesso == "" || !resposta){
@@ -97,9 +89,9 @@ module.exports = {
         } else {
             idPrognivel = "766f69643132333435366964";
         }
-                Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
+                Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                     console.log("Listagem Realizada de Usuário")
-                    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{
+                    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")    
                             Bene.find().sort({bene_nome: 1}).then((bene)=>{
                                     console.log("Listagem Realizada de beneficiarios")
@@ -125,10 +117,10 @@ module.exports = {
 
         let usuarioAtual = req.cookies['idUsu'];
         let perfilAtual = req.cookies['lvlUsu'];
-        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-            usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
-            Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{
-                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
+        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
+            usuario.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuário por nome
+            Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o usuário por nome
                     Bene.find().sort({bene_nome: 1}).then((bene)=>{
                         console.log("Listagem Realizada de beneficiarios")
                         Prog.findOne({_id: req.params.id}).then((prog)=>{
@@ -180,9 +172,9 @@ module.exports = {
             } else {
                 idPrognivel = "766f69643132333435366964";
             }
-                    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
+                    Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{//Usuário c/ filtro de função = Terapeutas
                         console.log("Listagem Realizada de Usuário")
-                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{
+                        Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                             console.log("Listagem Realizada de Usuário")    
                                 Bene.find().sort({bene_nome: 1}).then((bene)=>{
                                         console.log("Listagem Realizada de beneficiarios")
@@ -198,72 +190,105 @@ module.exports = {
             res.render('admin/erro')
         })
     },
+carregaProgsetEdi(req, res) {
+    let db = req.cookies['preferredDb'];
+    
+    // Carrega os modelos
+    Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema);
+    Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+    Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
+    Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema);
+    Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema);
+    Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
+    Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema);
 
-    carregaProgsetEdi(req, res) {
-        let db = req.cookies['preferredDb'];
-        
-        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema);
-        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema);
-        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
+    let perfilAtual = req.cookies['lvlUsu'];
 
-        let perfilAtual = req.cookies['lvlUsu'];
+    // Busca o progset principal
+    Progset.findById(req.params.id)
+        .then((progset) => {
+            if (!progset) {
+                req.flash("error_message", "SET não encontrado!");
+                return res.redirect('/menu/area/aba/progset/progsetlis');
+            }
 
-        Progset.findById(req.params.id)
-            .then((progset) => {
-                if (!progset) {
-                    req.flash("error_message", "SET não encontrado!");
-                    return res.redirect('/menu/area/aba/progset/progsetlis');
-                }
+            // ✅ Busca os documentos relacionados para exibir os nomes (usando lean() para performance)
+            const benePromise = progset.progset_beneid 
+                ? Bene.findById(progset.progset_beneid).lean() 
+                : Promise.resolve(null);
+            
+            const progtipoPromise = progset.progset_progtipoid 
+                ? Progtipo.findById(progset.progset_progtipoid).lean() 
+                : Promise.resolve(null);
+            
+            const prognivelPromise = progset.progset_prognivelid 
+                ? Prognivel.findById(progset.progset_prognivelid).lean() 
+                : Promise.resolve(null);
 
-                const benePromise = progset.progset_beneid 
-                    ? Bene.findById(progset.progset_beneid).lean() 
-                    : Promise.resolve(null);
-                
-                const progtipoPromise = progset.progset_progtipoid 
-                    ? Progtipo.findById(progset.progset_progtipoid).lean() 
-                    : Promise.resolve(null);
-                
-                const prognivelPromise = progset.progset_prognivelid 
-                    ? Prognivel.findById(progset.progset_prognivelid).lean() 
-                    : Promise.resolve(null);
-
-                const usuariosPromise = Usuario.find({
-                    "usuario_status": "Ativo", 
-                    $or: [
-                        {"usuario_funcaoid": "6241030bfbcc51f47c720a0b"},
-                        {"usuario_perfilid": {$in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"]}}
-                    ]
-                }).select('usuario_nome').lean();
-
-                return Promise.all([
-                    benePromise, 
-                    progtipoPromise, 
-                    prognivelPromise,
-                    usuariosPromise
-                ]).then(([bene, progtipo, prognivel, usuarios]) => {
+            // ✅ Resolve tudo em paralelo
+            return Promise.all([benePromise, progtipoPromise, prognivelPromise])
+                .then(([bene, progtipo, prognivel]) => {
                     
-                    res.render("area/aba/progset/progsetEdi", {
-                        usuarios,
-                        progset,
-                        perfilAtual,
-                        beneNomeExibicao: bene ? bene.bene_nome : 'Não informado',
-                        progtipoNomeExibicao: progtipo ? progtipo.progtipo_nome : 'Não informado',
-                        prognivelNomeExibicao: prognivel ? prognivel.prognivel_nome : 'Não informado'
+                    // ✅ Prepara os valores de exibição (fallback para 'Não informado')
+                    const dadosExibicao = {
+                        beneNome: bene ? bene.bene_nome : 'Não informado',
+                        progtipoNome: progtipo ? progtipo.progtipo_nome : 'Não informado',
+                        prognivelNome: prognivel ? prognivel.prognivel_nome : 'Não informado'
+                    };
+
+                    // ✅ Busca as listas para os selects (mantém sua lógica original)
+                    const usuariosPromise = Usuario.find({
+                        "usuario_status": "Ativo", 
+                        $or: [
+                            {"usuario_funcaoid": "6241030bfbcc51f47c720a0b"},
+                            {"usuario_perfilid": {$in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"]}}
+                        ]
+                    }).lean();
+
+                    const beneListPromise = Bene.find().sort({bene_nome: 1}).lean();
+                    const progdicaPromise = Progdica.find().lean();
+                    const progtipoListPromise = Progtipo.find().lean();
+                    const prognivelListPromise = Prognivel.find().lean();
+                    const progPromise = Prog.find().lean();
+                    const folregPromise = Folreg.find().lean();
+
+                    // ✅ Resolve todas as listas em paralelo
+                    return Promise.all([
+                        usuariosPromise, beneListPromise, progdicaPromise, 
+                        progtipoListPromise, prognivelListPromise, progPromise, folregPromise
+                    ]).then(([usuarios, benes, progdica, progtipos, prognivels, progs, folregs]) => {
+                        
+                        // ✅ Renderiza enviando os nomes já resolvidos
+                        res.render("area/aba/progset/progsetEdi", {
+                            usuarios,
+                            benes,
+                            progset,
+                            progs,
+                            progdicas: progdica,
+                            progtipos,
+                            prognivels,
+                            terapeutas: usuarios, // mantido pra compatibilidade
+                            folregs,
+                            perfilAtual,
+                            
+                            // ✅ Campos de exibição prontos (substituem o helper 'eq')
+                            beneNomeExibicao: dadosExibicao.beneNome,
+                            progtipoNomeExibicao: dadosExibicao.progtipoNome,
+                            prognivelNomeExibicao: dadosExibicao.prognivelNome
+                        });
                     });
                 });
-            })
-            .catch((err) => {
-                console.error("Erro ao carregar SET para edição:", err);
-                req.flash("error_message", "Houve um erro ao carregar os dados do SET!");
-                res.render('admin/erro');
-            });
-    },
-
+        })
+        .catch((err) => {
+            console.error("Erro ao carregar SET para edição:", err);
+            req.flash("error_message", "Houve um erro ao carregar os dados do SET!");
+            res.render('admin/erro');
+        });
+},
     cadastraProgset(req,res){
         let resultado
         let resposta = new Resposta()
-        let cadastro = progsetClass.progsetAdicionar(req,res);
+        let cadastro = progsetClass.progsetAdicionar(req,res);//variavel para armazenar a função que armazena o async
         
         cadastro.then((result)=>{
             resultado = true;
@@ -318,39 +343,19 @@ module.exports = {
         })
     },
 
-    // ✅ EXCLUSÃO LÓGICA (SOFT DELETE)
     deletaProgset(req,res){
         let db = req.cookies['preferredDb'];
         Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
 
-        let dataAtual = new Date();
-        let usuarioAtual = req.cookies['idUsu'];
-
-        // ✅ Ao invés de deletar fisicamente, marca como lixo
-        Progset.findByIdAndUpdate(req.params.id, {
-            progset_lixo: "true",
-            progset_datalixo: dataAtual.toISOString(),
-            progset_usuidlixo: usuarioAtual
-        }).then(() =>{
-            // ✅ Lista apenas os que NÃO estão marcados como lixo
-            Progset.find({
-                $or: [
-                    { progset_lixo: "false" },
-                    { progset_lixo: { $exists: false } },
-                    { progset_lixo: null }
-                ]
-            }).then((progset) =>{
-                req.flash("success_message", "SET marcado como excluído!")
+        Progset.deleteOne({_id: req.params.id}).then(() =>{
+            Progset.find().then((progset) =>{
+                req.flash("success_message", "Método deletado!")
                 res.render('area/aba/progset/progsetLis', {progsets: progset})
             }).catch((err) =>{
                 console.log(err)
-                req.flash("error_message", "houve um erro ao listar SETs")
+                req.flash("error_message", "houve um erro ao listar Métodos")
                 res.render('admin/erro')
             })
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao excluir SET")
-            res.render('admin/erro')
         })
     }
 }

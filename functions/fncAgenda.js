@@ -7799,50 +7799,86 @@ carregaAgendaPessoalquasela(req, res) {
         let dtFill, segunda, terca, quarta, quinta, sexta;
 
         // ========================================================================
-        // 📅 FASE 1: Definir Semana a partir da data atual
+        // 📅 FASE 1: Definir Semana a partir da data atual (CORRIGIDO)
         // ========================================================================
         console.log("\n📅 [FASE 1] Definindo período da semana");
-        
+
+        // ✅ CORREÇÃO: Usar Date.UTC para evitar problemas de fuso horário
         let dataBase = new Date();
-        let seg = new Date(dataBase); seg.setHours(0,0,0,0);
-        let sex = new Date(dataBase); sex.setHours(23,59,59,999);
-        
+        let seg = new Date(Date.UTC(dataBase.getUTCFullYear(), dataBase.getUTCMonth(), dataBase.getUTCDate(), 0, 0, 0, 0));
+        let sex = new Date(Date.UTC(dataBase.getUTCFullYear(), dataBase.getUTCMonth(), dataBase.getUTCDate(), 23, 59, 59, 999));
+
+        // ✅ CORREÇÃO: Ajustar AMBOS seg e sex em cada case (igual à segunda função)
         switch (seg.getUTCDay()) {
-            case 0: seg.setUTCDate(seg.getUTCDate() + 1); break;
-            case 2: seg.setUTCDate(seg.getUTCDate() - 1); break;
-            case 3: seg.setUTCDate(seg.getUTCDate() - 2); break;
-            case 4: seg.setUTCDate(seg.getUTCDate() - 3); break;
-            case 5: seg.setUTCDate(seg.getUTCDate() - 4); break;
-            case 6: seg.setUTCDate(seg.getUTCDate() - 5); break;
+            case 0: // DOMINGO
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
+            case 1: // SEGUNDA
+                sex.setUTCDate(sex.getUTCDate() + 4);
+                break;
+            case 2: // TERÇA
+                seg.setUTCDate(seg.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate() + 3);
+                break;
+            case 3: // QUARTA
+                seg.setUTCDate(seg.getUTCDate() - 2);
+                sex.setUTCDate(sex.getUTCDate() + 2);
+                break;
+            case 4: // QUINTA
+                seg.setUTCDate(seg.getUTCDate() - 3);
+                sex.setUTCDate(sex.getUTCDate() + 1);
+                break;
+            case 5: // SEXTA
+                seg.setUTCDate(seg.getUTCDate() - 4);
+                break;
+            case 6: // SÁBADO
+                seg.setUTCDate(seg.getUTCDate() - 5);
+                sex.setUTCDate(sex.getUTCDate() - 1);
+                break;
+            default:
+                seg.setUTCDate(seg.getUTCDate() + 1);
+                sex.setUTCDate(sex.getUTCDate() + 5);
+                break;
         }
-        sex = new Date(seg); sex.setUTCDate(sex.getUTCDate() + 4);
+
+        // ✅ Garantir horários corretos após ajustes
+        seg.setUTCHours(0, 0, 0, 0);
+        sex.setUTCHours(23, 59, 59, 999);
 
         let agora = fncGeral.getDateToIsostring(seg);
         let depois = fncGeral.getDateToIsostring(sex);
-        
+
         const diasSemana = ["dom","seg","ter","qua","qui","sex","sab"];
         const diasSemanaCompleto = ["DOMINGO","SEGUNDA","TERÇA","QUARTA","QUINTA","SEXTA","SÁBADO"];
+
+        // ✅ CORREÇÃO: Calcular array de semana usando cópias para não mutar o objeto original
         let diaSemana = new Date(seg);
         let semana = [];
         for (let i = 0; i < 5; i++) {
             semana.push({
                 dia: diasSemana[diaSemana.getUTCDay()],
-                data: this.getData(diaSemana)
+                data: this.getData(new Date(diaSemana))
             });
             diaSemana.setUTCDate(diaSemana.getUTCDate() + 1);
         }
-        
-        let baseFmt = new Date(seg);
-        segunda = this.getDataDiaMes(baseFmt);
-        terca = this.getDataDiaMes(baseFmt.setDate(baseFmt.getDate()+1));
-        quarta = this.getDataDiaMes(baseFmt.setDate(baseFmt.getDate()+1));
-        quinta = this.getDataDiaMes(baseFmt.setDate(baseFmt.getDate()+1));
-        sexta = this.getDataDiaMes(baseFmt.setDate(baseFmt.getDate()+1));
-        
+
+        // ✅ CORREÇÃO: Calcular segunda a sexta de forma segura (sem mutação em cadeia)
+        segunda = this.getDataDiaMes(new Date(seg));
+        let ter = new Date(seg); ter.setUTCDate(ter.getUTCDate() + 1);
+        terca = this.getDataDiaMes(ter);
+        let qua = new Date(seg); qua.setUTCDate(qua.getUTCDate() + 2);
+        quarta = this.getDataDiaMes(qua);
+        let qui = new Date(seg); qui.setUTCDate(qui.getUTCDate() + 3);
+        quinta = this.getDataDiaMes(qui);
+        let sexCalc = new Date(seg); sexCalc.setUTCDate(sexCalc.getUTCDate() + 4);
+        sexta = this.getDataDiaMes(sexCalc);
+
         const hoje = diasSemana[new Date().getUTCDay()];
         const DataTexto = `~${this.getDataFMT(seg)}~`;
-        
+
         console.log(`📆 Semana: ${agora} até ${depois} | DataTexto: ${DataTexto}`);
+        console.log(`📅 Seg: ${segunda} | Sex: ${sexta}`);
 
         // ========================================================================
         // 🔍 FASE 2: Buscar Registros da Semana

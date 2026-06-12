@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta charset="utf-8">
+		<title>Lista de Diários de Bordo</title>
+		<style>
+				/* ============================================
+         BARRA DE PESQUISA - CLASSE SEPARADA
+         ============================================ */
+      .toolbar-pesquisa {
+        background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 0 12px 20px 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid #1976d2;
+      }
+      .toolbar-pesquisa h5 {
+        margin: 0 0 12px 0;
+        font-size: 14px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .toolbar-pesquisa h5 i {
+        font-size: 18px;
+      }
+      .toolbar-pesquisa .form-inline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: flex-end;
+      }
+      .toolbar-pesquisa .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        width: 100%;
+        align-items: flex-end;
+      }
+      .toolbar-pesquisa .form-group {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        min-width: 140px;
+        flex: 1;
+        max-width: 220px;
+      }
+      .toolbar-pesquisa label {
+        font-size: 11px;
+        font-weight: 500;
+        margin-bottom: 4px;
+        color: #f8f9fa;
+        white-space: nowrap;
+      }
+      .toolbar-pesquisa input[type="date"],
+      .toolbar-pesquisa input[type="time"],
+      .toolbar-pesquisa select {
+        padding: 6px 10px;
+        border: 2px solid #e2e8f0;
+        border-radius: 4px;
+        font-size: 12px;
+        width: 100%;
+        box-sizing: border-box;
+        background: white;
+        color: #333;
+        transition: all 0.3s;
+        height: 30px;
+      }
+      .toolbar-pesquisa input[type="date"]:focus,
+      .toolbar-pesquisa input[type="time"]:focus,
+      .toolbar-pesquisa select:focus {
+        border-color: #fff;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+        outline: none;
+      }
+      .toolbar-pesquisa .btn-pesquisar {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 24px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        margin-left: auto;
+      }
+      .toolbar-pesquisa .btn-pesquisar:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+      
+      /* Grupo compacto para horário (turno + início + fim) */
+      .grupo-horario {
+        display: flex;
+        gap: 6px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+      }
+      .grupo-horario .form-group {
+        min-width: 70px;
+        max-width: 90px;
+        flex: none;
+      }
+      .grupo-horario label {
+        font-size: 10px;
+      }
+      .grupo-horario .info-sala {
+        font-size: 9px;
+        color: #e0e0e0;
+        margin-left: 4px;
+        white-space: nowrap;
+      }
+      .grupo-horario .info-sala i {
+        margin-right: 2px;
+      }
+		</style>
+		<style>
+			/* ============================================
+		SELECT2 - ESTILOS GERAIS
+		============================================ */
+		.select2-container {
+			min-width: 120px !important;
+		
+		}
+
+		/* Campo principal do Select2 (a "caixa" visível) */
+		.select2-container--default .select2-selection--single {
+			height: 30px !important;
+			border: 1px solid #ced4da !important;
+			border-radius: 4px !important;
+			background: white !important;
+			display: flex !important;
+			align-items: center !important;
+			padding: 0 8px !important;
+			font-size: 12px !important;
+		}
+
+		/* Seta do dropdown */
+		.select2-container--default .select2-selection--single .select2-selection__arrow {
+			height: 28px !important;
+			right: 5px !important;
+		}
+
+		/* Texto selecionado */
+		.select2-container--default .select2-selection--single .select2-selection__rendered {
+			line-height: 28px !important;
+			padding-left: 0 !important;
+			color: #333 !important;
+		}
+
+		/* Placeholder */
+		.select2-container--default .select2-selection--single .select2-selection__placeholder {
+			color: #999 !important;
+		}
+
+		/* Dropdown (lista de opções) */
+		.select2-dropdown {
+			border: 1px solid #ced4da !important;
+			border-radius: 4px !important;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+		}
+
+		/* Campo de busca dentro do dropdown */
+		.select2-container--default .select2-search--dropdown .select2-search__field {
+			border: 1px solid #ced4da !important;
+			border-radius: 4px !important;
+			padding: 4px 8px !important;
+			font-size: 12px !important;
+			margin: 4px !important;
+		}
+
+		/* Itens da lista */
+		.select2-container--default .select2-results__option {
+			padding: 6px 10px !important;
+			font-size: 12px !important;
+		}
+
+		/* Item selecionado/hover */
+		.select2-container--default .select2-results__option--highlighted[aria-selected] {
+			background-color: #2196f3 !important;
+			color: white !important;
+		}
+
+		/* Foco no select */
+		.select2-container--default.select2-container--focus .select2-selection--single {
+			border-color: #2196f3 !important;
+			box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2) !important;
+		}
+
+		/* ============================================
+		SELECT2 NA BARRA DE PESQUISA - LARGURA
+		============================================ */
+		.toolbar-pesquisa .select2-container {
+			width: 140px !important; /* Aumentado de 120px */
+		}
+
+		.toolbar-pesquisa .select2-container .select2-selection--single {
+			width: 138px !important; /* 2px a menos para borda */
+		}
+
+		/* Dropdown acompanha a largura */
+		.toolbar-pesquisa .select2-dropdown {
+			min-width: 140px !important;
+		}
+
+		</style>
+
+		<script type="text/javascript">
+			function ocultaEditar(){
+				let biscoito = procuraBiscoito("lvlUsu");
+				document.getElementById("botaoEditar").value;
+			}
+			function ajustaData(){
+				let fullDatas = document.getElementsByName("fullData");
+				fullDatas.forEach((elementox)=>{
+					let id = "bordodata"+elementox.id;
+					let dat = new Date(elementox.value);
+					let mes = (dat.getMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+
+					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
+				})
+			}
+			function formataData(){
+				let tipo = document.getElementById("tipoData").value;
+				console.log("tipoData:"+tipoData);
+				if(tipo == "Ano/Mes"){
+					let dat = new Date(document.getElementById('anoBordo').value+"-"+document.getElementById('mesBordo').value+"-01 00:00:00.000Z");
+					let mes = (dat.getUTCMonth()+1).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Semana"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				} else if (tipo == "Dia"){
+					let dat = new Date(document.getElementById('dataFil').value);
+					let mes = (dat.getUTCMonth()).toString();
+					let dia = (dat.getUTCDate()).toString();
+					if (mes.length == 1){
+						mes = "0"+mes;
+					}
+					if (dia.length == 1){
+						dia = "0"+dia;
+					}
+					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
+					document.getElementById('dataFinal').value = fulldate;
+					console.log("dataFinal:"+document.getElementById('dataFinal').value);
+				}
+			}
+			function trocaFiltroData(){
+				let fill = document.getElementById("tipoData").value;
+				if(fill == "Ano/Mes"){
+					document.getElementById("divAnoBordo").hidden = false;
+					document.getElementById("divMesBordo").hidden = false;
+					document.getElementById("divDataFil").hidden = true;
+				} else if (fill == "Semana"){
+					document.getElementById("divAnoBordo").hidden = true;
+					document.getElementById("divMesBordo").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				} else {
+					document.getElementById("divAnoBordo").hidden = true;
+					document.getElementById("divMesBordo").hidden = true;
+					document.getElementById("divDataFil").hidden = false;
+				}
+			}
+			function trocaFilpessoa() {
+				let fillTipopessoa = document.getElementById("bordoTipoPessoa").value;
+				if(fillTipopessoa == "Geral"){
+					document.getElementById("divBordoBeneficiario").hidden = true;
+					document.getElementById("divBordoTerapeuta").hidden = true;
+				} else if(fillTipopessoa == "Beneficiario"){
+					document.getElementById("divBordoBeneficiario").hidden = false;
+					document.getElementById("divBordoTerapeuta").hidden = true;
+				} else {
+					document.getElementById("divBordoBeneficiario").hidden = true;
+					document.getElementById("divBordoTerapeuta").hidden = false;
+				}
+			}
+			function carregarFiltros() {
+				const tipoData = $id("tipoDataFil")?.value || "Ano/Mes";
+				const tipoPessoa = $id("tipoPessoaFil")?.value || "Geral";
+
+				$id("tipoData").value = tipoData;
+				trocaFiltroData();
+
+				if(tipoData === "Ano/Mes") {
+				$id("anoBordo").value = $id("anoBordoFil")?.value || "";
+				$id("mesBordo").value = $id("mesBordoFil")?.value || "0";
+				} else {
+				const data = $id("dataFinalFil")?.value;
+				if(data) $id("dataFil").value = data.split('T')[0];
+				}
+
+				$id("bordoTipoPessoa").value = tipoPessoa;
+				trocaFilpessoa();
+
+				if(tipoPessoa === "Beneficiario") $id("bordoBeneficiario").value = $id("bordoBeneficiarioFil")?.value || "";
+				if(tipoPessoa === "Terapeuta") $id("bordoTerapeuta").value = $id("bordoTerapeutaFil")?.value || "";
+				if(tipoPessoa === "Convenio") $id("bordoConv").value = $id("bordoConvFil")?.value || "";
+			} 
+			function carregaBody(){
+				trocaFiltroData();
+				trocaFilpessoa();
+				formataData();
+				if (document.getElementById("carregaFiltro").value == "true"){
+					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
+					if(document.getElementById("tipoData").value == "Ano/Mes"){
+						document.getElementById("anoBordo").value = document.getElementById("anoBordoFil").value;
+						document.getElementById("mesBordo").value = document.getElementById("mesBordoFil").value;
+					} else if (document.getElementById("tipoData").value == "Semana"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					} else if (document.getElementById("tipoData").value == "Dia"){
+						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
+					}
+
+					document.getElementById("bordoTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
+					if (document.getElementById("bordoTipoPessoa").value == "Geral"){
+
+					} else if (document.getElementById("bordoTipoPessoa").value == "Beneficiario"){
+						document.getElementById("bordoBeneficiario").value = document.getElementById("bordoBeneficiarioFil").value
+					} else if (document.getElementById("bordoTipoPessoa").value == "Terapeuta"){
+						document.getElementById("bordoTerapeuta").value = document.getElementById("bordoTerapeutaFil").value;
+					}
+
+				}
+				carregarFiltros();
+			}
+
+			function confirmeDeletar(id){
+				let confirmado = confirm("Quer mesmo deletar este diário de bordo?");
+				if(confirmado == true){
+					window.location.href=("/menu/area/bordo/del/"+id);
+				}
+			}
+			
+		
+		</script>
+	</head>
+	<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+						<div class="espace">
+						</div>
+						<div class="page-header">
+							<h1>
+								Lista de Diários de Bordo
+							</h1>
+						</div><!-- /.page-header -->
+
+					{{#compareString flash.sucesso "true"}}
+						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+							<p>
+								<strong>
+									<i class="ace-icon fa fa-check"></i>
+									{{flash.texto}}
+								</strong>
+								<button type="button" class="close" onclick="javascript:OcultaMsg()">
+									<i class="ace-icon fa fa-times"></i>
+								</button>
+							</p>
+						</div>
+						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+					{{else}}
+						{{#compareString flash.sucesso "false"}}
+							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+								<p>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+								</p>
+							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
+						{{else}}
+						{{/compareString}}
+					{{/compareString}}
+					<div class="hidden">
+						<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+						<input id="bordoTerapeutaFil" value="{{bordoTerapeuta.bordoTerapeuta}}" />
+						<input id="bordoBeneficiarioFil" value="{{bordoBeneficiario.bordoBeneficiario}}" />
+						<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
+						<input id="mesBordoFil" value="{{mesBordo.mesBordo}}" />
+						<input id="anoBordoFil" value="{{anoBordo.anoBordo}}" />
+						<input id="tipoPessoaFil" value="{{tipoPessoa.tipoPessoa}}" />
+						<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
+						<input id="dataIniFil" value="{{dataIni.dataIni}}" />
+						<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+						<input id="usuarioAtual" value="{{usuario._id}}" >
+						<input id="idsChecked" value="" />
+					</div>
+					<div class="page-content"><!-- .page-content -->
+						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/bordo/lisF" method="POST">
+							<div class="toolbar-pesquisa noprint">
+								<div class="row">
+									<!-- 🔹 TIPO DATA -->
+									<div class="col-sm-2">
+										<div class="input-group">
+											<label>Tipo Filtro:&nbsp;</label>
+											<select name="tipoData" id="tipoData" class="select2" onchange="trocaFiltroData()">
+												<option value="Ano/Mes">Ano/Mês</option>
+												<option value="Semana">Semana</option>
+												<option value="Dia">Dia</option>
+											</select>
+										</div>
+									</div>
+
+									<!-- 🔹 FILIAL (OCULTO) -->
+									<div class="col-sm-2 hidden">
+										<div class="input-group">
+											<label>Filial:&nbsp;</label>
+											<select name="empresaFilial" id="empresaFilial" class="select2">
+												<option value="Matriz">Matriz</option>
+												<option value="Filial 1">Filial 1</option>
+												<option value="Filial 2">Filial 2</option>
+												<option value="Filial 3">Filial 3</option>
+												<option value="Filial 4">Filial 4</option>
+											</select>
+										</div>
+									</div>
+
+									<!-- 🔹 ANO -->
+									<div id="divAnoBordo" class="col-sm-2">
+										<div class="input-group">
+											<label>Ano:&nbsp;</label>
+											<select name="anoBordo" id="anoBordo" class="select2" onchange="formataData();">
+												{{#each anos}}
+													<option value="{{ano_nome}}">{{ano_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+
+									<!-- 🔹 MÊS -->
+									<div id="divMesBordo" class="col-sm-2">
+										<div class="input-group">
+											<label>Mês:&nbsp;</label>
+											<select name="mesBordo" id="mesBordo" class="select2"
+												onchange="formataData();">
+												<option value="0">Janeiro</option>
+												<option value="1">Fevereiro</option>
+												<option value="2">Março</option>
+												<option value="3">Abril</option>
+												<option value="4">Maio</option>
+												<option value="5">Junho</option>
+												<option value="6">Julho</option>
+												<option value="7">Agosto</option>
+												<option value="8">Setembro</option>
+												<option value="9">Outubro</option>
+												<option value="10">Novembro</option>
+												<option value="11">Dezembro</option>
+											</select>
+										</div>
+									</div>
+
+									<!-- 🔹 DATA -->
+									<div id="divDataFil" class="col-sm-2">
+										<div class="input-group">
+											<label>Data:&nbsp;</label>
+											<input type="date" id="dataFil" name="dataFil"
+												style="height: 30px;"
+												onchange="formataData();" />
+											<input type="hidden" id="dataFinal" name="dataFinal" />
+										</div>
+									</div>
+
+									<!-- 🔹 TIPO PESSOA -->
+									<div class="col-sm-2">
+										<div class="input-group">
+											<label>Tipo:&nbsp;</label>
+											<select name="bordoTipoPessoa" id="bordoTipoPessoa" class="select2" onchange="trocaFilpessoa()">
+												<option value="Geral">Geral</option>
+												<option value="Beneficiario">Beneficiário</option>
+												<option value="Terapeuta">Terapeuta</option>
+											</select>
+										</div>
+									</div>
+
+									<!-- 🔹 BENEFICIÁRIO -->
+									<div id="divBordoBeneficiario" class="col-sm-4" style="width: 100%;">
+										<div class="input-group">
+											<label>Beneficiário:&nbsp;</label>
+											<select name="bordoBeneficiario" id="bordoBeneficiario" class="select2">
+												{{#each benes}}
+													<option value="{{_id}}">{{bene_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+
+									<!-- 🔹 TERAPEUTA -->
+									<div id="divBordoTerapeuta" class="col-sm-2">
+										<div class="input-group">
+											<label>Terapeuta:&nbsp;</label>
+											<select name="bordoTerapeuta" id="bordoTerapeuta" class="select2">
+												{{#each terapeutas}}
+													<option value="{{_id}}">{{usuario_nome}}</option>
+												{{/each}}
+											</select>
+										</div>
+									</div>
+
+									<!-- 🔍 BOTÃO -->
+									<div class="col-sm-12" style="margin-top: 10px;">
+										<button id="acaoPesquisar" name="acaoPesquisar"
+											type="submit"
+											class="btn btn-xs btn-danger">
+											<i class="ace-icon fa fa-search-plus"></i>
+											Pesquisar
+										</button>
+									</div>
+
+									<div class="col-sm-12">
+										<hr>
+									</div>
+								</div>
+							</div>
+						</form>
+					
+						<div class="row"><!--.row -->
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="clearfix" >
+											<div class="pull-right tableTools-container">
+											</div>
+										</div>
+										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
+										</div>
+										
+										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+											<thead>
+												<tr role="row">
+													<th class="center">
+															<label class="pos-rel">
+																<input type="checkbox" class="ace" />
+																<span class="lbl"></span>
+															</label>
+													</th>
+													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data atividade</th>
+													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro</th>
+													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
+													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th class="" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 90px;">Ação</th>
+												</tr>
+											</thead>
+											<tbody>
+												{{#each bordos}}
+													<tr role="row" class="odd">
+														<td class="center">
+															<label class="pos-rel">
+																<input type="checkbox" class="ace" />
+																<span class="lbl"></span>
+															</label>
+														</td>
+														<td>{{bordo_ativ}}</td>	
+														<td> {{bordo_data}}</td>			
+														<td>{{#each ../benes}}
+															{{#ifEqual this._id ../bordo_beneid}}
+																{{bene_nome}}
+															{{/ifEqual}}
+														{{/each}}
+														</td>
+														<td>
+														{{#each ../terapeutasinas}}<!-- Ok -->
+															{{#ifEqual this._id ../bordo_terapeutaid}}
+																{{usuario_nome}}
+															{{/ifEqual}}
+														{{/each}}
+														</td>
+														<td>
+															<div class="action-buttons">
+																<a id="botaoEditar" class="pink" href="/menu/area/bordo/edi/{{_id}}">
+																	<i class="ace-icon fa fa-search bigger-130"></i>
+																</a>
+																															
+																<a class="blue" href="">
+																	<i class="ace-icon fa fa-map-o bigger-130"></i>
+																</a>
+																{{#ifEqual ../../usuarioAtual ../bordo_terapeutaid}}<!-- /.id de perfil do Root -->
+																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																</a>
+																{{else}}
+																	{{#compareThis usuario._id bordo_terapeutaid}}<!-- /.id do terapeuta que inseriu o Diário -->
+																		<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																			<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																		</a>
+																	{{else}}
+																		{{#compareThis ../lvlUsu '644743aa78166939169f8486'}}<!-- /.id de perfil Supervisor -->
+																			<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																				<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																			</a>
+																		{{else}}
+																			{{#compareThis ../lvlUsu '644742e378166939169f82a1'}}<!-- /.id de perfil Coordenador -->
+																				<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																					<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																				</a>
+																			{{else}}
+																				{{#compareThis ../lvlUsu '62421801a12aa557219a0fb9'}}<!-- /.id de perfil do Root -->
+																					<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
+																						<i class="ace-icon fa fa-trash-o bigger-130"></i>
+																					</a>
+																				{{else}}
+																				{{/compareThis}}
+																			{{/compareThis}}
+																		{{/compareThis}}
+																	{{/compareThis}}
+																{{/ifEqual}}
+															</div>
+														</td>
+													</tr>
+												{{/each}}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div><!-- /.row -->
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content-inner -->
+			</div><!-- /.main-content -->
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container ace-save-state -->
+		
+
+		<!-- basic scripts -->
+
+		
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<!-- basic scripts -->
+
+		<!-- page specific plugin scripts -->
+		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+		
+
+		<!-- inline scripts related to this page -->
+		<script type="text/javascript">
+		$(document).ready(function() {
+			$("#dynamic-table").DataTable({
+			"language": { "url": "/js/lang/datatable-pt-br.json" },
+			"aaSorting": [],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, { "bSortable": false }],
+			"responsive": true,
+			"lengthMenu": [ 50, 100, 200],
+			"lengthChange": true,
+			"autoWidth": false,
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			
+			select: {
+						style: 'multi'
+					}
+			});
+		});
+		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+		</script>
+	</body>
+</html>

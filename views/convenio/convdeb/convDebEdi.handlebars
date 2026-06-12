@@ -2,40 +2,10 @@
 <html lang="pt-br">
 	<head>
 		<title>Débitos de Convênios Edição</title>
-		<script>
-			function carregaBody(){
-				// Valores dos hidden inputs
-				const conveniosId = document.getElementById("convdebConvidEdi").value;
-				const terapiaId = document.getElementById("convdebTerapiaidEdi").value;
-				const status = document.getElementById("convdebStatusEdi").value;
-				
-				// 🎯 Atualiza os selects E dispara o evento do Chosen
-				if (typeof jQuery !== 'undefined' && jQuery.fn.chosen) {
-					$('#convdebConvid').val(conveniosId).trigger('chosen:updated');
-					$('#convdebTerapiaid').val(terapiaId).trigger('chosen:updated');
-					$('#convdebStatus').val(status).trigger('chosen:updated');
-				} else {
-					// Fallback caso Chosen não esteja carregado ainda
-					document.getElementById("convdebConvid").value = conveniosId;
-					document.getElementById("convdebTerapiaid").value = terapiaId;
-					document.getElementById("convdebStatus").value = status;
-				}
-				
-				// Data
-				atualizaData();
-			}
-			function atualizaData(){
-				var hora = "00:00"
-				var data = document.getElementById("convdebData").value+"T"+hora+":00.000Z";
-				var datafmt = new Date(data);
-				document.getElementById("convdebDataFinal").value = datafmt.toISOString();
-			}
-		</script>
 	</head>
-	<body onload="javascript:controlaNave(); carregaBody();" class="no-skin">
-		<div id="divCarrega" name="divCarrega" class="hidden">
-			<input id="convdebStatusEdi" name="convdebStatusEdi" value="{{convdeb.convdeb_status}}"/>
-		</div>
+
+	<body onload="javascript:controlaNave();" class="no-skin">
+
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -48,11 +18,21 @@
 							<li class="active">Débitos de Convênios Edição</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
+
+					<!-- Dados para carregar -->
+					<div id="divCarrega" name="divCarrega" class="hidden">
+						<input id="convdebStatusEdi" name="convdebStatusEdi" value="{{convdeb.convdeb_status}}"/>
+						<input id="convdebTerapiaidEdi" name="convdebTerapiaidEdi" value="{{convdeb.convdeb_terapiaid}}"/>
+						<input id="convdebConvidEdi" name="convdebConvidEdi" value="{{convdeb.convdeb_convid}}"/>
+						<input id="convdebDataEdi" name="convdebDataEdi" value="{{convdeb.convdeb_data}}"/>
+					</div>
+
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
-							<form class="form-horizontal" role="form"  action="/menu/convenio/convdeb/atualizar" method="POST">
-								<input id="convdebId" name="convdebId" hidden value="{{convdeb._id}}"/>
+							<form class="form-horizontal" role="form" action="/menu/convenio/convdeb/atualizar" method="POST">
+								<input id="convdebId" name="convdebId" class="hidden" value="{{convdeb._id}}"/>
+								
 								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
@@ -68,87 +48,177 @@
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
-												<input name="convdebId" class="hidden" value="{{convdeb._id}}"/>
-												<label> Convênio </label>
+												
+												<label>Convênio</label>
 												<div class="form-group">
 													<div class="col-sm-6">
 														<select name="convdebConvid" id="convdebConvid" class="select2" data-placeholder="Escolha...">
+															<option value=""></option>
 															{{#each convs}}
 																<option value="{{_id}}">{{conv_nome}}</option>
 															{{/each}}
 														</select>
 													</div>
 												</div>
+												
 												<div class="space space-8"></div>
+												
 												<label>Terapia</label>
 												<div class="form-group">
 													<div class="col-sm-4">
 														<select name="convdebTerapiaid" id="convdebTerapiaid" class="select2" data-placeholder="Escolha...">
+															<option value=""></option>
 															{{#each terapias}}
 																<option value="{{_id}}">{{terapia_nome}}</option>
 															{{/each}}
 														</select>
 													</div>
 												</div>
-												<label for="id-date-picker-1">Data</label>
-												<div class="row">
+												
+												<div class="space space-8"></div>
+												
+												<label>Data</label>
+												<div class="form-group">
 													<div class="col-sm-3">
-														<div class="input-group">
-															<input name="convdebData" id="convdebData"  type="date" value="{{convdeb.convdeb_data}}"/>
-														</div>
+														<input name="convdebData" id="convdebData" type="date" class="form-control"/>
 													</div>
 												</div>
+												
+												<div class="space space-8"></div>
+												
 												<label>Status</label>
 												<div class="form-group">
 													<div class="col-sm-2">
-														<select name="convdebStatus" id="convdebStatus" class="select2" style="width: 100px;">
+														<select name="convdebStatus" id="convdebStatus" class="select2" style="width: 150px;">
 															<option value="Ativo">Ativo</option>
 															<option value="Inativo">Inativo</option>
 														</select>
 													</div>
 												</div>
+												
 												<div class="space space-8"></div>
-												<label> Valor a Débito</label>
+												
+												<label>Valor a Débito</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="convdebValor" id="convdebValor" placeholder="" class="form-control" value="{{convdeb.convdeb_valor}}"/>
+														<input type="text" name="convdebValor" id="convdebValor" class="form-control" value="{{convdeb.convdeb_valor}}"/>
 													</div>
 												</div>
+												
 												<div class="space space-8"></div>
-												<label> Observações</label>
+												
+												<label>Observações</label>
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input type="text" name="convdebObs" id="convdebObs" placeholder="" class="form-control" value="{{convdeb.convdeb_obs}}"/>
+														<input type="text" name="convdebObs" id="convdebObs" class="form-control" value="{{convdeb.convdeb_obs}}"/>
 													</div>
 												</div>
+												
 											</div>
 										</div>
 									</div>
 								</div>
+								
 								<div class="space-6"></div>
-											
-									<div class="form-actions">
-										<div class="col-xs-12" style="text-align: center;" >
-											<button class="btn btn-info" name="acao" type="submit">
-												<i class="ace-icon fa fa-check bigger-110"></i>
-												Salvar
-											</button>
-											&nbsp; &nbsp; &nbsp;
-											<button class="btn btn-warning"  href="/menu/convenio/convdeb/lis">
-												<i class="ace-icon fa fa-undo bigger-110"></i>
-												Voltar
-											</button>
-										</div>
+								
+								<div class="form-actions">
+									<div class="col-xs-12" style="text-align: center;">
+										<button class="btn btn-info" name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<a href="/menu/convenio/convdeb/lis" class="btn btn-warning">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Voltar
+										</a>
 									</div>
+								</div>
 							</form>
-							<div class="hidden">
-								<input id="convdebTerapiaidEdi" name="convdebTerapiaidEdi" value="{{convdeb.convdeb_terapiaid}}" />
-								<input id="convdebConvidEdi" name="convdebConvidEdi" value="{{convdeb.convdeb_convid}}" />
-							</div>
 						</div><!-- /.col -->
 					</div><!-- /.row -->
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container -->
-	</body><!-- basic scripts -->
+
+		<!-- Scripts -->
+		<script>
+			$(document).ready(function() {
+				console.log("🔍 Iniciando carregamento da view convDebEdi...");
+				
+				// 1️⃣ Inicializar Select2
+				if (typeof $.fn.select2 === 'function') {
+					$('.select2').select2({
+						width: '100%',
+						placeholder: 'Escolha...',
+						allowClear: true
+					});
+					console.log("✅ Select2 inicializado");
+				} else {
+					console.error("❌ Select2 não está carregado!");
+				}
+				
+				// 2️⃣ Carregar valores salvos
+				carregaBody();
+			});
+
+			function carregaBody() {
+				console.log("📋 Iniciando carregaBody...");
+				
+				// 1️⃣ Formatar data (converter ISO para yyyy-mm-dd)
+				const dataEdi = document.getElementById("convdebDataEdi")?.value;
+				console.log("📅 Data recebida do banco:", dataEdi);
+				
+				if (dataEdi) {
+					try {
+						const dataObj = new Date(dataEdi);
+						
+						if (!isNaN(dataObj.getTime())) {
+							const ano = dataObj.getFullYear();
+							const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
+							const dia = String(dataObj.getDate()).padStart(2, '0');
+							
+							const dataFormatada = `${ano}-${mes}-${dia}`;
+							console.log("✅ Data formatada:", dataFormatada);
+							
+							document.getElementById("convdebData").value = dataFormatada;
+						} else {
+							console.error("❌ Data inválida:", dataEdi);
+						}
+					} catch (error) {
+						console.error("❌ Erro ao formatar data:", error);
+					}
+				} else {
+					console.warn("⚠️ Campo de data vazio");
+				}
+				
+				// 2️⃣ Setar valores dos selects
+				const conveniosId = document.getElementById("convdebConvidEdi")?.value;
+				const terapiaId = document.getElementById("convdebTerapiaidEdi")?.value;
+				const status = document.getElementById("convdebStatusEdi")?.value;
+				
+				console.log("🔧 Valores recebidos:", { conveniosId, terapiaId, status });
+				
+				// Convênio
+				if (conveniosId) {
+					$('#convdebConvid').val(conveniosId).trigger('change');
+					console.log("✅ Convênio setado:", conveniosId);
+				}
+				
+				// Terapia
+				if (terapiaId) {
+					$('#convdebTerapiaid').val(terapiaId).trigger('change');
+					console.log("✅ Terapia setada:", terapiaId);
+				}
+				
+				// Status
+				if (status) {
+					$('#convdebStatus').val(status).trigger('change');
+					console.log("✅ Status setado:", status);
+				}
+				
+				console.log("✅ carregaBody concluído!");
+			}
+		</script>
+	</body>
 </html>

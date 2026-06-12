@@ -352,7 +352,32 @@
           form.submit();
         }
       }
+      function filtrarPorCategoria() {
+        // Coleta todas as categorias ativas (marcadas)
+        let categoriasVisiveis = [];
+        $('.filtro-tipo:checked').each(function() {
+          let filtro = $(this).attr('data-filtro');
+          if (filtro) {
+            filtro.split(',').forEach(function(cat) {
+              categoriasVisiveis.push(cat.trim());
+            });
+          }
+        });
 
+        // Filtra cada linha da tabela
+        $('#dynamic-table tbody tr').each(function() {
+          let catLinha = $(this).attr('data-categoria') || '';
+          
+          // Verifica se a categoria da linha está entre as visíveis
+          if (categoriasVisiveis.indexOf(catLinha) !== -1) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+
+       
+      }
 
     </script>
   </head>
@@ -497,7 +522,54 @@
                     </div>
                   </div>
                 </div>
-				<hr>
+              <div class="control-group col-sm-12">
+                 <label class="control-label bolder white">Tipo</label>
+                  <div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center;">
+
+                    <label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+                      <input name="filtroTipo" value="Atendido" type="checkbox" class="ace filtro-tipo input-lg" checked data-filtro="Padrão,SubstitutoFixo,,null">
+                      <span class="lbl bigger-120"> Atendido</span>
+                    </label>
+
+                    <label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+                      <input name="filtroTipo" value="Substituicao" type="checkbox" class="ace filtro-tipo input-lg" checked data-filtro="Substituto,Substituição">
+                      <span class="lbl bigger-120"> Substituição</span>
+                    </label>
+
+                    <label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+                      <input name="filtroTipo" value="Falta" type="checkbox" class="ace filtro-tipo input-lg" checked data-filtro="Falta">
+                      <span class="lbl bigger-120"> Falta</span>
+                    </label>
+
+                    <label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+                      <input name="filtroTipo" value="FaltaJustificada" type="checkbox" class="ace filtro-tipo input-lg" checked data-filtro="Falta Justificada">
+                      <span class="lbl bigger-120"> Falta Justificada</span>
+                    </label>
+
+                    <label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+                      <input name="filtroTipo" value="FaltaAbsoluta" type="checkbox" class="ace filtro-tipo input-lg" checked data-filtro="Falta Absoluta">
+                      <span class="lbl bigger-120"> Falta Absoluta</span>
+                    </label>
+
+                    <label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+                      <input name="filtroTipo" value="Feriado" type="checkbox" class="ace filtro-tipo input-lg" checked data-filtro="Feriado">
+                      <span class="lbl bigger-120"> Feriado</span>
+                    </label>
+
+                    <label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+                      <input name="filtroTipo" value="Glosa" type="checkbox" class="ace filtro-tipo input-lg" checked data-filtro="Glosa">
+                      <span class="lbl bigger-120"> Glosa</span>
+                    </label>
+
+                    <label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+                      <input name="filtroTipo" value="Extra" type="checkbox" class="ace filtro-tipo input-lg" checked data-filtro="Extra">
+                      <span class="lbl bigger-120"> Extra</span>
+                    </label>
+
+                  </div>
+                  <hr>
+              </div>
+				
                 <!-- Botões -->
                 <div class="row">
                   <button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
@@ -559,7 +631,7 @@
                 <div class="widget-box">
                   <div class="widget-header widget-header-flat widget-header-small">
                     <h4 class="widget-title">
-                      <i class="ace-icon fa fa-calendar"></i> Lista de Atendimentos
+                      <i class="ace-icon fa fa-calendar"></i> Lista de Atendimentos v.3
                       <small class="text-muted">({{filtroTipo}}: {{#ifEqual filtroTipo "Ano/Mes"}}{{filtroAno}}/{{filtroMes}}{{else}}{{filtroData}}{{/ifEqual}})</small>
                     </h4>
                     <div class="widget-toolbar">
@@ -568,138 +640,138 @@
                   </div>
                   <div class="widget-body">
                     <div class="widget-main">
-<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" style="font-size: 11px;">
-  <thead style="background: #f5f5f5; font-size: 11px;">
-    <tr>
-      <th colspan="6" style="width: 100px;">Atendimento</th>
-      <th colspan="7"><span class="label label-sm label-success" style="font-size: 14px;">Original</span></th>
-      <th colspan="4"><span class="label label-sm label-danger" style="font-size: 14px;">Substituto Fixo</span></th>
-      <th colspan="4"><span class="label label-sm label-purple" style="font-size: 14px;">Substituição</span></th>
-      <th>&nbsp;</th>
-    </tr>
-    <tr role="row">
-      <th class="center"><label class="pos-rel"><input type="checkbox" id="marcar" name="marcar" class="ace" /><span class="lbl"></span></label></th>
-      <th style="width: 100px;">Data</th>
-      <th style="width: 50px;">Hora</th>
-      <th style="width: 50px;">Sala</th>
-      <th>Beneficiário</th>
-      <th>Convênio</th>
-      <th>Origem</th>
-      <th>Categoria</th>
-      <th>Evento</th>
-      <th>Terapia</th>
-      <th>Terapeuta</th>
-      <th>Cred</th>
-      <th>Deb</th>
-      <th>Terapia</th>
-      <th>Terapeuta</th>
-      <th>Cred</th>
-      <th>Deb</th>
-      <th>Terapia</th>
-      <th>Terapeuta</th>
-      <th>Cred</th>
-      <th>Deb</th>
-      <th style="width: 100px;">Ação</th>
-    </tr>
-  </thead>
-  <tbody style="font-size: 11px;">
-    {{#each atends}}
-      <tr role="row" class="odd">
-        <!-- 1. Checkbox -->
-        <td class="center">
-          <label class="pos-rel">
-            <input type="checkbox" class="ace" id="{{_id}}" name="chekId" onchange="javascript:alternarBotao()" />
-            <span class="lbl"></span>
-          </label>
-          <input hidden="true" style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{data}}" />
-          <input hidden="true" style="border: none; width: 35px;" readonly="true" id="atenddatahour{{_id}}" value="{{atend_atendhora}}" />
-        </td>
+                      <table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" style="font-size: 11px;">
+                        <thead style="background: #f5f5f5; font-size: 11px;">
+                          <tr>
+                            <th colspan="6" style="width: 100px;">Atendimento</th>
+                            <th colspan="7"><span class="label label-sm label-success" style="font-size: 14px;">Original</span></th>
+                            <th colspan="4"><span class="label label-sm label-danger" style="font-size: 14px;">Substituto Fixo</span></th>
+                            <th colspan="4"><span class="label label-sm label-purple" style="font-size: 14px;">Substituição</span></th>
+                            <th>&nbsp;</th>
+                          </tr>
+                          <tr role="row">
+                            <th class="center"><label class="pos-rel"><input type="checkbox" id="marcar" name="marcar" class="ace" /><span class="lbl"></span></label></th>
+                            <th style="width: 100px;">Data</th>
+                            <th style="width: 50px;">Hora</th>
+                            <th style="width: 50px;">Sala</th>
+                            <th>Beneficiário</th>
+                            <th>Convênio</th>
+                            <th>Origem</th>
+                            <th>Categoria</th>
+                            <th>Evento</th>
+                            <th>Terapia</th>
+                            <th>Terapeuta</th>
+                            <th>Cred</th>
+                            <th>Deb</th>
+                            <th>Terapia</th>
+                            <th>Terapeuta</th>
+                            <th>Cred</th>
+                            <th>Deb</th>
+                            <th>Terapia</th>
+                            <th>Terapeuta</th>
+                            <th>Cred</th>
+                            <th>Deb</th>
+                            <th style="width: 100px;">Ação</th>
+                          </tr>
+                        </thead>
+                        <tbody style="font-size: 11px;">
+                          {{#each atends}}
+                            <tr role="row" class="odd" data-categoria="{{this.atend_categoria}}">
+                              <!-- 1. Checkbox -->
+                              <td class="center">
+                                <label class="pos-rel">
+                                  <input type="checkbox" class="ace" id="{{_id}}" name="chekId" onchange="javascript:alternarBotao()" />
+                                  <span class="lbl"></span>
+                                </label>
+                                <input hidden="true" style="border: none; width: 80px;" readonly="true" id="atenddata{{atend_num}}" value="{{data}}" />
+                                <input hidden="true" style="border: none; width: 35px;" readonly="true" id="atenddatahour{{_id}}" value="{{atend_atendhora}}" />
+                              </td>
 
-        <!-- 2. Data | 3. Hora -->
-        <td>{{data}}</td>
-        <td>{{atend_atendhora}}</td>
+                              <!-- 2. Data | 3. Hora -->
+                              <td>{{data}}</td>
+                              <td>{{atend_atendhora}}</td>
 
-        <!-- 4. Sala | 5. Beneficiário | 6. Convênio -->
-        <td>{{#each ../salas}}{{#ifEqual this._id ../atend_salaid}}{{sala_nome}}{{/ifEqual}}{{/each}}</td>
-        <td>{{#each ../benes}}{{#ifEqual this._id ../atend_beneid}}{{bene_nome}}{{/ifEqual}}{{/each}}</td>
-        <td>{{#each ../convs}}{{#ifEqual this._id ../atend_convid}}{{conv_nome}}{{/ifEqual}}{{/each}}</td>
+                              <!-- 4. Sala | 5. Beneficiário | 6. Convênio -->
+                              <td>{{#each ../salas}}{{#ifEqual this._id ../atend_salaid}}{{sala_nome}}{{/ifEqual}}{{/each}}</td>
+                              <td>{{#each ../benes}}{{#ifEqual this._id ../atend_beneid}}{{bene_nome}}{{/ifEqual}}{{/each}}</td>
+                              <td>{{#each ../convs}}{{#ifEqual this._id ../atend_convid}}{{conv_nome}}{{/ifEqual}}{{/each}}</td>
 
-        <!-- 7. Origem -->
-        <td>
-          {{#ifEqual this.atend_org "ADM"}}<span class="label label-sm label-warning">{{atend_org}}</span>{{else}}<span class="label label-sm label-success">{{atend_org}}</span>{{/ifEqual}}
-        </td>
+                              <!-- 7. Origem -->
+                              <td>
+                                {{#ifEqual this.atend_org "ADM"}}<span class="label label-sm label-warning">{{atend_org}}</span>{{else}}<span class="label label-sm label-success">{{atend_org}}</span>{{/ifEqual}}
+                              </td>
 
-        <!-- 8. Categoria (Fixo/Padrão) -->
-        <td>
-          {{#ifEqual this.atend_fixo "true"}}<span class="label label-sm label-danger">Substituto Fixo</span>{{else}}<span class="label label-sm label-success">Padrão</span>{{/ifEqual}}
-        </td>
+                              <!-- 8. Categoria (Fixo/Padrão) -->
+                              <td>
+                                {{#ifEqual this.atend_fixo "true"}}<span class="label label-sm label-danger">Substituto Fixo</span>{{else}}<span class="label label-sm label-success">Padrão</span>{{/ifEqual}}
+                              </td>
 
-        <!-- 9. Evento (Categoria) -->
-        <td>
-          {{#ifEqual this.atend_categoria "Feriado"}}<span class="label label-sm label-warning">Feriado</span>
-          {{else ifEqual this.atend_categoria "Extra"}}<span class="label label-sm label-purple">Extra</span>
-          {{else ifEqual this.atend_categoria "Substituto"}}<span class="label label-sm label-pink">Substituição</span>
-          {{else ifEqual this.atend_categoria "Substituição"}}<span class="label label-sm label-pink">Substituição</span>
-          {{else ifEqual this.atend_categoria "Falta"}}<span class="label label-sm label-yellow">Falta</span>
-          {{else ifEqual this.atend_categoria "Padrão"}}<span class="label label-sm label-success">Sem Evento</span>
-          {{else ifEqual this.atend_categoria "SubstitutoFixo"}}<span class="label label-sm label-success">Sem Evento</span>
-          {{else ifEqual this.atend_categoria "Falta Absoluta"}}<span class="label label-sm label-warning">Falta Absoluta</span>
-          {{else ifEqual this.atend_categoria "Falta Justificada"}}<span class="label label-sm label-warning">Falta Justificada</span>
-          {{/ifEqual}}
-        </td>
+                              <!-- 9. Evento (Categoria) -->
+                              <td>
+                                {{#ifEqual this.atend_categoria "Feriado"}}<span class="label label-sm label-warning">Feriado</span>
+                                {{else ifEqual this.atend_categoria "Extra"}}<span class="label label-sm label-purple">Extra</span>
+                                {{else ifEqual this.atend_categoria "Substituto"}}<span class="label label-sm label-pink">Substituição</span>
+                                {{else ifEqual this.atend_categoria "Substituição"}}<span class="label label-sm label-pink">Substituição</span>
+                                {{else ifEqual this.atend_categoria "Falta"}}<span class="label label-sm label-yellow">Falta</span>
+                                {{else ifEqual this.atend_categoria "Padrão"}}<span class="label label-sm label-success">Sem Evento</span>
+                                {{else ifEqual this.atend_categoria "SubstitutoFixo"}}<span class="label label-sm label-success">Sem Evento</span>
+                                {{else ifEqual this.atend_categoria "Falta Absoluta"}}<span class="label label-sm label-warning">Falta Absoluta</span>
+                                {{else ifEqual this.atend_categoria "Falta Justificada"}}<span class="label label-sm label-warning">Falta Justificada</span>
+                                {{/ifEqual}}
+                              </td>
 
-        <!-- 10. Terapia Original | 11. Terapeuta Original -->
-        <td>{{#each ../terapias}}{{#ifEqual this._id ../atend_terapiaid}}{{terapia_nome}}{{/ifEqual}}{{/each}}</td>
-        <td>{{#each ../terapeutas}}{{#ifEqual this._id ../atend_terapeutaid}}{{usuario_nome}}{{/ifEqual}}{{/each}}</td>
+                              <!-- 10. Terapia Original | 11. Terapeuta Original -->
+                              <td>{{#each ../terapias}}{{#ifEqual this._id ../atend_terapiaid}}{{terapia_nome}}{{/ifEqual}}{{/each}}</td>
+                              <td>{{#each ../terapeutas}}{{#ifEqual this._id ../atend_terapeutaid}}{{usuario_nome}}{{/ifEqual}}{{/each}}</td>
 
-        <!-- 12. Cred Original | 13. Deb Original -->
-        <td>{{#ifEqual this.atend_valorcre "0,00"}}<span class="label label-sm label-warning arrowed">{{atend_valorcre}}</span>{{else}}{{atend_valorcre}}{{/ifEqual}}</td>
-        <td>{{#ifEqual this.atend_valordeb "0,00"}}<span class="label label-sm label-warning arrowed">{{atend_valordeb}}</span>{{else}}{{atend_valordeb}}{{/ifEqual}}</td>
+                              <!-- 12. Cred Original | 13. Deb Original -->
+                              <td>{{#ifEqual this.atend_valorcre "0,00"}}<span class="label label-sm label-warning arrowed">{{atend_valorcre}}</span>{{else}}{{atend_valorcre}}{{/ifEqual}}</td>
+                              <td>{{#ifEqual this.atend_valordeb "0,00"}}<span class="label label-sm label-warning arrowed">{{atend_valordeb}}</span>{{else}}{{atend_valordeb}}{{/ifEqual}}</td>
 
-        <!-- Substituto Fixo -->
-        <!-- 14. Terapia Fixo | 15. Terapeuta Fixo -->
-        <td>{{#compareThis atend_fixoterapiaid "766f69643132333435366964"}}-{{else}}{{#each ../terapias}}{{#ifEqual this._id ../atend_fixoterapiaid}}{{terapia_nome}}{{/ifEqual}}{{/each}}{{/compareThis}}</td>
-        <td>{{#compareThis atend_fixoterapeutaid "766f69643132333435366964"}}-{{else}}{{#each ../terapeutas}}{{#ifEqual this._id ../atend_fixoterapeutaid}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{/compareThis}}</td>
+                              <!-- Substituto Fixo -->
+                              <!-- 14. Terapia Fixo | 15. Terapeuta Fixo -->
+                              <td>{{#compareThis atend_fixoterapiaid "766f69643132333435366964"}}-{{else}}{{#each ../terapias}}{{#ifEqual this._id ../atend_fixoterapiaid}}{{terapia_nome}}{{/ifEqual}}{{/each}}{{/compareThis}}</td>
+                              <td>{{#compareThis atend_fixoterapeutaid "766f69643132333435366964"}}-{{else}}{{#each ../terapeutas}}{{#ifEqual this._id ../atend_fixoterapeutaid}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{/compareThis}}</td>
 
-        <!-- 16. Cred Fixo | 17. Deb Fixo -->
-        <td>{{#if atend_fixovalorcre}}{{#ifEqual this.atend_fixovalorcre "0,00"}}<span class="label label-sm label-warning arrowed">{{atend_fixovalorcre}}</span>{{else}}{{atend_fixovalorcre}}{{/ifEqual}}{{else}}-{{/if}}</td>
-        <td>{{#if atend_fixovalordeb}}{{#ifEqual this.atend_fixovalordeb "0,00"}}<span class="label label-sm label-warning arrowed">{{atend_fixovalordeb}}</span>{{else}}{{atend_fixovalordeb}}{{/ifEqual}}{{else}}-{{/if}}</td>
+                              <!-- 16. Cred Fixo | 17. Deb Fixo -->
+                              <td>{{#if atend_fixovalorcre}}{{#ifEqual this.atend_fixovalorcre "0,00"}}<span class="label label-sm label-warning arrowed">{{atend_fixovalorcre}}</span>{{else}}{{atend_fixovalorcre}}{{/ifEqual}}{{else}}-{{/if}}</td>
+                              <td>{{#if atend_fixovalordeb}}{{#ifEqual this.atend_fixovalordeb "0,00"}}<span class="label label-sm label-warning arrowed">{{atend_fixovalordeb}}</span>{{else}}{{atend_fixovalordeb}}{{/ifEqual}}{{else}}-{{/if}}</td>
 
-        <!-- Substituição -->
-        <!-- 18. Terapia Merge | 19. Terapeuta Merge -->
-        <td>{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}-{{else}}{{#each ../terapias}}{{#ifEqual this._id ../atend_mergeterapiaid}}{{terapia_nome}}{{/ifEqual}}{{/each}}{{/compareThis}}</td>
-        <td>{{#compareThis atend_mergeterapeutaid "766f69643132333435366964"}}-{{else}}{{#each ../terapeutas}}{{#ifEqual this._id ../atend_mergeterapeutaid}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{/compareThis}}</td>
+                              <!-- Substituição -->
+                              <!-- 18. Terapia Merge | 19. Terapeuta Merge -->
+                              <td>{{#compareThis atend_mergeterapiaid "766f69643132333435366964"}}-{{else}}{{#each ../terapias}}{{#ifEqual this._id ../atend_mergeterapiaid}}{{terapia_nome}}{{/ifEqual}}{{/each}}{{/compareThis}}</td>
+                              <td>{{#compareThis atend_mergeterapeutaid "766f69643132333435366964"}}-{{else}}{{#each ../terapeutas}}{{#ifEqual this._id ../atend_mergeterapeutaid}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{/compareThis}}</td>
 
-        <!-- 20. Cred Merge | 21. Deb Merge -->
-        <td>{{#if atend_mergevalorcre}}{{#ifEqual this.atend_mergevalorcre "0,00"}}<span class="label label-sm label-warning arrowed">{{atend_mergevalorcre}}</span>{{else}}{{atend_mergevalorcre}}{{/ifEqual}}{{else}}-{{/if}}</td>
-        <td>{{#if atend_mergevalordeb}}{{#ifEqual this.atend_mergevalordeb "0,00"}}<span class="label label-sm label-warning arrowed">{{atend_mergevalordeb}}</span>{{else}}{{atend_mergevalordeb}}{{/ifEqual}}{{else}}-{{/if}}</td>
+                              <!-- 20. Cred Merge | 21. Deb Merge -->
+                              <td>{{#if atend_mergevalorcre}}{{#ifEqual this.atend_mergevalorcre "0,00"}}<span class="label label-sm label-warning arrowed">{{atend_mergevalorcre}}</span>{{else}}{{atend_mergevalorcre}}{{/ifEqual}}{{else}}-{{/if}}</td>
+                              <td>{{#if atend_mergevalordeb}}{{#ifEqual this.atend_mergevalordeb "0,00"}}<span class="label label-sm label-warning arrowed">{{atend_mergevalordeb}}</span>{{else}}{{atend_mergevalordeb}}{{/ifEqual}}{{else}}-{{/if}}</td>
 
-        <!-- 22. Ações -->
-        <td>
-          <div class="action-buttons">
-            <a class="green" href="/menu/atendimento/atendadm/edi/{{_id}}"><i class="ace-icon fa fa-pencil bigger-130"></i></a>
-            <a class="red" onclick="javascript:confirmeDeletar('{{_id}}');"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>
-            <a class="blue" onclick="javascript:mostraDivCopia('{{_id}}');"><i class="ace-icon fa fa-clone bigger-130"></i></a>
-            <a class="orange custom-tooltip"><i class="ace-icon fa fa-eye bigger-130"></i>
-              <span class="tooltip-text">
-                <strong>Atendimento:</strong><br>
-                • Data Criação: {{#if atend_datacad}}{{formatDate atend_datacad}}{{else}}—{{/if}}<br>
-                • Criado por: {{#if atend_usuid}}{{#each ../usuarios}}{{#ifEqual this._id ../atend_usuid}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{else}}—{{/if}}<br>
-                • Data Edição: {{#if atend_dataedi}}{{formatDate atend_dataedi}}{{else}}—{{/if}}<br>
-                • Editado por: {{#if atend_usuidedi}}{{#each ../usuarios}}{{#ifEqual this._id ../atend_usuidedi}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{else}}—{{/if}}<br><br>
-                <strong>Agendamento:</strong><br>
-                • Data Criação: {{#if atend_agenda_datacad}}{{formatDate atend_agenda_datacad}}{{else}}—{{/if}}<br>
-                • Criado por: {{#if atend_agenda_usuid}}{{#each ../usuarios}}{{#ifEqual this._id ../atend_agenda_usuid}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{else}}—{{/if}}<br>
-                • Data Edição: {{#if atend_agenda_dataedi}}{{formatDate atend_agenda_dataedi}}{{else}}—{{/if}}<br>
-                • Editado por: {{#if atend_agenda_usuidedi}}{{#each ../usuarios}}{{#ifEqual this._id ../atend_agenda_usuidedi}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{else}}—{{/if}}
-              </span>
-            </a>
-          </div>
-        </td>
-      </tr>
-    {{/each}}
-  </tbody>
-</table>
+                              <!-- 22. Ações -->
+                              <td>
+                                <div class="action-buttons">
+                                  <a class="green" href="/menu/atendimento/atendadm/edi/{{_id}}"><i class="ace-icon fa fa-pencil bigger-130"></i></a>
+                                  <a class="red" onclick="javascript:confirmeDeletar('{{_id}}');"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>
+                                  <a class="blue" onclick="javascript:mostraDivCopia('{{_id}}');"><i class="ace-icon fa fa-clone bigger-130"></i></a>
+                                  <a class="orange custom-tooltip"><i class="ace-icon fa fa-eye bigger-130"></i>
+                                    <span class="tooltip-text">
+                                      <strong>Atendimento:</strong><br>
+                                      • Data Criação: {{#if atend_datacad}}{{formatDate atend_datacad}}{{else}}—{{/if}}<br>
+                                      • Criado por: {{#if atend_usuid}}{{#each ../usuarios}}{{#ifEqual this._id ../atend_usuid}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{else}}—{{/if}}<br>
+                                      • Data Edição: {{#if atend_dataedi}}{{formatDate atend_dataedi}}{{else}}—{{/if}}<br>
+                                      • Editado por: {{#if atend_usuidedi}}{{#each ../usuarios}}{{#ifEqual this._id ../atend_usuidedi}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{else}}—{{/if}}<br><br>
+                                      <strong>Agendamento:</strong><br>
+                                      • Data Criação: {{#if atend_agenda_datacad}}{{formatDate atend_agenda_datacad}}{{else}}—{{/if}}<br>
+                                      • Criado por: {{#if atend_agenda_usuid}}{{#each ../usuarios}}{{#ifEqual this._id ../atend_agenda_usuid}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{else}}—{{/if}}<br>
+                                      • Data Edição: {{#if atend_agenda_dataedi}}{{formatDate atend_agenda_dataedi}}{{else}}—{{/if}}<br>
+                                      • Editado por: {{#if atend_agenda_usuidedi}}{{#each ../usuarios}}{{#ifEqual this._id ../atend_agenda_usuidedi}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{else}}—{{/if}}
+                                    </span>
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                          {{/each}}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
@@ -716,54 +788,154 @@
     <!-- Scripts -->
     <script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
     <script type="text/javascript">
-$(document).ready(function() {
-  // ✅ Eventos para Select2 (sem onchange inline)
-  $('#tipoData').on('change.select2', function() {
-    trocaFiltroData();
-    formataData();
-  });
+      $(document).ready(function() {
+        // ✅ Eventos para Select2 (sem onchange inline)
+        $('#tipoData').on('change.select2', function() {
+          trocaFiltroData();
+          formataData();
+        });
 
-  $('#anoAtend, #mesAtend').on('change.select2', function() {
-    formataData();
-  });
+        $('#anoAtend, #mesAtend').on('change.select2', function() {
+          formataData();
+        });
 
-  $('#dataFil').on('change', function() {
-    formataData();
-  });
+        $('#dataFil').on('change', function() {
+          formataData();
+        });
 
-  $('#atendTipoPessoa').on('change.select2', function() {
-    trocaFilpessoa();
-  });
+        $('#atendTipoPessoa').on('change.select2', function() {
+          trocaFilpessoa();
+        });
 
-  // ✅ DataTable
-  $("#dynamic-table").DataTable({
-    language: { url: "/js/lang/datatable-pt-br.json" },
-    aaSorting: [],
-    aoColumns: [
-      { bSortable: false }, null, null, null, null, null,
-      null, null, null, null, null, null, null, null, null,
-      null, null, null, null, null, null, { bSortable: false }
+        // ✅ Filtro dinâmico por categoria
+        $('.filtro-tipo').on('change', function() {
+          filtrarPorCategoria();
+        });
+
+        // Aplica filtro inicial (todos marcados = mostra tudo)
+        filtrarPorCategoria();
+  
+        // ============================================
+				// ✅ PASSO 3: INICIALIZAÇÃO DO DATATABLE (ESTILO ACE ADMIN)
+				// ============================================
+			var myTable = $('#dynamic-table').DataTable({
+    bAutoWidth: false,
+    "language": { "url": "/js/lang/datatable-pt-br.json" },
+    "aoColumns": [
+        { "bSortable": false }, // 0 - Checkbox
+        null,                   // 1 - Data (Agora usa ordenação nativa)
+        null,                   // 2 - Hora
+        null,                   // 3 - Sala
+        null,                   // 4 - Beneficiário
+        null,                   // 5 - Convênio
+        null,                   // 6 - Origem
+        null,                   // 7 - Categoria
+        null,                   // 8 - Evento
+        null,                   // 9 - Terapia Original
+        null,                   // 10 - Terapeuta Original
+        null,                   // 11 - Cred Original
+        null,                   // 12 - Deb Original
+        null,                   // 13 - Terapia Fixo
+        null,                   // 14 - Terapeuta Fixo
+        null,                   // 15 - Cred Fixo
+        null,                   // 16 - Deb Fixo
+        null,                   // 17 - Terapia Merge
+        null,                   // 18 - Terapeuta Merge
+        null,                   // 19 - Cred Merge
+        null,                   // 20 - Deb Merge
+        { "bSortable": false }  // 21 - Ação
     ],
-    responsive: true,
-    lengthMenu: [100, 200, 500, 1000, 2000],
-    paging: true, searching: true, ordering: true, info: true,
-    select: { style: 'multi' }
-  });
-
-  // ✅ Inicializa Select2 nos campos do filtro
-  $('.select2').each(function() {
-    if(!$(this).data('select2')) {
-      $(this).select2({
-        width: 'resolve',
-        placeholder: $(this).data('placeholder') || "Selecione...",
-        allowClear: $(this).attr('id') !== 'tipoData' // sem clear no tipoData
-      });
+    // ❌ Removido aaSorting para não forçar ordem inicial
+    
+    "responsive": true,
+    "lengthMenu": [[ 500, 1000, 2000, 5000], [500, 1000, 2000, 5000]],
+    "lengthChange": true,
+    "autoWidth": false,
+    "paging": true,
+    "searching": true,
+    "ordering": true,
+    "info": true,
+    select: {
+        style: 'multi'
+    },
+    "initComplete": function(settings, json) {
+        console.log('✅ DataTable inicializado com sucesso');
     }
-  });
-
-  // ✅ Formata data inicial se necessário
-  formataData();
+    // ❌ Removido todo o bloco drawCallback que manipulava o data-order
 });
-</script>
+        
+        // ============================================
+				// ✅ CONFIGURAÇÃO DOS BOTÕES (ESTILO ACE ADMIN)
+				// ============================================
+				$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+
+				new $.fn.dataTable.Buttons(myTable, {
+					buttons: [
+						{
+							"extend": "colvis",
+							"text": "<i class='fa fa-search bigger-110 blue'></i> <span class='hidden'>Mostrar/Ocultar Colunas</span>",
+							"className": "btn btn-white btn-primary btn-bold",
+							columns: ':not(:first)'
+						},
+						{
+							"extend": "copy",
+							"text": "<i class='fa fa-copy bigger-110 pink'></i> <span class='hidden'>Copiar</span>",
+							"className": "btn btn-white btn-primary btn-bold",
+							exportOptions: {
+								columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+								modifier: { page: 'all' }
+							}
+						},
+						{
+							"extend": "csv",
+							"text": "<i class='fa fa-database bigger-110 orange'></i> <span class='hidden'>CSV</span>",
+							"className": "btn btn-white btn-primary btn-bold",
+							exportOptions: {
+								columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+								modifier: { page: 'all' }
+							}
+						},
+						{
+							"extend": "excel",
+							"text": "<i class='fa fa-file-excel-o bigger-110 green'></i> <span class='hidden'>Excel</span>",
+							"className": "btn btn-white btn-primary btn-bold",
+							exportOptions: {
+								columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+								modifier: { page: 'all' }
+							}
+						},
+						{
+							"extend": "pdf",
+							"text": "<i class='fa fa-file-pdf-o bigger-110 red'></i> <span class='hidden'>PDF</span>",
+							"className": "btn btn-white btn-primary btn-bold",
+							exportOptions: {
+								columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+								modifier: { page: 'all' }
+							},
+							orientation: 'landscape',
+							pageSize: 'A4'
+						},
+						
+					]
+				});
+
+				// Anexar os botões ao container (isso coloca os botões ACIMA da tabela)
+				myTable.buttons().container().appendTo($('.tableTools-container'));
+
+        // ✅ Inicializa Select2 nos campos do filtro
+        $('.select2').each(function() {
+          if(!$(this).data('select2')) {
+            $(this).select2({
+              width: 'resolve',
+              placeholder: $(this).data('placeholder') || "Selecione...",
+              allowClear: $(this).attr('id') !== 'tipoData' // sem clear no tipoData
+            });
+          }
+        });
+
+        // ✅ Formata data inicial se necessário
+        formataData();
+      });
+    </script>
   </body>
 </html>

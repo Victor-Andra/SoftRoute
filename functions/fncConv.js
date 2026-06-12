@@ -1,21 +1,36 @@
 //Exports
 const mongoose = require("mongoose")
-const { getModel } = require('../functions/fncGeral');
+const { getModel } = require('./fncGeral');
+//As classe tem que ser declaradas antes das tabelas
+//Classe  Plano de Bordoamento 
+const bordoClass = require("../models/bordo")
 
-//convenio
-const convClass = require("../models/conv")
-var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
 
 //Classes Extrangeiras
-const estadoClass = require("../models/estado")
+const anoClass = require("../models/ano")
+const atendClass = require("../models/atend")
+const beneClass = require("../models/bene")
+const convClass = require("../models/conv")
+const escolaClass = require("../models/escola")
 const usuarioClass = require("../models/usuario")
+const terapiaClass = require("../models/terapia")
+
+//Tabela Plano de Bordoamento 
+var Bordo = getModel("SoftRoute", 'tb_bordo', bordoClass.BordoSchema)
 
 //Tabelas Extrangeiras
-var Estado = getModel("PortalDoUsuario", 'tb_estado', estadoClass.EstadoSchema)
+var Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema)
+var Atend = getModel("SoftRoute", 'tb_atend', atendClass.AtendSchema)
+var Bene = getModel("SoftRoute", 'tb_bene', beneClass.BeneSchema)
+var Conv = getModel("SoftRoute", 'tb_conv', convClass.ConvSchema)
+var Escola = getModel("SoftRoute", 'tb_escola', escolaClass.EscolaSchema)
 var Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema)
+var Terapia = getModel("SoftRoute", 'tb_terapia', terapiaClass.TerapiaSchema)
 
+//Funções auxiliares
 const fncGeral = require("./fncGeral")
 const Resposta = fncGeral.Resposta;
+const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     //Função que Carrega view para cadastro novo
@@ -47,7 +62,6 @@ module.exports = {
             res.render('admin/erro');
         }
     },
-
     //Função que controla Classe para Deletar
     deletaConv(req, res){
         let db = req.cookies['preferredDb'];
@@ -64,7 +78,6 @@ module.exports = {
             })
         })
     },
-    
     //Função que controla Classe para Atualizar registro
     atualizaConv(req, res){
         let db = req.cookies['preferredDb'];
@@ -103,7 +116,6 @@ module.exports = {
             console.log(err1)
         } 
     },
-
     //Função que Carrega view para Editar Registro
     carregaConvEdi(req, res){
         let db = req.cookies['preferredDb'];
@@ -119,45 +131,7 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-
-    //Função que Carrega view para Listar registros
-    listaConvOLD(req, res){
-        let db = req.cookies['preferredDb'];
-        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
-
-        console.log('listando convs')
-        let qtregs;
-
-        // Função auxiliar para formatar data como dd/mm/yyyy hhh:mm
-        function formatDateToBR(date) {
-            const d = new Date(date);
-            const dia = String(d.getDate()).padStart(2, '0');
-            const mes = String(d.getMonth() + 1).padStart(2, '0'); // Janeiro é 0
-            const ano = d.getFullYear();
-            const hora = String(d.getHours()).padStart(2, '0');
-            const minuto = String(d.getMinutes()).padStart(2, '0');
-
-            return `${dia}/${mes}/${ano} h${hora}:${minuto}`;
-        }
-        Conv.find().then((conv) =>{
-            console.log("Listagem Realizada!")
-            convClass.qtregs(req,res).then((res)=>{
-                qtregs = res;
-            }).catch((err) =>{
-                console.log(err)
-                req.flash("error_message", "houve um erro ao listar Convs")
-                res.redirect('admin/erro')
-            }).finally(()=>{
-                res.render('convenio/conv/convLis', {convs: conv, qtregs})
-            })
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao listar Convs")
-            res.redirect('admin/erro')
-        })     
-      
-    },
-
+    //Função que Lista os registros
     listaConv(req, res) {
         let db = req.cookies['preferredDb'];
         Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
@@ -217,6 +191,7 @@ module.exports = {
             res.redirect('/admin/erro');
         });
     },
+    //Função que deleta (logicamente) os registros
     deletaConv(req, res) {
         convClass.convDeletar(req, res)
             .then((sucesso) => {

@@ -5,215 +5,263 @@
 		<meta charset="utf-8">
 		<title>Lista de Diários de Bordo</title>
 		<style>
-				/* ============================================
-         BARRA DE PESQUISA - CLASSE SEPARADA
-         ============================================ */
-      .toolbar-pesquisa {
-        background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
-        color: white;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 0 12px 20px 12px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        border: 1px solid #1976d2;
-      }
-      .toolbar-pesquisa h5 {
-        margin: 0 0 12px 0;
-        font-size: 14px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .toolbar-pesquisa h5 i {
-        font-size: 18px;
-      }
-      .toolbar-pesquisa .form-inline {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: flex-end;
-      }
-      .toolbar-pesquisa .form-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        width: 100%;
-        align-items: flex-end;
-      }
-      .toolbar-pesquisa .form-group {
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        min-width: 140px;
-        flex: 1;
-        max-width: 220px;
-      }
-      .toolbar-pesquisa label {
-        font-size: 11px;
-        font-weight: 500;
-        margin-bottom: 4px;
-        color: #f8f9fa;
-        white-space: nowrap;
-      }
-      .toolbar-pesquisa input[type="date"],
-      .toolbar-pesquisa input[type="time"],
-      .toolbar-pesquisa select {
-        padding: 6px 10px;
-        border: 2px solid #e2e8f0;
-        border-radius: 4px;
-        font-size: 12px;
-        width: 100%;
-        box-sizing: border-box;
-        background: white;
-        color: #333;
-        transition: all 0.3s;
-        height: 30px;
-      }
-      .toolbar-pesquisa input[type="date"]:focus,
-      .toolbar-pesquisa input[type="time"]:focus,
-      .toolbar-pesquisa select:focus {
-        border-color: #fff;
-        box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
-        outline: none;
-      }
-      .toolbar-pesquisa .btn-pesquisar {
-        background: #dc3545;
-        color: white;
-        border: none;
-        padding: 8px 24px;
-        border-radius: 4px;
-        font-weight: 600;
-        font-size: 13px;
-        cursor: pointer;
-        transition: all 0.3s;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        margin-left: auto;
-      }
-      .toolbar-pesquisa .btn-pesquisar:hover {
-        background: #c82333;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      }
-      
-      /* Grupo compacto para horário (turno + início + fim) */
-      .grupo-horario {
-        display: flex;
-        gap: 6px;
-        align-items: flex-end;
-        flex-wrap: wrap;
-      }
-      .grupo-horario .form-group {
-        min-width: 70px;
-        max-width: 90px;
-        flex: none;
-      }
-      .grupo-horario label {
-        font-size: 10px;
-      }
-      .grupo-horario .info-sala {
-        font-size: 9px;
-        color: #e0e0e0;
-        margin-left: 4px;
-        white-space: nowrap;
-      }
-      .grupo-horario .info-sala i {
-        margin-right: 2px;
-      }
+			/* ============================================
+			 BARRA DE PESQUISA - CLASSE SEPARADA
+			 ============================================ */
+			.toolbar-pesquisa {
+				background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
+				color: white;
+				padding: 15px;
+				border-radius: 8px;
+				margin: 0 12px 20px 12px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+				border: 1px solid #1976d2;
+			}
+			.toolbar-pesquisa h5 {
+				margin: 0 0 12px 0;
+				font-size: 14px;
+				font-weight: 600;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.toolbar-pesquisa h5 i { font-size: 18px; }
+			.toolbar-pesquisa .form-inline {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px;
+				align-items: flex-end;
+			}
+			.toolbar-pesquisa .form-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 12px;
+				width: 100%;
+				align-items: flex-end;
+			}
+			.toolbar-pesquisa .form-group {
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				min-width: 140px;
+				flex: 1;
+				max-width: 220px;
+			}
+			.toolbar-pesquisa label {
+				font-size: 11px;
+				font-weight: 500;
+				margin-bottom: 4px;
+				color: #f8f9fa;
+				white-space: nowrap;
+			}
+			.toolbar-pesquisa input[type="date"],
+			.toolbar-pesquisa input[type="time"],
+			.toolbar-pesquisa select {
+				padding: 6px 10px;
+				border: 2px solid #e2e8f0;
+				border-radius: 4px;
+				font-size: 12px;
+				width: 100%;
+				box-sizing: border-box;
+				background: white;
+				color: #333;
+				transition: all 0.3s;
+				height: 30px;
+			}
+			.toolbar-pesquisa input[type="date"]:focus,
+			.toolbar-pesquisa input[type="time"]:focus,
+			.toolbar-pesquisa select:focus {
+				border-color: #fff;
+				box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+				outline: none;
+			}
+			.toolbar-pesquisa .btn-pesquisar {
+				background: #dc3545;
+				color: white;
+				border: none;
+				padding: 8px 24px;
+				border-radius: 4px;
+				font-weight: 600;
+				font-size: 13px;
+				cursor: pointer;
+				transition: all 0.3s;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+				margin-left: auto;
+			}
+			.toolbar-pesquisa .btn-pesquisar:hover {
+				background: #c82333;
+				transform: translateY(-2px);
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+			}
+			
+			.grupo-horario {
+				display: flex;
+				gap: 6px;
+				align-items: flex-end;
+				flex-wrap: wrap;
+			}
+			.grupo-horario .form-group {
+				min-width: 70px;
+				max-width: 90px;
+				flex: none;
+			}
+			.grupo-horario label { font-size: 10px; }
+			.grupo-horario .info-sala {
+				font-size: 9px;
+				color: #e0e0e0;
+				margin-left: 4px;
+				white-space: nowrap;
+			}
+			.grupo-horario .info-sala i { margin-right: 2px; }
+
+			/* ============================================
+			 SELECT2 - ESTILOS GERAIS
+			 ============================================ */
+			.select2-container { min-width: 120px !important; }
+			.select2-container--default .select2-selection--single {
+				height: 30px !important;
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				background: white !important;
+				display: flex !important;
+				align-items: center !important;
+				padding: 0 8px !important;
+				font-size: 12px !important;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__arrow {
+				height: 28px !important;
+				right: 5px !important;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__rendered {
+				line-height: 28px !important;
+				padding-left: 0 !important;
+				color: #333 !important;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__placeholder {
+				color: #999 !important;
+			}
+			.select2-dropdown {
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+			}
+			.select2-container--default .select2-search--dropdown .select2-search__field {
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				padding: 4px 8px !important;
+				font-size: 12px !important;
+				margin: 4px !important;
+			}
+			.select2-container--default .select2-results__option {
+				padding: 6px 10px !important;
+				font-size: 12px !important;
+			}
+			.select2-container--default .select2-results__option--highlighted[aria-selected] {
+				background-color: #2196f3 !important;
+				color: white !important;
+			}
+			.select2-container--default.select2-container--focus .select2-selection--single {
+				border-color: #2196f3 !important;
+				box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2) !important;
+			}
+
+			/* ============================================
+			 SELECT2 NA BARRA DE PESQUISA - LARGURA
+			 ============================================ */
+			/* Regra padrão para selects pequenos (Tipo, Ano, Mês, etc) */
+			.toolbar-pesquisa .select2-container {
+				width: 140px !important;
+			}
+			.toolbar-pesquisa .select2-container .select2-selection--single {
+				width: 138px !important;
+			}
+			.toolbar-pesquisa .select2-dropdown {
+				min-width: 140px !important;
+			}
+
+			/* ✅ EXCEÇÃO: Campos largos (Beneficiário e Terapeuta) ocupam 100% da coluna col-sm-6 */
+			.toolbar-pesquisa .select2-largo,
+			.toolbar-pesquisa select#bordoBeneficiario + .select2-container,
+			.toolbar-pesquisa select#bordoTerapeuta + .select2-container {
+				width: 100% !important;
+				max-width: 100% !important;
+			}
+			.toolbar-pesquisa select#bordoBeneficiario + .select2-container .select2-selection--single,
+			.toolbar-pesquisa select#bordoTerapeuta + .select2-container .select2-selection--single {
+				width: 100% !important;
+			}
+			.toolbar-pesquisa select#bordoBeneficiario + .select2-container .select2-dropdown,
+			.toolbar-pesquisa select#bordoTerapeuta + .select2-container .select2-dropdown {
+				min-width: 100% !important;
+				width: 100% !important;
+			}
 		</style>
 		<style>
 			/* ============================================
-		SELECT2 - ESTILOS GERAIS
-		============================================ */
-		.select2-container {
-			min-width: 120px !important;
-		
-		}
-
-		/* Campo principal do Select2 (a "caixa" visível) */
-		.select2-container--default .select2-selection--single {
-			height: 30px !important;
-			border: 1px solid #ced4da !important;
-			border-radius: 4px !important;
-			background: white !important;
-			display: flex !important;
-			align-items: center !important;
-			padding: 0 8px !important;
-			font-size: 12px !important;
-		}
-
-		/* Seta do dropdown */
-		.select2-container--default .select2-selection--single .select2-selection__arrow {
-			height: 28px !important;
-			right: 5px !important;
-		}
-
-		/* Texto selecionado */
-		.select2-container--default .select2-selection--single .select2-selection__rendered {
-			line-height: 28px !important;
-			padding-left: 0 !important;
-			color: #333 !important;
-		}
-
-		/* Placeholder */
-		.select2-container--default .select2-selection--single .select2-selection__placeholder {
-			color: #999 !important;
-		}
-
-		/* Dropdown (lista de opções) */
-		.select2-dropdown {
-			border: 1px solid #ced4da !important;
-			border-radius: 4px !important;
-			box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-		}
-
-		/* Campo de busca dentro do dropdown */
-		.select2-container--default .select2-search--dropdown .select2-search__field {
-			border: 1px solid #ced4da !important;
-			border-radius: 4px !important;
-			padding: 4px 8px !important;
-			font-size: 12px !important;
-			margin: 4px !important;
-		}
-
-		/* Itens da lista */
-		.select2-container--default .select2-results__option {
-			padding: 6px 10px !important;
-			font-size: 12px !important;
-		}
-
-		/* Item selecionado/hover */
-		.select2-container--default .select2-results__option--highlighted[aria-selected] {
-			background-color: #2196f3 !important;
-			color: white !important;
-		}
-
-		/* Foco no select */
-		.select2-container--default.select2-container--focus .select2-selection--single {
-			border-color: #2196f3 !important;
-			box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2) !important;
-		}
-
-		/* ============================================
-		SELECT2 NA BARRA DE PESQUISA - LARGURA
-		============================================ */
-		.toolbar-pesquisa .select2-container {
-			width: 140px !important; /* Aumentado de 120px */
-		}
-
-		.toolbar-pesquisa .select2-container .select2-selection--single {
-			width: 138px !important; /* 2px a menos para borda */
-		}
-
-		/* Dropdown acompanha a largura */
-		.toolbar-pesquisa .select2-dropdown {
-			min-width: 140px !important;
-		}
-
+			SELECT2 - ESTILOS GERAIS (INTACTOS)
+			============================================ */
+			.select2-container {
+				min-width: 120px !important;
+			}
+			.select2-container--default .select2-selection--single {
+				height: 30px !important;
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				background: white !important;
+				display: flex !important;
+				align-items: center !important;
+				padding: 0 8px !important;
+				font-size: 12px !important;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__arrow {
+				height: 28px !important;
+				right: 5px !important;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__rendered {
+				line-height: 28px !important;
+				padding-left: 0 !important;
+				color: #333 !important;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__placeholder {
+				color: #999 !important;
+			}
+			.select2-dropdown {
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+			}
+			.select2-container--default .select2-search--dropdown .select2-search__field {
+				border: 1px solid #ced4da !important;
+				border-radius: 4px !important;
+				padding: 4px 8px !important;
+				font-size: 12px !important;
+				margin: 4px !important;
+			}
+			.select2-container--default .select2-results__option {
+				padding: 6px 10px !important;
+				font-size: 12px !important;
+			}
+			.select2-container--default .select2-results__option--highlighted[aria-selected] {
+				background-color: #2196f3 !important;
+				color: white !important;
+			}
+			.select2-container--default.select2-container--focus .select2-selection--single {
+				border-color: #2196f3 !important;
+				box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2) !important;
+			}
+			.toolbar-pesquisa .select2-container {
+				width: 140px !important;
+			}
+			.toolbar-pesquisa .select2-container .select2-selection--single {
+				width: 138px !important;
+			}
+			.toolbar-pesquisa .select2-dropdown {
+				min-width: 140px !important;
+			}
 		</style>
 
 		<script type="text/javascript">
@@ -229,76 +277,49 @@
 					let mes = (dat.getMonth()+1).toString();
 					let dia = (dat.getUTCDate()).toString();
 
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-
+					if (mes.length == 1){ mes = "0"+mes; }
+					if (dia.length == 1){ dia = "0"+dia; }
 					let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
 				})
 			}
 			function formataData(){
 				let tipo = document.getElementById("tipoData").value;
-				console.log("tipoData:"+tipoData);
 				if(tipo == "Ano/Mes"){
 					let dat = new Date(document.getElementById('anoBordo').value+"-"+document.getElementById('mesBordo').value+"-01 00:00:00.000Z");
 					let mes = (dat.getUTCMonth()+1).toString();
 					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
+					if (mes.length == 1){ mes = "0"+mes; }
+					if (dia.length == 1){ dia = "0"+dia; }
 					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
 					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
-				} else if (tipo == "Semana"){
+				} else if (tipo == "Semana" || tipo == "Dia"){
 					let dat = new Date(document.getElementById('dataFil').value);
-					let mes = (dat.getUTCMonth()).toString();
+					let mes = (dat.getUTCMonth()+1).toString(); // Corrigido para getUTCMonth()+1 para alinhar com o padrão
 					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
+					if (mes.length == 1){ mes = "0"+mes; }
+					if (dia.length == 1){ dia = "0"+dia; }
 					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
 					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
-				} else if (tipo == "Dia"){
-					let dat = new Date(document.getElementById('dataFil').value);
-					let mes = (dat.getUTCMonth()).toString();
-					let dia = (dat.getUTCDate()).toString();
-					if (mes.length == 1){
-						mes = "0"+mes;
-					}
-					if (dia.length == 1){
-						dia = "0"+dia;
-					}
-					let fulldate = (dat.getFullYear()+"-"+mes+"-"+dia+' 00:00:00.000Z').toString();
-					document.getElementById('dataFinal').value = fulldate;
-					console.log("dataFinal:"+document.getElementById('dataFinal').value);
 				}
 			}
+			
+			// ✅ FUNÇÃO AJUSTADA: Avisa o Select2 para recalcular ao aparecer
 			function trocaFiltroData(){
 				let fill = document.getElementById("tipoData").value;
 				if(fill == "Ano/Mes"){
 					document.getElementById("divAnoBordo").hidden = false;
 					document.getElementById("divMesBordo").hidden = false;
 					document.getElementById("divDataFil").hidden = true;
-				} else if (fill == "Semana"){
-					document.getElementById("divAnoBordo").hidden = true;
-					document.getElementById("divMesBordo").hidden = true;
-					document.getElementById("divDataFil").hidden = false;
+					// Acorda o Select2
+					setTimeout(() => { $('#anoBordo, #mesBordo').trigger('change.select2'); }, 50);
 				} else {
 					document.getElementById("divAnoBordo").hidden = true;
 					document.getElementById("divMesBordo").hidden = true;
 					document.getElementById("divDataFil").hidden = false;
 				}
 			}
+			
+			// ✅ FUNÇÃO AJUSTADA: Avisa o Select2 para recalcular ao aparecer
 			function trocaFilpessoa() {
 				let fillTipopessoa = document.getElementById("bordoTipoPessoa").value;
 				if(fillTipopessoa == "Geral"){
@@ -307,58 +328,70 @@
 				} else if(fillTipopessoa == "Beneficiario"){
 					document.getElementById("divBordoBeneficiario").hidden = false;
 					document.getElementById("divBordoTerapeuta").hidden = true;
+					// Acorda o Select2
+					setTimeout(() => { $('#bordoBeneficiario').trigger('change.select2'); }, 50);
 				} else {
 					document.getElementById("divBordoBeneficiario").hidden = true;
 					document.getElementById("divBordoTerapeuta").hidden = false;
+					// Acorda o Select2
+					setTimeout(() => { $('#bordoTerapeuta').trigger('change.select2'); }, 50);
 				}
 			}
-			function carregarFiltros() {
-				const tipoData = $id("tipoDataFil")?.value || "Ano/Mes";
-				const tipoPessoa = $id("tipoPessoaFil")?.value || "Geral";
 
-				$id("tipoData").value = tipoData;
-				trocaFiltroData();
+			// ✅ FUNÇÃO AJUSTADA: Sincroniza valores E atualiza a UI do Select2 após POST
+			function carregarFiltros() {
+				const tipoData = document.getElementById("tipoDataFil")?.value || "Ano/Mes";
+				const tipoPessoa = document.getElementById("tipoPessoaFil")?.value || "Geral";
+
+				document.getElementById("tipoData").value = tipoData;
+				trocaFiltroData(); // Garante que os campos certos estão visíveis primeiro
 
 				if(tipoData === "Ano/Mes") {
-				$id("anoBordo").value = $id("anoBordoFil")?.value || "";
-				$id("mesBordo").value = $id("mesBordoFil")?.value || "0";
+					document.getElementById("anoBordo").value = document.getElementById("anoBordoFil")?.value || "";
+					document.getElementById("mesBordo").value = document.getElementById("mesBordoFil")?.value || "0";
+					// Acorda o Select2 com os novos valores
+					$('#anoBordo, #mesBordo').trigger('change.select2');
 				} else {
-				const data = $id("dataFinalFil")?.value;
-				if(data) $id("dataFil").value = data.split('T')[0];
+					const data = document.getElementById("dataFinalFil")?.value;
+					if(data) document.getElementById("dataFil").value = data.split('T')[0];
 				}
 
-				$id("bordoTipoPessoa").value = tipoPessoa;
-				trocaFilpessoa();
+				document.getElementById("bordoTipoPessoa").value = tipoPessoa;
+				trocaFilpessoa(); // Garante que os campos certos estão visíveis primeiro
 
-				if(tipoPessoa === "Beneficiario") $id("bordoBeneficiario").value = $id("bordoBeneficiarioFil")?.value || "";
-				if(tipoPessoa === "Terapeuta") $id("bordoTerapeuta").value = $id("bordoTerapeutaFil")?.value || "";
-				if(tipoPessoa === "Convenio") $id("bordoConv").value = $id("bordoConvFil")?.value || "";
+				if(tipoPessoa === "Beneficiario") {
+					document.getElementById("bordoBeneficiario").value = document.getElementById("bordoBeneficiarioFil")?.value || "";
+					$('#bordoBeneficiario').trigger('change.select2'); // Acorda o Select2
+				}
+				if(tipoPessoa === "Terapeuta") {
+					document.getElementById("bordoTerapeuta").value = document.getElementById("bordoTerapeutaFil")?.value || "";
+					$('#bordoTerapeuta').trigger('change.select2'); // Acorda o Select2
+				}
 			} 
+			
 			function carregaBody(){
 				trocaFiltroData();
 				trocaFilpessoa();
 				formataData();
+				
 				if (document.getElementById("carregaFiltro").value == "true"){
 					document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value;
 					if(document.getElementById("tipoData").value == "Ano/Mes"){
 						document.getElementById("anoBordo").value = document.getElementById("anoBordoFil").value;
 						document.getElementById("mesBordo").value = document.getElementById("mesBordoFil").value;
-					} else if (document.getElementById("tipoData").value == "Semana"){
-						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
-					} else if (document.getElementById("tipoData").value == "Dia"){
+					} else if (document.getElementById("tipoData").value == "Semana" || document.getElementById("tipoData").value == "Dia"){
 						document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value;
 					}
 
 					document.getElementById("bordoTipoPessoa").value = document.getElementById("tipoPessoaFil").value;
-					if (document.getElementById("bordoTipoPessoa").value == "Geral"){
-
-					} else if (document.getElementById("bordoTipoPessoa").value == "Beneficiario"){
-						document.getElementById("bordoBeneficiario").value = document.getElementById("bordoBeneficiarioFil").value
+					if (document.getElementById("bordoTipoPessoa").value == "Beneficiario"){
+						document.getElementById("bordoBeneficiario").value = document.getElementById("bordoBeneficiarioFil").value;
 					} else if (document.getElementById("bordoTipoPessoa").value == "Terapeuta"){
 						document.getElementById("bordoTerapeuta").value = document.getElementById("bordoTerapeutaFil").value;
 					}
-
 				}
+				
+				// Chama a função blindada no final do carregamento
 				carregarFiltros();
 			}
 
@@ -368,52 +401,36 @@
 					window.location.href=("/menu/area/bordo/del/"+id);
 				}
 			}
-			
-		
+			function OcultaMsg() { 
+				let msg = document.getElementById("alertMsgFlash");
+				if(msg) msg.style.display = "none"; 
+			}
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
-						<div class="espace">
-						</div>
+						<div class="espace"></div>
 						<div class="page-header">
-							<h1>
-								Lista de Diários de Bordo
-							</h1>
+							<h1>Lista de Diários de Bordo</h1>
 						</div><!-- /.page-header -->
 
 					{{#compareString flash.sucesso "true"}}
 						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
-							<p>
-								<strong>
-									<i class="ace-icon fa fa-check"></i>
-									{{flash.texto}}
-								</strong>
-								<button type="button" class="close" onclick="javascript:OcultaMsg()">
-									<i class="ace-icon fa fa-times"></i>
-								</button>
-							</p>
+							<p><strong><i class="ace-icon fa fa-check"></i> {{flash.texto}}</strong>
+							<button type="button" class="close" onclick="javascript:OcultaMsg()"><i class="ace-icon fa fa-times"></i></button></p>
 						</div>
-						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 					{{else}}
 						{{#compareString flash.sucesso "false"}}
 							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
-								<p>
-									<strong>
-										<i class="ace-icon fa fa-times"></i>
-										{{flash.texto}}
-									</strong>
-									<button type="button" class="close" onclick="javascript:OcultaMsg()">
-										<i class="ace-icon fa fa-times"></i>
-									</button>
-								</p>
+								<p><strong><i class="ace-icon fa fa-times"></i> {{flash.texto}}</strong>
+								<button type="button" class="close" onclick="javascript:OcultaMsg()"><i class="ace-icon fa fa-times"></i></button></p>
 							</div>
-							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 						{{else}}
 						{{/compareString}}
 					{{/compareString}}
+					
 					<div class="hidden">
 						<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
 						<input id="bordoTerapeutaFil" value="{{bordoTerapeuta.bordoTerapeuta}}" />
@@ -428,10 +445,12 @@
 						<input id="usuarioAtual" value="{{usuario._id}}" >
 						<input id="idsChecked" value="" />
 					</div>
+					
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/bordo/lisF" method="POST">
 							<div class="toolbar-pesquisa noprint">
 								<div class="row">
+									<div class="col-sm-12">
 									<!-- 🔹 TIPO DATA -->
 									<div class="col-sm-2">
 										<div class="input-group">
@@ -443,21 +462,6 @@
 											</select>
 										</div>
 									</div>
-
-									<!-- 🔹 FILIAL (OCULTO) -->
-									<div class="col-sm-2 hidden">
-										<div class="input-group">
-											<label>Filial:&nbsp;</label>
-											<select name="empresaFilial" id="empresaFilial" class="select2">
-												<option value="Matriz">Matriz</option>
-												<option value="Filial 1">Filial 1</option>
-												<option value="Filial 2">Filial 2</option>
-												<option value="Filial 3">Filial 3</option>
-												<option value="Filial 4">Filial 4</option>
-											</select>
-										</div>
-									</div>
-
 									<!-- 🔹 ANO -->
 									<div id="divAnoBordo" class="col-sm-2">
 										<div class="input-group">
@@ -469,13 +473,11 @@
 											</select>
 										</div>
 									</div>
-
 									<!-- 🔹 MÊS -->
 									<div id="divMesBordo" class="col-sm-2">
 										<div class="input-group">
 											<label>Mês:&nbsp;</label>
-											<select name="mesBordo" id="mesBordo" class="select2"
-												onchange="formataData();">
+											<select name="mesBordo" id="mesBordo" class="select2" onchange="formataData();">
 												<option value="0">Janeiro</option>
 												<option value="1">Fevereiro</option>
 												<option value="2">Março</option>
@@ -491,18 +493,14 @@
 											</select>
 										</div>
 									</div>
-
 									<!-- 🔹 DATA -->
 									<div id="divDataFil" class="col-sm-2">
 										<div class="input-group">
 											<label>Data:&nbsp;</label>
-											<input type="date" id="dataFil" name="dataFil"
-												style="height: 30px;"
-												onchange="formataData();" />
+											<input type="date" id="dataFil" name="dataFil" style="height: 30px;" onchange="formataData();" />
 											<input type="hidden" id="dataFinal" name="dataFinal" />
 										</div>
 									</div>
-
 									<!-- 🔹 TIPO PESSOA -->
 									<div class="col-sm-2">
 										<div class="input-group">
@@ -514,9 +512,9 @@
 											</select>
 										</div>
 									</div>
-
+									<br>
 									<!-- 🔹 BENEFICIÁRIO -->
-									<div id="divBordoBeneficiario" class="col-sm-4" style="width: 100%;">
+									<div id="divBordoBeneficiario" class="col-sm-6">
 										<div class="input-group">
 											<label>Beneficiário:&nbsp;</label>
 											<select name="bordoBeneficiario" id="bordoBeneficiario" class="select2">
@@ -526,9 +524,8 @@
 											</select>
 										</div>
 									</div>
-
 									<!-- 🔹 TERAPEUTA -->
-									<div id="divBordoTerapeuta" class="col-sm-2">
+									<div id="divBordoTerapeuta" class="col-sm-6">
 										<div class="input-group">
 											<label>Terapeuta:&nbsp;</label>
 											<select name="bordoTerapeuta" id="bordoTerapeuta" class="select2">
@@ -538,19 +535,15 @@
 											</select>
 										</div>
 									</div>
-
-									<!-- 🔍 BOTÃO -->
-									<div class="col-sm-12" style="margin-top: 10px;">
-										<button id="acaoPesquisar" name="acaoPesquisar"
-											type="submit"
-											class="btn btn-xs btn-danger">
-											<i class="ace-icon fa fa-search-plus"></i>
-											Pesquisar
-										</button>
-									</div>
-
 									<div class="col-sm-12">
 										<hr>
+										<!-- 🔍 BOTÃO -->
+										<div class="col-sm-12" style="margin-top: 10px;">
+											<button id="acaoPesquisar" name="acaoPesquisar" type="submit" class="btn btn-xs btn-danger">
+												<i class="ace-icon fa fa-search-plus"></i> Pesquisar
+											</button>
+										</div>
+									</div>
 									</div>
 								</div>
 							</div>
@@ -558,30 +551,27 @@
 					
 						<div class="row"><!--.row -->
 							<div class="col-xs-12">
-								<!-- PAGE CONTENT BEGINS -->
 								<div class="row">
 									<div class="col-xs-12">
 										<div class="clearfix" >
-											<div class="pull-right tableTools-container">
-											</div>
+											<div class="pull-right tableTools-container"></div>
 										</div>
-										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer">
-										</div>
+										<div id="dynamic-table_wrapper" class="dataTables_wrapper form-inline no-footer"></div>
 										
 										<table id="dynamic-table" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
 											<thead>
 												<tr role="row">
 													<th class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
+														<label class="pos-rel">
+															<input type="checkbox" class="ace" />
+															<span class="lbl"></span>
+														</label>
 													</th>
 													<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data atividade</th>
 													<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Data cadastro</th>
 													<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Beneficiário</th>
 													<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
-													<th class="" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1"style="width: 90px;">Ação</th>
+													<th class="" tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" style="width: 90px;">Ação</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -602,7 +592,7 @@
 														{{/each}}
 														</td>
 														<td>
-														{{#each ../terapeutasinas}}<!-- Ok -->
+														{{#each ../terapeutasinas}}
 															{{#ifEqual this._id ../bordo_terapeutaid}}
 																{{usuario_nome}}
 															{{/ifEqual}}
@@ -612,32 +602,31 @@
 															<div class="action-buttons">
 																<a id="botaoEditar" class="pink" href="/menu/area/bordo/edi/{{_id}}">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
-																</a>
-																															
+																</a>																															
 																<a class="blue" href="">
 																	<i class="ace-icon fa fa-map-o bigger-130"></i>
 																</a>
-																{{#ifEqual ../../usuarioAtual ../bordo_terapeutaid}}<!-- /.id de perfil do Root -->
+																{{#ifEqual ../../usuarioAtual ../bordo_terapeutaid}}
 																<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
 																	<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																</a>
 																{{else}}
-																	{{#compareThis usuario._id bordo_terapeutaid}}<!-- /.id do terapeuta que inseriu o Diário -->
+																	{{#compareThis usuario._id bordo_terapeutaid}}
 																		<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
 																			<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																		</a>
 																	{{else}}
-																		{{#compareThis ../lvlUsu '644743aa78166939169f8486'}}<!-- /.id de perfil Supervisor -->
+																		{{#compareThis ../lvlUsu '644743aa78166939169f8486'}}
 																			<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
 																				<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																			</a>
 																		{{else}}
-																			{{#compareThis ../lvlUsu '644742e378166939169f82a1'}}<!-- /.id de perfil Coordenador -->
+																			{{#compareThis ../lvlUsu '644742e378166939169f82a1'}}
 																				<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
 																					<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																				</a>
 																			{{else}}
-																				{{#compareThis ../lvlUsu '62421801a12aa557219a0fb9'}}<!-- /.id de perfil do Root -->
+																				{{#compareThis ../lvlUsu '62421801a12aa557219a0fb9'}}
 																					<a class="red" name="acaoDel" id="acaoDel" onclick="javascript:confirmeDeletar('{{_id}}');">
 																						<i class="ace-icon fa fa-trash-o bigger-130"></i>
 																					</a>
@@ -665,42 +654,39 @@
 			</a>
 		</div><!-- /.main-container ace-save-state -->
 		
-
-		<!-- basic scripts -->
-
-		
 		<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
 		</script>
-		<!-- basic scripts -->
-
-		<!-- page specific plugin scripts -->
 		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
 		
-
-		<!-- inline scripts related to this page -->
+		<!-- ✅ SCRIPT DE INICIALIZAÇÃO E BLINDAGEM DO SELECT2 -->
 		<script type="text/javascript">
 		$(document).ready(function() {
-			$("#dynamic-table").DataTable({
-			"language": { "url": "/js/lang/datatable-pt-br.json" },
-			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null, null, null, { "bSortable": false }],
-			"responsive": true,
-			"lengthMenu": [ 50, 100, 200],
-			"lengthChange": true,
-			"autoWidth": false,
-			"paging": true,
-			"lengthChange": true,
-			"searching": true,
-			"ordering": true,
-			"info": true,
-			
-			select: {
-						style: 'multi'
-					}
+			// 1. Inicializa o Select2 de forma segura, respeitando seu CSS de 140px
+			$('.select2').select2({
+				width: '100%', // Garante que ele obedeça o container pai
+				dropdownAutoWidth: false,
+				language: { noResults: () => "Nenhum registro encontrado" }
 			});
+
+			// 2. DataTable (mantido exatamente como o seu original)
+			$("#dynamic-table").DataTable({
+				"language": { "url": "/js/lang/datatable-pt-br.json" },
+				"aaSorting": [],
+				"aoColumns": [{ "bSortable": false }, null, null, null, null, { "bSortable": false }],
+				"responsive": true,
+				"lengthMenu": [ 50, 100, 200],
+				"lengthChange": true,
+				"autoWidth": false,
+				"paging": true,
+				"searching": true,
+				"ordering": true,
+				"info": true,
+				"select": { style: 'multi' }
+			});
+			
+			$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
 		});
-		$.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
 		</script>
 	</body>
 </html>

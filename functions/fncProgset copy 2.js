@@ -36,15 +36,7 @@ module.exports = {
 
         let flash = new Resposta()
         console.log('listando progsets')
-        
-        // ✅ FILTRA APENAS registros que NÃO estão marcados como lixo
-        Progset.find({
-            $or: [
-                { progset_lixo: "false" },
-                { progset_lixo: { $exists: false } },
-                { progset_lixo: null }
-            ]
-        }).then((progset) =>{
+        Progset.find().then((progset) =>{
             console.log("Listagem Realizada!")
 
             if(resposta.sucesso == "" || !resposta){
@@ -144,6 +136,7 @@ module.exports = {
     },
 
     carregaProgsetEdiOLD2(req,res){
+        // Mantido como estava (versão antiga)
         let db = req.cookies['preferredDb'];
         Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -199,9 +192,11 @@ module.exports = {
         })
     },
 
+    // ✅ VERSÃO OTIMIZADA - Apenas consultas realmente necessárias
     carregaProgsetEdi(req, res) {
         let db = req.cookies['preferredDb'];
         
+        // Carrega os modelos necessários
         Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema);
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
         Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema);
@@ -209,6 +204,7 @@ module.exports = {
 
         let perfilAtual = req.cookies['lvlUsu'];
 
+        // Busca o progset principal
         Progset.findById(req.params.id)
             .then((progset) => {
                 if (!progset) {
@@ -216,6 +212,7 @@ module.exports = {
                     return res.redirect('/menu/area/aba/progset/progsetlis');
                 }
 
+                // ✅ FASE 1: Busca APENAS os 3 documentos relacionados para exibir nomes
                 const benePromise = progset.progset_beneid 
                     ? Bene.findById(progset.progset_beneid).lean() 
                     : Promise.resolve(null);
@@ -228,14 +225,16 @@ module.exports = {
                     ? Prognivel.findById(progset.progset_prognivelid).lean() 
                     : Promise.resolve(null);
 
+                // ✅ FASE 2: Busca APENAS a lista de usuários (único select usado na view)
                 const usuariosPromise = Usuario.find({
                     "usuario_status": "Ativo", 
                     $or: [
                         {"usuario_funcaoid": "6241030bfbcc51f47c720a0b"},
                         {"usuario_perfilid": {$in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"]}}
                     ]
-                }).select('usuario_nome').lean();
+                }).select('usuario_nome').lean(); // ✅ Otimização: só traz o nome
 
+                // ✅ Resolve tudo em paralelo (4 consultas ao invés de 10!)
                 return Promise.all([
                     benePromise, 
                     progtipoPromise, 
@@ -243,10 +242,13 @@ module.exports = {
                     usuariosPromise
                 ]).then(([bene, progtipo, prognivel, usuarios]) => {
                     
+                    // ✅ Renderiza com APENAS os dados necessários
                     res.render("area/aba/progset/progsetEdi", {
                         usuarios,
                         progset,
                         perfilAtual,
+                        
+                        // Campos de exibição prontos
                         beneNomeExibicao: bene ? bene.bene_nome : 'Não informado',
                         progtipoNomeExibicao: progtipo ? progtipo.progtipo_nome : 'Não informado',
                         prognivelNomeExibicao: prognivel ? prognivel.prognivel_nome : 'Não informado'
@@ -318,39 +320,19 @@ module.exports = {
         })
     },
 
-    // ✅ EXCLUSÃO LÓGICA (SOFT DELETE)
     deletaProgset(req,res){
         let db = req.cookies['preferredDb'];
         Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema)
 
-        let dataAtual = new Date();
-        let usuarioAtual = req.cookies['idUsu'];
-
-        // ✅ Ao invés de deletar fisicamente, marca como lixo
-        Progset.findByIdAndUpdate(req.params.id, {
-            progset_lixo: "true",
-            progset_datalixo: dataAtual.toISOString(),
-            progset_usuidlixo: usuarioAtual
-        }).then(() =>{
-            // ✅ Lista apenas os que NÃO estão marcados como lixo
-            Progset.find({
-                $or: [
-                    { progset_lixo: "false" },
-                    { progset_lixo: { $exists: false } },
-                    { progset_lixo: null }
-                ]
-            }).then((progset) =>{
-                req.flash("success_message", "SET marcado como excluído!")
+        Progset.deleteOne({_id: req.params.id}).then(() =>{
+            Progset.find().then((progset) =>{
+                req.flash("success_message", "Método deletado!")
                 res.render('area/aba/progset/progsetLis', {progsets: progset})
             }).catch((err) =>{
                 console.log(err)
-                req.flash("error_message", "houve um erro ao listar SETs")
+                req.flash("error_message", "houve um erro ao listar Métodos")
                 res.render('admin/erro')
             })
-        }).catch((err) =>{
-            console.log(err)
-            req.flash("error_message", "houve um erro ao excluir SET")
-            res.render('admin/erro')
         })
     }
 }

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Escala EBAI - Edição</title>
+		<link rel="stylesheet" href="/assets/css/jquery-ui.custom.min.css" />
+		<style>
+			/* Select2 - Estilos Gerais */
+			.select2-container { min-width: 120px !important; }
+			.select2-container--default .select2-selection--single {
+				height: 30px !important; border: 1px solid #ced4da !important;
+				border-radius: 4px !important; background: white !important;
+				display: flex !important; align-items: center !important;
+				padding: 0 8px !important; font-size: 12px !important;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__arrow {
+				height: 28px !important; right: 5px !important;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__rendered {
+				line-height: 28px !important; padding-left: 0 !important; color: #333 !important;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__placeholder {
+				color: #999 !important;
+			}
+			.select2-dropdown {
+				border: 1px solid #ced4da !important; border-radius: 4px !important;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+			}
+			.select2-container--default .select2-search--dropdown .select2-search__field {
+				border: 1px solid #ced4da !important; border-radius: 4px !important;
+				padding: 4px 8px !important; font-size: 12px !important; margin: 4px !important;
+			}
+			.select2-container--default .select2-results__option {
+				padding: 6px 10px !important; font-size: 12px !important;
+			}
+			.select2-container--default .select2-results__option--highlighted[aria-selected] {
+				background-color: #2196f3 !important; color: white !important;
+			}
+			.select2-container--default.select2-container--focus .select2-selection--single {
+				border-color: #2196f3 !important;
+				box-shadow: 0 0 0 2px rgba(33,150,243,0.2) !important;
+			}
+			
+			/* Aumentar padding das células da tabela */
+			.table tbody td {
+				padding: 15px 20px !important;
+				vertical-align: middle !important;
+			}
+			
+			/* Estilo personalizado para os sliders - COM MAIS ESPAÇO */
+			.ebai-slider {
+				margin: 20px 15px !important;
+				width: calc(100% - 30px) !important;
+				height: 12px !important;
+				background: #e0e0e0 !important;
+				border: 2px solid #b0b0b0 !important;
+				border-radius: 6px !important;
+				position: relative;
+				cursor: pointer;
+			}
+			
+			.ebai-slider .ui-slider-range {
+				background: #2196f3 !important;
+				border-radius: 4px !important;
+				height: 100% !important;
+			}
+			
+			.ebai-slider .ui-slider-handle {
+				width: 24px !important;
+				height: 24px !important;
+				background: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%) !important;
+				border: 3px solid #fff !important;
+				border-radius: 50% !important;
+				cursor: grab !important;
+				outline: none !important;
+				box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
+				position: absolute !important;
+				top: 50% !important;
+				transform: translateY(-50%) !important;
+				margin-left: -12px !important;
+				transition: all 0.2s ease !important;
+			}
+			
+			.ebai-slider .ui-slider-handle:hover {
+				background: linear-gradient(135deg, #64ddda 0%, #42a5f5 100%) !important;
+				box-shadow: 0 4px 10px rgba(33,150,243,0.5) !important;
+				transform: translateY(-50%) scale(1.15) !important;
+			}
+			
+			.ebai-slider .ui-slider-handle:active {
+				cursor: grabbing !important;
+				transform: translateY(-50%) scale(1.1) !important;
+			}
+			
+			.ebai-slider .ui-slider-handle:focus {
+				outline: 2px solid #2196f3 !important;
+				outline-offset: 2px !important;
+			}
+			
+			.ebai-slider-value {
+				font-weight: bold;
+				color: #2196f3;
+				min-width: 200px;
+				text-align: center;
+				display: inline-block;
+				font-size: 13px;
+				padding: 8px 15px;
+				background: #f5f5f5;
+				border-radius: 4px;
+				border: 1px solid #ddd;
+			}
+			
+			.ebai-slider-labels {
+				font-size: 11px;
+				color: #666;
+				margin-top: 10px;
+				display: flex;
+				justify-content: space-between;
+				padding: 0 5px;
+			}
+			
+			/* Ajustar largura das colunas */
+			.table thead th {
+				padding: 12px 20px !important;
+				font-weight: bold;
+				background: #f5f5f5;
+			}
+		</style>
+		<script>
+		function carregaBody() {
+			console.log("🔍 Iniciando carregaBody EBAI...");
+			
+			// 1️⃣ Formata data de aplicação (converte de ISO para yyyy-mm-dd)
+			const dataAplicaEdi = document.getElementById("ebaiDataaplicaEdi")?.value;
+			console.log("📅 Data recebida do banco:", dataAplicaEdi);
+			
+			if (dataAplicaEdi) {
+				try {
+					const dataObj = new Date(dataAplicaEdi);
+					
+					if (!isNaN(dataObj.getTime())) {
+						const ano = dataObj.getFullYear();
+						const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
+						const dia = String(dataObj.getDate()).padStart(2, '0');
+						
+						const dataFormatada = `${ano}-${mes}-${dia}`;
+						console.log("✅ Data formatada:", dataFormatada);
+						
+						document.getElementById("ebaiDataaplica").value = dataFormatada;
+					} else {
+						console.error("❌ Data inválida:", dataAplicaEdi);
+					}
+				} catch (error) {
+					console.error("❌ Erro ao formatar data:", error);
+				}
+			} else {
+				console.warn("⚠️ Campo de data vazio");
+			}
+			
+			// 2️⃣ Mapeamento de campos simples (select e textarea)
+			const mapaCampos = [
+				["ebaiBeneid", "ebaiBeneidEdi"],
+				["ebaiComentarios", "ebaiComentariosEdi"]
+			];
+
+			// 3️⃣ Popula campos simples
+			mapaCampos.forEach(([dest, orig]) => {
+				const elOrig = document.getElementById(orig);
+				const elDest = document.getElementById(dest);
+				
+				if (!elOrig || !elDest) return;
+				
+				const valor = elOrig.value;
+				
+				if (elDest.tagName === "SELECT") {
+					$(elDest).val(valor).trigger('change');
+				} else {
+					elDest.value = valor;
+				}
+			});
+
+			// 4️⃣ Lista de todos os sliders com suas descrições
+			const sliders = [
+				{ id: 'ebaiMomentosrefeicao', labels: ['1 - Muito difícil', '2', '3', '4', '5', '6', '7 - Fácil'] },
+				{ id: 'ebaiPreocupacao', labels: ['1 - Não estou preocupado', '2', '3', '4', '5', '6', '7 - Estou muito preocupado'] },
+				{ id: 'ebaiApetite', labels: ['1 - Nunca tem fome', '2', '3', '4', '5', '6', '7 - Tem um Bom apetite'] },
+				{ id: 'ebaiRecusacomer', labels: ['1 - No início', '2', '3', '4', '5', '6', '7 - No fim'] },
+				{ id: 'ebaiTemporefeicao', labels: ['1 - 1-10 min', '2 - 11-20', '3 - 21-30', '4 - 31-40', '5 - 41-50', '6 - 51-60', '7 - >60 min'] },
+				{ id: 'ebaiComportamento', labels: ['1 - Se comporta bem', '2', '3', '4', '5', '6', '7 - Faz bagunça'] },
+				{ id: 'ebaiNauseavomita', labels: ['1 - Nunca', '2', '3', '4', '5', '6', '7 - Na maioria'] },
+				{ id: 'ebaiComidaparada', labels: ['1 - Na maioria', '2', '3', '4', '5', '6', '7 - Nunca'] },
+				{ id: 'ebaiDistrações', labels: ['1 - Nunca', '2', '3', '4', '5', '6', '7 - Na maioria'] },
+				{ id: 'ebaiForçarcomer', labels: ['1 - Na maioria', '2', '3', '4', '5', '6', '7 - Nunca'] },
+				{ id: 'ebaiMastigacao', labels: ['1 - Boa', '2', '3', '4', '5', '6', '7 - Muito ruim'] },
+				{ id: 'ebaiCrescimento', labels: ['1 - Crescendo pouco', '2', '3', '4', '5', '6', '7 - Crescendo bem'] },
+				{ id: 'ebaiRelacaocrianca', labels: ['1 - Muito negativa', '2', '3', '4', '5', '6', '7 - Não influencia'] },
+				{ id: 'ebaiRelacaofamiliar', labels: ['1 - Não influencia', '2', '3', '4', '5', '6', '7 - Muito negativa'] }
+			];
+
+			// 5️⃣ Popula sliders com valores salvos
+			sliders.forEach(slider => {
+				const valorSalvo = document.getElementById(slider.id + "Edi")?.value;
+				const $sliderEl = $('#slider-' + slider.id);
+				const $valueEl = $('#value-' + slider.id);
+				const $hiddenInput = $('#' + slider.id);
+				
+				console.log(`🎚️ Processando slider ${slider.id}:`, valorSalvo);
+				
+				if (valorSalvo && valorSalvo !== '' && valorSalvo !== '0') {
+					const valor = parseInt(valorSalvo);
+					
+					if (valor >= 1 && valor <= 7) {
+						// Configura o slider para o valor salvo
+						$sliderEl.slider("value", valor);
+						// Atualiza o texto exibido
+						$valueEl.text(slider.labels[valor - 1]);
+						// Atualiza o hidden input
+						$hiddenInput.val(valor);
+						console.log(`✅ Slider ${slider.id} configurado para ${valor}`);
+					} else {
+						console.warn(`⚠️ Valor inválido para ${slider.id}:`, valor);
+					}
+				} else {
+					// Valor vazio ou 0 - mantém como não respondido
+					$sliderEl.slider("value", 0);
+					$valueEl.text('Não respondido');
+					$hiddenInput.val('');
+					console.log(`ℹ️ Slider ${slider.id} mantido como não respondido`);
+				}
+			});
+
+			// 6️⃣ Terapeuta já está carregado via Handlebars
+			console.log("✅ carregaBody EBAI concluído!");
+		}
+		</script>
+	</head>
+
+	<body class="no-skin" onload="javascript:controlaNave();setTimeout(carregaBody, 200);">
+
+		<div class="main-container ace-save-state" id="main-container">
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Nutrição</a>
+							</li>
+							<li>
+								<a href="#">Escala EBAI</a>
+							</li>
+							<li class="active">Edição</li>
+						</ul>
+					</div>
+
+					<!-- Dados para carregar -->
+					<div id="divCarrega" name="divCarrega" class="hidden">
+						<input id="ebaiBeneidEdi" name="ebaiBeneidEdi" value="{{ebai.ebai_beneid}}"/>
+						<input id="ebaiTerapeutaidEdi" name="ebaiTerapeutaidEdi" value="{{ebai.ebai_terapeutaid}}"/>
+						<input id="ebaiDataaplicaEdi" name="ebaiDataaplicaEdi" value="{{ebai.ebai_dataaplica}}"/>
+						<input id="ebaiMomentosrefeicaoEdi" name="ebaiMomentosrefeicaoEdi" value="{{ebai.ebai_momentosrefeicao}}"/>
+						<input id="ebaiPreocupacaoEdi" name="ebaiPreocupacaoEdi" value="{{ebai.ebai_preocupacao}}"/>
+						<input id="ebaiApetiteEdi" name="ebaiApetiteEdi" value="{{ebai.ebai_apetite}}"/>
+						<input id="ebaiRecusacomerEdi" name="ebaiRecusacomerEdi" value="{{ebai.ebai_recusacomer}}"/>
+						<input id="ebaiTemporefeicaoEdi" name="ebaiTemporefeicaoEdi" value="{{ebai.ebai_temporefeicao}}"/>
+						<input id="ebaiComportamentoEdi" name="ebaiComportamentoEdi" value="{{ebai.ebai_comportamento}}"/>
+						<input id="ebaiNauseavomitaEdi" name="ebaiNauseavomitaEdi" value="{{ebai.ebai_nauseavomita}}"/>
+						<input id="ebaiComidaparadaEdi" name="ebaiComidaparadaEdi" value="{{ebai.ebai_comidaparada}}"/>
+						<input id="ebaiDistraçõesEdi" name="ebaiDistraçõesEdi" value="{{ebai.ebai_distrações}}"/>
+						<input id="ebaiForçarcomerEdi" name="ebaiForçarcomerEdi" value="{{ebai.ebai_forçarcomer}}"/>
+						<input id="ebaiMastigacaoEdi" name="ebaiMastigacaoEdi" value="{{ebai.ebai_mastigacao}}"/>
+						<input id="ebaiCrescimentoEdi" name="ebaiCrescimentoEdi" value="{{ebai.ebai_crescimento}}"/>
+						<input id="ebaiRelacaocriancaEdi" name="ebaiRelacaocriancaEdi" value="{{ebai.ebai_relacaocrianca}}"/>
+						<input id="ebaiRelacaofamiliarEdi" name="ebaiRelacaofamiliarEdi" value="{{ebai.ebai_relacaofamiliar}}"/>
+						<input id="ebaiComentariosEdi" name="ebaiComentariosEdi" value="{{ebai.ebai_comentarios}}"/>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<form class="form-horizontal" role="form" action="/menu/nutricao/ebai/atualizar" method="POST">
+								<input class="hidden" id="ebaiId" name="ebaiId" value="{{ebai._id}}" />
+								
+								<!-- Widget Dados Básicos -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">Dados da Avaliação</h4>
+										<span class="widget-toolbar">
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</span>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<label>Beneficiário</label>
+											<div class="form-group">
+												<div class="col-sm-8">
+													<select name="ebaiBeneid" id="ebaiBeneid" class="select2" required>
+														<option value="">Selecione o beneficiário</option>
+														{{#each beneficiarios}}
+															<option value="{{this._id}}">{{this.bene_nome}}</option>
+														{{/each}}
+													</select>
+												</div>
+											</div>
+											
+											<div class="space space-4"></div>
+											
+											<label>Terapeuta Responsável</label>
+											<div class="form-group">
+												<div class="col-sm-6">
+													<input type="hidden" name="ebaiTerapeutaid" id="ebaiTerapeutaid" value="{{terapeutaAplicador.id}}" />
+													<input type="text" class="form-control" value="{{terapeutaAplicador.nome}}" disabled />
+												</div>
+											</div>
+											
+											<div class="space space-4"></div>
+											
+											<label>Data da Aplicação</label>
+											<div class="form-group">
+												<div class="col-sm-4">
+													<input type="date" name="ebaiDataaplica" id="ebaiDataaplica" class="form-control" required />
+												</div>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								
+								<div class="space-4"></div>
+								
+								<!-- Widget Escala EBAI -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">Escala EBAI - Avaliação do Comportamento Alimentar</h4>
+										<span class="widget-toolbar">
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</span>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<div class="table-responsive">
+												<table class="table table-bordered">
+													<thead>
+														<tr>
+															<th style="width: 40%;">Questão</th>
+															<th style="width: 40%;">Avaliação (1-7)</th>
+															<th style="width: 20%;">Valor</th>
+														</tr>
+													</thead>
+													<tbody>
+														<!-- Questão 1 -->
+														<tr>
+															<td>1. O que você acha dos momentos de refeições com a sua criança?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiMomentosrefeicao"></div>
+																<input type="hidden" name="ebaiMomentosrefeicao" id="ebaiMomentosrefeicao" value="" />
+																<div class="ebai-slider-labels">
+																	<span>Muito difícil</span>
+																	<span style="float: right;">Fácil</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiMomentosrefeicao">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 2 -->
+														<tr>
+															<td>2. Quão preocupado você está com a alimentação da sua criança?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiPreocupacao"></div>
+																<input type="hidden" name="ebaiPreocupacao" id="ebaiPreocupacao" value="" />
+																<div class="ebai-slider-labels">
+																	<span>Não estou preocupado</span>
+																	<span style="float: right;">Estou muito preocupado</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiPreocupacao">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 3 -->
+														<tr>
+															<td>3. Quanto de apetite (fome) sua criança tem?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiApetite"></div>
+																<input type="hidden" name="ebaiApetite" id="ebaiApetite" value="" />
+																<div class="ebai-slider-labels">
+																	<span>Nunca tem fome</span>
+																	<span style="float: right;">Tem um Bom apetite</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiApetite">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 4 -->
+														<tr>
+															<td>4. Quando a sua criança começa a se recusar a comer durante as refeições?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiRecusacomer"></div>
+																<input type="hidden" name="ebaiRecusacomer" id="ebaiRecusacomer" value="" />
+																<div class="ebai-slider-labels">
+																	<span>No início da refeição</span>
+																	<span style="float: right;">No fim da refeição</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiRecusacomer">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 5 -->
+														<tr>
+															<td>5. Quanto tempo (em minutos) dura a refeição da sua criança?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiTemporefeicao"></div>
+																<input type="hidden" name="ebaiTemporefeicao" id="ebaiTemporefeicao" value="" />
+																<div class="ebai-slider-labels">
+																	<span>1-10 min</span>
+																	<span style="float: right;">&gt;60 min</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiTemporefeicao">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 6 -->
+														<tr>
+															<td>6. Como a sua criança se comporta durante a refeição?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiComportamento"></div>
+																<input type="hidden" name="ebaiComportamento" id="ebaiComportamento" value="" />
+																<div class="ebai-slider-labels">
+																	<span>Se comporta bem</span>
+																	<span style="float: right;">Faz grande bagunça</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiComportamento">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 7 -->
+														<tr>
+															<td>7. A sua criança nausea, cospe ou vomita com algum tipo de alimento?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiNauseavomita"></div>
+																<input type="hidden" name="ebaiNauseavomita" id="ebaiNauseavomita" value="" />
+																<div class="ebai-slider-labels">
+																	<span>Nunca</span>
+																	<span style="float: right;">Na maioria das vezes</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiNauseavomita">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 8 -->
+														<tr>
+															<td>8. A sua criança fica com a comida parada na boca sem engolir?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiComidaparada"></div>
+																<input type="hidden" name="ebaiComidaparada" id="ebaiComidaparada" value="" />
+																<div class="ebai-slider-labels">
+																	<span>Na maioria das vezes</span>
+																	<span style="float: right;">Nunca</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiComidaparada">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 9 -->
+														<tr>
+															<td>9. Você precisa ir atrás da sua criança ou usar distrações durante a refeição?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiDistrações"></div>
+																<input type="hidden" name="ebaiDistrações" id="ebaiDistrações" value="" />
+																<div class="ebai-slider-labels">
+																	<span>Nunca</span>
+																	<span style="float: right;">Na maioria das vezes</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiDistrações">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 10 -->
+														<tr>
+															<td>10. Você precisa forçar a sua criança a comer ou beber?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiForçarcomer"></div>
+																<input type="hidden" name="ebaiForçarcomer" id="ebaiForçarcomer" value="" />
+																<div class="ebai-slider-labels">
+																	<span>Na maioria das vezes</span>
+																	<span style="float: right;">Nunca</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiForçarcomer">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 11 -->
+														<tr>
+															<td>11. Como é a habilidade de mastigação da sua criança?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiMastigacao"></div>
+																<input type="hidden" name="ebaiMastigacao" id="ebaiMastigacao" value="" />
+																<div class="ebai-slider-labels">
+																	<span>Boa</span>
+																	<span style="float: right;">Muito ruim</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiMastigacao">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 12 -->
+														<tr>
+															<td>12. O que você acha do crescimento da sua criança?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiCrescimento"></div>
+																<input type="hidden" name="ebaiCrescimento" id="ebaiCrescimento" value="" />
+																<div class="ebai-slider-labels">
+																	<span>Crescendo pouco</span>
+																	<span style="float: right;">Crescendo bem</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiCrescimento">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 13 -->
+														<tr>
+															<td>13. Como a alimentação influencia sua relação com a criança?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiRelacaocrianca"></div>
+																<input type="hidden" name="ebaiRelacaocrianca" id="ebaiRelacaocrianca" value="" />
+																<div class="ebai-slider-labels">
+																	<span>De forma muito negativa</span>
+																	<span style="float: right;">Não influencia nada</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiRelacaocrianca">Não respondido</span>
+															</td>
+														</tr>
+														
+														<!-- Questão 14 -->
+														<tr>
+															<td>14. Como a alimentação influencia as relações familiares?</td>
+															<td>
+																<div class="ebai-slider" id="slider-ebaiRelacaofamiliar"></div>
+																<input type="hidden" name="ebaiRelacaofamiliar" id="ebaiRelacaofamiliar" value="" />
+																<div class="ebai-slider-labels">
+																	<span>Não influencia nada</span>
+																	<span style="float: right;">De forma muito negativa</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="ebai-slider-value" id="value-ebaiRelacaofamiliar">Não respondido</span>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								
+								<div class="space-4"></div>
+								
+								<!-- Widget Comentários -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">Comentários Adicionais</h4>
+										<span class="widget-toolbar">
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</span>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<label>Observações</label>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<textarea name="ebaiComentarios" id="ebaiComentarios" class="form-control" rows="4" placeholder="Digite aqui observações adicionais sobre a avaliação..."></textarea>
+												</div>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+
+								<div class="form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Limpar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<a href="/menu/nutricao/ebai/lis" class="btn btn-danger">
+											<i class="ace-icon fa fa-times bigger-110"></i>
+											Cancelar
+										</a>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Scripts -->
+		<script src="/assets/js/jquery.min.js"></script>
+		<script src="/assets/js/jquery-ui.custom.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				// Lista de todos os sliders com suas descrições
+				const sliders = [
+					{ id: 'ebaiMomentosrefeicao', labels: ['1 - Muito difícil', '2', '3', '4', '5', '6', '7 - Fácil'] },
+					{ id: 'ebaiPreocupacao', labels: ['1 - Não estou preocupado', '2', '3', '4', '5', '6', '7 - Estou muito preocupado'] },
+					{ id: 'ebaiApetite', labels: ['1 - Nunca tem fome', '2', '3', '4', '5', '6', '7 - Tem um Bom apetite'] },
+					{ id: 'ebaiRecusacomer', labels: ['1 - No início', '2', '3', '4', '5', '6', '7 - No fim'] },
+					{ id: 'ebaiTemporefeicao', labels: ['1 - 1-10 min', '2 - 11-20', '3 - 21-30', '4 - 31-40', '5 - 41-50', '6 - 51-60', '7 - >60 min'] },
+					{ id: 'ebaiComportamento', labels: ['1 - Se comporta bem', '2', '3', '4', '5', '6', '7 - Faz bagunça'] },
+					{ id: 'ebaiNauseavomita', labels: ['1 - Nunca', '2', '3', '4', '5', '6', '7 - Na maioria'] },
+					{ id: 'ebaiComidaparada', labels: ['1 - Na maioria', '2', '3', '4', '5', '6', '7 - Nunca'] },
+					{ id: 'ebaiDistrações', labels: ['1 - Nunca', '2', '3', '4', '5', '6', '7 - Na maioria'] },
+					{ id: 'ebaiForçarcomer', labels: ['1 - Na maioria', '2', '3', '4', '5', '6', '7 - Nunca'] },
+					{ id: 'ebaiMastigacao', labels: ['1 - Boa', '2', '3', '4', '5', '6', '7 - Muito ruim'] },
+					{ id: 'ebaiCrescimento', labels: ['1 - Crescendo pouco', '2', '3', '4', '5', '6', '7 - Crescendo bem'] },
+					{ id: 'ebaiRelacaocrianca', labels: ['1 - Muito negativa', '2', '3', '4', '5', '6', '7 - Não influencia'] },
+					{ id: 'ebaiRelacaofamiliar', labels: ['1 - Não influencia', '2', '3', '4', '5', '6', '7 - Muito negativa'] }
+				];
+
+				// Inicializa cada slider com valor 0
+				sliders.forEach(slider => {
+					const $sliderEl = $('#slider-' + slider.id);
+					const $valueEl = $('#value-' + slider.id);
+					const $hiddenInput = $('#' + slider.id);
+					
+					if ($.fn.slider) {
+						$sliderEl.slider({
+							value: 0,
+							min: 0,
+							max: 7,
+							step: 1,
+							create: function(event, ui) {
+								$valueEl.text('Não respondido');
+								$hiddenInput.val('');
+							},
+							slide: function(event, ui) {
+								if (ui.value === 0) {
+									$valueEl.text('Não respondido');
+									$hiddenInput.val('');
+								} else {
+									$valueEl.text(slider.labels[ui.value - 1]);
+									$hiddenInput.val(ui.value);
+								}
+							},
+							change: function(event, ui) {
+								if (ui.value === 0) {
+									$valueEl.text('Não respondido');
+									$hiddenInput.val('');
+								} else {
+									$valueEl.text(slider.labels[ui.value - 1]);
+									$hiddenInput.val(ui.value);
+								}
+							}
+						});
+					} else {
+						console.error('jQuery UI Slider não está carregado!');
+						$valueEl.text('Erro: jQuery UI não carregado');
+					}
+				});
+
+				// Inicializa Select2
+				if (typeof $.fn.select2 === 'function') {
+					$('.select2').select2({
+						width: '100%',
+						placeholder: 'Escolha...',
+						allowClear: true
+					});
+				}
+			});
+		</script>
+	</body>
+</html>

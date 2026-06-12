@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Avaliação de Escala de LABIRINTO - Cadastro</title>
+		<link rel="stylesheet" href="/assets/css/jquery-ui.custom.min.css" />
+		<style>
+			/* Aumentar padding das células da tabela */
+			.table tbody td {
+				padding: 15px 20px !important;
+				vertical-align: middle !important;
+			}
+			
+			/* Estilo personalizado para os sliders */
+			.compali-slider {
+				margin: 20px 15px !important;
+				width: calc(100% - 30px) !important;
+				height: 12px !important;
+				background: #e0e0e0 !important;
+				border: 2px solid #b0b0b0 !important;
+				border-radius: 6px !important;
+				position: relative;
+				cursor: pointer;
+			}
+			
+			.compali-slider .ui-slider-range {
+				background: #2196f3 !important;
+				border-radius: 4px !important;
+				height: 100% !important;
+			}
+			
+			.compali-slider .ui-slider-handle {
+				width: 24px !important;
+				height: 24px !important;
+				background: linear-gradient(135deg, #4fc3f7 0%, #2196f3 100%) !important;
+				border: 3px solid #fff !important;
+				border-radius: 50% !important;
+				cursor: grab !important;
+				outline: none !important;
+				box-shadow: 0 2px 6px rgba(0,0,0,0.3) !important;
+				position: absolute !important;
+				top: 50% !important;
+				transform: translateY(-50%) !important;
+				margin-left: -12px !important;
+				transition: all 0.2s ease !important;
+			}
+			
+			.compali-slider .ui-slider-handle:hover {
+				background: linear-gradient(135deg, #64ddda 0%, #42a5f5 100%) !important;
+				box-shadow: 0 4px 10px rgba(33,150,243,0.5) !important;
+				transform: translateY(-50%) scale(1.15) !important;
+			}
+			
+			.compali-slider .ui-slider-handle:active {
+				cursor: grabbing !important;
+				transform: translateY(-50%) scale(1.1) !important;
+			}
+			
+			.compali-slider .ui-slider-handle:focus {
+				outline: 2px solid #2196f3 !important;
+				outline-offset: 2px !important;
+			}
+			
+			.compali-slider-value {
+				font-weight: bold;
+				color: #2196f3;
+				min-width: 200px;
+				text-align: center;
+				display: inline-block;
+				font-size: 13px;
+				padding: 8px 15px;
+				background: #f5f5f5;
+				border-radius: 4px;
+				border: 1px solid #ddd;
+			}
+			
+			.compali-slider-labels {
+				font-size: 11px;
+				color: #666;
+				margin-top: 10px;
+				display: flex;
+				justify-content: space-between;
+				padding: 0 5px;
+			}
+			
+			/* Garantir que o slider seja visível mesmo sem jQuery UI */
+			.compali-slider::before {
+				content: '← Arraste →';
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				font-size: 11px;
+				color: #999;
+				pointer-events: none;
+				z-index: 0;
+			}
+			
+			.compali-slider.ui-slider::before {
+				display: none;
+			}
+			
+			/* Ajustar largura das colunas */
+			.table thead th {
+				padding: 12px 20px !important;
+				font-weight: bold;
+				background: #f5f5f5;
+			}
+		</style>
+	</head>
+
+	<body onload="javascript:controlaNave();" class="no-skin">
+
+		<div class="main-container ace-save-state" id="main-container">
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Nutrição</a>
+							</li>
+							<li>
+								<a href="#">Avaliação de Escala de Labirinto</a>
+							</li>
+							<li class="active">Cadastro</li>
+						</ul>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<form class="form-horizontal" role="form" action="/menu/nutricao/compali/add" method="POST">
+								
+								<!-- Widget Dados Básicos -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">Dados da Avaliação</h4>
+										<span class="widget-toolbar">
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</span>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<label>Beneficiário</label>
+											<div class="form-group">
+												<div class="col-sm-8">
+													<select name="compaliBeneid" id="compaliBeneid" class="select2" required>
+														<option value="">Selecione o beneficiário</option>
+														{{#each beneficiarios}}
+															<option value="{{this._id}}">{{this.bene_nome}}</option>
+														{{/each}}
+													</select>
+												</div>
+											</div>
+											
+											<div class="space space-4"></div>
+											
+											<label>Terapeuta Responsável</label>
+											<div class="form-group">
+												<div class="col-sm-6">
+													<input type="hidden" name="compaliTerapeutaid" id="compaliTerapeutaid" value="{{usuario.id}}" />
+													<input type="text" class="form-control" value="{{usuario.nome}}" disabled />
+												</div>
+											</div>
+											
+											<div class="space space-4"></div>
+											
+											<label>Data da Aplicação</label>
+											<div class="form-group">
+												<div class="col-sm-4">
+													<input type="date" name="compaliDataaplica" id="compaliDataaplica" class="form-control" required />
+												</div>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								
+								<div class="space-4"></div>
+								
+								<!-- Widget Escala LABIRINTO -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">Escala Labirinto de Avaliação do Comportamento Alimentar no TEA</h4>
+										<span class="widget-toolbar">
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</span>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<div class="table-responsive">
+												<table class="table table-bordered">
+													<thead>
+														<tr>
+															<th style="width: 40%;">Questão</th>
+															<th style="width: 40%;">Avaliação (0-4)</th>
+															<th style="width: 20%;">Valor</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>1. Dificuldades para mastigar os alimentos</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliMastigar"></div>
+																<input type="hidden" name="compaliMastigar" id="compaliMastigar" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliMastigar">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>2. Engole os alimentos sem mastigá-los o bastante</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliEngolesem"></div>
+																<input type="hidden" name="compaliEngolesem" id="compaliEngolesem" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliEngolesem">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>3. Dificuldade para levar o alimento de um lado para outro da boca com a língua</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliLevaalimento"></div>
+																<input type="hidden" name="compaliLevaalimento" id="compaliLevaalimento" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliLevaalimento">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>4. Mastiga os alimentos com a boca aberta</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliBocaaberta"></div>
+																<input type="hidden" name="compaliBocaaberta" id="compaliBocaaberta" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliBocaaberta">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>5. Evita comer vegetais cozidos e/ou crus</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliEvitavegetais"></div>
+																<input type="hidden" name="compaliEvitavegetais" id="compaliEvitavegetais" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliEvitavegetais">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>6. Retira o tempero da comida (ex.: pedaços de coentro, cebolinha ou tomate)</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliRetiratempero"></div>
+																<input type="hidden" name="compaliRetiratempero" id="compaliRetiratempero" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliRetiratempero">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>7. Evita comer frutas</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliEvitafrutas"></div>
+																<input type="hidden" name="compaliEvitafrutas" id="compaliEvitafrutas" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliEvitafrutas">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>8. Possui inquietação/agitação motora que dificulta sentar-se à mesa</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliInquietacao"></div>
+																<input type="hidden" name="compaliInquietacao" id="compaliInquietacao" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliInquietacao">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>9. Tem dificuldades de sentar-se à mesa para fazer as refeições (ex.: almoça no chão, sofá, cama)</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliSentarmesa"></div>
+																<input type="hidden" name="compaliSentarmesa" id="compaliSentarmesa" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliSentarmesa">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>10. Tem dificuldades de utilizar os talheres e outros utensílios</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliTalheres"></div>
+																<input type="hidden" name="compaliTalheres" id="compaliTalheres" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliTalheres">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>11. Derrama muito a comida na mesa ou na roupa quando se alimenta</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliDerramacomida"></div>
+																<input type="hidden" name="compaliDerramacomida" id="compaliDerramacomida" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliDerramacomida">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>12. Bebe, come, lambe substâncias ou objetos estranhos (ex.: sabão, terra, plástico, chiclete)</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliObjetosestranhos"></div>
+																<input type="hidden" name="compaliObjetosestranhos" id="compaliObjetosestranhos" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliObjetosestranhos">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>13. Vomita, durante ou imediatamente após as refeições</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliVomita"></div>
+																<input type="hidden" name="compaliVomita" id="compaliVomita" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliVomita">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>14. Durante ou imediatamente após as refeições, golfa (trazendo de volta o alimento que engoliu à boca) e mastiga o alimento novamente</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliGolfa"></div>
+																<input type="hidden" name="compaliGolfa" id="compaliGolfa" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliGolfa">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>15. Come sempre com os mesmos utensílios (ex.: o mesmo prato, garfo, colher ou copo)</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliMesmosutens"></div>
+																<input type="hidden" name="compaliMesmosutens" id="compaliMesmosutens" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliMesmosutens">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>16. Come sempre no mesmo lugar</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliMesmolugar"></div>
+																<input type="hidden" name="compaliMesmolugar" id="compaliMesmolugar" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliMesmolugar">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>17. Quer comer sempre os mesmos alimentos (ex.: se comeu frango hoje, quer amanhã novamente)</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliMesmosalim"></div>
+																<input type="hidden" name="compaliMesmosalim" id="compaliMesmosalim" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliMesmosalim">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>18. Quer comer alimentos com cor semelhante (ex.: somente quer sucos amarelos - manga, maracujá, laranja)</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliCoresemel"></div>
+																<input type="hidden" name="compaliCoresemel" id="compaliCoresemel" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliCoresemel">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>19. Quer comer alimentos sempre da mesma marca, embalagem ou personagem (ex.: bebe suco somente de caixinha, quer somente produtos do Bob Esponja)</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliMesmamarca"></div>
+																<input type="hidden" name="compaliMesmamarca" id="compaliMesmamarca" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliMesmamarca">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>20. Possui ritual para comer (ex.: os alimentos devem ser arrumados no prato da mesma forma; se o ritual não for obedecido, seu filho se recusa a comer ou fica irritado ou perturbado)</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliRitualcomer"></div>
+																<input type="hidden" name="compaliRitualcomer" id="compaliRitualcomer" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliRitualcomer">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>21. Sem permissão, pega a comida fora do horário das refeições</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliPegaforahor"></div>
+																<input type="hidden" name="compaliPegaforahor" id="compaliPegaforahor" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliPegaforahor">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>22. Sem permissão, pega a comida de outras pessoas durante as refeições</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliPegaoutros"></div>
+																<input type="hidden" name="compaliPegaoutros" id="compaliPegaoutros" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliPegaoutros">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>23. Come uma grande quantidade de alimento num período de tempo curto</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliGrandequant"></div>
+																<input type="hidden" name="compaliGrandequant" id="compaliGrandequant" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliGrandequant">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>24. Intolerância ao glúten (o glúten está presente na farinha de trigo, aveia, centeio e cevada)</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliIntolgluten"></div>
+																<input type="hidden" name="compaliIntolgluten" id="compaliIntolgluten" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliIntolgluten">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>25. Alergia alimentar (ex.: amendoim, frutos do mar)</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliAlergia"></div>
+																<input type="hidden" name="compaliAlergia" id="compaliAlergia" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliAlergia">Não preenchido</span>
+															</td>
+														</tr>
+														<tr>
+															<td>26. Tem intolerância à lactose</td>
+															<td>
+																<div class="compali-slider" id="slider-compaliIntollactose"></div>
+																<input type="hidden" name="compaliIntollactose" id="compaliIntollactose" value="-" />
+																<div class="compali-slider-labels">
+																	<span>Não preenchido</span>
+																	<span style="float: right;">Sempre</span>
+																</div>
+															</td>
+															<td class="center">
+																<span class="compali-slider-value" id="value-compaliIntollactose">Não preenchido</span>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								
+								<div class="space-4"></div>
+								
+								<!-- Widget Comentários -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">Comentários Adicionais</h4>
+										<span class="widget-toolbar">
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+										</span>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<label>Observações</label>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<textarea name="compaliComentarios" id="compaliComentarios" class="form-control" rows="4" placeholder="Digite aqui observações adicionais sobre a avaliação..."></textarea>
+												</div>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+
+								<div class="form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info" name="acao" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Limpar
+										</button>
+										&nbsp; &nbsp; &nbsp;
+										<a href="/menu/nutricao/compali/lis" class="btn btn-danger">
+											<i class="ace-icon fa fa-times bigger-110"></i>
+											Cancelar
+										</a>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Scripts -->
+		<script src="/assets/js/jquery.min.js"></script>
+		<script src="/assets/js/jquery-ui.custom.min.js"></script>
+		<script>
+			$(document).ready(function() {
+				// Labels para cada posição do slider (6 posições: 0-5)
+				// Posição 0 = "-" (não preenchido)
+				// Posições 1-5 = valores 0-4
+				const labels = [
+					'Não preenchido',      // posição 0 → valor "-"
+					'0 - Não',             // posição 1 → valor "0"
+					'1 - Raramente',       // posição 2 → valor "1"
+					'2 - Às vezes',        // posição 3 → valor "2"
+					'3 - Frequentemente',  // posição 4 → valor "3"
+					'4 - Sempre'           // posição 5 → valor "4"
+				];
+
+				// Lista de todos os campos do COMPALI
+				const campos = [
+					'compaliMastigar', 'compaliEngolesem', 'compaliLevaalimento',
+					'compaliBocaaberta', 'compaliEvitavegetais', 'compaliRetiratempero',
+					'compaliEvitafrutas', 'compaliInquietacao', 'compaliSentarmesa',
+					'compaliTalheres', 'compaliDerramacomida', 'compaliObjetosestranhos',
+					'compaliVomita', 'compaliGolfa', 'compaliMesmosutens',
+					'compaliMesmolugar', 'compaliMesmosalim', 'compaliCoresemel',
+					'compaliMesmamarca', 'compaliRitualcomer', 'compaliPegaforahor',
+					'compaliPegaoutros', 'compaliGrandequant', 'compaliIntolgluten',
+					'compaliAlergia', 'compaliIntollactose'
+				];
+
+				// Inicializa cada slider
+				campos.forEach(campo => {
+					const $sliderEl = $('#slider-' + campo);
+					const $valueEl = $('#value-' + campo);
+					const $hiddenInput = $('#' + campo);
+					
+					if ($.fn.slider) {
+						$sliderEl.slider({
+							value: 0,
+							min: 0,
+							max: 5,
+							step: 1,
+							create: function(event, ui) {
+								$valueEl.text('Não preenchido');
+								$hiddenInput.val('-');
+							},
+							slide: function(event, ui) {
+								if (ui.value === 0) {
+									$valueEl.text('Não preenchido');
+									$hiddenInput.val('-');
+								} else {
+									$valueEl.text(labels[ui.value]);
+									$hiddenInput.val(ui.value - 1);
+								}
+							},
+							change: function(event, ui) {
+								if (ui.value === 0) {
+									$valueEl.text('Não preenchido');
+									$hiddenInput.val('-');
+								} else {
+									$valueEl.text(labels[ui.value]);
+									$hiddenInput.val(ui.value - 1);
+								}
+							}
+						});
+					} else {
+						console.error('jQuery UI Slider não está carregado!');
+						$valueEl.text('Erro: jQuery UI não carregado');
+					}
+				});
+
+				// Inicializa Select2
+				if (typeof $.fn.select2 === 'function') {
+					$('.select2').select2({
+						width: '100%',
+						placeholder: 'Escolha...',
+						allowClear: true
+					});
+				}
+			});
+		</script>
+	</body>
+</html>
