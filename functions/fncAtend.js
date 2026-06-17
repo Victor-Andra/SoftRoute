@@ -10341,6 +10341,10 @@ relAtendteraanaFiltronovo: function (req, res) {
     let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
     seg.setUTCHours(0, 0, 0, 0);
     sex.setUTCHours(23, 59, 59, 999);
+    console.log("seg")
+    console.log(seg)
+    console.log("sex")
+    console.log(sex)
 
     // --- Busca anos ---
     Ano.find().exec(function (err, todosAnos) {
@@ -10354,7 +10358,7 @@ relAtendteraanaFiltronovo: function (req, res) {
         };
 
         Agenda.find(filtroFixo).exec(function (err, agendaFixa) {
-            if (err) return res.status(500).send("Erro ao buscar agendas fixas.");
+            if (err) return res.status(500).send("Erro ao buscar agendas fixas."+err);
 
             let idsFixos = agendaFixa.map(af => af._id);
 
@@ -10372,8 +10376,23 @@ relAtendteraanaFiltronovo: function (req, res) {
                     }
                 ]
             };
+            var idsPais = agendaFixa.map(a => a._id);
 
-            Agenda.find(filtroSemanal).exec(function (err, agendaSemanal) {
+            Agenda.find({ $or: [
+                    {
+                        agenda_data: { $gte: seg, $lte: sex },
+                        agenda_usuid: req.body.relTeraid,
+                        agenda_temp: true,
+                        agenda_tempId: {
+                            $nin: idsPais
+                        }
+                    },
+                    {
+                        agenda_tempId: {
+                            $in: idsPais
+                        }
+                    }
+                ]}).exec(function (err, agendaSemanal) {
                 
                 // ========================================================================
                 // 🔥 CORREÇÃO 2: Lógica de montagem da agendaFinal (igual ao Relatório A)
