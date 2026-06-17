@@ -9630,7 +9630,7 @@ carregaAgendaPessoalquasela(req, res) {
         })
     },
    
-    cadastraAgendaTemp_old_20260616(req,res){//AdicionaAgenda
+    cadastraAgendaTemp(req,res){//AdicionaAgenda
         let flash = new Resposta()
         let resultado;
         //console.log(req.body.dataAg)
