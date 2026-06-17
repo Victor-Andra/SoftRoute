@@ -486,7 +486,7 @@ class PoteBiscoito{
 // FUNÇÃO AUXILIAR: Buscar evoluções pendentes 
 // Período: Dia 01 do mês atual até a DATA ATUAL
 // ============================================
-async function buscarEvolucoesPendentesMes(db, idTerapeuta) {
+async function buscarEvolucoesPendentesMesOld(db, idTerapeuta) {
     const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
     
     // Calcular período: dia 01 do mês atual até HOJE (UTC)
@@ -579,7 +579,7 @@ async function buscarEvolucoesPendentesMes(db, idTerapeuta) {
     }
 }
 
-async function buscarEvolucoesPendentesMesTemp(db, idTerapeuta) {
+async function buscarEvolucoesPendentesMes(db, idTerapeuta) {
     var Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
     
     // Calcular período: dia 01 do mês atual até HOJE (UTC)
@@ -637,8 +637,32 @@ async function buscarEvolucoesPendentesMesTemp(db, idTerapeuta) {
         filhosRaw = filhosRaw.filter(f => String(f.agenda_usuid) === String(idTerapeuta));
         
         console.log(`   🔗 Filhos (substituições) encontrados: ${filhosRaw.length}`);
-        
 
+        var registros = agendasRaw.concat(filhosRaw);
+
+        function normalizeBoolean(value) {
+            if (typeof value === "boolean") return value;
+            if (typeof value === "string") return value.toLowerCase() === "true";
+            return false;
+        }
+
+        var contadorPendentes = 0;
+
+        for (var reg of registros) {
+
+            if (normalizeBoolean(reg.agenda_selo))
+                continue;
+
+            var categoria = (reg.agenda_categoria || "").trim();
+
+            if (categoria === "Falta Absoluta" ||  categoria === "Feriado") {
+                continue;
+            }
+
+            contadorPendentes++;
+        }
+
+        /*
         // Refazer o trecho abaixo
         // O codigo esta gerando informacoes com falso verdadeiro
         // Deve ser alterado o for e este foreach, o filtro ja foi feito mas exige melhora.
@@ -695,6 +719,7 @@ async function buscarEvolucoesPendentesMesTemp(db, idTerapeuta) {
         }
         
         console.log(`   ✅ Evoluções pendentes (01 até hoje): ${contadorPendentes}`);
+        */
         
         return contadorPendentes;
     } catch (err) {
@@ -3637,11 +3662,11 @@ router.get('/area/bordo/lis', fncGeral.IsAuthenticated, (req,res) =>{//direciona
     resposta.sucesso = "";
     fncBordo.listaBordo(req, res, resposta);
 })
-router.get('/area/bordo/bordosuplis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.
-    fncBordo.bordoSuplis(req, res);
-})
 router.post('/area/bordo/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.
     fncBordo.filtraBordo(req, res);
+})
+router.get('/area/bordo/bordosuplis', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.
+    fncBordo.bordoSuplis(req, res);
 })
 //Carrega Cadastro de Diário de Bordo
 router.get('/area/bordo/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Diário de Bordo.

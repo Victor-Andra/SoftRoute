@@ -182,7 +182,9 @@ module.exports = {
     },
     
    //Função que Lista os registros
-    listaCompali(req, res) {
+   
+    //Função que Lista os registros
+    listaCompali_old(req, res) {
         let db = req.cookies['preferredDb'];
         Compali = getModel(db, 'tb_compali', compaliClass.CompaliSchema);
 
@@ -229,7 +231,6 @@ module.exports = {
 
                 // Processar cada registro
                 compaliList.forEach(c => {
-                    // ✅ CORRIGIDO: compali_ em vez de compal_
                     c.datacad = c.compali_datacad ? formatDateToBR(c.compali_datacad) : "--/--/---- h--:--";
                     c.dataedi = c.compali_dataedi ? formatDateToBR(c.compali_dataedi) : "--/--/---- h--:--";
                     c.dataaplica = c.compali_dataaplica ? formatDateOnlyToBR(c.compali_dataaplica) : "--/--/----";
@@ -241,6 +242,156 @@ module.exports = {
                     c.usuarioCadNome = usuarioCad ? usuarioCad.usuario_nome : "--";
                     c.usuarioEdiNome = usuarioEdi ? usuarioEdi.usuario_nome : "--";
                     c.beneficiarioNome = beneficiario ? beneficiario.bene_nome : "--";
+                    
+                    // ✅ NOVOS CAMPOS - Totais dos Fatores
+                    c.fator1 = c.compali_totmotricidademastigacao || 0;
+                    c.fator2 = c.compali_totseletividadealimentar || 0;
+                    c.fator3 = c.compali_tothabilidadesrefeicoes || 0;
+                    c.fator4 = c.compali_totcomportinadequadorefeicoes || 0;
+                    c.fator5 = c.compali_totcomportrigidosalimentacao || 0;
+                    c.fator6 = c.compali_totcomportopositoralimentacao || 0;
+                    c.fator7 = c.compali_totalergiasintolerancia || 0;
+                    c.totalGeral = c.compali_tottotalgeral || 0;
+                });
+
+                res.render('nutricao/compali/compaliLis', { compalis: compaliList, qtregs });
+
+            } catch (err) {
+                console.error("Erro ao carregar dados para listaCompali:", err);
+                req.flash("error_message", "Houve um erro ao listar Escalas LABIRINTO");
+                res.redirect('/admin/erro');
+            }
+
+        }).catch((err) => {
+            console.error(err);
+            req.flash("error_message", "Houve um erro ao listar Escalas LABIRINTO");
+            res.redirect('/admin/erro');
+        });
+    },
+    //Função que Lista os registros
+    listaCompali(req, res) {
+        let db = req.cookies['preferredDb'];
+        Compali = getModel(db, 'tb_compali', compaliClass.CompaliSchema);
+
+        function formatDateToBR(date) {
+            if(!date) return "--/--/---- h--:--";
+            const d = new Date(date);
+            const dia = String(d.getDate()).padStart(2, '0');
+            const mes = String(d.getMonth() + 1).padStart(2, '0');
+            const ano = d.getFullYear();
+            const hora = String(d.getHours()).padStart(2, '0');
+            const minuto = String(d.getMinutes()).padStart(2, '0');
+            return `${dia}/${mes}/${ano} h${hora}:${minuto}`;
+        }
+
+        function formatDateOnlyToBR(date) {
+            if(!date) return "--/--/----";
+            const d = new Date(date);
+            const dia = String(d.getDate()).padStart(2, '0');
+            const mes = String(d.getMonth() + 1).padStart(2, '0');
+            const ano = d.getFullYear();
+            return `${dia}/${mes}/${ano}`;
+        }
+
+        Compali.find({ compali_lixo: { $ne: "true" } }).sort({ compali_datacad: -1 }).then(async (compaliList) => {
+            let qtregs;
+
+            try {
+                // Carregar total de registros
+                qtregs = await compaliClass.qtregs(req, res);
+
+                // Carregar usuários para mapeamento
+                const usuarioList = await Usuario.find();
+                const usuarioMap = usuarioList.reduce((acc, u) => {
+                    acc[u._id.toString()] = u;
+                    return acc;
+                }, {});
+
+                // Carregar beneficiários para mapeamento
+                const beneList = await Bene.find();
+                const beneMap = beneList.reduce((acc, b) => {
+                    acc[b._id.toString()] = b;
+                    return acc;
+                }, {});
+
+                // ✅ AGRUPAR POR BENEFICIÁRIO PARA COMPARAÇÃO
+                const avaliacoesPorBene = {};
+                compaliList.forEach(c => {
+                    const beneId = c.compali_beneid?.toString();
+                    if (!avaliacoesPorBene[beneId]) {
+                        avaliacoesPorBene[beneId] = [];
+                    }
+                    avaliacoesPorBene[beneId].push(c);
+                });
+
+                // ✅ PARA CADA BENEFICIÁRIO, ORDENAR POR DATA E CALCULAR COMPARAÇÕES
+                Object.keys(avaliacoesPorBene).forEach(beneId => {
+                    const avaliacoes = avaliacoesPorBene[beneId];
+                    
+                    // Ordenar do mais antigo para o mais recente
+                    avaliacoes.sort((a, b) => new Date(a.compali_datacad) - new Date(b.compali_datacad));
+                    
+                    // Para cada avaliação, calcular comparação com a anterior
+                    avaliacoes.forEach((avaliacao, index) => {
+                        if (index === 0) {
+                            // Primeira avaliação - todos os ícones são traço
+                            avaliacao.setaFator1 = '-';
+                            avaliacao.setaFator2 = '-';
+                            avaliacao.setaFator3 = '-';
+                            avaliacao.setaFator4 = '-';
+                            avaliacao.setaFator5 = '-';
+                            avaliacao.setaFator6 = '-';
+                            avaliacao.setaFator7 = '-';
+                            avaliacao.setaTotal = '-';
+                        } else {
+                            // Comparar com avaliação anterior
+                            const anterior = avaliacoes[index - 1];
+                            
+                            avaliacao.setaFator1 = calcularSeta(avaliacao.compali_totmotricidademastigacao, anterior.compali_totmotricidademastigacao);
+                            avaliacao.setaFator2 = calcularSeta(avaliacao.compali_totseletividadealimentar, anterior.compali_totseletividadealimentar);
+                            avaliacao.setaFator3 = calcularSeta(avaliacao.compali_tothabilidadesrefeicoes, anterior.compali_tothabilidadesrefeicoes);
+                            avaliacao.setaFator4 = calcularSeta(avaliacao.compali_totcomportinadequadorefeicoes, anterior.compali_totcomportinadequadorefeicoes);
+                            avaliacao.setaFator5 = calcularSeta(avaliacao.compali_totcomportrigidosalimentacao, anterior.compali_totcomportrigidosalimentacao);
+                            avaliacao.setaFator6 = calcularSeta(avaliacao.compali_totcomportopositoralimentacao, anterior.compali_totcomportopositoralimentacao);
+                            avaliacao.setaFator7 = calcularSeta(avaliacao.compali_totalergiasintolerancia, anterior.compali_totalergiasintolerancia);
+                            avaliacao.setaTotal = calcularSeta(avaliacao.compali_tottotalgeral, anterior.compali_tottotalgeral);
+                        }
+                    });
+                });
+
+                // Função para calcular seta
+                function calcularSeta(valorAtual, valorAnterior) {
+                    const atual = valorAtual || 0;
+                    const anterior = valorAnterior || 0;
+                    
+                    if (atual > anterior) return 'up';    // Piorou - seta para cima
+                    if (atual < anterior) return 'down';  // Melhorou - seta para baixo
+                    return 'same';                         // Inalterado - traço
+                }
+
+                // Processar cada registro
+                compaliList.forEach(c => {
+                    c.datacad = c.compali_datacad ? formatDateToBR(c.compali_datacad) : "--/--/---- h--:--";
+                    c.dataedi = c.compali_dataedi ? formatDateToBR(c.compali_dataedi) : "--/--/---- h--:--";
+                    c.dataaplica = c.compali_dataaplica ? formatDateOnlyToBR(c.compali_dataaplica) : "--/--/----";
+
+                    const usuarioCad = usuarioMap[c.compali_usuidcad?.toString()];
+                    const usuarioEdi = usuarioMap[c.compali_usuidedi?.toString()];
+                    const beneficiario = beneMap[c.compali_beneid?.toString()];
+
+                    c.usuarioCadNome = usuarioCad ? usuarioCad.usuario_nome : "--";
+                    c.usuarioEdiNome = usuarioEdi ? usuarioEdi.usuario_nome : "--";
+                    c.beneficiarioNome = beneficiario ? beneficiario.bene_nome : "--";
+                    
+                    // Totais dos Fatores
+                    c.fator1 = c.compali_totmotricidademastigacao || 0;
+                    c.fator2 = c.compali_totseletividadealimentar || 0;
+                    c.fator3 = c.compali_tothabilidadesrefeicoes || 0;
+                    c.fator4 = c.compali_totcomportinadequadorefeicoes || 0;
+                    c.fator5 = c.compali_totcomportrigidosalimentacao || 0;
+                    c.fator6 = c.compali_totcomportopositoralimentacao || 0;
+                    c.fator7 = c.compali_totalergiasintolerancia || 0;
+                    c.totalGeral = c.compali_tottotalgeral || 0;
                 });
 
                 res.render('nutricao/compali/compaliLis', { compalis: compaliList, qtregs });

@@ -145,64 +145,66 @@ module.exports = {
                 dataFim = fncGeral.getDateToIsostring(dataFim);
 
                 break;
-                case "Semana":
-                    data = req.body.dataFinal;
-                    ano = data.substring(0,4);
-                    mes = data.substring(5,7);
-                    dia = data.substring(8,10);
+            case "Semana":
+                console.log("fdafsnaeo"+req.body.dataFinal)
+                data = req.body.dataFinal;
+                ano = data.substring(0,4);
+                mes = parseInt(data.substring(5,7))-1;
+                dia = data.substring(8,10);
 
-                    seg = new Date();
-                    seg.setFullYear(ano);
-                    seg.setUTCMonth(mes);
-                    seg.setDate(dia);
-                    seg.setHours(0, 0, 0, 0);
+                seg = new Date();
+                seg.setFullYear(ano);
+                seg.setUTCMonth(mes);
+                seg.setDate(dia);
+                seg.setHours(0, 0, 0, 0);
 
-                    sex = new Date();
-                    sex.setFullYear(ano);
-                    sex.setUTCMonth(mes);
-                    sex.setDate(dia);
-                    sex.setHours(23, 59, 59, 0);
+                sex = new Date();
+                sex.setFullYear(ano);
+                sex.setUTCMonth(mes);
+                sex.setDate(dia);
+                sex.setHours(23, 59, 59, 0);
 
-                    switch (seg.getUTCDay()){
-                        case 0://DOM
-                            seg.setUTCDate(seg.getUTCDate() + 1);
-                            sex.setUTCDate(sex.getUTCDate() + 5);
-                            break;
-                        case 1://SEG
-                            sex.setUTCDate(sex.getUTCDate() + 4);
-                            break;
-                        case 2://TER
-                            seg.setUTCDate(seg.getUTCDate() - 1);
-                            sex.setUTCDate(sex.getUTCDate() + 3);
-                            break;
-                        case 3://QUA
-                            seg.setUTCDate(seg.getUTCDate() - 2);
-                            sex.setUTCDate(sex.getUTCDate() + 2);
-                            break;
-                        case 4://QUI
-                            seg.setUTCDate(seg.getUTCDate() - 3);
-                            sex.setUTCDate(sex.getUTCDate() + 1);
-                            break;
-                        case 5://SEX
-                            seg.setUTCDate(seg.getUTCDate() - 4);
-                            break;
-                        case 6://SAB
-                            seg.setUTCDate(seg.getUTCDate() - 5);
-                            sex.setUTCDate(sex.getUTCDate() - 1);
-                            break;
-                        default:
-                            seg.setUTCDate(seg.getUTCDate() + 1);
-                            sex.setUTCDate(sex.getUTCDate() + 5);
-                            break;
-                    }
-                    dataIni = fncGeral.getDateToIsostring(seg);
-                    dataFim = fncGeral.getDateToIsostring(sex);
-
+                switch (seg.getUTCDay()){
+                    case 0://DOM
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                    case 1://SEG
+                        sex.setUTCDate(sex.getUTCDate() + 4);
+                        break;
+                    case 2://TER
+                        seg.setUTCDate(seg.getUTCDate() - 1);
+                        sex.setUTCDate(sex.getUTCDate() + 3);
+                        break;
+                    case 3://QUA
+                        seg.setUTCDate(seg.getUTCDate() - 2);
+                        sex.setUTCDate(sex.getUTCDate() + 2);
+                        break;
+                    case 4://QUI
+                        seg.setUTCDate(seg.getUTCDate() - 3);
+                        sex.setUTCDate(sex.getUTCDate() + 1);
+                        break;
+                    case 5://SEX
+                        seg.setUTCDate(seg.getUTCDate() - 4);
+                        break;
+                    case 6://SAB
+                        seg.setUTCDate(seg.getUTCDate() - 5);
+                        sex.setUTCDate(sex.getUTCDate() - 1);
+                        break;
+                    default:
+                        seg.setUTCDate(seg.getUTCDate() + 1);
+                        sex.setUTCDate(sex.getUTCDate() + 5);
+                        break;
+                }
+                dataIni = fncGeral.getDateToIsostring(seg);
+                dataFim = fncGeral.getDateToIsostring(sex);
+console.log(dataIni)
+console.log(dataFim)
                 break;
             case "Dia":
                 data = req.body.dataFinal;
                 ano = data.substring(0,4);
-                mes = data.substring(5,7);
+                mes = parseInt(data.substring(5,7))-1;
                 dia = data.substring(8,10);
 
                 dataIni = new Date();

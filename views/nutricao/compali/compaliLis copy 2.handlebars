@@ -52,7 +52,7 @@
 				visibility: visible;
 			}
 			
-			/* ✅ ESTILOS PARA OS FATORES */
+			/* ✅ NOVOS ESTILOS PARA OS FATORES */
 			.fator-badge {
 				display: inline-block;
 				padding: 3px 6px;
@@ -71,29 +71,6 @@
 			.fator-badge.pink { background-color: #fadbd8; color: #922b21; }
 			.fator-badge.grey { background-color: #eaecee; color: #566573; }
 			.fator-badge.total { background-color: #d5f4e6; color: #1e8449; font-size: 13px; }
-			
-			/* ✅ ESTILOS PARA AS SETAS */
-			.seta-indicador {
-				display: inline-block;
-				margin-left: 3px;
-				font-size: 10px;
-				font-weight: bold;
-			}
-			
-			.seta-up {
-				color: #d9534f; /* Vermelho - piorou */
-				font-family: 'Wingdings 3';
-			}
-			
-			.seta-down {
-				color: #5cb85c; /* Verde - melhorou */
-				font-family: 'Wingdings 3';
-			}
-			
-			.seta-same {
-				color: #777; /* Cinza - inalterado */
-				font-family: Arial, sans-serif;
-			}
 		</style>
 		
 	</head>
@@ -210,110 +187,15 @@
 															<td>{{this.beneficiarioNome}}</td>
 															<td>{{this.usuarioCadNome}}</td>
 															
-															<!-- ✅ VALORES DOS FATORES COM SETAS (usando ifEqual) -->
-<td class="center">
-    <span class="fator-badge info">{{this.fator1}}</span>
-    {{#ifEqual this.setaFator1 'up'}}
-        <span class="seta-indicador seta-up" title="Piorou em relação à avaliação anterior">&#x25B2;</span>
-    {{else}}
-        {{#ifEqual this.setaFator1 'down'}}
-            <span class="seta-indicador seta-down" title="Melhorou em relação à avaliação anterior">&#x25BC;</span>
-        {{else}}
-            <span class="seta-indicador seta-same" title="Sem alteração em relação à avaliação anterior">-</span>
-        {{/ifEqual}}
-    {{/ifEqual}}
-</td>
-
-<td class="center">
-    <span class="fator-badge success">{{this.fator2}}</span>
-    {{#ifEqual this.setaFator2 'up'}}
-        <span class="seta-indicador seta-up" title="Piorou em relação à avaliação anterior">&#x25B2;</span>
-    {{else}}
-        {{#ifEqual this.setaFator2 'down'}}
-            <span class="seta-indicador seta-down" title="Melhorou em relação à avaliação anterior">&#x25BC;</span>
-        {{else}}
-            <span class="seta-indicador seta-same" title="Sem alteração em relação à avaliação anterior">-</span>
-        {{/ifEqual}}
-    {{/ifEqual}}
-</td>
-
-<td class="center">
-    <span class="fator-badge warning">{{this.fator3}}</span>
-    {{#ifEqual this.setaFator3 'up'}}
-        <span class="seta-indicador seta-up" title="Piorou em relação à avaliação anterior">&#x25B2;</span>
-    {{else}}
-        {{#ifEqual this.setaFator3 'down'}}
-            <span class="seta-indicador seta-down" title="Melhorou em relação à avaliação anterior">&#x25BC;</span>
-        {{else}}
-            <span class="seta-indicador seta-same" title="Sem alteração em relação à avaliação anterior">-</span>
-        {{/ifEqual}}
-    {{/ifEqual}}
-</td>
-
-<td class="center">
-    <span class="fator-badge danger">{{this.fator4}}</span>
-    {{#ifEqual this.setaFator4 'up'}}
-        <span class="seta-indicador seta-up" title="Piorou em relação à avaliação anterior">&#x25B2;</span>
-    {{else}}
-        {{#ifEqual this.setaFator4 'down'}}
-            <span class="seta-indicador seta-down" title="Melhorou em relação à avaliação anterior">&#x25BC;</span>
-        {{else}}
-            <span class="seta-indicador seta-same" title="Sem alteração em relação à avaliação anterior">-</span>
-        {{/ifEqual}}
-    {{/ifEqual}}
-</td>
-
-<td class="center">
-    <span class="fator-badge purple">{{this.fator5}}</span>
-    {{#ifEqual this.setaFator5 'up'}}
-        <span class="seta-indicador seta-up" title="Piorou em relação à avaliação anterior">&#x25B2;</span>
-    {{else}}
-        {{#ifEqual this.setaFator5 'down'}}
-            <span class="seta-indicador seta-down" title="Melhorou em relação à avaliação anterior">&#x25BC;</span>
-        {{else}}
-            <span class="seta-indicador seta-same" title="Sem alteração em relação à avaliação anterior">-</span>
-        {{/ifEqual}}
-    {{/ifEqual}}
-</td>
-
-<td class="center">
-    <span class="fator-badge pink">{{this.fator6}}</span>
-    {{#ifEqual this.setaFator6 'up'}}
-        <span class="seta-indicador seta-up" title="Piorou em relação à avaliação anterior">&#x25B2;</span>
-    {{else}}
-        {{#ifEqual this.setaFator6 'down'}}
-            <span class="seta-indicador seta-down" title="Melhorou em relação à avaliação anterior">&#x25BC;</span>
-        {{else}}
-            <span class="seta-indicador seta-same" title="Sem alteração em relação à avaliação anterior">-</span>
-        {{/ifEqual}}
-    {{/ifEqual}}
-</td>
-
-<td class="center">
-    <span class="fator-badge grey">{{this.fator7}}</span>
-    {{#ifEqual this.setaFator7 'up'}}
-        <span class="seta-indicador seta-up" title="Piorou em relação à avaliação anterior">&#x25B2;</span>
-    {{else}}
-        {{#ifEqual this.setaFator7 'down'}}
-            <span class="seta-indicador seta-down" title="Melhorou em relação à avaliação anterior">&#x25BC;</span>
-        {{else}}
-            <span class="seta-indicador seta-same" title="Sem alteração em relação à avaliação anterior">-</span>
-        {{/ifEqual}}
-    {{/ifEqual}}
-</td>
-
-<td class="center">
-    <span class="fator-badge total">{{this.totalGeral}}</span>
-    {{#ifEqual this.setaTotal 'up'}}
-        <span class="seta-indicador seta-up" title="Piorou em relação à avaliação anterior">&#x25B2;</span>
-    {{else}}
-        {{#ifEqual this.setaTotal 'down'}}
-            <span class="seta-indicador seta-down" title="Melhorou em relação à avaliação anterior">&#x25BC;</span>
-        {{else}}
-            <span class="seta-indicador seta-same" title="Sem alteração em relação à avaliação anterior">-</span>
-        {{/ifEqual}}
-    {{/ifEqual}}
-</td>
+															<!-- ✅ VALORES DOS FATORES -->
+															<td class="center"><span class="fator-badge info">{{this.fator1}}</span></td>
+															<td class="center"><span class="fator-badge success">{{this.fator2}}</span></td>
+															<td class="center"><span class="fator-badge warning">{{this.fator3}}</span></td>
+															<td class="center"><span class="fator-badge danger">{{this.fator4}}</span></td>
+															<td class="center"><span class="fator-badge purple">{{this.fator5}}</span></td>
+															<td class="center"><span class="fator-badge pink">{{this.fator6}}</span></td>
+															<td class="center"><span class="fator-badge grey">{{this.fator7}}</span></td>
+															<td class="center"><span class="fator-badge total">{{this.totalGeral}}</span></td>
 
 															<td>
 																<div class="action-buttons">

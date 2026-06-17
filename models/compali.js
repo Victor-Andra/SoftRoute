@@ -35,6 +35,19 @@ const CompaliSchema = mongoose.Schema({
     compali_alergia :{type: String, required: false},
     compali_intollactose :{type: String, required: false},
     compali_comentarios :{type: String, required: false},
+    
+    // Totais dos Fatores
+    compali_totmotricidademastigacao :{type: Number, required: false},
+    compali_totseletividadealimentar :{type: Number, required: false},
+    compali_tothabilidadesrefeicoes :{type: Number, required: false},
+    compali_totcomportinadequadorefeicoes :{type: Number, required: false},
+    compali_totcomportrigidosalimentacao :{type: Number, required: false},
+    compali_totcomportopositoralimentacao :{type: Number, required: false},
+    compali_totalergiasintolerancia :{type: Number, required: false},
+    
+    // Total Geral
+    compali_tottotalgeral :{type: Number, required: false},
+
     compali_datacad :{type: Date, required: false},
     compali_dataedi :{type: Date, required: false},
     compali_usuidcad :{type: ObjectId, required: false},
@@ -76,6 +89,17 @@ class Compali{
         compali_alergia,
         compali_intollactose,
         compali_comentarios,
+        // Totais dos Fatores
+        compali_totmotricidademastigacao,
+        compali_totseletividadealimentar,
+        compali_tothabilidadesrefeicoes,
+        compali_totcomportinadequadorefeicoes,
+        compali_totcomportrigidosalimentacao,
+        compali_totcomportopositoralimentacao,
+        compali_totalergiasintolerancia,
+        // Total Geral
+        compali_tottotalgeral,
+        // Controle de Registro
         compali_datacad,
         compali_dataedi,
         compali_usuidcad,
@@ -114,6 +138,17 @@ class Compali{
         this.compali_alergia = compali_alergia,
         this.compali_intollactose = compali_intollactose,
         this.compali_comentarios = compali_comentarios,
+        // Totais dos Fatores
+        this.compali_totmotricidademastigacao = compali_totmotricidademastigacao,
+        this.compali_totseletividadealimentar = compali_totseletividadealimentar,
+        this.compali_tothabilidadesrefeicoes = compali_tothabilidadesrefeicoes,
+        this.compali_totcomportinadequadorefeicoes = compali_totcomportinadequadorefeicoes,
+        this.compali_totcomportrigidosalimentacao = compali_totcomportrigidosalimentacao,
+        this.compali_totcomportopositoralimentacao = compali_totcomportopositoralimentacao,
+        this.compali_totalergiasintolerancia = compali_totalergiasintolerancia,
+        // Total Geral
+        this.compali_tottotalgeral =compali_tottotalgeral,
+        // Controle de Registro
         this.compali_datacad = compali_datacad,
         this.compali_dataedi = compali_dataedi,
         this.compali_usuidcad = compali_usuidcad,
@@ -171,6 +206,17 @@ module.exports = {CompaliModel,CompaliSchema,
                 compali_alergia: req.body.compaliAlergia,
                 compali_intollactose: req.body.compaliIntollactose,
                 compali_comentarios: req.body.compaliComentarios,
+                // Totais dos Fatores
+                compali_totmotricidademastigacao: req.body.compaliTotmotricidademastigacao,
+                compali_totseletividadealimentar: req.body.compaliTotseletividadealimentar,
+                compali_tothabilidadesrefeicoes: req.body.compaliTothabilidadesrefeicoes,
+                compali_totcomportinadequadorefeicoes: req.body.compaliTotcomportinadequadorefeicoes,
+                compali_totcomportrigidosalimentacao: req.body.compaliTotcomportrigidosalimentacao,
+                compali_totcomportopositoralimentacao: req.body.compaliTotcomportopositoralimentacao,
+                compali_totalergiasintolerancia: req.body.compaliTotalergiasintolerancia,
+                // Total Geral
+                compali_tottotalgeral: req.body.compaliTottotalgeral,
+                // Controle de Registro
                 compali_dataedi: dataAtual,
                 compali_usuidedi: req.cookies['idUsu'],
                 compali_lixo: "false"
@@ -230,6 +276,17 @@ module.exports = {CompaliModel,CompaliSchema,
             compali_alergia: req.body.compaliAlergia,
             compali_intollactose: req.body.compaliIntollactose,
             compali_comentarios: req.body.compaliComentarios,
+            // Totais dos Fatores
+            compali_totmotricidademastigacao: req.body.compaliTotmotricidademastigacao,
+            compali_totseletividadealimentar: req.body.compaliTotseletividadealimentar,
+            compali_tothabilidadesrefeicoes: req.body.compaliTothabilidadesrefeicoes,
+            compali_totcomportinadequadorefeicoes: req.body.compaliTotcomportinadequadorefeicoes,
+            compali_totcomportrigidosalimentacao: req.body.compaliTotcomportrigidosalimentacao,
+            compali_totcomportopositoralimentacao: req.body.compaliTotcomportopositoralimentacao,
+            compali_totalergiasintolerancia: req.body.compaliTotalergiasintolerancia,
+            // Total Geral
+            compali_tottotalgeral: req.body.compaliTottotalgeral,
+            // Controle de Registro
             compali_datacad: dataAtual,
             compali_usuidcad: usuarioAtual,
             compali_lixo: "false"

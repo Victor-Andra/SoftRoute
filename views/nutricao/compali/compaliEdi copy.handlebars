@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Avaliação de Escala de LABIRINTO - Edição</title>
+		<style>
+			/* Select2 - Estilos Gerais */
+			.select2-container { min-width: 120px !important; }
+			.select2-container--default .select2-selection--single {
+				height: 30px !important; border: 1px solid #ced4da !important;
+				border-radius: 4px !important; background: white !important;
+				display: flex !important; align-items: center !important;
+				padding: 0 8px !important; font-size: 12px !important;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__arrow {
+				height: 28px !important; right: 5px !important;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__rendered {
+				line-height: 28px !important; padding-left: 0 !important; color: #333 !important;
+			}
+			.select2-container--default .select2-selection--single .select2-selection__placeholder {
+				color: #999 !important;
+			}
+			.select2-dropdown {
+				border: 1px solid #ced4da !important; border-radius: 4px !important;
+				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+			}
+			.select2-container--default .select2-search--dropdown .select2-search__field {
+				border: 1px solid #ced4da !important; border-radius: 4px !important;
+				padding: 4px 8px !important; font-size: 12px !important; margin: 4px !important;
+			}
+			.select2-container--default .select2-results__option {
+				padding: 6px 10px !important; font-size: 12px !important;
+			}
+			.select2-container--default .select2-results__option--highlighted[aria-selected] {
+				background-color: #2196f3 !important; color: white !important;
+			}
+			.select2-container--default.select2-container--focus .select2-selection--single {
+				border-color: #2196f3 !important;
+				box-shadow: 0 0 0 2px rgba(33,150,243,0.2) !important;
+			}
+		</style>
+		<script>
+		function carregaBody() {
+    // 1️⃣ Formata data de aplicação (converte de ISO para yyyy-mm-dd)
+    const dataAplicaEdi = document.getElementById("compaliDataaplicaEdi")?.value;
+    console.log("🔍 Data recebida do banco:", dataAplicaEdi);
+    
+    if (dataAplicaEdi) {
+        try {
+            // Cria objeto Date para parsear qualquer formato
+            const dataObj = new Date(dataAplicaEdi);
+            
+            // Verifica se a data é válida
+            if (!isNaN(dataObj.getTime())) {
+                // Extrai ano, mês e dia
+                const ano = dataObj.getFullYear();
+                const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
+                const dia = String(dataObj.getDate()).padStart(2, '0');
+                
+                // Formata para yyyy-mm-dd
+                const dataFormatada = `${ano}-${mes}-${dia}`;
+                console.log("✅ Data formatada:", dataFormatada);
+                
+                // Aplica no input
+                document.getElementById("compaliDataaplica").value = dataFormatada;
+            } else {
+                console.error("❌ Data inválida:", dataAplicaEdi);
+            }
+        } catch (error) {
+            console.error("❌ Erro ao formatar data:", error);
+        }
+    } else {
+        console.warn("⚠️ Campo de data vazio");
+    }
+    
+    // 2️⃣ Mapeamento de campos (exceto radio buttons)
+    const mapaCampos = [
+        ["compaliBeneid", "compaliBeneidEdi"],
+        ["compaliComentarios", "compaliComentariosEdi"]
+    ];
+
+    // 3️⃣ Popula campos com verificação de segurança
+    mapaCampos.forEach(([dest, orig]) => {
+        const elOrig = document.getElementById(orig);
+        const elDest = document.getElementById(dest);
+        
+        if (!elOrig || !elDest) return;
+        
+        const valor = elOrig.value;
+        
+        if (elDest.tagName === "SELECT") {
+            $(elDest).val(valor).trigger('change');
+        } else {
+            elDest.value = valor;
+        }
+    });
+
+    // 4️⃣ Popula radio buttons
+    const camposRadio = [
+        "compaliMastigar", "compaliEngolesem", "compaliLevaalimento", "compaliBocaaberta",
+        "compaliEvitavegetais", "compaliRetiratempero", "compaliEvitafrutas", "compaliInquietacao",
+        "compaliSentarmesa", "compaliTalheres", "compaliDerramacomida", "compaliObjetosestranhos",
+        "compaliVomita", "compaliGolfa", "compaliMesmosutens", "compaliMesmolugar",
+        "compaliMesmosalim", "compaliCoresemel", "compaliMesmamarca", "compaliRitualcomer",
+        "compaliPegaforahor", "compaliPegaoutros", "compaliGrandequant", "compaliIntolgluten",
+        "compaliAlergia", "compaliIntollactose"
+    ];
+
+    camposRadio.forEach(nome => {
+        const elEdi = document.getElementById(nome + "Edi");
+        if (elEdi && elEdi.value) {
+            const valor = elEdi.value;
+            const radio = document.querySelector(`input[name="${nome}"][value="${valor}"]`);
+            if (radio) {
+                radio.checked = true;
+            }
+        }
+    });
+
+    // 5️⃣ Terapeuta já está carregado via Handlebars, não precisa fazer nada aqui
+}
+			
+		</script>
+	</head>
+
+	<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Nutrição</a>
+							</li>
+							<li>
+								<a href="#">Avaliação de Escala de Labirinto</a>
+							</li>
+
+							<li class="active">Edição</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<!-- Dados para carregar -->
+					<div id="divCarrega" name="divCarrega" class="hidden">
+						<input id="compaliBeneidEdi" name="compaliBeneidEdi" value="{{compali.compali_beneid}}"/>
+						<input id="compaliTerapeutaidEdi" name="compaliTerapeutaidEdi" value="{{compali.compali_terapeutaid}}"/>
+						<input id="compaliDataaplicaEdi" name="compaliDataaplicaEdi" value="{{compali.compali_dataaplica}}"/>
+						<input id="compaliMastigarEdi" name="compaliMastigarEdi" value="{{compali.compali_mastigar}}"/>
+						<input id="compaliEngolesemEdi" name="compaliEngolesemEdi" value="{{compali.compali_engolesem}}"/>
+						<input id="compaliLevaalimentoEdi" name="compaliLevaalimentoEdi" value="{{compali.compali_levaalimento}}"/>
+						<input id="compaliBocaabertaEdi" name="compaliBocaabertaEdi" value="{{compali.compali_bocaaberta}}"/>
+						<input id="compaliEvitavegetaisEdi" name="compaliEvitavegetaisEdi" value="{{compali.compali_evitavegetais}}"/>
+						<input id="compaliRetiratemperoEdi" name="compaliRetiratemperoEdi" value="{{compali.compali_retiratempero}}"/>
+						<input id="compaliEvitafrutasEdi" name="compaliEvitafrutasEdi" value="{{compali.compali_evitafrutas}}"/>
+						<input id="compaliInquietacaoEdi" name="compaliInquietacaoEdi" value="{{compali.compali_inquietacao}}"/>
+						<input id="compaliSentarmesaEdi" name="compaliSentarmesaEdi" value="{{compali.compali_sentarmesa}}"/>
+						<input id="compaliTalheresEdi" name="compaliTalheresEdi" value="{{compali.compali_talheres}}"/>
+						<input id="compaliDerramacomidaEdi" name="compaliDerramacomidaEdi" value="{{compali.compali_derramacomida}}"/>
+						<input id="compaliObjetosestranhosEdi" name="compaliObjetosestranhosEdi" value="{{compali.compali_objetosestranhos}}"/>
+						<input id="compaliVomitaEdi" name="compaliVomitaEdi" value="{{compali.compali_vomita}}"/>
+						<input id="compaliGolfaEdi" name="compaliGolfaEdi" value="{{compali.compali_golfa}}"/>
+						<input id="compaliMesmosutensEdi" name="compaliMesmosutensEdi" value="{{compali.compali_mesmosutens}}"/>
+						<input id="compaliMesmolugarEdi" name="compaliMesmolugarEdi" value="{{compali.compali_mesmolugar}}"/>
+						<input id="compaliMesmosalimEdi" name="compaliMesmosalimEdi" value="{{compali.compali_mesmosalim}}"/>
+						<input id="compaliCoresemelEdi" name="compaliCoresemelEdi" value="{{compali.compali_coresemel}}"/>
+						<input id="compaliMesmamarcaEdi" name="compaliMesmamarcaEdi" value="{{compali.compali_mesmamarca}}"/>
+						<input id="compaliRitualcomerEdi" name="compaliRitualcomerEdi" value="{{compali.compali_ritualcomer}}"/>
+						<input id="compaliPegaforahorEdi" name="compaliPegaforahorEdi" value="{{compali.compali_pegaforahor}}"/>
+						<input id="compaliPegaoutrosEdi" name="compaliPegaoutrosEdi" value="{{compali.compali_pegaoutros}}"/>
+						<input id="compaliGrandequantEdi" name="compaliGrandequantEdi" value="{{compali.compali_grandequant}}"/>
+						<input id="compaliIntolglutenEdi" name="compaliIntolglutenEdi" value="{{compali.compali_intolgluten}}"/>
+						<input id="compaliAlergiaEdi" name="compaliAlergiaEdi" value="{{compali.compali_alergia}}"/>
+						<input id="compaliIntollactoseEdi" name="compaliIntollactoseEdi" value="{{compali.compali_intollactose}}"/>
+						<input id="compaliComentariosEdi" name="compaliComentariosEdi" value="{{compali.compali_comentarios}}"/>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/nutricao/compali/atualizar" method="POST">
+								<input class="hidden" id="compaliId" name="compaliId" value="{{compali._id}}" />
+								
+								<!-- Widget Dados Básicos -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">Dados da Avaliação</h4>
+
+										<span class="widget-toolbar">
+
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+
+										</span>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<label>Beneficiário</label>
+											<div class="form-group">
+												<div class="col-sm-8">
+													<select name="compaliBeneid" id="compaliBeneid" class="select2" required>
+														<option value="">Selecione o beneficiário</option>
+														{{#each beneficiarios}}
+															<option value="{{this._id}}">{{this.bene_nome}}</option>
+														{{/each}}
+													</select>
+												</div>
+											</div>
+											
+											<div class="space space-4"></div>
+											
+											<!-- Na seção do terapeuta, altere para: -->
+											<label>Terapeuta Responsável</label>
+											<div class="form-group">
+												<div class="col-sm-6">
+													<input type="hidden" name="compaliTerapeutaid" id="compaliTerapeutaid" value="{{terapeutaAplicador.id}}" />
+													<input type="text" class="form-control" value="{{terapeutaAplicador.nome}}" disabled />
+												</div>
+											</div>
+											
+											<div class="space space-4"></div>
+											
+											<label>Data da Aplicação</label>
+											<div class="form-group">
+												<div class="col-sm-4">
+													<input type="date" name="compaliDataaplica" id="compaliDataaplica" class="form-control" required />
+												</div>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								
+								<div class="space-4"></div>
+								
+								<!-- Widget Escala LABIRINTO -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">Escala Labirinto de Avaliação do Comportamento Alimentar no TEA</h4>
+
+										<span class="widget-toolbar">
+
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+
+										</span>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<div class="table-responsive">
+												<table class="table table-bordered table-striped">
+													<thead>
+														<tr>
+															<th style="width: 50%;">Questão</th>
+															<th class="center" style="width: 10%;">Não<br><span class="badge badge-grey">0</span></th>
+															<th class="center" style="width: 10%;">Raramente<br><span class="badge badge-success">1</span></th>
+															<th class="center" style="width: 10%;">Às vezes<br><span class="badge badge-info">2</span></th>
+															<th class="center" style="width: 10%;">Frequentemente<br><span class="badge badge-warning">3</span></th>
+															<th class="center" style="width: 10%;">Sempre<br><span class="badge badge-danger">4</span></th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>1. Dificuldades para mastigar os alimentos</td>
+															<td class="center"><input type="radio" name="compaliMastigar" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliMastigar" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliMastigar" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliMastigar" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliMastigar" value="4" /></td>
+														</tr>
+														<tr>
+															<td>2. Engole os alimentos sem mastigá-los o bastante</td>
+															<td class="center"><input type="radio" name="compaliEngolesem" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliEngolesem" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliEngolesem" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliEngolesem" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliEngolesem" value="4" /></td>
+														</tr>
+														<tr>
+															<td>3. Dificuldade para levar o alimento de um lado para outro da boca com a língua</td>
+															<td class="center"><input type="radio" name="compaliLevaalimento" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliLevaalimento" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliLevaalimento" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliLevaalimento" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliLevaalimento" value="4" /></td>
+														</tr>
+														<tr>
+															<td>4. Mastiga os alimentos com a boca aberta</td>
+															<td class="center"><input type="radio" name="compaliBocaaberta" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliBocaaberta" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliBocaaberta" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliBocaaberta" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliBocaaberta" value="4" /></td>
+														</tr>
+														<tr>
+															<td>5. Evita comer vegetais cozidos e/ou crus</td>
+															<td class="center"><input type="radio" name="compaliEvitavegetais" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliEvitavegetais" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliEvitavegetais" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliEvitavegetais" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliEvitavegetais" value="4" /></td>
+														</tr>
+														<tr>
+															<td>6. Retira o tempero da comida (ex.: pedaços de coentro, cebolinha ou tomate)</td>
+															<td class="center"><input type="radio" name="compaliRetiratempero" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliRetiratempero" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliRetiratempero" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliRetiratempero" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliRetiratempero" value="4" /></td>
+														</tr>
+														<tr>
+															<td>7. Evita comer frutas</td>
+															<td class="center"><input type="radio" name="compaliEvitafrutas" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliEvitafrutas" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliEvitafrutas" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliEvitafrutas" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliEvitafrutas" value="4" /></td>
+														</tr>
+														<tr>
+															<td>8. Possui inquietação/agitação motora que dificulta sentar-se à mesa</td>
+															<td class="center"><input type="radio" name="compaliInquietacao" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliInquietacao" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliInquietacao" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliInquietacao" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliInquietacao" value="4" /></td>
+														</tr>
+														<tr>
+															<td>9. Tem dificuldades de sentar-se à mesa para fazer as refeições (ex.: almoça no chão, sofá, cama)</td>
+															<td class="center"><input type="radio" name="compaliSentarmesa" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliSentarmesa" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliSentarmesa" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliSentarmesa" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliSentarmesa" value="4" /></td>
+														</tr>
+														<tr>
+															<td>10. Tem dificuldades de utilizar os talheres e outros utensílios</td>
+															<td class="center"><input type="radio" name="compaliTalheres" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliTalheres" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliTalheres" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliTalheres" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliTalheres" value="4" /></td>
+														</tr>
+														<tr>
+															<td>11. Derrama muito a comida na mesa ou na roupa quando se alimenta</td>
+															<td class="center"><input type="radio" name="compaliDerramacomida" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliDerramacomida" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliDerramacomida" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliDerramacomida" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliDerramacomida" value="4" /></td>
+														</tr>
+														<tr>
+															<td>12. Bebe, come, lambe substâncias ou objetos estranhos (ex.: sabão, terra, plástico, chiclete)</td>
+															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="4" /></td>
+														</tr>
+														<tr>
+															<td>13. Vomita, durante ou imediatamente após as refeições</td>
+															<td class="center"><input type="radio" name="compaliVomita" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliVomita" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliVomita" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliVomita" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliVomita" value="4" /></td>
+														</tr>
+														<tr>
+															<td>14. Durante ou imediatamente após as refeições, golfa (trazendo de volta o alimento que engoliu à boca) e mastiga o alimento novamente</td>
+															<td class="center"><input type="radio" name="compaliGolfa" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliGolfa" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliGolfa" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliGolfa" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliGolfa" value="4" /></td>
+														</tr>
+														<tr>
+															<td>15. Come sempre com os mesmos utensílios (ex.: o mesmo prato, garfo, colher ou copo)</td>
+															<td class="center"><input type="radio" name="compaliMesmosutens" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosutens" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosutens" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosutens" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosutens" value="4" /></td>
+														</tr>
+														<tr>
+															<td>16. Come sempre no mesmo lugar</td>
+															<td class="center"><input type="radio" name="compaliMesmolugar" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliMesmolugar" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliMesmolugar" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliMesmolugar" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliMesmolugar" value="4" /></td>
+														</tr>
+														<tr>
+															<td>17. Quer comer sempre os mesmos alimentos (ex.: se comeu frango hoje, quer amanhã novamente)</td>
+															<td class="center"><input type="radio" name="compaliMesmosalim" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosalim" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosalim" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosalim" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosalim" value="4" /></td>
+														</tr>
+														<tr>
+															<td>18. Quer comer alimentos com cor semelhante (ex.: somente quer sucos amarelos - manga, maracujá, laranja)</td>
+															<td class="center"><input type="radio" name="compaliCoresemel" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliCoresemel" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliCoresemel" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliCoresemel" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliCoresemel" value="4" /></td>
+														</tr>
+														<tr>
+															<td>19. Quer comer alimentos sempre da mesma marca, embalagem ou personagem (ex.: bebe suco somente de caixinha, quer somente produtos do Bob Esponja)</td>
+															<td class="center"><input type="radio" name="compaliMesmamarca" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliMesmamarca" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliMesmamarca" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliMesmamarca" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliMesmamarca" value="4" /></td>
+														</tr>
+														<tr>
+															<td>20. Possui ritual para comer (ex.: os alimentos devem ser arrumados no prato da mesma forma; se o ritual não for obedecido, seu filho se recusa a comer ou fica irritado ou perturbado)</td>
+															<td class="center"><input type="radio" name="compaliRitualcomer" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliRitualcomer" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliRitualcomer" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliRitualcomer" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliRitualcomer" value="4" /></td>
+														</tr>
+														<tr>
+															<td>21. Sem permissão, pega a comida fora do horário das refeições</td>
+															<td class="center"><input type="radio" name="compaliPegaforahor" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliPegaforahor" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliPegaforahor" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliPegaforahor" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliPegaforahor" value="4" /></td>
+														</tr>
+														<tr>
+															<td>22. Sem permissão, pega a comida de outras pessoas durante as refeições</td>
+															<td class="center"><input type="radio" name="compaliPegaoutros" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliPegaoutros" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliPegaoutros" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliPegaoutros" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliPegaoutros" value="4" /></td>
+														</tr>
+														<tr>
+															<td>23. Come uma grande quantidade de alimento num período de tempo curto</td>
+															<td class="center"><input type="radio" name="compaliGrandequant" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliGrandequant" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliGrandequant" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliGrandequant" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliGrandequant" value="4" /></td>
+														</tr>
+														<tr>
+															<td>24. Intolerância ao glúten (o glúten está presente na farinha de trigo, aveia, centeio e cevada)</td>
+															<td class="center"><input type="radio" name="compaliIntolgluten" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliIntolgluten" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliIntolgluten" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliIntolgluten" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliIntolgluten" value="4" /></td>
+														</tr>
+														<tr>
+															<td>25. Alergia alimentar (ex.: amendoim, frutos do mar)</td>
+															<td class="center"><input type="radio" name="compaliAlergia" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliAlergia" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliAlergia" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliAlergia" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliAlergia" value="4" /></td>
+														</tr>
+														<tr>
+															<td>26. Tem intolerância à lactose</td>
+															<td class="center"><input type="radio" name="compaliIntollactose" value="0" /></td>
+															<td class="center"><input type="radio" name="compaliIntollactose" value="1" /></td>
+															<td class="center"><input type="radio" name="compaliIntollactose" value="2" /></td>
+															<td class="center"><input type="radio" name="compaliIntollactose" value="3" /></td>
+															<td class="center"><input type="radio" name="compaliIntollactose" value="4" /></td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								
+								<div class="space-4"></div>
+								
+								<!-- Widget Comentários -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">Comentários Adicionais</h4>
+
+										<span class="widget-toolbar">
+
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+
+										</span>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<label>Observações</label>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<textarea name="compaliComentarios" id="compaliComentarios" class="form-control" rows="4"></textarea>
+												</div>
+											</div>
+											
+										</div>
+									</div>
+								</div>
+								
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+
+								<div class="form-actions">
+									<div class="col-md-offset-3 col-md-9">
+										<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+											<i class="ace-icon fa fa-check bigger-110"></i>
+											Salvar
+										</button>
+
+										&nbsp; &nbsp; &nbsp;
+										<button class="btn btn-warning" type="reset">
+											<i class="ace-icon fa fa-undo bigger-110"></i>
+											Limpar
+										</button>
+										
+										&nbsp; &nbsp; &nbsp;
+										<a href="/menu/nutricao/compali/lis" class="btn btn-danger">
+											<i class="ace-icon fa fa-times bigger-110"></i>
+											Cancelar
+										</a>
+									</div>
+								</div>
+							</form>
+
+							
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+
+
+
+
+		<!-- basic scripts -->
+		<script>
+			$(document).ready(function() {
+				// Inicializa Select2
+				if (typeof $.fn.select2 === 'function') {
+					$('.select2').select2({
+						width: '100%',
+						placeholder: 'Escolha...',
+						allowClear: true
+					});
+				}
+			});
+		</script>
+
+	</body>
+</html>

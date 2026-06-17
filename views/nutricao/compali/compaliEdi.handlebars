@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 	<head>
-		<title>Avaliação de Escala de LABIRINTO - Edição</title>
+		<title>Avaliação da Escala LABIRINTO - Edição</title>
 		<style>
 			/* Select2 - Estilos Gerais */
 			.select2-container { min-width: 120px !important; }
@@ -41,85 +41,113 @@
 		</style>
 		<script>
 		function carregaBody() {
-    // 1️⃣ Formata data de aplicação (converte de ISO para yyyy-mm-dd)
-    const dataAplicaEdi = document.getElementById("compaliDataaplicaEdi")?.value;
-    console.log("🔍 Data recebida do banco:", dataAplicaEdi);
-    
-    if (dataAplicaEdi) {
-        try {
-            // Cria objeto Date para parsear qualquer formato
-            const dataObj = new Date(dataAplicaEdi);
-            
-            // Verifica se a data é válida
-            if (!isNaN(dataObj.getTime())) {
-                // Extrai ano, mês e dia
-                const ano = dataObj.getFullYear();
-                const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
-                const dia = String(dataObj.getDate()).padStart(2, '0');
-                
-                // Formata para yyyy-mm-dd
-                const dataFormatada = `${ano}-${mes}-${dia}`;
-                console.log("✅ Data formatada:", dataFormatada);
-                
-                // Aplica no input
-                document.getElementById("compaliDataaplica").value = dataFormatada;
-            } else {
-                console.error("❌ Data inválida:", dataAplicaEdi);
-            }
-        } catch (error) {
-            console.error("❌ Erro ao formatar data:", error);
-        }
-    } else {
-        console.warn("⚠️ Campo de data vazio");
-    }
-    
-    // 2️⃣ Mapeamento de campos (exceto radio buttons)
-    const mapaCampos = [
-        ["compaliBeneid", "compaliBeneidEdi"],
-        ["compaliComentarios", "compaliComentariosEdi"]
-    ];
-
-    // 3️⃣ Popula campos com verificação de segurança
-    mapaCampos.forEach(([dest, orig]) => {
-        const elOrig = document.getElementById(orig);
-        const elDest = document.getElementById(dest);
-        
-        if (!elOrig || !elDest) return;
-        
-        const valor = elOrig.value;
-        
-        if (elDest.tagName === "SELECT") {
-            $(elDest).val(valor).trigger('change');
-        } else {
-            elDest.value = valor;
-        }
-    });
-
-    // 4️⃣ Popula radio buttons
-    const camposRadio = [
-        "compaliMastigar", "compaliEngolesem", "compaliLevaalimento", "compaliBocaaberta",
-        "compaliEvitavegetais", "compaliRetiratempero", "compaliEvitafrutas", "compaliInquietacao",
-        "compaliSentarmesa", "compaliTalheres", "compaliDerramacomida", "compaliObjetosestranhos",
-        "compaliVomita", "compaliGolfa", "compaliMesmosutens", "compaliMesmolugar",
-        "compaliMesmosalim", "compaliCoresemel", "compaliMesmamarca", "compaliRitualcomer",
-        "compaliPegaforahor", "compaliPegaoutros", "compaliGrandequant", "compaliIntolgluten",
-        "compaliAlergia", "compaliIntollactose"
-    ];
-
-    camposRadio.forEach(nome => {
-        const elEdi = document.getElementById(nome + "Edi");
-        if (elEdi && elEdi.value) {
-            const valor = elEdi.value;
-            const radio = document.querySelector(`input[name="${nome}"][value="${valor}"]`);
-            if (radio) {
-                radio.checked = true;
-            }
-        }
-    });
-
-    // 5️⃣ Terapeuta já está carregado via Handlebars, não precisa fazer nada aqui
-}
+			// 1️⃣ Formata data de aplicação (converte de ISO para yyyy-mm-dd)
+			const dataAplicaEdi = document.getElementById("compaliDataaplicaEdi")?.value;
+			console.log("🔍 Data recebida do banco:", dataAplicaEdi);
 			
+			if (dataAplicaEdi) {
+				try {
+					const dataObj = new Date(dataAplicaEdi);
+					if (!isNaN(dataObj.getTime())) {
+						const ano = dataObj.getFullYear();
+						const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
+						const dia = String(dataObj.getDate()).padStart(2, '0');
+						const dataFormatada = `${ano}-${mes}-${dia}`;
+						console.log("✅ Data formatada:", dataFormatada);
+						document.getElementById("compaliDataaplica").value = dataFormatada;
+					} else {
+						console.error("❌ Data inválida:", dataAplicaEdi);
+					}
+				} catch (error) {
+					console.error("❌ Erro ao formatar data:", error);
+				}
+			}
+			
+			// 2️⃣ Mapeamento de campos (exceto radio buttons)
+			const mapaCampos = [
+				["compaliBeneid", "compaliBeneidEdi"],
+				["compaliComentarios", "compaliComentariosEdi"]
+			];
+
+			// 3️⃣ Popula campos com verificação de segurança
+			mapaCampos.forEach(([dest, orig]) => {
+				const elOrig = document.getElementById(orig);
+				const elDest = document.getElementById(dest);
+				
+				if (!elOrig || !elDest) return;
+				
+				const valor = elOrig.value;
+				
+				if (elDest.tagName === "SELECT") {
+					$(elDest).val(valor).trigger('change');
+				} else {
+					elDest.value = valor;
+				}
+			});
+
+			// 4️⃣ Popula radio buttons
+			const camposRadio = [
+				"compaliMastigar", "compaliEngolesem", "compaliLevaalimento", "compaliBocaaberta",
+				"compaliEvitavegetais", "compaliRetiratempero", "compaliEvitafrutas", "compaliInquietacao",
+				"compaliSentarmesa", "compaliTalheres", "compaliDerramacomida", "compaliObjetosestranhos",
+				"compaliVomita", "compaliGolfa", "compaliMesmosutens", "compaliMesmolugar",
+				"compaliMesmosalim", "compaliCoresemel", "compaliMesmamarca", "compaliRitualcomer",
+				"compaliPegaforahor", "compaliPegaoutros", "compaliGrandequant", "compaliIntolgluten",
+				"compaliAlergia", "compaliIntollactose"
+			];
+
+			camposRadio.forEach(nome => {
+				const elEdi = document.getElementById(nome + "Edi");
+				if (elEdi && elEdi.value) {
+					const valor = elEdi.value;
+					const radio = document.querySelector(`input[name="${nome}"][value="${valor}"]`);
+					if (radio) {
+						radio.checked = true;
+						// Atualiza visualmente o valor do item
+						var itemNum = $(radio).data('item');
+						if (itemNum) {
+							$('#valItem' + itemNum).text(valor);
+						}
+					}
+				}
+			});
+
+			// 5️⃣ Carrega os totais do banco e atualiza a interface
+			carregarTotaisDoBanco();
+			
+			// 6️⃣ Recalcula todos os totais para garantir consistência
+			calcularFator1();
+			calcularFator2();
+			calcularFator3();
+			calcularFator4();
+			calcularFator5();
+			calcularFator6();
+			calcularFator7();
+			calcularTotalGeral();
+		}
+		
+		// Função para carregar os totais do banco
+		function carregarTotaisDoBanco() {
+			// Carrega valores dos totais
+			const totais = {
+				'compaliTotmotricidademastigacaoEdi': 'totFator1Final',
+				'compaliTotseletividadealimentarEdi': 'totFator2Final',
+				'compaliTothabilidadesrefeicoesEdi': 'totFator3Final',
+				'compaliTotcomportinadequadorefeicoesEdi': 'totFator4Final',
+				'compaliTotcomportrigidosalimentacaoEdi': 'totFator5Final',
+				'compaliTotcomportopositoralimentacaoEdi': 'totFator6Final',
+				'compaliTotalergiasintoleranciaEdi': 'totFator7Final',
+				'compaliTottotalgeralEdi': 'totGeral'
+			};
+			
+			for (let [orig, dest] of Object.entries(totais)) {
+				const elOrig = document.getElementById(orig);
+				const elDest = document.getElementById(dest);
+				if (elOrig && elDest && elOrig.value) {
+					elDest.textContent = elOrig.value;
+				}
+			}
+		}
 		</script>
 	</head>
 
@@ -138,7 +166,7 @@
 								<a href="#">Nutrição</a>
 							</li>
 							<li>
-								<a href="#">Avaliação de Escala de Labirinto</a>
+								<a href="#">Avaliação da Escala Labirinto</a>
 							</li>
 
 							<li class="active">Edição</li>
@@ -178,6 +206,15 @@
 						<input id="compaliAlergiaEdi" name="compaliAlergiaEdi" value="{{compali.compali_alergia}}"/>
 						<input id="compaliIntollactoseEdi" name="compaliIntollactoseEdi" value="{{compali.compali_intollactose}}"/>
 						<input id="compaliComentariosEdi" name="compaliComentariosEdi" value="{{compali.compali_comentarios}}"/>
+						<!-- Novos campos de totais -->
+						<input id="compaliTotmotricidademastigacaoEdi" name="compaliTotmotricidademastigacaoEdi" value="{{compali.compali_totmotricidademastigacao}}"/>
+						<input id="compaliTotseletividadealimentarEdi" name="compaliTotseletividadealimentarEdi" value="{{compali.compali_totseletividadealimentar}}"/>
+						<input id="compaliTothabilidadesrefeicoesEdi" name="compaliTothabilidadesrefeicoesEdi" value="{{compali.compali_tothabilidadesrefeicoes}}"/>
+						<input id="compaliTotcomportinadequadorefeicoesEdi" name="compaliTotcomportinadequadorefeicoesEdi" value="{{compali.compali_totcomportinadequadorefeicoes}}"/>
+						<input id="compaliTotcomportrigidosalimentacaoEdi" name="compaliTotcomportrigidosalimentacaoEdi" value="{{compali.compali_totcomportrigidosalimentacao}}"/>
+						<input id="compaliTotcomportopositoralimentacaoEdi" name="compaliTotcomportopositoralimentacaoEdi" value="{{compali.compali_totcomportopositoralimentacao}}"/>
+						<input id="compaliTotalergiasintoleranciaEdi" name="compaliTotalergiasintoleranciaEdi" value="{{compali.compali_totalergiasintolerancia}}"/>
+						<input id="compaliTottotalgeralEdi" name="compaliTottotalgeralEdi" value="{{compali.compali_tottotalgeral}}"/>
 					</div>
 
 					<div class="row">
@@ -220,7 +257,6 @@
 											
 											<div class="space space-4"></div>
 											
-											<!-- Na seção do terapeuta, altere para: -->
 											<label>Terapeuta Responsável</label>
 											<div class="form-group">
 												<div class="col-sm-6">
@@ -237,6 +273,128 @@
 													<input type="date" name="compaliDataaplica" id="compaliDataaplica" class="form-control" required />
 												</div>
 											</div>
+											
+										</div>
+									</div>
+								</div>
+								
+								<div class="space-4"></div>
+								
+								<!-- Widget Soma dos Fatores -->
+								<div class="widget-box">
+									<div class="widget-header">
+										<h4 class="widget-title">Soma dos Fatores</h4>
+
+										<span class="widget-toolbar">
+
+											<a href="#" data-action="reload">
+												<i class="ace-icon fa fa-refresh"></i>
+											</a>
+
+											<a href="#" data-action="collapse">
+												<i class="ace-icon fa fa-chevron-up"></i>
+											</a>
+
+										</span>
+									</div>
+									<div class="widget-body">
+										<div class="widget-main">
+											
+											<div class="table-responsive">
+												<table class="table table-bordered table-striped">
+													<thead>
+														<tr>
+															<th style="width: 40%;">Fatores da Escala</th>
+															<th class="center" style="width: 40%;">Itens</th>
+															<th class="center" style="width: 20%;">Total</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td><span class="badge badge-info">Fator 1</span> Motricidade na Mastigação</td>
+															<td class="center">
+																Q1: <span id="valItem1" class="badge badge-info">__</span> 
+																Q2: <span id="valItem2" class="badge badge-info">__</span> 
+																Q3: <span id="valItem3" class="badge badge-info">__</span> 
+																Q4: <span id="valItem4" class="badge badge-info">__</span>
+															</td>
+															<td class="center"><strong id="totFator1Final" class="badge badge-info">0</strong></td>
+														</tr>
+														<tr>
+															<td><span class="badge badge-success">Fator 2</span> Seletividade Alimentar</td>
+															<td class="center">
+																Q5: <span id="valItem5" class="badge badge-success">__</span> 
+																Q6: <span id="valItem6" class="badge badge-success">__</span> 
+																Q7: <span id="valItem7" class="badge badge-success">__</span>
+															</td>
+															<td class="center"><strong id="totFator2Final" class="badge badge-success">0</strong></td>
+														</tr>
+														<tr>
+															<td><span class="badge badge-warning">Fator 3</span> Habilidades nas Refeições</td>
+															<td class="center">
+																Q8: <span id="valItem8" class="badge badge-warning">__</span> 
+																Q9: <span id="valItem9" class="badge badge-warning">__</span> 
+																Q10: <span id="valItem10" class="badge badge-warning">__</span> 
+																Q11: <span id="valItem11" class="badge badge-warning">__</span> 
+																Q12: <span id="valItem12" class="badge badge-warning">__</span>
+															</td>
+															<td class="center"><strong id="totFator3Final" class="badge badge-warning">0</strong></td>
+														</tr>
+														<tr>
+															<td><span class="badge badge-danger">Fator 4</span> Comportamento Inadequado relacionado às Refeições</td>
+															<td class="center">
+																Q13: <span id="valItem13" class="badge badge-danger">__</span> 
+																Q14: <span id="valItem14" class="badge badge-danger">__</span>
+															</td>
+															<td class="center"><strong id="totFator4Final" class="badge badge-danger">0</strong></td>
+														</tr>
+														<tr>
+															<td><span class="badge badge-purple">Fator 5</span> Comportamentos Rígidos relacionados à Alimentação</td>
+															<td class="center">
+																Q15: <span id="valItem15" class="badge badge-purple">__</span> 
+																Q16: <span id="valItem16" class="badge badge-purple">__</span> 
+																Q17: <span id="valItem17" class="badge badge-purple">__</span> 
+																Q18: <span id="valItem18" class="badge badge-purple">__</span> 
+																Q19: <span id="valItem19" class="badge badge-purple">__</span> 
+																Q20: <span id="valItem20" class="badge badge-purple">__</span>
+															</td>
+															<td class="center"><strong id="totFator5Final" class="badge badge-purple">0</strong></td>
+														</tr>
+														<tr>
+															<td><span class="badge badge-pink">Fator 6</span> Comportamento Opositor relacionado à Alimentação</td>
+															<td class="center">
+																Q21: <span id="valItem21" class="badge badge-pink">__</span> 
+																Q22: <span id="valItem22" class="badge badge-pink">__</span> 
+																Q23: <span id="valItem23" class="badge badge-pink">__</span>
+															</td>
+															<td class="center"><strong id="totFator6Final" class="badge badge-pink">0</strong></td>
+														</tr>
+														<tr>
+															<td><span class="badge badge-grey">Fator 7</span> Alergias e Intolerância Alimentar</td>
+															<td class="center">
+																Q24: <span id="valItem24" class="badge badge-grey">__</span> 
+																Q25: <span id="valItem25" class="badge badge-grey">__</span> 
+																Q26: <span id="valItem26" class="badge badge-grey">__</span>
+															</td>
+															<td class="center"><strong id="totFator7Final" class="badge badge-grey">0</strong></td>
+														</tr>
+														<tr style="background-color: #dff0d8;">
+															<td colspan="2" class="right"><strong>TOTAL GERAL:</strong></td>
+															<td class="center"><strong id="totGeral" class="badge badge-success" style="font-size: 1.2em;">0</strong></td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+											
+											<!-- Campos Hidden para envio dos totais -->
+											<input type="hidden" id="compaliTotmotricidademastigacao" name="compaliTotmotricidademastigacao" value="0" />
+											<input type="hidden" id="compaliTotseletividadealimentar" name="compaliTotseletividadealimentar" value="0" />
+											<input type="hidden" id="compaliTothabilidadesrefeicoes" name="compaliTothabilidadesrefeicoes" value="0" />
+											<input type="hidden" id="compaliTotcomportinadequadorefeicoes" name="compaliTotcomportinadequadorefeicoes" value="0" />
+											<input type="hidden" id="compaliTotcomportrigidosalimentacao" name="compaliTotcomportrigidosalimentacao" value="0" />
+											<input type="hidden" id="compaliTotcomportopositoralimentacao" name="compaliTotcomportopositoralimentacao" value="0" />
+											<input type="hidden" id="compaliTotalergiasintolerancia" name="compaliTotalergiasintolerancia" value="0" />
+											<input type="hidden" id="compaliTottotalgeral" name="compaliTottotalgeral" value="0" />
 											
 										</div>
 									</div>
@@ -278,212 +436,212 @@
 													</thead>
 													<tbody>
 														<tr>
-															<td>1. Dificuldades para mastigar os alimentos</td>
-															<td class="center"><input type="radio" name="compaliMastigar" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliMastigar" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliMastigar" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliMastigar" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliMastigar" value="4" /></td>
+															<td>1. Dificuldade para mastigar os alimentos</td>
+															<td class="center"><input type="radio" name="compaliMastigar" value="0" data-item="1" /></td>
+															<td class="center"><input type="radio" name="compaliMastigar" value="1" data-item="1" /></td>
+															<td class="center"><input type="radio" name="compaliMastigar" value="2" data-item="1" /></td>
+															<td class="center"><input type="radio" name="compaliMastigar" value="3" data-item="1" /></td>
+															<td class="center"><input type="radio" name="compaliMastigar" value="4" data-item="1" /></td>
 														</tr>
 														<tr>
 															<td>2. Engole os alimentos sem mastigá-los o bastante</td>
-															<td class="center"><input type="radio" name="compaliEngolesem" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliEngolesem" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliEngolesem" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliEngolesem" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliEngolesem" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliEngolesem" value="0" data-item="2" /></td>
+															<td class="center"><input type="radio" name="compaliEngolesem" value="1" data-item="2" /></td>
+															<td class="center"><input type="radio" name="compaliEngolesem" value="2" data-item="2" /></td>
+															<td class="center"><input type="radio" name="compaliEngolesem" value="3" data-item="2" /></td>
+															<td class="center"><input type="radio" name="compaliEngolesem" value="4" data-item="2" /></td>
 														</tr>
 														<tr>
-															<td>3. Dificuldade para levar o alimento de um lado para outro da boca com a língua</td>
-															<td class="center"><input type="radio" name="compaliLevaalimento" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliLevaalimento" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliLevaalimento" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliLevaalimento" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliLevaalimento" value="4" /></td>
+															<td>3. Dificuldade para levar o alimento de um lado ao outro da boca com a língua</td>
+															<td class="center"><input type="radio" name="compaliLevaalimento" value="0" data-item="3" /></td>
+															<td class="center"><input type="radio" name="compaliLevaalimento" value="1" data-item="3" /></td>
+															<td class="center"><input type="radio" name="compaliLevaalimento" value="2" data-item="3" /></td>
+															<td class="center"><input type="radio" name="compaliLevaalimento" value="3" data-item="3" /></td>
+															<td class="center"><input type="radio" name="compaliLevaalimento" value="4" data-item="3" /></td>
 														</tr>
 														<tr>
 															<td>4. Mastiga os alimentos com a boca aberta</td>
-															<td class="center"><input type="radio" name="compaliBocaaberta" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliBocaaberta" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliBocaaberta" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliBocaaberta" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliBocaaberta" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliBocaaberta" value="0" data-item="4" /></td>
+															<td class="center"><input type="radio" name="compaliBocaaberta" value="1" data-item="4" /></td>
+															<td class="center"><input type="radio" name="compaliBocaaberta" value="2" data-item="4" /></td>
+															<td class="center"><input type="radio" name="compaliBocaaberta" value="3" data-item="4" /></td>
+															<td class="center"><input type="radio" name="compaliBocaaberta" value="4" data-item="4" /></td>
 														</tr>
 														<tr>
 															<td>5. Evita comer vegetais cozidos e/ou crus</td>
-															<td class="center"><input type="radio" name="compaliEvitavegetais" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliEvitavegetais" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliEvitavegetais" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliEvitavegetais" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliEvitavegetais" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliEvitavegetais" value="0" data-item="5" /></td>
+															<td class="center"><input type="radio" name="compaliEvitavegetais" value="1" data-item="5" /></td>
+															<td class="center"><input type="radio" name="compaliEvitavegetais" value="2" data-item="5" /></td>
+															<td class="center"><input type="radio" name="compaliEvitavegetais" value="3" data-item="5" /></td>
+															<td class="center"><input type="radio" name="compaliEvitavegetais" value="4" data-item="5" /></td>
 														</tr>
 														<tr>
 															<td>6. Retira o tempero da comida (ex.: pedaços de coentro, cebolinha ou tomate)</td>
-															<td class="center"><input type="radio" name="compaliRetiratempero" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliRetiratempero" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliRetiratempero" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliRetiratempero" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliRetiratempero" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliRetiratempero" value="0" data-item="6" /></td>
+															<td class="center"><input type="radio" name="compaliRetiratempero" value="1" data-item="6" /></td>
+															<td class="center"><input type="radio" name="compaliRetiratempero" value="2" data-item="6" /></td>
+															<td class="center"><input type="radio" name="compaliRetiratempero" value="3" data-item="6" /></td>
+															<td class="center"><input type="radio" name="compaliRetiratempero" value="4" data-item="6" /></td>
 														</tr>
 														<tr>
 															<td>7. Evita comer frutas</td>
-															<td class="center"><input type="radio" name="compaliEvitafrutas" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliEvitafrutas" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliEvitafrutas" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliEvitafrutas" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliEvitafrutas" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliEvitafrutas" value="0" data-item="7" /></td>
+															<td class="center"><input type="radio" name="compaliEvitafrutas" value="1" data-item="7" /></td>
+															<td class="center"><input type="radio" name="compaliEvitafrutas" value="2" data-item="7" /></td>
+															<td class="center"><input type="radio" name="compaliEvitafrutas" value="3" data-item="7" /></td>
+															<td class="center"><input type="radio" name="compaliEvitafrutas" value="4" data-item="7" /></td>
 														</tr>
 														<tr>
 															<td>8. Possui inquietação/agitação motora que dificulta sentar-se à mesa</td>
-															<td class="center"><input type="radio" name="compaliInquietacao" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliInquietacao" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliInquietacao" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliInquietacao" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliInquietacao" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliInquietacao" value="0" data-item="8" /></td>
+															<td class="center"><input type="radio" name="compaliInquietacao" value="1" data-item="8" /></td>
+															<td class="center"><input type="radio" name="compaliInquietacao" value="2" data-item="8" /></td>
+															<td class="center"><input type="radio" name="compaliInquietacao" value="3" data-item="8" /></td>
+															<td class="center"><input type="radio" name="compaliInquietacao" value="4" data-item="8" /></td>
 														</tr>
 														<tr>
 															<td>9. Tem dificuldades de sentar-se à mesa para fazer as refeições (ex.: almoça no chão, sofá, cama)</td>
-															<td class="center"><input type="radio" name="compaliSentarmesa" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliSentarmesa" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliSentarmesa" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliSentarmesa" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliSentarmesa" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliSentarmesa" value="0" data-item="9" /></td>
+															<td class="center"><input type="radio" name="compaliSentarmesa" value="1" data-item="9" /></td>
+															<td class="center"><input type="radio" name="compaliSentarmesa" value="2" data-item="9" /></td>
+															<td class="center"><input type="radio" name="compaliSentarmesa" value="3" data-item="9" /></td>
+															<td class="center"><input type="radio" name="compaliSentarmesa" value="4" data-item="9" /></td>
 														</tr>
 														<tr>
 															<td>10. Tem dificuldades de utilizar os talheres e outros utensílios</td>
-															<td class="center"><input type="radio" name="compaliTalheres" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliTalheres" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliTalheres" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliTalheres" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliTalheres" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliTalheres" value="0" data-item="10" /></td>
+															<td class="center"><input type="radio" name="compaliTalheres" value="1" data-item="10" /></td>
+															<td class="center"><input type="radio" name="compaliTalheres" value="2" data-item="10" /></td>
+															<td class="center"><input type="radio" name="compaliTalheres" value="3" data-item="10" /></td>
+															<td class="center"><input type="radio" name="compaliTalheres" value="4" data-item="10" /></td>
 														</tr>
 														<tr>
 															<td>11. Derrama muito a comida na mesa ou na roupa quando se alimenta</td>
-															<td class="center"><input type="radio" name="compaliDerramacomida" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliDerramacomida" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliDerramacomida" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliDerramacomida" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliDerramacomida" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliDerramacomida" value="0" data-item="11" /></td>
+															<td class="center"><input type="radio" name="compaliDerramacomida" value="1" data-item="11" /></td>
+															<td class="center"><input type="radio" name="compaliDerramacomida" value="2" data-item="11" /></td>
+															<td class="center"><input type="radio" name="compaliDerramacomida" value="3" data-item="11" /></td>
+															<td class="center"><input type="radio" name="compaliDerramacomida" value="4" data-item="11" /></td>
 														</tr>
 														<tr>
 															<td>12. Bebe, come, lambe substâncias ou objetos estranhos (ex.: sabão, terra, plástico, chiclete)</td>
-															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="0" data-item="12" /></td>
+															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="1" data-item="12" /></td>
+															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="2" data-item="12" /></td>
+															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="3" data-item="12" /></td>
+															<td class="center"><input type="radio" name="compaliObjetosestranhos" value="4" data-item="12" /></td>
 														</tr>
 														<tr>
 															<td>13. Vomita, durante ou imediatamente após as refeições</td>
-															<td class="center"><input type="radio" name="compaliVomita" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliVomita" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliVomita" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliVomita" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliVomita" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliVomita" value="0" data-item="13" /></td>
+															<td class="center"><input type="radio" name="compaliVomita" value="1" data-item="13" /></td>
+															<td class="center"><input type="radio" name="compaliVomita" value="2" data-item="13" /></td>
+															<td class="center"><input type="radio" name="compaliVomita" value="3" data-item="13" /></td>
+															<td class="center"><input type="radio" name="compaliVomita" value="4" data-item="13" /></td>
 														</tr>
 														<tr>
 															<td>14. Durante ou imediatamente após as refeições, golfa (trazendo de volta o alimento que engoliu à boca) e mastiga o alimento novamente</td>
-															<td class="center"><input type="radio" name="compaliGolfa" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliGolfa" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliGolfa" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliGolfa" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliGolfa" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliGolfa" value="0" data-item="14" /></td>
+															<td class="center"><input type="radio" name="compaliGolfa" value="1" data-item="14" /></td>
+															<td class="center"><input type="radio" name="compaliGolfa" value="2" data-item="14" /></td>
+															<td class="center"><input type="radio" name="compaliGolfa" value="3" data-item="14" /></td>
+															<td class="center"><input type="radio" name="compaliGolfa" value="4" data-item="14" /></td>
 														</tr>
 														<tr>
 															<td>15. Come sempre com os mesmos utensílios (ex.: o mesmo prato, garfo, colher ou copo)</td>
-															<td class="center"><input type="radio" name="compaliMesmosutens" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliMesmosutens" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliMesmosutens" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliMesmosutens" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliMesmosutens" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosutens" value="0" data-item="15" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosutens" value="1" data-item="15" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosutens" value="2" data-item="15" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosutens" value="3" data-item="15" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosutens" value="4" data-item="15" /></td>
 														</tr>
 														<tr>
 															<td>16. Come sempre no mesmo lugar</td>
-															<td class="center"><input type="radio" name="compaliMesmolugar" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliMesmolugar" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliMesmolugar" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliMesmolugar" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliMesmolugar" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliMesmolugar" value="0" data-item="16" /></td>
+															<td class="center"><input type="radio" name="compaliMesmolugar" value="1" data-item="16" /></td>
+															<td class="center"><input type="radio" name="compaliMesmolugar" value="2" data-item="16" /></td>
+															<td class="center"><input type="radio" name="compaliMesmolugar" value="3" data-item="16" /></td>
+															<td class="center"><input type="radio" name="compaliMesmolugar" value="4" data-item="16" /></td>
 														</tr>
 														<tr>
 															<td>17. Quer comer sempre os mesmos alimentos (ex.: se comeu frango hoje, quer amanhã novamente)</td>
-															<td class="center"><input type="radio" name="compaliMesmosalim" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliMesmosalim" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliMesmosalim" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliMesmosalim" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliMesmosalim" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosalim" value="0" data-item="17" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosalim" value="1" data-item="17" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosalim" value="2" data-item="17" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosalim" value="3" data-item="17" /></td>
+															<td class="center"><input type="radio" name="compaliMesmosalim" value="4" data-item="17" /></td>
 														</tr>
 														<tr>
 															<td>18. Quer comer alimentos com cor semelhante (ex.: somente quer sucos amarelos - manga, maracujá, laranja)</td>
-															<td class="center"><input type="radio" name="compaliCoresemel" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliCoresemel" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliCoresemel" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliCoresemel" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliCoresemel" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliCoresemel" value="0" data-item="18" /></td>
+															<td class="center"><input type="radio" name="compaliCoresemel" value="1" data-item="18" /></td>
+															<td class="center"><input type="radio" name="compaliCoresemel" value="2" data-item="18" /></td>
+															<td class="center"><input type="radio" name="compaliCoresemel" value="3" data-item="18" /></td>
+															<td class="center"><input type="radio" name="compaliCoresemel" value="4" data-item="18" /></td>
 														</tr>
 														<tr>
 															<td>19. Quer comer alimentos sempre da mesma marca, embalagem ou personagem (ex.: bebe suco somente de caixinha, quer somente produtos do Bob Esponja)</td>
-															<td class="center"><input type="radio" name="compaliMesmamarca" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliMesmamarca" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliMesmamarca" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliMesmamarca" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliMesmamarca" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliMesmamarca" value="0" data-item="19" /></td>
+															<td class="center"><input type="radio" name="compaliMesmamarca" value="1" data-item="19" /></td>
+															<td class="center"><input type="radio" name="compaliMesmamarca" value="2" data-item="19" /></td>
+															<td class="center"><input type="radio" name="compaliMesmamarca" value="3" data-item="19" /></td>
+															<td class="center"><input type="radio" name="compaliMesmamarca" value="4" data-item="19" /></td>
 														</tr>
 														<tr>
 															<td>20. Possui ritual para comer (ex.: os alimentos devem ser arrumados no prato da mesma forma; se o ritual não for obedecido, seu filho se recusa a comer ou fica irritado ou perturbado)</td>
-															<td class="center"><input type="radio" name="compaliRitualcomer" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliRitualcomer" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliRitualcomer" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliRitualcomer" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliRitualcomer" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliRitualcomer" value="0" data-item="20" /></td>
+															<td class="center"><input type="radio" name="compaliRitualcomer" value="1" data-item="20" /></td>
+															<td class="center"><input type="radio" name="compaliRitualcomer" value="2" data-item="20" /></td>
+															<td class="center"><input type="radio" name="compaliRitualcomer" value="3" data-item="20" /></td>
+															<td class="center"><input type="radio" name="compaliRitualcomer" value="4" data-item="20" /></td>
 														</tr>
 														<tr>
 															<td>21. Sem permissão, pega a comida fora do horário das refeições</td>
-															<td class="center"><input type="radio" name="compaliPegaforahor" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliPegaforahor" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliPegaforahor" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliPegaforahor" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliPegaforahor" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliPegaforahor" value="0" data-item="21" /></td>
+															<td class="center"><input type="radio" name="compaliPegaforahor" value="1" data-item="21" /></td>
+															<td class="center"><input type="radio" name="compaliPegaforahor" value="2" data-item="21" /></td>
+															<td class="center"><input type="radio" name="compaliPegaforahor" value="3" data-item="21" /></td>
+															<td class="center"><input type="radio" name="compaliPegaforahor" value="4" data-item="21" /></td>
 														</tr>
 														<tr>
 															<td>22. Sem permissão, pega a comida de outras pessoas durante as refeições</td>
-															<td class="center"><input type="radio" name="compaliPegaoutros" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliPegaoutros" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliPegaoutros" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliPegaoutros" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliPegaoutros" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliPegaoutros" value="0" data-item="22" /></td>
+															<td class="center"><input type="radio" name="compaliPegaoutros" value="1" data-item="22" /></td>
+															<td class="center"><input type="radio" name="compaliPegaoutros" value="2" data-item="22" /></td>
+															<td class="center"><input type="radio" name="compaliPegaoutros" value="3" data-item="22" /></td>
+															<td class="center"><input type="radio" name="compaliPegaoutros" value="4" data-item="22" /></td>
 														</tr>
 														<tr>
 															<td>23. Come uma grande quantidade de alimento num período de tempo curto</td>
-															<td class="center"><input type="radio" name="compaliGrandequant" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliGrandequant" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliGrandequant" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliGrandequant" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliGrandequant" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliGrandequant" value="0" data-item="23" /></td>
+															<td class="center"><input type="radio" name="compaliGrandequant" value="1" data-item="23" /></td>
+															<td class="center"><input type="radio" name="compaliGrandequant" value="2" data-item="23" /></td>
+															<td class="center"><input type="radio" name="compaliGrandequant" value="3" data-item="23" /></td>
+															<td class="center"><input type="radio" name="compaliGrandequant" value="4" data-item="23" /></td>
 														</tr>
 														<tr>
 															<td>24. Intolerância ao glúten (o glúten está presente na farinha de trigo, aveia, centeio e cevada)</td>
-															<td class="center"><input type="radio" name="compaliIntolgluten" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliIntolgluten" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliIntolgluten" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliIntolgluten" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliIntolgluten" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliIntolgluten" value="0" data-item="24" /></td>
+															<td class="center"><input type="radio" name="compaliIntolgluten" value="1" data-item="24" /></td>
+															<td class="center"><input type="radio" name="compaliIntolgluten" value="2" data-item="24" /></td>
+															<td class="center"><input type="radio" name="compaliIntolgluten" value="3" data-item="24" /></td>
+															<td class="center"><input type="radio" name="compaliIntolgluten" value="4" data-item="24" /></td>
 														</tr>
 														<tr>
 															<td>25. Alergia alimentar (ex.: amendoim, frutos do mar)</td>
-															<td class="center"><input type="radio" name="compaliAlergia" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliAlergia" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliAlergia" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliAlergia" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliAlergia" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliAlergia" value="0" data-item="25" /></td>
+															<td class="center"><input type="radio" name="compaliAlergia" value="1" data-item="25" /></td>
+															<td class="center"><input type="radio" name="compaliAlergia" value="2" data-item="25" /></td>
+															<td class="center"><input type="radio" name="compaliAlergia" value="3" data-item="25" /></td>
+															<td class="center"><input type="radio" name="compaliAlergia" value="4" data-item="25" /></td>
 														</tr>
 														<tr>
 															<td>26. Tem intolerância à lactose</td>
-															<td class="center"><input type="radio" name="compaliIntollactose" value="0" /></td>
-															<td class="center"><input type="radio" name="compaliIntollactose" value="1" /></td>
-															<td class="center"><input type="radio" name="compaliIntollactose" value="2" /></td>
-															<td class="center"><input type="radio" name="compaliIntollactose" value="3" /></td>
-															<td class="center"><input type="radio" name="compaliIntollactose" value="4" /></td>
+															<td class="center"><input type="radio" name="compaliIntollactose" value="0" data-item="26" /></td>
+															<td class="center"><input type="radio" name="compaliIntollactose" value="1" data-item="26" /></td>
+															<td class="center"><input type="radio" name="compaliIntollactose" value="2" data-item="26" /></td>
+															<td class="center"><input type="radio" name="compaliIntollactose" value="3" data-item="26" /></td>
+															<td class="center"><input type="radio" name="compaliIntollactose" value="4" data-item="26" /></td>
 														</tr>
 													</tbody>
 												</table>
@@ -563,12 +721,127 @@
 
 
 		</div><!-- /.main-container -->
-
-
-
-
-
-		<!-- basic scripts -->
+		
+		<script type="text/javascript">
+			// Função para atualizar os totais quando um radio button for selecionado
+			$(document).on('change', 'input[type="radio"][data-item]', function() {
+				var itemNum = $(this).data('item');
+				var valor = parseInt($(this).val());
+				
+				// Atualiza o valor do item na tabela de totais
+				$('#valItem' + itemNum).text(valor);
+				
+				// Calcula os totais de cada fator
+				calcularFator1();
+				calcularFator2();
+				calcularFator3();
+				calcularFator4();
+				calcularFator5();
+				calcularFator6();
+				calcularFator7();
+				
+				// Calcula o total geral
+				calcularTotalGeral();
+			});
+			
+			// Fator 1: Motricidade na Mastigação (itens 1-4)
+			function calcularFator1() {
+				var item1 = parseInt($('#valItem1').text()) || 0;
+				var item2 = parseInt($('#valItem2').text()) || 0;
+				var item3 = parseInt($('#valItem3').text()) || 0;
+				var item4 = parseInt($('#valItem4').text()) || 0;
+				var total = item1 + item2 + item3 + item4;
+				
+				$('#totFator1Final').text(total);
+				$('#compaliTotmotricidademastigacao').val(total);
+			}
+			
+			// Fator 2: Seletividade Alimentar (itens 5-7)
+			function calcularFator2() {
+				var item5 = parseInt($('#valItem5').text()) || 0;
+				var item6 = parseInt($('#valItem6').text()) || 0;
+				var item7 = parseInt($('#valItem7').text()) || 0;
+				var total = item5 + item6 + item7;
+				
+				$('#totFator2Final').text(total);
+				$('#compaliTotseletividadealimentar').val(total);
+			}
+			
+			// Fator 3: Habilidades nas Refeições (itens 8-12)
+			function calcularFator3() {
+				var item8 = parseInt($('#valItem8').text()) || 0;
+				var item9 = parseInt($('#valItem9').text()) || 0;
+				var item10 = parseInt($('#valItem10').text()) || 0;
+				var item11 = parseInt($('#valItem11').text()) || 0;
+				var item12 = parseInt($('#valItem12').text()) || 0;
+				var total = item8 + item9 + item10 + item11 + item12;
+				
+				$('#totFator3Final').text(total);
+				$('#compaliTothabilidadesrefeicoes').val(total);
+			}
+			
+			// Fator 4: Comportamento Inadequado (itens 13-14)
+			function calcularFator4() {
+				var item13 = parseInt($('#valItem13').text()) || 0;
+				var item14 = parseInt($('#valItem14').text()) || 0;
+				var total = item13 + item14;
+				
+				$('#totFator4Final').text(total);
+				$('#compaliTotcomportinadequadorefeicoes').val(total);
+			}
+			
+			// Fator 5: Comportamentos Rígidos (itens 15-20)
+			function calcularFator5() {
+				var item15 = parseInt($('#valItem15').text()) || 0;
+				var item16 = parseInt($('#valItem16').text()) || 0;
+				var item17 = parseInt($('#valItem17').text()) || 0;
+				var item18 = parseInt($('#valItem18').text()) || 0;
+				var item19 = parseInt($('#valItem19').text()) || 0;
+				var item20 = parseInt($('#valItem20').text()) || 0;
+				var total = item15 + item16 + item17 + item18 + item19 + item20;
+				
+				$('#totFator5Final').text(total);
+				$('#compaliTotcomportrigidosalimentacao').val(total);
+			}
+			
+			// Fator 6: Comportamento Opositor (itens 21-23)
+			function calcularFator6() {
+				var item21 = parseInt($('#valItem21').text()) || 0;
+				var item22 = parseInt($('#valItem22').text()) || 0;
+				var item23 = parseInt($('#valItem23').text()) || 0;
+				var total = item21 + item22 + item23;
+				
+				$('#totFator6Final').text(total);
+				$('#compaliTotcomportopositoralimentacao').val(total);
+			}
+			
+			// Fator 7: Alergias e Intolerância (itens 24-26)
+			function calcularFator7() {
+				var item24 = parseInt($('#valItem24').text()) || 0;
+				var item25 = parseInt($('#valItem25').text()) || 0;
+				var item26 = parseInt($('#valItem26').text()) || 0;
+				var total = item24 + item25 + item26;
+				
+				$('#totFator7Final').text(total);
+				$('#compaliTotalergiasintolerancia').val(total);
+			}
+			
+			// Total Geral
+			function calcularTotalGeral() {
+				var fator1 = parseInt($('#totFator1Final').text()) || 0;
+				var fator2 = parseInt($('#totFator2Final').text()) || 0;
+				var fator3 = parseInt($('#totFator3Final').text()) || 0;
+				var fator4 = parseInt($('#totFator4Final').text()) || 0;
+				var fator5 = parseInt($('#totFator5Final').text()) || 0;
+				var fator6 = parseInt($('#totFator6Final').text()) || 0;
+				var fator7 = parseInt($('#totFator7Final').text()) || 0;
+				var totalGeral = fator1 + fator2 + fator3 + fator4 + fator5 + fator6 + fator7;
+				
+				$('#totGeral').text(totalGeral);
+				$('#compaliTottotalgeral').val(totalGeral);
+			}
+		</script>
+		
 		<script>
 			$(document).ready(function() {
 				// Inicializa Select2

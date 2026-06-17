@@ -9585,7 +9585,7 @@ carregaAgendaPessoalquasela(req, res) {
         res.render('admin/erro')
     })
 },
-    carregaAgendaTemp(req, res){//CarregaEdiçãoAgenda
+    carregaAgendaTemp_old_20260616(req, res){//CarregaEdiçãoAgenda
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -9621,15 +9621,16 @@ carregaAgendaPessoalquasela(req, res) {
                                 console.log("Listagem terapeutas!")
                                 Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                     console.log("Abre Edição Agenda Semanal")
-                                    Sessao.find().then((sessao)=>{
-                                        Excecao.find().then((excecao)=>{
-        res.render('agenda/agendaCadTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, agenda_tempId, sessaos: sessao, excecaos: excecao})
-        })})})})})})})})}).catch((err) =>{
+                                    //Sessao.find().then((sessao)=>{
+                                        //Excecao.find().then((excecao)=>{
+        res.render('agenda/agendaCadTemp', {agenda, benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, agenda_tempId})//, sessaos: sessao, excecaos: excecao
+        })})})})})})}).catch((err) =>{//})})
             console.log(err)
             res.render('admin/erro')
         })
     },
-    cadastraAgendaTemp(req,res){//AdicionaAgenda
+   
+    cadastraAgendaTemp_old_20260616(req,res){//AdicionaAgenda
         let flash = new Resposta()
         let resultado;
         //console.log(req.body.dataAg)
@@ -9655,7 +9656,85 @@ carregaAgendaPessoalquasela(req, res) {
             }
         })
     },
-    carregaAgendaEdiTemp(req, res){//CarregaEdiçãoAgenda
+    async carregaAgendaTemp(req, res) { // Carrega Edição Agenda
+    try {
+        const db = req.cookies['preferredDb'];
+        
+        // 1. Instanciando TODOS os Models corretamente
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); // Faltava no original!
+
+        const agenda_tempId = req.params.id;
+        
+        // 2. Busca a agenda principal
+        const agenda = await Agenda.findById(agenda_tempId);
+        if (!agenda) return res.render('admin/erro');
+
+        // 3. LÓGICA CIRÚRGICA: Beneficiário e Convênio
+        // Pega o beneId da URL (se a view de origem enviou) ou usa o da própria agenda
+        const beneId = req.query.beneId || agenda.agenda_beneid;
+        
+        // Busca APENAS o beneficiário específico com projeção de campos
+        const bene = await Bene.findById(beneId).select('_id bene_nome bene_convid');
+        
+        // Busca APENAS o convênio daquele beneficiário
+        const convId = bene ? bene.bene_convid : null; 
+        let conv = null;
+        if (convId) {
+            conv = await Conv.findById(convId).select('_id conv_nome');
+        }
+
+        // 4. LISTAS COMPLETAS: Disparando tudo em paralelo com Promise.all
+        // Usando .select() para trazer apenas o necessário
+        const [salas, terapias, terapeutas, horaages, sessaos, excecaos] = await Promise.all([
+            Sala.find().select('_id sala_nome'),
+            Terapia.find().select('_id terapia_nome'),
+            Usuario.find({ usuario_funcaoid: "6241030bfbcc51f47c720a0b" }).select('_id usuario_nome'),
+            Horaage.find().select('_id horaage_hora').sort({ horaage_turno: 1, horaage_ordem: 1 }),
+        ]);
+
+        // 5. Ordenação rápida usando Intl.Collator
+        const collator = new Intl.Collator('pt-BR', { sensitivity: 'base' });
+        salas.sort((a, b) => collator.compare(a.sala_nome, b.sala_nome));
+        terapias.sort((a, b) => collator.compare(a.terapia_nome, b.terapia_nome));
+        terapeutas.sort((a, b) => collator.compare(a.usuario_nome, b.usuario_nome));
+        
+
+        // 6. Formatação da Data/Hora da Agenda
+        let dat = new Date(agenda.agenda_data);
+        let hora = String(dat.getUTCHours()).padStart(2, '0');
+        let min = String(dat.getUTCMinutes()).padStart(2, '0'); 
+        
+        agenda.agenda_hora = `${hora}:${min}`;
+        agenda.agenda_data_dia = this.getDataFMT(dat); 
+
+        console.log("Abre Edição Agenda Semanal");
+
+        // 7. Renderização
+        // Passando bene e conv como arrays de 1 elemento para compatibilidade com o Handlebars
+        res.render('agenda/agendaCadTemp', {
+            agenda, 
+            benes: bene ? [bene] : [], 
+            convs: conv ? [conv] : [], 
+            salas, 
+            terapias, 
+            terapeutas, 
+            horaages, 
+            agenda_tempId
+            
+        });
+
+    } catch (err) {
+        console.error("Erro ao carregar agenda temporária:", err);
+        res.render('admin/erro');
+    }
+},
+    carregaAgendaEdiTemp_old_20260616(req, res){//CarregaEdiçãoAgenda
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -9714,6 +9793,93 @@ carregaAgendaPessoalquasela(req, res) {
             res.render('admin/erro')
         })
     },
+async carregaAgendaEdiTemp(req, res) { // Carrega Edição Agenda
+    try {
+        const db = req.cookies['preferredDb'];
+        
+        // 1. Instanciando os Models (incluindo Sala e Usuario que faltavam)
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema); 
+        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); 
+
+        // 2. Controle de Permissão
+        const lvlUsu = req.cookies['lvlUsu'];
+        const arrayIds = ['62421801a12aa557219a0fb9', '62421903a12aa557219a0fd3'];
+        const isAgendaTerapeuta = arrayIds.includes(lvlUsu);
+
+        const id = req.params.id || req.body.agendaId;
+        
+        // 3. Busca a agenda principal (necessária para preencher o form)
+        const agenda = await Agenda.findById(id);
+        if (!agenda) return res.render('admin/erro');
+
+        // 4. LÓGICA CIRÚRGICA: Beneficiário e Convênio
+        // Pega o beneId da URL (Opção A) ou usa o da própria agenda como fallback
+        const beneId = req.query.beneId || agenda.agenda_beneid;
+        
+        // Busca APENAS o beneficiário específico. 
+        // O .select() garante que só trará _id, bene_nome e o campo do convênio (ajuste 'bene_convid' se o nome for outro)
+        const bene = await Bene.findById(beneId).select('_id bene_nome bene_convid');
+        
+        // Busca APENAS o convênio daquele beneficiário (sem trazer a base de convênios inteira)
+        const convId = bene ? bene.bene_convid : null; 
+        let conv = null;
+        if (convId) {
+            conv = await Conv.findById(convId).select('_id conv_nome');
+        }
+
+        // 5. LÓGICA DAS LISTAS: Disparando tudo em paralelo com Promise.all
+        // Usamos .select() para trazer apenas o _id e o nome, reduzindo drasticamente o tráfego de dados.
+        const [salas, terapias, terapianovo, terapeutas, horaages] = await Promise.all([
+            Sala.find().select('_id sala_nome'),
+            Terapia.find().select('_id terapia_nome'),
+            Terapia.find({ terapia_status: "Ativo", terapia_lixo: false }).select('_id terapia_nome'),
+            Usuario.find({ usuario_funcaoid: "6241030bfbcc51f47c720a0b" }).select('_id usuario_nome'),
+            // Horaage: Trazendo apenas _id e horaage_hora, já ordenado
+            Horaage.find().select('_id horaage_hora').sort({ horaage_turno: 1, horaage_ordem: 1 })
+        ]);
+
+        // 6. Ordenação rápida das listas usando Intl.Collator (Nativo e muito mais leve que .normalize())
+        const collator = new Intl.Collator('pt-BR', { sensitivity: 'base' });
+        salas.sort((a, b) => collator.compare(a.sala_nome, b.sala_nome));
+        terapias.sort((a, b) => collator.compare(a.terapia_nome, b.terapia_nome));
+        terapianovo.sort((a, b) => collator.compare(a.terapia_nome, b.terapia_nome));
+        terapeutas.sort((a, b) => collator.compare(a.usuario_nome, b.usuario_nome));
+
+        // 7. Formatação da Data/Hora da Agenda
+        let selo = agenda.agenda_selo;
+        let dat = new Date(agenda.agenda_data);
+        let hora = String(dat.getUTCHours()).padStart(2, '0');
+        let min = String(dat.getUTCMinutes()).padStart(2, '0'); 
+        
+        agenda.agenda_hora = `${hora}:${min}`;
+        agenda.agenda_data_dia = this.getDataFMT(dat); 
+
+        // 8. Renderização
+        // Como sua view usa {{#each benes}} e {{#each convs}}, passamos eles como arrays de 1 elemento 
+        // para o Handlebars continuar funcionando perfeitamente sem alterar a view de edição.
+        res.render('agenda/agendaEdiTemp', {
+            agenda, 
+            benes: bene ? [bene] : [], 
+            convs: conv ? [conv] : [], 
+            salas, 
+            terapias, 
+            terapianovos: terapianovo, 
+            terapeutas, 
+            horaages, 
+            isAgendaTerapeuta, 
+            selo
+        });
+
+    } catch (err) {
+        console.error("Erro ao carregar edição da agenda:", err);
+        res.render('admin/erro');
+    }
+},
     atualizaAgendaTemp(req, res){//EditaAgenda
         let flash = new Resposta()
         let resposta;
@@ -10597,19 +10763,19 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
                             terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                             //console.log("Listagem terapeutas!")
                             Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
-                                Sessao.find().then((sessao)=>{
-                                    if(resposta.sucesso == ""){
-                                        //console.log(' objeto vazio');
-                                        flash.texto = ""
-                                        flash.sucesso = ""
-                                    } else {
-                                        //console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
-                                        flash.texto = resposta.texto
-                                        flash.sucesso = resposta.sucesso
-                                    }
-                                    Excecao.find().then((excecao)=>{
-                                    res.render('agenda/agendaCadT', {benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, sessaos: sessao, excecaos: excecao, flash})
-        })})})})})})})}).catch((err) =>{
+                                if(resposta.sucesso == ""){
+                                    //console.log(' objeto vazio');
+                                    flash.texto = ""
+                                    flash.sucesso = ""
+                                } else {
+                                    //console.log(resposta.sucesso+' objeto com valor'+resposta.texto);
+                                    flash.texto = resposta.texto
+                                    flash.sucesso = resposta.sucesso
+                                }
+                                //Sessao.find().then((sessao)=>{
+                                    //Excecao.find().then((excecao)=>{
+                                    res.render('agenda/agendaCadT', {benes: bene, convs: conv, salas: sala, terapias: terapia, terapeutas: terapeuta, horaages: horaage, flash})//, sessaos: sessao, excecaos: excecao
+        })})})})})}).catch((err) =>{//})})
             console.log(err)
             res.render('admin/erro')
         })
