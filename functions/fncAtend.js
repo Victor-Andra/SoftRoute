@@ -10337,14 +10337,10 @@ relAtendteraanaFiltronovo: function (req, res) {
     };
 
     // --- Ajuste das datas ---
-    let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
-    let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+    let seg = new Date(req.body.dataIni);
+    let sex = new Date(req.body.dataFim);
     seg.setUTCHours(0, 0, 0, 0);
     sex.setUTCHours(23, 59, 59, 999);
-    console.log("seg")
-    console.log(seg)
-    console.log("sex")
-    console.log(sex)
 
     // --- Busca anos ---
     Ano.find().exec(function (err, todosAnos) {
@@ -11351,8 +11347,9 @@ relAtendteraanaFiltronovo: function (req, res) {
         };
 
         // --- Ajuste das datas ---
-        let seg = fncGeral.getDateFromString(req.body.dataIni, "ini");
-        let sex = fncGeral.getDateFromString(req.body.dataFim, "fim");
+        let seg = new Date(req.body.dataIni);
+        let sex = new Date(req.body.dataFim);
+
         seg.setUTCHours(0, 0, 0, 0);
         sex.setUTCHours(23, 59, 59, 999);
 

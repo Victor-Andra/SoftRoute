@@ -431,20 +431,20 @@
 						{{/compareString}}
 					{{/compareString}}
 					
-						<div class="hidden">
-							<input id="carregaFiltro" value="{{carregaFiltro}}" />
-							<input id="bordoTerapeutaFil" value="{{bordoTerapeuta}}" />
-							<input id="bordoBeneficiarioFil" value="{{bordoBeneficiario}}" />
-							<input id="dataFinalFil" value="{{dataFinal}}" />
-							<input id="mesBordoFil" value="{{mesBordo}}" />
-							<input id="anoBordoFil" value="{{anoBordo}}" />
-							<input id="tipoPessoaFil" value="{{tipoPessoa}}" />
-							<input id="tipoDataFil" value="{{tipoData}}" />
-							<input id="dataIniFil" value="{{dataIni}}" />
-							<input id="dataFimFil" value="{{dataFim}}" />
-							<input id="usuarioAtual" value="{{usuarioAtual}}" />
-							<input id="idsChecked" value="" />
-						</div>
+					<div class="hidden">
+						<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+						<input id="bordoTerapeutaFil" value="{{bordoTerapeuta.bordoTerapeuta}}" />
+						<input id="bordoBeneficiarioFil" value="{{bordoBeneficiario.bordoBeneficiario}}" />
+						<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
+						<input id="mesBordoFil" value="{{mesBordo.mesBordo}}" />
+						<input id="anoBordoFil" value="{{anoBordo.anoBordo}}" />
+						<input id="tipoPessoaFil" value="{{tipoPessoa.tipoPessoa}}" />
+						<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
+						<input id="dataIniFil" value="{{dataIni.dataIni}}" />
+						<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+						<input id="usuarioAtual" value="{{usuario._id}}" >
+						<input id="idsChecked" value="" />
+					</div>
 					
 					<div class="page-content"><!-- .page-content -->
 						<form id="divFormPesquisa" class="form-horizontal" role="form" action="/menu/area/bordo/lisF" method="POST">
@@ -675,7 +675,7 @@
 				"aaSorting": [],
 				"aoColumns": [{ "bSortable": false }, null, null, null, null, { "bSortable": false }],
 				"responsive": true,
-				"lengthMenu": [ 200, 500, 1000],
+				"lengthMenu": [ 50, 100, 200],
 				"lengthChange": true,
 				"autoWidth": false,
 				"paging": true,
