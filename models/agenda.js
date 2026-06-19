@@ -416,7 +416,7 @@ module.exports = {
         let db = req.cookies['preferredDb'];
         AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
         //;
-        let [ano, mes, dia] = data.split('-').map(Number);
+        let [ano, mes, dia] = req.body.dataAg.split('-').map(Number);
         let data = new Date(ano, mes - 1, dia);
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+req.body.agendaHora+':00.000Z');
         let doisMesesAtras = new Date();
