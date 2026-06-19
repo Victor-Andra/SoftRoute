@@ -1754,6 +1754,25 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
                                 ),
                                 temLink: !bloqueado
                             };
+                            // ========================================================================
+                            // 🚨 DETECÇÃO DE EVOLUÇÃO INDEVIDA (Falta Absoluta + evolução preenchida)
+                            // ========================================================================
+                            reg.temEvolucaoIndevida = false;
+                            reg.podeApagarEvolucao = false;
+
+                            if (cat === "Falta Absoluta" &&  // ← CORRIGIDO: usar 'cat' em vez de 'catFinal'
+                                reg.agenda_evolucao && 
+                                reg.agenda_evolucao.toString().trim() !== "") {
+                                
+                                reg.temEvolucaoIndevida = true;
+                                reg.podeApagarEvolucao = true;
+                                
+                                // Sobrescrever tooltip para explicar a situação
+                                reg.ui.tooltipTitulo = "⚠️ Evolução Indevida";
+                                reg.ui.tooltipTexto = "Falta Absoluta com evolução registrada.\nClique na borracha para apagar.";
+                                
+                                console.log(`   🚨 [${idx+1}] EVOLUÇÃO INDEVIDA DETECTADA | Bene: ${reg.beneNome} | Evolução: "${reg.agenda_evolucao.substring(0, 30)}..."`);
+                            }
                             return;
                         }
                         
@@ -1880,9 +1899,15 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
                             }
                         })();
                         
-                        // Ajuste UI baseado em agenda_selo
-                        if (reg.agenda_selo === true || reg.agenda_selo === "true") {
-                            reg.ui.temLink = false; reg.ui.icone = "check"; reg.ui.tooltipTexto = "Já evoluído";
+                       
+
+                        // 🚨 ADICIONAR SÍMBOLO DE ALERTA SE FOR EVOLUÇÃO INDEVIDA
+                        if (reg.temEvolucaoIndevida) {
+                            reg.simboloAlerta = "⚠️";
+                            reg.tooltipAlerta = "O atendimento virou Falta Absoluta. Você deve limpar a evolução clicando no ícone da borracha.";
+                        } else {
+                            reg.simboloAlerta = "";
+                            reg.tooltipAlerta = "";
                         }
                         if (reg.cadeia?.tamanho > 1 && reg.agenda_usuid?.toString() !== idTerapeuta) {
                             reg.ui.temLink = false; reg.ui.icone = "ban";
@@ -1890,12 +1915,36 @@ async function login(req, res, dbEscolhida) { // Processa após verificação de
                     });
     
                     console.log(`   ✅ Registros para view: ${agendasParaView.length}`);
-                    // ========================================================================
                     // 🧠 FASE 6.5: REGRA ABSOLUTA DE EVOLUÇÃO (SOBRESCREVE TUDO)
-                    // ========================================================================
-                    console.log("\n🧠 [FASE 6.5] Aplicando redefinição de evolução (agenda_selo)");
+                        console.log("\n🧠 [FASE 6.5] Aplicando redefinição de evolução (agenda_selo)");
 
-                    agendasParaView = agendasParaView.map(reg => redefinicaoEvolucao(reg));
+                        agendasParaView = agendasParaView.map(reg => redefinicaoEvolucao(reg));
+
+                        // ========================================================================
+                        // 🚨 SOBRESCREVER COR APÓS redefinicaoEvolucao (PARA EVOLUÇÃO INDEVIDA)
+                        // ========================================================================
+                        agendasParaView.forEach(reg => {
+                            // Se for evolução indevida, FORÇAR cor laranja (mesmo que redefinicaoEvolucao tenha colocado verde)
+                            if (reg.temEvolucaoIndevida) {
+                                reg.badgeStyle = `
+                                    background-color: orange !important;
+                                    color: #212529 !important;
+                                    border: 1px solid transparent;
+                                    display: inline-block;
+                                    padding: 2px 6px;
+                                    font-size: 9px;
+                                    font-weight: 500;
+                                    border-radius: 3px;
+                                    white-space: nowrap;
+                                    line-height: 1.3;
+                                `;
+                                reg.simboloAlerta = "⚠️";
+                                reg.tooltipAlerta = "O atendimento virou Falta Absoluta. Você deve limpar a evolução clicando no ícone da borracha.";
+                            } else {
+                                reg.simboloAlerta = "";
+                                reg.tooltipAlerta = "";
+                            }
+                        });
     
                     // ========================================================================
                     // 📋 FASE 7: Log Final
@@ -2460,6 +2509,14 @@ router.get('/area/magenda/lisSemana', fncGeral.IsAuthenticated, (req,res) =>{//d
 
 router.get('/agenda/lisPessoal', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.carregaAgendaPessoal(req, res);
+})
+
+router.get('/agenda/apagarEvolucaoagendapessoal/:id', fncGeral.IsAuthenticated, (req, res) => {
+    fncAgenda.apagarEvolucaoIndevidaagendapessoal(req, res);
+})
+
+router.get('/agenda/apagarEvolucaobranco/:id', fncGeral.IsAuthenticated, (req, res) => {
+    fncAgenda.apagarEvolucaoIndevidabranco(req, res);
 })
 
 // 👉 NOVA ROTA: Filtra agenda pessoal por dia específico
@@ -3525,6 +3582,11 @@ router.post('/area/evoatendfechadofil', fncGeral.IsAuthenticated, (req,res) =>{/
 router.post('/area/evoatendfil', fncGeral.IsAuthenticated, (req,res) =>{//direciona aLista de agendamentos com Beneficiários do dia.
     fncEvoatend.filtraEvoatend(req, res);
 })
+
+router.get('/agenda/apagarEvolucaoIndevidaevoatendlis/:id', fncGeral.IsAuthenticated, (req, res) => {
+    fncAgenda.apagarEvolucaoIndevidaevoatend(req, res);
+})
+
 //Lista Geral Fechado e Aberto com sinalizações coloridas
 router.get('/area/evol/evoatendgeralLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista de evoluções.
     fncEvoatend.listaEvoatendgeral(req, res);

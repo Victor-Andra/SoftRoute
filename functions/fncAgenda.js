@@ -7279,6 +7279,24 @@ carregaAgendaPessoalquasela(req, res) {
                                 ),
                                 temLink: !bloqueado
                             };
+                            // ========================================================================
+                            // 🚨 DETECÇÃO DE EVOLUÇÃO INDEVIDA (Falta Absoluta + evolução preenchida)
+                            // ========================================================================
+                            reg.temEvolucaoIndevida = false;
+                            reg.podeApagarEvolucao = false;
+
+                            if (cat === "Falta Absoluta" && 
+                                reg.agenda_evolucao && 
+                                reg.agenda_evolucao.toString().trim() !== "") {
+                                
+                                reg.temEvolucaoIndevida = true;
+                                reg.podeApagarEvolucao = true;
+                                
+                                reg.ui.tooltipTitulo = "⚠️ Evolução Indevida";
+                                reg.ui.tooltipTexto = "Falta Absoluta com evolução registrada.\nClique na borracha para apagar.";
+                                
+                                console.log(`   🚨 [${idx+1}] EVOLUÇÃO INDEVIDA DETECTADA | Bene: ${reg.beneNome} | Evolução: "${reg.agenda_evolucao.substring(0, 30)}..."`);
+                            }
                             return;
                         }
                         
@@ -7386,22 +7404,33 @@ carregaAgendaPessoalquasela(req, res) {
                                 reg.agenda_selo === "true" ||
                                 (reg.agenda_evolucao && reg.agenda_evolucao.toString().trim() !== "");
 
-                            if (temEvolucao) {
-                                reg.ui = {
-                                    icone: "check",
-                                    tooltipTitulo: "Evoluído",
-                                    tooltipTexto: "Atendimento já realizado",
-                                    temLink: false
-                                };
+                                if (temEvolucao) {
+                                    reg.ui = {
+                                        icone: "check",
+                                        tooltipTitulo: "Evoluído",
+                                        tooltipTexto: "Atendimento já realizado",
+                                        temLink: false
+                                    };
 
-                                // 👉 força visual do beneficiário (verde pastel)
-                                reg.badgeStyle = `
-                                    background-color: #c8e6c9 !important;
-                                    color: #2e7d32 !important;
-                                    border: 1px solid #a5d6a7;
-                                    font-weight: 600;
-                                `;
-                            }
+                                    // ⚠️ SE FOR EVOLUÇÃO INDEVIDA, NÃO MUDA A COR (mantém laranja)
+                                    if (!reg.temEvolucaoIndevida) {
+                                        reg.badgeStyle = `
+                                            background-color: #c8e6c9 !important;
+                                            color: #2e7d32 !important;
+                                            border: 1px solid #a5d6a7;
+                                            font-weight: 600;
+                                        `;
+                                    }
+                                }
+
+                                // 🚨 ADICIONAR SÍMBOLO DE ALERTA SE FOR EVOLUÇÃO INDEVIDA
+                                if (reg.temEvolucaoIndevida) {
+                                    reg.simboloAlerta = "⚠️";
+                                    reg.tooltipAlerta = "O atendimento virou Falta Absoluta. Você deve limpar a evolução clicando no ícone da borracha.";
+                                } else {
+                                    reg.simboloAlerta = "";
+                                    reg.tooltipAlerta = "";
+                                }
                             if (reg.cadeia?.tamanho > 1 && reg.agenda_usuid?.toString() !== idTerapeuta) {
                                 reg.ui.temLink = false; reg.ui.icone = "ban";
                             }
@@ -7608,6 +7637,24 @@ carregaAgendaPessoalquasela(req, res) {
                                             )),
                                 temLink: podeEditar
                             };
+                            // ========================================================================
+                            // 🚨 DETECÇÃO DE EVOLUÇÃO INDEVIDA (Falta Absoluta + evolução preenchida)
+                            // ========================================================================
+                            reg.temEvolucaoIndevida = false;
+                            reg.podeApagarEvolucao = false;
+
+                            if (catFinal === "Falta Absoluta" && 
+                                reg.agenda_evolucao && 
+                                reg.agenda_evolucao.toString().trim() !== "") {
+                                
+                                reg.temEvolucaoIndevida = true;
+                                reg.podeApagarEvolucao = true;
+                                
+                                reg.ui.tooltipTitulo = "⚠️ Evolução Indevida";
+                                reg.ui.tooltipTexto = "Falta Absoluta com evolução registrada.\nClique na borracha para apagar.";
+                                
+                                console.log(`   🚨 [${idx+1}] EVOLUÇÃO INDEVIDA DETECTADA | Bene: ${reg.beneNome} | Evolução: "${reg.agenda_evolucao.substring(0, 30)}..."`);
+                            }
                             return;
                         }
                         
@@ -7718,8 +7765,29 @@ carregaAgendaPessoalquasela(req, res) {
                             reg.beneNome = bene?.bene_nome || 'Sem beneficiário';
                             reg.beneApelido = bene?.bene_apelido || reg.beneNome;
                             
-                            if (reg.agenda_selo === true || reg.agenda_selo === "true") {
-                                reg.ui.temLink = false; reg.ui.icone = "check"; reg.ui.tooltipTexto = "Já evoluído";
+                           if (reg.agenda_selo === true || reg.agenda_selo === "true") {
+                                reg.ui.temLink = false; 
+                                reg.ui.icone = "check"; 
+                                reg.ui.tooltipTexto = "Já evoluído";
+                                
+                                // ⚠️ SE FOR EVOLUÇÃO INDEVIDA, NÃO MUDA A COR (mantém laranja)
+                                if (!reg.temEvolucaoIndevida) {
+                                    reg.badgeStyle = `
+                                        background-color: #c8e6c9 !important;
+                                        color: #2e7d32 !important;
+                                        border: 1px solid #a5d6a7;
+                                        font-weight: 600;
+                                    `;
+                                }
+                            }
+
+                            // 🚨 ADICIONAR SÍMBOLO DE ALERTA SE FOR EVOLUÇÃO INDEVIDA
+                            if (reg.temEvolucaoIndevida) {
+                                reg.simboloAlerta = "⚠️";
+                                reg.tooltipAlerta = "O atendimento virou Falta Absoluta. Você deve limpar a evolução clicando no ícone da borracha.";
+                            } else {
+                                reg.simboloAlerta = "";
+                                reg.tooltipAlerta = "";
                             }
                             if (reg.cadeia?.tamanho > 1 && reg.agenda_usuid?.toString() !== idTerapeuta) {
                                 reg.ui.temLink = false; reg.ui.icone = "ban";
@@ -7775,6 +7843,67 @@ carregaAgendaPessoalquasela(req, res) {
             res.redirect('/admin/erro');
         });
     },
+// ========================================================================
+// 🧹 APAGAR EVOLUÇÃO INDEVIDA (Falta Absoluta com evolução)
+// ========================================================================
+async apagarEvolucaoIndevida(req, res) {
+    try {
+        const idAgenda = req.params.id;
+        const idUsuario = req.cookies['idUsu'];
+        const db = req.cookies['preferredDb'];
+        
+        if (!idUsuario || !db) {
+            req.flash("error_message", "Sessão expirada. Faça login novamente.");
+            return res.redirect('/menu/login');
+        }
+        
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const registro = await Agenda.findById(idAgenda);
+        
+        if (!registro) {
+            req.flash("error_message", "Registro não encontrado.");
+            return res.redirect('back');
+        }
+        
+        // Verificar se o usuário é o dono do registro
+        if (registro.agenda_usuid.toString() !== idUsuario) {
+            req.flash("error_message", "Você só pode apagar evoluções dos seus próprios registros.");
+            return res.redirect('back');
+        }
+        
+        // Verificar se é realmente uma Falta Absoluta com evolução
+        if (registro.agenda_categoria !== "Falta Absoluta") {
+            req.flash("error_message", "Esta ação só é permitida para registros de Falta Absoluta.");
+            return res.redirect('back');
+        }
+        
+        if (!registro.agenda_evolucao || registro.agenda_evolucao.toString().trim() === "") {
+            req.flash("error_message", "Este registro não possui evolução para apagar.");
+            return res.redirect('back');
+        }
+        
+        // Registrar auditoria
+        registro.agenda_usuedi = idUsuario;
+        registro.agenda_dataedi = new Date();
+        
+        // Limpar evolução e resetar selo
+        registro.agenda_evolucao = "";
+        registro.agenda_selo = false;
+        
+        await registro.save();
+        
+        console.log(`✅ [APAGAR EVOLUÇÃO] Registro ${idAgenda} | Usuário: ${idUsuario} | Data: ${registro.agenda_dataedi}`);
+        
+        req.flash("success_message", "Evolução apagada com sucesso!");
+        return res.redirect('back');
+        
+    } catch (err) {
+        console.error("❌ Erro ao apagar evolução:", err);
+        req.flash("error_message", "Erro ao apagar evolução. Tente novamente.");
+        return res.redirect('back');
+    }
+},
+
 
     carregaAgendaPessoalSemanal(req, res) {
         // ========================================================================
@@ -13993,6 +14122,120 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
         })
             
     },
+    // ========================================================================
+    // 🧹 APAGAR EVOLUÇÃO INDEVIDA (Falta Absoluta com evolução)
+    // ========================================================================
+    async apagarEvolucaoIndevidabranco(req, res) {
+    try {
+        const idAgenda = req.params.id;
+        const idUsuario = req.cookies['idUsu'];
+        const db = req.cookies['preferredDb'];
+        
+        if (!idUsuario || !db) {
+            req.flash("error_message", "Sessão expirada. Faça login novamente.");
+            return res.redirect('/menu/login');
+        }
+        
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const registro = await Agenda.findById(idAgenda);
+        
+        if (!registro) {
+            req.flash("error_message", "Registro não encontrado.");
+            return res.redirect('back'); // ← CORRIGIDO
+        }
+        
+        if (registro.agenda_usuid.toString() !== idUsuario) {
+            req.flash("error_message", "Você só pode apagar evoluções dos seus próprios registros.");
+            return res.redirect('back'); // ← CORRIGIDO
+        }
+        
+        if (registro.agenda_categoria !== "Falta Absoluta") {
+            req.flash("error_message", "Esta ação só é permitida para registros de Falta Absoluta.");
+            return res.redirect('back'); // ← CORRIGIDO
+        }
+        
+        if (!registro.agenda_evolucao || registro.agenda_evolucao.toString().trim() === "") {
+            req.flash("error_message", "Este registro não possui evolução para apagar.");
+            return res.redirect('back'); // ← CORRIGIDO
+        }
+        
+        // Registrar auditoria
+        registro.agenda_usuedi = idUsuario;
+        registro.agenda_dataedi = new Date();
+        
+        // Limpar evolução e resetar selo
+        registro.agenda_evolucao = "";
+        registro.agenda_selo = false;
+        
+        await registro.save();
+        
+        console.log(`✅ [APAGAR EVOLUÇÃO] Registro ${idAgenda} | Usuário: ${idUsuario} | Data: ${registro.agenda_dataedi}`);
+        
+        req.flash("success_message", "Evolução apagada com sucesso!");
+        return res.redirect('back'); // ← CORRIGIDO
+        
+    } catch (err) {
+        console.error("❌ Erro ao apagar evolução:", err);
+        req.flash("error_message", "Erro ao apagar evolução. Tente novamente.");
+        return res.redirect('back'); // ← CORRIGIDO
+    }
+},
+    async apagarEvolucaoIndevidaagendapessoal(req, res) {
+    try {
+        const idAgenda = req.params.id;
+        const idUsuario = req.cookies['idUsu'];
+        const db = req.cookies['preferredDb'];
+        
+        if (!idUsuario || !db) {
+            req.flash("error_message", "Sessão expirada. Faça login novamente.");
+            return res.redirect('/menu/login');
+        }
+        
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const registro = await Agenda.findById(idAgenda);
+        
+        if (!registro) {
+            req.flash("error_message", "Registro não encontrado.");
+            return res.redirect('back'); // ← CORRIGIDO
+        }
+        
+        if (registro.agenda_usuid.toString() !== idUsuario) {
+            req.flash("error_message", "Você só pode apagar evoluções dos seus próprios registros.");
+            return res.redirect('back'); // ← CORRIGIDO
+        }
+        
+        if (registro.agenda_categoria !== "Falta Absoluta") {
+            req.flash("error_message", "Esta ação só é permitida para registros de Falta Absoluta.");
+            return res.redirect('back'); // ← CORRIGIDO
+        }
+        
+        if (!registro.agenda_evolucao || registro.agenda_evolucao.toString().trim() === "") {
+            req.flash("error_message", "Este registro não possui evolução para apagar.");
+            return res.redirect('back'); // ← CORRIGIDO
+        }
+        
+        // Registrar auditoria
+        registro.agenda_usuedi = idUsuario;
+        registro.agenda_dataedi = new Date();
+        
+        // Limpar evolução e resetar selo
+        registro.agenda_evolucao = "";
+        registro.agenda_selo = false;
+        
+        await registro.save();
+        
+        console.log(`✅ [APAGAR EVOLUÇÃO] Registro ${idAgenda} | Usuário: ${idUsuario} | Data: ${registro.agenda_dataedi}`);
+        
+        req.flash("success_message", "Evolução apagada com sucesso!");
+        return res.redirect('back'); // ← CORRIGIDO
+        
+    } catch (err) {
+        console.error("❌ Erro ao apagar evolução:", err);
+        req.flash("error_message", "Erro ao apagar evolução. Tente novamente.");
+        return res.redirect('back'); // ← CORRIGIDO
+    }
+},
+    
     arquivarAgendasAntigas : async(req,res) => {
         try {
             let db = req.cookies['preferredDb'];

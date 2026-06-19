@@ -187,7 +187,24 @@
                             </tr>
                             {{/each}}
                           </tbody>
+
+                          <tfoot>
+                            <tr style="background-color: #e8f5e9; font-weight: bold; border-top: 3px solid #4caf50;">
+                              <td></td>
+                              <td colspan="2" class="text-right" style="vertical-align: middle;">
+                                <i class="ace-icon fa fa-calculator green"></i>
+                                &nbsp;CONSOLIDADO TOTAL
+                              </td>
+                              <td class="text-right">{{totais.total_registros}}</td>
+                              <td class="text-right">{{totais.qt_falta}}</td>
+                              <td class="text-right">{{totais.qt_falta_jus}}</td>
+                              <td class="text-right">{{totais.qt_falta_abs}}</td>
+                              <td class="text-right">{{totais.qt_feriado}}</td>
+                              <td class="text-right">{{totais.indice_faltas}}%</td>
+                            </tr>
+                          </tfoot>
                         </table>
+                        
 
                         {{else}}
                         <div class="alert alert-info">

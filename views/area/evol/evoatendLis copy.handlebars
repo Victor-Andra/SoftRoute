@@ -1066,7 +1066,20 @@
 														{{/each}}
 														{{#each ../benes}}
 															{{#ifEqual this._id ../agenda_beneid}}
-																<td>{{bene_nome}}</td>
+																<td>
+																	<span class="badge-agenda" style="{{../badgeStyle}}">
+																		{{this.bene_nome}}
+																	</span>
+																	{{#if ../simboloAlerta}}
+																		<span class="custom-tooltip-action" style="margin-left: 3px; cursor: help;">
+																			<span style="font-size: 12px;">{{../simboloAlerta}}</span>
+																			<span class="tooltip-text-action">
+																				<strong style="color:#c00">⚠️ Atenção</strong><br>
+																				{{../tooltipAlerta}}
+																			</span>
+																		</span>
+																	{{/if}}
+																</td>
 															{{/ifEqual}}
 														{{/each}}
 														<td>{{agenda_evolucao}}</td>

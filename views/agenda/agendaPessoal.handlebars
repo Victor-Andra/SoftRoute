@@ -241,6 +241,11 @@
 			function evolucaoSemanalEmDia(id){
 				window.location.href=("/menu/agenda/evolucaoTemp/"+id);
 			}
+			function apagarEvolucao(idAgenda) {
+				if (confirm("⚠️ ATENÇÃO!\n\nVocê está prestes a apagar uma evolução registrada indevidamente em um registro de Falta Absoluta.\n\nEsta ação:\n• Irá limpar o campo de evolução\n• Irá resetar o selo de evolução\n• Será registrada com sua identificação e data/hora\n\nTem certeza que deseja continuar?")) {
+					window.location.href = "/menu/agenda/apagarEvolucaoagendapessoal/" + idAgenda;
+				}
+			}
 		</script>
 	</head>
 	
@@ -254,7 +259,7 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Agenda Pessoal do Dia</li>
+							<li class="active">Agenda Pessoal do Dia x</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
 					<!-- Form de pesquisa com validação -->
@@ -329,7 +334,7 @@
 															{{/each}}
 														</td>
 
-														<!-- 👉 DEPOIS (formatado igual agenda pessoal): -->
+														<!-- 👉 Beneficiário (COM SÍMBOLO DE ALERTA) -->
 														<td>
 															{{#each ../benes}}
 																{{#ifEqual this._id ../agenda_beneid}}
@@ -337,29 +342,45 @@
 																		<span class="badge-agenda" style="{{../badgeStyle}}">
 																			{{this.bene_nome}}
 																		</span>
+																		{{!-- ⚠️ SÍMBOLO DE ALERTA COM TOOLTIP --}}
+																		{{#if ../simboloAlerta}}
+																			 <span class="custom-tooltip" style="margin-left: 3px; cursor: help;">
+																				<span style="font-size: 12px;">{{../simboloAlerta}}</span>
+																				<span class="tooltip-text">
+																					<strong style="color:#c00">⚠️ Atenção</strong><br>
+																					{{../tooltipAlerta}}
+																				</span>
+																			</span>
+																		{{/if}}
 																	</label>
 																{{/ifEqual}}
 															{{/each}}
 														</td>
 														
-														<!-- 👉 Evoluir: ícone com tooltip -->
-															<td class="text-center" style="vertical-align: middle; width: 50px;">
-																<div class="custom-tooltip">
-
-																	{{#if ui.temLink}}
-																		<a href="javascript:evolucaoSemanalEmDia('{{_id}}');">
-																			<i class="ace-icon fa fa-{{ui.icone}} bigger-130"></i>
-																		</a>
-																	{{else}}
+														<!-- 👉 Evoluir: ícone com tooltip (COM SUPORTE A BORRACHA) -->
+														<td class="text-center" style="vertical-align: middle; width: 70px;">
+															<div class="custom-tooltip">
+																{{#if ui.temLink}}
+																	<a href="javascript:evolucaoSemanalEmDia('{{_id}}');">
 																		<i class="ace-icon fa fa-{{ui.icone}} bigger-130"></i>
-																	{{/if}}
-
-																	<span class="tooltip-text">
-																		<strong style="color:#c00">{{ui.tooltipTitulo}}</strong><br>
-																		{{ui.tooltipTexto}}
-																	</span>
-																</div>
-															</td>
+																	</a>
+																{{else}}
+																	<i class="ace-icon fa fa-{{ui.icone}} bigger-130"></i>
+																{{/if}}
+																
+																{{!-- 🧽 ÍCONE DE BORRACHA (apenas quando há evolução indevida) --}}
+																{{#if temEvolucaoIndevida}}
+																	<a href="javascript:apagarEvolucao('{{_id}}');" style="margin-left: 5px;" title="Apagar evolução indevida">
+																		<i class="ace-icon fa fa-eraser bigger-130" style="color: #d15b47 !important;"></i>
+																	</a>
+																{{/if}}
+																
+																<span class="tooltip-text">
+																	<strong style="color:#c00">{{ui.tooltipTitulo}}</strong><br>
+																	{{ui.tooltipTexto}}
+																</span>
+															</div>
+														</td>
 													</tr>
 													{{/each}}
 												</tbody>
@@ -377,7 +398,8 @@
 									<div class="hidden" id="divBeneData">
 										{{#each agendas}}
 											<input name="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_beneid}}" 
-												value="{{cadeia.ultimoCategoria}}{{#unless cadeia.ultimoCategoria}}{{agenda_categoria}}{{/unless}}">
+												value="{{agenda_beneid}}"
+												data-categoria="{{cadeia.ultimoCategoria}}{{#unless cadeia.ultimoCategoria}}{{agenda_categoria}}{{/unless}}">
 										{{/each}}
 									</div>
 								</div>
@@ -447,45 +469,43 @@
 			
 
 			function carregaBody(){
-				console.log("🚀 [carregaBody] Iniciando formatação de beneficiários...");
-				let dias = ["seg","ter","qua","qui","sex"];
-				
-				try{
-					dias.forEach((dia)=>{
-						document.getElementsByName(dia).forEach((e)=>{
-							let id = "hora" + e.id;
-							let valor = e.value;
-							let tempId = e.id + "_" + valor;
-							
-							if(valor && valor != "766f69643132333435366964"){
-								// ✅ BENEFICIÁRIO
-								if(e.id.indexOf("BeneId_") != -1){
-									let val = document.getElementById(valor)?.cloneNode(true);
-									if(!val) return;
-									
-									val.id = val.id + "x";
-									
-									// Busca categoria e aplica formatação
-									document.getElementsByName(tempId).forEach((ti)=>{
-										pintaAgenda(val, ti.value);
-									});
-									
-									// Insere na célula de destino
-									let destino = document.getElementById(id);
-									if(destino){
-										destino.innerHTML = '';  // Limpa antes
-										destino.appendChild(val);
-										console.log(`✅ Bene formatado: #${id}`);
-									}
-								}
-							}
-						});
-					});
-					console.log("✅ [carregaBody] Finalizado");
-				} catch(err){
-					console.error("❌ ERRO em carregaBody:", err);
-				}
-			}
+    console.log("🚀 [carregaBody] Iniciando formatação de beneficiários...");
+    let dias = ["seg","ter","qua","qui","sex"];
+    
+    try{
+        dias.forEach((dia)=>{
+            document.getElementsByName(dia).forEach((e)=>{
+                let id = "hora" + e.id;
+                let beneId = e.value; // ← Agora é o ID do beneficiário
+                let categoria = e.getAttribute('data-categoria'); // ← Nova forma de pegar a categoria
+                let tempId = e.id + "_" + beneId;
+                
+                if(beneId && beneId != "766f69643132333435366964"){
+                    if(e.id.indexOf("BeneId_") != -1){
+                        let val = document.getElementById(beneId)?.cloneNode(true);
+                        if(!val) return;
+                        
+                        val.id = val.id + "x";
+                        
+                        document.getElementsByName(tempId).forEach((ti)=>{
+                            pintaAgenda(val, categoria);
+                        });
+                        
+                        let destino = document.getElementById(id);
+                        if(destino){
+                            destino.innerHTML = '';
+                            destino.appendChild(val);
+                            console.log(`✅ Bene formatado: #${id} | Categoria: ${categoria}`);
+                        }
+                    }
+                }
+            });
+        });
+        console.log("✅ [carregaBody] Finalizado");
+    } catch(err){
+        console.error("❌ ERRO em carregaBody:", err);
+    }
+}
 
 			function pintaAgenda(val, motivo){
 				// 🎨 CORES POR CATEGORIA (TEXTO, não background)
