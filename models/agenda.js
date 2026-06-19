@@ -410,12 +410,14 @@ module.exports = {
     // Criado por: Wagner Cintra
     // Criado em: 2022/03/20
     // Editado em: 2025/10/03
-    agendaAdicionarTempOLD: async (req,res) => {
+    agendaAdicionarTemp: async (req,res) => {
 
         //Estrura Multiempresa
         let db = req.cookies['preferredDb'];
         AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
         //;
+        let [ano, mes, dia] = "2026-06-22".split('-').map(Number);
+        let data = new Date(ano, mes - 1, dia);
         let dataAgenda = new Date(data.getFullYear()+'-'+(data.getMonth()+1)+'-'+data.getDate()+' '+req.body.agendaHora+':00.000Z');
         let doisMesesAtras = new Date();
         doisMesesAtras.setMonth(doisMesesAtras.getMonth() - 2);
@@ -459,7 +461,7 @@ module.exports = {
                 //agenda_falta : req.body.agendaAlvoFalta,
                 agenda_log: req.body.agendaLog , //Log das alterações
                 agenda_usucad : usuarioAtual,
-                agenda_datacad : dataAtual
+                agenda_datacad : dataAtual,
             });
             //console.log("newAgenda save");
             await newAgenda.save().then(()=>{
@@ -476,7 +478,7 @@ module.exports = {
     // ➕ Add Temp Agenda - CADASTRAR AGENDAMENTO TEMPORÁRIO (SUBSTITUIÇÃO)
     // Criado por: Wagner Cintra | Editado em: 2025/10/03
     // ========================================================================
-    agendaAdicionarTemp: async (req, res) => {
+    agendaAdicionarTempQuebrada: async (req, res) => {
 
         // 📌 PASSO 1: Configurar estrutura multiempresa
         let db = req.cookies['preferredDb'];
