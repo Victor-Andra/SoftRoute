@@ -5163,7 +5163,6 @@ carregaAgendaFilSFixo(req,res){
     Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
     Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
     Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
-    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema)
 
     let aux = 1;
     let segunda;
@@ -9796,7 +9795,6 @@ async apagarEvolucaoIndevida(req, res) {
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
         const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); // Faltava no original!
 
         const agenda_tempId = req.params.id;
         
@@ -9933,7 +9931,6 @@ async carregaAgendaEdiTemp(req, res) { // Carrega Edição Agenda
         const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
         const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema); 
-        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); 
 
         // 2. Controle de Permissão
         const lvlUsu = req.cookies['lvlUsu'];

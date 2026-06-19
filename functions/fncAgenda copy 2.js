@@ -4790,7 +4790,6 @@ carregaAgendaFilSFixo(req,res){
     Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
     Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema)
     Sala = getModel(db, 'tb_sala', salaClass.SalaSchema)
-    Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema)
 
     let aux = 1;
     let segunda;

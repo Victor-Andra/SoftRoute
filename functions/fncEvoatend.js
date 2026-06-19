@@ -145,7 +145,6 @@ function formatarPeriodo(filtroTela, dataIni, dataFim) {
  * Função auxiliar: Busca terapeutas válidos (exclui perfil de diário de bordo)
  */
 async function buscarTerapeutasValidos(db) {
-    const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
     return await Usuario.find({
         usuario_status: "Ativo",
         // ✅ EXCLUSÃO CRÍTICA: Remove perfil de Diário de Bordo

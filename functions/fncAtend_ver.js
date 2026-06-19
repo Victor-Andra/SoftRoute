@@ -8407,7 +8407,6 @@ if (ehSalaEscola) {
         Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema)
         Convdeb = getModel(db, 'tb_convdeb', convdebClass.ConvdebSchema)
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema)
         Funcao = getModel(db, 'tb_funcao', funcaoClass.FuncaoSchema)
         Perfil = getModel(db, 'tb_perfil', perfilClass.PerfilSchema)
 
@@ -14766,7 +14765,6 @@ listaCalendarioMensal(req, res, resposta) {
     const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
     const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
     const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
     let flash = new Resposta();
     if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
@@ -14874,7 +14872,6 @@ filtraCalendarioMensal(req, res) {
     const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
     const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
     const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
     const Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
 
     try {

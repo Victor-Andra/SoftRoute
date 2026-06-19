@@ -8812,7 +8812,6 @@ if (ehSalaEscola) {
         Convcre = getModel(db, 'tb_convcre', convcreClass.ConvcreSchema)
         Convdeb = getModel(db, 'tb_convdeb', convdebClass.ConvdebSchema)
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema)
         Funcao = getModel(db, 'tb_funcao', funcaoClass.FuncaoSchema)
         Perfil = getModel(db, 'tb_perfil', perfilClass.PerfilSchema)
 

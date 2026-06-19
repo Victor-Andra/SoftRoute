@@ -691,7 +691,6 @@ console.log(dataFim)
         Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
         Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
-        Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema)
 
         let usuarioAtual = req.cookies['idUsu'];
         Bordo.findById(req.params.id).then((bordo) =>{console.log("ID: "+bordo._id)
