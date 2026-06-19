@@ -1345,7 +1345,7 @@ module.exports = {
     // 🎉 Feriado do Dia Agenda - MARCAR AGENDAMENTOS COMO FERIADO
     // Criado por: Wagner Cintra | Editado em: 2025/10/03
     // ========================================================================
-    agendaFeriado: async (req, res) => {
+    agendaFeriado_old: async (req, res) => {
 
         // 📌 PASSO 1: Configurar estrutura multiempresa
         let db = req.cookies['preferredDb'];
@@ -1483,7 +1483,131 @@ module.exports = {
         // 📌 PASSO 6: Retornar status
         return "true";
     },
-    
+
+    agendaFeriado: async (req, res) => {
+        try {
+            // 📌 PASSO 1: Configurar estrutura multiempresa
+            let db = req.cookies['preferredDb'];
+            let AgendaModel = getModel(db, 'tb_agenda', AgendaSchema); // 👈 Adicionado 'let' para não virar variável global
+
+            // 📌 PASSO 2: Definir período do dia (00:00:00 até 23:59:59)
+            let dataAtual = new Date();
+            let usuarioAtual = req.cookies['idUsu'];
+            
+            let seg = new Date(req.body.agendaData);
+            seg.setUTCHours(0, 0, 0, 0);  
+            
+            let sex = new Date(req.body.agendaData);
+            sex.setUTCHours(23, 59, 59, 999);  
+
+            console.log("📅 Período feriado:", {
+                ini: fncGeral.getDateToIsostring(seg),
+                fim: fncGeral.getDateToIsostring(sex)
+            });
+
+            // 📌 PASSO 3: Buscar registros do dia (apenas pais, não temporários)
+            let busca = { 
+                agenda_data: { 
+                    $gte: fncGeral.getDateToIsostring(seg), 
+                    $lte: fncGeral.getDateToIsostring(sex) 
+                }, 
+                agenda_temp: false  
+            };
+
+            let arrayIds = [];
+            let agendaFinal = [];
+            let arrayAgendasNovas = [];
+
+            // 📌 PASSO 4: Buscar pais e detectar filhos (cadeia)
+            // 👇 Busca os "pais" e guarda na variável 'agenda'
+            let agenda = await AgendaModel.find(busca); 
+            
+            // Coletar IDs dos pais
+            agenda.forEach(a => { arrayIds.push(a._id); });
+
+            // 👇 Busca os "filhos" (se houver pais)
+            let agendaSemanal = [];
+            if (arrayIds.length > 0) {
+                agendaSemanal = await AgendaModel.find({ agenda_tempId: { $in: arrayIds } });
+            }
+
+            // Unir filhos na lista final
+            agendaSemanal.forEach(as => { agendaFinal.push(as); });
+            
+            // 👇 Adiciona os pais que NÃO estão na lista de filhos (Aqui estava o erro do AgendaModel.forEach)
+            agenda.forEach((a) => { 
+                let add = "true";
+                agendaSemanal.forEach(as => {
+                    if ("" + as.agenda_tempId + "" == "" + a._id + "") {
+                        add = "false";  
+                    }
+                });
+                if (add == "true") {
+                    agendaFinal.push(a);
+                }
+            });
+
+            // 📌 PASSO 5: Processar cada registro para marcar como feriado
+            for (const a of agendaFinal) {
+                let agendaS = (a.agenda_tempId && a.agenda_tempId != "undefined") ? "true" : "false";
+                
+                if (agendaS == "true") {
+                    // 👉 Filho: atualizar categoria diretamente
+                    if (a.agenda_categoria != "Feriado") {
+                        arrayAgendasNovas.push(a);
+                        await AgendaModel.findByIdAndUpdate(a._id, {
+                            $set: {
+                                agenda_categoria: "Feriado",
+                                agenda_org: "Administrativo",
+                                agenda_usucad: usuarioAtual,
+                                agenda_dataedi: dataAtual,
+                                agenda_tempmotivo: "Feriado",
+                                agenda_extra: false,
+                                agenda_turnoFalta: req.body.agendaTurnoFalta
+                            }
+                        });
+                    }
+                } else {
+                    // 👉 Pai: criar novo registro temporário como feriado
+                    let newAgenda = new AgendaModel({
+                        agenda_data: a.agenda_data,
+                        agenda_hora: null,              
+                        agenda_horafim: null,           
+                        agenda_beneid: a.agenda_beneid,
+                        agenda_convid: a.agenda_convid,
+                        agenda_salaid: a.agenda_salaid,
+                        agenda_terapiaid: a.agenda_terapiaid,
+                        agenda_usuid: a.agenda_usuid,
+                        agenda_mergeterapeutaid: a.agenda_mergeterapeutaid,
+                        agenda_mergeterapiaid: a.agenda_mergeterapiaid,
+                        agenda_migrado: false,
+                        agenda_categoria: "Feriado",    
+                        agenda_org: "Administrativo",
+                        agenda_obs: a.agenda_obs,
+                        agenda_temp: true,
+                        agenda_tempId: new mongoose.Types.ObjectId(a._id),
+                        agenda_tempmotivo: "Feriado",
+                        agenda_selo: false,
+                        agenda_copia: false,
+                        agenda_extra: false,
+                        agenda_turnoFalta: req.body.agendaTurnoFalta,
+                        agenda_usucad: usuarioAtual,
+                        agenda_datacad: dataAtual.toISOString()
+                    });
+                    
+                    arrayAgendasNovas.push(newAgenda);
+                    await newAgenda.save();
+                }
+            }
+
+            console.log(`✅ [FINAL] ${arrayAgendasNovas.length} registros processados como feriado`);
+            return "true";
+
+        } catch (err) {
+            console.error("❌ [ERRO] agendaFeriado:", err);
+            return "false"; // 👈 Retorna false em caso de erro para o try/catch
+        }
+    },  
     /*
     agendaFaltaDia: async (req, res, busca, buscaSemanal) => {
         let usuarioAtual = req.cookies['idUsu'];

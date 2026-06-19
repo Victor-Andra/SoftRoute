@@ -7842,66 +7842,67 @@ carregaAgendaPessoalquasela(req, res) {
             res.redirect('/admin/erro');
         });
     },
-// ========================================================================
-// 🧹 APAGAR EVOLUÇÃO INDEVIDA (Falta Absoluta com evolução)
-// ========================================================================
-async apagarEvolucaoIndevida(req, res) {
-    try {
-        const idAgenda = req.params.id;
-        const idUsuario = req.cookies['idUsu'];
-        const db = req.cookies['preferredDb'];
-        
-        if (!idUsuario || !db) {
-            req.flash("error_message", "Sessão expirada. Faça login novamente.");
-            return res.redirect('/menu/login');
-        }
-        
-        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-        const registro = await Agenda.findById(idAgenda);
-        
-        if (!registro) {
-            req.flash("error_message", "Registro não encontrado.");
+
+    // ========================================================================
+    // 🧹 APAGAR EVOLUÇÃO INDEVIDA (Falta Absoluta com evolução)
+    // ========================================================================
+    async apagarEvolucaoIndevida(req, res) {
+        try {
+            const idAgenda = req.params.id;
+            const idUsuario = req.cookies['idUsu'];
+            const db = req.cookies['preferredDb'];
+            
+            if (!idUsuario || !db) {
+                req.flash("error_message", "Sessão expirada. Faça login novamente.");
+                return res.redirect('/menu/login');
+            }
+            
+            const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+            const registro = await Agenda.findById(idAgenda);
+            
+            if (!registro) {
+                req.flash("error_message", "Registro não encontrado.");
+                return res.redirect('back');
+            }
+            
+            // Verificar se o usuário é o dono do registro
+            if (registro.agenda_usuid.toString() !== idUsuario) {
+                req.flash("error_message", "Você só pode apagar evoluções dos seus próprios registros.");
+                return res.redirect('back');
+            }
+            
+            // Verificar se é realmente uma Falta Absoluta com evolução
+            if (registro.agenda_categoria !== "Falta Absoluta") {
+                req.flash("error_message", "Esta ação só é permitida para registros de Falta Absoluta.");
+                return res.redirect('back');
+            }
+            
+            if (!registro.agenda_evolucao || registro.agenda_evolucao.toString().trim() === "") {
+                req.flash("error_message", "Este registro não possui evolução para apagar.");
+                return res.redirect('back');
+            }
+            
+            // Registrar auditoria
+            registro.agenda_usuedi = idUsuario;
+            registro.agenda_dataedi = new Date();
+            
+            // Limpar evolução e resetar selo
+            registro.agenda_evolucao = "";
+            registro.agenda_selo = false;
+            
+            await registro.save();
+            
+            console.log(`✅ [APAGAR EVOLUÇÃO] Registro ${idAgenda} | Usuário: ${idUsuario} | Data: ${registro.agenda_dataedi}`);
+            
+            req.flash("success_message", "Evolução apagada com sucesso!");
+            return res.redirect('back');
+            
+        } catch (err) {
+            console.error("❌ Erro ao apagar evolução:", err);
+            req.flash("error_message", "Erro ao apagar evolução. Tente novamente.");
             return res.redirect('back');
         }
-        
-        // Verificar se o usuário é o dono do registro
-        if (registro.agenda_usuid.toString() !== idUsuario) {
-            req.flash("error_message", "Você só pode apagar evoluções dos seus próprios registros.");
-            return res.redirect('back');
-        }
-        
-        // Verificar se é realmente uma Falta Absoluta com evolução
-        if (registro.agenda_categoria !== "Falta Absoluta") {
-            req.flash("error_message", "Esta ação só é permitida para registros de Falta Absoluta.");
-            return res.redirect('back');
-        }
-        
-        if (!registro.agenda_evolucao || registro.agenda_evolucao.toString().trim() === "") {
-            req.flash("error_message", "Este registro não possui evolução para apagar.");
-            return res.redirect('back');
-        }
-        
-        // Registrar auditoria
-        registro.agenda_usuedi = idUsuario;
-        registro.agenda_dataedi = new Date();
-        
-        // Limpar evolução e resetar selo
-        registro.agenda_evolucao = "";
-        registro.agenda_selo = false;
-        
-        await registro.save();
-        
-        console.log(`✅ [APAGAR EVOLUÇÃO] Registro ${idAgenda} | Usuário: ${idUsuario} | Data: ${registro.agenda_dataedi}`);
-        
-        req.flash("success_message", "Evolução apagada com sucesso!");
-        return res.redirect('back');
-        
-    } catch (err) {
-        console.error("❌ Erro ao apagar evolução:", err);
-        req.flash("error_message", "Erro ao apagar evolução. Tente novamente.");
-        return res.redirect('back');
-    }
-},
+    },
 
 
     carregaAgendaPessoalSemanal(req, res) {
@@ -12519,7 +12520,7 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
         }
     },
     
-    agendaFaltaDiaFill(req,res){
+    agendaFaltaDiaFill_old(req,res){
         let flash = new Resposta();
         let resultado;
         console.log("req.body.agendaCateg: "+req.body.agendaCateg)
@@ -12544,6 +12545,46 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
             this.carregaCadFaltas(req,res,flash);
         }
         
+    },
+    
+    async agendaFaltaDiaFill (req,res){ // 👈 Adicionado async
+        let flash = new Resposta();
+        
+        // 👇 Usamos variáveis separadas para não perder o retorno da primeira função
+        let resultadoAgenda = "true";
+        let resultadoAtend = "true";
+        
+        console.log("req.body.agendaCateg: "+req.body.agendaCateg)
+        
+        try {
+            if (req.body.agendaCateg == "Feriado"){
+                resultadoAgenda = await agendaClass.agendaFeriado(req,res);
+                resultadoAtend = await atendClass.atendFeriadoDia(req,res);
+            } else if (req.body.agendaCateg == "Falta Absoluta"){
+                resultadoAgenda = await agendaClass.agendaFaltaDia(req,res);
+                resultadoAtend = await atendClass.atendFaltaDia(req,res);
+            } else {
+                resultadoAgenda = await agendaClass.agendaFaltaDia(req,res);
+                resultadoAtend = await atendClass.atendFaltaDia(req,res);
+            }
+            
+            // 👇 Verifica se ambas as funções retornaram "true"
+            if (resultadoAgenda === "true" && resultadoAtend === "true") {
+                flash.sucesso = "true"
+                flash.texto = "Cadastro de faltas realizados!"
+                this.carregaCadFaltas(req,res,flash);
+            } else {
+                flash.sucesso = "false"
+                flash.texto = "Erro ao realizar faltas."
+                this.carregaCadFaltas(req,res,flash);
+            }
+        } catch (err) {
+            // 👇 Se der qualquer erro no await, cai aqui e mostra na tela
+            console.error("❌ Erro em agendaFaltaDiaFill:", err);
+            flash.sucesso = "false"
+            flash.texto = "Erro ao realizar faltas: " + err.message;
+            this.carregaCadFaltas(req,res,flash);
+        }
     },
     listaPlansubsfixoVictor(req, res) {
         let db = req.cookies['preferredDb'];
