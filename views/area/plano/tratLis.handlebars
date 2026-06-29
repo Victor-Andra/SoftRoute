@@ -727,17 +727,17 @@
 															{{else}}&nbsp;{{/if}}
 														</td>
 														<td>
-															<div class="action-buttons" style="display: flex; justify-content: center; gap: 8px;">
+															<div class="action-buttons" >
 																<a class="green" href="/menu/area/plano/edi/{{_id}}" title="Editar">
 																	<i class="ace-icon fa fa-search bigger-130"></i>
 																</a>
-																<div>
+																
 																<!-- Botão de deletar com modal -->
 																<a class="red cursor-pointer" title="Deletar" 
 																   onclick="abreModalDeletar('{{_id}}', '{{#each ../benes}}{{#ifEqual this._id ../trat_beneid}}{{bene_nome}}{{/ifEqual}}{{/each}}')">
 																	<i class="ace-icon fa fa-trash bigger-130"></i>
 																</a>
-																</div>
+																
 																<a class="pink" href="/menu/area/plano/imp/{{_id}}" title="Imprimir">
 																	<i class="ace-icon fa fa-file-pdf-o bigger-130"></i>
 																</a>
