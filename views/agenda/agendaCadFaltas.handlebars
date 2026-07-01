@@ -18,11 +18,13 @@
 				let tipo = document.getElementById("agendaCateg").value;
 				if (tipo == "Feriado"){
 					document.getElementById("divBeneficiario").style = "display:none";
-					document.getElementById("divFalta").style = "display:none";
+					document.getElementById("lblFaltaDo").style = "display:none";
+					document.getElementById("divFaltaDo").style = "display:none";
 					document.getElementById("divOrigem").style = "display:none";
 				} else {
 					document.getElementById("divBeneficiario").style = "display:''";
-					document.getElementById("divFalta").style = "display:''";
+					document.getElementById("lblFaltaDo").style = "display:''";
+					document.getElementById("divFaltaDo").style = "display:''";
 					document.getElementById("divOrigem").style = "display:''";
 				}
 			}
@@ -140,8 +142,8 @@
 																</select>
 															</div>
 														</div>
-														<label>Falta do:</label>
-														<div class="form-group">
+														<label id="lblFaltaDo">Falta do:</label>
+														<div id="divFaltaDo" class="form-group">
 															<div class="col-sm-6">
 																<input id="agendaFaltaId" name="agendaFaltaId" class="hidden" value="-" />
 																<select id="agendaAlvoFalta" name="agendaAlvoFalta" class="chosen-select" data-placeholder="Escolha..." onchange="javascript:CarregaIdFalta();">

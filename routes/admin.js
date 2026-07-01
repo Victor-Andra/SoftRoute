@@ -659,6 +659,8 @@ async function buscarEvolucoesPendentesMes(db, idTerapeuta) {
                 continue;
             }
 
+            if (reg.agenda_usuid?.toString() !== String(idTerapeuta)) continue;
+
             contadorPendentes++;
         }
 
@@ -866,54 +868,84 @@ async function buscarEvolucoesFaltantes(db, idTerapeuta, benesFull, salas, terap
     const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
     
     // Intervalo de 15 dias para trás
-    const hoje = new Date();
-    hoje.setHours(23, 59, 59, 999);
-    const quinzeDiasAtras = new Date();
-    quinzeDiasAtras.setDate(hoje.getDate() - 15);
-    quinzeDiasAtras.setHours(0, 0, 0, 0);
+    var hoje = new Date();
+    var dataIsoIni = new Date(Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), 1, 0, 0, 0, 0));
     
-    const dataIsoIni = fncGeral.getDateToIsostring(quinzeDiasAtras);
-    const dataIsoFim = fncGeral.getDateToIsostring(hoje);
+    // ✅ AJUSTE: fimMes é HOJE (não mais o último dia do mês)
+    var dataIsoFim = new Date(Date.UTC(hoje.getUTCFullYear(), hoje.getUTCMonth(), hoje.getUTCDate(), 23, 59, 59, 999));
     
     console.log("\n🔍 [buscarEvolucoesFaltantes] Buscando últimos 15 dias...");
     console.log(`   📆 Período: ${dataIsoIni} até ${dataIsoFim}`);
     
-    // 1️⃣ Buscar agendamentos do terapeuta no período
-    const agendasRaw = await Agenda.find({
-        agenda_data: { $gte: dataIsoIni, $lte: dataIsoFim },
-        agenda_usuid: mongoose.Types.ObjectId(idTerapeuta),
-        agenda_temp: false  // apenas os "pais" (registros originais)
-    }).lean();
-    
-    console.log(`   📦 Agendas brutas encontradas: ${agendasRaw.length}`);
-    
-    // 2️⃣ Buscar possíveis filhos (substituições) que apontam para essas agendas
-    const idsPais = agendasRaw.map(a => a._id);
-    const filhosRaw = idsPais.length > 0 
-        ? await Agenda.find({ agenda_tempId: { $in: idsPais } }).lean()
-        : [];
-    
-    console.log(`   🔗 Filhos (substituições) encontrados: ${filhosRaw.length}`);
-    
-    // 3️⃣ Montar mapa de filhos por pai
-    const mapaFilhos = new Map();
-    filhosRaw.forEach(f => {
-        const tempId = "" + f.agenda_tempId;
-        if (!mapaFilhos.has(tempId)) mapaFilhos.set(tempId, []);
-        mapaFilhos.get(tempId).push(f);
-    });
-    
-    // 4️⃣ Helper: normalizar boolean
-    const normalizeBoolean = (value) => {
-        if (typeof value === "boolean") return value;
-        if (typeof value === "string") return value.toLowerCase() === "true";
-        return false;
-    };
+    // 1️⃣ Buscar agendamentos PAIS do período (agenda_temp: false)
+        var agendasRaw = await Agenda.find({
+            agenda_data: { $gte: dataIsoIni, $lte: dataIsoFim },
+            agenda_usuid: mongoose.Types.ObjectId(idTerapeuta),
+            agenda_temp: false  // Apenas pais
+        }).lean();
+        
+        console.log(`   📦 Pais encontrados no período: ${agendasRaw.length}`);
+        
+        if (agendasRaw.length === 0) {
+            console.log(`   ✅ Evoluções pendentes: 0 (sem agendamentos no período)`);
+            return 0;
+        }
+        
+        // 2️⃣ Buscar filhos (substituições) que apontam para esses pais
+        var idsPais = agendasRaw.map(a => a._id);
+        var filhosRaw = await Agenda.find({
+            //agenda_tempId: { $in: idsPais }
+            $or: [
+                {
+                    agenda_data: { $gte: dataIsoIni, $lte: dataIsoFim },
+                    agenda_usuid: mongoose.Types.ObjectId(idTerapeuta),
+                    agenda_temp: true,
+                    agenda_tempId: {
+                        $nin: idsPais
+                    }
+                },
+                {
+                    agenda_tempId: {
+                        $in: idsPais
+                    }
+                }
+            ]
+        }).lean();
+
+
+        agendasRaw = agendasRaw.filter(
+            agenda => !filhosRaw.some(
+                filho => String(filho.agenda_tempId) === String(agenda._id)
+            )
+        );
+
+        filhosRaw = filhosRaw.filter(f => String(f.agenda_usuid) === String(idTerapeuta));
+        
+        console.log(`   🔗 Filhos (substituições) encontrados: ${filhosRaw.length}`);
+
+        var registros = agendasRaw.concat(filhosRaw);
+
+        function normalizeBoolean(value) {
+            if (typeof value === "boolean") return value;
+            if (typeof value === "string") return value.toLowerCase() === "true";
+            return false;
+        }
     
     // 5️⃣ Processar cada registro aplicando regras de negócio
     const resultado = [];
-    
-    for (const reg of agendasRaw) {
+    console.log("aaaaaaaaaa")
+    console.log("aaaaaaaaaa")
+    console.log("aaaaaaaaaa")
+    console.log("aaaaaaaaaa")
+    console.log("aaaaaaaaaa")
+    console.log("reguistros "+registros.length);
+    console.log("aaaaaaaaaa")
+    console.log("aaaaaaaaaa")
+    console.log("aaaaaaaaaa")
+    console.log("aaaaaaaaaa")
+    console.log("aaaaaaaaaa")
+    console.log("aaaaaaaaaa")
+    for (const reg of registros) {
         // Regra 1: Já foi evoluído? → PULA
         if (normalizeBoolean(reg.agenda_selo)) continue;
         
@@ -921,21 +953,17 @@ async function buscarEvolucoesFaltantes(db, idTerapeuta, benesFull, salas, terap
         const cat = (reg.agenda_categoria || "").toString().trim();
         if (cat === "Falta Absoluta" || cat === "Feriado") continue;
         
-        // Regra 3: Verificar cadeia de substituição
-        const filhos = mapaFilhos.get("" + reg._id) || [];
-        let registroResponsavel = reg; // por padrão, o pai é o responsável
-        
-        if (filhos.length > 0) {
-            // Existe cadeia → o responsável é o ÚLTIMO da cadeia
-            registroResponsavel = filhos[filhos.length - 1];
-        }
-        
         // Regra 4: Só mostra se o terapeuta logado é o responsável atual
-        if (registroResponsavel.agenda_usuid?.toString() !== idTerapeuta) continue;
+        if (reg.agenda_usuid?.toString() !== idTerapeuta) continue;
         
-        // Regra 5: Verificar categoria final (do responsável)
-        const catFinal = (registroResponsavel.agenda_categoria || "").toString().trim();
-        if (catFinal === "Falta Absoluta" || catFinal === "Feriado") continue;
+        if (normalizeBoolean(reg.agenda_selo))
+            continue;
+
+        var categoria = (reg.agenda_categoria || "").trim();
+
+        if (categoria === "Falta Absoluta" ||  categoria === "Feriado") {
+            continue;
+        }
         
         // 6️⃣ Enriquecer com nomes (sala, beneficiário, terapia)
         const dat = new Date(reg.agenda_data);
@@ -959,7 +987,7 @@ async function buscarEvolucoesFaltantes(db, idTerapeuta, benesFull, salas, terap
             bene_apelido: bene?.bene_apelido || bene?.bene_nome || "Beneficiário não encontrado",
             terapia_nomecid: terapia?.terapia_nomecid || "Terapia não encontrada",
             dia_hora_ordenação: chaveOrdem,
-            agenda_categoria: catFinal
+            agenda_categoria: categoria
         });
     }
     

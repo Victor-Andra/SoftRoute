@@ -1500,7 +1500,7 @@ module.exports = {
             seg.setUTCHours(0, 0, 0, 0);  
             
             let sex = new Date(req.body.agendaData);
-            sex.setUTCHours(23, 59, 59, 999);  
+            sex.setUTCHours(23, 59, 59, 999);
 
             console.log("📅 Período feriado:", {
                 ini: fncGeral.getDateToIsostring(seg),
@@ -1508,7 +1508,7 @@ module.exports = {
             });
 
             // 📌 PASSO 3: Buscar registros do dia (apenas pais, não temporários)
-            let busca = { 
+            let busca = {
                 agenda_data: { 
                     $gte: fncGeral.getDateToIsostring(seg), 
                     $lte: fncGeral.getDateToIsostring(sex) 
@@ -1551,6 +1551,26 @@ module.exports = {
 
             // 📌 PASSO 5: Processar cada registro para marcar como feriado
             for (const a of agendaFinal) {
+                const data = new Date(a.agenda_data);
+                const totalMinutos = (data.getUTCHours() * 60) + data.getUTCMinutes();
+
+
+                console.log("req.body.agendaTurnoFalta "+req.body.agendaTurnoFalta)
+                console.log("data.getUTCHours()"+data.getUTCHours())
+                console.log("data.getUTCMinutes()"+data.getUTCMinutes())
+                console.log("totalMinutos"+totalMinutos)
+                console.log("totalminutsogv "+(totalMinutos >= 720))
+                console.log("mfiroenmgo "+(totalMinutos < 720))
+                if (req.body.agendaTurnoFalta == "Manhã" && totalMinutos >= 720) {//12 x 60
+                    console.log("FILHO DA PUTA")
+                    continue;
+                }
+
+                if (req.body.agendaTurnoFalta == "Tarde" && totalMinutos < 720) {//12 x 60
+                    console.log("ARROMBADO")
+                    continue;
+                }
+
                 let agendaS = (a.agenda_tempId && a.agenda_tempId != "undefined") ? "true" : "false";
                 
                 if (agendaS == "true") {

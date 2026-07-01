@@ -7484,7 +7484,10 @@ carregaAgendaPessoalquasela(req, res) {
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
         Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-            Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+
+        var catFinal;
+        var ultimo;
 
         const idTerapeuta = req.cookies['idUsu'];
         let aux = 1;
@@ -7641,6 +7644,7 @@ carregaAgendaPessoalquasela(req, res) {
                             // ========================================================================
                             reg.temEvolucaoIndevida = false;
                             reg.podeApagarEvolucao = false;
+                            catFinal = reg.agenda_categoria  || "";
 
                             if (catFinal === "Falta Absoluta" && 
                                 reg.agenda_evolucao && 
@@ -7659,8 +7663,8 @@ carregaAgendaPessoalquasela(req, res) {
                         
                         // CASO 2: Com cadeia
                         const cadeia = resolverCadeia(reg);
-                        const ultimo = cadeia[cadeia.length - 1];
-                        const catFinal = (ultimo.agenda_categoria || "").toString().trim() || reg.agenda_categoria;
+                        ultimo = cadeia[cadeia.length - 1];
+                        catFinal = (ultimo.agenda_categoria || "").toString().trim() || reg.agenda_categoria;
                         
                         reg.cadeia = {
                             nivel: cadeia.indexOf(reg),
