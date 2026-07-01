@@ -7493,7 +7493,7 @@ carregaAgendaPessoalquasela(req, res) {
         let aux = 1;
         let dtFill, segunda, terca, quarta, quinta, sexta, hoje, hojeCompleto;
 
-        console.log("\n📅 [FASE 1] Definindo data exata");
+        //console.log("\n📅 [FASE 1] Definindo data exata");
         
         let dataFiltro = new Date(req.body.dataFinal + "T00:00:00.000Z");
         if (isNaN(dataFiltro.getTime())) {
@@ -7523,23 +7523,23 @@ carregaAgendaPessoalquasela(req, res) {
         const dataFiltroInput = dataFiltro.toISOString().slice(0, 10);
         const dataFiltroFormatada = `${fncGeral.getDataFMT(dataFiltro)} - ${hojeCompleto}`;
         
-        console.log(`📆 Filtrando: ${inicioDia.toISOString()} até ${fimDia.toISOString()}`);
-        console.log(`📍 Dia: ${dataFiltroFormatada}`);
+        //console.log(`📆 Filtrando: ${inicioDia.toISOString()} até ${fimDia.toISOString()}`);
+        //console.log(`📍 Dia: ${dataFiltroFormatada}`);
 
-        console.log("\n🔍 [FASE 2] Buscando registros do dia");
+        //console.log("\n🔍 [FASE 2] Buscando registros do dia");
         
         const idFiltro = mongoose.Types.ObjectId(idTerapeuta);
         const dataIsoInicio = fncGeral.getDateToIsostring(inicioDia);
         const dataIsoFim = fncGeral.getDateToIsostring(fimDia);
 
-        return Agenda.find({
+        Agenda.find({
             agenda_data: { $gte: dataIsoInicio, $lte: dataIsoFim },
             agenda_usuid: idFiltro
         }, 'agenda_data agenda_usuid agenda_categoria agenda_temp agenda_tempId agenda_salaid agenda_beneid agenda_obs agenda_terapiaid agenda_selo')
         .then((agenda) => {
             // 🔥 CONVERSÃO IMEDIATA PARA OBJETOS SIMPLES
             let agendaObj = JSON.parse(JSON.stringify(agenda));
-            console.log(`📦 Registros brutos: ${agendaObj.length}`);
+            //console.log(`📦 Registros brutos: ${agendaObj.length}`);
             agendaObj.sort((a, b) => new Date(a.agenda_data) - new Date(b.agenda_data));
 
             // 📝 Formatação
@@ -7553,7 +7553,7 @@ carregaAgendaPessoalquasela(req, res) {
 
             // 🔗 Detectar Filhos
             const idsAtuais = agendaObj.map(a => a._id);
-            return Agenda.find({ agenda_tempId: { $in: idsAtuais } }).lean().then((filhosEncontrados) => {
+            Agenda.find({ agenda_tempId: { $in: idsAtuais } }).lean().then((filhosEncontrados) => {
                 const filhosObj = JSON.parse(JSON.stringify(filhosEncontrados));
                 const mapaFilhos = new Map();
                 filhosObj.forEach(f => {
@@ -7569,7 +7569,7 @@ carregaAgendaPessoalquasela(req, res) {
                 agendaObj.forEach(r => idsTerapeutas.add(r.agenda_usuid?.toString()));
                 filhosObj.forEach(f => idsTerapeutas.add(f.agenda_usuid?.toString()));
 
-                return Usuario.find({ _id: { $in: Array.from(idsTerapeutas) } }, 'usuario_nome').lean().then((terapeutasNomes) => {
+                Usuario.find({ _id: { $in: Array.from(idsTerapeutas) } }, 'usuario_nome').lean().then((terapeutasNomes) => {
                     const mapaNomes = {};
                     terapeutasNomes.forEach(t => { mapaNomes[t._id.toString()] = t.usuario_nome; });
 
@@ -7656,7 +7656,7 @@ carregaAgendaPessoalquasela(req, res) {
                                 reg.ui.tooltipTitulo = "⚠️ Evolução Indevida";
                                 reg.ui.tooltipTexto = "Falta Absoluta com evolução registrada.\nClique na borracha para apagar.";
                                 
-                                console.log(`   🚨 [${idx+1}] EVOLUÇÃO INDEVIDA DETECTADA | Bene: ${reg.beneNome} | Evolução: "${reg.agenda_evolucao.substring(0, 30)}..."`);
+                                //console.log(`   🚨 [${idx+1}] EVOLUÇÃO INDEVIDA DETECTADA | Bene: ${reg.beneNome} | Evolução: "${reg.agenda_evolucao.substring(0, 30)}..."`);
                             }
                             return;
                         }
@@ -7737,7 +7737,7 @@ carregaAgendaPessoalquasela(req, res) {
                             temLink: podeEditar
                         };
                         
-                        console.log(`[${idx+1}] 🔗 Cadeia(${cadeia.length}) | Pos: ${isPaiOriginal ? 'PAI' : 'FILHO'} | CatFinal: ${catFinal} | Sub? ${temSubstituicao} | Futura? ${ehDataFutura} | Icone: ${iconeTipo}`);
+                        //console.log(`[${idx+1}] 🔗 Cadeia(${cadeia.length}) | Pos: ${isPaiOriginal ? 'PAI' : 'FILHO'} | CatFinal: ${catFinal} | Sub? ${temSubstituicao} | Futura? ${ehDataFutura} | Icone: ${iconeTipo}`);
                     });
 
                     // 🧹 Remover duplicados
@@ -7761,7 +7761,7 @@ carregaAgendaPessoalquasela(req, res) {
                     // 🎯 Filtrar e enriquecer
                     let agendasParaView = agendaObj.filter(r => r.deveAparecer === true);
                     
-                    return Bene.find().lean().then((benesFull) => {
+                    Bene.find().lean().then((benesFull) => {
                         const benesObj = JSON.parse(JSON.stringify(benesFull));
                         agendasParaView.forEach(reg => {
                             const bene = benesObj.find(b => b._id === reg.agenda_beneid);
@@ -7798,7 +7798,7 @@ carregaAgendaPessoalquasela(req, res) {
                         });
 
                         // 📦 Carregar auxiliares e renderizar
-                        return Promise.all([
+                        Promise.all([
                             Bene.find({ bene_status: "Ativo" }).lean(),
                             Usuario.find({ usuario_status: "Ativo", $or: [{ usuario_funcaoid: "6241030bfbcc51f47c720a0b" }, { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }] }).lean(),
                             Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }).lean(),
@@ -7810,7 +7810,7 @@ carregaAgendaPessoalquasela(req, res) {
                             sala.sort((a,b) => a.sala_nome?.localeCompare(b.sala_nome, 'pt-BR')||0);
                             terapias.sort((a,b) => a.terapia_nome?.localeCompare(b.terapia_nome, 'pt-BR')||0);
 
-                            console.log("\n✅ [SUCESSO] Renderizando view agendaPessoal (modo dia filtrado)");
+                            //console.log("\n✅ [SUCESSO] Renderizando view agendaPessoal (modo dia filtrado)");
                             
                             res.render("agenda/agendaPessoal", {
                                 salas: sala,
@@ -7913,10 +7913,10 @@ carregaAgendaPessoalquasela(req, res) {
         // ========================================================================
         // 📦 FASE 0: Inicialização
         // ========================================================================
-        console.log("=".repeat(80));
-        console.log("🔍 [CARREGA AGENDA PESSOAL SEMANAL] INÍCIO");
-        console.log("👤 Terapeuta:", req.cookies['idUsu']);
-        console.log("=".repeat(80));
+        //console.log("=".repeat(80));
+        //console.log("🔍 [CARREGA AGENDA PESSOAL SEMANAL] INÍCIO");
+        //console.log("👤 Terapeuta:", req.cookies['idUsu']);
+        //console.log("=".repeat(80));
 
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
@@ -7934,7 +7934,7 @@ carregaAgendaPessoalquasela(req, res) {
         // ========================================================================
         // 📅 FASE 1: Definir Semana a partir da data atual (CORRIGIDO)
         // ========================================================================
-        console.log("\n📅 [FASE 1] Definindo período da semana");
+        //console.log("\n📅 [FASE 1] Definindo período da semana");
 
         // ✅ CORREÇÃO: Usar Date.UTC para evitar problemas de fuso horário
         let dataBase = new Date();
@@ -8016,7 +8016,7 @@ carregaAgendaPessoalquasela(req, res) {
         // ========================================================================
         // 🔍 FASE 2: Buscar Registros da Semana
         // ========================================================================
-        console.log("\n🔍 [FASE 2] Buscando registros da semana");
+        //console.log("\n🔍 [FASE 2] Buscando registros da semana");
         
         let idFiltro = mongoose.Types.ObjectId(idTerapeuta);
 
@@ -12573,7 +12573,7 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
             }
             
             // 👇 Verifica se ambas as funções retornaram "true"
-            if (resultadoAgenda === "true" && resultadoAtend === "true") {
+            if ((resultadoAgenda === "true" || resultadoAgenda == true) && (resultadoAtend === "true" || resultadoAtend == true)) {
                 flash.sucesso = "true"
                 flash.texto = "Cadastro de faltas realizados!"
                 this.carregaCadFaltas(req,res,flash);

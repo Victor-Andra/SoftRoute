@@ -747,6 +747,11 @@ module.exports = {
             }
 
             console.log(`📅 Filtrando extras para mês: ${mesAtual + 1}/${anoAtual}`);
+            let dataIni = new Date(anoAtual, mesAtual, 1, 0, 0, 0, 0);
+            let dataFim = new Date(anoAtual, (mesAtual + 1), 1, 23, 59, 59, 0);
+            dataFim.setDate(dataFim.getDate()-1)
+
+            let busca = { atend_atenddata: { $gte : dataIni, $lte:  dataFim } }
 
             // --- Promises para buscar todos os dados necessários ---
             Promise.all([
@@ -764,7 +769,7 @@ module.exports = {
                 Terapia.find(),
                 Conv.find(),
                 Ano.find(),
-                Atend.find() // Todos os atendimentos
+                Atend.find(busca) // Todos os atendimentos
             ])
             .then(([extras, benes, usuarios, horaages, salas, terapias, convs, anos, atends]) => {
                 console.log(`✅ Dados carregados: ${extras.length} extras, ${atends.length} atendimentos`);
@@ -1209,6 +1214,7 @@ module.exports = {
 
             const usuarioId = req.user?._id || req.cookies['idUsu'];
             if (!usuarioId) {
+                console.log("USUARIO NÃO AUTENTICADO!")
                 //req.flash("error_message", "Usuário não autenticado.");
                 //return res.redirect('back');
                 flash.sucesso = "false";
@@ -1223,7 +1229,7 @@ module.exports = {
             const agendaIds = agendamentos.map(ag => ag._id);
             const jaCopiados = await Extra.find({ extra_copiado: { $in: agendaIds } }).select('extra_copiado');
             const jaCopiadosSet = new Set(jaCopiados.map(e => e.extra_copiado.toString()));
-
+console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
             // 🧮 Filtra os novos
             const novosExtras = agendamentos
                 .filter(ag => !jaCopiadosSet.has(ag._id.toString()))

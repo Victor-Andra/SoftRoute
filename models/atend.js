@@ -779,8 +779,16 @@ module.exports = {
             //console.log("turnoFim? "+turnoFim)
         }
         //console.log("req.body.agendaCateg: "+req.body.agendaCateg);
-        if (beneidx == "-" && teraidx == "-") {
+        if (beneidx == "-" && teraidx == "-" && (req.body.agendaData == null || req.body.agendaData == undefined)) {
             resultado = "false";
+        } else if (beneidx == "-" && teraidx == "-") {
+            if (req.body.agendaTurnoFalta == "Manhã"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_atendhora: { $in: horasTurnoManha }};
+            } else if (req.body.agendaTurnoFalta == "Tarde"){
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_atendhora: { $in: horasTurnoTarde }};
+            } else{
+                busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim } };
+            }
         } else if (beneidx != "-" && teraidx == "-") {
             console.log("CERTOP")
             if (req.body.agendaTurnoFalta == "Manhã"){
@@ -795,7 +803,7 @@ module.exports = {
             console.log("falta terapeuta")
             if (req.body.agendaTurnoFalta == "Manhã"){
                 busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_atendhora: { $in: horasTurnoManha } };
-            } else if (req.body.agendaTurnoFalta == "Manhã"){
+            } else if (req.body.agendaTurnoFalta == "Tarde"){
                 busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_atendhora: { $in: horasTurnoTarde } };
             } else{
                 busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx };
@@ -804,7 +812,7 @@ module.exports = {
             console.log("falta de um bene para um terapeuta")
             if (req.body.agendaTurnoFalta == "Manhã"){
                 busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_beneid: beneidx , atend_atendhora: { $in: horasTurnoManha } };
-            } else if (req.body.agendaTurnoFalta == "Manhã"){
+            } else if (req.body.agendaTurnoFalta == "Tarde"){
                 busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_beneid: beneidx , atend_atendhora: { $in: horasTurnoTarde } };
             } else{
                 busca = { atend_atenddata: { $gte : turnoIni, $lte:  turnoFim }, atend_terapeutaid: teraidx , atend_beneid: beneidx };
@@ -840,6 +848,8 @@ module.exports = {
                 retorno = "true";
                 return retorno;
             })
+        } else {
+            return "true";
         }
     }
 };
