@@ -7535,7 +7535,7 @@ carregaAgendaPessoalquasela(req, res) {
         Agenda.find({
             agenda_data: { $gte: dataIsoInicio, $lte: dataIsoFim },
             agenda_usuid: idFiltro
-        }, 'agenda_data agenda_usuid agenda_categoria agenda_temp agenda_tempId agenda_salaid agenda_beneid agenda_obs agenda_terapiaid agenda_selo')
+        }, 'agenda_data agenda_usuid agenda_categoria agenda_temp agenda_tempId agenda_salaid agenda_beneid agenda_obs agenda_terapiaid agenda_selo agenda_evolucao')
         .then((agenda) => {
             // 🔥 CONVERSÃO IMEDIATA PARA OBJETOS SIMPLES
             let agendaObj = JSON.parse(JSON.stringify(agenda));

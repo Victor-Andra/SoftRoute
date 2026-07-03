@@ -671,6 +671,8 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
                                         <tr>
                                             <th></th>
                                             <th>Lote</th>
+                                            <th>Beneficiário</th>
+                                            <th>Convênio</th>
                                             <th>Status</th>
                                             <th>Qt. Atend.</th>
                                             <th>Valor Total</th>
@@ -690,6 +692,12 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
                                                     </span>
                                                 </td>
                                                 <td>
+                                                    <span class="badge badge-danger">{{beneNome}}</span>
+                                                </td>
+                                                  <td>
+                                                    <span class="badge badge-danger">{{convNome}}</span>
+                                                </td>
+                                                <td>
                                                     {{#ifEqual loteStatus "Aberto"}}
                                                         <span class="badge badge-danger">{{loteStatus}}</span>
                                                     {{else}}
@@ -706,7 +714,7 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
                                                 <td>{{loteUsucadNome}}</td>
                                             </tr>
                                             <tr class="detalhe-linha">
-                                                <td colspan="7">
+                                                <td colspan="9">
                                                     <div style="padding:15px;">
                                                         <h5>
                                                             Atendimentos do Lote "{{loteNum}}" ({{qtAtendimentos}} sessões)
@@ -768,7 +776,7 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
                                                                     <td>{{terapeutaNome}}</td>
                                                                 </tr>
                                                                 <tr class="detalhe-linha">
-                                                                    <td colspan="7">
+                                                                    <td colspan="9">
                                                                     <div style="padding:15px; background:#fff3cd; border-left: 3px solid #ffc107;">
                                                                         <h5>
                                                                         <i class="ace-icon fa fa-exclamation-triangle text-orange"></i> 
@@ -818,7 +826,7 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
                                                                 </tr>
                                                                 {{else}}
                                                                 <tr>
-                                                                    <td colspan="7" style="text-align:center; padding:25px; color:#28a745; font-weight:bold; background-color:#f8fdf8; border-top: 2px solid #28a745;">
+                                                                    <td colspan="9" style="text-align:center; padding:25px; color:#28a745; font-weight:bold; background-color:#f8fdf8; border-top: 2px solid #28a745;">
                                                                     <i class="ace-icon fa fa-check-circle bigger-150"></i><br><br>
                                                                     ✅ Todos os atendimentos válidos já estão vinculados a lotes!<br>
                                                                     <small style="color:#6c757d; font-weight:normal;">Nenhum atendimento órfão encontrado para este filtro</small>
@@ -835,7 +843,7 @@ BARRA DE PESQUISA - CLASSE SEPARADA (CORRIGIDA)
                                         <!-- ATENDIMENTOS ÓRFÃOS (sem lote) -->
                                         {{#if lotesConsolidados}}
                                             <tr>
-                                                <td colspan="7" style="background-color:#eef7ff; font-weight:bold; text-align:center; padding:15px;">
+                                                <td colspan="9" style="background-color:#eef7ff; font-weight:bold; text-align:center; padding:15px;">
                                                     ⚠️ ATENDIMENTOS SEM LOTE (ÓRFÃOS DE LOTE)
                                                 </td>
                                             </tr>
