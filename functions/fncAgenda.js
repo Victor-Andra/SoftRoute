@@ -14238,22 +14238,22 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
         
         if (!registro) {
             req.flash("error_message", "Registro não encontrado.");
-            return res.redirect('back'); // ← CORRIGIDO
+            return res.redirect('/menu/agenda/lisPessoal');
         }
         
         if (registro.agenda_usuid.toString() !== idUsuario) {
             req.flash("error_message", "Você só pode apagar evoluções dos seus próprios registros.");
-            return res.redirect('back'); // ← CORRIGIDO
+            return res.redirect('/menu/agenda/lisPessoal');
         }
         
         if (registro.agenda_categoria !== "Falta Absoluta") {
             req.flash("error_message", "Esta ação só é permitida para registros de Falta Absoluta.");
-            return res.redirect('back'); // ← CORRIGIDO
+            return res.redirect('/menu/agenda/lisPessoal');
         }
         
         if (!registro.agenda_evolucao || registro.agenda_evolucao.toString().trim() === "") {
             req.flash("error_message", "Este registro não possui evolução para apagar.");
-            return res.redirect('back'); // ← CORRIGIDO
+            return res.redirect('/menu/agenda/lisPessoal');
         }
         
         // Registrar auditoria
@@ -14269,12 +14269,12 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
         console.log(`✅ [APAGAR EVOLUÇÃO] Registro ${idAgenda} | Usuário: ${idUsuario} | Data: ${registro.agenda_dataedi}`);
         
         req.flash("success_message", "Evolução apagada com sucesso!");
-        return res.redirect('back'); // ← CORRIGIDO
+        return res.redirect('/menu/agenda/lisPessoal');
         
     } catch (err) {
         console.error("❌ Erro ao apagar evolução:", err);
         req.flash("error_message", "Erro ao apagar evolução. Tente novamente.");
-        return res.redirect('back'); // ← CORRIGIDO
+        return res.redirect('/menu/agenda/lisPessoal');
     }
 },
     

@@ -2539,9 +2539,7 @@ router.get('/agenda/lisPessoal', fncGeral.IsAuthenticated, (req,res) =>{//direci
     fncAgenda.carregaAgendaPessoal(req, res);
 })
 
-router.get('/agenda/apagarEvolucaoagendapessoal/:id', fncGeral.IsAuthenticated, (req, res) => {
-    fncAgenda.apagarEvolucaoIndevidaagendapessoal(req, res);
-})
+
 
 router.get('/agenda/apagarEvolucaobranco/:id', fncGeral.IsAuthenticated, (req, res) => {
     fncAgenda.apagarEvolucaoIndevidabranco(req, res);
@@ -2551,6 +2549,10 @@ router.get('/agenda/apagarEvolucaobranco/:id', fncGeral.IsAuthenticated, (req, r
 router.post('/agenda/filPessoalDia', fncGeral.IsAuthenticated, (req,res) => {
     fncAgenda.filtraAgendaPessoalDia(req, res);
 });
+
+router.get('/agenda/apagarEvolucaoagendapessoal/:id', fncGeral.IsAuthenticated, (req, res) => {
+    fncAgenda.apagarEvolucaoIndevidaagendapessoal(req, res);
+})
 
 router.post('/agenda/filPessoal', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     fncAgenda.filtraAgendaPessoal(req, res);
