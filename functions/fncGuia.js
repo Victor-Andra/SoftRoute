@@ -43,7 +43,8 @@ class FiltroEvoatend{
         mesAtend,
         tipoPessoa,
         atendTerapeuta,
-        atendBeneficiario
+        atendBeneficiario,
+        atendConvenio  // ✅ ADICIONE
         ){
         this.tipoData = tipoData,
         this.dataFinal = dataFinal,
@@ -51,7 +52,8 @@ class FiltroEvoatend{
         this.mesAtend = mesAtend,
         this.tipoPessoa = tipoPessoa,
         this.atendTerapeuta = atendTerapeuta,
-        this.atendBeneficiario = atendBeneficiario
+        this.atendBeneficiario = atendBeneficiario,
+        this.atendConvenio = atendConvenio  // ✅ ADICIONE
     }
 }
 
@@ -121,7 +123,8 @@ module.exports = {FiltroEvoatend,
                                         filtroData: "",
                                         filtroTipoPessoa: "Geral",
                                         filtroBeneficiario: "",
-                                        filtroTerapeuta: ""
+                                        filtroTerapeuta: "",
+                                        filtroConvenio: ""  // ✅ ADICIONE ESTA LINHA
                                     });
                                 });
                             });
@@ -162,10 +165,12 @@ module.exports = {FiltroEvoatend,
         const dataFil = req.body.dataFil;
         const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
         const atendBeneficiario = req.body.atendBeneficiario;
-        const atendTerapeuta = req.body.atendTerapeuta; // ← ADICIONE ESTA LINHA
+        const atendTerapeuta = req.body.atendTerapeuta; 
+        const atendConvenio = req.body.atendConvenio;  // ✅ ADICIONE ESTA LINHA
 
         const filtroTela = {
             tipoData: req.body.tipoData || "Ano/Mes",
+            
             // ✅ Corrige a prioridade dos campos de data
             dataFinal: req.body.dataFinal || "",
             dataFil: req.body.dataFil || "",
@@ -174,7 +179,9 @@ module.exports = {FiltroEvoatend,
             tipoPessoa: req.body.atendTipoPessoa || "Geral",
             atendTerapeuta: req.body.atendTerapeuta || "",
             atendBeneficiario: req.body.atendBeneficiario || "",
-            // ✅ Verifica se o campo existe na view antes de usar
+            atendConvenio: req.body.atendConvenio || "",  // ✅ ADICIONE ESTA LINHA
+            
+            // Verifica se o campo existe na view antes de usar
             atendConcluido: req.body.AtendConcluido || "Todos", 
             atendSelo: req.body.atendSelo || "Todos"
         };
@@ -200,13 +207,16 @@ module.exports = {FiltroEvoatend,
                 break;
         }
 
-        // === QUERY BASE ===
-        let agendaQuery = { agenda_data: { $gte: dataIni, $lte: dataFim }, agenda_categoria: { $nin: ["Extra", "Reuniao", "Pais"] } };
+        // === ✅ QUERY BASE ===
+        let agendaQuery = { agenda_data: { $gte: dataIni, $lte: dataFim }, agenda_categoria: { $nin: ["Extra", "Reuniao", "Pais", "Glosa"] } };
         if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
             agendaQuery.agenda_beneid = atendBeneficiario;
         }
         else if (atendTipoPessoa === "Terapeuta" && atendTerapeuta) {
             agendaQuery.agenda_usuid = atendTerapeuta; // Confirme se o campo é agenda_usuid no seu schema
+        }
+        else if (atendTipoPessoa === "Convênio" && atendConvenio) {  // ✅ ADICIONE ESTE BLOCO
+            agendaQuery.agenda_convid = atendConvenio;
         }
 
         // === BUSCAR AGENDAS E DADOS COMPLEMENTARES ===
@@ -323,6 +333,7 @@ module.exports = {FiltroEvoatend,
                         filtroData: dataFil,
                         filtroTipoPessoa: atendTipoPessoa,
                         filtroBeneficiario: atendBeneficiario,
+                        filtroConvenio: atendConvenio,  // ✅ ADICIONE ESTA LINHA
                         estatisticas: estatisticas,
                         filtroTela: filtroTela
                     });

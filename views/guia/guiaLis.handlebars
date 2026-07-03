@@ -488,20 +488,23 @@
 
 		// ✅ CORRIGIDO: Usa style.display em vez de atributo hidden
 		function trocaFilpessoa() {
-			const tipo = document.getElementById("atendTipoPessoa").value;
-			
-			// Oculta tudo
-			document.getElementById("divAtendBeneficiario").classList.add('hidden-div');
-			document.getElementById("divAtendTerapeuta").classList.add('hidden-div');
-			
-			// Mostra conforme seleção
-			if(tipo == "Beneficiario"){
-				document.getElementById("divAtendBeneficiario").classList.remove('hidden-div');
-			} else if(tipo == "Terapeuta"){
-				document.getElementById("divAtendTerapeuta").classList.remove('hidden-div');
+			const tipo = $('#atendTipoPessoa').val();
+
+			// Oculta todos primeiro
+			$('#divAtendBeneficiario').addClass('hidden-div');
+			$('#divAtendTerapeuta').addClass('hidden-div');
+			$('#divAtendConvenio').addClass('hidden-div');  // ✅ Adicionado
+
+			// Mostra apenas o relevante
+			if (tipo === 'Geral') {
+				// Todos ocultos (já feito acima)
+			} else if (tipo === 'Beneficiario') {
+				$('#divAtendBeneficiario').removeClass('hidden-div');
+			} else if (tipo === 'Terapeuta') {
+				$('#divAtendTerapeuta').removeClass('hidden-div');
+			} else if (tipo === 'Convênio') {  // ✅ Adicionado
+				$('#divAtendConvenio').removeClass('hidden-div');
 			}
-			
-			console.log('[DEBUG] Tipo Pessoa:', tipo);
 		}
 
 		// ✅ CORRIGIDO: Carrega estado inicial com visibilidade correta
@@ -860,6 +863,7 @@
 								<input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
 								<input id="atendTerapeutaFil" value="{{atendTerapeuta.atendTerapeuta}}" />
 								<input id="atendBeneficiarioFil" value="{{atendBeneficiario.atendBeneficiario}}" />
+								<input id="atendConvenioFil" value="{{filtroTela.atendConvenio}}" />  <!-- ✅ ADICIONE -->
 								<input id="dataFinalFil" value="{{dataFinal.dataFinal}}" />
 								<input id="mesAtendFil" value="{{mesAtend.mesAtend}}" />
 								<input id="anoAtendFil" value="{{anoAtend.anoAtend}}" />
@@ -926,6 +930,7 @@
 								<input class="hidden" id="atendBeneficiarioEdi" name="atendBeneficiarioEdi" value="{{filtroTela.atendBeneficiario}}" />
 								<input class="hidden" id="atendTerapeutaEdi" name="atendTerapeutaEdi" value="{{filtroTela.atendTerapeuta}}" />
 								<input class="hidden" id="idEdi" name="idEdi" value="{{filtroTela.atendTerapeuta}}" />
+								<input class="hidden" id="atendConvenioEdi" name="atendConvenioEdi" value="{{filtroTela.atendConvenio}}" />  <!-- ✅ ADICIONE -->
 							</div>
 							
 							<!-- 🔹 Tipo de Pessoa -->
@@ -935,6 +940,7 @@
 									<option value="Geral" {{#ifEqual filtroTipoPessoa "Geral"}}selected{{/ifEqual}}>Geral</option>
 									<option value="Beneficiario" {{#ifEqual filtroTipoPessoa "Beneficiario"}}selected{{/ifEqual}}>Beneficiário</option>
 									<option value="Terapeuta" {{#ifEqual filtroTipoPessoa "Terapeuta"}}selected{{/ifEqual}}>Terapeuta</option>
+									<option value="Convênio" {{#ifEqual filtroTipoPessoa "Convênio"}}selected{{/ifEqual}}>Convênio</option>
 								</select>
 							</div>
 							
@@ -961,6 +967,20 @@
 										<option value="{{this._id}}" 
 											{{#ifEqual ../filtroTerapeuta this._id}}selected{{/ifEqual}}>
 											{{this.usuario_nome}}
+										</option>
+									{{/each}}
+								</select>
+							</div>
+
+							<!-- 🔹 Convênio - visível apenas quando tipoPessoa = "Convênio" -->
+							<div id="divAtendConvenio" class="form-group{{#ifEqual filtroTipoPessoa "Convênio"}}{{else}} hidden-div{{/ifEqual}}">
+								<label>Convênio</label>
+								<select name="atendConvenio" id="atendConvenio" class="form-control select" data-placeholder="Escolha...">
+									<option value=""></option>
+									{{#each convs}}
+										<option value="{{this._id}}" 
+											{{#ifEqual ../filtroConvenio this._id}}selected{{/ifEqual}}>
+											{{this.conv_nome}}  <!-- ✅ Corrigido -->
 										</option>
 									{{/each}}
 								</select>

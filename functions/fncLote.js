@@ -43,7 +43,8 @@ class FiltroEvoatend{
         mesAtend,
         tipoPessoa,
         atendTerapeuta,
-        atendBeneficiario
+        atendBeneficiario,
+        
         ){
         this.tipoData = tipoData,
         this.dataFinal = dataFinal,
@@ -59,6 +60,9 @@ module.exports = {FiltroEvoatend,
 
   
     filtraLotelis(req, res, resposta) {
+        console.log("🚨🚨🚨 ENTROU NA FUNÇÃO filtraLotelis 🚨🚨🚨");
+        console.log("📦 req.body completo:", req.body);
+        
         let db = req.cookies['preferredDb'];
         const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
@@ -84,16 +88,20 @@ module.exports = {FiltroEvoatend,
         const dataFil = req.body.dataFil;
         const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
         const atendBeneficiario = req.body.atendBeneficiario;
+        const atendTerapeuta = req.body.atendTerapeuta;  // ✅ ADICIONE ESTA LINHA
+        const atendConvenio = req.body.atendConvenio;
+        let dataIni, dataFim;
 
-        console.log("🔍 [INPUTS DO FORMULÁRIO]");
-        console.log("→ tipoData:", tipoData);
-        console.log("→ anoAtend:", anoAtend);
-        console.log("→ mesAtend:", mesAtend);
-        console.log("→ dataFil:", dataFil);
+        
+        // ✅ LOGS DE DEBUG - ADICIONE ESTES LOGS
+        console.log("🔍 [DADOS RECEBIDOS DO FORMULÁRIO]");
         console.log("→ atendTipoPessoa:", atendTipoPessoa);
         console.log("→ atendBeneficiario:", atendBeneficiario);
+        console.log("→ atendTerapeuta:", atendTerapeuta);
+        console.log("→ atendConvenio:", atendConvenio);
+        console.log("→ Tipo de atendTipoPessoa:", typeof atendTipoPessoa);
+        console.log("→ atendTipoPessoa === 'Convênio':", atendTipoPessoa === "Convênio");
 
-        let dataIni, dataFim;
 
         if (tipoData === "Ano/Mes") {
             const ano = parseInt(anoAtend);
@@ -127,14 +135,22 @@ module.exports = {FiltroEvoatend,
         console.log("→ dataFim (ISO):", dataFim);
 
         // Montar critérios de busca na Agenda
-        let agendaQuery = {
-            agenda_data: { $gte: dataIni, $lte: dataFim }
-        };
+            let agendaQuery = {
+                agenda_data: { $gte: dataIni, $lte: dataFim }
+            };
 
-        if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
-            agendaQuery.agenda_beneid = atendBeneficiario;
-            console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
-        }
+            if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
+                agendaQuery.agenda_beneid = atendBeneficiario;
+                console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
+            }
+            else if (atendTipoPessoa === "Terapeuta" && req.body.atendTerapeuta) {  // ✅ ADICIONE ESTA CONDIÇÃO
+                agendaQuery.agenda_usuid = req.body.atendTerapeuta;
+                console.log("👨‍⚕️ Aplicando filtro por terapeuta ID:", req.body.atendTerapeuta);
+            }
+            else if (atendTipoPessoa === "Convênio" && atendConvenio) {  // ✅ ADICIONE ESTA CONDIÇÃO
+                agendaQuery.agenda_convid = atendConvenio;
+                console.log("🏥 Aplicando filtro por convênio ID:", atendConvenio);
+            }
 
         console.log("🔎 [QUERY FINAL PARA AGENDA]");
         console.log(agendaQuery);
@@ -227,7 +243,8 @@ module.exports = {FiltroEvoatend,
                                                                         filtroMes: mesAtend,
                                                                         filtroData: dataFil,
                                                                         filtroTipoPessoa: atendTipoPessoa,
-                                                                        filtroBeneficiario: atendBeneficiario
+                                                                        filtroBeneficiario: atendBeneficiario,
+                                                                        filtroConvenio: atendConvenio  // ✅ ADICIONE ESTA LINHA
                                                                     });
                                                                 });
                                                         });
@@ -307,7 +324,8 @@ module.exports = {FiltroEvoatend,
                                         filtroMes: mesAtual,
                                         filtroData: "",
                                         filtroTipoPessoa: "Geral",
-                                        filtroBeneficiario: ""
+                                        filtroBeneficiario: "",
+                                        filtroConvenio: ""  // ✅ ADICIONE ESTA LINHA
                                     });
                                 });
                             });

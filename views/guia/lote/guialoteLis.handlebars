@@ -69,6 +69,9 @@
 		.count-card.danger {       background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); }   /* Laranja Escuro - Cancel c/ Evol */
 		.count-card.orphan {       background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%); }   /* Cinza - Órfãos */
 		.count-card.success {      background: linear-gradient(135deg, #1abc9c 0%, #16a085 100%); }   /* Verde Água - Completo */
+		.count-card.guia-unicas {  background: linear-gradient(135deg, #16a085 0%, #1abc9c 100%); }   /* Azul Água
+		.count-card.loteqt {       background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); }   /* Vermelho - Cancelados */
+		.count-card.lotevalor {    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); }   /* Azul - Válidos */
 		.count-header {
 			display: flex;
 			align-items: center;
@@ -628,37 +631,27 @@ SELECT2 - ESTILOS GERAIS
 			console.log('[DEBUG] Tipo Data:', tipo, '| isAnoMes:', isAnoMes);
 		}
 		function trocaFilpessoa() {
-			let fillTipopessoa = document.getElementById("atendTipoPessoa").value;
-			if(fillTipopessoa == "Geral"){
-				document.getElementById("divAtendBeneficiario").hidden = true;
-				document.getElementById("divAtendTerapeuta").hidden = true;
-			} else if(fillTipopessoa == "Beneficiario"){
-				document.getElementById("divAtendBeneficiario").hidden = false;
-				document.getElementById("divAtendTerapeuta").hidden = true;
-			} else {
-				document.getElementById("divAtendBeneficiario").hidden = true;
-				document.getElementById("divAtendTerapeuta").hidden = false;
+			const tipo = document.getElementById("atendTipoPessoa").value;
+			
+			// Oculta TODOS primeiro (usando a classe CSS correta)
+			document.getElementById("divAtendBeneficiario").classList.add('hidden-div');
+			document.getElementById("divAtendTerapeuta").classList.add('hidden-div');
+			document.getElementById("divAtendConvenio").classList.add('hidden-div');
+			
+			// Mostra apenas o relevante
+			if (tipo === "Beneficiario") {
+				document.getElementById("divAtendBeneficiario").classList.remove('hidden-div');
+			} else if (tipo === "Terapeuta") {
+				document.getElementById("divAtendTerapeuta").classList.remove('hidden-div');
+			} else if (tipo === "Convênio") {
+				document.getElementById("divAtendConvenio").classList.remove('hidden-div');
 			}
+			// Se for "Geral", todos permanecem ocultos
 		}
 
-		function trocaFilpessoa() {
-			const tipo = $('#atendTipoPessoa').val();
+		
 
-			if (tipo === 'Geral') {
-				$('#divAtendBeneficiario').addClass('hidden-div');
-				$('#divAtendTerapeuta').addClass('hidden-div');
-
-			} else if (tipo === 'Beneficiario') {
-				$('#divAtendBeneficiario').removeClass('hidden-div');
-				$('#divAtendTerapeuta').addClass('hidden-div');
-
-			} else if (tipo === 'Terapeuta') {
-				$('#divAtendBeneficiario').addClass('hidden-div');
-				$('#divAtendTerapeuta').removeClass('hidden-div');
-			}
-		}
-
-		// ✅ CORRIGIDO: Carrega estado inicial com visibilidade correta
+		// ✅ Alterado: Carrega estado inicial com visibilidade correta
 		function carregaBody(){
 			// Define valores padrão
 			if (!document.getElementById("tipoData").value) {
@@ -667,6 +660,7 @@ SELECT2 - ESTILOS GERAIS
 			if (!document.getElementById("atendTipoPessoa").value) {
 				document.getElementById("atendTipoPessoa").value = "Geral";
 			}
+			
 			
 			// Aplica visibilidade inicial
 			trocaFiltroData();
@@ -685,14 +679,16 @@ SELECT2 - ESTILOS GERAIS
 					document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value.split('T')[0] || "";
 				}
 
-				// Tipo Pessoa
+				// ✅ Tipo Pessoa
 				document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value || "Geral";
 				trocaFilpessoa();
-				
+
 				if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
 					document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value || "766f69643132333435366964";
 				} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
 					document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value || "766f69643132333435366964";
+				} else if (document.getElementById("atendTipoPessoa").value == "Convênio") {  // ✅ ADICIONE ESTE BLOCO
+					document.getElementById("atendConvenio").value = document.getElementById("atendConvenioFil").value || "";
 				}
 			}
 			
@@ -1112,7 +1108,9 @@ SELECT2 - ESTILOS GERAIS
 								<input id="tipoDataFil" value="{{tipoData.tipoData}}" />
 								<input id="dataIniFil" value="{{dataIni.dataIni}}" />
 								<input id="dataFimFil" value="{{dataFim.dataFim}}" />
+								<input id="atendConvenioFil" value="{{filtroTela.atendConvenio}}" />  <!-- ✅ ADICIONE -->
 								<input id="idsChecked" value="" />
+								
 							</div>
 							
 							<!-- 🔹 Tipo de Filtro -->
@@ -1180,6 +1178,7 @@ SELECT2 - ESTILOS GERAIS
 									<option value="Geral" {{#ifEqual filtroTipoPessoa "Geral"}}selected{{/ifEqual}}>Geral</option>
 									<option value="Beneficiario" {{#ifEqual filtroTipoPessoa "Beneficiario"}}selected{{/ifEqual}}>Beneficiário</option>
 									<option value="Terapeuta" {{#ifEqual filtroTipoPessoa "Terapeuta"}}selected{{/ifEqual}}>Terapeuta</option>
+								    <option value="Convênio" {{#ifEqual filtroTipoPessoa "Convênio"}}selected{{/ifEqual}}>Convênio</option>
 								</select>
 							</div>
 							
@@ -1206,6 +1205,20 @@ SELECT2 - ESTILOS GERAIS
 										<option value="{{this._id}}" 
 											{{#ifEqual ../filtroTerapeuta this._id}}selected{{/ifEqual}}>
 											{{this.usuario_nome}}
+										</option>
+									{{/each}}
+								</select>
+							</div>
+
+							<!-- 🔹 Convênio - visível apenas quando tipoPessoa = "Convênio" -->
+							<div id="divAtendConvenio" class="form-group{{#ifEqual filtroTipoPessoa "Convênio"}}{{else}} hidden-div{{/ifEqual}}">
+								<label>Convênio</label>
+								<select name="atendConvenio" id="atendConvenio" class="form-control select" data-placeholder="Escolha...">
+									<option value=""></option>
+									{{#each convs}}
+										<option value="{{this._id}}" 
+											{{#ifEqual ../filtroConvenio this._id}}selected{{/ifEqual}}>
+											{{this.conv_nome}}  <!-- ✅ Corrigido -->
 										</option>
 									{{/each}}
 								</select>
@@ -1270,13 +1283,13 @@ SELECT2 - ESTILOS GERAIS
 								</div>
 							</div>
 							<!-- ============================================
-							BARRA DE ESTATÍSTICAS DOS LOTES
+							BARRA DE ESTATÍSTICAS DOS GUIAS
 							============================================ -->
 							<div class="widget-box">
 								<div class="widget-header">
 									<h4 class="widget-title">
 										<i class="ace-icon fa fa-bar-chart"></i>
-										Estatísticas dos Lotes de Guias
+										Estatísticas das Guias
 										<small class="text-muted">({{filtroTipo}}: {{#ifEqual filtroTipo "Ano/Mes"}}{{filtroAno}}/{{filtroMes}}{{else}}{{filtroData}}{{/ifEqual}})</small>
 									</h4>
 								</div>
@@ -1363,8 +1376,27 @@ SELECT2 - ESTILOS GERAIS
 													<div class="count-value">{{estatisticas.qtva}}</div>
 												</div>
 											</div>
+											
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- ============================================
+							BARRA DE ESTATÍSTICAS DOS LOTES
+							============================================ -->
+							<div class="widget-box">
+								<div class="widget-header">
+									<h4 class="widget-title">
+										<i class="ace-icon fa fa-bar-chart"></i>
+										Estatísticas dos Lotes
+										<small class="text-muted">({{filtroTipo}}: {{#ifEqual filtroTipo "Ano/Mes"}}{{filtroAno}}/{{filtroMes}}{{else}}{{filtroData}}{{/ifEqual}})</small>
+									</h4>
+								</div>
+								<div class="widget-body">
+									<div class="widget-main">
+										<div class="row">
 											<!-- QTVL - Com Lote -->
-											<div class="col-xs-6 col-sm-3">
+											<div class="col-xs-4 col-sm-2">
 												<div class="count-card lote" title="Atendimentos Válidos já vinculados a um Lote">
 													<div class="count-header">
 														<i class="ace-icon fa fa-archive count-icon"></i>
@@ -1374,13 +1406,43 @@ SELECT2 - ESTILOS GERAIS
 												</div>
 											</div>
 											<!-- QTVLO - Órfãos de Lote -->
-											<div class="col-xs-6 col-sm-3">
+											<div class="col-xs-4 col-sm-2">
 												<div class="count-card lote-orfa" title="Atendimentos Válidos com Guia+Senha mas SEM Lote vinculado (prontos para lotear!)">
 													<div class="count-header">
-														<i class="ace-icon fa fa-ghost count-icon"></i>
+														<i class="ace-icon fa fa-child count-icon"></i>
 														<span class="count-label">Órfãos Lote</span>
 													</div>
 													<div class="count-value">{{estatisticas.qtvLo}}</div>
+												</div>
+											</div>
+											<!-- QTGuiasUnicas - Quantidade de Guias Unicas -->
+											<div class="col-xs-4 col-sm-2">
+												<div class="count-card guia-unicas" title="Quantidade de Guias Unicas, independente da QUANTIDADE DE ATENDIMENTOS QUE CONTENHAM A GUIA">
+													<div class="count-header">
+														<i class="ace-icon fa fa-file-text count-icon"></i>
+														<span class="count-label">Qt Guias Únicas</span>
+													</div>
+													<div class="count-value">{{estatisticas.qtdGuias}}</div>
+												</div>
+											</div>
+											<!-- QTGuiasUnicas - Quantidade de Guias Unicas -->
+											<div class="col-xs-4 col-sm-2">
+												<div class="count-card loteqt" title="Quantidade de Guias Unicas, independente da QUANTIDADE DE ATENDIMENTOS QUE CONTENHAM A GUIA">
+													<div class="count-header">
+														<i class="ace-icon fa fa-archive count-icon"></i>
+														<span class="count-label">Qt Lotes Únicos</span>
+													</div>
+													<div class="count-value">{{estatisticas.qtdLotes}}</div>
+												</div>
+											</div>
+											<!-- QTGuiasUnicas - Quantidade de Guias Unicas -->
+											<div class="col-xs-4 col-sm-2">
+												<div class="count-card lotevalor" title="Quantidade de Guias Unicas, independente da QUANTIDADE DE ATENDIMENTOS QUE CONTENHAM A GUIA">
+													<div class="count-header">
+														<i class="ace-icon fa fa-money count-icon"></i>
+														<span class="count-label">Valor Total dos Lotes</span>
+													</div>
+													<div class="count-value">R$ {{formataContabil estatisticas.vlrTotalLotes}}</div>
 												</div>
 											</div>
 										</div>
@@ -1686,7 +1748,7 @@ SELECT2 - ESTILOS GERAIS
             <label>Log / Observações</label>
             <textarea id="guialote_log" name="guialote_log" class="form-control" rows="4" placeholder="Adicione observações sobre este lote..."></textarea>
             <p class="help-block">
-              <strong>ℹ️ Dica:</strong> Use este campo para registrar eventos importantes do lote (ex: "Enviado via SEDEX #123456 em 15/02/2026")
+              <strong>ℹ️ Dica:</strong> Use este campo para registrar eventos importantes do lote 
             </p>
           </div>
           
