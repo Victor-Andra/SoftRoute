@@ -367,1050 +367,1049 @@ module.exports = {FiltroEvoatend,
                 res.redirect('/admin/erro');
             });
     },
-   
-filtraGuialotelis_OLD_ComConv(req, res, resposta) {
-    console.log("🚨🚨🚨 ENTROU NA FUNÇÃO filtraGuialotelis 🚨🚨🚨");
-    console.log("📦 req.body completo:", req.body);
-    
-    let db = req.cookies['preferredDb'];
-    
-    // ✅ Models com classes corretas (horaageClass, não horaClass!)
-    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema); // ✅ CORRETO
-    const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
-    const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema); // ✅ Não esquecer
+    filtraGuialotelis_OLD_ComConv(req, res, resposta) {
+        console.log("🚨🚨🚨 ENTROU NA FUNÇÃO filtraGuialotelis 🚨🚨🚨");
+        console.log("📦 req.body completo:", req.body);
+        
+        let db = req.cookies['preferredDb'];
+        
+        // ✅ Models com classes corretas (horaageClass, não horaClass!)
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema); // ✅ CORRETO
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema); // ✅ Não esquecer
 
-    if (!resposta || typeof resposta !== 'object') {
-        resposta = { texto: '', sucesso: false };
-    }
-    let flash = new Resposta();
-    flash.texto = resposta.texto;
-    flash.sucesso = resposta.sucesso;
+        if (!resposta || typeof resposta !== 'object') {
+            resposta = { texto: '', sucesso: false };
+        }
+        let flash = new Resposta();
+        flash.texto = resposta.texto;
+        flash.sucesso = resposta.sucesso;
 
-    // ✅ Capturar filtros do body (NÃO ALTERAR NOMES)
-    const tipoData = req.body.tipoData;
-    const anoAtend = req.body.anoAtend;
-    const mesAtend = req.body.mesAtend;
-    const dataFil = req.body.dataFil;
-    const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
-    const atendBeneficiario = req.body.atendBeneficiario;
-    const atendTerapeuta = req.body.atendTerapeuta;  // ✅ ADICIONADO
-    const atendConvenio = req.body.atendConvenio;    // ✅ ADICIONADO
+        // ✅ Capturar filtros do body (NÃO ALTERAR NOMES)
+        const tipoData = req.body.tipoData;
+        const anoAtend = req.body.anoAtend;
+        const mesAtend = req.body.mesAtend;
+        const dataFil = req.body.dataFil;
+        const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
+        const atendBeneficiario = req.body.atendBeneficiario;
+        const atendTerapeuta = req.body.atendTerapeuta;  // ✅ ADICIONADO
+        const atendConvenio = req.body.atendConvenio;    // ✅ ADICIONADO
 
-    // ✅ LOGS DE DEBUG
-    console.log("🔍 [DADOS RECEBIDOS DO FORMULÁRIO]");
-    console.log("→ atendTipoPessoa:", atendTipoPessoa);
-    console.log("→ atendBeneficiario:", atendBeneficiario);
-    console.log("→ atendTerapeuta:", atendTerapeuta);
-    console.log("→ atendConvenio:", atendConvenio);
-    console.log("→ Tipo de atendTipoPessoa:", typeof atendTipoPessoa);
-    console.log("→ atendTipoPessoa === 'Convênio':", atendTipoPessoa === "Convênio");
+        // ✅ LOGS DE DEBUG
+        console.log("🔍 [DADOS RECEBIDOS DO FORMULÁRIO]");
+        console.log("→ atendTipoPessoa:", atendTipoPessoa);
+        console.log("→ atendBeneficiario:", atendBeneficiario);
+        console.log("→ atendTerapeuta:", atendTerapeuta);
+        console.log("→ atendConvenio:", atendConvenio);
+        console.log("→ Tipo de atendTipoPessoa:", typeof atendTipoPessoa);
+        console.log("→ atendTipoPessoa === 'Convênio':", atendTipoPessoa === "Convênio");
 
-    const filtroTela = {
-        tipoData: req.body.tipoData || "Ano/Mes",
-        // ✅ Corrige a prioridade dos campos de data
-        dataFinal: req.body.dataFinal || "",
-        dataFil: req.body.dataFil || "",
-        anoAtend: req.body.anoAtend || "",
-        mesAtend: req.body.mesAtend || "",
-        tipoPessoa: req.body.atendTipoPessoa || "Geral",
-        atendTerapeuta: req.body.atendTerapeuta || "",
-        atendBeneficiario: req.body.atendBeneficiario || "",
-        atendConvenio: req.body.atendConvenio || "",  // ✅ ADICIONADO
-        // ✅ Verifica se o campo existe na view antes de usar
-        atendConcluido: req.body.AtendConcluido || "Todos", 
-        atendSelo: req.body.atendSelo || "Todos"
-    };
+        const filtroTela = {
+            tipoData: req.body.tipoData || "Ano/Mes",
+            // ✅ Corrige a prioridade dos campos de data
+            dataFinal: req.body.dataFinal || "",
+            dataFil: req.body.dataFil || "",
+            anoAtend: req.body.anoAtend || "",
+            mesAtend: req.body.mesAtend || "",
+            tipoPessoa: req.body.atendTipoPessoa || "Geral",
+            atendTerapeuta: req.body.atendTerapeuta || "",
+            atendBeneficiario: req.body.atendBeneficiario || "",
+            atendConvenio: req.body.atendConvenio || "",  // ✅ ADICIONADO
+            // ✅ Verifica se o campo existe na view antes de usar
+            atendConcluido: req.body.AtendConcluido || "Todos", 
+            atendSelo: req.body.atendSelo || "Todos"
+        };
 
-    let dataIni, dataFim;
-    console.log(filtroTela.dataFinal);
+        let dataIni, dataFim;
+        console.log(filtroTela.dataFinal);
 
-    switch (filtroTela.tipoData){
-        case "Ano/Mes":
-            ({ dataIni, dataFim } = fncGeral.obterPeriodoMes(filtroTela.anoAtend, filtroTela.mesAtend));
-            break;
-        case "Semana":
-            ({ dataIni, dataFim } = fncGeral.obterSemanaUtil(filtroTela.dataFinal));
-            break;
-        case "Dia":
-            ({ dataIni, dataFim } = fncGeral.obterPeriodoDia(filtroTela.dataFinal));
-            break;
-        default:
-            ({ dataIni, dataFim } = fncGeral.obterPeriodoDia('2000-01-01'));
-            break;
-    }
+        switch (filtroTela.tipoData){
+            case "Ano/Mes":
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoMes(filtroTela.anoAtend, filtroTela.mesAtend));
+                break;
+            case "Semana":
+                ({ dataIni, dataFim } = fncGeral.obterSemanaUtil(filtroTela.dataFinal));
+                break;
+            case "Dia":
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia(filtroTela.dataFinal));
+                break;
+            default:
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia('2000-01-01'));
+                break;
+        }
 
-    let agendaQuery = {
-        agenda_data: { $gte: dataIni, $lte: dataFim }
-    };
+        let agendaQuery = {
+            agenda_data: { $gte: dataIni, $lte: dataFim }
+        };
 
-    if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
-        agendaQuery.agenda_beneid = atendBeneficiario;
-        console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
-    }
-    else if (atendTipoPessoa === "Terapeuta" && atendTerapeuta) {  // ✅ CORRIGIDO
-        agendaQuery.agenda_usuid = atendTerapeuta;
-        console.log("👨‍⚕️ Aplicando filtro por terapeuta ID:", atendTerapeuta);
-    }
-    else if (atendTipoPessoa === "Convênio" && atendConvenio) {  // ✅ ADICIONADO
-        agendaQuery.agenda_convid = atendConvenio;
-        console.log("🏥 Aplicando filtro por convênio ID:", atendConvenio);
-    }
+        if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
+            agendaQuery.agenda_beneid = atendBeneficiario;
+            console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
+        }
+        else if (atendTipoPessoa === "Terapeuta" && atendTerapeuta) {  // ✅ CORRIGIDO
+            agendaQuery.agenda_usuid = atendTerapeuta;
+            console.log("👨‍⚕️ Aplicando filtro por terapeuta ID:", atendTerapeuta);
+        }
+        else if (atendTipoPessoa === "Convênio" && atendConvenio) {  // ✅ ADICIONADO
+            agendaQuery.agenda_convid = atendConvenio;
+            console.log("🏥 Aplicando filtro por convênio ID:", atendConvenio);
+        }
 
-    console.log("🔎 [QUERY FINAL PARA AGENDA]");
-    console.log("→ agendaQuery:", JSON.stringify(agendaQuery, null, 2));
+        console.log("🔎 [QUERY FINAL PARA AGENDA]");
+        console.log("→ agendaQuery:", JSON.stringify(agendaQuery, null, 2));
 
-    // ✅ QUERY PRINCIPAL COM POPULATE ANINHADO CORRETO (encadeado com .then)
-    Agenda.find(agendaQuery)
-        .populate({
-            path: 'agenda_loteid',
-            // ✅ TODOS OS CAMPOS DO SCHEMA - nenhum faltando:
-            select: 'guialote_num guialote_numdatacad guialote_numprotocolo guialote_dataenvio guialote_guialotevalor guialote_status guialote_log guialote_usucad guialote_datacad guialote_usuedi guialote_dataedi guialote_qtatend guialote_agendas',
-            strictPopulate: false,
-            // ✅ POPULATE ANINHADO PARA BUSCAR usuario_nome (não ObjectId):
-            populate: [
-                {
-                    path: 'guialote_usucad',
-                    model: Usuario,
-                    select: 'usuario_nome'
-                },
-                {
-                    path: 'guialote_usuedi',
-                    model: Usuario,
-                    select: 'usuario_nome'
-                }
-            ]
-        })
-        .then((agendas) => {
-            console.log("✅ [RESULTADO DA AGENDA]");
-            console.log("→ Total de registros encontrados:", agendas.length);
-            
-            // ✅ CÁLCULO DAS ESTATÍSTICAS COM MÉTRICAS DE LOTE - NOVO!
-            const estatisticas = {
-                qa: 0,    // Total de Agendamentos
-                qt: 0,    // Atendimentos Válidos
-                qac: 0,   // Cancelados
-                qtv: 0,   // Validados (c/ evolução)
-                qtse: 0,  // Sem Evolução
-                qace: 0,  // Cancelados c/ Evolução
-                atvo: 0,  // Órfãos de Guia/Senha
-                qtva: 0,  // Completos (Guia + Senha)
-                qtvL: 0,  // Com Lote vinculado ✅ NOVO
-                qtvLo: 0  // Órfãos de Lote ✅ NOVO
-            };
-
-            agendas.forEach(a => {
-                estatisticas.qa++;
-                
-                const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
-                const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
-                const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
-                const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
-                const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
-                
-                if (ehCancelado) {
-                    estatisticas.qac++;
-                    if (temEvolucao) estatisticas.qace++;
-                } else {
-                    estatisticas.qt++;
-                    if (temEvolucao) {
-                        estatisticas.qtv++;
-                        
-                        // Verificar status de guia/senha
-                        if (!temGuia || !temSenha) {
-                            estatisticas.atvo++; // Órfão de guia/senha
-                        } else {
-                            estatisticas.qtva++; // Completo com guia+senha
-                            
-                            // ✅ NOVAS MÉTRICAS DE LOTE
-                            if (temLote) {
-                                estatisticas.qtvL++; // Com lote vinculado
-                            } else {
-                                estatisticas.qtvLo++; // Órfão de lote (tem guia+senha mas sem lote)
-                            }
-                        }
-                    } else {
-                        estatisticas.qtse++; // Sem evolução
+        // ✅ QUERY PRINCIPAL COM POPULATE ANINHADO CORRETO (encadeado com .then)
+        Agenda.find(agendaQuery)
+            .populate({
+                path: 'agenda_loteid',
+                // ✅ TODOS OS CAMPOS DO SCHEMA - nenhum faltando:
+                select: 'guialote_num guialote_numdatacad guialote_numprotocolo guialote_dataenvio guialote_guialotevalor guialote_status guialote_log guialote_usucad guialote_datacad guialote_usuedi guialote_dataedi guialote_qtatend guialote_agendas',
+                strictPopulate: false,
+                // ✅ POPULATE ANINHADO PARA BUSCAR usuario_nome (não ObjectId):
+                populate: [
+                    {
+                        path: 'guialote_usucad',
+                        model: Usuario,
+                        select: 'usuario_nome'
+                    },
+                    {
+                        path: 'guialote_usuedi',
+                        model: Usuario,
+                        select: 'usuario_nome'
                     }
-                }
-            });
-
-            // ✅ DEBUG DAS ESTATÍSTICAS COM LOTES
-            console.log("📊 [ESTATÍSTICAS CALCULADAS COM LOTES]");
-            console.log("→ QA (Total):", estatisticas.qa);
-            console.log("→ QT (Válidos):", estatisticas.qt);
-            console.log("→ QAC (Cancelados):", estatisticas.qac);
-            console.log("→ QTV (Validados):", estatisticas.qtv);
-            console.log("→ QTSE (Sem Evolução):", estatisticas.qtse);
-            console.log("→ QACE (Cancel c/ Evol):", estatisticas.qace);
-            console.log("→ ATVO (Órfãos Guia/Senha):", estatisticas.atvo);
-            console.log("→ QTVA (Completos Guia+Senha):", estatisticas.qtva);
-            console.log("→ QTVL (Com Lote):", estatisticas.qtvL);      // ✅ NOVO
-            console.log("→ QTVLO (Órfãos de Lote):", estatisticas.qtvLo); // ✅ NOVO
-
-            return Bene.find().then((bene) => {
-                bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
-
-                return Usuario.find({
-                    usuario_status: "Ativo",
-                    $or: [
-                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                    ]
-                }).then((terapeuta) => {
-                    terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
-
-                    // Mapa para fallback caso populate falhe
-                    const usuarioMap = {};
-                    terapeuta.forEach(u => {
-                        usuarioMap[u._id.toString()] = u.usuario_nome;
-                    });
-
-                    // Enriquecer cada agenda
-                    agendas.forEach(a => {
-                        const dataAgenda = new Date(a.agenda_data);
-                        const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
-                        const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
-                        a.agenda_hora = `${hor}:${min}`;
-                        a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
-                        a.evolucaoSimNao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '') ? 'Sim' : 'Não';
-                        a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
-                        a.usuarioCadNome = usuarioMap[a.agenda_usucad] || 'Desconhecido';
-                        a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
-                        a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
-
-                        const temGuia = a.agenda_guia && a.agenda_guia.guia_num && a.agenda_guia.guia_num.trim() !== '';
-                        const temSenha = a.agenda_guia && a.agenda_guia.guia_senha && a.agenda_guia.guia_senha.trim() !== '';
-                        const jaTemLote = a.agenda_loteid != null && a.agenda_loteid != undefined;
-                        
-                        a.podeLotear = (temGuia && temSenha && !jaTemLote);
-                        a.jaTemLote = jaTemLote;
-
-                        // ✅ EXTRAÇÃO COM TODOS OS CAMPOS + NOMES DOS USUÁRIOS
-                        if (a.agenda_loteid && typeof a.agenda_loteid === 'object' && a.agenda_loteid._id) {
-                            // Helper para extrair nome do usuário (populado ou fallback)
-                            const getUserName = (userField) => {
-                                if (!userField) return null;
-                                // Se foi populado, é objeto com usuario_nome
-                                if (typeof userField === 'object' && userField.usuario_nome) {
-                                    return userField.usuario_nome;
-                                }
-                                // Fallback: se for ObjectId, buscar no mapa
-                                const idStr = typeof userField === 'string' ? userField : (userField._id?.toString?.() || null);
-                                return idStr ? usuarioMap[idStr] || null : null;
-                            };
-
-                            a.lote = {
-                                // ✅ Todos os campos do schema, na ordem:
-                                guialoteNum: a.agenda_loteid.guialote_num || null,
-                                guialoteNumdatacad: a.agenda_loteid.guialote_numdatacad || null,
-                                guialoteNumprotocolo: a.agenda_loteid.guialote_numprotocolo || null,  // ✅ Protocolo
-                                guialoteDataenvio: a.agenda_loteid.guialote_dataenvio || null,       // ✅ Data envio
-                                guialoteGuialotevalor: a.agenda_loteid.guialote_guialotevalor || null,
-                                guialoteStatus: a.agenda_loteid.guialote_status || null,
-                                guialoteLog: a.agenda_loteid.guialote_log || null,                   // ✅ Log
-                                guialoteUsucad: a.agenda_loteid.guialote_usucad || null,
-                                guialoteUsucadNome: getUserName(a.agenda_loteid.guialote_usucad),   // ✅ NOME (não ID)
-                                guialoteDatacad: a.agenda_loteid.guialote_datacad || null,
-                                guialoteUsuedi: a.agenda_loteid.guialote_usuedi || null,
-                                guialoteUsuediNome: getUserName(a.agenda_loteid.guialote_usuedi),   // ✅ NOME (não ID)
-                                guialoteDataedi: a.agenda_loteid.guialote_dataedi || null,           // ✅ Data edição
-                                guialoteQtatend: a.agenda_loteid.guialote_qtatend || null,
-                                guialoteAgendas: a.agenda_loteid.guialote_agendas || []
-                            };
-                        } else {
-                            a.lote = null;
-                        }
-
-                        a.agenda_guia_numdatacad_input = a.agenda_guia?.guia_numdatacad
-                            ? new Date(a.agenda_guia.guia_numdatacad).toISOString().split('T')[0] : '';
-                        a.agenda_guia_senhadatacad_input = a.agenda_guia?.guia_senhadatacad
-                            ? new Date(a.agenda_guia.guia_senhadatacad).toISOString().split('T')[0] : '';
-                    });
-
-                    // ✅ LOG DE DEBUG COM NOMES DOS USUÁRIOS
-                    if (agendas.length > 0) {
-                        const primeiraAgendaComLote = agendas.find(a => a.lote !== null);
-                        if (primeiraAgendaComLote) {
-                            console.log("🔍 [DEBUG] Campos do lote enviados para a view:");
-                            console.log("→ guialoteNum:", primeiraAgendaComLote.lote.guialoteNum);
-                            console.log("→ guialoteNumprotocolo:", primeiraAgendaComLote.lote.guialoteNumprotocolo);
-                            console.log("→ guialoteDataenvio:", primeiraAgendaComLote.lote.guialoteDataenvio);
-                            console.log("→ guialoteGuialotevalor:", primeiraAgendaComLote.lote.guialoteGuialotevalor);
-                            console.log("→ guialoteStatus:", primeiraAgendaComLote.lote.guialoteStatus);
-                            console.log("→ guialoteUsucadNome:", primeiraAgendaComLote.lote.guialoteUsucadNome); // ✅ NOME
-                            console.log("→ guialoteUsuediNome:", primeiraAgendaComLote.lote.guialoteUsuediNome); // ✅ NOME
-                            console.log("→ guialoteDataedi:", primeiraAgendaComLote.lote.guialoteDataedi);
-                            console.log("→ guialoteQtatend:", primeiraAgendaComLote.lote.guialoteQtatend);
-                        } else {
-                            console.log("⚠️ [DEBUG] Nenhuma agenda com lote encontrado nesta lista");
-                        }
-                    }
-
-                    // ✅ CHAIN CORRETA - sem código solto!
-                    return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
-                        .then((horaage) => Sala.find().then((salas) => {
-                            salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
-                            return Terapia.find().then((terapias) => Conv.find().then((convs) => {
-                                convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
-                                return Ano.find().then((anos) => {
-                                    console.log("📤 [RENDERIZANDO VIEW]");
-                                    
-                                    // ✅ RENDER COM NOMES EXATOS (não alterar!)
-                                    res.render('guia/lote/guialoteLis', {
-                                        extras: agendas,
-                                        benes: bene,
-                                        terapeutas: terapeuta,
-                                        horaages: horaage,
-                                        salas: salas,
-                                        terapias: terapias,
-                                        convs: convs,
-                                        anos: anos,
-                                        flash,
-                                        filtroTipo: tipoData,
-                                        filtroAno: anoAtend,
-                                        filtroMes: mesAtend,
-                                        filtroData: dataFil,
-                                        filtroTipoPessoa: atendTipoPessoa,
-                                        filtroBeneficiario: atendBeneficiario,
-                                        filtroConvenio: atendConvenio,  // ✅ ADICIONADO
-                                        // ✅ ADICIONAR ESTATÍSTICAS NO RENDER
-                                        estatisticas: estatisticas,
-                                        filtroTela: filtroTela
-                                    });
-                                });
-                            }));
-                        }));
-                });
-            });
-        })
-        .catch((err) => {
-            console.error("💥 ERRO EM filtraGuialotelis:", err);
-            req.flash("error_message", "Houve um erro ao listar os agendamentos.");
-            res.redirect('/admin/erro');
-        });
-},
-filtraGuialotelis_OLD_ComConv_qtGuia(req, res, resposta) {
-    console.log("🚨🚨🚨 ENTROU NA FUNÇÃO filtraGuialotelis 🚨🚨🚨");
-    console.log("📦 req.body completo:", req.body);
-    
-    let db = req.cookies['preferredDb'];
-    
-    // ✅ Models com classes corretas
-    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
-    const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
-
-    if (!resposta || typeof resposta !== 'object') {
-        resposta = { texto: '', sucesso: false };
-    }
-    let flash = new Resposta();
-    flash.texto = resposta.texto;
-    flash.sucesso = resposta.sucesso;
-
-    // ✅ Capturar filtros do body
-    const tipoData = req.body.tipoData;
-    const anoAtend = req.body.anoAtend;
-    const mesAtend = req.body.mesAtend;
-    const dataFil = req.body.dataFil;
-    const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
-    const atendBeneficiario = req.body.atendBeneficiario;
-    const atendTerapeuta = req.body.atendTerapeuta;
-    const atendConvenio = req.body.atendConvenio;
-
-    // ✅ LOGS DE DEBUG
-    console.log("🔍 [DADOS RECEBIDOS DO FORMULÁRIO]");
-    console.log("→ atendTipoPessoa:", atendTipoPessoa);
-    console.log("→ atendBeneficiario:", atendBeneficiario);
-    console.log("→ atendTerapeuta:", atendTerapeuta);
-    console.log("→ atendConvenio:", atendConvenio);
-
-    const filtroTela = {
-        tipoData: req.body.tipoData || "Ano/Mes",
-        dataFinal: req.body.dataFinal || "",
-        dataFil: req.body.dataFil || "",
-        anoAtend: req.body.anoAtend || "",
-        mesAtend: req.body.mesAtend || "",
-        tipoPessoa: req.body.atendTipoPessoa || "Geral",
-        atendTerapeuta: req.body.atendTerapeuta || "",
-        atendBeneficiario: req.body.atendBeneficiario || "",
-        atendConvenio: req.body.atendConvenio || "",
-        atendConcluido: req.body.AtendConcluido || "Todos", 
-        atendSelo: req.body.atendSelo || "Todos"
-    };
-
-    let dataIni, dataFim;
-    console.log(filtroTela.dataFinal);
-
-    switch (filtroTela.tipoData){
-        case "Ano/Mes":
-            ({ dataIni, dataFim } = fncGeral.obterPeriodoMes(filtroTela.anoAtend, filtroTela.mesAtend));
-            break;
-        case "Semana":
-            ({ dataIni, dataFim } = fncGeral.obterSemanaUtil(filtroTela.dataFinal));
-            break;
-        case "Dia":
-            ({ dataIni, dataFim } = fncGeral.obterPeriodoDia(filtroTela.dataFinal));
-            break;
-        default:
-            ({ dataIni, dataFim } = fncGeral.obterPeriodoDia('2000-01-01'));
-            break;
-    }
-
-    // ✅ QUERY BASE COM FILTROS (IGUAL À filtraGuialis)
-    let agendaQuery = { 
-        agenda_data: { $gte: dataIni, $lte: dataFim },
-        agenda_categoria: { $nin: ["Extra", "Reuniao", "Pais", "Glosa"] }  // ✅ ADICIONADO
-    };
-
-    if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
-        agendaQuery.agenda_beneid = atendBeneficiario;
-        console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
-    }
-    else if (atendTipoPessoa === "Terapeuta" && atendTerapeuta) {
-        agendaQuery.agenda_usuid = atendTerapeuta;
-        console.log("👨‍⚕️ Aplicando filtro por terapeuta ID:", atendTerapeuta);
-    }
-    else if (atendTipoPessoa === "Convênio" && atendConvenio) {
-        agendaQuery.agenda_convid = atendConvenio;
-        console.log("🏥 Aplicando filtro por convênio ID:", atendConvenio);
-    }
-
-    console.log("🔎 [QUERY FINAL PARA AGENDA]");
-    console.log("→ agendaQuery:", JSON.stringify(agendaQuery, null, 2));
-
-    // ✅ QUERY PRINCIPAL COM POPULATE ANINHADO
-    Agenda.find(agendaQuery)
-        .populate({
-            path: 'agenda_loteid',
-            select: 'guialote_num guialote_numdatacad guialote_numprotocolo guialote_dataenvio guialote_guialotevalor guialote_status guialote_log guialote_usucad guialote_datacad guialote_usuedi guialote_dataedi guialote_qtatend guialote_agendas',
-            strictPopulate: false,
-            populate: [
-                {
-                    path: 'guialote_usucad',
-                    model: Usuario,
-                    select: 'usuario_nome'
-                },
-                {
-                    path: 'guialote_usuedi',
-                    model: Usuario,
-                    select: 'usuario_nome'
-                }
-            ]
-        })
-        .then((agendas) => {
-            console.log("✅ [RESULTADO DA AGENDA]");
-            console.log("→ Total de registros encontrados:", agendas.length);
-            
-            // 🔥 REGRAS DE NEGÓCIO: FILTRAGEM (IGUAL À filtraGuialis)
-            
-            // 1. Remover agendas temporárias
-            let idsAgendasEx = [];
-            agendas.forEach(e => {
-                if (e.agenda_temp) {
-                    idsAgendasEx.push(e.agenda_tempId.toString());
-                }
-            });
-            agendas = agendas.filter(a => !idsAgendasEx.includes(a._id.toString()));
-            console.log("🗑️ [FILTRO TEMPORÁRIAS] Removidas:", idsAgendasEx.length);
-            
-            // 2. Remover cancelados (Feriado e Falta Absoluta)
-            agendas = agendas.filter(a => {
-                const cat = a.agenda_categoria;
-                return cat !== "Falta Absoluta" && cat !== "Feriado";
-            });
-            console.log("🗑️ [FILTRO CANCELADOS] Total após filtro:", agendas.length);
-
-            // 📊 ESTATÍSTICAS COMPLETAS (COM NOVA MÉTRICA qtdGuias)
-            const estatisticas = {
-                qa: 0,        // Total de Agendamentos
-                qt: 0,        // Atendimentos Válidos
-                qac: 0,       // Cancelados
-                qtv: 0,       // Validados (c/ evolução)
-                qtse: 0,      // Sem Evolução
-                qace: 0,      // Cancelados c/ Evolução
-                atvo: 0,      // Órfãos de Guia/Senha
-                qtva: 0,      // Completos (Guia + Senha)
-                qtvL: 0,      // Com Lote vinculado
-                qtvLo: 0,     // Órfãos de Lote
-                qtdGuias: 0   // ✅ NOVA: Quantidade de Guias Únicas
-            };
-
-            // ✅ SET PARA CONTAR GUIAS ÚNICAS
-            const guiasSet = new Set();
-
-            agendas.forEach(a => {
-                estatisticas.qa++;
+                ]
+            })
+            .then((agendas) => {
+                console.log("✅ [RESULTADO DA AGENDA]");
+                console.log("→ Total de registros encontrados:", agendas.length);
                 
-                const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
-                const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
-                const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
-                const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
-                const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
-                
-                // ✅ ADICIONAR GUIA AO SET (SE EXISTIR)
-                if (temGuia) {
-                    guiasSet.add(a.agenda_guia?.guia_num?.trim());  // ✅ USAR OPTIONAL CHAINING
-                }
-                
-                if (ehCancelado) {
-                    estatisticas.qac++;
-                    if (temEvolucao) estatisticas.qace++;
-                } else {
-                    estatisticas.qt++;
-                    if (temEvolucao) {
-                        estatisticas.qtv++;
-                        
-                        if (!temGuia || !temSenha) {
-                            estatisticas.atvo++;
-                        } else {
-                            estatisticas.qtva++;
-                            
-                            if (temLote) {
-                                estatisticas.qtvL++;
-                            } else {
-                                estatisticas.qtvLo++;
-                            }
-                        }
-                    } else {
-                        estatisticas.qtse++;
-                    }
-                }
-            });
+                // ✅ CÁLCULO DAS ESTATÍSTICAS COM MÉTRICAS DE LOTE - NOVO!
+                const estatisticas = {
+                    qa: 0,    // Total de Agendamentos
+                    qt: 0,    // Atendimentos Válidos
+                    qac: 0,   // Cancelados
+                    qtv: 0,   // Validados (c/ evolução)
+                    qtse: 0,  // Sem Evolução
+                    qace: 0,  // Cancelados c/ Evolução
+                    atvo: 0,  // Órfãos de Guia/Senha
+                    qtva: 0,  // Completos (Guia + Senha)
+                    qtvL: 0,  // Com Lote vinculado ✅ NOVO
+                    qtvLo: 0  // Órfãos de Lote ✅ NOVO
+                };
 
-            // ✅ DEFINIR QUANTIDADE DE GUIAS ÚNICAS
-            estatisticas.qtdGuias = guiasSet.size;
-
-            // ✅ DEBUG DAS ESTATÍSTICAS COM LOTES E GUIAS
-            console.log("📊 [ESTATÍSTICAS CALCULADAS COM LOTES]");
-            console.log("→ QA (Total):", estatisticas.qa);
-            console.log("→ QT (Válidos):", estatisticas.qt);
-            console.log("→ QAC (Cancelados):", estatisticas.qac);
-            console.log("→ QTV (Validados):", estatisticas.qtv);
-            console.log("→ QTSE (Sem Evolução):", estatisticas.qtse);
-            console.log("→ QACE (Cancel c/ Evol):", estatisticas.qace);
-            console.log("→ ATVO (Órfãos Guia/Senha):", estatisticas.atvo);
-            console.log("→ QTVA (Completos Guia+Senha):", estatisticas.qtva);
-            console.log("→ QTVL (Com Lote):", estatisticas.qtvL);
-            console.log("→ QTVLO (Órfãos de Lote):", estatisticas.qtvLo);
-            console.log("→ QTDGUIAS (Guias Únicas):", estatisticas.qtdGuias);  // ✅ NOVO LOG
-
-            return Bene.find().then((bene) => {
-                bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
-
-                return Usuario.find({
-                    usuario_status: "Ativo",
-                    $or: [
-                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                    ]
-                }).then((terapeuta) => {
-                    terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
-
-                    const usuarioMap = {};
-                    terapeuta.forEach(u => {
-                        usuarioMap[u._id.toString()] = u.usuario_nome;
-                    });
-
-                    // Enriquecer cada agenda
-                    agendas.forEach(a => {
-                        const dataAgenda = new Date(a.agenda_data);
-                        const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
-                        const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
-                        a.agenda_hora = `${hor}:${min}`;
-                        a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
-                        a.evolucaoSimNao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '') ? 'Sim' : 'Não';
-                        a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
-                        a.usuarioCadNome = usuarioMap[a.agenda_usucad] || 'Desconhecido';
-                        a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
-                        a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
-
-                        const temGuia = a.agenda_guia && a.agenda_guia.guia_num && a.agenda_guia.guia_num.trim() !== '';
-                        const temSenha = a.agenda_guia && a.agenda_guia.guia_senha && a.agenda_guia.guia_senha.trim() !== '';
-                        const jaTemLote = a.agenda_loteid != null && a.agenda_loteid != undefined;
-                        
-                        a.podeLotear = (temGuia && temSenha && !jaTemLote);
-                        a.jaTemLote = jaTemLote;
-
-                        // ✅ EXTRAÇÃO COM TODOS OS CAMPOS + NOMES DOS USUÁRIOS
-                        if (a.agenda_loteid && typeof a.agenda_loteid === 'object' && a.agenda_loteid._id) {
-                            const getUserName = (userField) => {
-                                if (!userField) return null;
-                                if (typeof userField === 'object' && userField.usuario_nome) {
-                                    return userField.usuario_nome;
-                                }
-                                const idStr = typeof userField === 'string' ? userField : (userField._id?.toString?.() || null);
-                                return idStr ? usuarioMap[idStr] || null : null;
-                            };
-
-                            a.lote = {
-                                guialoteNum: a.agenda_loteid.guialote_num || null,
-                                guialoteNumdatacad: a.agenda_loteid.guialote_numdatacad || null,
-                                guialoteNumprotocolo: a.agenda_loteid.guialote_numprotocolo || null,
-                                guialoteDataenvio: a.agenda_loteid.guialote_dataenvio || null,
-                                guialoteGuialotevalor: a.agenda_loteid.guialote_guialotevalor || null,
-                                guialoteStatus: a.agenda_loteid.guialote_status || null,
-                                guialoteLog: a.agenda_loteid.guialote_log || null,
-                                guialoteUsucad: a.agenda_loteid.guialote_usucad || null,
-                                guialoteUsucadNome: getUserName(a.agenda_loteid.guialote_usucad),
-                                guialoteDatacad: a.agenda_loteid.guialote_datacad || null,
-                                guialoteUsuedi: a.agenda_loteid.guialote_usuedi || null,
-                                guialoteUsuediNome: getUserName(a.agenda_loteid.guialote_usuedi),
-                                guialoteDataedi: a.agenda_loteid.guialote_dataedi || null,
-                                guialoteQtatend: a.agenda_loteid.guialote_qtatend || null,
-                                guialoteAgendas: a.agenda_loteid.guialote_agendas || []
-                            };
-                        } else {
-                            a.lote = null;
-                        }
-
-                        a.agenda_guia_numdatacad_input = a.agenda_guia?.guia_numdatacad
-                            ? new Date(a.agenda_guia.guia_numdatacad).toISOString().split('T')[0] : '';
-                        a.agenda_guia_senhadatacad_input = a.agenda_guia?.guia_senhadatacad
-                            ? new Date(a.agenda_guia.guia_senhadatacad).toISOString().split('T')[0] : '';
-                    });
-
-                    // ✅ LOG DE DEBUG COM NOMES DOS USUÁRIOS
-                    if (agendas.length > 0) {
-                        const primeiraAgendaComLote = agendas.find(a => a.lote !== null);
-                        if (primeiraAgendaComLote) {
-                            console.log("🔍 [DEBUG] Campos do lote enviados para a view:");
-                            console.log("→ guialoteNum:", primeiraAgendaComLote.lote.guialoteNum);
-                            console.log("→ guialoteNumprotocolo:", primeiraAgendaComLote.lote.guialoteNumprotocolo);
-                            console.log("→ guialoteDataenvio:", primeiraAgendaComLote.lote.guialoteDataenvio);
-                            console.log("→ guialoteGuialotevalor:", primeiraAgendaComLote.lote.guialoteGuialotevalor);
-                            console.log("→ guialoteStatus:", primeiraAgendaComLote.lote.guialoteStatus);
-                            console.log("→ guialoteUsucadNome:", primeiraAgendaComLote.lote.guialoteUsucadNome);
-                            console.log("→ guialoteUsuediNome:", primeiraAgendaComLote.lote.guialoteUsuediNome);
-                            console.log("→ guialoteDataedi:", primeiraAgendaComLote.lote.guialoteDataedi);
-                            console.log("→ guialoteQtatend:", primeiraAgendaComLote.lote.guialoteQtatend);
-                        } else {
-                            console.log("⚠️ [DEBUG] Nenhuma agenda com lote encontrado nesta lista");
-                        }
-                    }
-
-                    return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
-                        .then((horaage) => Sala.find().then((salas) => {
-                            salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
-                            return Terapia.find().then((terapias) => Conv.find().then((convs) => {
-                                convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
-                                return Ano.find().then((anos) => {
-                                    console.log("📤 [RENDERIZANDO VIEW]");
-                                    
-                                    res.render('guia/lote/guialoteLis', {
-                                        extras: agendas,
-                                        benes: bene,
-                                        terapeutas: terapeuta,
-                                        horaages: horaage,
-                                        salas: salas,
-                                        terapias: terapias,
-                                        convs: convs,
-                                        anos: anos,
-                                        flash,
-                                        filtroTipo: tipoData,
-                                        filtroAno: anoAtend,
-                                        filtroMes: mesAtend,
-                                        filtroData: dataFil,
-                                        filtroTipoPessoa: atendTipoPessoa,
-                                        filtroBeneficiario: atendBeneficiario,
-                                        filtroConvenio: atendConvenio,
-                                        estatisticas: estatisticas,
-                                        filtroTela: filtroTela
-                                    });
-                                });
-                            }));
-                        }));
-                });
-            });
-        })
-        .catch((err) => {
-            console.error("💥 ERRO EM filtraGuialotelis:", err);
-            req.flash("error_message", "Houve um erro ao listar os agendamentos.");
-            res.redirect('/admin/erro');
-        });
-},
-filtraGuialotelis(req, res, resposta) {
-    console.log("🚨🚨🚨 ENTROU NA FUNÇÃO filtraGuialotelis 🚨🚨🚨");
-    console.log("📦 req.body completo:", req.body);
-    
-    let db = req.cookies['preferredDb'];
-    
-    // ✅ Models com classes corretas
-    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
-    const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
-
-    if (!resposta || typeof resposta !== 'object') {
-        resposta = { texto: '', sucesso: false };
-    }
-    let flash = new Resposta();
-    flash.texto = resposta.texto;
-    flash.sucesso = resposta.sucesso;
-
-    // ✅ Capturar filtros do body
-    const tipoData = req.body.tipoData;
-    const anoAtend = req.body.anoAtend;
-    const mesAtend = req.body.mesAtend;
-    const dataFil = req.body.dataFil;
-    const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
-    const atendBeneficiario = req.body.atendBeneficiario;
-    const atendTerapeuta = req.body.atendTerapeuta;
-    const atendConvenio = req.body.atendConvenio;
-
-    // ✅ LOGS DE DEBUG
-    console.log("🔍 [DADOS RECEBIDOS DO FORMULÁRIO]");
-    console.log("→ atendTipoPessoa:", atendTipoPessoa);
-    console.log("→ atendBeneficiario:", atendBeneficiario);
-    console.log("→ atendTerapeuta:", atendTerapeuta);
-    console.log("→ atendConvenio:", atendConvenio);
-
-    const filtroTela = {
-        tipoData: req.body.tipoData || "Ano/Mes",
-        dataFinal: req.body.dataFinal || "",
-        dataFil: req.body.dataFil || "",
-        anoAtend: req.body.anoAtend || "",
-        mesAtend: req.body.mesAtend || "",
-        tipoPessoa: req.body.atendTipoPessoa || "Geral",
-        atendTerapeuta: req.body.atendTerapeuta || "",
-        atendBeneficiario: req.body.atendBeneficiario || "",
-        atendConvenio: req.body.atendConvenio || "",
-        atendConcluido: req.body.AtendConcluido || "Todos", 
-        atendSelo: req.body.atendSelo || "Todos"
-    };
-
-    let dataIni, dataFim;
-    console.log(filtroTela.dataFinal);
-
-    switch (filtroTela.tipoData){
-        case "Ano/Mes":
-            ({ dataIni, dataFim } = fncGeral.obterPeriodoMes(filtroTela.anoAtend, filtroTela.mesAtend));
-            break;
-        case "Semana":
-            ({ dataIni, dataFim } = fncGeral.obterSemanaUtil(filtroTela.dataFinal));
-            break;
-        case "Dia":
-            ({ dataIni, dataFim } = fncGeral.obterPeriodoDia(filtroTela.dataFinal));
-            break;
-        default:
-            ({ dataIni, dataFim } = fncGeral.obterPeriodoDia('2000-01-01'));
-            break;
-    }
-
-    // ✅ QUERY BASE COM FILTROS (IGUAL À filtraGuialis)
-    let agendaQuery = { 
-        agenda_data: { $gte: dataIni, $lte: dataFim },
-        agenda_categoria: { $nin: ["Extra", "Reuniao", "Pais", "Glosa"] }  // ✅ ADICIONADO
-    };
-
-    if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
-        agendaQuery.agenda_beneid = atendBeneficiario;
-        console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
-    }
-    else if (atendTipoPessoa === "Terapeuta" && atendTerapeuta) {
-        agendaQuery.agenda_usuid = atendTerapeuta;
-        console.log("👨‍⚕️ Aplicando filtro por terapeuta ID:", atendTerapeuta);
-    }
-    else if (atendTipoPessoa === "Convênio" && atendConvenio) {
-        agendaQuery.agenda_convid = atendConvenio;
-        console.log("🏥 Aplicando filtro por convênio ID:", atendConvenio);
-    }
-
-    console.log("🔎 [QUERY FINAL PARA AGENDA]");
-    console.log("→ agendaQuery:", JSON.stringify(agendaQuery, null, 2));
-
-    // ✅ QUERY PRINCIPAL COM POPULATE ANINHADO
-    Agenda.find(agendaQuery)
-        .populate({
-            path: 'agenda_loteid',
-            select: 'guialote_num guialote_numdatacad guialote_numprotocolo guialote_dataenvio guialote_guialotevalor guialote_status guialote_log guialote_usucad guialote_datacad guialote_usuedi guialote_dataedi guialote_qtatend guialote_agendas',
-            strictPopulate: false,
-            populate: [
-                {
-                    path: 'guialote_usucad',
-                    model: Usuario,
-                    select: 'usuario_nome'
-                },
-                {
-                    path: 'guialote_usuedi',
-                    model: Usuario,
-                    select: 'usuario_nome'
-                }
-            ]
-        })
-        .then((agendas) => {
-            console.log("✅ [RESULTADO DA AGENDA]");
-            console.log("→ Total de registros encontrados:", agendas.length);
-            
-            // 🔥 REGRAS DE NEGÓCIO: FILTRAGEM (IGUAL À filtraGuialis)
-            
-            // 1. Remover agendas temporárias
-            let idsAgendasEx = [];
-            agendas.forEach(e => {
-                if (e.agenda_temp) {
-                    idsAgendasEx.push(e.agenda_tempId.toString());
-                }
-            });
-            agendas = agendas.filter(a => !idsAgendasEx.includes(a._id.toString()));
-            console.log("🗑️ [FILTRO TEMPORÁRIAS] Removidas:", idsAgendasEx.length);
-            
-            // 2. Remover cancelados (Feriado e Falta Absoluta)
-            agendas = agendas.filter(a => {
-                const cat = a.agenda_categoria;
-                return cat !== "Falta Absoluta" && cat !== "Feriado";
-            });
-            console.log("🗑️ [FILTRO CANCELADOS] Total após filtro:", agendas.length);
-
-            // 📊 ESTATÍSTICAS COMPLETAS (COM NOVAS MÉTRICAS)
-            const estatisticas = {
-                qa: 0,        // Total de Agendamentos
-                qt: 0,        // Atendimentos Válidos
-                qac: 0,       // Cancelados
-                qtv: 0,       // Validados (c/ evolução)
-                qtse: 0,      // Sem Evolução
-                qace: 0,      // Cancelados c/ Evolução
-                atvo: 0,      // Órfãos de Guia/Senha
-                qtva: 0,      // Completos (Guia + Senha)
-                qtvL: 0,      // Com Lote vinculado
-                qtvLo: 0,     // Órfãos de Lote
-                qtdGuias: 0,  // ✅ Quantidade de Guias Únicas
-                qtdLotes: 0,  // ✅ NOVO: Quantidade de Lotes Únicos
-                vlrTotalLotes: 0  // ✅ NOVO: Valor Total dos Lotes Únicos
-            };
-
-            // ✅ SET PARA CONTAR GUIAS ÚNICAS
-            const guiasSet = new Set();
-            
-            // ✅ NOVO: SET E MAP PARA CONTAR LOTES ÚNICOS
-            const lotesSet = new Set();
-            const lotesValores = new Map();
-
-            agendas.forEach(a => {
-                estatisticas.qa++;
-                
-                const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
-                const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
-                const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
-                const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
-                const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
-                
-                // ✅ ADICIONAR GUIA AO SET (SE EXISTIR)
-                if (temGuia) {
-                    guiasSet.add(a.agenda_guia?.guia_num?.trim());
-                }
-                
-                // ✅ NOVO: PROCESSAR LOTES ÚNICOS
-                if (temLote && a.agenda_loteid && typeof a.agenda_loteid === 'object' && a.agenda_loteid._id) {
-                    const loteId = a.agenda_loteid._id.toString();
-                    const loteValor = parseFloat(a.agenda_loteid.guialote_guialotevalor) || 0;
+                agendas.forEach(a => {
+                    estatisticas.qa++;
                     
-                    // Adicionar ID ao Set (ignora duplicatas automaticamente)
-                    lotesSet.add(loteId);
+                    const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
+                    const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
+                    const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
+                    const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
+                    const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
                     
-                    // Armazenar valor no Map (só se ainda não existe)
-                    if (!lotesValores.has(loteId)) {
-                        lotesValores.set(loteId, loteValor);
-                    }
-                }
-                
-                if (ehCancelado) {
-                    estatisticas.qac++;
-                    if (temEvolucao) estatisticas.qace++;
-                } else {
-                    estatisticas.qt++;
-                    if (temEvolucao) {
-                        estatisticas.qtv++;
-                        
-                        if (!temGuia || !temSenha) {
-                            estatisticas.atvo++;
-                        } else {
-                            estatisticas.qtva++;
+                    if (ehCancelado) {
+                        estatisticas.qac++;
+                        if (temEvolucao) estatisticas.qace++;
+                    } else {
+                        estatisticas.qt++;
+                        if (temEvolucao) {
+                            estatisticas.qtv++;
                             
-                            if (temLote) {
-                                estatisticas.qtvL++;
+                            // Verificar status de guia/senha
+                            if (!temGuia || !temSenha) {
+                                estatisticas.atvo++; // Órfão de guia/senha
                             } else {
-                                estatisticas.qtvLo++;
+                                estatisticas.qtva++; // Completo com guia+senha
+                                
+                                // ✅ NOVAS MÉTRICAS DE LOTE
+                                if (temLote) {
+                                    estatisticas.qtvL++; // Com lote vinculado
+                                } else {
+                                    estatisticas.qtvLo++; // Órfão de lote (tem guia+senha mas sem lote)
+                                }
+                            }
+                        } else {
+                            estatisticas.qtse++; // Sem evolução
+                        }
+                    }
+                });
+
+                // ✅ DEBUG DAS ESTATÍSTICAS COM LOTES
+                console.log("📊 [ESTATÍSTICAS CALCULADAS COM LOTES]");
+                console.log("→ QA (Total):", estatisticas.qa);
+                console.log("→ QT (Válidos):", estatisticas.qt);
+                console.log("→ QAC (Cancelados):", estatisticas.qac);
+                console.log("→ QTV (Validados):", estatisticas.qtv);
+                console.log("→ QTSE (Sem Evolução):", estatisticas.qtse);
+                console.log("→ QACE (Cancel c/ Evol):", estatisticas.qace);
+                console.log("→ ATVO (Órfãos Guia/Senha):", estatisticas.atvo);
+                console.log("→ QTVA (Completos Guia+Senha):", estatisticas.qtva);
+                console.log("→ QTVL (Com Lote):", estatisticas.qtvL);      // ✅ NOVO
+                console.log("→ QTVLO (Órfãos de Lote):", estatisticas.qtvLo); // ✅ NOVO
+
+                return Bene.find().then((bene) => {
+                    bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
+
+                    return Usuario.find({
+                        usuario_status: "Ativo",
+                        $or: [
+                            { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                            { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                        ]
+                    }).then((terapeuta) => {
+                        terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
+
+                        // Mapa para fallback caso populate falhe
+                        const usuarioMap = {};
+                        terapeuta.forEach(u => {
+                            usuarioMap[u._id.toString()] = u.usuario_nome;
+                        });
+
+                        // Enriquecer cada agenda
+                        agendas.forEach(a => {
+                            const dataAgenda = new Date(a.agenda_data);
+                            const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                            const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+                            a.agenda_hora = `${hor}:${min}`;
+                            a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
+                            a.evolucaoSimNao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '') ? 'Sim' : 'Não';
+                            a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
+                            a.usuarioCadNome = usuarioMap[a.agenda_usucad] || 'Desconhecido';
+                            a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
+                            a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
+
+                            const temGuia = a.agenda_guia && a.agenda_guia.guia_num && a.agenda_guia.guia_num.trim() !== '';
+                            const temSenha = a.agenda_guia && a.agenda_guia.guia_senha && a.agenda_guia.guia_senha.trim() !== '';
+                            const jaTemLote = a.agenda_loteid != null && a.agenda_loteid != undefined;
+                            
+                            a.podeLotear = (temGuia && temSenha && !jaTemLote);
+                            a.jaTemLote = jaTemLote;
+
+                            // ✅ EXTRAÇÃO COM TODOS OS CAMPOS + NOMES DOS USUÁRIOS
+                            if (a.agenda_loteid && typeof a.agenda_loteid === 'object' && a.agenda_loteid._id) {
+                                // Helper para extrair nome do usuário (populado ou fallback)
+                                const getUserName = (userField) => {
+                                    if (!userField) return null;
+                                    // Se foi populado, é objeto com usuario_nome
+                                    if (typeof userField === 'object' && userField.usuario_nome) {
+                                        return userField.usuario_nome;
+                                    }
+                                    // Fallback: se for ObjectId, buscar no mapa
+                                    const idStr = typeof userField === 'string' ? userField : (userField._id?.toString?.() || null);
+                                    return idStr ? usuarioMap[idStr] || null : null;
+                                };
+
+                                a.lote = {
+                                    // ✅ Todos os campos do schema, na ordem:
+                                    guialoteNum: a.agenda_loteid.guialote_num || null,
+                                    guialoteNumdatacad: a.agenda_loteid.guialote_numdatacad || null,
+                                    guialoteNumprotocolo: a.agenda_loteid.guialote_numprotocolo || null,  // ✅ Protocolo
+                                    guialoteDataenvio: a.agenda_loteid.guialote_dataenvio || null,       // ✅ Data envio
+                                    guialoteGuialotevalor: a.agenda_loteid.guialote_guialotevalor || null,
+                                    guialoteStatus: a.agenda_loteid.guialote_status || null,
+                                    guialoteLog: a.agenda_loteid.guialote_log || null,                   // ✅ Log
+                                    guialoteUsucad: a.agenda_loteid.guialote_usucad || null,
+                                    guialoteUsucadNome: getUserName(a.agenda_loteid.guialote_usucad),   // ✅ NOME (não ID)
+                                    guialoteDatacad: a.agenda_loteid.guialote_datacad || null,
+                                    guialoteUsuedi: a.agenda_loteid.guialote_usuedi || null,
+                                    guialoteUsuediNome: getUserName(a.agenda_loteid.guialote_usuedi),   // ✅ NOME (não ID)
+                                    guialoteDataedi: a.agenda_loteid.guialote_dataedi || null,           // ✅ Data edição
+                                    guialoteQtatend: a.agenda_loteid.guialote_qtatend || null,
+                                    guialoteAgendas: a.agenda_loteid.guialote_agendas || []
+                                };
+                            } else {
+                                a.lote = null;
+                            }
+
+                            a.agenda_guia_numdatacad_input = a.agenda_guia?.guia_numdatacad
+                                ? new Date(a.agenda_guia.guia_numdatacad).toISOString().split('T')[0] : '';
+                            a.agenda_guia_senhadatacad_input = a.agenda_guia?.guia_senhadatacad
+                                ? new Date(a.agenda_guia.guia_senhadatacad).toISOString().split('T')[0] : '';
+                        });
+
+                        // ✅ LOG DE DEBUG COM NOMES DOS USUÁRIOS
+                        if (agendas.length > 0) {
+                            const primeiraAgendaComLote = agendas.find(a => a.lote !== null);
+                            if (primeiraAgendaComLote) {
+                                console.log("🔍 [DEBUG] Campos do lote enviados para a view:");
+                                console.log("→ guialoteNum:", primeiraAgendaComLote.lote.guialoteNum);
+                                console.log("→ guialoteNumprotocolo:", primeiraAgendaComLote.lote.guialoteNumprotocolo);
+                                console.log("→ guialoteDataenvio:", primeiraAgendaComLote.lote.guialoteDataenvio);
+                                console.log("→ guialoteGuialotevalor:", primeiraAgendaComLote.lote.guialoteGuialotevalor);
+                                console.log("→ guialoteStatus:", primeiraAgendaComLote.lote.guialoteStatus);
+                                console.log("→ guialoteUsucadNome:", primeiraAgendaComLote.lote.guialoteUsucadNome); // ✅ NOME
+                                console.log("→ guialoteUsuediNome:", primeiraAgendaComLote.lote.guialoteUsuediNome); // ✅ NOME
+                                console.log("→ guialoteDataedi:", primeiraAgendaComLote.lote.guialoteDataedi);
+                                console.log("→ guialoteQtatend:", primeiraAgendaComLote.lote.guialoteQtatend);
+                            } else {
+                                console.log("⚠️ [DEBUG] Nenhuma agenda com lote encontrado nesta lista");
                             }
                         }
-                    } else {
-                        estatisticas.qtse++;
-                    }
-                }
-            });
 
-            // ✅ DEFINIR QUANTIDADE DE GUIAS ÚNICAS
-            estatisticas.qtdGuias = guiasSet.size;
-            
-            // ✅ NOVO: CALCULAR QUANTIDADE E VALOR TOTAL DE LOTES ÚNICOS
-            estatisticas.qtdLotes = lotesSet.size;
-            estatisticas.vlrTotalLotes = 0;
-            lotesValores.forEach(valor => {
-                estatisticas.vlrTotalLotes += valor;
-            });
-
-            // ✅ DEBUG DAS ESTATÍSTICAS COMPLETAS
-            console.log("📊 [ESTATÍSTICAS CALCULADAS COM LOTES]");
-            console.log("→ QA (Total):", estatisticas.qa);
-            console.log("→ QT (Válidos):", estatisticas.qt);
-            console.log("→ QAC (Cancelados):", estatisticas.qac);
-            console.log("→ QTV (Validados):", estatisticas.qtv);
-            console.log("→ QTSE (Sem Evolução):", estatisticas.qtse);
-            console.log("→ QACE (Cancel c/ Evol):", estatisticas.qace);
-            console.log("→ ATVO (Órfãos Guia/Senha):", estatisticas.atvo);
-            console.log("→ QTVA (Completos Guia+Senha):", estatisticas.qtva);
-            console.log("→ QTVL (Com Lote):", estatisticas.qtvL);
-            console.log("→ QTVLO (Órfãos de Lote):", estatisticas.qtvLo);
-            console.log("→ QTDGUIAS (Guias Únicas):", estatisticas.qtdGuias);
-            console.log("→ QTDLOTES (Lotes Únicos):", estatisticas.qtdLotes);  // ✅ NOVO LOG
-            console.log("→ VLRTOTALLOTES (Valor Total):", estatisticas.vlrTotalLotes);  // ✅ NOVO LOG
-
-            return Bene.find().then((bene) => {
-                bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
-
-                return Usuario.find({
-                    usuario_status: "Ativo",
-                    $or: [
-                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                    ]
-                }).then((terapeuta) => {
-                    terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
-
-                    const usuarioMap = {};
-                    terapeuta.forEach(u => {
-                        usuarioMap[u._id.toString()] = u.usuario_nome;
-                    });
-
-                    // Enriquecer cada agenda
-                    agendas.forEach(a => {
-                        const dataAgenda = new Date(a.agenda_data);
-                        const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
-                        const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
-                        a.agenda_hora = `${hor}:${min}`;
-                        a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
-                        a.evolucaoSimNao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '') ? 'Sim' : 'Não';
-                        a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
-                        a.usuarioCadNome = usuarioMap[a.agenda_usucad] || 'Desconhecido';
-                        a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
-                        a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
-
-                        const temGuia = a.agenda_guia && a.agenda_guia.guia_num && a.agenda_guia.guia_num.trim() !== '';
-                        const temSenha = a.agenda_guia && a.agenda_guia.guia_senha && a.agenda_guia.guia_senha.trim() !== '';
-                        const jaTemLote = a.agenda_loteid != null && a.agenda_loteid != undefined;
-                        
-                        a.podeLotear = (temGuia && temSenha && !jaTemLote);
-                        a.jaTemLote = jaTemLote;
-
-                        // ✅ EXTRAÇÃO COM TODOS OS CAMPOS + NOMES DOS USUÁRIOS
-                        if (a.agenda_loteid && typeof a.agenda_loteid === 'object' && a.agenda_loteid._id) {
-                            const getUserName = (userField) => {
-                                if (!userField) return null;
-                                if (typeof userField === 'object' && userField.usuario_nome) {
-                                    return userField.usuario_nome;
-                                }
-                                const idStr = typeof userField === 'string' ? userField : (userField._id?.toString?.() || null);
-                                return idStr ? usuarioMap[idStr] || null : null;
-                            };
-
-                            a.lote = {
-                                guialoteNum: a.agenda_loteid.guialote_num || null,
-                                guialoteNumdatacad: a.agenda_loteid.guialote_numdatacad || null,
-                                guialoteNumprotocolo: a.agenda_loteid.guialote_numprotocolo || null,
-                                guialoteDataenvio: a.agenda_loteid.guialote_dataenvio || null,
-                                guialoteGuialotevalor: a.agenda_loteid.guialote_guialotevalor || null,
-                                guialoteStatus: a.agenda_loteid.guialote_status || null,
-                                guialoteLog: a.agenda_loteid.guialote_log || null,
-                                guialoteUsucad: a.agenda_loteid.guialote_usucad || null,
-                                guialoteUsucadNome: getUserName(a.agenda_loteid.guialote_usucad),
-                                guialoteDatacad: a.agenda_loteid.guialote_datacad || null,
-                                guialoteUsuedi: a.agenda_loteid.guialote_usuedi || null,
-                                guialoteUsuediNome: getUserName(a.agenda_loteid.guialote_usuedi),
-                                guialoteDataedi: a.agenda_loteid.guialote_dataedi || null,
-                                guialoteQtatend: a.agenda_loteid.guialote_qtatend || null,
-                                guialoteAgendas: a.agenda_loteid.guialote_agendas || []
-                            };
-                        } else {
-                            a.lote = null;
-                        }
-
-                        a.agenda_guia_numdatacad_input = a.agenda_guia?.guia_numdatacad
-                            ? new Date(a.agenda_guia.guia_numdatacad).toISOString().split('T')[0] : '';
-                        a.agenda_guia_senhadatacad_input = a.agenda_guia?.guia_senhadatacad
-                            ? new Date(a.agenda_guia.guia_senhadatacad).toISOString().split('T')[0] : '';
-                    });
-
-                    // ✅ LOG DE DEBUG COM NOMES DOS USUÁRIOS
-                    if (agendas.length > 0) {
-                        const primeiraAgendaComLote = agendas.find(a => a.lote !== null);
-                        if (primeiraAgendaComLote) {
-                            console.log("🔍 [DEBUG] Campos do lote enviados para a view:");
-                            console.log("→ guialoteNum:", primeiraAgendaComLote.lote.guialoteNum);
-                            console.log("→ guialoteNumprotocolo:", primeiraAgendaComLote.lote.guialoteNumprotocolo);
-                            console.log("→ guialoteDataenvio:", primeiraAgendaComLote.lote.guialoteDataenvio);
-                            console.log("→ guialoteGuialotevalor:", primeiraAgendaComLote.lote.guialoteGuialotevalor);
-                            console.log("→ guialoteStatus:", primeiraAgendaComLote.lote.guialoteStatus);
-                            console.log("→ guialoteUsucadNome:", primeiraAgendaComLote.lote.guialoteUsucadNome);
-                            console.log("→ guialoteUsuediNome:", primeiraAgendaComLote.lote.guialoteUsuediNome);
-                            console.log("→ guialoteDataedi:", primeiraAgendaComLote.lote.guialoteDataedi);
-                            console.log("→ guialoteQtatend:", primeiraAgendaComLote.lote.guialoteQtatend);
-                        } else {
-                            console.log("⚠️ [DEBUG] Nenhuma agenda com lote encontrado nesta lista");
-                        }
-                    }
-
-                    return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
-                        .then((horaage) => Sala.find().then((salas) => {
-                            salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
-                            return Terapia.find().then((terapias) => Conv.find().then((convs) => {
-                                convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
-                                return Ano.find().then((anos) => {
-                                    console.log("📤 [RENDERIZANDO VIEW]");
-                                    
-                                    res.render('guia/lote/guialoteLis', {
-                                        extras: agendas,
-                                        benes: bene,
-                                        terapeutas: terapeuta,
-                                        horaages: horaage,
-                                        salas: salas,
-                                        terapias: terapias,
-                                        convs: convs,
-                                        anos: anos,
-                                        flash,
-                                        filtroTipo: tipoData,
-                                        filtroAno: anoAtend,
-                                        filtroMes: mesAtend,
-                                        filtroData: dataFil,
-                                        filtroTipoPessoa: atendTipoPessoa,
-                                        filtroBeneficiario: atendBeneficiario,
-                                        filtroConvenio: atendConvenio,
-                                        estatisticas: estatisticas,
-                                        filtroTela: filtroTela
+                        // ✅ CHAIN CORRETA - sem código solto!
+                        return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
+                            .then((horaage) => Sala.find().then((salas) => {
+                                salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
+                                return Terapia.find().then((terapias) => Conv.find().then((convs) => {
+                                    convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
+                                    return Ano.find().then((anos) => {
+                                        console.log("📤 [RENDERIZANDO VIEW]");
+                                        
+                                        // ✅ RENDER COM NOMES EXATOS (não alterar!)
+                                        res.render('guia/lote/guialoteLis', {
+                                            extras: agendas,
+                                            benes: bene,
+                                            terapeutas: terapeuta,
+                                            horaages: horaage,
+                                            salas: salas,
+                                            terapias: terapias,
+                                            convs: convs,
+                                            anos: anos,
+                                            flash,
+                                            filtroTipo: tipoData,
+                                            filtroAno: anoAtend,
+                                            filtroMes: mesAtend,
+                                            filtroData: dataFil,
+                                            filtroTipoPessoa: atendTipoPessoa,
+                                            filtroBeneficiario: atendBeneficiario,
+                                            filtroConvenio: atendConvenio,  // ✅ ADICIONADO
+                                            // ✅ ADICIONAR ESTATÍSTICAS NO RENDER
+                                            estatisticas: estatisticas,
+                                            filtroTela: filtroTela
+                                        });
                                     });
-                                });
+                                }));
                             }));
-                        }));
+                    });
                 });
+            })
+            .catch((err) => {
+                console.error("💥 ERRO EM filtraGuialotelis:", err);
+                req.flash("error_message", "Houve um erro ao listar os agendamentos.");
+                res.redirect('/admin/erro');
             });
-        })
-        .catch((err) => {
-            console.error("💥 ERRO EM filtraGuialotelis:", err);
-            req.flash("error_message", "Houve um erro ao listar os agendamentos.");
-            res.redirect('/admin/erro');
-        });
-},
+    },
+    filtraGuialotelis_OLD_ComConv_qtGuia(req, res, resposta) {
+        console.log("🚨🚨🚨 ENTROU NA FUNÇÃO filtraGuialotelis 🚨🚨🚨");
+        console.log("📦 req.body completo:", req.body);
+        
+        let db = req.cookies['preferredDb'];
+        
+        // ✅ Models com classes corretas
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+
+        if (!resposta || typeof resposta !== 'object') {
+            resposta = { texto: '', sucesso: false };
+        }
+        let flash = new Resposta();
+        flash.texto = resposta.texto;
+        flash.sucesso = resposta.sucesso;
+
+        // ✅ Capturar filtros do body
+        const tipoData = req.body.tipoData;
+        const anoAtend = req.body.anoAtend;
+        const mesAtend = req.body.mesAtend;
+        const dataFil = req.body.dataFil;
+        const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
+        const atendBeneficiario = req.body.atendBeneficiario;
+        const atendTerapeuta = req.body.atendTerapeuta;
+        const atendConvenio = req.body.atendConvenio;
+
+        // ✅ LOGS DE DEBUG
+        console.log("🔍 [DADOS RECEBIDOS DO FORMULÁRIO]");
+        console.log("→ atendTipoPessoa:", atendTipoPessoa);
+        console.log("→ atendBeneficiario:", atendBeneficiario);
+        console.log("→ atendTerapeuta:", atendTerapeuta);
+        console.log("→ atendConvenio:", atendConvenio);
+
+        const filtroTela = {
+            tipoData: req.body.tipoData || "Ano/Mes",
+            dataFinal: req.body.dataFinal || "",
+            dataFil: req.body.dataFil || "",
+            anoAtend: req.body.anoAtend || "",
+            mesAtend: req.body.mesAtend || "",
+            tipoPessoa: req.body.atendTipoPessoa || "Geral",
+            atendTerapeuta: req.body.atendTerapeuta || "",
+            atendBeneficiario: req.body.atendBeneficiario || "",
+            atendConvenio: req.body.atendConvenio || "",
+            atendConcluido: req.body.AtendConcluido || "Todos", 
+            atendSelo: req.body.atendSelo || "Todos"
+        };
+
+        let dataIni, dataFim;
+        console.log(filtroTela.dataFinal);
+
+        switch (filtroTela.tipoData){
+            case "Ano/Mes":
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoMes(filtroTela.anoAtend, filtroTela.mesAtend));
+                break;
+            case "Semana":
+                ({ dataIni, dataFim } = fncGeral.obterSemanaUtil(filtroTela.dataFinal));
+                break;
+            case "Dia":
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia(filtroTela.dataFinal));
+                break;
+            default:
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia('2000-01-01'));
+                break;
+        }
+
+        // ✅ QUERY BASE COM FILTROS (IGUAL À filtraGuialis)
+        let agendaQuery = { 
+            agenda_data: { $gte: dataIni, $lte: dataFim },
+            agenda_categoria: { $nin: ["Extra", "Reuniao", "Pais", "Glosa"] }  // ✅ ADICIONADO
+        };
+
+        if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
+            agendaQuery.agenda_beneid = atendBeneficiario;
+            console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
+        }
+        else if (atendTipoPessoa === "Terapeuta" && atendTerapeuta) {
+            agendaQuery.agenda_usuid = atendTerapeuta;
+            console.log("👨‍⚕️ Aplicando filtro por terapeuta ID:", atendTerapeuta);
+        }
+        else if (atendTipoPessoa === "Convênio" && atendConvenio) {
+            agendaQuery.agenda_convid = atendConvenio;
+            console.log("🏥 Aplicando filtro por convênio ID:", atendConvenio);
+        }
+
+        console.log("🔎 [QUERY FINAL PARA AGENDA]");
+        console.log("→ agendaQuery:", JSON.stringify(agendaQuery, null, 2));
+
+        // ✅ QUERY PRINCIPAL COM POPULATE ANINHADO
+        Agenda.find(agendaQuery)
+            .populate({
+                path: 'agenda_loteid',
+                select: 'guialote_num guialote_numdatacad guialote_numprotocolo guialote_dataenvio guialote_guialotevalor guialote_status guialote_log guialote_usucad guialote_datacad guialote_usuedi guialote_dataedi guialote_qtatend guialote_agendas',
+                strictPopulate: false,
+                populate: [
+                    {
+                        path: 'guialote_usucad',
+                        model: Usuario,
+                        select: 'usuario_nome'
+                    },
+                    {
+                        path: 'guialote_usuedi',
+                        model: Usuario,
+                        select: 'usuario_nome'
+                    }
+                ]
+            })
+            .then((agendas) => {
+                console.log("✅ [RESULTADO DA AGENDA]");
+                console.log("→ Total de registros encontrados:", agendas.length);
+                
+                // 🔥 REGRAS DE NEGÓCIO: FILTRAGEM (IGUAL À filtraGuialis)
+                
+                // 1. Remover agendas temporárias
+                let idsAgendasEx = [];
+                agendas.forEach(e => {
+                    if (e.agenda_temp) {
+                        idsAgendasEx.push(e.agenda_tempId.toString());
+                    }
+                });
+                agendas = agendas.filter(a => !idsAgendasEx.includes(a._id.toString()));
+                console.log("🗑️ [FILTRO TEMPORÁRIAS] Removidas:", idsAgendasEx.length);
+                
+                // 2. Remover cancelados (Feriado e Falta Absoluta)
+                agendas = agendas.filter(a => {
+                    const cat = a.agenda_categoria;
+                    return cat !== "Falta Absoluta" && cat !== "Feriado";
+                });
+                console.log("🗑️ [FILTRO CANCELADOS] Total após filtro:", agendas.length);
+
+                // 📊 ESTATÍSTICAS COMPLETAS (COM NOVA MÉTRICA qtdGuias)
+                const estatisticas = {
+                    qa: 0,        // Total de Agendamentos
+                    qt: 0,        // Atendimentos Válidos
+                    qac: 0,       // Cancelados
+                    qtv: 0,       // Validados (c/ evolução)
+                    qtse: 0,      // Sem Evolução
+                    qace: 0,      // Cancelados c/ Evolução
+                    atvo: 0,      // Órfãos de Guia/Senha
+                    qtva: 0,      // Completos (Guia + Senha)
+                    qtvL: 0,      // Com Lote vinculado
+                    qtvLo: 0,     // Órfãos de Lote
+                    qtdGuias: 0   // ✅ NOVA: Quantidade de Guias Únicas
+                };
+
+                // ✅ SET PARA CONTAR GUIAS ÚNICAS
+                const guiasSet = new Set();
+
+                agendas.forEach(a => {
+                    estatisticas.qa++;
+                    
+                    const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
+                    const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
+                    const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
+                    const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
+                    const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
+                    
+                    // ✅ ADICIONAR GUIA AO SET (SE EXISTIR)
+                    if (temGuia) {
+                        guiasSet.add(a.agenda_guia?.guia_num?.trim());  // ✅ USAR OPTIONAL CHAINING
+                    }
+                    
+                    if (ehCancelado) {
+                        estatisticas.qac++;
+                        if (temEvolucao) estatisticas.qace++;
+                    } else {
+                        estatisticas.qt++;
+                        if (temEvolucao) {
+                            estatisticas.qtv++;
+                            
+                            if (!temGuia || !temSenha) {
+                                estatisticas.atvo++;
+                            } else {
+                                estatisticas.qtva++;
+                                
+                                if (temLote) {
+                                    estatisticas.qtvL++;
+                                } else {
+                                    estatisticas.qtvLo++;
+                                }
+                            }
+                        } else {
+                            estatisticas.qtse++;
+                        }
+                    }
+                });
+
+                // ✅ DEFINIR QUANTIDADE DE GUIAS ÚNICAS
+                estatisticas.qtdGuias = guiasSet.size;
+
+                // ✅ DEBUG DAS ESTATÍSTICAS COM LOTES E GUIAS
+                console.log("📊 [ESTATÍSTICAS CALCULADAS COM LOTES]");
+                console.log("→ QA (Total):", estatisticas.qa);
+                console.log("→ QT (Válidos):", estatisticas.qt);
+                console.log("→ QAC (Cancelados):", estatisticas.qac);
+                console.log("→ QTV (Validados):", estatisticas.qtv);
+                console.log("→ QTSE (Sem Evolução):", estatisticas.qtse);
+                console.log("→ QACE (Cancel c/ Evol):", estatisticas.qace);
+                console.log("→ ATVO (Órfãos Guia/Senha):", estatisticas.atvo);
+                console.log("→ QTVA (Completos Guia+Senha):", estatisticas.qtva);
+                console.log("→ QTVL (Com Lote):", estatisticas.qtvL);
+                console.log("→ QTVLO (Órfãos de Lote):", estatisticas.qtvLo);
+                console.log("→ QTDGUIAS (Guias Únicas):", estatisticas.qtdGuias);  // ✅ NOVO LOG
+
+                return Bene.find().then((bene) => {
+                    bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
+
+                    return Usuario.find({
+                        usuario_status: "Ativo",
+                        $or: [
+                            { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                            { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                        ]
+                    }).then((terapeuta) => {
+                        terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
+
+                        const usuarioMap = {};
+                        terapeuta.forEach(u => {
+                            usuarioMap[u._id.toString()] = u.usuario_nome;
+                        });
+
+                        // Enriquecer cada agenda
+                        agendas.forEach(a => {
+                            const dataAgenda = new Date(a.agenda_data);
+                            const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                            const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+                            a.agenda_hora = `${hor}:${min}`;
+                            a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
+                            a.evolucaoSimNao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '') ? 'Sim' : 'Não';
+                            a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
+                            a.usuarioCadNome = usuarioMap[a.agenda_usucad] || 'Desconhecido';
+                            a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
+                            a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
+
+                            const temGuia = a.agenda_guia && a.agenda_guia.guia_num && a.agenda_guia.guia_num.trim() !== '';
+                            const temSenha = a.agenda_guia && a.agenda_guia.guia_senha && a.agenda_guia.guia_senha.trim() !== '';
+                            const jaTemLote = a.agenda_loteid != null && a.agenda_loteid != undefined;
+                            
+                            a.podeLotear = (temGuia && temSenha && !jaTemLote);
+                            a.jaTemLote = jaTemLote;
+
+                            // ✅ EXTRAÇÃO COM TODOS OS CAMPOS + NOMES DOS USUÁRIOS
+                            if (a.agenda_loteid && typeof a.agenda_loteid === 'object' && a.agenda_loteid._id) {
+                                const getUserName = (userField) => {
+                                    if (!userField) return null;
+                                    if (typeof userField === 'object' && userField.usuario_nome) {
+                                        return userField.usuario_nome;
+                                    }
+                                    const idStr = typeof userField === 'string' ? userField : (userField._id?.toString?.() || null);
+                                    return idStr ? usuarioMap[idStr] || null : null;
+                                };
+
+                                a.lote = {
+                                    guialoteNum: a.agenda_loteid.guialote_num || null,
+                                    guialoteNumdatacad: a.agenda_loteid.guialote_numdatacad || null,
+                                    guialoteNumprotocolo: a.agenda_loteid.guialote_numprotocolo || null,
+                                    guialoteDataenvio: a.agenda_loteid.guialote_dataenvio || null,
+                                    guialoteGuialotevalor: a.agenda_loteid.guialote_guialotevalor || null,
+                                    guialoteStatus: a.agenda_loteid.guialote_status || null,
+                                    guialoteLog: a.agenda_loteid.guialote_log || null,
+                                    guialoteUsucad: a.agenda_loteid.guialote_usucad || null,
+                                    guialoteUsucadNome: getUserName(a.agenda_loteid.guialote_usucad),
+                                    guialoteDatacad: a.agenda_loteid.guialote_datacad || null,
+                                    guialoteUsuedi: a.agenda_loteid.guialote_usuedi || null,
+                                    guialoteUsuediNome: getUserName(a.agenda_loteid.guialote_usuedi),
+                                    guialoteDataedi: a.agenda_loteid.guialote_dataedi || null,
+                                    guialoteQtatend: a.agenda_loteid.guialote_qtatend || null,
+                                    guialoteAgendas: a.agenda_loteid.guialote_agendas || []
+                                };
+                            } else {
+                                a.lote = null;
+                            }
+
+                            a.agenda_guia_numdatacad_input = a.agenda_guia?.guia_numdatacad
+                                ? new Date(a.agenda_guia.guia_numdatacad).toISOString().split('T')[0] : '';
+                            a.agenda_guia_senhadatacad_input = a.agenda_guia?.guia_senhadatacad
+                                ? new Date(a.agenda_guia.guia_senhadatacad).toISOString().split('T')[0] : '';
+                        });
+
+                        // ✅ LOG DE DEBUG COM NOMES DOS USUÁRIOS
+                        if (agendas.length > 0) {
+                            const primeiraAgendaComLote = agendas.find(a => a.lote !== null);
+                            if (primeiraAgendaComLote) {
+                                console.log("🔍 [DEBUG] Campos do lote enviados para a view:");
+                                console.log("→ guialoteNum:", primeiraAgendaComLote.lote.guialoteNum);
+                                console.log("→ guialoteNumprotocolo:", primeiraAgendaComLote.lote.guialoteNumprotocolo);
+                                console.log("→ guialoteDataenvio:", primeiraAgendaComLote.lote.guialoteDataenvio);
+                                console.log("→ guialoteGuialotevalor:", primeiraAgendaComLote.lote.guialoteGuialotevalor);
+                                console.log("→ guialoteStatus:", primeiraAgendaComLote.lote.guialoteStatus);
+                                console.log("→ guialoteUsucadNome:", primeiraAgendaComLote.lote.guialoteUsucadNome);
+                                console.log("→ guialoteUsuediNome:", primeiraAgendaComLote.lote.guialoteUsuediNome);
+                                console.log("→ guialoteDataedi:", primeiraAgendaComLote.lote.guialoteDataedi);
+                                console.log("→ guialoteQtatend:", primeiraAgendaComLote.lote.guialoteQtatend);
+                            } else {
+                                console.log("⚠️ [DEBUG] Nenhuma agenda com lote encontrado nesta lista");
+                            }
+                        }
+
+                        return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
+                            .then((horaage) => Sala.find().then((salas) => {
+                                salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
+                                return Terapia.find().then((terapias) => Conv.find().then((convs) => {
+                                    convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
+                                    return Ano.find().then((anos) => {
+                                        console.log("📤 [RENDERIZANDO VIEW]");
+                                        
+                                        res.render('guia/lote/guialoteLis', {
+                                            extras: agendas,
+                                            benes: bene,
+                                            terapeutas: terapeuta,
+                                            horaages: horaage,
+                                            salas: salas,
+                                            terapias: terapias,
+                                            convs: convs,
+                                            anos: anos,
+                                            flash,
+                                            filtroTipo: tipoData,
+                                            filtroAno: anoAtend,
+                                            filtroMes: mesAtend,
+                                            filtroData: dataFil,
+                                            filtroTipoPessoa: atendTipoPessoa,
+                                            filtroBeneficiario: atendBeneficiario,
+                                            filtroConvenio: atendConvenio,
+                                            estatisticas: estatisticas,
+                                            filtroTela: filtroTela
+                                        });
+                                    });
+                                }));
+                            }));
+                    });
+                });
+            })
+            .catch((err) => {
+                console.error("💥 ERRO EM filtraGuialotelis:", err);
+                req.flash("error_message", "Houve um erro ao listar os agendamentos.");
+                res.redirect('/admin/erro');
+            });
+    },
+    filtraGuialotelis(req, res, resposta) {
+        console.log("🚨🚨🚨 ENTROU NA FUNÇÃO filtraGuialotelis 🚨🚨🚨");
+        console.log("📦 req.body completo:", req.body);
+        
+        let db = req.cookies['preferredDb'];
+        
+        // ✅ Models com classes corretas
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+
+        if (!resposta || typeof resposta !== 'object') {
+            resposta = { texto: '', sucesso: false };
+        }
+        let flash = new Resposta();
+        flash.texto = resposta.texto;
+        flash.sucesso = resposta.sucesso;
+
+        // ✅ Capturar filtros do body
+        const tipoData = req.body.tipoData;
+        const anoAtend = req.body.anoAtend;
+        const mesAtend = req.body.mesAtend;
+        const dataFil = req.body.dataFil;
+        const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
+        const atendBeneficiario = req.body.atendBeneficiario;
+        const atendTerapeuta = req.body.atendTerapeuta;
+        const atendConvenio = req.body.atendConvenio;
+
+        // ✅ LOGS DE DEBUG
+        console.log("🔍 [DADOS RECEBIDOS DO FORMULÁRIO]");
+        console.log("→ atendTipoPessoa:", atendTipoPessoa);
+        console.log("→ atendBeneficiario:", atendBeneficiario);
+        console.log("→ atendTerapeuta:", atendTerapeuta);
+        console.log("→ atendConvenio:", atendConvenio);
+
+        const filtroTela = {
+            tipoData: req.body.tipoData || "Ano/Mes",
+            dataFinal: req.body.dataFinal || "",
+            dataFil: req.body.dataFil || "",
+            anoAtend: req.body.anoAtend || "",
+            mesAtend: req.body.mesAtend || "",
+            tipoPessoa: req.body.atendTipoPessoa || "Geral",
+            atendTerapeuta: req.body.atendTerapeuta || "",
+            atendBeneficiario: req.body.atendBeneficiario || "",
+            atendConvenio: req.body.atendConvenio || "",
+            atendConcluido: req.body.AtendConcluido || "Todos", 
+            atendSelo: req.body.atendSelo || "Todos"
+        };
+
+        let dataIni, dataFim;
+        console.log(filtroTela.dataFinal);
+
+        switch (filtroTela.tipoData){
+            case "Ano/Mes":
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoMes(filtroTela.anoAtend, filtroTela.mesAtend));
+                break;
+            case "Semana":
+                ({ dataIni, dataFim } = fncGeral.obterSemanaUtil(filtroTela.dataFinal));
+                break;
+            case "Dia":
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia(filtroTela.dataFinal));
+                break;
+            default:
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia('2000-01-01'));
+                break;
+        }
+
+        // ✅ QUERY BASE COM FILTROS (IGUAL À filtraGuialis)
+        let agendaQuery = { 
+            agenda_data: { $gte: dataIni, $lte: dataFim },
+            agenda_categoria: { $nin: ["Extra", "Reuniao", "Pais", "Glosa"] }  // ✅ ADICIONADO
+        };
+
+        if (atendTipoPessoa === "Beneficiario" && atendBeneficiario) {
+            agendaQuery.agenda_beneid = atendBeneficiario;
+            console.log("👤 Aplicando filtro por beneficiário ID:", atendBeneficiario);
+        }
+        else if (atendTipoPessoa === "Terapeuta" && atendTerapeuta) {
+            agendaQuery.agenda_usuid = atendTerapeuta;
+            console.log("👨‍⚕️ Aplicando filtro por terapeuta ID:", atendTerapeuta);
+        }
+        else if (atendTipoPessoa === "Convênio" && atendConvenio) {
+            agendaQuery.agenda_convid = atendConvenio;
+            console.log("🏥 Aplicando filtro por convênio ID:", atendConvenio);
+        }
+
+        console.log("🔎 [QUERY FINAL PARA AGENDA]");
+        console.log("→ agendaQuery:", JSON.stringify(agendaQuery, null, 2));
+
+        // ✅ QUERY PRINCIPAL COM POPULATE ANINHADO
+        Agenda.find(agendaQuery)
+            .populate({
+                path: 'agenda_loteid',
+                select: 'guialote_num guialote_numdatacad guialote_numprotocolo guialote_dataenvio guialote_guialotevalor guialote_status guialote_log guialote_usucad guialote_datacad guialote_usuedi guialote_dataedi guialote_qtatend guialote_agendas',
+                strictPopulate: false,
+                populate: [
+                    {
+                        path: 'guialote_usucad',
+                        model: Usuario,
+                        select: 'usuario_nome'
+                    },
+                    {
+                        path: 'guialote_usuedi',
+                        model: Usuario,
+                        select: 'usuario_nome'
+                    }
+                ]
+            })
+            .then((agendas) => {
+                console.log("✅ [RESULTADO DA AGENDA]");
+                console.log("→ Total de registros encontrados:", agendas.length);
+                
+                // 🔥 REGRAS DE NEGÓCIO: FILTRAGEM (IGUAL À filtraGuialis)
+                
+                // 1. Remover agendas temporárias
+                let idsAgendasEx = [];
+                agendas.forEach(e => {
+                    if (e.agenda_temp) {
+                        idsAgendasEx.push(e.agenda_tempId.toString());
+                    }
+                });
+                agendas = agendas.filter(a => !idsAgendasEx.includes(a._id.toString()));
+                console.log("🗑️ [FILTRO TEMPORÁRIAS] Removidas:", idsAgendasEx.length);
+                
+                // 2. Remover cancelados (Feriado e Falta Absoluta)
+                agendas = agendas.filter(a => {
+                    const cat = a.agenda_categoria;
+                    return cat !== "Falta Absoluta" && cat !== "Feriado";
+                });
+                console.log("🗑️ [FILTRO CANCELADOS] Total após filtro:", agendas.length);
+
+                // 📊 ESTATÍSTICAS COMPLETAS (COM NOVAS MÉTRICAS)
+                const estatisticas = {
+                    qa: 0,        // Total de Agendamentos
+                    qt: 0,        // Atendimentos Válidos
+                    qac: 0,       // Cancelados
+                    qtv: 0,       // Validados (c/ evolução)
+                    qtse: 0,      // Sem Evolução
+                    qace: 0,      // Cancelados c/ Evolução
+                    atvo: 0,      // Órfãos de Guia/Senha
+                    qtva: 0,      // Completos (Guia + Senha)
+                    qtvL: 0,      // Com Lote vinculado
+                    qtvLo: 0,     // Órfãos de Lote
+                    qtdGuias: 0,  // ✅ Quantidade de Guias Únicas
+                    qtdLotes: 0,  // ✅ NOVO: Quantidade de Lotes Únicos
+                    vlrTotalLotes: 0  // ✅ NOVO: Valor Total dos Lotes Únicos
+                };
+
+                // ✅ SET PARA CONTAR GUIAS ÚNICAS
+                const guiasSet = new Set();
+                
+                // ✅ NOVO: SET E MAP PARA CONTAR LOTES ÚNICOS
+                const lotesSet = new Set();
+                const lotesValores = new Map();
+
+                agendas.forEach(a => {
+                    estatisticas.qa++;
+                    
+                    const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
+                    const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
+                    const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
+                    const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
+                    const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
+                    
+                    // ✅ ADICIONAR GUIA AO SET (SE EXISTIR)
+                    if (temGuia) {
+                        guiasSet.add(a.agenda_guia?.guia_num?.trim());
+                    }
+                    
+                    // ✅ NOVO: PROCESSAR LOTES ÚNICOS
+                    if (temLote && a.agenda_loteid && typeof a.agenda_loteid === 'object' && a.agenda_loteid._id) {
+                        const loteId = a.agenda_loteid._id.toString();
+                        const loteValor = parseFloat(a.agenda_loteid.guialote_guialotevalor) || 0;
+                        
+                        // Adicionar ID ao Set (ignora duplicatas automaticamente)
+                        lotesSet.add(loteId);
+                        
+                        // Armazenar valor no Map (só se ainda não existe)
+                        if (!lotesValores.has(loteId)) {
+                            lotesValores.set(loteId, loteValor);
+                        }
+                    }
+                    
+                    if (ehCancelado) {
+                        estatisticas.qac++;
+                        if (temEvolucao) estatisticas.qace++;
+                    } else {
+                        estatisticas.qt++;
+                        if (temEvolucao) {
+                            estatisticas.qtv++;
+                            
+                            if (!temGuia || !temSenha) {
+                                estatisticas.atvo++;
+                            } else {
+                                estatisticas.qtva++;
+                                
+                                if (temLote) {
+                                    estatisticas.qtvL++;
+                                } else {
+                                    estatisticas.qtvLo++;
+                                }
+                            }
+                        } else {
+                            estatisticas.qtse++;
+                        }
+                    }
+                });
+
+                // ✅ DEFINIR QUANTIDADE DE GUIAS ÚNICAS
+                estatisticas.qtdGuias = guiasSet.size;
+                
+                // ✅ NOVO: CALCULAR QUANTIDADE E VALOR TOTAL DE LOTES ÚNICOS
+                estatisticas.qtdLotes = lotesSet.size;
+                estatisticas.vlrTotalLotes = 0;
+                lotesValores.forEach(valor => {
+                    estatisticas.vlrTotalLotes += valor;
+                });
+
+                // ✅ DEBUG DAS ESTATÍSTICAS COMPLETAS
+                console.log("📊 [ESTATÍSTICAS CALCULADAS COM LOTES]");
+                console.log("→ QA (Total):", estatisticas.qa);
+                console.log("→ QT (Válidos):", estatisticas.qt);
+                console.log("→ QAC (Cancelados):", estatisticas.qac);
+                console.log("→ QTV (Validados):", estatisticas.qtv);
+                console.log("→ QTSE (Sem Evolução):", estatisticas.qtse);
+                console.log("→ QACE (Cancel c/ Evol):", estatisticas.qace);
+                console.log("→ ATVO (Órfãos Guia/Senha):", estatisticas.atvo);
+                console.log("→ QTVA (Completos Guia+Senha):", estatisticas.qtva);
+                console.log("→ QTVL (Com Lote):", estatisticas.qtvL);
+                console.log("→ QTVLO (Órfãos de Lote):", estatisticas.qtvLo);
+                console.log("→ QTDGUIAS (Guias Únicas):", estatisticas.qtdGuias);
+                console.log("→ QTDLOTES (Lotes Únicos):", estatisticas.qtdLotes);  // ✅ NOVO LOG
+                console.log("→ VLRTOTALLOTES (Valor Total):", estatisticas.vlrTotalLotes);  // ✅ NOVO LOG
+
+                return Bene.find().then((bene) => {
+                    bene.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, 'pt-BR'));
+
+                    return Usuario.find({
+                        
+                        $or: [
+                            { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                            { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                        ]
+                    }).then((terapeuta) => {
+                        terapeuta.sort((a, b) => a.usuario_nome.localeCompare(b.usuario_nome, 'pt-BR'));
+
+                        const usuarioMap = {};
+                        terapeuta.forEach(u => {
+                            usuarioMap[u._id.toString()] = u.usuario_nome;
+                        });
+
+                        // Enriquecer cada agenda
+                        agendas.forEach(a => {
+                            const dataAgenda = new Date(a.agenda_data);
+                            const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                            const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+                            a.agenda_hora = `${hor}:${min}`;
+                            a.agenda_data_dia = fncGeral.getDataFMT(dataAgenda);
+                            a.evolucaoSimNao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '') ? 'Sim' : 'Não';
+                            a.datacad = a.agenda_datacad ? fncGeral.getDataFMT(new Date(a.agenda_datacad)) : null;
+                            a.usuarioCadNome = usuarioMap[a.agenda_usucad] || 'Desconhecido';
+                            a.dataedi = a.agenda_dataedi ? fncGeral.getDataFMT(new Date(a.agenda_dataedi)) : null;
+                            a.usuarioEdiNome = usuarioMap[a.agenda_usuedi] || 'Desconhecido';
+
+                            const temGuia = a.agenda_guia && a.agenda_guia.guia_num && a.agenda_guia.guia_num.trim() !== '';
+                            const temSenha = a.agenda_guia && a.agenda_guia.guia_senha && a.agenda_guia.guia_senha.trim() !== '';
+                            const jaTemLote = a.agenda_loteid != null && a.agenda_loteid != undefined;
+                            
+                            a.podeLotear = (temGuia && temSenha && !jaTemLote);
+                            a.jaTemLote = jaTemLote;
+
+                            // ✅ EXTRAÇÃO COM TODOS OS CAMPOS + NOMES DOS USUÁRIOS
+                            if (a.agenda_loteid && typeof a.agenda_loteid === 'object' && a.agenda_loteid._id) {
+                                const getUserName = (userField) => {
+                                    if (!userField) return null;
+                                    if (typeof userField === 'object' && userField.usuario_nome) {
+                                        return userField.usuario_nome;
+                                    }
+                                    const idStr = typeof userField === 'string' ? userField : (userField._id?.toString?.() || null);
+                                    return idStr ? usuarioMap[idStr] || null : null;
+                                };
+
+                                a.lote = {
+                                    guialoteNum: a.agenda_loteid.guialote_num || null,
+                                    guialoteNumdatacad: a.agenda_loteid.guialote_numdatacad || null,
+                                    guialoteNumprotocolo: a.agenda_loteid.guialote_numprotocolo || null,
+                                    guialoteDataenvio: a.agenda_loteid.guialote_dataenvio || null,
+                                    guialoteGuialotevalor: a.agenda_loteid.guialote_guialotevalor || null,
+                                    guialoteStatus: a.agenda_loteid.guialote_status || null,
+                                    guialoteLog: a.agenda_loteid.guialote_log || null,
+                                    guialoteUsucad: a.agenda_loteid.guialote_usucad || null,
+                                    guialoteUsucadNome: getUserName(a.agenda_loteid.guialote_usucad),
+                                    guialoteDatacad: a.agenda_loteid.guialote_datacad || null,
+                                    guialoteUsuedi: a.agenda_loteid.guialote_usuedi || null,
+                                    guialoteUsuediNome: getUserName(a.agenda_loteid.guialote_usuedi),
+                                    guialoteDataedi: a.agenda_loteid.guialote_dataedi || null,
+                                    guialoteQtatend: a.agenda_loteid.guialote_qtatend || null,
+                                    guialoteAgendas: a.agenda_loteid.guialote_agendas || []
+                                };
+                            } else {
+                                a.lote = null;
+                            }
+
+                            a.agenda_guia_numdatacad_input = a.agenda_guia?.guia_numdatacad
+                                ? new Date(a.agenda_guia.guia_numdatacad).toISOString().split('T')[0] : '';
+                            a.agenda_guia_senhadatacad_input = a.agenda_guia?.guia_senhadatacad
+                                ? new Date(a.agenda_guia.guia_senhadatacad).toISOString().split('T')[0] : '';
+                        });
+
+                        // ✅ LOG DE DEBUG COM NOMES DOS USUÁRIOS
+                        if (agendas.length > 0) {
+                            const primeiraAgendaComLote = agendas.find(a => a.lote !== null);
+                            if (primeiraAgendaComLote) {
+                                console.log("🔍 [DEBUG] Campos do lote enviados para a view:");
+                                console.log("→ guialoteNum:", primeiraAgendaComLote.lote.guialoteNum);
+                                console.log("→ guialoteNumprotocolo:", primeiraAgendaComLote.lote.guialoteNumprotocolo);
+                                console.log("→ guialoteDataenvio:", primeiraAgendaComLote.lote.guialoteDataenvio);
+                                console.log("→ guialoteGuialotevalor:", primeiraAgendaComLote.lote.guialoteGuialotevalor);
+                                console.log("→ guialoteStatus:", primeiraAgendaComLote.lote.guialoteStatus);
+                                console.log("→ guialoteUsucadNome:", primeiraAgendaComLote.lote.guialoteUsucadNome);
+                                console.log("→ guialoteUsuediNome:", primeiraAgendaComLote.lote.guialoteUsuediNome);
+                                console.log("→ guialoteDataedi:", primeiraAgendaComLote.lote.guialoteDataedi);
+                                console.log("→ guialoteQtatend:", primeiraAgendaComLote.lote.guialoteQtatend);
+                            } else {
+                                console.log("⚠️ [DEBUG] Nenhuma agenda com lote encontrado nesta lista");
+                            }
+                        }
+
+                        return Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 })
+                            .then((horaage) => Sala.find().then((salas) => {
+                                salas.sort((a, b) => a.sala_nome.localeCompare(b.sala_nome, 'pt-BR'));
+                                return Terapia.find().then((terapias) => Conv.find().then((convs) => {
+                                    convs.sort((a, b) => a.conv_nome.localeCompare(b.conv_nome, 'pt-BR'));
+                                    return Ano.find().then((anos) => {
+                                        console.log("📤 [RENDERIZANDO VIEW]");
+                                        
+                                        res.render('guia/lote/guialoteLis', {
+                                            extras: agendas,
+                                            benes: bene,
+                                            terapeutas: terapeuta,
+                                            horaages: horaage,
+                                            salas: salas,
+                                            terapias: terapias,
+                                            convs: convs,
+                                            anos: anos,
+                                            flash,
+                                            filtroTipo: tipoData,
+                                            filtroAno: anoAtend,
+                                            filtroMes: mesAtend,
+                                            filtroData: dataFil,
+                                            filtroTipoPessoa: atendTipoPessoa,
+                                            filtroBeneficiario: atendBeneficiario,
+                                            filtroConvenio: atendConvenio,
+                                            estatisticas: estatisticas,
+                                            filtroTela: filtroTela
+                                        });
+                                    });
+                                }));
+                            }));
+                    });
+                });
+            })
+            .catch((err) => {
+                console.error("💥 ERRO EM filtraGuialotelis:", err);
+                req.flash("error_message", "Houve um erro ao listar os agendamentos.");
+                res.redirect('/admin/erro');
+            });
+    },
     // ============================================
     // LISTA INICIAL DE GUIALOTE (SEM FILTRO)
     // ============================================
@@ -1496,9 +1495,12 @@ filtraGuialotelis(req, res, resposta) {
     // ============================================
     // FILTRAR GESTÃO DOS LOTES (CORRIGIDA)
     // ============================================
+
     filtragestaoGuialote(req, res, resposta) {
         let db = req.cookies['preferredDb'];
-        
+
+        // ✅ Models locais
+        const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
         const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
         const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
@@ -1523,6 +1525,7 @@ filtraGuialotelis(req, res, resposta) {
         const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
         const atendBeneficiario = req.body.atendBeneficiario;
         const atendTerapeuta = req.body.atendTerapeuta || '766f69643132333435366964';
+        const atendConvenio = req.body.atendConvenio;
 
         let dataIni, dataFim;
 
@@ -1546,223 +1549,233 @@ filtraGuialotelis(req, res, resposta) {
             return res.render('admin/erro', { message: "Tipo de filtro inválido." });
         }
 
-        // ✅ CORREÇÃO CRÍTICA: Buscar TODOS os agendamentos (não só com lote!)
+        // ✅ Query base
         let agendaQuery = {
-            agenda_data: { $gte: dataIni, $lte: dataFim }  // ✅ SEM FILTRO DE LOTE AQUI!
+            agenda_data: { $gte: dataIni, $lte: dataFim }
         };
 
+        // ✅ Aplicar filtros de pessoa
         if (atendTipoPessoa === "Beneficiario" && atendBeneficiario && atendBeneficiario !== '766f69643132333435366964') {
             agendaQuery.agenda_beneid = atendBeneficiario;
         } else if (atendTipoPessoa === "Terapeuta" && atendTerapeuta && atendTerapeuta !== '766f69643132333435366964') {
             agendaQuery.agenda_usuid = atendTerapeuta;
+        } else if (atendTipoPessoa === "Convênio" && atendConvenio) {
+            agendaQuery.agenda_convid = atendConvenio;
         }
 
-        // ✅ QUERY PRINCIPAL COM POPULATE COMPLETO
-        Agenda.find(agendaQuery)
-            .populate([
-                {
-                    path: 'agenda_beneid',
-                    model: Bene,
-                    select: 'bene_nome'
-                },
-                {
-                    path: 'agenda_usuid',
-                    model: Usuario,
-                    select: 'usuario_nome'
-                },
-                {
-                    path: 'agenda_terapiaid',
-                    model: Terapia,
-                    select: 'terapia_nomecid'
-                },
-                {
-                    path: 'agenda_loteid',
-                    select: 'guialote_num guialote_numdatacad guialote_numprotocolo guialote_dataenvio guialote_guialotevalor guialote_status guialote_log guialote_usucad guialote_datacad guialote_usuedi guialote_dataedi guialote_qtatend guialote_agendas',
-                    strictPopulate: false,
-                    populate: [
-                        { path: 'guialote_usucad', model: Usuario, select: 'usuario_nome' },
-                        { path: 'guialote_usuedi', model: Usuario, select: 'usuario_nome' }
-                    ]
-                }
-            ])
-            .then((agendas) => {
-                console.log("✅ [RESULTADO DA AGENDA]");
-                console.log("→ Total de registros encontrados:", agendas.length);
-                
-                // ✅ CÁLCULO DAS ESTATÍSTICAS CORRETO (todos os agendamentos)
-                const estatisticas = {
-                    qa: 0, qt: 0, qac: 0, qtv: 0, qtse: 0, qace: 0, atvo: 0, qtva: 0, qtvL: 0, qtvLo: 0
-                };
+        // ✅ PASSO 1: Buscar TODOS os usuários (SEM filtro de função/perfil)
+        // Isso garante que TODOS os usuários estejam no mapa, incluindo desligados
+        Usuario.find({})
+        .then((todosUsuarios) => {
+            // ✅ Criar mapa de fallback (ID → nome)
+            const usuarioMap = {};
+            todosUsuarios.forEach(u => {
+                usuarioMap[u._id.toString()] = u.usuario_nome;
+            });
+            
+            console.log("📋 [MAPA DE USUÁRIOS CRIADO]");
+            console.log("→ Total de usuários carregados:", todosUsuarios.length);
+            console.log("→ Usuários com status Ativo:", todosUsuarios.filter(u => u.usuario_status === "Ativo").length);
+            console.log("→ Usuários com status Inativo:", todosUsuarios.filter(u => u.usuario_status !== "Ativo").length);
 
-                agendas.forEach(a => {
-                    estatisticas.qa++; // Total de agendamentos
-                    
-                    const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
-                    const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
-                    const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
-                    const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
-                    const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
-                    
-                    if (ehCancelado) {
-                        estatisticas.qac++;
-                        if (temEvolucao) estatisticas.qace++;
-                    } else {
-                        estatisticas.qt++;
-                        if (temEvolucao) {
-                            estatisticas.qtv++;
-                            if (!temGuia || !temSenha) {
-                                estatisticas.atvo++; // Órfão de guia/senha
-                            } else {
-                                estatisticas.qtva++; // Completo com guia+senha
-                                if (temLote) estatisticas.qtvL++;   // Com lote
-                                else estatisticas.qtvLo++;          // Órfão de lote
-                            }
-                        } else {
-                            estatisticas.qtse++; // Sem evolução
-                        }
-                    }
-                });
-
-                // ✅ AGRUPAR POR LOTE (apenas agendas VÁLIDAS + COMPLETAS + COM LOTE)
-                const lotesMap = {};
-                const atendimentosOrfaos = []; // Órfãos de lote (válidos + completos mas sem lote)
-
-                agendas.forEach(a => {
-                    const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
-                    const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
-                    const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
-                    const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
-                    const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
-                    
-                    // ✅ Só considera para lote se for VÁLIDO + COM EVOLUÇÃO + COM GUIA E SENHA
-                    const ehValidoParaLote = !ehCancelado && temEvolucao && temGuia && temSenha;
-                    
-                    if (ehValidoParaLote && temLote) {
-                        // Agrupar no lote
-                        const loteId = a.agenda_loteid?._id?.toString();
-                        if (!loteId) return;
-                        
-                        if (!lotesMap[loteId]) {
-                            lotesMap[loteId] = {
-                                loteId: loteId,
-                                loteNum: a.agenda_loteid.guialote_num || '-',
-                                loteStatus: a.agenda_loteid.guialote_status || 'Aberto',
-                                loteValor: a.agenda_loteid.guialote_guialotevalor || 0,
-                                loteDataCad: a.agenda_loteid.guialote_datacad,
-                                loteUsucadNome: a.agenda_loteid.guialote_usucad?.usuario_nome || 'Desconhecido',
-                                qtAtendimentos: 0,
-                                agendas: []
-                            };
-                        }
-                        
-                        // Formatar agenda para exibição
-                        const dataAgenda = new Date(a.agenda_data);
-                        const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
-                        const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
-                        
-                        lotesMap[loteId].agendas.push({
-                            _id: a._id,
-                            data: fncGeral.getDataFMT(dataAgenda),
-                            hora: `${hor}:${min}`,
-                            beneNome: a.agenda_beneid?.bene_nome || 'Sem nome',
-                            terapeutaNome: a.agenda_usuid?.usuario_nome || 'Sem nome',
-                            terapiaNome: a.agenda_terapiaid?.terapia_nomecid || 'Sem terapia',
-                            evolucao: temEvolucao ? 'Sim' : 'Não',
-                            guia: a.agenda_guia?.guia_num || '-',
-                            senha: a.agenda_guia?.guia_senha || '-',
-                            categoria: a.agenda_categoria || '-'
-                        });
-                        
-                        lotesMap[loteId].qtAtendimentos++;
-                        
-                    } else if (ehValidoParaLote && !temLote) {
-                        // Órfão de lote - vai para lista separada
-                        const dataAgenda = new Date(a.agenda_data);
-                        const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
-                        const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
-                        
-                        atendimentosOrfaos.push({
-                            _id: a._id,
-                            data: fncGeral.getDataFMT(dataAgenda),
-                            hora: `${hor}:${min}`,
-                            beneNome: a.agenda_beneid?.bene_nome || 'Sem nome',
-                            terapeutaNome: a.agenda_usuid?.usuario_nome || 'Sem nome',
-                            terapiaNome: a.agenda_terapiaid?.terapia_nomecid || 'Sem terapia',
-                            evolucao: temEvolucao ? 'Sim' : 'Não',
-                            guia: a.agenda_guia?.guia_num || '-',
-                            senha: a.agenda_guia?.guia_senha || '-',
-                            categoria: a.agenda_categoria || '-'
-                        });
-                    }
-                    // Cancelados, sem evolução ou sem guia/senha não entram nem no lote nem nos órfãos
-                });
-
-                // ✅ Converter para array e ordenar (mais recentes primeiro)
-                const lotesConsolidados = Object.values(lotesMap).sort((a, b) => {
-                    return new Date(b.loteDataCad) - new Date(a.loteDataCad);
-                });
-
-                // ✅ CÁLCULO DO CONSOLIDADO (CORRIGIDO)
-                const consolidado = {
-                    // ✅ SOMA DOS ATENDIMENTOS DENTRO DOS LOTES (não o total geral)
-                    qtAtendimentos: lotesConsolidados.reduce((total, lote) => total + lote.qtAtendimentos, 0),
-                    qtLotes: lotesConsolidados.length,  // ✅ Total de lotes distintos
-                    valorTotal: lotesConsolidados.reduce((soma, l) => soma + (l.loteValor || 0), 0)  // ✅ Soma dos valores dos lotes
-                };
-                // ✅ Carregar dados complementares
-                Promise.all([
-                    Bene.find().sort({ bene_nome: 1 }),
-                    Usuario.find({
-                        usuario_status: "Ativo",
-                        $or: [
-                            { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                            { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+            // ✅ PASSO 2: Buscar agendas SEM populate de usuário (usa mapa depois)
+            // ✅ Mantém populate apenas para lote (que precisa dos dados do lote)
+            return Agenda.find(agendaQuery)
+                .populate([
+                    {
+                        path: 'agenda_loteid',
+                        select: 'guialote_num guialote_numdatacad guialote_numprotocolo guialote_dataenvio guialote_guialotevalor guialote_status guialote_log guialote_usucad guialote_datacad guialote_usuedi guialote_dataedi guialote_qtatend guialote_agendas',
+                        strictPopulate: false,
+                        populate: [
+                            { path: 'guialote_usucad', model: Usuario, select: 'usuario_nome' },
+                            { path: 'guialote_usuedi', model: Usuario, select: 'usuario_nome' }
                         ]
-                    }).sort({ usuario_nome: 1 }),
-                    Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }),
-                    Sala.find().sort({ sala_nome: 1 }),
-                    Terapia.find().sort({ terapia_nome: 1 }),
-                    Conv.find().sort({ conv_nome: 1 }),
-                    Ano.find().sort({ ano_nome: -1 })
+                    }
                 ])
-                .then(([benes, terapeutas, horaages, salas, terapias, convs, anos]) => {
-                    console.log("📤 [RENDERIZANDO VIEW DE GESTÃO DE LOTES]");
-                    console.log("→ Lotes consolidados:", lotesConsolidados.length);
-                    console.log("→ Atendimentos órfãos de lote:", atendimentosOrfaos.length);
-                    console.log("→ Consolidado:", consolidado);
+                .then((agendas) => {
+                    console.log("✅ [RESULTADO DA AGENDA]");
+                    console.log("→ Total de registros encontrados:", agendas.length);
                     
-                    res.render('guia/lote/guialoteGes', {
-                        lotesConsolidados: lotesConsolidados,
-                        atendimentosOrfaos: atendimentosOrfaos, // ✅ Novo campo para órfãos
-                        benes: benes,
-                        terapeutas: terapeutas,
-                        horaages: horaages,
-                        salas: salas,
-                        terapias: terapias,
-                        convs: convs,
-                        anos: anos,
-                        flash,
-                        filtroTipo: tipoData,
-                        filtroAno: anoAtend,
-                        filtroMes: mesAtend,
-                        filtroData: dataFil,
-                        filtroTipoPessoa: atendTipoPessoa,
-                        filtroBeneficiario: atendBeneficiario,
-                        filtroTerapeuta: atendTerapeuta,
-                        consolidado: {
-                            qtAtendimentos: consolidado.qtAtendimentos,
-                            qtLotes: consolidado.qtLotes,
-                            valorTotal: fncGeral.formatarReal(Math.round(consolidado.valorTotal * 100))
-                        },
-                        estatisticas: estatisticas
+                    // ✅ CÁLCULO DAS ESTATÍSTICAS
+                    const estatisticas = {
+                        qa: 0, qt: 0, qac: 0, qtv: 0, qtse: 0, qace: 0, atvo: 0, qtva: 0, qtvL: 0, qtvLo: 0
+                    };
+
+                    agendas.forEach(a => {
+                        estatisticas.qa++;
+                        
+                        const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
+                        const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
+                        const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
+                        const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
+                        const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
+                        
+                        if (ehCancelado) {
+                            estatisticas.qac++;
+                            if (temEvolucao) estatisticas.qace++;
+                        } else {
+                            estatisticas.qt++;
+                            if (temEvolucao) {
+                                estatisticas.qtv++;
+                                if (!temGuia || !temSenha) {
+                                    estatisticas.atvo++;
+                                } else {
+                                    estatisticas.qtva++;
+                                    if (temLote) estatisticas.qtvL++;
+                                    else estatisticas.qtvLo++;
+                                }
+                            } else {
+                                estatisticas.qtse++;
+                            }
+                        }
+                    });
+
+                    // ✅ PASSO 3: Buscar dados complementares (benes, convs, etc)
+                    return Promise.all([
+                        Bene.find().sort({ bene_nome: 1 }),
+                        Conv.find().sort({ conv_nome: 1 }),
+                        Terapia.find().sort({ terapia_nome: 1 }),
+                        Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }),
+                        Sala.find().sort({ sala_nome: 1 }),
+                        Ano.find().sort({ ano_nome: -1 })
+                    ])
+                    .then(([benes, convs, terapias, horaages, salas, anos]) => {
+                        
+                        // ✅ Criar mapas de todos os dados complementares
+                        const beneMap = {};
+                        const convMap = {};
+                        const terapiaMap = {};
+                        
+                        benes.forEach(b => { beneMap[b._id.toString()] = b.bene_nome; });
+                        convs.forEach(c => { convMap[c._id.toString()] = c.conv_nome; });
+                        terapias.forEach(t => { terapiaMap[t._id.toString()] = t.terapia_nomecid; });
+                        
+                        // ✅ AGRUPAR POR LOTE usando os mapas (mesmo padrão da filtraGuialis)
+                        const lotesMap = {};
+                        const atendimentosOrfaos = [];
+
+                        agendas.forEach(a => {
+                            const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
+                            const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
+                            const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
+                            const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
+                            const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
+                            
+                            // ✅ RESOLVER NOMES USANDO OS MAPAS (mesmo padrão da filtraGuialis)
+                            const nomeTerapeuta = usuarioMap[a.agenda_usuid?.toString()] || 'Terapeuta não encontrado';
+                            const nomeBeneficiario = beneMap[a.agenda_beneid?.toString()] || 'Sem nome';
+                            const nomeConvenio = convMap[a.agenda_convid?.toString()] || 'Sem convênio';
+                            const nomeTerapia = terapiaMap[a.agenda_terapiaid?.toString()] || 'Sem terapia';
+                            
+                            const ehValidoParaLote = !ehCancelado && temEvolucao && temGuia && temSenha;
+                            
+                            if (ehValidoParaLote && temLote) {
+                                const loteId = a.agenda_loteid?._id?.toString();
+                                if (!loteId) return;
+                                
+                                if (!lotesMap[loteId]) {
+                                    lotesMap[loteId] = {
+                                        loteId: loteId,
+                                        loteNum: a.agenda_loteid.guialote_num || '-',
+                                        loteStatus: a.agenda_loteid.guialote_status || 'Aberto',
+                                        loteValor: a.agenda_loteid.guialote_guialotevalor || 0,
+                                        loteDataCad: a.agenda_loteid.guialote_datacad,
+                                        loteUsucadNome: a.agenda_loteid.guialote_usucad?.usuario_nome || 'Desconhecido',
+                                        beneNome: nomeBeneficiario,
+                                        convNome: nomeConvenio,
+                                        qtAtendimentos: 0,
+                                        agendas: []
+                                    };
+                                }
+                                
+                                const dataAgenda = new Date(a.agenda_data);
+                                const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                                const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+                                
+                                lotesMap[loteId].agendas.push({
+                                    _id: a._id,
+                                    data: fncGeral.getDataFMT(dataAgenda),
+                                    hora: `${hor}:${min}`,
+                                    beneNome: nomeBeneficiario,
+                                    terapeutaNome: nomeTerapeuta,
+                                    terapiaNome: nomeTerapia,
+                                    evolucao: temEvolucao ? 'Sim' : 'Não',
+                                    guia: a.agenda_guia?.guia_num || '-',
+                                    senha: a.agenda_guia?.guia_senha || '-',
+                                    categoria: a.agenda_categoria || '-'
+                                });
+                                
+                                lotesMap[loteId].qtAtendimentos++;
+                                
+                            } else if (ehValidoParaLote && !temLote) {
+                                const dataAgenda = new Date(a.agenda_data);
+                                const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                                const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+                                
+                                atendimentosOrfaos.push({
+                                    _id: a._id,
+                                    data: fncGeral.getDataFMT(dataAgenda),
+                                    hora: `${hor}:${min}`,
+                                    beneNome: nomeBeneficiario,
+                                    terapeutaNome: nomeTerapeuta,
+                                    terapiaNome: nomeTerapia,
+                                    evolucao: temEvolucao ? 'Sim' : 'Não',
+                                    guia: a.agenda_guia?.guia_num || '-',
+                                    senha: a.agenda_guia?.guia_senha || '-',
+                                    categoria: a.agenda_categoria || '-'
+                                });
+                            }
+                        });
+
+                        const lotesConsolidados = Object.values(lotesMap).sort((a, b) => {
+                            return new Date(b.loteDataCad) - new Date(a.loteDataCad);
+                        });
+
+                        const consolidado = {
+                            qtAtendimentos: lotesConsolidados.reduce((total, lote) => total + lote.qtAtendimentos, 0),
+                            qtLotes: lotesConsolidados.length,
+                            valorTotal: lotesConsolidados.reduce((soma, l) => soma + (l.loteValor || 0), 0)
+                        };
+
+                        console.log("📤 [RENDERIZANDO VIEW DE GESTÃO DE LOTES]");
+                        console.log("→ Lotes consolidados:", lotesConsolidados.length);
+                        console.log("→ Atendimentos órfãos de lote:", atendimentosOrfaos.length);
+                        console.log("→ Consolidado:", consolidado);
+                        
+                        res.render('guia/lote/guialoteGes', {
+                            lotesConsolidados: lotesConsolidados,
+                            atendimentosOrfaos: atendimentosOrfaos,
+                            benes: benes,
+                            terapeutas: todosUsuarios,  // ✅ Usa os usuários já buscados (todos)
+                            horaages: horaages,
+                            salas: salas,
+                            terapias: terapias,
+                            convs: convs,
+                            anos: anos,
+                            flash,
+                            filtroTipo: tipoData,
+                            filtroAno: anoAtend,
+                            filtroMes: mesAtend,
+                            filtroData: dataFil,
+                            filtroTipoPessoa: atendTipoPessoa,
+                            filtroBeneficiario: atendBeneficiario,
+                            filtroTerapeuta: atendTerapeuta,
+                            filtroConvenio: atendConvenio,
+                            consolidado: {
+                                qtAtendimentos: consolidado.qtAtendimentos,
+                                qtLotes: consolidado.qtLotes,
+                                valorTotal: fncGeral.formatarReal(Math.round(consolidado.valorTotal * 100))
+                            },
+                            estatisticas: estatisticas
+                        });
                     });
                 });
-            })
-            .catch((err) => {
-                console.error("💥 ERRO EM filtragestaoGuialote:", err);
-                req.flash("error_message", "Houve um erro ao listar os lotes.");
-                res.redirect('/admin/erro');
-            });
+        })
+        .catch((err) => {
+            console.error("💥 ERRO EM filtragestaoGuialote:", err);
+            req.flash("error_message", "Houve um erro ao listar os lotes.");
+            res.redirect('/admin/erro');
+        });
     },
 
     // ============================================

@@ -261,7 +261,7 @@ module.exports = {FiltroEvoatend,
                     Conv.find(),
                     Terapia.find(),
                     Usuario.find({
-                        usuario_status: "Ativo",
+                        
                         $or: [
                             { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
                             { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
