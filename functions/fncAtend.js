@@ -1652,7 +1652,7 @@ relAtendimentoValFiltro: async (req, res) => {
                 valTotCentavos += totalCredCentavos;
             }
         });
-
+console.log("ASDASDASDASD sessaoTot? "+sessaoTot)
         // === 🧾 Totais e Formatação para View ===
         const total = {
             sessoes: sessaoTot,

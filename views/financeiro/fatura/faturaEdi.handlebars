@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Faturamento</title>
+</head>
+<body onload="controlaNave();" class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs_home">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="ace-icon fa fa-home home-icon"></i>
+                            <a href="#">Home</a>
+                        </li>
+                        <li class="active">Editar Faturamento</li>
+                    </ul>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="widget-box">
+                            <div class="widget-header widget-header-blue widget-header-flat">
+                                <h4 class="widget-title lighter">
+                                    <i class="ace-icon fa fa-edit"></i>
+                                    Editar Faturamento
+                                </h4>
+                            </div>
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <form action="/financeiro/fatura/atualizar" method="POST">
+                                        <input type="hidden" name="faturaId" value="{{fatura._id}}">
+                                        
+                                        <div class="form-group">
+                                            <label>Ano:</label>
+                                            <input type="number" name="fat_ano" value="{{fatura.fat_ano}}" class="form-control" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Mês:</label>
+                                            <input type="number" name="fat_mes" value="{{fatura.fat_mes}}" class="form-control" min="1" max="12" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Período Início:</label>
+                                            <input type="date" name="fat_periodoini" value="{{fatura.fat_periodoini}}" class="form-control" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Período Fim:</label>
+                                            <input type="date" name="fat_periodofim" value="{{fatura.fat_periodofim}}" class="form-control" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Convênio:</label>
+                                            <input type="text" name="fat_filtroconv" value="{{fatura.fat_filtroconv}}" class="form-control" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Tipo Terapia:</label>
+                                            <select name="fat_tipoterapia" class="form-control" required>
+                                                <option value="Nome" {{#ifEqual fatura.fat_tipoterapia "Nome"}}selected{{/ifEqual}}>Nome</option>
+                                                <option value="CID" {{#ifEqual fatura.fat_tipoterapia "CID"}}selected{{/ifEqual}}>CID</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Nº Terapias:</label>
+                                            <input type="number" name="fat_nterapias" value="{{fatura.fat_nterapias}}" class="form-control" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Qual Terapia:</label>
+                                            <input type="text" name="fat_qualterapia" value="{{fatura.fat_qualterapia}}" class="form-control" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Qtd Sessões:</label>
+                                            <input type="number" name="fat_qtdsessoes" value="{{fatura.fat_qtdsessoes}}" class="form-control" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Valor Sessão (JSON Array):</label>
+                                            <textarea name="fat_valorsessao" class="form-control" rows="3">{{json fatura.fat_valorsessao}}</textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Valor Total:</label>
+                                            <input type="text" name="fat_valortotal" value="{{fatura.fat_valortotal}}" class="form-control" required>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="ace-icon fa fa-save"></i>
+                                            Salvar Alterações
+                                        </button>
+
+                                        <a href="/financeiro/fatura/lis" class="btn btn-default">
+                                            <i class="ace-icon fa fa-arrow-left"></i>
+                                            Cancelar
+                                        </a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

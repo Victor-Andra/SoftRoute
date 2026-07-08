@@ -646,7 +646,6 @@ carregaDashadminin(req, res) {
     const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
     const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
     const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    
     const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
 
     // === Definir período (filtro ou mês atual) ===
@@ -833,93 +832,121 @@ carregaDashadminin(req, res) {
                                     totals: totalEvolucao
                                 };
 
-                                // === 🔹 Sessões por Tipo de Beneficiário ===
-                                const mapaBeneTipo = {};
-                                beneAtivos.forEach(b => {
-                                    const convid = String(b.bene_convid);
-                                    let tipo = 'convenio';
-                                    if (convid === ID_PARTICULAR) tipo = 'particular';
-                                    else if (b.bene_liminar === "Sim") tipo = 'liminar';
-                                    mapaBeneTipo[String(b._id)] = tipo;
-                                });
-
-                                let sessoesParticular = 0, sessoesConvenio = 0, sessoesLiminar = 0;
-                                agendaFiltrada.forEach(agenda => {
-                                    const beneId = String(agenda.agenda_beneid);
-                                    const tipo = mapaBeneTipo[beneId];
-                                    if (tipo === 'particular') sessoesParticular++;
-                                    else if (tipo === 'liminar') sessoesLiminar++;
-                                    else sessoesConvenio++;
-                                });
-
-                                const resumoSessoesPorTipo = [
-                                    { tipo: 'Particular', total: sessoesParticular, cor: '#2ecc71' },
-                                    { tipo: 'Convênio', total: sessoesConvenio, cor: '#3498db' },
-                                    { tipo: 'Liminar', total: sessoesLiminar, cor: '#e74c3c' }
-                                ];
-                                const totalSessoes = sessoesParticular + sessoesConvenio + sessoesLiminar;
-
-                                // === 🔹 CONSULTA 2: Evolução de Atendimentos por Convênio ===
-                                const categoriasInvalidas = ["Falta Absoluta", "Glosa", "Feriado", "Falta Justificada"];
-                                const anoAtual = year;
-                                const inicioAno = new Date(anoAtual, 0, 1);
-                                const fimAno = new Date(anoAtual, 11, 31, 23, 59, 59, 999);
-
-                                Atend.find({
-                                    atend_atenddata: { $gte: inicioAno, $lte: fimAno },
-                                    atend_categoria: { $nin: categoriasInvalidas }
-                                }).then((atendimentos) => {
-                                    const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-                                    const totaisMensais = new Array(12).fill(0);
-                                    const porConvenio = {};
-
-                                    atendimentos.forEach(a => {
-                                        const convId = String(a.atend_convid);
-                                        const mes = new Date(a.atend_atenddata).getMonth();
-                                        totaisMensais[mes]++;
-                                        porConvenio[convId] = porConvenio[convId] || new Array(12).fill(0);
-                                        porConvenio[convId][mes]++;
+                                // === 🔹 SESSÕES POR TIPO DE BENEFICIÁRIO (AGORA USA ATENDIMENTO) ===
+                                // 1️⃣ Buscar TODOS os beneficiários (ativos e inativos) para o mapa
+                                Bene.find().lean().then((todosBeneParaMapa) => {
+                                    
+                                    const mapaBeneTipo = {};
+                                    todosBeneParaMapa.forEach(b => {
+                                        const convid = String(b.bene_convid);
+                                        let tipo = 'convenio';
+                                        if (convid === ID_PARTICULAR) tipo = 'particular';
+                                        else if (b.bene_liminar === "Sim") tipo = 'liminar';
+                                        mapaBeneTipo[String(b._id)] = tipo;
                                     });
 
-                                    const seriesConvenio = convs.map(c => ({
-                                        nome: c.conv_nome,
-                                        data: porConvenio[String(c._id)] || new Array(12).fill(0)
-                                    }));
+                                    // 2️⃣ Buscar TODOS os atendimentos do período (sem filtro de terapeuta)
+                                    //    Exclui apenas "Feriado" e "Falta Absoluta" (mesma regra do relatório)
+                                    console.log('[Filtro Atendimentos]', JSON.stringify({
+                                        atend_atenddata: { $gte: seg, $lte: sex },
+                                        atend_categoria: { $nin: ["Feriado", "Falta Absoluta"] }
+                                    }, null, 2));
+                                    Atend.find({
+                                        atend_atenddata: { $gte: seg, $lte: sex },
+                                        atend_categoria: { $nin: ["Feriado", "Falta Absoluta"] }
+                                    }).lean().then((atendimentosParaSessoes) => {
+                                        
+                                        console.log(`[DashAdmin] Atendimentos para gráfico de sessões: ${atendimentosParaSessoes.length}`);
 
-                                    const evolucaoAtendConv = {
-                                        ano: anoAtual,
-                                        labels: meses,
-                                        totalMensal: totaisMensais,
-                                        series: seriesConvenio
-                                    };
+                                        // 3️⃣ Contar sessões por tipo de beneficiário
+                                        let sessoesParticular = 0, sessoesConvenio = 0, sessoesLiminar = 0;
+                                        atendimentosParaSessoes.forEach(atend => {
+                                            const beneId = String(atend.atend_beneid);
+                                            const tipo = mapaBeneTipo[beneId];
+                                            if (tipo === 'particular') sessoesParticular++;
+                                            else if (tipo === 'liminar') sessoesLiminar++;
+                                            else sessoesConvenio++;
+                                        });
 
-                                    // === Renderização final ===
-                                    res.render("dash/dashAdminin", {
-                                        usuarios: todosUsuarios,
-                                        convs,
-                                        benes: beneAtivos,
-                                        qtregs: convs.filter(c => c.conv_status === "Ativo").length,
-                                        qtregsbene: beneAtivos.length,
-                                        arrayRelQtValors: arrayRelQtValor,
-                                        totalBene: beneAtivos.length,
-                                        qtregsbenefiltrados: qtregsbenefiltrado,
-                                        arrays: qtregsbenefiltrado,
-                                        resumoSessoesPorTipo,
-                                        totalSessoes,
-                                        evolucaoBene,
-                                        evolucaoAtendConv,
-                                        dataIniFiltro: fncGeral.getDataFMT(seg).split(' ')[0],
-                                        dataFimFiltro: fncGeral.getDataFMT(sex).split(' ')[0],
-                                        // ✅ Dados restaurados para gráficos de Terapias e Terapeutas
-                                        resumoTerapia,
-                                        resumoTerapiaNomecid,
-                                        resumoTerapeuta,
-                                        resumoDetalhado
+                                        const resumoSessoesPorTipo = [
+                                            { tipo: 'Particular', total: sessoesParticular, cor: '#2ecc71' },
+                                            { tipo: 'Convênio', total: sessoesConvenio, cor: '#3498db' },
+                                            { tipo: 'Liminar', total: sessoesLiminar, cor: '#e74c3c' }
+                                        ];
+                                        const totalSessoes = sessoesParticular + sessoesConvenio + sessoesLiminar;
+
+                                        console.log(`[DashAdmin] Resumo Sessões: Particular=${sessoesParticular}, Convênio=${sessoesConvenio}, Liminar=${sessoesLiminar}, Total=${totalSessoes}`);
+
+                                        // === 🔹 CONSULTA 2: Evolução de Atendimentos por Convênio ===
+                                        const categoriasInvalidas = ["Falta Absoluta", "Glosa", "Feriado", "Falta Justificada"];
+                                        const anoAtual = year;
+                                        const inicioAno = new Date(anoAtual, 0, 1);
+                                        const fimAno = new Date(anoAtual, 11, 31, 23, 59, 59, 999);
+
+                                        Atend.find({
+                                            atend_atenddata: { $gte: inicioAno, $lte: fimAno },
+                                            atend_categoria: { $nin: categoriasInvalidas }
+                                        }).then((atendimentos) => {
+                                            const meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+                                            const totaisMensais = new Array(12).fill(0);
+                                            const porConvenio = {};
+
+                                            atendimentos.forEach(a => {
+                                                const convId = String(a.atend_convid);
+                                                const mes = new Date(a.atend_atenddata).getMonth();
+                                                totaisMensais[mes]++;
+                                                porConvenio[convId] = porConvenio[convId] || new Array(12).fill(0);
+                                                porConvenio[convId][mes]++;
+                                            });
+
+                                            const seriesConvenio = convs.map(c => ({
+                                                nome: c.conv_nome,
+                                                data: porConvenio[String(c._id)] || new Array(12).fill(0)
+                                            }));
+
+                                            const evolucaoAtendConv = {
+                                                ano: anoAtual,
+                                                labels: meses,
+                                                totalMensal: totaisMensais,
+                                                series: seriesConvenio
+                                            };
+
+                                            // === Renderização final ===
+                                            res.render("dash/dashAdminin", {
+                                                usuarios: todosUsuarios,
+                                                convs,
+                                                benes: beneAtivos,
+                                                qtregs: convs.filter(c => c.conv_status === "Ativo").length,
+                                                qtregsbene: beneAtivos.length,
+                                                arrayRelQtValors: arrayRelQtValor,
+                                                totalBene: beneAtivos.length,
+                                                qtregsbenefiltrados: qtregsbenefiltrado,
+                                                arrays: qtregsbenefiltrado,
+                                                resumoSessoesPorTipo,
+                                                totalSessoes,
+                                                evolucaoBene,
+                                                evolucaoAtendConv,
+                                                dataIniFiltro: fncGeral.getDataFMT(seg).split(' ')[0],
+                                                dataFimFiltro: fncGeral.getDataFMT(sex).split(' ')[0],
+                                                resumoTerapia,
+                                                resumoTerapiaNomecid,
+                                                resumoTerapeuta,
+                                                resumoDetalhado
+                                            });
+
+                                        }).catch(err => {
+                                            console.error("[DashAdmin] Erro ao calcular evolução de atendimentos:", err);
+                                            res.status(500).send("Erro ao calcular evolução de atendimentos");
+                                        });
+
+                                    }).catch(err => {
+                                        console.error("[DashAdmin] Erro ao buscar atendimentos para sessões:", err);
+                                        res.status(500).send("Erro ao buscar atendimentos");
                                     });
 
                                 }).catch(err => {
-                                    console.error("[DashAdmin] Erro ao calcular evolução de atendimentos:", err);
-                                    res.status(500).send("Erro ao calcular evolução de atendimentos");
+                                    console.error("[DashAdmin] Erro ao buscar beneficiários para mapa:", err);
+                                    res.status(500).send("Erro ao buscar beneficiários");
                                 });
 
                             }).catch(err => {
@@ -952,6 +979,7 @@ carregaDashadminin(req, res) {
         res.status(500).send("Erro ao carregar terapeutas");
     });
 },
+
 
     carregaDashestatis(req,res){
         Usuario.find().then((usuario)=>{

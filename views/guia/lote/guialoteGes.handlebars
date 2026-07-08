@@ -939,19 +939,26 @@
 
                     <!-- CONSOLIDADO (abaixo das estatísticas) -->
                     <div class="row">
-                        <div class="col-xs-4 col-sm-4">
+                        <div class="col-xs-3 col-sm-3">
                             <div class="consolidado-card">
                                 <div class="consolidado-label">Qt. Total Atendimentos</div>
                                 <div class="consolidado-value">{{consolidado.qtAtendimentos}}</div>
                             </div>
                         </div>
-                        <div class="col-xs-4 col-sm-4">
+                        <!-- QTGuiasUnicas - Quantidade de Guias Unicas -->
+                         <div class="col-xs-3 col-sm-3">
+                            <div class="consolidado-card">
+                                <div class="consolidado-label">Qt. Guias Unicas</div>
+                                <div class="consolidado-value">{{estatisticas.qtdGuias}}</div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3 col-sm-3">
                             <div class="consolidado-card">
                                 <div class="consolidado-label">Qt. Total de Lotes</div>
                                 <div class="consolidado-value">{{consolidado.qtLotes}}</div>
                             </div>
                         </div>
-                        <div class="col-xs-4 col-sm-4">
+                        <div class="col-xs-3 col-sm-3">
                             <div class="consolidado-card">
                                 <div class="consolidado-label">Valor Total dos Lotes</div>
                                 <div class="consolidado-value">R$ {{consolidado.valorTotal}}</div>
@@ -978,6 +985,7 @@
                                             <th>Convênio</th>
                                             <th>Status</th>
                                             <th>Qt. Atend.</th>
+                                            <th>Qt. Guias Únicas.</th>
                                             <th>Valor Total</th>
                                             <th>Criado em</th>
                                             <th>Por</th>
@@ -985,58 +993,61 @@
                                     </thead>
                                     <tbody>
                                         {{#each lotesConsolidados}}
-                                            <tr data-lote-id="{{loteId}}">
-                                                <td class="text-center">
-                                                    <i class="btn-expand ace-icon fa fa-plus-circle bigger-140"></i>
-                                                </td>
-                                                <td>
-                                                   <div class="custom-tooltip">
-                                                        <span class="badge badge-info badge-lote-editavel" data-lote-id="{{loteId}}">
-                                                            <i class="ace-icon fa fa-link"></i> {{loteNum}}
-                                                        </span>
-                                                        <span class="tooltip-text">
-                                                            <strong style="display: block; margin-bottom: 4px; color: #667eea;">📦 Dados do Lote</strong>
-                                                            
-                                                            <div><strong>Lote:</strong> {{loteNum}}</div>
-                                                            <div><strong>Qtd. Atend.:</strong> {{qtAtendimentos}}</div>
-                                                            <div><strong>Valor:</strong> R$ {{loteValor}}</div>
-                                                            <div><strong>Status:</strong> {{loteStatus}}</div>
-                                                            
-                                                            <div style="border-top: 1px solid #ddd; margin: 6px 0;"></div>
-                                                            
-                                                            <div><strong>👤 Criado por:</strong> {{loteUsucadNome}}</div>
-                                                            <div><strong>📅 Em:</strong> {{#dataISOToDate loteDataCad}}{{/dataISOToDate}}</div>
-                                                            
-                                                            <div style="margin-top: 6px; font-size: 9px; color: #999; font-style: italic;">
-                                                                💡 Duplo clique para editar
-                                                            </div>
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge badge-danger">{{beneNome}}</span>
-                                                </td>
-                                                  <td>
-                                                    <span class="badge badge-danger">{{convNome}}</span>
-                                                </td>
-                                                <td>
-                                                    {{#ifEqual loteStatus "Aberto"}}
-                                                        <span class="badge badge-danger">{{loteStatus}}</span>
-                                                    {{else}}
-                                                        {{#ifEqual loteStatus "Enviado"}}
-                                                            <span class="badge badge-warning">{{loteStatus}}</span>
-                                                        {{else}}
-                                                            <span class="badge badge-success">{{loteStatus}}</span>
-                                                        {{/ifEqual}}
-                                                    {{/ifEqual}}
-                                                </td>
-                                                <td class="text-right">{{qtAtendimentos}}</td>
-                                                <td class="text-right">R$ {{formataContabil loteValor}}</td>
-                                                <td>{{#dataISOToDate loteDataCad}}{{/dataISOToDate}}</td>
-                                                <td>{{loteUsucadNome}}</td>
+    <tr data-lote-id="{{loteId}}">
+        <td class="text-center">
+            <i class="btn-expand ace-icon fa fa-plus-circle bigger-140"></i>
+        </td>
+        <td>
+           <div class="custom-tooltip">
+                <span class="badge badge-info badge-lote-editavel" data-lote-id="{{loteId}}">
+                    <i class="ace-icon fa fa-link"></i> {{loteNum}}
+                </span>
+                <span class="tooltip-text">
+                    <strong style="display: block; margin-bottom: 4px; color: #667eea;">📦 Dados do Lote</strong>
+                    
+                    <div><strong>Lote:</strong> {{loteNum}}</div>
+                    <div><strong>Qtd. Atend.:</strong> {{qtAtendimentos}}</div>
+                    <div><strong>Qtd. Guias:</strong> {{qtGuias}}</div>
+                    <div><strong>Valor:</strong> R$ {{loteValor}}</div>
+                    <div><strong>Status:</strong> {{loteStatus}}</div>
+                    
+                    <div style="border-top: 1px solid #ddd; margin: 6px 0;"></div>
+                    
+                    <div><strong>👤 Criado por:</strong> {{loteUsucadNome}}</div>
+                    <div><strong>📅 Em:</strong> {{#dataISOToDate loteDataCad}}{{/dataISOToDate}}</div>
+                    
+                    <div style="margin-top: 6px; font-size: 9px; color: #999; font-style: italic;">
+                        💡 Duplo clique para editar
+                    </div>
+                </span>
+            </div>
+        </td>
+        <td>
+            <span class="badge badge-danger">{{beneNome}}</span>
+        </td>
+        <td>
+            <span class="badge badge-danger">{{convNome}}</span>
+        </td>
+        <td>
+            {{#ifEqual loteStatus "Aberto"}}
+                <span class="badge badge-danger">{{loteStatus}}</span>
+            {{else}}
+                {{#ifEqual loteStatus "Enviado"}}
+                    <span class="badge badge-warning">{{loteStatus}}</span>
+                {{else}}
+                    <span class="badge badge-success">{{loteStatus}}</span>
+                {{/ifEqual}}
+            {{/ifEqual}}
+        </td>
+        <td class="text-right">{{qtAtendimentos}}</td>
+        <td class="text-right">{{qtGuias}}</td>  <!-- ✅ CORRIGIDO: Agora mostra qtGuias -->
+        <td class="text-right">R$ {{formataContabil loteValor}}</td>
+        <td>{{#dataISOToDate loteDataCad}}{{/dataISOToDate}}</td>
+        <td>{{loteUsucadNome}}</td>
+    </tr>
                                             </tr>
                                             <tr class="detalhe-linha">
-                                                <td colspan="9">
+                                                <td colspan="10">
                                                     <div style="padding:15px;">
                                                         <h5>
                                                             Atendimentos do Lote "{{loteNum}}" ({{qtAtendimentos}} sessões)
@@ -1098,7 +1109,7 @@
                                                                     <td>{{terapeutaNome}}</td>
                                                                 </tr>
                                                                 <tr class="detalhe-linha">
-                                                                    <td colspan="9">
+                                                                    <td colspan="10">
                                                                     <div style="padding:15px; background:#fff3cd; border-left: 3px solid #ffc107;">
                                                                         <h5>
                                                                         <i class="ace-icon fa fa-exclamation-triangle text-orange"></i> 
@@ -1148,7 +1159,7 @@
                                                                 </tr>
                                                                 {{else}}
                                                                 <tr>
-                                                                    <td colspan="9" style="text-align:center; padding:25px; color:#28a745; font-weight:bold; background-color:#f8fdf8; border-top: 2px solid #28a745;">
+                                                                    <td colspan="10" style="text-align:center; padding:25px; color:#28a745; font-weight:bold; background-color:#f8fdf8; border-top: 2px solid #28a745;">
                                                                     <i class="ace-icon fa fa-check-circle bigger-150"></i><br><br>
                                                                     ✅ Todos os atendimentos válidos já estão vinculados a lotes!<br>
                                                                     <small style="color:#6c757d; font-weight:normal;">Nenhum atendimento órfão encontrado para este filtro</small>
@@ -1165,7 +1176,7 @@
                                         <!-- ATENDIMENTOS ÓRFÃOS (sem lote) -->
                                         {{#if lotesConsolidados}}
                                             <tr>
-                                                <td colspan="9" style="background-color:#eef7ff; font-weight:bold; text-align:center; padding:15px;">
+                                                <td colspan="10" style="background-color:#eef7ff; font-weight:bold; text-align:center; padding:15px;">
                                                     ⚠️ ATENDIMENTOS SEM LOTE (ÓRFÃOS DE LOTE)
                                                 </td>
                                             </tr>

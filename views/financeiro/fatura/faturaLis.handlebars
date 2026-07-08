@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Faturamentos</title>
+    <style>
+        .toolbar-pesquisa {
+            background: linear-gradient(135deg, #21cdf3 0%, #1976d2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 0 12px 20px 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #1976d2;
+        }
+        .toolbar-pesquisa h5 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-pesquisar {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .btn-pesquisar:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        .btn-anual {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            margin-left: 10px;
+        }
+        .btn-anual:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body onload="controlaNave();" class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs_home">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="ace-icon fa fa-home home-icon"></i>
+                            <a href="#">Home</a>
+                        </li>
+                        <li class="active">Lista de Faturamentos Mensais</li>
+                    </ul>
+                </div>
+
+                <div class="toolbar-pesquisa">
+                    <h5>
+                        <i class="ace-icon fa fa-file-text-o"></i>
+                        <span>Faturamentos Salvos</span>
+                    </h5>
+                    <div style="display: flex; gap: 10px;">
+                        <a href="/financeiro/fatura/cad" class="btn-pesquisar">
+                            <i class="ace-icon fa fa-plus"></i>
+                            Novo Faturamento
+                        </a>
+                        <a href="/financeiro/fatura/anual?ano={{anoAtual}}&tipoTerapia=Nome" class="btn-anual">
+                            <i class="ace-icon fa fa-calendar"></i>
+                            Relatório Anual
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="widget-box">
+                            <div class="widget-header widget-header-blue widget-header-flat">
+                                <h4 class="widget-title lighter">
+                                    <i class="ace-icon fa fa-list-alt"></i>
+                                    Faturamentos Realizados
+                                </h4>
+                            </div>
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <table class="table table-striped table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="center">Ano</th>
+                                                <th class="center">Mês</th>
+                                                <th>Período</th>
+                                                <th>Convênio</th>
+                                                <th>Tipo</th>
+                                                <th>Terapia</th>
+                                                <th class="text-right">Sessões</th>
+                                                <th class="text-right">Valor Total</th>
+                                                <th class="center">Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each faturas}}
+                                            <tr>
+                                                <td class="center">{{fat_ano}}</td>
+                                                <td class="center">{{fat_mes}}</td>
+                                                <td>{{fat_periodoini}} até {{fat_periodofim}}</td>
+                                                <td>{{convNome}}</td>
+                                                <td>{{fat_tipoterapia}}</td>
+                                                <td>{{fat_qualterapia}}</td>
+                                                <td class="text-right">{{fat_qtdsessoes}}</td>
+                                                <td class="text-right">{{fat_valortotal}}</td>
+                                                <td class="center">
+                                                    <a href="/financeiro/fatura/edi/{{_id}}" class="btn btn-xs btn-info">
+                                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                                    </a>
+                                                    <a href="/financeiro/fatura/del/{{_id}}" class="btn btn-xs btn-danger" onclick="return confirm('Confirma exclusão?');">
+                                                        <i class="ace-icon fa fa-trash bigger-120"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

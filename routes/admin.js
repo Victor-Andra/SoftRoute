@@ -460,6 +460,11 @@ const passport = require('passport')
 //Financeiro
 const fncFinanceiro = require("../functions/fncFinanceiro")
 
+//faturamento mensal
+const faturamensalClass = require("../models/faturamensal")
+var FaturaMensal = getModel("softroute", 'tb_faturamensal', faturamensalClass.FaturaMensalSchema)
+const fncFaturaMensal = require("../functions/fncFaturamensal")
+
 //Dashboards
 const fncDash = require("../functions/fncDash")
 
@@ -2801,6 +2806,40 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
     }
 })
 
+//faturamento Mensal
+//###############################################################################################
+
+router.get('/financeiro/fatura/lis', fncGeral.IsAuthenticated, (req, res) => {
+    fncFaturaMensal.listaFatura(req, res);
+})
+
+router.get('/financeiro/fatura/cad', fncGeral.IsAuthenticated, (req, res) => {
+    fncFaturaMensal.carregaFatura(req, res);
+})
+
+router.post('/financeiro/fatura/processar', fncGeral.IsAuthenticated, (req, res) => {
+    fncFaturaMensal.processarFaturamento(req, res);
+})
+
+router.post('/financeiro/fatura/salvar', fncGeral.IsAuthenticated, (req, res) => {
+    fncFaturaMensal.salvarFaturamento(req, res);
+})
+
+router.get('/financeiro/fatura/anual', fncGeral.IsAuthenticated, (req, res) => {
+    fncFaturaMensal.relatorioAnual(req, res);
+})
+
+router.get('/financeiro/fatura/edi/:id', fncGeral.IsAuthenticated, (req, res) => {
+    fncFaturaMensal.carregaFaturaEdi(req, res);
+})
+
+router.post('/financeiro/fatura/atualizar', fncGeral.IsAuthenticated, (req, res) => {
+    fncFaturaMensal.atualizaFatura(req, res);
+})
+
+router.get('/financeiro/fatura/del/:id', fncGeral.IsAuthenticated, (req, res) => {
+    fncFaturaMensal.deletaFatura(req, res);
+})
   
 
 //Relatório de Atendimentos por Convênio.
