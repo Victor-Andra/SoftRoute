@@ -2,6 +2,47 @@
 <html lang="pt=br">
     <head>
         <title>Ajuda</title>
+            <!-- ✅ ADICIONE ESTE BLOCO CSS -->
+    <style>
+        /* Tooltip personalizado */
+        .custom-tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: max-content;
+            background-color: #f3dfdf;
+            color: red;
+            font-size: 10px;
+            text-align: left;
+            border-radius: 4px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 9999;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.95;
+            min-width: 150px;
+            max-width: 260px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #f3dfdf transparent transparent transparent;
+        }
+        .custom-tooltip:hover .tooltip-text {
+            visibility: visible;
+        }
+    </style>
     </head>
 
     <body onload="javascript:controlaNave();" class="no-skin">
@@ -222,6 +263,13 @@
                                                         <table id="dynamic-table_manual" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
                                                             <thead>
                                                                 <tr role="row">
+                                                                    <!-- Coluna do Checkbox adicionada para alinhar com o tbody -->
+                                                                    <th class="center sorting_disabled" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">
+                                                                        <label class="pos-rel">
+                                                                            <input type="checkbox" class="ace" />
+                                                                            <span class="lbl"></span>
+                                                                        </label>
+                                                                    </th>
                                                                     <th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Manual</th>
                                                                     <th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Versão</th>
                                                                     <th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1">Data</th>
@@ -229,41 +277,48 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                            {{#each manuals}}
-                                                            <tr>
-                                                                <th class="center">
-                                                                    <label class="pos-rel">
-                                                                        <input type="checkbox" class="ace" />
-                                                                        <span class="lbl"></span>
-                                                                    </label>
-                                                                </th>
-                                                                <td>{{man_nome}}</td>
-                                                                <td>{{man_versao}}</td>
-                                                                <td>{{man_versaodata}}</td>
-                                                                <td>
-                                                                    <div class="action-buttons">
-                                                                        
-                                                                        <a class="red" class="red" href="/menu/ferramentas/manual/ver/{{_id}}">
-                                                                            <i class="ace-icon fa fa-serch bigger-130"></i>
-                                                                        </a>
-                                                                        <a class="purple custom-tooltip" href="#">
-                                                                            <i class="ace-icon fa fa-eye bigger-130"></i>
-                                                                            <span class="tooltip-text">
-                                                                                <strong>Manual</strong><br>
-                                                                                {{#if man.dataedi}}
-                                                                                    <b>Edição:</b> {{man.dataedi}} por {{man.usuarioEdiNome}}<br>
-                                                                                {{/if}}
-                                                                                <b>Cad.:</b> {{man.datacad}} por {{man.usuarioCadNome}}
-                                                                            </span>
-                                                                        </a>            
-                                                                    </div>
-                                                                
-                                                                </td>
-                                                            </tr>
-                                                        {{/each}}
+                                                                {{#each manuals}}
+                                                                <tr>
+                                                                    <th class="center">
+                                                                        <label class="pos-rel">
+                                                                            <input type="checkbox" class="ace" />
+                                                                            <span class="lbl"></span>
+                                                                        </label>
+                                                                    </th>
+                                                                    <td>{{man_nome}}</td>
+                                                                    <td>{{man_versao}}</td>
+                                                                    <td>{{dataversao}}</td> <!-- Usando a data formatada no backend -->
+                                                                    <td>
+                                                                        <div class="action-buttons">
+                                                                            <!-- Corrigido typo de 'fa-serch' para 'fa-search' e removido class duplicada -->
+                                                                            <a class="red" href="/menu/ferramentas/manual/formver/{{_id}}">
+                                                                                <i class="ace-icon fa fa-search bigger-130"></i>
+                                                                            </a>
+                                                                            <!-- DETALHES - TOOLTIP -->
+                                                                            <a class="purple custom-tooltip">
+                                                                                <i class="ace-icon fa fa-eye bigger-130"></i>
+                                                                                <span class="tooltip-text">
+                                                                                    <strong>Última Edição:</strong>
+                                                                                    {{#if dataedi}}
+                                                                                        <p><b>{{dataedi}}</b></p>
+                                                                                    {{else}}
+                                                                                        <p>--/--/----</p>
+                                                                                    {{/if}}
+                                                                                    <p>Por: {{usuarioEdiNome}}</p>
 
-                                                                
-                                                                
+                                                                                    <strong>Cadastrado em:</strong>
+                                                                                    {{#if datacad}}
+                                                                                        <p><b>{{datacad}}</b></p>
+                                                                                    {{else}}
+                                                                                        <p>--/--/----</p>
+                                                                                    {{/if}}
+                                                                                    <p>Por: {{usuarioCadNome}}</p>
+                                                                                </span>
+                                                                            </a>      
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                                {{/each}}
                                                             </tbody>
                                                         </table>
                                                     </div>

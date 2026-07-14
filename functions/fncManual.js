@@ -285,7 +285,85 @@ carregarFormularioEdi: async function(req, res) {
         res.redirect('/admin/erro');
     }
 },
+carregarFormularioVer: async function(req, res) {
+    try {
+        // ✅ USA O BANCO DO COOKIE (igual as outras funções)
+        const db = req.cookies['PortalDoUsuario'];
+        const ManualModel = getModel(db, 'tb_manual', manualClass.ManualSchema);
 
+        console.log("📥 REQ PARAMS:", req.params);
+
+        let manual = null;
+        let modo = 'edicao';
+
+        if (req.params.id) {
+            manual = await ManualModel.findById(req.params.id).lean();
+
+            console.log("\n\n==================== 📌 MANUAL RAW DO MONGO ====================");
+            console.log(JSON.stringify(manual, null, 2));
+            console.log("================================================================\n\n");
+
+            if (!manual) {
+                console.log("❌ Manual não encontrado no banco");
+                req.flash("error_message", "Manual não encontrado.");
+                return res.redirect('/admin/erro');
+            }
+
+            if (manual.man_lixo === "true") {
+                console.log("⚠️ Manual marcado como lixo");
+                req.flash("error_message", "Manual não encontrado.");
+                return res.redirect('/admin/erro');
+            }
+        }
+
+        if (!manual.segmentos) {
+            console.log("⚠️ Manual.segmentos veio undefined! Ajustando para []");
+            manual.segmentos = [];
+        }
+
+        console.log("\n======= 🧩 DEBUG — SEGMENTOS =======");
+        manual.segmentos.forEach((seg, i) => {
+            console.log(`SEGMENTO ${i}:`, JSON.stringify(seg, null, 2));
+
+            if (!seg.descricoes) {
+                console.log(`⚠️ descricoes do segmento ${i} vieram undefined. Ajustando.`);
+                seg.descricoes = [];
+            }
+
+            seg.descricoes.forEach((desc, j) => {
+                console.log(`  → DESCRIÇÃO ${j}:`, JSON.stringify(desc, null, 2));
+            });
+        });
+        console.log("===================================\n");
+
+        if (manual.segmentos && Array.isArray(manual.segmentos)) {
+            manual.segmentos = manual.segmentos.map((seg, segIndex) => ({
+                ...seg,
+                segIndex: segIndex,
+                descricoes: (seg.descricoes || []).map((desc, descIndex) => ({
+                    ...desc,
+                    segIndex: segIndex,
+                    descIndex: descIndex
+                }))
+            }));
+        }
+
+        console.log("\n\n==================== 📤 ENVIANDO PARA O HANDLEBARS ====================");
+        console.log("Modo:", modo);
+        console.log("manual enviado:", JSON.stringify(manual, null, 2));
+        console.log("========================================================================\n\n");
+
+        res.render('ferramentas/manual/manualFormVer', {
+            modo,
+            manual
+        });
+
+    } catch (err) {
+        console.error("\n\n❌ ERRO em carregarFormularioVer:", err, "\n\n");
+        req.flash("error_message", "Erro ao carregar formulário.");
+        res.redirect('/admin/erro');
+    }
+},
     cadastraManual(req, res) {
         manualClass.manualAdicionar(req, res)
             .then(() => {

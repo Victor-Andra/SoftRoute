@@ -1,536 +1,505 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-		<head id="cabecalho" name="cabecalho">
-		<title>
-			Plano de tratamento - 
-			{{#each benes}}
-				{{#ifEqual ../trat.trat_beneid _id}}
-					&nbsp;{{bene_nome}}
-				{{/ifEqual}}
-			{{/each}}
-			&nbsp; - &nbsp; 
-			{{#compareThis trat.trat_planotipo "Padrão"}}
-				{{trat.trat_especialidadepad}}
-			{{else}}
-				{{trat.trat_especialidadeis}}
-					&nbsp;-&nbsp;{{trat.trat_especialidadeavd}}
-			{{/compareThis}}
-			</title>
-		<style>
-			
-			@page {
-            size: A4;
-            margin: 1in;
+<head id="cabecalho" name="cabecalho">
+    <title>
+        Plano de tratamento - 
+        {{#each benes}}
+            {{#ifEqual ../trat.trat_beneid _id}}
+                &nbsp;{{bene_nome}}
+            {{/ifEqual}}
+        {{/each}}
+        &nbsp; - &nbsp; 
+        {{#compareThis trat.trat_planotipo "Padrão"}}
+            {{trat.trat_especialidadepad}}
+        {{else}}
+            {{trat.trat_especialidadeis}} &nbsp;-&nbsp; {{trat.trat_especialidadeavd}}
+        {{/compareThis}}
+    </title>
+<style>
+    /* Estilos normais de tela */
+    body {
+        font-family: Calibri, sans-serif;
+        font-size: 12px;
+    }
+    #conteudo {
+        text-align: justify;
+        display: flex;
+        flex-direction: column;
+    }
+    .cabecalho-image img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* ========================================================= */
+    /* BLINDAGEM TOTAL PARA IMPRESSÃO (A4)                       */
+    /* ========================================================= */
+    @media print {
+        /* 1. Configuração da folha A4 */
+        @page {
+            size: A4 portrait;
+            margin: 9mm 9mm 15mm 9mm; /* Topo, Direita, Rodapé (maior para paginação), Esquerda */
         }
-			
-			/* Estilos para o conteúdo da página */
-			#conteudo {
-				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
-				padding-bottom: 100px; /* Ajuste o valor conforme necessário para evitar sobreposição com o rodapé */
-				text-align: justify; /* Alinhamento à esquerda */
-				font-family: calibri;
-				font-size: 11px;
-				display: flex;
-            	flex-direction: column;
-			}
 
-			/* Estilos específicos para a visualização de impressão */
-			@media print {
-				#cabecalho {
-				position: fixed;
-				top: 0;
-				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
-				padding-bottom: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o rodapé */
-				margin: 0; /* Margem inicial zero */
-				text-align: center; /* Alinhamento ao centro */
-				object-position: left;
-				width: 100%; /* Ocupar toda a largura */
-				padding-top: 50px; /* Ajuste o valor conforme necessário para evitar sobreposição com o cabeçalho */
-				}
+        /* 2. Reset total do corpo */
+        html, body {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: visible !important;
+            background: white !important;
+        }
 
-				#rodape {
-				
-				bottom: 0;
-				object-position: center;
-				text-align: center; /* Alinhamento ao centro */
-				
-				margin: 0; /* Margem inicial zero */
-				width: 100%; /* Ocupar toda a largura */
-				}
-				
-               .noprint {
-                  display: none;
-               }
-			}
-		</style>
-		
-		<script type="text/javascript">
-			
-			function defineplanopadrao(){
-				document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
-			}
-			
-			function mudaAnomes(){
-				document.getElementById("mesano").value = document.getElementById("anoMestrat").value
-			}
-			
-			
-			function carregaBody(){
-				let dtnsc = new Date(document.getElementById("tratTratdataEdi").value);
-				let mes = (dtnsc.getMonth()+1).toString();
-				let dia = (dtnsc.getUTCDate()).toString();
-				if (mes.length == 1){
-					mes = "0"+mes;
-				}
-				if (dia.length == 1){
-					dia = "0"+dia;
-				}
-				let fulldate=(dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
-						
-				document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
-				document.getElementById("tratBeneid").value = document.getElementById("tratBeneidEdi").value;
-				document.getElementById("tratTratdata").value = fulldate;
-				
-				
-				//document.getElementById("tratDiagnostico").value = document.getElementById("tratDiagnosticoEdi").value;
-				document.getElementById("tratEspecialidadepad").value = document.getElementById("tratEspecialidadepadEdi").value;
-				document.getElementById("tratTerapeutaidpad").value = document.getElementById("tratTerapeutaidpadEdi").value;
-				document.getElementById("tratRegconselhopad").value = document.getElementById("tratRegconselhopadEdi").value;
-				document.getElementById("tratHistoricopad").value = document.getElementById("tratHistoricopadEdi").value;
-				document.getElementById("tratObjgeralpad").value = document.getElementById("tratObjgeralpadEdi").value;
-				document.getElementById("tratObjespecificopad").value = document.getElementById("tratObjespecificopadEdi").value;
-				document.getElementById("tratEstrategiapad").value = document.getElementById("tratEstrategiapadEdi").value;
-				document.getElementById("tratObspad").value = document.getElementById("tratObspadEdi").value;
-				document.getElementById("tratDiagnosticoocup").value = document.getElementById("tratDiagnosticoocupEdi").value;
-				document.getElementById("tratEspecialidadeis").value = document.getElementById("tratEspecialidadeisEdi").value;
-				document.getElementById("tratTerapeutaidis").value = document.getElementById("tratTerapeutaidisEdi").value;
-				document.getElementById("tratRegconselhois").value = document.getElementById("tratRegconselhoisEdi").value;
-				document.getElementById("tratMetacurtois").value = document.getElementById("tratMetacurtoisEdi").value;
-				document.getElementById("tratMetamediois").value = document.getElementById("tratMetamedioisEdi").value;
-				document.getElementById("tratMetalongois").value = document.getElementById("tratMetalongoisEdi").value;
-				document.getElementById("tratObjetivois").value = document.getElementById("tratObjetivoisEdi").value;
-				document.getElementById("tratEspecialidadeavd").value = document.getElementById("tratEspecialidadeavdEdi").value;
-				document.getElementById("tratTerapeutaidavd").value = document.getElementById("tratTerapeutaidavdEdi").value;
-				document.getElementById("tratRegconselhoavd").value = document.getElementById("tratRegconselhoavdEdi").value;
-				console.log("ta chegando aqui?");
-				let usuarioAtual = document.getElementById("usuarioAtual").value;
-				let perfilAtual = document.getElementById("perfilAtual").value;
-				if ((document.getElementById("tratTerapeutaidpad").value || document.getElementById("tratTerapeutaidis").value || document.getElementById("tratTerapeutaidavd").value) == usuarioAtual || perfilAtual == "644743aa78166939169f8486" || perfilAtual == "644742e378166939169f82a1" || perfilAtual == "62421857a12aa557219a0fc1"){
-					document.getElementById("acaoSalvar").style.display = '';
-				} else {
-					document.getElementById("acaoSalvar").style.display = 'none';
-				}
-				this.atualizaDadosbene();
-			}
-		
-			function atualizaData(){
-				var dataIso = document.getElementById("b").value+"T00:00:00.000Z";
-				var dataFmt = new Date(dataIso);
-				console.log(dataFmt.toISOString());
-				document.getElementById("a").value = dataFmt;
-			}
-			function formataData(date) {//yyyy-MM-dd
-				var d = new Date(date);
-				if (d.getTimezoneOffset() == 180){
-					d.setHours(d.getHours()+3);
-				}
-				console.log("d:"+d);
-					month = '' + (d.getMonth() + 1);
-					day = '' + d.getDate();
-					year = d.getFullYear();
+        /* 3. NEUTRALIZAÇÃO AGRESSIVA DO BOOTSTRAP NA IMPRESSÃO */
+        .container, .container-fluid, .row,
+        .col-xs-12, .col-sm-10, .col-sm-offset-1, .col-md-12, .col-lg-12 {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            float: none !important;
+            flex: 0 0 100% !important;
+            display: block !important;
+        }
 
-				if (month.length == 1) {
-					month = '0' + month;
-				}
-					
-				if (day.length == 1) {
-					day = '0' + day;
-				}
+        /* 4. Container de conteúdo com largura segura */
+        #conteudo, .widget-box, .main-content, .main-content-inner {
+            width: 100% !important;
+            max-width: 194mm !important;
+            margin: 0 auto !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
 
-				return [year, month, day].join('-');
-			}
-			function atualizaDadosbene(){
-				let beneid = document.getElementById("tratBeneid").value;
+        /* 5. Garantia de que imagens não estouram a largura */
+        img {
+            max-width: 100% !important;
+            height: auto !important;
+            display: block;
+        }
 
-				var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
-				if (dataIso != undefined && dataIso != "undefined"){
-					var dataFmt = new Date(dataIso);
-					document.getElementById("beneDatanasc").value = formataData(dataFmt);//document.getElementById("_beneDatanasc").value;
-					document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
-				}
-				document.getElementById("laudoDiag").value = document.getElementById((beneid+"_laudoDiagEdi")).value;
-				//document.getElementById("beneMae").value = document.getElementById(beneid+"_beneMae").value;
-				//document.getElementById("benePai").value = document.getElementById(beneid+"_benePai").value;
-			}
-			function converteMai(input) {
-           	 input.value = input.value.toUpperCase();
-        	}
-			
-			
-			
-		</script>
-	</head>
-	<body class="no-skin" background-image="/assets/images/papelparede/temaLoginPadrao.png" onload="javascript:controlaNave();"  >
-		
-		<div class="main-container ace-save-state" id="main-container" class="page-break-before">
-			<div class="main-content">
-				<div class="main-content-inner">
-					<div class="main-content-inner noprint">
-						<div class="breadcrumbs ace-save-state" id="breadcrumbs" >
-							<ul class="breadcrumb">
-								<li>
-									<i class="ace-icon fa fa-home home-icon"></i>
-									<a href="#">Home</a>
-								</li>
-								<li class="active">Plano de Tratamento</li>
-							</ul><!-- /.breadcrumb -->
-							<div id="divCarrega" name="divCarrega" class="hidden">
-								<input id="tratId" name="tratId" value="{{trat._id}}" />
-								<input id="tratPlanotipoEdi" name="tratPlanotipoEdi" value="{{trat.trat_planotipo}}"/>
-								<input id="tratBeneidEdi" name="tratBeneidEdi" value="{{trat.trat_beneid}}"/>
-								<input id="tratBeneidadeEdi" name="tratBeneidadeEdi" value="{{trat.trat_beneidade}}"/>
-								<input id="laudoDescEdi" name="laudoDescEdi" value="{{laudo.laudo_desc}}"/>
-								<input id="tratTratdataEdi" name="tratTratdataEdi" value="{{trat.trat_tratdata}}"/>
-								<input id="tratTratdatavigenciaEdi" name="tratTratdatavigenciaEdi" value="{{trat.trat_tratdatavigencia}}"/>
-								<!--<input id="tratDiagnosticoEdi" name="tratDiagnosticoEdi" value="{{trat.trat_diagnostico}}"/>-->
-								<input id="tratEspecialidadepadEdi" name="tratEspecialidadepadEdi" value="{{trat.trat_especialidadepad}}"/>
-								<input id="tratTerapeutaidpadEdi" name="tratTerapeutaidpadEdi" value="{{trat.trat_terapeutaidpad}}"/>
-								<input id="tratRegconselhopadEdi" name="tratRegconselhopadEdi" value="{{trat.trat_regconselhopad}}"/>
-								<input id="tratHistoricopadEdi" name="tratHistoricopadEdi" value="{{trat.trat_historicopad}}"/>
-								<input id="tratObjgeralpadEdi" name="tratObjgeralpadEdi" value="{{trat.trat_objgeralpad}}"/>
-								<input id="tratObjespecificopadEdi" name="tratObjespecificopadEdi" value="{{trat.trat_objespecificopad}}"/>
-								<input id="tratEstrategiapadEdi" name="tratEstrategiapadEdi" value="{{trat.trat_estrategiapad}}"/>
-								<input id="tratObspadEdi" name="tratObspadEdi" value="{{trat.trat_obspad}}"/>
-								<input id="tratDiagnosticoocupEdi" name="tratDiagnosticoocupEdi" value="{{trat.trat_diagnosticoocup}}"/>
-								<input id="tratEspecialidadeisEdi" name="tratEspecialidadeisEdi" value="{{trat.trat_especialidadeis}}"/>
-								<input id="tratTerapeutaidisEdi" name="tratTerapeutaidisEdi" value="{{trat.trat_terapeutaidis}}"/>
-								<input id="tratRegconselhoisEdi" name="tratRegconselhoisEdi" value="{{trat.trat_regconselhois}}"/>
-								<input id="tratMetacurtoisEdi" name="tratMetacurtoisEdi" value="{{trat.trat_metacurtois}}"/>
-								<input id="tratMetamedioisEdi" name="tratMetamedioisEdi" value="{{trat.trat_metamediois}}"/>
-								<input id="tratMetalongoisEdi" name="tratMetalongoisEdi" value="{{trat.trat_metalongois}}"/>
-								<input id="tratObjetivoisEdi" name="tratObjetivoisEdi" value="{{trat.trat_objetivois}}"/>
-								<input id="tratEspecialidadeavdEdi" name="tratEspecialidadeavdEdi" value="{{trat.trat_especialidadeavd}}"/>
-								<input id="tratTerapeutaidavdEdi" name="tratTerapeutaidavdEdi" value="{{trat.trat_terapeutaidavd}}"/>
-								<input id="tratRegconselhoavdEdi" name="tratRegconselhoavdEdi" value="{{trat.trat_regconselhoavd}}"/>
-								<input id="usuarioAtual" name="usuarioAtual" value="{{usuarioAtual}}"/>
-								<input id="perfilAtual" name="perfilAtual" value="{{perfilAtual}}"/>
-							</div>
-							<ul class="breadcrumb" >
-								<label>Mês/Ano a ser impresso no Plano de Tratamento:</label>
-								<input style="height: 30px;" id="anoMestrat" name="anoMestrat" type="text" placeholder="SETEMBRO DE 2023" oninput="converteMai(this);" onchange="mudaAnomes();">
-								
-								
-								<button class="btn btn-info" name="generate-pdf" id="generate-pdf" onclick="" >
-									<i class="ace-icon fa fa-file-pdf-o bigger-110"></i>
-									Salvar em PDF
-								</button>
-							</ul><!-- /.breadcrumb -->
-						</div>
-					</div>
-					<div class="row" class="cabecalho">
-						<div class="col-xs-12">
-							<div class="cabecalho">
-								<div class="cabecalho-image">
-									<img src="/images/gallery/cabecalhoRoute.png" >
-								</div>
-								
-							</div>
-						</div>
-					</div><!-- /.row -->
-					<div class="row" class="conteudo" >
-						<div class="col-xs-12" >
-							<div class="row">
-								<div class="col-sm-10 col-sm-offset-1">
-									<div class="widget-box transparent">
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-											<div class="widget-header widget-header-large">
-												<h1 class="widget-title grey lighter">
-													PLANO DE TRATAMENTO
-												</h1>
-											</div>
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<br>
-										<table id="dynamic-table" style="font-size: 20px" >
-											<thead>
-											</thead>
-											<tbody>
-												<br>
-												<br>
-												<br>
-												<br>
-												<br>
-												<tr>
-													<td>{{#each benes}}
-															{{#ifEqual ../trat.trat_beneid _id}}
-																&nbsp;{{bene_nome}}
-															{{/ifEqual}}
-														{{/each}}
-													</td>
-												</tr>
-												
-												{{#compareThis trat.trat_planotipo "Padrão"}}
-													<tr>
-														<td>&nbsp;{{trat.trat_especialidadepad}}</td>
-													</tr>
-													{{else}}
-														<tr>
-															<td>&nbsp;{{trat.trat_especialidadeis}}</td>
-														</tr>
-														<tr>
-															<td>&nbsp;{{trat.trat_especialidadeavd}}</td>
-														</tr>
-												{{/compareThis}}
-												
-												<tr>
-													<td>
-														<input type="text" id="mesano" name="mesano" style="border: none; font-size: 18px;"></input>
-													</td>
-												</tr>
-												<tr rowspan="6">&nbsp;</tr>
-											</tbody>
-										</table>
-									</div>
-								</div>
-							</div><!-- PAGE CONTENT ENDS -->
-						</div><!-- /.col -->
-					</div><!-- /.row -->
-					
-				</div><!-- /.main-content-inner" -->
-			</div><!-- /.main-content -->
-		</div><!-- /.main-container -->
-		<div class="main-container ace-save-state" id="main-container" class="page-break-after">
-			<div class="main-content">
-				<div class="main-content-inner">
-					<div class="row" class="cabecalho">
-								<div class="col-xs-12">
-									<div class="cabecalho">
-										<div class="cabecalho-image">
-											<img src="/images/gallery/cabecalhoRoute.png" >
-										</div>
-										
-									</div>
-								</div>
-					</div><!-- /.row -->
-					<div class="row" class="conteudo">
-						<div class="col-sm-10 col-sm-offset-1">
-							<div class="widget-box transparent">
-								<table id="dynamic-table" >
-									<thead>
-										
-									</thead>
-									<tbody>
-										<tr rowspan="3">
-											<td></td>
-										</tr>
-										<tr>
-											<td>NOME:&nbsp;</td>
-											<td>{{#each benes}}
-													{{#ifEqual ../trat.trat_beneid _id}}
-														{{bene_nome}}
-													{{/ifEqual}}
-												{{/each}}</td>
-											
-										</tr>
-										{{#compareThis trat.trat_planotipo "Padrão"}}
-										<tr>
-											<td>TERAPIA:&nbsp;</td>
-											<td>{{trat.trat_especialidadepad}}</td>
-										</tr>
-										<tr>
-											<td>TERAPEUTA:&nbsp;</td>
-											<td>{{#each usuarios}}
-													{{#ifEqual ../trat.trat_terapeutaidpad _id}}
-														{{usuario_nome}}
-													{{/ifEqual}}
-												{{/each}}
-											&nbsp;-&nbsp;{{trat.trat_regconselhopad}}</td>
-											
-										</tr>
-										{{else}}
-										<tr>
-											<td>TERAPIA:&nbsp;</td>
-											<td>{{trat.trat_especialidadeis}}</td>
-										</tr>
-										<tr>
-											<td>TERAPEUTA:&nbsp;</td>
-											<td>{{#each usuarios}}
-													{{#ifEqual ../trat.trat_terapeutaidis _id}}
-														{{usuario_nome}}
-													{{/ifEqual}}
-												{{/each}}
-											&nbsp;-&nbsp;{{trat.trat_regconselhois}}</td>
-											
-										</tr>
-										<hr>
-										<tr>
-											<td>TERAPIA:&nbsp;</td>
-											<td>{{trat.trat_especialidadeavd}}</td>
-										</tr>
-										<tr>
-											<td>TERAPEUTA:&nbsp;</td>
-											<td>{{#each usuarios}}
-													{{#ifEqual ../trat.trat_terapeutaidavd _id}}
-														{{usuario_nome}}
-													{{/ifEqual}}
-												{{/each}}
-											&nbsp;-&nbsp;{{trat.trat_regconselhoavd}}</td>
-											<td></td>
-										</tr>
-										{{/compareThis}}
-										
-									</tbody>
-								</table>
-								<hr>
-								<div class="row">
-									<table id="dynamic-table" >
-										<thead></thead>
-										<tbody>	
-											{{#compareThis trat.trat_planotipo "Padrão"}}
-												<tr>
-													<td><b><span>HISTÓRICO CLÍNICO</span></b></td>
-												</tr>
-												<tr>
-													<td>{{trat.trat_historicopad}}</td>
-												</tr>
-												<tr><td><hr></td></tr>
-												<tr>
-													<td><b><span>OBJETIVOS GERAIS</span></b></td>
-												</tr>
-												<tr>
-													<td>{{trat.trat_objgeralpad}}</td>
-												</tr>
-												<tr><td><hr></td></tr>
-												<tr>
-													<td><b><span>OBJETIVO ESPECÍFICOS</span></b></td>
-												</tr>
-												<tr>
-													<td>{{trat.trat_objespecificopad}}</td>
-												</tr>
-												<tr><td><hr></td></tr>
-												<tr>
-													<td><b><span>ESTRATÉGIAS</span></b></td>
-												</tr>
-												<tr>
-													<td>{{trat.trat_estrategiapad}}</td>
-												</tr>
-												<tr><td><hr></td></tr>
-												<tr>
-													
-													<td><b><span>OBSERVAÇÕES</span></b></td>
-													
-												</tr>
-												<tr>
-													<td>{{trat.trat_obspad}}</td>
-												</tr>
-											{{else}}
-											<tr>
-												<td><b><span>DIAGNÓSTICO TERAPÊUTICO OCUPACIONAL</span></b></td>
-											</tr>
-											<tr>
-												<td>{{trat.trat_diagnosticoocup}}</td>
-											</tr>
-											<tr><td><hr></td></tr>
-											<tr>
-												<td><b><span>METAS À CURTO PRAZO</span></b></td>
-											</tr>
-											<tr>
-												<td>{{trat.trat_metacurtois}}</td>
-											</tr>
-											<tr><td><hr></td></tr>
-											<tr>
-												<td><b><span>METAS À MÉDIO PRAZO</span></b></td>
-											</tr>
-											<tr>
-												<td>{{trat.trat_metamediois}}</td>
-											</tr>
-											<tr><td><hr></td></tr>
-											<tr>
-												<td><b><span>METAS À LONGO PRAZO</span></b></td>
-											</tr>
-											<tr>
-												<td>{{trat.trat_metalongois}}</td>
-											</tr>
-											<tr><td><hr></td></tr>
-											<tr>
-												
-												<td><b><span>ESTRATÉGIAS E OBJETIVOS</span></b></td>
-												
-											</tr>
-											<tr>
-												<td>{{trat.trat_objetivois}}</td>
-											</tr>
-											<tr><td><hr></td></tr>
-											<tr>
-												
-												<td><b><span>OBSERVAÇÕES</span></b></td>
-												
-											</tr>
-											<tr>
-												<td rowspan="1" colspan="2">{{trat.trat_obspad}}</td>
-											</tr>
-											<tr><td><hr></td></tr>
-											{{/compareThis}}
-										</tbody>
-									</table>
-									<table>
-										<thead>
-											<tr>
-												<td class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="3"><label for="carimbo">Carimbos e assinaturas:</label></td>
-											</tr>
-										</thead>
-										<!-- Divs para mostrar as imagens de carimbo e assinaturas -->
-										<tbody>
-											<tr>
-												{{#verificarVazioOuIndefinido this.carimboUsuPad }}
-														{{else}}
-															<td rowspan="1" colspan="3" class="center"><!-- Div imagem carimbo Terapeuta Padrão -->
-																<img id="previewImage1" src="data:image/png;base64, {{carimboUsuPad}}" alt="Visualização do carimbo e assinatura" style="max-width: 100%; max-height: 200px;">
-															</td>
-												{{/verificarVazioOuIndefinido}}
-												{{#verificarVazioOuIndefinido this.carimboUsuIs }}
-														{{else}}
-															<td rowspan="1" colspan="1" class="center"><!-- Div imagem carimbo Terapeuta IS -->
-																<img id="previewImage2" src="data:image/png;base64, {{carimboUsuIs}}" alt="Visualização do carimbo e assinatura" style="max-width: 100%; max-height: 200px;">
-															</td>
-												{{/verificarVazioOuIndefinido}}
-												{{#verificarVazioOuIndefinido this.carimboUsuAvd }}
-														{{else}}
-															<td rowspan="1" colspan="1" class="center"><!-- Div imagem carimbo Terapeuta Avd -->
-																<img id="previewImage3" src="data:image/png;base64, {{carimboUsuAvd}}" alt="Visualização do carimbo e assinatura" style="max-width: 100%; max-height: 200px;">
-															</td>
-												{{/verificarVazioOuIndefinido}}
-											</tr>
-											<!-- Aparecer na Linha abaixo removido assinatura e carimbo de roberta-->
-											
-										</tbody>
-										<tfoot></tfoot>
+        /* 6. Evitar quebras no meio de elementos */
+        tr, p, h1, h2, h3, h4, h5, h6 {
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
+        }
 
-									</table>
-								</div>
-						</div>
-						</div><!-- PAGE CONTENT ENDS -->
-					</div><!-- /.row -->
-					
-				</div>
-			</div><!-- /.main-content-inner" -->
-		</div><!-- /.main-container -->
-	</body>
+        /* 7. Quebra de página forçada */
+        .page-break-before {
+            break-before: page !important;
+            page-break-before: always !important;
+        }
+        .page-break-after {
+            break-after: page !important;
+            page-break-after: always !important;
+        }
+
+        /* 8. Esconder elementos de interface */
+        .noprint, .breadcrumbs, button, .hidden {
+            display: none !important;
+        }
+
+       
+    }
+</style>
+    
+    <script type="text/javascript">
+        // Função para salvar e carregar o filtro de Mês/Ano
+        function initFiltroMesAno() {
+            const tratId = document.getElementById("tratId") ? document.getElementById("tratId").value : 'default';
+            const storageKey = `planoTrat_mesano_${tratId}`;
+            
+            // Carrega valor salvo se existir
+            const valorSalvo = localStorage.getItem(storageKey);
+            if (valorSalvo) {
+                document.getElementById("anoMestrat").value = valorSalvo;
+                document.getElementById("mesano").value = valorSalvo;
+            }
+        }
+
+        function defineplanopadrao(){
+            document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
+        }
+        
+        function mudaAnomes(){
+            const val = document.getElementById("anoMestrat").value;
+            document.getElementById("mesano").value = val;
+            
+            // Salva no localStorage para persistência
+            const tratId = document.getElementById("tratId") ? document.getElementById("tratId").value : 'default';
+            localStorage.setItem(`planoTrat_mesano_${tratId}`, val);
+        }
+        
+        function carregaBody(){
+            initFiltroMesAno(); // Inicializa o filtro salvo
+            
+            let dtnsc = new Date(document.getElementById("tratTratdataEdi").value);
+            let mes = (dtnsc.getMonth()+1).toString();
+            let dia = (dtnsc.getUTCDate()).toString();
+            if (mes.length == 1) mes = "0"+mes;
+            if (dia.length == 1) dia = "0"+dia;
+            let fulldate = (dtnsc.getFullYear()+"-"+mes+"-"+dia).toString();
+                    
+            document.getElementById("tratPlanotipo").value = document.getElementById("tratPlanotipoEdi").value;
+            document.getElementById("tratBeneid").value = document.getElementById("tratBeneidEdi").value;
+            document.getElementById("tratTratdata").value = fulldate;
+            
+            document.getElementById("tratEspecialidadepad").value = document.getElementById("tratEspecialidadepadEdi").value;
+            document.getElementById("tratTerapeutaidpad").value = document.getElementById("tratTerapeutaidpadEdi").value;
+            document.getElementById("tratRegconselhopad").value = document.getElementById("tratRegconselhopadEdi").value;
+            document.getElementById("tratHistoricopad").value = document.getElementById("tratHistoricopadEdi").value;
+            document.getElementById("tratObjgeralpad").value = document.getElementById("tratObjgeralpadEdi").value;
+            document.getElementById("tratObjespecificopad").value = document.getElementById("tratObjespecificopadEdi").value;
+            document.getElementById("tratEstrategiapad").value = document.getElementById("tratEstrategiapadEdi").value;
+            document.getElementById("tratObspad").value = document.getElementById("tratObspadEdi").value;
+            document.getElementById("tratDiagnosticoocup").value = document.getElementById("tratDiagnosticoocupEdi").value;
+            document.getElementById("tratEspecialidadeis").value = document.getElementById("tratEspecialidadeisEdi").value;
+            document.getElementById("tratTerapeutaidis").value = document.getElementById("tratTerapeutaidisEdi").value;
+            document.getElementById("tratRegconselhois").value = document.getElementById("tratRegconselhoisEdi").value;
+            document.getElementById("tratMetacurtois").value = document.getElementById("tratMetacurtoisEdi").value;
+            document.getElementById("tratMetamediois").value = document.getElementById("tratMetamedioisEdi").value;
+            document.getElementById("tratMetalongois").value = document.getElementById("tratMetalongoisEdi").value;
+            document.getElementById("tratObjetivois").value = document.getElementById("tratObjetivoisEdi").value;
+            document.getElementById("tratEspecialidadeavd").value = document.getElementById("tratEspecialidadeavdEdi").value;
+            document.getElementById("tratTerapeutaidavd").value = document.getElementById("tratTerapeutaidavdEdi").value;
+            document.getElementById("tratRegconselhoavd").value = document.getElementById("tratRegconselhoavdEdi").value;
+            
+            let usuarioAtual = document.getElementById("usuarioAtual").value;
+            let perfilAtual = document.getElementById("perfilAtual").value;
+            
+            if ((document.getElementById("tratTerapeutaidpad").value || document.getElementById("tratTerapeutaidis").value || document.getElementById("tratTerapeutaidavd").value) == usuarioAtual || perfilAtual == "644743aa78166939169f8486" || perfilAtual == "644742e378166939169f82a1" || perfilAtual == "62421857a12aa557219a0fc1"){
+                document.getElementById("acaoSalvar").style.display = '';
+            } else {
+                document.getElementById("acaoSalvar").style.display = 'none';
+            }
+            this.atualizaDadosbene();
+        }
+    
+        function formataData(date) {
+            var d = new Date(date);
+            if (d.getTimezoneOffset() == 180){
+                d.setHours(d.getHours()+3);
+            }
+            let month = '' + (d.getMonth() + 1);
+            let day = '' + d.getDate();
+            let year = d.getFullYear();
+
+            if (month.length == 1) month = '0' + month;
+            if (day.length == 1) day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+        
+        function atualizaDadosbene(){
+            let beneid = document.getElementById("tratBeneid").value;
+            var dataIso = document.getElementById(beneid+"_beneDatanasc").value;
+            
+            if (dataIso != undefined && dataIso != "undefined" && dataIso !== ""){
+                var dataFmt = new Date(dataIso);
+                document.getElementById("beneDatanasc").value = formataData(dataFmt);
+                document.getElementById("beneIdade").value = ((new Date()).getFullYear() - dataFmt.getFullYear()).toString() + " anos e " + (dataFmt.getMonth()+1).toString() + " meses.";
+            }
+            
+            let elLaudo = document.getElementById((beneid+"_laudoDiagEdi"));
+            if(elLaudo) {
+                document.getElementById("laudoDiag").value = elLaudo.value;
+            }
+        }
+        
+        function converteMai(input) {
+            input.value = input.value.toUpperCase();
+        }
+    </script>
+</head>
+
+<!-- Removido background-image inline para evitar problemas de renderização, e adicionado onload correto -->
+<body class="no-skin" onload="carregaBody();">
+    
+    <!-- PÁGINA 1: CAPA / TÍTULO -->
+    <!-- Corrigido: removido atributo 'class' duplicado, unificado em um só -->
+    <div class="main-container ace-save-state page-break-after" id="main-container-1">
+        <div class="main-content">
+            <div class="main-content-inner">
+                
+                <!-- Menu superior (oculto na impressão) -->
+                <div class="main-content-inner noprint">
+                    <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                        <ul class="breadcrumb">
+                            <li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
+                            <li class="active">Plano de Tratamento</li>
+                        </ul>
+                        
+                        <div id="divCarrega" name="divCarrega" class="hidden">
+                            <input id="tratId" name="tratId" value="{{trat._id}}" />
+                            <input id="tratPlanotipoEdi" name="tratPlanotipoEdi" value="{{trat.trat_planotipo}}"/>
+                            <input id="tratBeneidEdi" name="tratBeneidEdi" value="{{trat.trat_beneid}}"/>
+                            <input id="tratBeneidadeEdi" name="tratBeneidadeEdi" value="{{trat.trat_beneidade}}"/>
+                            <input id="laudoDescEdi" name="laudoDescEdi" value="{{laudo.laudo_desc}}"/>
+                            <input id="tratTratdataEdi" name="tratTratdataEdi" value="{{trat.trat_tratdata}}"/>
+                            <input id="tratTratdatavigenciaEdi" name="tratTratdatavigenciaEdi" value="{{trat.trat_tratdatavigencia}}"/>
+                            <input id="tratEspecialidadepadEdi" name="tratEspecialidadepadEdi" value="{{trat.trat_especialidadepad}}"/>
+                            <input id="tratTerapeutaidpadEdi" name="tratTerapeutaidpadEdi" value="{{trat.trat_terapeutaidpad}}"/>
+                            <input id="tratRegconselhopadEdi" name="tratRegconselhopadEdi" value="{{trat.trat_regconselhopad}}"/>
+                            <input id="tratHistoricopadEdi" name="tratHistoricopadEdi" value="{{trat.trat_historicopad}}"/>
+                            <input id="tratObjgeralpadEdi" name="tratObjgeralpadEdi" value="{{trat.trat_objgeralpad}}"/>
+                            <input id="tratObjespecificopadEdi" name="tratObjespecificopadEdi" value="{{trat.trat_objespecificopad}}"/>
+                            <input id="tratEstrategiapadEdi" name="tratEstrategiapadEdi" value="{{trat.trat_estrategiapad}}"/>
+                            <input id="tratObspadEdi" name="tratObspadEdi" value="{{trat.trat_obspad}}"/>
+                            <input id="tratDiagnosticoocupEdi" name="tratDiagnosticoocupEdi" value="{{trat.trat_diagnosticoocup}}"/>
+                            <input id="tratEspecialidadeisEdi" name="tratEspecialidadeisEdi" value="{{trat.trat_especialidadeis}}"/>
+                            <input id="tratTerapeutaidisEdi" name="tratTerapeutaidisEdi" value="{{trat.trat_terapeutaidis}}"/>
+                            <input id="tratRegconselhoisEdi" name="tratRegconselhoisEdi" value="{{trat.trat_regconselhois}}"/>
+                            <input id="tratMetacurtoisEdi" name="tratMetacurtoisEdi" value="{{trat.trat_metacurtois}}"/>
+                            <input id="tratMetamedioisEdi" name="tratMetamedioisEdi" value="{{trat.trat_metamediois}}"/>
+                            <input id="tratMetalongoisEdi" name="tratMetalongoisEdi" value="{{trat.trat_metalongois}}"/>
+                            <input id="tratObjetivoisEdi" name="tratObjetivoisEdi" value="{{trat.trat_objetivois}}"/>
+                            <input id="tratEspecialidadeavdEdi" name="tratEspecialidadeavdEdi" value="{{trat.trat_especialidadeavd}}"/>
+                            <input id="tratTerapeutaidavdEdi" name="tratTerapeutaidavdEdi" value="{{trat.trat_terapeutaidavd}}"/>
+                            <input id="tratRegconselhoavdEdi" name="tratRegconselhoavdEdi" value="{{trat.trat_regconselhoavd}}"/>
+                            <input id="usuarioAtual" name="usuarioAtual" value="{{usuarioAtual}}"/>
+                            <input id="perfilAtual" name="perfilAtual" value="{{perfilAtual}}"/>
+							<input type="hidden" id="mesanoHidden" name="mesanoHidden" value="{{mesanoFiltro}}" />
+							
+                        </div>
+                        
+                        <ul class="breadcrumb">
+                            <button class="btn btn-info" name="generate-pdf" id="generate-pdf" onclick="window.print();">
+                                <i class="ace-icon fa fa-file-pdf-o bigger-110"></i> Salvar em PDF / Imprimir
+                            </button>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Cabeçalho Visual -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="cabecalho-image">
+                            <img src="/images/gallery/cabecalhoRoute.png" alt="Cabeçalho">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conteúdo Página 1 -->
+                <div class="row" id="conteudo">
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-sm-10 col-sm-offset-1">
+                                <div class="widget-box transparent">
+                                    <br><br><br><br><br><br><br><br><br>
+                                    <div class="widget-header widget-header-large">
+                                        <h1 class="widget-title grey lighter" style="text-align: center;">PLANO DE TRATAMENTO</h1>
+                                    </div>
+                                    <br><br><br><br><br><br><br><br><br><br><br>
+                                    <table id="dynamic-table" style="font-size: 20px; width: 95%;">
+                                        <tbody>
+                                            <tr>
+                                                <td style="text-align: center; font-weight: bold;">
+                                                    {{#each benes}}
+                                                        {{#ifEqual ../trat.trat_beneid _id}}
+                                                            {{bene_nome}}
+                                                        {{/ifEqual}}
+                                                    {{/each}}
+                                                </td>
+                                            </tr>
+                                            {{#compareThis trat.trat_planotipo "Padrão"}}
+                                                <tr>
+                                                    <td style="text-align: center;">{{trat.trat_especialidadepad}}</td>
+                                                </tr>
+                                            {{else}}
+                                                <tr>
+                                                    <td style="text-align: center;">{{trat.trat_especialidadeis}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="text-align: center;">{{trat.trat_especialidadeavd}}</td>
+                                                </tr>
+                                            {{/compareThis}}
+                                            <tr>
+                                                <td style="text-align: center; padding-top: 20px;">
+                                                    <input type="text" id="mesano" name="mesano" style="border: none; font-size: 18px; text-align: center; background: transparent; width: 95%;" readonly>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA 2: CONTEÚDO DETALHADO -->
+    <!-- Corrigido: ID único e classe de quebra de página -->
+    <div class="main-container ace-save-state page-break-before" id="main-container-2">
+        <div class="main-content">
+            <div class="main-content-inner">
+                
+                <!-- Repete o cabeçalho visual na página 2 -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="cabecalho-image">
+                            <img src="/images/gallery/cabecalhoRoute.png" alt="Cabeçalho">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="conteudo">
+                    <div class="col-sm-10 col-sm-offset-1">
+                        <div class="widget-box transparent">
+                            <table id="dynamic-table" style="width: 100%; margin-bottom: 20px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 20%; font-weight: bold;">NOME:</td>
+                                        <td>
+                                            {{#each benes}}
+                                                {{#ifEqual ../trat.trat_beneid _id}}
+                                                    {{bene_nome}}
+                                                {{/ifEqual}}
+                                            {{/each}}
+                                        </td>
+                                    </tr>
+                                    {{#compareThis trat.trat_planotipo "Padrão"}}
+                                        <tr>
+                                            <td style="font-weight: bold;">TERAPIA:</td>
+                                            <td>{{trat.trat_especialidadepad}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">TERAPEUTA:</td>
+                                            <td>
+                                                {{#each usuarios}}
+                                                    {{#ifEqual ../trat.trat_terapeutaidpad _id}}
+                                                        {{usuario_nome}}
+                                                    {{/ifEqual}}
+                                                {{/each}}
+                                                &nbsp;-&nbsp;{{trat.trat_regconselhopad}}
+                                            </td>
+                                        </tr>
+                                    {{else}}
+                                        <tr>
+                                            <td style="font-weight: bold;">TERAPIA:</td>
+                                            <td>{{trat.trat_especialidadeis}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">TERAPEUTA:</td>
+                                            <td>
+                                                {{#each usuarios}}
+                                                    {{#ifEqual ../trat.trat_terapeutaidis _id}}
+                                                        {{usuario_nome}}
+                                                    {{/ifEqual}}
+                                                {{/each}}
+                                                &nbsp;-&nbsp;{{trat.trat_regconselhois}}
+                                            </td>
+                                        </tr>
+                                        <tr><td colspan="2"><hr></td></tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">TERAPIA:</td>
+                                            <td>{{trat.trat_especialidadeavd}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-weight: bold;">TERAPEUTA:</td>
+                                            <td>
+                                                {{#each usuarios}}
+                                                    {{#ifEqual ../trat.trat_terapeutaidavd _id}}
+                                                        {{usuario_nome}}
+                                                    {{/ifEqual}}
+                                                {{/each}}
+                                                &nbsp;-&nbsp;{{trat.trat_regconselhoavd}}
+                                            </td>
+                                        </tr>
+                                    {{/compareThis}}
+                                </tbody>
+                            </table>
+                            
+                            <hr>
+                            
+                            <table id="dynamic-table" style="width: 100%;">
+                                <tbody>    
+                                    {{#compareThis trat.trat_planotipo "Padrão"}}
+                                        <tr><td style="font-weight: bold; padding-top: 10px;">HISTÓRICO CLÍNICO</td></tr>
+                                        <tr><td style="padding-bottom: 10px;">{{trat.trat_historicopad}}</td></tr>
+                                        <tr><td><hr></td></tr>
+                                        
+                                        <tr><td style="font-weight: bold; padding-top: 10px;">OBJETIVOS GERAIS</td></tr>
+                                        <tr><td style="padding-bottom: 10px;">{{trat.trat_objgeralpad}}</td></tr>
+                                        <tr><td><hr></td></tr>
+                                        
+                                        <tr><td style="font-weight: bold; padding-top: 10px;">OBJETIVOS ESPECÍFICOS</td></tr>
+                                        <tr><td style="padding-bottom: 10px;">{{trat.trat_objespecificopad}}</td></tr>
+                                        <tr><td><hr></td></tr>
+                                        
+                                        <tr><td style="font-weight: bold; padding-top: 10px;">ESTRATÉGIAS</td></tr>
+                                        <tr><td style="padding-bottom: 10px;">{{trat.trat_estrategiapad}}</td></tr>
+                                        <tr><td><hr></td></tr>
+                                        
+                                        <tr><td style="font-weight: bold; padding-top: 10px;">OBSERVAÇÕES</td></tr>
+                                        <tr><td style="padding-bottom: 10px;">{{trat.trat_obspad}}</td></tr>
+                                    {{else}}
+                                        <tr><td style="font-weight: bold; padding-top: 10px;">DIAGNÓSTICO TERAPÊUTICO OCUPACIONAL</td></tr>
+                                        <tr><td style="padding-bottom: 10px;">{{trat.trat_diagnosticoocup}}</td></tr>
+                                        <tr><td><hr></td></tr>
+                                        
+                                        <tr><td style="font-weight: bold; padding-top: 10px;">METAS À CURTO PRAZO</td></tr>
+                                        <tr><td style="padding-bottom: 10px;">{{trat.trat_metacurtois}}</td></tr>
+                                        <tr><td><hr></td></tr>
+                                        
+                                        <tr><td style="font-weight: bold; padding-top: 10px;">METAS À MÉDIO PRAZO</td></tr>
+                                        <tr><td style="padding-bottom: 10px;">{{trat.trat_metamediois}}</td></tr>
+                                        <tr><td><hr></td></tr>
+                                        
+                                        <tr><td style="font-weight: bold; padding-top: 10px;">METAS À LONGO PRAZO</td></tr>
+                                        <tr><td style="padding-bottom: 10px;">{{trat.trat_metalongois}}</td></tr>
+                                        <tr><td><hr></td></tr>
+                                        
+                                        <tr><td style="font-weight: bold; padding-top: 10px;">ESTRATÉGIAS E OBJETIVOS</td></tr>
+                                        <tr><td style="padding-bottom: 10px;">{{trat.trat_objetivois}}</td></tr>
+                                        <tr><td><hr></td></tr>
+                                        
+                                        <tr><td style="font-weight: bold; padding-top: 10px;">OBSERVAÇÕES</td></tr>
+                                        <tr><td style="padding-bottom: 10px;">{{trat.trat_obspad}}</td></tr>
+                                    {{/compareThis}}
+                                </tbody>
+                            </table>
+
+                            <br><br>
+                            
+                            <table style="width: 100%; margin-top: 30px;">
+                                <thead>
+                                    <tr>
+                                        <td style="font-weight: bold; border-bottom: 1px solid #000; padding-bottom: 5px;">Carimbos e assinaturas:</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding-top: 20px; text-align: center; vertical-align: top;">
+                                            {{#verificarVazioOuIndefinido this.carimboUsuPad }}
+                                            {{else}}
+                                                <img src="data:image/png;base64, {{carimboUsuPad}}" alt="Carimbo Padrão" style="max-width: 200px; max-height: 150px;">
+                                            {{/verificarVazioOuIndefinido}}
+                                        </td>
+                                        <td style="padding-top: 20px; text-align: center; vertical-align: top;">
+                                            {{#verificarVazioOuIndefinido this.carimboUsuIs }}
+                                            {{else}}
+                                                <img src="data:image/png;base64, {{carimboUsuIs}}" alt="Carimbo IS" style="max-width: 200px; max-height: 150px;">
+                                            {{/verificarVazioOuIndefinido}}
+                                        </td>
+                                        <td style="padding-top: 20px; text-align: center; vertical-align: top;">
+                                            {{#verificarVazioOuIndefinido this.carimboUsuAvd }}
+                                            {{else}}
+                                                <img src="data:image/png;base64, {{carimboUsuAvd}}" alt="Carimbo AVD" style="max-width: 200px; max-height: 150px;">
+                                            {{/verificarVazioOuIndefinido}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 </html>

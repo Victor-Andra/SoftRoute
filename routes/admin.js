@@ -401,6 +401,8 @@ const agendaClass = require("../models/agenda")
 var Agenda = getModel("softroute", 'tb_agenda', agendaClass.AgendaSchema);//getModel("softroute", 'tb_agenda', agendaTecClass.AgendaSchema)
 const fncAgenda = require("../functions/fncAgenda")
 
+//Estatisticas para Gestão
+const fncEstatistica = require('../functions/fncEstatistica')
 
 
 
@@ -2805,6 +2807,13 @@ router.post('/atendimento/atualizar', fncGeral.IsAuthenticated,(req,res) =>{//at
         res.render("ferramentas/usuario/login", {nivel: lvl});
     }
 })
+//Estatistica e Gestão
+//###############################################################################################
+
+// Rota para Relatório Quantitativo de Beneficiários
+router.get('/atendimento/atendreltera/gestao/relqtbene', fncGeral.IsAuthenticated, function(req, res) {
+    fncEstatistica.carregaRelQtdBene(req, res);
+});
 
 //faturamento Mensal
 //###############################################################################################
@@ -4997,6 +5006,10 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
         // Edição
         router.get('/ferramentas/manual/form/:id', fncGeral.IsAuthenticated, (req, res) => {
             fncManual.carregarFormularioEdi(req, res);
+        });
+         // Ver
+        router.get('/ferramentas/manual/formver/:id', fncGeral.IsAuthenticated, (req, res) => {
+            fncManual.carregarFormularioVer(req, res);
         });
 
     //sala

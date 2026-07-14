@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <title>Relatório Quantitativo de Beneficiários</title>
+    <style>
+        @media screen { .print-footer { display: none; } }
+        @media print {
+            .noprint { display: none !important; }
+            .print-footer {
+                display: block;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                text-align: center;
+                font-size: 11px;
+                padding: 5px 0;
+                background: white;
+                z-index: 9999;
+            }
+            body { margin-bottom: 30mm; }
+            @page {
+                margin: 1cm;
+                @bottom-center {
+                    content: "Página " counter(page) " de " counter(pages);
+                    font-size: 12px;
+                }
+            }
+        }
+
+        /* ============================================
+            BARRA DE PESQUISA
+        ============================================ */
+        .toolbar-pesquisa {
+            background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 0 12px 20px 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #1976d2;
+        }
+        .toolbar-pesquisa h5 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .toolbar-pesquisa h5 i {
+            font-size: 18px;
+        }
+        .toolbar-pesquisa .form-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+        }
+        .toolbar-pesquisa .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            width: 100%;
+            align-items: flex-end;
+        }
+        .toolbar-pesquisa .form-group {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 140px;
+            flex: 1;
+            max-width: 220px;
+        }
+        .toolbar-pesquisa label {
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #f8f9fa;
+            white-space: nowrap;
+        }
+        .toolbar-pesquisa select {
+            padding: 6px 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 12px;
+            width: 100%;
+            box-sizing: border-box;
+            background: white;
+            color: #333;
+            transition: all 0.3s;
+            height: 30px;
+        }
+        .toolbar-pesquisa select:focus {
+            border-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+        .toolbar-pesquisa .btn-pesquisar {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            margin-left: auto;
+        }
+        .toolbar-pesquisa .btn-pesquisar:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ============================================
+            CONTAINERS E TABELAS
+        ============================================ */
+        .container-analise {
+            margin-bottom: 30px;
+        }
+        .widget-header-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .widget-header-custom h4 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .widget-header-custom h4 i {
+            font-size: 16px;
+        }
+        .widget-body-custom {
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .btn-export-csv {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-export-csv:hover {
+            background: #218838;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .table-analise {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .table-analise thead {
+            background: #f8f9fa;
+        }
+        .table-analise th {
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .table-analise td {
+            padding: 10px;
+            font-size: 13px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .table-analise tbody tr:hover {
+            background: #f8f9fa;
+        }
+        .table-analise .text-right {
+            text-align: right;
+        }
+        .table-analise .text-center {
+            text-align: center;
+        }
+        .total-row {
+            background: #e7f3ff !important;
+            font-weight: bold;
+        }
+        .total-row td {
+            border-top: 2px solid #007bff;
+        }
+
+        /* Cores para os tipos de beneficiário */
+        .tipo-convenio {
+            color: #3498db;
+            font-weight: 600;
+        }
+        .tipo-particular {
+            color: #2ecc71;
+            font-weight: 600;
+        }
+        .tipo-liminar {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+    </style>
+    <script>
+        // ============================================
+        // FUNÇÃO DE EXPORTAÇÃO CSV
+        // ============================================
+        function exportarTabelaParaCSV(idTabela, nomeArquivo) {
+            const tabela = document.getElementById(idTabela);
+            if (!tabela) {
+                alert('Tabela não encontrada!');
+                return;
+            }
+
+            let csv = [];
+            const rows = tabela.querySelectorAll('tr');
+
+            rows.forEach(row => {
+                const cols = row.querySelectorAll('td, th');
+                const csvRow = [];
+                cols.forEach(col => {
+                    let text = col.innerText.replace(/"/g, '""');
+                    csvRow.push('"' + text + '"');
+                });
+                csv.push(csvRow.join(','));
+            });
+
+            const csvString = csv.join('\n');
+            const blob = new Blob(['\ufeff' + csvString], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', nomeArquivo + '.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function carregaBody() {
+            // Seleciona o ano atual no dropdown
+            const selectAno = document.getElementById('anoFiltro');
+            if (selectAno) {
+                selectAno.value = {{anoFiltro}};
+            }
+        }
+    </script>
+</head>
+<body onload="carregaBody()" class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner noprint">
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
+                        <li><a href="#">Atendimento</a></li>
+                        <li><a href="#">Relatórios</a></li>
+                        <li class="active">Relatório Quantitativo de Beneficiários</li>
+                    </ul>
+                </div>
+
+                <!-- ============================================
+                    TOOLBAR DE PESQUISA
+                ============================================ -->
+                <form class="noprint" role="form" method="GET">
+                    <div class="toolbar-pesquisa noprint">
+                        <h5>
+                            <i class="ace-icon fa fa-filter"></i>
+                            <span>Filtros do Relatório</span>
+                        </h5>
+
+                        <div class="form-inline">
+                            <div class="form-row">
+                                <!-- Seletor de Ano -->
+                                <div class="form-group">
+                                    <label>Ano de Referência:</label>
+                                    <select id="anoFiltro" name="ano">
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2027">2027</option>
+                                    </select>
+                                </div>
+
+                                <!-- Botão Pesquisar -->
+                                <button class="btn-pesquisar" type="submit">
+                                    <i class="ace-icon fa fa-search"></i>
+                                    Pesquisar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ============================================
+                CONTEÚDO PRINCIPAL
+            ============================================ -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="space-6"></div>
+                    
+                    <!-- Cabeçalho do Relatório -->
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1">
+                            <div class="widget-box transparent">
+                                <div style="text-align: center;">
+                                    <img width="140" height="60" src="/images/gallery/logo_route_centro.png">
+                                </div>
+                                <div class="widget-header widget-header-large">
+                                    <h3 class="widget-title grey lighter">
+                                        <i class="ace-icon fa fa-users green"></i>
+                                        Relatório Quantitativo de Beneficiários – Ano {{anoFiltro}}
+                                    </h3>
+                                </div>
+                                <div class="widget-body">
+                                    <div class="widget-main padding-24">
+                                        <div class="row">
+                                            <div class="col-xs-12 label label-lg label-info arrowed-in arrowed-right">
+                                                <b>Informações da Clínica</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled">
+                                                <li><i class="ace-icon fa fa-caret-right blue"></i><b>Prestador:</b> Route Centro de Terapia e Apoio Infantil</li>
+                                                <li><i class="ace-icon fa fa-caret-right blue"></i><b>CNPJ:</b> 33.346.423/0001-17</li>
+                                                <li><i class="ace-icon fa fa-caret-right blue"></i><b>Total de Beneficiários Ativos:</b> {{totalBeneAtivos}}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-12"></div>
+
+                    <!-- ============================================
+                        CONTAINER 1: EVOLUÇÃO MENSAL
+                    ============================================ -->
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1 container-analise">
+                            <div class="widget-header-custom">
+                                <h4>
+                                    <i class="ace-icon fa fa-line-chart"></i>
+                                    <span>Análise 1: Evolução Mensal de Beneficiários – {{anoFiltro}}</span>
+                                </h4>
+                                <button class="btn-export-csv" onclick="exportarTabelaParaCSV('tabelaEvolucao', 'evolucao_mensal_beneficiarios_{{anoFiltro}}')">
+                                    <i class="ace-icon fa fa-file-excel-o"></i>
+                                    Exportar CSV
+                                </button>
+                            </div>
+                            <div class="widget-body-custom">
+                                <table class="table-analise" id="tabelaEvolucao">
+                                    <thead>
+                                        <tr>
+                                            <th>Mês</th>
+                                            <th class="text-center">Novos Entrantes</th>
+                                            <th class="text-center">Descontinuados (Saídas)</th>
+                                            <th class="text-center">Total Acumulado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each evolucaoMensal}}
+                                        <tr>
+                                            <td>{{mes}}</td>
+                                            <td class="text-center">{{novos}}</td>
+                                            <td class="text-center">{{descontinuados}}</td>
+                                            <td class="text-center"><b>{{total}}</b></td>
+                                        </tr>
+                                        {{/each}}
+                                        <tr class="total-row">
+                                            <td><b>TOTAL ANUAL</b></td>
+                                            <td class="text-center"><b>{{totalNovosAno}}</b></td>
+                                            <td class="text-center"><b>{{totalDescontinuadosAno}}</b></td>
+                                            <td class="text-center"><b>{{totalFinalAno}}</b></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-12"></div>
+
+                    <!-- ============================================
+                        CONTAINER 2: BENEFICIÁRIOS POR CONVÊNIO
+                    ============================================ -->
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1 container-analise">
+                            <div class="widget-header-custom">
+                                <h4>
+                                    <i class="ace-icon fa fa-hospital-o"></i>
+                                    <span>Análise 2: Beneficiários Ativos por Convênio</span>
+                                </h4>
+                                <button class="btn-export-csv" onclick="exportarTabelaParaCSV('tabelaConvenio', 'beneficiarios_por_convenio_{{anoFiltro}}')">
+                                    <i class="ace-icon fa fa-file-excel-o"></i>
+                                    Exportar CSV
+                                </button>
+                            </div>
+                            <div class="widget-body-custom">
+                                <table class="table-analise" id="tabelaConvenio">
+                                    <thead>
+                                        <tr>
+                                            <th>Convênio</th>
+                                            <th class="text-center">Quantidade de Beneficiários Ativos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each benesPorConvenio}}
+                                        <tr>
+                                            <td>{{conv_nome}}</td>
+                                            <td class="text-center"><b>{{quantidade}}</b></td>
+                                        </tr>
+                                        {{/each}}
+                                        <tr class="total-row">
+                                            <td><b>TOTAL GERAL</b></td>
+                                            <td class="text-center"><b>{{totalBeneConvenio}}</b></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-12"></div>
+
+                    <!-- ============================================
+                        CONTAINER 3: BENEFICIÁRIOS POR TIPO
+                    ============================================ -->
+                    <div class="row">
+                        <div class="col-sm-10 col-sm-offset-1 container-analise">
+                            <div class="widget-header-custom">
+                                <h4>
+                                    <i class="ace-icon fa fa-tags"></i>
+                                    <span>Análise 3: Beneficiários Ativos por Tipo</span>
+                                </h4>
+                                <button class="btn-export-csv" onclick="exportarTabelaParaCSV('tabelaTipo', 'beneficiarios_por_tipo_{{anoFiltro}}')">
+                                    <i class="ace-icon fa fa-file-excel-o"></i>
+                                    Exportar CSV
+                                </button>
+                            </div>
+                            <div class="widget-body-custom">
+                                <table class="table-analise" id="tabelaTipo">
+                                    <thead>
+                                        <tr>
+                                            <th>Tipo de Beneficiário</th>
+                                            <th class="text-center">Quantidade</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each benesPorTipo}}
+                                        <tr>
+                                            <td class="{{classe}}">{{tipo}}</td>
+                                            <td class="text-center"><b>{{quantidade}}</b></td>
+                                        </tr>
+                                        {{/each}}
+                                        <tr class="total-row">
+                                            <td><b>TOTAL GERAL</b></td>
+                                            <td class="text-center"><b>{{totalBeneTipo}}</b></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-footer" id="printFooter"></div>
+</body>
+</html>

@@ -198,33 +198,14 @@
                                                     </p>
                                                 </div>
 
-                                                <button type="button"
-                                                        class="btn btn-sm btn-primary"
-                                                        onclick="adicionarSegmento()"
-                                                        style="margin-top: 10px;">
-                                                    <i class="fa fa-plus"></i>
-                                                    Adicionar Segmento
-                                                </button>
+                                              
 
                                             </div>
                                         </div>
                                     </div>
                                     <!-- /BOX SEGMENTOS -->
 
-                                    <!-- BOTÕES -->
-                                    <div class="form-actions center">
-                                        <button class="btn btn-info" type="submit" id="btnSubmit">
-                                            <i class="ace-icon fa fa-check bigger-110"></i>
-                                            <span id="btnSubmitText">Cadastrar</span>
-                                        </button>
-
-                                        &nbsp;&nbsp;
-
-                                        <a class="btn btn-warning" href="/ferramentas/manual/lis">
-                                            <i class="ace-icon fa fa-undo bigger-110"></i>
-                                            Cancelar
-                                        </a>
-                                    </div>
+                                   
 
                                 </div> <!-- /col-sm-12 -->
                             </form>
@@ -252,56 +233,62 @@
         }
 
         // Inicializa formulário
-        function initForm() {
-            const isEdicao = modo === "edicao" && temEdicao;
+       // Inicializa formulário
+function initForm() {
+    const isEdicao = (modo === "edicao" || modo === "visualizacao") && temEdicao;
 
-            document.getElementById('pageTitle').textContent = isEdicao ? "Editar Manual" : "Novo Manual";
-            document.getElementById('breadcrumbTitle').textContent = isEdicao ? "Editar Manual" : "Novo Manual";
-            document.getElementById('widgetTitle').textContent = isEdicao ? "Editar Manual" : "Dados do Manual";
-            document.getElementById('btnSubmitText').textContent = isEdicao ? "Salvar Alterações" : "Cadastrar";
+    document.getElementById('pageTitle').textContent = isEdicao ? "Editar Manual" : "Novo Manual";
+    document.getElementById('breadcrumbTitle').textContent = isEdicao ? "Editar Manual" : "Novo Manual";
+    document.getElementById('widgetTitle').textContent = isEdicao ? "Editar Manual" : "Dados do Manual";
+    
+    // ✅ VERIFICA SE O ELEMENTO EXISTE ANTES DE ACESSAR
+    const btnSubmitText = document.getElementById('btnSubmitText');
+    if (btnSubmitText) {
+        btnSubmitText.textContent = isEdicao ? "Salvar Alterações" : "Cadastrar";
+    }
 
-            if (isEdicao) {
-                // Campos raiz
-                document.getElementById('manualId').value = document.getElementById('hid_manualId').value;
-                document.getElementById('manNome').value = document.getElementById('hid_manNome').value;
-                document.getElementById('manTitulo').value = document.getElementById('hid_manTitulo').value;
-                document.getElementById('manIntro').value = document.getElementById('hid_manIntro').value;
-                document.getElementById('manVersao').value = document.getElementById('hid_manVersao').value;
-                document.getElementById('manVersaodata').value = toInputDate(document.getElementById('hid_manVersaodata').value);
+    if (isEdicao) {
+        // Campos raiz
+        document.getElementById('manualId').value = document.getElementById('hid_manualId').value;
+        document.getElementById('manNome').value = document.getElementById('hid_manNome').value;
+        document.getElementById('manTitulo').value = document.getElementById('hid_manTitulo').value;
+        document.getElementById('manIntro').value = document.getElementById('hid_manIntro').value;
+        document.getElementById('manVersao').value = document.getElementById('hid_manVersao').value;
+        document.getElementById('manVersaodata').value = toInputDate(document.getElementById('hid_manVersaodata').value);
 
-                // Carregar segmentos
-                const segCount = parseInt(document.getElementById('hid_segCount').value) || 0;
-                for (let i = 0; i < segCount; i++) {
-                    const seg = {
-                        man_segid: document.getElementById(`hid_seg_${i}_id`).value,
-                        man_segordem: document.getElementById(`hid_seg_${i}_ordem`).value,
-                        man_segtitulo: document.getElementById(`hid_seg_${i}_titulo`).value,
-                        man_segintro: document.getElementById(`hid_seg_${i}_intro`).value,
-                        man_segobs: document.getElementById(`hid_seg_${i}_obs`).value,
-                        descricoes: []
-                    };
+        // Carregar segmentos
+        const segCount = parseInt(document.getElementById('hid_segCount').value) || 0;
+        for (let i = 0; i < segCount; i++) {
+            const seg = {
+                man_segid: document.getElementById(`hid_seg_${i}_id`).value,
+                man_segordem: document.getElementById(`hid_seg_${i}_ordem`).value,
+                man_segtitulo: document.getElementById(`hid_seg_${i}_titulo`).value,
+                man_segintro: document.getElementById(`hid_seg_${i}_intro`).value,
+                man_segobs: document.getElementById(`hid_seg_${i}_obs`).value,
+                descricoes: []
+            };
 
-                    const descCount = parseInt(document.getElementById(`hid_seg_${i}_descCount`).value) || 0;
+            const descCount = parseInt(document.getElementById(`hid_seg_${i}_descCount`).value) || 0;
 
-                    // 🔹 Lê descrições via data-* (seguro, sem getElementById frágil)
-                    for (let j = 0; j < descCount; j++) {
-                        const fields = { id: '', numalf: '', descr: '' };
-                        document.querySelectorAll(`input.hid-desc[data-seg-index="${i}"][data-desc-index="${j}"]`)
-                            .forEach(el => {
-                                const field = el.dataset.field;
-                                if (field in fields) fields[field] = el.value;
-                            });
-                        seg.descricoes.push({
-                            man_segdescr_id: fields.id,
-                            man_segnumalf: fields.numalf,
-                            man_segdescr: fields.descr
-                        });
-                    }
-
-                    adicionarSegmento(seg);
-                }
+            // 🔹 Lê descrições via data-* (seguro, sem getElementById frágil)
+            for (let j = 0; j < descCount; j++) {
+                const fields = { id: '', numalf: '', descr: '' };
+                document.querySelectorAll(`input.hid-desc[data-seg-index="${i}"][data-desc-index="${j}"]`)
+                    .forEach(el => {
+                        const field = el.dataset.field;
+                        if (field in fields) fields[field] = el.value;
+                    });
+                seg.descricoes.push({
+                    man_segdescr_id: fields.id,
+                    man_segnumalf: fields.numalf,
+                    man_segdescr: fields.descr
+                });
             }
+
+            adicionarSegmento(seg);
         }
+    }
+}
 
         // Adiciona segmento
         function adicionarSegmento(data = null) {
@@ -370,12 +357,7 @@
                                 <div class="col-sm-9">
                                     <div class="descricao-list" id="descricao-list-${segIndex}"></div>
 
-                                    <button type="button"
-                                            class="btn btn-sm btn-success"
-                                            onclick="adicionarDescricao(${segIndex})">
-                                        <i class="fa fa-plus"></i>
-                                        Adicionar Subitem
-                                    </button>
+                                  
                                 </div>
                             </div>
 
@@ -423,11 +405,7 @@
                             value="${data?.man_segdescr || ''}">
 
                         <span class="input-group-btn">
-                            <button type="button"
-                                    class="btn btn-sm btn-danger"
-                                    onclick="this.closest('.descricao-item').remove()">
-                                <i class="fa fa-minus"></i>
-                            </button>
+                           
                         </span>
                     </div>
                 </div>

@@ -342,7 +342,7 @@ module.exports = {
             res.redirect('/admin/erro');
         });
     },
-    filtraTrat(req, res, resposta){
+    filtraTrat_OLD(req, res, resposta){
         let db = req.cookies['preferredDb'];
         Trat = getModel(db, 'tb_trat', tratClass.TratSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -630,6 +630,417 @@ module.exports = {
             res.redirect('/admin/erro');
         });
     },
+        listaTrat(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        let Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        let flash = new Resposta();
+        let perfilAtual = req.cookies['lvlUsu'];
+
+        Promise.all([
+            Bene.find({ bene_nome: { $not: /\./ } }).sort({ bene_nome: 1 }),
+            Ano.find().sort({ ano_nome: 1 }),
+            Usuario.find({
+                "usuario_status": { $in: ["Ativo", "Inativo"] },
+                $or: [
+                    { "usuario_funcaoid": "6241030bfbcc51f47c720a0b" },
+                    { "usuario_perfilid": { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                ]
+            }).sort({ usuario_nome: 1 })
+        ]).then(([bene, ano, terapeuta]) => {
+            res.render('area/plano/tratLis', {
+                anos: ano,
+                terapeutas: terapeuta,
+                usuarios: terapeuta,
+                benes: bene,
+                perfilAtual,
+                flash: resposta.sucesso === "true" ? resposta : { sucesso: "", texto: "" },
+                
+                // Padrão universal de filtros vazios
+                carregaFiltro: "false",
+                filtroTipo: "Ano/Mes",
+                filtroAno: new Date().getFullYear().toString(),
+                filtroMes: new Date().getMonth().toString(),
+                filtroData: "",
+                filtroTipoPessoa: "Geral",
+                filtroBeneficiario: "",
+                filtroTerapeuta: ""
+            });
+        }).catch((err) => {
+            console.log(err);
+            req.flash("error_message", "houve um erro ao listar!");
+            res.redirect('/admin/erro');
+        });
+    },
+
+    filtraTrat_OLD(req, res) {
+        let db = req.cookies['preferredDb'];
+        let Trat = getModel(db, 'tb_trat', tratClass.TratSchema);
+        let Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+
+        let flash = new Resposta();
+        let tipoPessoa = req.body.atendTipoPessoa || "Geral";
+        let tipoData = req.body.tipoData || "Ano/Mes";
+        let dataIni, dataFim, seg, sex, busca;
+        let isAgendaTerapeuta = false;
+        let idUsu = req.cookies['idUsu'];
+        let lvlUsu = req.cookies['lvlUsu'];
+        let perfilAtual = req.cookies['lvlUsu'];
+        let arrayIds = ['62421903a12aa557219a0fd3', '6242191fa12aa557219a0fd9', '6242190fa12aa557219a0fd6', '624218f5a12aa557219a0fd0'];
+
+        arrayIds.forEach((id) => { if (id == lvlUsu) isAgendaTerapeuta = true; });
+
+        // === 1. DEFINIÇÃO DO PERÍODO ===
+        switch (tipoData) {
+            case "Ano":
+                dataIni = new Date(); dataIni.setDate(1); dataIni.setFullYear(parseInt(req.body.anoAtend) - 1); dataIni.setUTCMonth(1); dataIni.setHours(0, 0, 0, 0);
+                dataFim = new Date(); dataFim.setDate(1); dataFim.setFullYear(parseInt(req.body.anoAtend) + 1); dataFim.setUTCMonth(1); dataFim.setHours(0, 0, 0, 0);
+                break;
+            case "Ano/Mes":
+                dataIni = new Date(); dataIni.setDate(1); dataIni.setFullYear(parseInt(req.body.anoAtend)); dataIni.setUTCMonth(parseInt(req.body.mesAtend)); dataIni.setHours(0, 0, 0, 0);
+                dataFim = new Date(); dataFim.setFullYear(parseInt(req.body.anoAtend)); dataFim.setUTCMonth(parseInt(req.body.mesAtend) + 1); dataFim.setDate(0); dataFim.setHours(23, 59, 59, 0);
+                break;
+            case "Semana":
+                let dataS = req.body.dataFinal;
+                let anoS = dataS.substring(0, 4), mesS = dataS.substring(5, 7), diaS = dataS.substring(8, 10);
+                seg = new Date(); seg.setFullYear(anoS); seg.setUTCMonth(parseInt(mesS) - 1); seg.setDate(diaS); seg.setHours(0, 0, 0, 0);
+                sex = new Date(); sex.setFullYear(anoS); sex.setUTCMonth(parseInt(mesS) - 1); sex.setDate(diaS); sex.setHours(23, 59, 59, 0);
+                // (Mantenha sua lógica de ajuste de dias da semana original aqui)
+                dataIni = seg.toISOString(); dataFim = sex.toISOString();
+                break;
+            case "Dia":
+                let dD = req.body.dataFinal;
+                let aD = dD.substring(0, 4), mD = dD.substring(5, 7), diD = dD.substring(8, 10);
+                dataIni = new Date(); dataIni.setFullYear(aD); dataIni.setUTCMonth(parseInt(mD) - 1); dataIni.setDate(diD); dataIni.setHours(0, 0, 0, 0);
+                dataFim = new Date(); dataFim.setFullYear(aD); dataFim.setUTCMonth(parseInt(mD) - 1); dataFim.setDate(diD); dataFim.setHours(23, 59, 59, 0);
+                break;
+        }
+
+        // === 2. DEFINIÇÃO DO FILTRO POR PESSOA ===
+        switch (tipoPessoa) {
+            case "Geral":
+                busca = isAgendaTerapeuta ? { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) }, trat_terapeutaidpad: new ObjectId(idUsu) } : { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) } };
+                break;
+            case "Beneficiario":
+                busca = isAgendaTerapeuta ? { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) }, trat_beneid: req.body.atendBeneficiario, trat_terapeutaidpad: new ObjectId(idUsu) } : { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) }, trat_beneid: req.body.atendBeneficiario };
+                break;
+            case "Terapeuta":
+                busca = { $or: [{ trat_terapeutaidpad: req.body.atendTerapeuta }, { trat_terapeutaidis: req.body.atendTerapeuta }, { trat_terapeutaidavd: req.body.atendTerapeuta }], $and: [{ trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) } }] };
+                break;
+        }
+
+        // Filtro de Lixeira
+        busca = busca.$or || busca.$and ? { $and: [busca, { trat_lixo: { $ne: "true" } }] } : { ...busca, trat_lixo: { $ne: "true" } };
+
+        // === 3. EXECUTA A BUSCA ===
+        Trat.find(busca).then((trat) => {
+            trat.forEach((b) => {
+                let dCad = new Date(b.trat_datacad);
+                b.datacad = `${dCad.getFullYear()}-${String(dCad.getMonth()+1).padStart(2,'0')}-${String(dCad.getUTCDate()).padStart(2,'0')}`;
+                let dTrat = new Date(b.trat_tratdata);
+                b.tratdata = `${dTrat.getFullYear()}-${String(dTrat.getMonth()+1).padStart(2,'0')}-${String(dTrat.getUTCDate()).padStart(2,'0')}`;
+                let dEdi = new Date(b.trat_dataedi);
+                b.dataedi = `${dEdi.getFullYear()}-${String(dEdi.getMonth()+1).padStart(2,'0')}-${String(dEdi.getUTCDate()).padStart(2,'0')}`;
+            });
+
+            Promise.all([
+                Bene.find({ bene_nome: { $not: /\./ } }).sort({ bene_nome: 1 }),
+                Ano.find().sort({ ano_nome: 1 }),
+                Usuario.find({ "usuario_status": { $in: ["Ativo", "Inativo"] }, $or: [{ "usuario_funcaoid": "6241030bfbcc51f47c720a0b" }, { "usuario_perfilid": { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }] }).sort({ usuario_nome: 1 }),
+                Usuario.find().sort({ usuario_nome: 1 })
+            ]).then(([bene, ano, terapeuta, usuarios]) => {
+                
+                const usuarioLogado = usuarios.find(u => u._id.toString() === idUsu);
+                const usuarioNomeLogado = usuarioLogado ? (usuarioLogado.usuario_nomecompleto || usuarioLogado.usuario_nome || 'Usuário') : 'Usuário';
+
+                res.render('area/plano/tratLis', {
+                    anos: ano, trats: trat, usuarios: usuarios, terapeutas: terapeuta, benes: bene,
+                    perfilAtual: perfilAtual, flash: { texto: "", sucesso: "true" },
+                    usuarioNomeLogado: usuarioNomeLogado,
+                    
+                    // === VARIÁVEIS UNIVERSAIS DE FILTRO (Padrão Guia e Senha) ===
+                    carregaFiltro: "true",
+                    filtroTipo: req.body.tipoData,
+                    filtroAno: req.body.anoAtend,
+                    filtroMes: req.body.mesAtend,
+                    filtroData: req.body.dataFinal ? req.body.dataFinal.split('T')[0] : "",
+                    filtroTipoPessoa: req.body.atendTipoPessoa,
+                    filtroBeneficiario: req.body.atendBeneficiario,
+                    filtroTerapeuta: req.body.atendTerapeuta
+                });
+            }).catch(err => { console.log("Erro ao buscar dados auxiliares:", err); res.redirect('/admin/erro'); });
+        }).catch((err) => {
+            console.log(err);
+            req.flash("error_message", "houve um erro ao listar!");
+            res.redirect('/admin/erro');
+        });
+    },
+        filtraTrat(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        let Trat = getModel(db, 'tb_trat', tratClass.TratSchema);
+        let Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+
+        let flash = new Resposta();
+        
+        // === NOMES UNIVERSAIS DO FRONTEND ===
+        let tipoPessoa = req.body.atendTipoPessoa || "Geral"; 
+        let tipoData = req.body.tipoData || "Ano/Mes";
+        
+        let dataIni;
+        let dataFim;
+        let seg;
+        let sex;
+        let busca;
+        let data;
+        let ano;
+        let mes;
+        let dia;
+        let isAgendaTerapeuta = false;
+        let idUsu = req.cookies['idUsu'];
+        let lvlUsu = req.cookies['lvlUsu'];
+        let arrayIds = ['62421903a12aa557219a0fd3', '6242191fa12aa557219a0fd9', '6242190fa12aa557219a0fd6', '624218f5a12aa557219a0fd0'];
+        let perfilAtual = req.cookies['lvlUsu'];
+
+        arrayIds.forEach((id) => {
+            if (id == lvlUsu) {
+                isAgendaTerapeuta = true;
+            }
+        });
+
+        // === DEFINIÇÃO DO PERÍODO (switch tipoData) ===
+        switch (tipoData) {
+            case "Ano":
+                dataIni = new Date();
+                dataIni.setDate(01);
+                dataIni.setFullYear(parseInt(req.body.anoAtend) - 1); // UNIVERSAL: anoAtend
+                dataIni.setUTCMonth(1);
+                dataIni.setHours(0, 0, 0, 0);
+
+                dataFim = new Date();
+                dataFim.setDate(01);
+                dataFim.setFullYear(parseInt(req.body.anoAtend) + 1); // UNIVERSAL: anoAtend
+                dataFim.setUTCMonth(1);
+                dataFim.setHours(0, 0, 0, 0);
+                break;
+                
+            case "Ano/Mes":
+                dataIni = new Date();
+                let mesIni = parseInt(req.body.mesAtend); // UNIVERSAL: mesAtend
+                let anoIni = parseInt(req.body.anoAtend); // UNIVERSAL: anoAtend
+                
+                dataIni.setDate(01);
+                dataIni.setFullYear(anoIni);
+                dataIni.setUTCMonth(mesIni);
+                dataIni.setHours(0, 0, 0, 0);
+                
+                dataFim = new Date();
+                dataFim.setFullYear(anoIni);
+                dataFim.setUTCMonth(mesIni + 1);
+                dataFim.setDate(01);
+                dataFim.setDate(dataFim.getDate() - 1);
+                dataFim.setHours(23, 59, 59, 0);
+                break;
+                
+            case "Semana":
+                data = req.body.dataFinal;
+                ano = data.substring(0, 4);
+                mes = data.substring(5, 7);
+                dia = data.substring(8, 10);
+
+                seg = new Date();
+                seg.setFullYear(ano);
+                seg.setUTCMonth(parseInt(mes) - 1);
+                seg.setDate(dia);
+                seg.setHours(0, 0, 0, 0);
+
+                sex = new Date();
+                sex.setFullYear(ano);
+                sex.setUTCMonth(parseInt(mes) - 1);
+                sex.setDate(dia);
+                sex.setHours(23, 59, 59, 0);
+
+                switch (seg.getUTCDay()) {
+                    case 0: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
+                    case 1: sex.setUTCDate(sex.getUTCDate() + 4); break;
+                    case 2: seg.setUTCDate(seg.getUTCDate() - 1); sex.setUTCDate(sex.getUTCDate() + 3); break;
+                    case 3: seg.setUTCDate(seg.getUTCDate() - 2); sex.setUTCDate(sex.getUTCDate() + 2); break;
+                    case 4: seg.setUTCDate(seg.getUTCDate() - 3); sex.setUTCDate(sex.getUTCDate() + 1); break;
+                    case 5: seg.setUTCDate(seg.getUTCDate() - 4); break;
+                    case 6: seg.setUTCDate(seg.getUTCDate() - 5); sex.setUTCDate(sex.getUTCDate() - 1); break;
+                    default: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
+                }
+                dataIni = seg.toISOString();
+                dataFim = sex.toISOString();
+                break;
+                
+            case "Dia":
+                data = req.body.dataFinal;
+                ano = data.substring(0, 4);
+                mes = data.substring(5, 7);
+                dia = data.substring(8, 10);
+
+                dataIni = new Date();
+                dataIni.setFullYear(ano);
+                dataIni.setUTCMonth(parseInt(mes) - 1);
+                dataIni.setDate(dia);
+                dataIni.setHours(0, 0, 0, 0);
+
+                dataFim = new Date();
+                dataFim.setFullYear(ano);
+                dataFim.setUTCMonth(parseInt(mes) - 1);
+                dataFim.setDate(dia);
+                dataFim.setHours(23, 59, 59, 0);
+                break;
+                
+            default:
+                break;
+        }
+
+        // === DEFINIÇÃO DO FILTRO POR PESSOA (switch tipoPessoa) ===
+        switch (tipoPessoa) {
+            case "Geral":
+                if (isAgendaTerapeuta) {
+                    busca = { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) }, trat_terapeutaidpad: new ObjectId(idUsu) };
+                } else {
+                    busca = { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) } };
+                }
+                break;
+                
+            case "Beneficiario":
+                if (isAgendaTerapeuta) {
+                    busca = { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) }, trat_beneid: req.body.atendBeneficiario, trat_terapeutaidpad: new ObjectId(idUsu) }; // UNIVERSAL
+                } else {
+                    busca = { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) }, trat_beneid: req.body.atendBeneficiario }; // UNIVERSAL
+                }
+                break;
+                
+            case "Terapeuta":
+                busca = { 
+                    $or: [
+                        { trat_terapeutaidpad: req.body.atendTerapeuta }, // UNIVERSAL
+                        { trat_terapeutaidis: req.body.atendTerapeuta },  // UNIVERSAL
+                        { trat_terapeutaidavd: req.body.atendTerapeuta }  // UNIVERSAL
+                    ], 
+                    $and: [{ trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) } }] 
+                };
+                break;
+                
+            default:
+                break;
+        }
+        
+        // === FILTRO PARA EXCLUIR REGISTROS DA LIXEIRA ===
+        if (busca.$or || busca.$and) {
+            busca = {
+                $and: [
+                    busca,
+                    { trat_lixo: { $ne: "true" } }
+                ]
+            };
+        } else {
+            busca.trat_lixo = { $ne: "true" };
+        }
+
+        // === EXECUTA A BUSCA COM OS FILTROS ===
+        Trat.find(busca).then((trat) => {
+            trat.forEach((b) => {
+                let datacad = new Date(b.trat_datacad);
+                let mesCad = (datacad.getMonth() + 1).toString();
+                let diaCad = (datacad.getUTCDate()).toString();
+                if (mesCad.length == 1) { mesCad = "0" + mesCad; }
+                if (diaCad.length == 1) { diaCad = "0" + diaCad; }
+                b.datacad = (datacad.getFullYear() + "-" + mesCad + "-" + diaCad).toString();
+                
+                let datatrata = new Date(b.trat_tratdata);
+                let mesTrat = (datatrata.getMonth() + 1).toString();
+                let diaTrat = (datatrata.getUTCDate()).toString();
+                if (mesTrat.length == 1) { mesTrat = "0" + mesTrat; }
+                if (diaTrat.length == 1) { diaTrat = "0" + diaTrat; }
+                b.tratdata = (datatrata.getFullYear() + "-" + mesTrat + "-" + diaTrat).toString();
+
+                let dataedi = new Date(b.trat_dataedi);
+                let mesEdi = (dataedi.getMonth() + 1).toString();
+                let diaEdi = (dataedi.getUTCDate()).toString();
+                if (mesEdi.length == 1) { mesEdi = "0" + mesEdi; }
+                if (diaEdi.length == 1) { diaEdi = "0" + diaEdi; }
+                b.dataedi = (dataedi.getFullYear() + "-" + mesEdi + "-" + diaEdi).toString();
+            });
+
+            Bene.find({ bene_nome: { $not: /\./ } }).then((bene) => {
+                bene.sort((a, b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : -1);
+                
+                Ano.find().sort({ ano_nome: 1 }).then((ano) => {
+                    Usuario.find({
+                        "usuario_status": { $in: ["Ativo", "Inativo"] }, 
+                        $or: [
+                            { "usuario_funcaoid": "6241030bfbcc51f47c720a0b" },
+                            { "usuario_perfilid": { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                        ]
+                    }).then((terapeuta) => {
+                        terapeuta.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : -1);
+                        
+                        Usuario.find().then((usuario) => {
+                            usuario.sort((a, b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : -1);
+                            
+                            const usuarioLogado = usuario.find(u => u._id.toString() === idUsu);
+                            const usuarioNomeLogado = usuarioLogado 
+                                ? (usuarioLogado.usuario_nomecompleto || usuarioLogado.usuario_nome || 'Usuário') 
+                                : 'Usuário';
+
+                            flash.texto = "";
+                            flash.sucesso = "true";
+                            
+                            // === RENDER COM VARIÁVEIS UNIVERSAIS DE FILTRO ===
+                            res.render('area/plano/tratLis', {
+                                anos: ano, 
+                                trats: trat, 
+                                usuarios: usuario,
+                                terapeutas: terapeuta,
+                                benes: bene, 
+                                perfilAtual: perfilAtual, 
+                                flash: flash,
+                                usuarioNomeLogado: usuarioNomeLogado,
+                                
+                                // Padrão Universal (Prefixo filtro...)
+                                carregaFiltro: "true",
+                                filtroTipo: req.body.tipoData,
+                                filtroAno: req.body.anoAtend,
+                                filtroMes: req.body.mesAtend,
+                                filtroData: req.body.dataFinal ? req.body.dataFinal.split('T')[0] : "",
+                                filtroTipoPessoa: req.body.atendTipoPessoa,
+                                filtroBeneficiario: req.body.atendBeneficiario,
+                                filtroTerapeuta: req.body.atendTerapeuta
+                            });
+                            
+                        }).catch((err) => {
+                            console.log("Erro ao buscar usuários:", err);
+                            req.flash("error_message", "Erro ao carregar usuários");
+                            res.redirect('/admin/erro');
+                        });
+                        
+                    }).catch((err) => {
+                        console.log("Erro ao buscar terapeutas:", err);
+                        req.flash("error_message", "Erro ao carregar terapeutas");
+                        res.redirect('/admin/erro');
+                    });
+                    
+                }).catch((err) => {
+                    console.log("Erro ao buscar anos:", err);
+                    req.flash("error_message", "Erro ao carregar anos");
+                    res.redirect('/admin/erro');
+                });
+                
+            }).catch((err) => {
+                console.log("Erro ao buscar beneficiários:", err);
+                req.flash("error_message", "Erro ao carregar beneficiários");
+                res.redirect('/admin/erro');
+            });
+            
+        }).catch((err) => {
+            console.log('❌ [filtraTrat] ERRO na busca principal:', err);
+            req.flash("error_message", "houve um erro ao listar!");
+            res.redirect('/admin/erro');
+        });
+    },
     carregaTrat(req,res){
         let db = req.cookies['preferredDb'];
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -683,7 +1094,7 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-    tratImp(req,res){
+    tratImp_OLD(req,res){
         let db = req.cookies['preferredDb'];
         Trat = getModel(db, 'tb_trat', tratClass.TratSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -727,6 +1138,97 @@ module.exports = {
             res.render('admin/erro')
         })
     },
+    async tratImp(req, res) {
+    try {
+        // 1. Variáveis de contexto
+        const db = req.cookies['preferredDb'];
+        const usuarioAtual = req.cookies['idUsu'];
+        const perfilAtual = req.cookies['lvlUsu'];
+        
+        // CAPTURA O FILTRO DA URL (se existir), senão deixa vazio
+        const mesanoFiltro = req.query.mesano || ''; 
+
+        // 2. Inicialização dos Models
+        const Trat = getModel(db, 'tb_trat', tratClass.TratSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema);
+        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); // Ajuste o nome do model se for diferente
+
+        // 3. Busca principal do tratamento
+        const trat = await Trat.findOne({ _id: req.params.id });
+        if (!trat) {
+            req.flash("error_message", "Plano de tratamento não encontrado!");
+            return res.redirect('/area/plano'); // Ou a rota de lista que você usar
+        }
+
+        const tratDataCadSimpleFormat = fncGeral.getData(trat.trat_datacad);
+
+        // 4. Busca dos dados auxiliares em paralelo (muito mais rápido que um .then() dentro do outro)
+        const [terapia, usuarios, laudo, bene] = await Promise.all([
+            Terapia.find(),
+            Usuario.find(),
+            Laudo.find(),
+            Bene.find({ bene_nome: { $not: /\./ } })
+        ]);
+
+        // 5. Ordenação (mantendo sua lógica original de normalização)
+        usuarios.sort((a, b) => {
+            const nomeA = a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            const nomeB = b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            return nomeA > nomeB ? 1 : (nomeB > nomeA ? -1 : 0);
+        });
+
+        bene.sort((a, b) => {
+            const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            return nomeA > nomeB ? 1 : (nomeB > nomeA ? -1 : 0);
+        });
+
+        // 6. Processamento dos Carimbos
+        let carimboUsuPad, carimboUsuAvd, carimboUsuIs, carimboRoute;
+        
+        usuarios.forEach((usu) => {
+            if (usu.usuario_carimbo) {
+                const carimboBase64 = Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
+                const idUsuString = String(usu._id);
+
+                if (trat.trat_planotipo === "Padrão" && String(trat.trat_terapeutaidpad) === idUsuString) {
+                    carimboUsuPad = carimboBase64;
+                } else if (trat.trat_planotipo === "Ocupacional" && String(trat.trat_terapeutaidis) === idUsuString) {
+                    carimboUsuIs = carimboBase64;
+                } else if (trat.trat_planotipo === "Ocupacional" && String(trat.trat_terapeutaidavd) === idUsuString) {
+                    carimboUsuAvd = carimboBase64;
+                } else if (idUsuString === '62e008adea444f5b7a02c04f') {
+                    carimboRoute = carimboBase64;
+                }
+            }
+        });
+
+        // 7. Renderização da View enviando o mesanoFiltro
+        res.render("area/plano/tratImp", {
+            trat,
+            laudos: laudo,
+            terapias: terapia,
+            usuarios,
+            benes: bene,
+            usuarioAtual,
+            perfilAtual,
+            tratDataCadSimpleFormat,
+            carimboRoute,
+            carimboUsuPad,
+            carimboUsuIs,
+            carimboUsuAvd,
+            mesanoFiltro // <-- NOVO: Envia o valor para a view
+        });
+
+    } catch (err) {
+        console.error("Erro em tratImp:", err);
+        req.flash("error_message", "Houve um erro ao realizar as listas!");
+        res.render('admin/erro');
+        // Ou res.redirect('/area/plano'); dependendo do seu fluxo de erro
+    }
+},
     cadastraTrat(req,res){
         let resultado
         let flash = new Resposta();
@@ -930,7 +1432,7 @@ lixoTrat(req, res) {
         }
     });
 },
-    tratLixo: async (req, res) => {
+    tratLixo_OLDErr: async (req, res) => {
         try {
             let db = req.cookies['preferredDb'];
             const TratModel = getModel(db, 'tb_trat', TratSchema);
@@ -972,6 +1474,47 @@ lixoTrat(req, res) {
             console.error('❌ Erro ao enviar para lixeira:', err);
             return { sucesso: false, erro: err.message };
         }
+    },
+        lixoTrat(req, res) {
+        console.log('🔍 [lixoTrat] Iniciando controlador de exclusão lógica');
+        
+        // === 1. VERIFICAÇÃO DE PERMISSÃO (FAIL-SAFE) ===
+        try {
+            const perfilAtual = req.cookies['lvlUsu'];
+            const perfisPermitidos = ['62421801a12aa557219a0fb9', '62421857a12aa557219a0fc1'];
+            
+            if (!perfilAtual || !perfisPermitidos.includes(perfilAtual)) {
+                console.log('🚫 [lixoTrat] Acesso NEGADO - perfil não autorizado');
+                req.flash("error_message", "Acesso negado: permissão insuficiente.");
+                return res.redirect('/menu/area/plano/lis'); // Redirecionamento seguro
+            }
+        } catch (err) {
+            console.error('💥 [lixoTrat] ERRO na verificação de permissão:', err.message);
+            req.flash("error_message", "Erro de validação de acesso.");
+            return res.redirect('/menu/area/plano/lis');
+        }
+
+        // === 2. EXECUTA A EXCLUSÃO LÓGICA ===
+        tratClass.tratLixo(req, res).then((retorno) => {
+            if (retorno.sucesso) {
+                console.log('✅ [lixoTrat] Plano enviado para lixeira com sucesso!');
+                // Usamos success_message para ser capturado pelo sistema de flash padrão
+                req.flash("success_message", "Plano enviado para lixeira com sucesso!");
+            } else {
+                console.log('❌ [lixoTrat] Erro ao enviar para lixeira:', retorno.erro);
+                req.flash("error_message", "Erro: " + retorno.erro);
+            }
+            
+            // === 3. REDIRECIONAMENTO SEGURO (CORREÇÃO DO ERRO) ===
+            // Forçamos SEMPRE o retorno para a rota GET principal, ignorando o Referer.
+            // Isso elimina 100% dos erros "Cannot GET /lisF"
+            res.redirect('/menu/area/plano/lis');
+            
+        }).catch((err) => {
+            console.error('💥 [lixoTrat] Erro inesperado no catch:', err);
+            req.flash("error_message", "Erro interno ao processar exclusão");
+            res.redirect('/menu/area/plano/lis');
+        });
     },
     tratRestaurar: async (req, res) => {
         try {
