@@ -3041,51 +3041,23 @@ async apagarEvolucaoIndevidaevoatend(req, res) {
 
             
 
-           // Certifique-se de que sua função esteja declarada como 'async', ex: exports.minhaFuncao = async (req, res) => {
-                try {
-                    // 1. Busca os usuários (sem filtro de status "Ativo")
-                    const usuarios = await Usuario.find({
-                        $or: [
-                            { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
-                            { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
-                        ]
-                    });
+            // ===== BUSCAS AUXILIARES EM PARALELO =====
+            const [bene, usuario, horaage, sala, terapia, ano, conv] = await Promise.all([
+                Bene.find().lean(),
+                Usuario.find({
+                    usuario_status: "Ativo",
+                    $or: [
+                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"] }}
+                    ]
+                }).lean(),
+                Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }).lean(),
+                Sala.find().lean(),
+                Terapia.find().lean(),
+                Ano.find().sort({ ano_nome: 1 }).lean(),
+                Conv.find().lean()
+            ]);
 
-                    // Ordena os usuários por nome (ignorando acentos de forma nativa e segura)
-                    usuarios.sort((a, b) => {
-                        const nomeA = a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-                        const nomeB = b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-                        return nomeA.localeCompare(nomeB); 
-                    });
-                    console.log("Tamanho de usuários: " + usuarios.length);
-
-                    // 2. Busca os anos ordenados
-                    const anos = await Ano.find().sort({ ano_nome: 1 });
-
-                    // 3. Busca os beneficiários ativos
-                    const bene = await Bene.find({ bene_status: "Ativo" });
-
-                    // Ordena os beneficiários por nome
-                    bene.sort((a, b) => {
-                        const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-                        const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-                        return nomeA.localeCompare(nomeB);
-                    });
-
-                    // 4. Renderiza a view com tudo pronto e organizado
-                    res.render('area/evol/evoatendgeralLis', { 
-                        terapeutas: usuarios, 
-                        anos: anos, 
-                        benes: bene, 
-                        flash 
-                    });
-
-                } catch (err) {
-                    // Captura qualquer erro das buscas acima de uma vez só, evitando código duplicado
-                    console.log(err);
-                    req.flash("error_message", "Houve um erro ao listar os dados!");
-                    res.redirect('admin/erro');
-                }
             // Ordenações auxiliares
             const sortPtBr = (a, b, field) => (a[field]||"").localeCompare(b[field]||"", 'pt-BR');
             bene.sort((a,b) => sortPtBr(a,b,'bene_nome'));
