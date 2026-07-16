@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head id="cabecalho" name="cabecalho">
+    <title>Diário de Bordo - {{#each benes}}{{#ifEqual ../bordo.bordo_beneid _id}}{{bene_nome}}{{/ifEqual}}{{/each}}</title>
+    <style>
+        /* Estilos normais de tela */
+        body {
+            font-family: Calibri, sans-serif;
+            font-size: 12px;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Container principal para visualização em tela */
+        .print-container {
+            background: white;
+            max-width: 210mm; /* Largura A4 */
+            margin: 20px auto;
+            padding: 15mm;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .cabecalho-image img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        /* Toolbar de impressão (oculta na impressão) */
+        .toolbar-impressao {
+            background: #fff;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+            gap: 15px;
+        }
+
+        /* Estilos do Cabeçalho de Dados (Coluna Única) */
+        .dados-gerais {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #fafafa;
+        }
+        .dados-gerais .linha-dado {
+            display: flex;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        .dados-gerais .label-dado {
+            font-weight: bold;
+            width: 180px;
+            flex-shrink: 0;
+            color: #555;
+        }
+        .dados-gerais .valor-dado {
+            flex-grow: 1;
+            border-bottom: 1px dotted #999;
+            padding-bottom: 2px;
+        }
+
+        /* Estilos dos Blocos Temáticos (Duas Colunas) */
+        .tema-block {
+            margin-bottom: 20px;
+            break-inside: avoid; /* Evita quebra no meio do bloco na impressão */
+            page-break-inside: avoid;
+        }
+        .tema-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2196f3;
+            border-bottom: 2px solid #2196f3;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .coluna-perguntas {
+            padding-right: 15px;
+        }
+        .coluna-obs {
+            padding-left: 15px;
+            border-left: 2px solid #eee;
+        }
+        .qa-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 4px 0;
+            border-bottom: 1px dotted #ccc;
+            font-size: 12px;
+        }
+        .qa-item:last-child {
+            border-bottom: none;
+        }
+        .q-text {
+            flex-grow: 1;
+            padding-right: 10px;
+        }
+        .q-resp {
+            font-weight: bold;
+            color: #333;
+            white-space: nowrap;
+        }
+        .obs-text {
+            font-size: 12px;
+            color: #444;
+            font-style: italic;
+            margin-top: 5px;
+            white-space: pre-wrap; /* Mantém quebras de linha do textarea */
+        }
+        .obs-label {
+            font-weight: bold;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* Estilos da Parte 3 e Observações (Coluna Única) */
+        .bloco-unico {
+            margin-bottom: 15px;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        .bloco-unico-label {
+            font-weight: bold;
+            font-size: 13px;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .bloco-unico-valor {
+            font-size: 12px;
+            color: #444;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            background: #fdfdfd;
+            min-height: 40px;
+            white-space: pre-wrap;
+        }
+
+        /* Área de Assinatura */
+        .area-assinatura {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+        .assinatura-box {
+            text-align: center;
+            width: 300px;
+        }
+        .linha-assinatura {
+            border-top: 1px solid #000;
+            margin-top: 60px;
+            padding-top: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .sub-assinatura {
+            font-size: 11px;
+            color: #666;
+            font-weight: normal;
+        }
+
+        /* ========================================================= */
+        /* BLINDAGEM TOTAL PARA IMPRESSÃO (A4)                       */
+        /* ========================================================= */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm 10mm 15mm 10mm;
+            }
+            body {
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .print-container {
+                box-shadow: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            .toolbar-impressao, .noprint {
+                display: none !important;
+            }
+            /* Garante que cores de fundo e bordas sejam impressas */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .tema-block, .bloco-unico, .area-assinatura {
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
+        }
+    </style>
+	<script>
+    function carregaBody() {
+        // Pega a data do input hidden injetado pelo Handlebars
+        const dataEdi = document.getElementById("bordoDataativEdi")?.value;
+        
+        if (dataEdi) {
+            const dataObjeto = new Date(dataEdi);
+            
+            // Verifica se é uma data válida
+            if (!isNaN(dataObjeto.getTime())) {
+                const ano = dataObjeto.getFullYear();
+                const mes = String(dataObjeto.getMonth() + 1).padStart(2, '0');
+                const dia = String(dataObjeto.getDate()).padStart(2, '0');
+                
+                // Formata como AAAA-MM-DD
+                const dataFormatada = `${ano}-${mes}-${dia}`;
+                
+                // Atualiza a data visível no corpo do documento
+                let elData = document.getElementById("dataExibicao");
+                if (elData) {
+                    elData.textContent = dataFormatada;
+                }
+
+                // Atualiza o título da página (usado pelo navegador ao Salvar como PDF)
+                let nomeBene = "{{#each benes}}{{#ifEqual ../bordo.bordo_beneid _id}}{{bene_nome}}{{/ifEqual}}{{/each}}".trim();
+                if (!nomeBene) nomeBene = "Beneficiário";
+                
+                document.title = "Diário de Bordo - " + nomeBene + " - " + dataFormatada;
+            }
+        }
+    }
+</script>
+</head>
+
+<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
+	<input type="hidden" id="bordoDataativEdi" value="{{bordo.bordo_dataativ}}" />
+    
+	<!-- TOOLBAR DE IMPRESSÃO (Oculta na impressão) -->
+    <div class="toolbar-impressao noprint">
+        <button class="btn btn-info" onclick="window.print();" style="height: 35px; padding: 0 20px; font-weight: bold;">
+            <i class="ace-icon fa fa-file-pdf-o bigger-110"></i> Salvar em PDF / Imprimir
+        </button>
+        <button class="btn btn-default" onclick="window.history.back();" style="height: 35px;">
+            <i class="ace-icon fa fa-arrow-left"></i> Voltar
+        </button>
+    </div>
+
+    <!-- CONTAINER PRINCIPAL DE IMPRESSÃO -->
+    <div class="print-container">
+        
+        <!-- CABEÇALHO COM LOGO -->
+        <div class="cabecalho-image">
+            <img src="/images/gallery/cabecalhoRoute.png" alt="Cabeçalho">
+        </div>
+
+        <h2 style="text-align: center; text-transform: uppercase; margin-bottom: 20px; font-size: 18px; color: #333;">
+            Diário de Bordo
+        </h2>
+
+        <!-- DADOS GERAIS (COLUNA ÚNICA) -->
+        <div class="dados-gerais">
+            <div class="linha-dado">
+                <span class="label-dado">Beneficiário:</span>
+                <span class="valor-dado">
+                    {{#each benes}}
+                        {{#ifEqual ../bordo.bordo_beneid _id}}{{bene_nome}}{{/ifEqual}}
+                    {{/each}}
+                </span>
+            </div>
+            <div class="linha-dado">
+                <span class="label-dado">Terapeuta Responsável:</span>
+                <span class="valor-dado">
+                    {{#each terapeutas}}
+                        {{#ifEqual ../bordo.bordo_terapeutaid _id}}{{usuario_nomecompleto}}{{/ifEqual}}
+                    {{/each}}
+                </span>
+            </div>
+			<div class="linha-dado">
+				<span class="label-dado">Data da Atividade:</span>
+				<span class="valor-dado" id="dataExibicao">{{bordo.bordo_dataativ}}</span>
+			</div>
+            <div class="linha-dado">
+                <span class="label-dado">Atendimento realizado em:</span>
+                <span class="valor-dado">{{bordo.bordo_atendem}} {{#ifEqual bordo.bordo_atendem "Externo"}} - {{bordo.bordo_ondefoi}}{{/ifEqual}}</span>
+            </div>
+            <div class="linha-dado">
+                <span class="label-dado">Escola:</span>
+                <span class="valor-dado">{{bordo.bordo_escolanome}}</span>
+            </div>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- PARTE 1 e 2: BLOCOS TEMÁTICOS (DUAS COLUNAS)            -->
+        <!-- ======================================================= -->
+
+        <!-- 1. ROTINA DO DIA -->
+        <div class="tema-block">
+            <div class="tema-title">1. Rotina do Dia</div>
+            <div class="row">
+                <div class="col-sm-6 coluna-perguntas">
+                    <div class="qa-item"><span class="q-text">1. Segue rotina</span><span class="q-resp">{{bordo.bordo_seguerotina}}</span></div>
+                    <div class="qa-item"><span class="q-text">2. Apresentou estereotipias</span><span class="q-resp">{{bordo.bordo_estereotipas}}</span></div>
+                    <div class="qa-item"><span class="q-text">3. Foco atencional</span><span class="q-resp">{{bordo.bordo_foco}}</span></div>
+                    <div class="qa-item"><span class="q-text">4. Necessita de auto cuidado</span><span class="q-resp">{{bordo.bordo_autocuidado}}</span></div>
+                    <div class="qa-item"><span class="q-text">5. Se alimenta com independência</span><span class="q-resp">{{bordo.bordo_aliindepende}}</span></div>
+                    <div class="qa-item"><span class="q-text">6. Ecolalia</span><span class="q-resp">{{bordo.bordo_escolalia}}</span></div>
+                    <div class="qa-item"><span class="q-text">7. Participação no grupo</span><span class="q-resp">{{bordo.bordo_participa}}</span></div>
+                    <div class="qa-item"><span class="q-text">8. Segue instruções do professor</span><span class="q-resp">{{bordo.bordo_segue}}</span></div>
+                    <div class="qa-item"><span class="q-text">9. Repertório de comunicação social</span><span class="q-resp">{{bordo.bordo_repertorio}}</span></div>
+                    <div class="qa-item"><span class="q-text">10. Se desorganiza ao trocar de atividade/ambiente</span><span class="q-resp">{{bordo.bordo_desorganiza}}</span></div>
+                </div>
+                <div class="col-sm-6 coluna-obs">
+                    <span class="obs-label">Anotações / Desorganização:</span>
+                    <div class="obs-text">{{bordo.bordo_desorganizadesc}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. PROBLEMAS DE COMPORTAMENTO -->
+        <div class="tema-block">
+            <div class="tema-title">2. Problemas de Comportamento</div>
+            <div class="row">
+                <div class="col-sm-6 coluna-perguntas">
+                    <div class="qa-item"><span class="q-text">1. Autoagressão (bater em si mesmo)</span><span class="q-resp">{{bordo.bordo_autoagressao}}</span></div>
+                    <div class="qa-item"><span class="q-text">2. Agride adultos</span><span class="q-resp">{{bordo.bordo_agrideadulto}}</span></div>
+                    <div class="qa-item"><span class="q-text">3. Agride pares</span><span class="q-resp">{{bordo.bordo_agridepares}}</span></div>
+                    <div class="qa-item"><span class="q-text">4. Destruição de objetos</span><span class="q-resp">{{bordo.bordo_destruir}}</span></div>
+                    <div class="qa-item"><span class="q-text">5. Gritos</span><span class="q-resp">{{bordo.bordo_gritos}}</span></div>
+                    <div class="qa-item"><span class="q-text">6. Choros</span><span class="q-resp">{{bordo.bordo_choros}}</span></div>
+                    <div class="qa-item"><span class="q-text">7. Birras</span><span class="q-resp">{{bordo.bordo_birras}}</span></div>
+                </div>
+                <div class="col-sm-6 coluna-obs">
+                    <span class="obs-label">Anotações / Descrição das Birras:</span>
+                    <div class="obs-text">{{bordo.bordo_birrasdesc}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. COMPORTAMENTO VERBAL -->
+        <div class="tema-block">
+            <div class="tema-title">3. Comportamento Verbal</div>
+            <div class="row">
+                <div class="col-sm-6 coluna-perguntas">
+                    <div class="qa-item"><span class="q-text">1. Emiteu mandos para os adultos?</span><span class="q-resp">{{bordo.bordo_mandosadulto}}</span></div>
+                    <div class="qa-item"><span class="q-text">2. Emiteu mandos para os pares?</span><span class="q-resp">{{bordo.bordo_mandospares}}</span></div>
+                    <div class="qa-item"><span class="q-text">3. Fez perguntas?</span><span class="q-resp">{{bordo.bordo_pergunta}}</span></div>
+                    <div class="qa-item"><span class="q-text">4. Respondeu perguntas?</span><span class="q-resp">{{bordo.bordo_responde}}</span></div>
+                    <div class="qa-item"><span class="q-text">5. Imitou os colegas?</span><span class="q-resp">{{bordo.bordo_imita}}</span></div>
+                    <div class="qa-item"><span class="q-text">6. Iniciou interações verbais?</span><span class="q-resp">{{bordo.bordo_interacaoverbal}}</span></div>
+                </div>
+                <div class="col-sm-6 coluna-obs">
+                    <span class="obs-label">Anotações Verbais:</span>
+                    <div class="obs-text">{{bordo.bordo_verbaldesc}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. EXECUÇÃO DAS ATIVIDADES -->
+        <div class="tema-block">
+            <div class="tema-title">4. Execução das Atividades</div>
+            <div class="row">
+                <div class="col-sm-6 coluna-perguntas">
+                    <div class="qa-item"><span class="q-text">1. Colaborativo todo o tempo?</span><span class="q-resp">{{bordo.bordo_colabtodotempo}}</span></div>
+                    <div class="qa-item"><span class="q-text">2. Colaborativo maior parte do tempo?</span><span class="q-resp">{{bordo.bordo_colabmaiortempo}}</span></div>
+                    <div class="qa-item"><span class="q-text">3. Colaborativo metade do tempo?</span><span class="q-resp">{{bordo.bordo_colabmetadetempo}}</span></div>
+                    <div class="qa-item"><span class="q-text">4. Colaborativo menos da metade do tempo?</span><span class="q-resp">{{bordo.bordo_colabmenosmetadetempo}}</span></div>
+                    <div class="qa-item"><span class="q-text">5. Não colaborou em nenhum momento?</span><span class="q-resp">{{bordo.bordo_colabnao}}</span></div>
+                </div>
+                <div class="col-sm-6 coluna-obs">
+                    <span class="obs-label">Anotações sobre Colaboração:</span>
+                    <div class="obs-text">{{bordo.bordo_colabnaodesc}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. ATIVIDADES REALIZADAS -->
+        <div class="tema-block">
+            <div class="tema-title">5. Atividades Realizadas</div>
+            <div class="row">
+                <div class="col-sm-6 coluna-perguntas">
+                    <div class="qa-item"><span class="q-text">1. Mesmas atividades da turma e foi bem sucedida</span><span class="q-resp">{{bordo.bordo_ativsucedido}}</span></div>
+                    <div class="qa-item"><span class="q-text">2. Mesma atividade da turma e não conseguiu realizar</span><span class="q-resp">{{bordo.bordo_ativnaosucedido}}</span></div>
+                    <div class="qa-item"><span class="q-text">3. Atividade adaptada, mas era muito difícil</span><span class="q-resp">{{bordo.bordo_adequadodificil}}</span></div>
+                    <div class="qa-item"><span class="q-text">4. Atividade adaptada, mas era muito fácil</span><span class="q-resp">{{bordo.bordo_adequadodifacil}}</span></div>
+                    <div class="qa-item"><span class="q-text">5. Professora não passou nenhuma atividade</span><span class="q-resp">{{bordo.bordo_semativ}}</span></div>
+                    <div class="qa-item"><span class="q-text">6. Com mediação da terapeuta</span><span class="q-resp">{{bordo.bordo_mediacao}}</span></div>
+                    <div class="qa-item"><span class="q-text">7. Com adaptação de material da terapeuta</span><span class="q-resp">{{bordo.bordo_adaptacao}}</span></div>
+                </div>
+                <div class="col-sm-6 coluna-obs">
+                    <span class="obs-label">Anotações sobre Atividades:</span>
+                    <div class="obs-text">{{bordo.bordo_ativsaladesc}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. RECREIO OU BRINCAR LIVRE -->
+        <div class="tema-block">
+            <div class="tema-title">6. Recreio ou Brincar Livre</div>
+            <div class="row">
+                <div class="col-sm-6 coluna-perguntas">
+                    <div class="qa-item"><span class="q-text">1. Brincou sozinho e longe dos pares</span><span class="q-resp">{{bordo.bordo_brincousolonge}}</span></div>
+                    <div class="qa-item"><span class="q-text">2. Brincou sozinho, mas perto dos pares</span><span class="q-resp">{{bordo.bordo_brincousoperto}}</span></div>
+                    <div class="qa-item"><span class="q-text">3. Tentou brincar com os pares</span><span class="q-resp">{{bordo.bordo_tentoubrincar}}</span></div>
+                    <div class="qa-item"><span class="q-text">4. Brincou com os pares de forma independente</span><span class="q-resp">{{bordo.bordo_brincouparesindep}}</span></div>
+                    <div class="qa-item"><span class="q-text">5. Iniciou brincadeira com ajuda do terapeuta</span><span class="q-resp">{{bordo.bordo_brincouparesterapeuta}}</span></div>
+                    <div class="qa-item"><span class="q-text">6. Não quer brincar</span><span class="q-resp">{{bordo.bordo_naobrincar}}</span></div>
+                </div>
+                <div class="col-sm-6 coluna-obs">
+                    <span class="obs-label">Anotações sobre Brincadeira:</span>
+                    <div class="obs-text">{{bordo.bordo_brincardesc}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. ATIVIDADES ESCOLARES -->
+        <div class="tema-block">
+            <div class="tema-title">7. Atividades Escolares</div>
+            <div class="row">
+                <div class="col-sm-6 coluna-perguntas">
+                    <div class="qa-item"><span class="q-text">1. Consegue ler texto sozinho?</span><span class="q-resp">{{bordo.bordo_lerso}}</span></div>
+                    <div class="qa-item"><span class="q-text">2. Precisa de ajuda na leitura?</span><span class="q-resp">{{bordo.bordo_lerajuda}}</span></div>
+                    <div class="qa-item"><span class="q-text">3. Compreende a leitura?</span><span class="q-resp">{{bordo.bordo_lercompreende}}</span></div>
+                    <div class="qa-item"><span class="q-text">4. Consegue fazer contas de somar?</span><span class="q-resp">{{bordo.bordo_fazsoma}}</span></div>
+                    <div class="qa-item"><span class="q-text">5. Quantos números (soma)?</span><span class="q-resp">{{bordo.bordo_fazsomaqtnum}}</span></div>
+                    <div class="qa-item"><span class="q-text">6. Consegue fazer conta de subtração?</span><span class="q-resp">{{bordo.bordo_subtrai}}</span></div>
+                    <div class="qa-item"><span class="q-text">7. Quantos números (subtração)?</span><span class="q-resp">{{bordo.bordo_subtraiqtnum}}</span></div>
+                    <div class="qa-item"><span class="q-text">8. Consegue fazer conta de dividir?</span><span class="q-resp">{{bordo.bordo_dividir}}</span></div>
+                    <div class="qa-item"><span class="q-text">9. Consegue fazer conta de multiplicar?</span><span class="q-resp">{{bordo.bordo_multiplicar}}</span></div>
+                </div>
+                <div class="col-sm-6 coluna-obs">
+                    <span class="obs-label">Anotações Escolares:</span>
+                    <div class="obs-text">{{bordo.bordo_escolardesc}}</div>
+                </div>
+            </div>
+        </div>
+
+        <hr style="border-top: 2px solid #333; margin: 30px 0;">
+
+        <!-- ======================================================= -->
+        <!-- PARTE 3 E OBSERVAÇÕES (COLUNA ÚNICA)                    -->
+        <!-- ======================================================= -->
+
+        <div class="bloco-unico">
+            <span class="bloco-unico-label">O beneficiário apresentou algum comportamento incomum ou atípico (positivo ou negativo)? Descreva:</span>
+            <div class="bloco-unico-valor">{{bordo.bordo_foranormal}}</div>
+        </div>
+
+        <div class="bloco-unico">
+            <span class="bloco-unico-label">O beneficiário demonstrou alguma habilidade nova? Quais? Descreva:</span>
+            <div class="bloco-unico-valor">{{bordo.bordo_habilnova}}</div>
+        </div>
+
+        <div class="bloco-unico">
+            <span class="bloco-unico-label">Ocorreu algum incidente (machucados, brigas, dores, etc.) que precisou ser relatado aos pais? Especifique:</span>
+            <div class="bloco-unico-valor">{{bordo.bordo_incidente}}</div>
+        </div>
+
+        <div class="bloco-unico">
+            <span class="bloco-unico-label">Mais Observações Gerais:</span>
+            <div class="bloco-unico-valor" style="min-height: 80px;">{{bordo.bordo_obs}}</div>
+        </div>
+
+        <!-- ======================================================= -->
+        <!-- ÁREA DE ASSINATURA / CARIMBO                            -->
+        <!-- ======================================================= -->
+        <div class="area-assinatura">
+            <div class="assinatura-box">
+                <div class="linha-assinatura">
+                    {{#each terapeutas}}
+                        {{#ifEqual ../bordo.bordo_terapeutaid _id}}{{usuario_nomecompleto}}{{/ifEqual}}
+                    {{/each}}
+                </div>
+                <div class="sub-assinatura">Terapeuta Responsável</div>
+                <div class="sub-assinatura" style="margin-top: 5px; font-style: italic;">(Carimbo e Assinatura)</div>
+            </div>
+        </div>
+
+    </div> <!-- Fim do print-container -->
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			// 1. Pega a data crua injetada pelo Handlebars
+			let dataRaw = "{{bordo.bordo_dataativ}}";
+			
+			if (dataRaw && dataRaw.length >= 10) {
+				// 2. Extrai apenas AAAA-MM-DD, ignorando horas e fuso horário (T00:00:00.000Z)
+				let dataLimpa = dataRaw.substring(0, 10);
+				
+				// 3. Atualiza a data visível no corpo do documento
+				let elData = document.getElementById("dataExibicao");
+				if (elData) {
+					elData.textContent = dataLimpa;
+				}
+
+				// 4. Atualiza o título da página (usado pelo navegador ao Salvar como PDF)
+				let nomeBene = "{{#each benes}}{{#ifEqual ../bordo.bordo_beneid _id}}{{bene_nome}}{{/ifEqual}}{{/each}}".trim();
+				if (!nomeBene) nomeBene = "Beneficiário"; // Fallback de segurança
+				
+				document.title = "Diário de Bordo - " + nomeBene + " - " + dataLimpa;
+			}
+		});
+	</script>
+</body>
+</html>

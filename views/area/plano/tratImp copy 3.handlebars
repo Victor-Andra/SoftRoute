@@ -176,9 +176,6 @@
                 document.getElementById("acaoSalvar").style.display = 'none';
             }
             this.atualizaDadosbene();
-            
-            // Garante o estado correto da exibição do carimbo ao carregar a página
-            toggleCarimbo(); 
         }
     
         function formataData(date) {
@@ -214,18 +211,6 @@
         
         function converteMai(input) {
             input.value = input.value.toUpperCase();
-        }
-        function toggleCarimbo() {
-            var selectCarimbo = document.getElementById("carimboExibir");
-            var trCarimbo = document.getElementById("carimboExibicao");
-            
-            if (selectCarimbo && trCarimbo) {
-                if (selectCarimbo.value === "Não") {
-                    trCarimbo.style.display = "none";
-                } else {
-                    trCarimbo.style.display = "table-row";
-                }
-            }
         }
     </script>
 </head>
@@ -279,36 +264,16 @@
 							<input type="hidden" id="mesanoHidden" name="mesanoHidden" value="{{mesanoFiltro}}" />
 							
                         </div>
-                        <div class="col-sm-12" style="display: flex; align-items: center; justify-content: center; flex-wrap: nowrap; padding: 10px 0;">
-                            
-                            <div class="col-sm-3" style="display: flex; align-items: center; justify-content: flex-end; padding: 0 5px;">
-                                <label for="terapiaStatus" style="margin: 0; white-space: nowrap;">
-                                    <span class="badge badge-danger">Atenção:</span> Mês/Ano a ser impresso:
-                                </label>
-                            </div>
-
-                            <div class="col-sm-2" style="display: flex; align-items: center; padding: 0 5px;">
-                                <input style="height: 30px; width: 100%;" id="anoMestrat" name="anoMestrat" type="text" placeholder="MAIO DE 2026" oninput="converteMai(this);" onchange="mudaAnomes();">
-                            </div>
-
-                            <div class="col-sm-2" style="display: flex; align-items: center; justify-content: flex-end; padding: 0 5px;">
-                                <label for="carimboExibir" style="margin: 0; white-space: nowrap;">Exibir Carimbo:</label>
-                            </div>
-
-                            <div class="col-sm-2" style="display: flex; align-items: center; padding: 0 5px;">
-                                <select name="carimboExibir" id="carimboExibir" class="form-control select2" style="height: 30px; width: 100%;" onchange="toggleCarimbo();">
-                                    <option value="Sim">Sim</option>
-                                    <option value="Não">Não</option>
-                                </select>
-                            </div>
-
-                            <div class="col-sm-3" style="display: flex; align-items: center; justify-content: center; padding: 0 5px;">
-                                <button class="btn btn-info" name="generate-pdf" id="generate-pdf" onclick="window.print();" style="width: 100%;">
-                                    <i class="ace-icon fa fa-file-pdf-o bigger-110"></i> Salvar em PDF / Imprimir
-                                </button>
-                            </div>
-
-                        </div>
+                        <label><span class="badge badge-danger">Atenção: </span> Mês/Ano a ser impresso no Plano de Tratamento:</label>
+								<input style="height: 30px;" id="anoMestrat" name="anoMestrat" type="text" 
+                                placeholder="MAIO DE 2026"
+                                oninput="converteMai(this);" onchange="mudaAnomes();">
+								
+                        <ul class="breadcrumb">
+                            <button class="btn btn-info" name="generate-pdf" id="generate-pdf" onclick="window.print();">
+                                <i class="ace-icon fa fa-file-pdf-o bigger-110"></i> Salvar em PDF / Imprimir
+                            </button>
+                        </ul>
                     </div>
                 </div>
 
@@ -512,7 +477,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr id="carimboExibicao">
+                                    <tr>
                                         <td style="padding-top: 20px; text-align: center; vertical-align: top;">
                                             {{#verificarVazioOuIndefinido this.carimboUsuPad }}
                                             {{else}}

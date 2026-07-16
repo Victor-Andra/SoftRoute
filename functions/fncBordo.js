@@ -814,6 +814,77 @@ console.log(dataFim)
             res.render('admin/erro')
         }
     },
+    carregaBordoimp(req,res){
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
+        Bordo = getModel(db, 'tb_bordo', bordoClass.BordoSchema)
+        Conv = getModel(db, 'tb_conv', convClass.ConvSchema)
+        Escola = getModel(db, 'tb_escola', escolaClass.EscolaSchema)
+        Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+
+        let usuarioAtual = req.cookies['idUsu'];
+        Bordo.findById(req.params.id).then((bordo) =>{console.log("ID: "+bordo._id)
+            Conv.find().then((conv)=>{
+                Terapia.find().then((terapia)=>{
+                    console.log("Listagem Realizada de terapias")
+                    Usuario.find().then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas, supervisores, diretores, corrdenadores
+                        terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
+                        console.log("Listagem Realizada de Usuário")
+                        Bene.find({bene_status: "Ativo", bene_nome: { $not: /\./ } }).then((bene) => {
+                            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
+                            console.log("Listagem Realizada de beneficiarios")
+                            Escola.find().then((escola) =>{
+                                escola.sort((a,b) => (a.escola_nome > b.escola_nome) ? 1 : ((b.escola_nome > a.escola_nome) ? -1 : 0));//Ordena o bene por nome        
+                                Bene.aggregate([
+                                    {
+                                        $match: {
+                                        "bene_escolanome": { "$ne": null, "$ne": "" }
+                                        }
+                                    },
+                                    {
+                                        $group: {
+                                        _id: "$bene_escolanome",
+                                        colegio: { $addToSet: "$bene_escolanome" }
+                                        }
+                                    },
+                                    {
+                                        $project: {
+                                        _id: 0,
+                                        colegio: 1
+                                        }
+                                    },
+                                    {
+                                        $unwind: "$colegio" // Desdobra o array para permitir a ordenação
+                                    },
+                                    {
+                                        $sort: { "colegio": 1 } // Ordena em ordem alfabética ascendente
+                                    },
+                                    {
+                                        $group: {
+                                        _id: null,
+                                        colegio: { $push: "$colegio" }
+                                        }
+                                    },
+                                    {
+                                        $project: {
+                                        _id: 0,
+                                        colegio: 1
+                                        }
+                                    }
+                                    ]).exec((err, colegio) => {
+                                        if (err) {
+                                            console.error("Erro na consulta Bene.aggregate:", err);
+                                            return;
+                                        }
+                                        
+                                        //console.log("Resultado da consulta Bene.aggregate:", colegio);    
+                                        res.render("area/bordo/bordoImp", {colegios: colegio, bordo, convs: conv, escolas: escola, terapias: terapia, terapeutas: terapeuta, benes: bene, usuarioAtual})
+        })})})})})})}).catch((err) =>{
+            console.log(err)
+            req.flash("error_message", "houve um erro ao Realizar as listas!")
+            res.render('admin/erro')
+        })
+    },
     deletaBordo(req,res){
         let db = req.cookies['preferredDb'];
         Bordo = getModel(db, 'tb_bordo', bordoClass.BordoSchema)

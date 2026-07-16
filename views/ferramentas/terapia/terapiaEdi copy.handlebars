@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Terapias</title>
+		<style>
+		/* Estilo minimalista para chosen-select */
+        .chosen-container .chosen-single {
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+            box-shadow: none !important;
+            background: white !important;
+            height: 30px !important;
+            line-height: 30px !important;
+        }
+
+        .chosen-container .chosen-single:hover {
+            border-color: #868e96 !important;
+        }
+
+        .chosen-container-active.chosen-with-drop .chosen-single {
+            border-color: #868e96 !important;
+            background: white !important;
+        }
+
+        .chosen-container .chosen-drop {
+            border: 1px solid #ced4da !important;
+            border-top: none !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        }
+
+        .chosen-container .chosen-search input[type="text"] {
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important;
+            margin: 4px !important;
+        }
+		</style>
+	</head>
+
+	<body onload="javascript:controlaNave(); carregaValoresForm();" class="no-skin">
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Terapias Editar</a>
+							</li>
+
+							<li class="active">Terapias Editar</li>
+						</ul><!-- /.breadcrumb -->
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12"><!-- PAGE CONTENT BEGINS -->
+							
+						<form class="form-horizontal" role="form"  action="/menu/ferramentas/terapia/atualizar" method="POST">
+								
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box">
+										<div class="widget-header">
+											<h4 class="widget-title">Dados Básicos</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+
+												<label > Terapia </label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input type="text" name="terapiaNome" placeholder="" class="form-control" value="{{terapia.terapia_nome}}" />
+													</div>
+												</div>
+
+
+
+												<label > Terapia Nome CID / Convênio</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<select name="terapiaNomeCid" id="terapiaNomeCid" class="form-control select2">
+															<option value="">Selecione...</option>
+															<option value="ARTETERAPIA">ARTETERAPIA</option>
+															<option value="ABA">ABA</option>
+															<option value="AVALIAÇÃO">AVALIAÇÃO</option>
+															<option value="FISIOTERAPIA">FISIOTERAPIA</option>
+															<option value="FONOAUDIOLOGIA">FONOAUDIOLOGIA</option>
+															<option value="JUDÔ">JUDÔ</option>
+															<option value="MUSICOTERAPIA">MUSICOTERAPIA</option>
+															<option value="NUTRIÇÃO">NUTRIÇÃO</option>
+															<option value="PSICOLOGIA">PSICOLOGIA</option>
+															<option value="PSICOMOTRICIDADE">PSICOMOTRICIDADE</option>
+															<option value="PSICOMOTRICIDADE FUNCIONAL">PSICOMOTRICIDADE FUNCIONAL</option>
+															<option value="PSICOMOTRICIDADE RELACIONAL">PSICOMOTRICIDADE RELACIONAL</option>
+															<option value="PSICOPEDAGOGIA">PSICOPEDAGOGIA</option>
+															<option value="TCC">TCC</option>
+															<option value="TERAPIA AQUATICA">TERAPIA AQUÁTICA</option>
+															<option value="TO AVD">TO AVD</option>
+															<option value="TO IS">TO IS</option>
+														</select>
+														
+													</div>
+												</div>
+
+												<label > CID</label>
+												<div class="form-group">
+													<div class="col-sm-3">
+														<input type="text" name="terapiaCid" id="terapiaCid" placeholder="" class="form-control" value="{{terapia.terapia_cid}}" />
+													</div>
+												</div>
+												
+												<label > Descrição </label>
+												<div class="form-group">
+													<div class="col-sm-12">
+														<input type="text" name="terapiaDescricao" placeholder="" class="form-control" value="{{terapia.terapia_descricao}}" />
+													</div>
+												</div>
+
+												<label>Status</label>
+												<div class="form-group">
+													<div class="col-sm-4">
+														<select name="terapiaStatus" id="terapiaStatus" class="form-control select2">
+															<option value="">Selecione...</option>
+															<option value="Ativo">Ativo</option>
+															<option value="Inativo">Inativo</option>
+														</select>
+													</div>
+												</div>
+
+												<div class="hidden">
+													<input name="terapiaId" value="{{terapia._id}}" />
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+
+							<div class="space-4"></div>
+
+							<div class="form-actions">
+								<div class="col-md-offset-3 col-md-9">
+									<button class="btn btn-info" name="acao" type="submit">
+										<i class="ace-icon fa fa-check bigger-110"></i>
+										Salvar
+									</button>
+
+									&nbsp; &nbsp; &nbsp;
+									<a class="btn btn-warning" href="/menu/ferramentas/terapia/lis">
+										<i class="ace-icon fa fa-undo bigger-110"></i>
+										Voltar
+									</a>
+								</div>
+							</div>
+				
+						</form>
+
+
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+
+
+
+
+				</div>
+			</div><!-- /.main-content -->
+
+
+		</div><!-- /.main-container -->
+
+		<!-- Variáveis para carregar valores do banco -->
+		<script>
+			// Valores vindos do banco de dados
+			var terapiaNomeCidBanco = "{{terapia.terapia_nomecid}}";
+			var terapiaStatusBanco = "{{terapia.terapia_status}}";
+			
+			// Função para carregar valores nos selects Chosen
+			function carregaValoresForm() {
+				console.log('[DEBUG] Carregando valores do banco...');
+				console.log('[DEBUG] terapia_nomecid:', terapiaNomeCidBanco);
+				console.log('[DEBUG] terapia_status:', terapiaStatusBanco);
+				
+				// Atualiza select de terapia_nomecid
+				if (terapiaNomeCidBanco && terapiaNomeCidBanco !== 'null' && terapiaNomeCidBanco !== 'undefined') {
+					$('#terapiaNomeCid').val(terapiaNomeCidBanco);
+					console.log('[DEBUG] Valor terapiaNomeCid definido:', terapiaNomeCidBanco);
+				}
+				
+				// Atualiza select de terapia_status
+				if (terapiaStatusBanco && terapiaStatusBanco !== 'null' && terapiaStatusBanco !== 'undefined') {
+					$('#terapiaStatus').val(terapiaStatusBanco);
+					console.log('[DEBUG] Valor terapiaStatus definido:', terapiaStatusBanco);
+				}
+				
+				// Atualiza os Chosen selects
+				if (typeof $.fn.chosen !== 'undefined') {
+					$('.chosen-select').trigger('chosen:updated');
+					console.log('[DEBUG] Chosen selects atualizados!');
+				} else {
+					console.log('[DEBUG] Chosen não carregado ainda');
+				}
+			}
+			
+			// Inicializa Chosen quando o documento estiver pronto
+			$(document).ready(function() {
+				console.log('[DEBUG] Inicializando Chosen...');
+				
+				// Inicializa todos os selects com classe chosen-select
+				$('.chosen-select').chosen({
+					no_results_text: "Não encontrado...",
+					search_contains: true, // Permite buscar em qualquer parte do texto
+					disable_search_threshold: 10, // Desativa busca se tiver menos de 10 opções
+					width: "100%" // Ocupa 100% da largura do container
+				});
+				
+				console.log('[DEBUG] Chosen inicializado!');
+				
+				// Chama a função para carregar valores do banco
+				carregaValoresForm();
+			});
+		</script>
+
+	</body>
+</html>

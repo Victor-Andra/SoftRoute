@@ -3816,6 +3816,11 @@ router.get('/area/bordo/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona
 router.get('/area/bordo/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
     fncBordo.carregaBordoedi(req,res);
 })
+//Carrega Impressao Selecionado de Diário de Bordo
+router.get('/area/bordo/imp/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
+    fncBordo.carregaBordoimp(req,res);
+})
+
 //Adiciona Diário de Bordo Registro
 router.post('/area/bordo/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Diário de Bordo Padrao
     fncBordo.cadastraBordo(req,res);

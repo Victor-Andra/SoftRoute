@@ -79,13 +79,23 @@
 				// document.getElementById("bordoDataativFinal").value = datafmt.toISOString();
 			}
 function carregaBody() {
-    // 1️⃣ Formata data
+    // 1️⃣ Formata data no formato YYYY/MM/DD de forma segura
     const dataEdi = document.getElementById("bordoDataativEdi")?.value;
-    if (dataEdi && dataEdi.length >= 10) {
-        const dataLimpa = dataEdi.includes('T') ? dataEdi.split('T')[0] : dataEdi.substring(0, 10);
-        document.getElementById("bordoDataativ").value = dataLimpa;
+    if (dataEdi) {
+        const dataObjeto = new Date(dataEdi);
+        
+        // Verifica se é uma data válida antes de formatar
+        if (!isNaN(dataObjeto.getTime())) {
+            const ano = dataObjeto.getFullYear();
+            // getMonth() retorna de 0 a 11, por isso somamos +1
+            const mes = String(dataObjeto.getMonth() + 1).padStart(2, '0');
+            const dia = String(dataObjeto.getDate()).padStart(2, '0');
+            
+            // Define o valor formatado como 2026/05/03
+            document.getElementById("bordoDataativ").value = `${ano}/${mes}/${dia}`;
+        }
     }
-    
+
     // 2️⃣ Mapeamento de campos
     const mapaCampos = [
         ["bordoBeneid", "bordoBeneidEdi"], ["bordoAtendem", "bordoAtendemEdi"],
@@ -129,42 +139,38 @@ function carregaBody() {
         const elOrig = document.getElementById(orig);
         const elDest = document.getElementById(dest);
         
-        if (!elOrig || !elDest) return; // Pula se algum elemento não existir
+        if (!elOrig || !elDest) return;
         
         const valor = elOrig.value;
         
         if (elDest.tagName === "SELECT") {
-            // Para Select2: define valor e dispara evento de atualização
             $(elDest).val(valor).trigger('change');
         } else {
-            // Para inputs/textareas normais: usa JS puro
             elDest.value = valor;
         }
     });
 
-    // Dentro de carregaBody(), na parte do terapeuta:
-		const terapeutaEdi = document.getElementById("bordoTerapeutaidEdi")?.value;
-			if (terapeutaEdi && terapeutaEdi !== "-" && terapeutaEdi !== "766f69643132333435366964") {
-				const $select = $("#bordoTerapeutaid");
-				
-				// Aguarda o Select2 estar totalmente inicializado
-				setTimeout(() => {
-					$select.val(terapeutaEdi).trigger('change');
-					
-					// Atualiza campo de nome (se existir)
-					const nomeTerapeuta = document.getElementById(terapeutaEdi)?.value;
-					const campoUsuario = document.getElementById("usuarioAtual");
-					if (campoUsuario && nomeTerapeuta) {
-						campoUsuario.value = nomeTerapeuta;
-					}
-				}, 100);
-			}
+    // 4️⃣ Configuração do Terapeuta
+    const terapeutaEdi = document.getElementById("bordoTerapeutaidEdi")?.value;
+    if (terapeutaEdi && terapeutaEdi !== "-" && terapeutaEdi !== "766f69643132333435366964") {
+        const $select = $("#bordoTerapeutaid");
+        
+        setTimeout(() => {
+            $select.val(terapeutaEdi).trigger('change');
+            
+            const nomeTerapeuta = document.getElementById(terapeutaEdi)?.value;
+            const campoUsuario = document.getElementById("usuarioAtual");
+            if (campoUsuario && nomeTerapeuta) {
+                campoUsuario.value = nomeTerapeuta;
+            }
+        }, 100);
+    }
 
-    // 6️⃣ Formata data final
+    // 5️⃣ Formata data final
     atualizaData();
 }
 
-		</script>
+	</script>
 	</head>
 
 	<body class="no-skin" onload="javascript:controlaNave();carregaBody();" >
@@ -275,6 +281,7 @@ function carregaBody() {
 							<input id="bordoSeloEdi" name="bordoSeloEdi" value="{{bordo.bordo_selo}}"/>
 							<input id="bordoUsuidcadEdi" name="bordoUsuidcadEdi" value="{{bordo.bordo_usuidcad}}"/>
 							<input id="bordoUsuidediEdi" name="bordoUsuidediEdi" value="{{bordo.bordo_usuidedi}}"/>
+							 <input id="bordoDataativEdi" name="bordoDataativEdi" value="{{bordo.bordo_dataativ}}"/>
 							{{#each terapeutas}}
 								<input id="{{_id}}" value="{{usuario_nomecompleto}}" />
 							{{/each}}
@@ -365,7 +372,7 @@ function carregaBody() {
 												<label for="id-date-picker-1">Data atividade</label><!--Data atividade-->
 												<div class="form-group">
 													<div class="col-sm-6">
-														<input id="bordoDataativ" name="bordoDataativ" type="date" >
+														<input id="bordoDataativ" name="bordoDataativ" type="text" >
 													</div>
 												</div>
 												
