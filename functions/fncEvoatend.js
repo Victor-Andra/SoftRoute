@@ -429,7 +429,22 @@ module.exports = {FiltroEvoatend,
             // 🔗 Coletar IDs para buscar filhos
             let agendaTempIds = agenda.map(a => a._id);
             
-            Agenda.find({ agenda_tempId: {$in: agendaTempIds} }).then((agendaS)=>{
+            Agenda.find({ $or: [
+        {
+            agenda_tempId: { $in: agendaTempIds }
+        },
+        {
+            agenda_data: {
+                $gte: new Date(dataIni),
+                $lte: new Date(dataFim)
+            },
+            agenda_usuid: idTerapeuta,
+            agenda_temp: true,
+            _id: {
+                $nin: agendaTempIds
+            }
+        }
+    ] }).then((agendaS)=>{
                 
                 // 📝 Formatação dos filhos
                 agendaS.forEach((e)=>{
@@ -444,17 +459,20 @@ module.exports = {FiltroEvoatend,
                 // 🧹 Montar lista final: pais sem filhos + filhos válidos
                 let agendaFinal = [];
                 
-                // Adicionar pais que NÃO têm filhos
-                agenda.forEach((a)=>{
-                    let temFilho = agendaS.some(s => s.agenda_tempId?.toString() === a._id.toString());
-                    if (!temFilho) {
+                agenda.forEach(a => {
+                    const foiSubstituida = agendaS.some(
+                        s => String(s.agenda_tempId) === String(a._id)
+                    );
+
+                    if (!foiSubstituida) {
                         agendaFinal.push(a);
                     }
-                })
+                });
 
                 // Adicionar filhos válidos (não é falta justificada/feriado e é do terapeuta)
                 agendaS.forEach((s)=>{
-                    if (s.agenda_categoria !== "Falta Justificada" && 
+                    if (s.agenda_categoria !== "Falta Absoluta" && 
+                        s.agenda_categoria !== "Falta Justificada" && 
                         s.agenda_categoria !== "Feriado" && 
                         s.agenda_usuid?.toString() === idTerapeuta?.toString()) {
                         agendaFinal.push(s);
