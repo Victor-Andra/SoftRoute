@@ -94,7 +94,7 @@ module.exports = {
         Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
 
         let usuarioAtual = req.cookies['idUsu'];
-        let tipoPessoa = req.body.bordoTipoPessoa;
+        let tipoPessoa = req.body.bordoTipoPessoa || "Geral";
         let tipoData = req.body.tipoData;
         let dataIni;
         let dataFim;
@@ -107,7 +107,7 @@ module.exports = {
         let dia;
         let isAgendaTerapeuta = false;
         let carregaFiltro = "true";
-        let bordoTerapeuta = new ObjectId(usuarioAtual);
+        let bordoTerapeuta = req.body.bordoTerapeuta || "";
         let bordoBeneficiario = req.body.bordoBeneficiario;
         let dataFinal = req.body.dataFinal;
         let mesBordo = req.body.mesBordo;

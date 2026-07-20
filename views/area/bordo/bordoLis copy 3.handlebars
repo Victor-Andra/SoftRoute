@@ -321,57 +321,51 @@
 			
 			// ✅ FUNÇÃO AJUSTADA: Avisa o Select2 para recalcular ao aparecer
 			function trocaFilpessoa() {
-				// ✅ Adicionado fallback "Geral" caso o valor venha vazio ou undefined
-				let fillTipopessoa = document.getElementById("bordoTipoPessoa").value || "Geral"; 
-				
-				if(fillTipopessoa === "Geral"){
+				let fillTipopessoa = document.getElementById("bordoTipoPessoa").value;
+				if(fillTipopessoa == "Geral"){
 					document.getElementById("divBordoBeneficiario").hidden = true;
 					document.getElementById("divBordoTerapeuta").hidden = true;
-				} else if(fillTipopessoa === "Beneficiario"){
+				} else if(fillTipopessoa == "Beneficiario"){
 					document.getElementById("divBordoBeneficiario").hidden = false;
 					document.getElementById("divBordoTerapeuta").hidden = true;
+					// Acorda o Select2
 					setTimeout(() => { $('#bordoBeneficiario').trigger('change.select2'); }, 50);
-				} else if(fillTipopessoa === "Terapeuta"){
+				} else {
 					document.getElementById("divBordoBeneficiario").hidden = true;
 					document.getElementById("divBordoTerapeuta").hidden = false;
+					// Acorda o Select2
 					setTimeout(() => { $('#bordoTerapeuta').trigger('change.select2'); }, 50);
 				}
 			}
 
 			// ✅ FUNÇÃO AJUSTADA: Sincroniza valores E atualiza a UI do Select2 após POST
 			function carregarFiltros() {
-				// 1. Captura os valores com fallback seguro
 				const tipoData = document.getElementById("tipoDataFil")?.value || "Ano/Mes";
 				const tipoPessoa = document.getElementById("tipoPessoaFil")?.value || "Geral";
 
-				// 2. Aplica no Tipo de Data
 				document.getElementById("tipoData").value = tipoData;
-				$('#tipoData').trigger('change.select2'); // Avisa o Select2
-				trocaFiltroData(); 
+				trocaFiltroData(); // Garante que os campos certos estão visíveis primeiro
 
 				if(tipoData === "Ano/Mes") {
 					document.getElementById("anoBordo").value = document.getElementById("anoBordoFil")?.value || "";
 					document.getElementById("mesBordo").value = document.getElementById("mesBordoFil")?.value || "0";
+					// Acorda o Select2 com os novos valores
 					$('#anoBordo, #mesBordo').trigger('change.select2');
 				} else {
 					const data = document.getElementById("dataFinalFil")?.value;
 					if(data) document.getElementById("dataFil").value = data.split('T')[0];
 				}
 
-				// 3. Aplica no Tipo de Pessoa (ORDEM CORRIGIDA)
 				document.getElementById("bordoTipoPessoa").value = tipoPessoa;
-				$('#bordoTipoPessoa').trigger('change.select2'); // ✅ Avisa o Select2 PRIMEIRO
-				
-				trocaFilpessoa(); // ✅ Depois executa a lógica de mostrar/esconder
+				trocaFilpessoa(); // Garante que os campos certos estão visíveis primeiro
 
-				// 4. Aplica os IDs específicos
 				if(tipoPessoa === "Beneficiario") {
 					document.getElementById("bordoBeneficiario").value = document.getElementById("bordoBeneficiarioFil")?.value || "";
-					$('#bordoBeneficiario').trigger('change.select2');
+					$('#bordoBeneficiario').trigger('change.select2'); // Acorda o Select2
 				}
 				if(tipoPessoa === "Terapeuta") {
 					document.getElementById("bordoTerapeuta").value = document.getElementById("bordoTerapeutaFil")?.value || "";
-					$('#bordoTerapeuta').trigger('change.select2');
+					$('#bordoTerapeuta').trigger('change.select2'); // Acorda o Select2
 				}
 			} 
 			
