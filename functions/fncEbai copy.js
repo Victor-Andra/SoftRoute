@@ -61,22 +61,17 @@ module.exports = {
     },
     
     //Função que controla Classe para salvar
-    async cadastraEbai(req, res){
-        try {
-            const cadastro = await ebaiClass.ebaiAdicionar(req, res);
-            if (cadastro) {
-                console.log('Cadastro realizado com sucesso!');
-                req.flash("success_message", "Escala EBAI cadastrada com sucesso!");
-                res.redirect('/menu/nutricao/ebai/lis');
-            } else {
-                console.log('Erro ao cadastrar');
-                req.flash("error_message", "Houve um erro ao cadastrar Escala EBAI");
-                res.redirect('/admin/erro');
-            }
-        } catch (err) {
-            console.error('Erro inesperado em cadastraEbai:', err);
-            req.flash("error_message", "Houve um erro ao cadastrar Escala EBAI");
-            res.redirect('/admin/erro');
+    cadastraEbai(req,res){
+        let cadastro = ebaiClass.ebaiAdicionar(req,res);//variavel para armazenar a função que armazena o async
+
+        if(cadastro){
+            console.log('Cadastro realizado com sucesso!')
+            req.flash("success_message", "Escala EBAI cadastrada com sucesso!")
+            res.redirect('/menu/nutricao/ebai/lis')
+        } else {
+            console.log('Erro ao cadastrar')
+            req.flash("error_message", "Houve um erro ao cadastrar Escala EBAI")
+            res.redirect('/admin/erro')
         }
     },
     
