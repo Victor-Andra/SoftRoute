@@ -16048,7 +16048,7 @@ console.log(terapeutas);
             return res.status(500).send("Erro ao gerar relatório de faltas.");
         }
     },
-    relfaltasbene: async (req, res) => {
+    relfaltasbene_old2: async (req, res) => {
         try {
             console.log("\n======================");
             console.log("🔍 INICIANDO relfaltasbene");
@@ -16062,6 +16062,7 @@ console.log(terapeutas);
             const Bene  = getModel(db, 'tb_bene', beneClass.BeneSchema);
             const Conv  = getModel(db, 'tb_conv', convClass.ConvSchema);
             const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+            const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
 
             // ------------------------ DATAS ------------------------
             const dataIniStr = req.query.dataIni || req.body.dataIni;
@@ -16111,6 +16112,7 @@ console.log(terapeutas);
             const convIds = [...new Set(atendimentos.map(a => String(a.atend_convid)))];
             const terapiaIds = [...new Set(atendimentos.map(a => String(a.atend_terapiaid)))];
             const terapeutaIds = [...new Set(atendimentos.filter(a => a.atend_terapeutaid !== undefined && a.atend_terapeutaid !== null).map(a => String(a.atend_terapeutaids)))]; // <-- NOVO
+            const salaIds =  [...new Set(salas.filter(a => a.atend_salaid !== undefined && a.atend_salaid !== null).map(a => String(a.atend_salaids)))]; // <-- NOVO
 
             console.log("\n📥 Buscando beneficiários...");
             const benes = await Bene.find({ _id: { $in: beneIds } }, 'bene_nome').lean();
@@ -16123,6 +16125,9 @@ console.log(terapeutas);
 
             console.log("📥 Buscando terapeutas..."); // <-- NOVO
             const terapeutas = await Usuario.find({  }, 'usuario_nome usuario_nomecompleto').lean();
+
+             console.log("📥 Buscando salas..."); // <-- NOVO
+            const salas = await Sala.find({ _id: { $in: salaIds } }, 'sala_nome').lean();
 
             // Maps para substituição
             const beneMap = Object.fromEntries(benes.map(b => [String(b._id), b.bene_nome]));
@@ -16149,6 +16154,7 @@ console.log(terapeutas);
                 const convId = String(at.atend_convid);
                 const terapiaId = String(at.atend_terapiaid);
                 const terapeutaId = String(at.atend_terapeuta);
+                
 
                 if (!mapa[beneId]) {
                     mapa[beneId] = {
@@ -16198,7 +16204,7 @@ console.log(terapeutas);
             console.log("----------------------------------------------------");
 
             let rels = Object.values(mapa).map(r => {
-                const totalFaltas = r.qt_falta + r.qt_falta_abs;
+                const totalFaltas = r.qt_falta + r.qt_falta_abs + r.qt_falta_jus;
                 const total_faltas = r.qt_falta + r.qt_falta_abs + r.qt_falta_jus;
 
                 const indice = r.total_registros > 0
@@ -16262,6 +16268,677 @@ console.log("\n📊 CONSOLIDADO GERAL:", totais);
                 periodoDe: dataIniStr.split("-").reverse().join("/"),
                 periodoAte: dataFimStr.split("-").reverse().join("/"),
                 pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr }
+            });
+
+        } catch (err) {
+            console.error("💥 Erro em relfaltasbene:", err);
+            return res.status(500).send("Erro ao gerar relatório de faltas.");
+        }
+    },
+    relfaltasbene_AntesUpgrade: async (req, res) => {
+        try {
+            console.log("\n======================");
+            console.log("🔍 INICIANDO relfaltasbene");
+            console.log("======================");
+
+            const db = req.cookies['preferredDb'];
+            if (!db) return res.status(400).send("Banco de dados não selecionado.");
+            console.log("📌 Banco selecionado:", db);
+
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Bene  = getModel(db, 'tb_bene', beneClass.BeneSchema);
+            const Conv  = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+            const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+
+            // ------------------------ DATAS ------------------------
+            const dataIniStr = req.query.dataIni || req.body.dataIni;
+            const dataFimStr = req.query.dataFim || req.body.dataFim;
+
+            console.log("📅 Datas recebidas:", dataIniStr, "→", dataFimStr);
+
+            if (!dataIniStr || !dataFimStr) {
+                console.log("⚠️ Datas não enviadas.");
+                return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                    rels: [],
+                    periodoDe: '',
+                    periodoAte: '',
+                    pesquisa: { dataIni: '', dataFim: '' }
+                });
+            }
+
+            const dataIni = new Date(dataIniStr);
+            const dataFim = new Date(dataFimStr);
+            dataFim.setUTCHours(23, 59, 59, 999);
+
+            // ---------------------- BUSCA ATEND ----------------------
+            console.log("\n📥 Buscando atendimentos...");
+            const atendimentos = await Atend.find(
+                {
+                    atend_atenddata: { $gte: dataIni, $lte: dataFim },
+                    atend_beneid: { $ne: null },
+                    atend_convid: { $ne: null }
+                },
+                // ALTERADO PARA SALA: Adicionado atend_salaid e atend_sala na projeção
+                'atend_beneid atend_convid atend_categoria atend_atenddata atend_atendhora atend_terapia atend_terapeuta atend_terapiaid atend_terapeutaid atend_salaid atend_sala'
+            ).lean();
+
+            console.log("   → Encontrados:", atendimentos.length);
+
+            if (atendimentos.length === 0) {
+                console.log("⚠️ Nenhum registro encontrado.");
+                return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                    rels: [],
+                    periodoDe: dataIniStr,
+                    periodoAte: dataFimStr,
+                    pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr }
+                });
+            }
+
+            // ---------------------- BUSCAR NOMES ----------------------
+            const beneIds = [...new Set(atendimentos.map(a => String(a.atend_beneid)))];
+            const convIds = [...new Set(atendimentos.map(a => String(a.atend_convid)))];
+            const terapiaIds = [...new Set(atendimentos.map(a => String(a.atend_terapiaid)))];
+            
+            // CORREÇÃO: Removido o 's' final de atend_terapeutaids para bater com o campo real
+            const terapeutaIds = [...new Set(atendimentos.filter(a => a.atend_terapeutaid !== undefined && a.atend_terapeutaid !== null).map(a => String(a.atend_terapeutaid)))]; 
+            
+            // CORREÇÃO: Agora filtra 'atendimentos' (não 'salas', que ainda não existe) e removido o 's' final de atend_salaids
+            const salaIds = [...new Set(atendimentos.filter(a => a.atend_salaid !== undefined && a.atend_salaid !== null).map(a => String(a.atend_salaid)))]; 
+
+            console.log("\n📥 Buscando beneficiários...");
+            const benes = await Bene.find({ _id: { $in: beneIds } }, 'bene_nome').lean();
+
+            console.log("📥 Buscando convênios...");
+            const convs = await Conv.find({ _id: { $in: convIds } }, 'conv_nome').lean();
+
+            console.log("📥 Buscando terapias...");
+            const terapias = await Terapia.find({ _id: { $in: terapiaIds } }, 'terapia_nomecid').lean();
+
+            console.log("📥 Buscando terapeutas...");
+            const terapeutas = await Usuario.find({ _id: { $in: terapeutaIds } }, 'usuario_nome usuario_nomecompleto').lean(); // Otimizado com $in
+
+            console.log("📥 Buscando salas...");
+            const salas = await Sala.find({ _id: { $in: salaIds } }, 'sala_nome').lean();
+
+            // Maps para substituição
+            const beneMap = Object.fromEntries(benes.map(b => [String(b._id), b.bene_nome]));
+            const convMap = Object.fromEntries(convs.map(c => [String(c._id), c.conv_nome]));
+            const terapiaMap = Object.fromEntries(terapias.map(t => [String(t._id), t.terapia_nomecid]));
+            
+            const terapeutaMap = {};
+            for (const t of terapeutas) {
+                terapeutaMap[t._id.toString()] = t.usuario_nomecompleto || t.usuario_nome;
+            }
+
+            // ALTERADO PARA SALA: Criado o salaMap
+            const salaMap = Object.fromEntries(salas.map(s => [String(s._id), s.sala_nome]));
+
+            // ---------------------- AGRUPAMENTO ----------------------
+            console.log("\n📊 AGRUPANDO registros...");
+            const mapa = {};
+
+            for (const at of atendimentos) {
+                const beneId = String(at.atend_beneid);
+                const convId = String(at.atend_convid);
+                const terapiaId = String(at.atend_terapiaid);
+                const terapeutaId = String(at.atend_terapeutaid); // Corrigido para bater com o map
+                const salaId = String(at.atend_salaid); // ALTERADO PARA SALA
+
+                if (!mapa[beneId]) {
+                    mapa[beneId] = {
+                        bene_id: beneId,
+                        bene_nome: beneMap[beneId] || "—",
+                        convenio: convMap[convId] || "—",
+                        total_registros: 0,
+                        qt_falta: 0,
+                        qt_falta_abs: 0,
+                        qt_falta_jus: 0,
+                        qt_feriado: 0,
+                        detalhes: []
+                    };
+                }
+
+                const item = mapa[beneId];
+                item.total_registros++;
+
+                // Contagem de categorias
+                switch (at.atend_categoria) {
+                    case "Falta": item.qt_falta++; break;
+                    case "Falta Absoluta": item.qt_falta_abs++; break;
+                    case "Falta Justificada": item.qt_falta_jus++; break;
+                    case "Feriado": item.qt_feriado++; break;
+                }
+
+                // Detalhes COM NOMES RESOLVIDOS ✅
+                const dataBr = at.atend_atenddata
+                    ? new Date(at.atend_atenddata).toISOString().slice(0, 10).split("-").reverse().join("/")
+                    : "—";
+
+                item.detalhes.push({
+                    data: dataBr,
+                    hora: at.atend_atendhora || "—",
+                    // ALTERADO PARA SALA: Adicionada a propriedade sala usando o salaMap
+                    sala: salaMap[salaId] || at.atend_sala || "—", 
+                    terapia: terapiaMap[terapiaId] || at.atend_terapia || "—",
+                    terapeuta: terapeutaMap[terapeutaId] || "—",
+                    categoria: at.atend_categoria || "—"
+                });
+            }
+
+            // ------------------------ RESULTADOS ------------------------
+            console.log("\n📌 RESULTADOS POR BENEFICIÁRIO:");
+            console.log("----------------------------------------------------");
+
+            let rels = Object.values(mapa).map(r => {
+                const totalFaltas = r.qt_falta + r.qt_falta_abs + r.qt_falta_jus;
+
+                const indice = r.total_registros > 0
+                    ? parseFloat((totalFaltas / r.total_registros).toFixed(4))
+                    : 0;
+
+                console.log(`
+                👤 BENEFICIÁRIO: ${r.bene_nome}
+                🏥 CONVÊNIO: ${r.convenio}
+                📌 Total Registros: ${r.total_registros}
+                ❌ Falta: ${r.qt_falta}
+                ❌ Falta Absoluta: ${r.qt_falta_abs}
+                ❌ Falta Justificada: ${r.qt_falta_jus}
+                🟦 Feriado: ${r.qt_feriado}
+                📉 Índice: ${indice}
+                ----------------------------------------------------
+                `);
+
+                return {
+                    ...r,
+                    indice_faltas: (indice * 100).toFixed(2)
+                };
+            });
+
+            // ------------------------ ORDENAR ------------------------
+            rels.sort((a, b) =>
+                a.bene_nome.localeCompare(b.bene_nome, "pt", { sensitivity: "base" })
+            );
+            
+            // ------------------------ CONSOLIDADO TOTAL ------------------------
+            const totais = rels.reduce((acc, r) => {
+                acc.total_registros += r.total_registros;
+                acc.qt_falta      += r.qt_falta;
+                acc.qt_falta_abs  += r.qt_falta_abs;
+                acc.qt_falta_jus  += r.qt_falta_jus;
+                acc.qt_feriado    += r.qt_feriado;
+                return acc;
+            }, {
+                total_registros: 0,
+                qt_falta: 0,
+                qt_falta_abs: 0,
+                qt_falta_jus: 0,
+                qt_feriado: 0
+            });
+
+            const totalFaltasGeral = totais.qt_falta + totais.qt_falta_abs + totais.qt_falta_jus;
+            totais.indice_faltas = totais.total_registros > 0
+                ? ((totalFaltasGeral / totais.total_registros) * 100).toFixed(2)
+                : "0.00";
+
+            console.log("\n📊 CONSOLIDADO GERAL:", totais);
+
+            // ------------------------ RENDER ------------------------
+            return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                rels,
+                totais,
+                periodoDe: dataIniStr.split("-").reverse().join("/"),
+                periodoAte: dataFimStr.split("-").reverse().join("/"),
+                pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr }
+            });
+
+        } catch (err) {
+            console.error("💥 Erro em relfaltasbene:", err);
+            return res.status(500).send("Erro ao gerar relatório de faltas.");
+        }
+    },
+    relfaltasbene_semFilBene: async (req, res) => {
+    try {
+        console.log("\n======================");
+        console.log("🔍 INICIANDO relfaltasbene (UPGRADE 3 CONTAINERS)");
+        console.log("======================");
+
+        const db = req.cookies['preferredDb'];
+        if (!db) return res.status(400).send("Banco de dados não selecionado.");
+        console.log("📌 Banco selecionado:", db);
+
+        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+        const Bene  = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv  = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+
+        // ------------------------ DATAS ------------------------
+        const dataIniStr = req.query.dataIni || req.body.dataIni;
+        const dataFimStr = req.query.dataFim || req.body.dataFim;
+
+        console.log("📅 Datas recebidas:", dataIniStr, "→", dataFimStr);
+
+        // Parâmetros dos checkboxes (persistência de estado)
+        const mostrarParam = req.query.mostrar || 'geral'; // Padrão: só 'geral'
+        const mostrarArr = mostrarParam.split(',').map(s => s.trim());
+        const mostrarGeral = mostrarArr.includes('geral');
+        const mostrarClinica = mostrarArr.includes('clinica');
+        const mostrarExternos = mostrarArr.includes('externos');
+
+        console.log("🎛️ Containers a exibir:", { mostrarGeral, mostrarClinica, mostrarExternos });
+
+        if (!dataIniStr || !dataFimStr) {
+            return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                relsGeral: [], totaisGeral: {},
+                relsClinica: [], totaisClinica: {},
+                relsExternos: [], totaisExternos: {},
+                periodoDe: '', periodoAte: '',
+                pesquisa: { dataIni: '', dataFim: '' },
+                mostrarGeral, mostrarClinica, mostrarExternos
+            });
+        }
+
+        const dataIni = new Date(dataIniStr);
+        const dataFim = new Date(dataFimStr);
+        dataFim.setUTCHours(23, 59, 59, 999);
+
+        // ---------------------- BUSCA ATEND ----------------------
+        console.log("\n📥 Buscando atendimentos...");
+        const atendimentos = await Atend.find(
+            {
+                atend_atenddata: { $gte: dataIni, $lte: dataFim },
+                atend_beneid: { $ne: null },
+                atend_convid: { $ne: null }
+            },
+            'atend_beneid atend_convid atend_categoria atend_atenddata atend_atendhora atend_terapia atend_terapeuta atend_terapiaid atend_terapeutaid atend_salaid atend_sala'
+        ).lean();
+
+        console.log("   → Encontrados:", atendimentos.length);
+
+        if (atendimentos.length === 0) {
+            return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                relsGeral: [], totaisGeral: {},
+                relsClinica: [], totaisClinica: {},
+                relsExternos: [], totaisExternos: {},
+                periodoDe: dataIniStr.split("-").reverse().join("/"),
+                periodoAte: dataFimStr.split("-").reverse().join("/"),
+                pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr },
+                mostrarGeral, mostrarClinica, mostrarExternos
+            });
+        }
+
+        // ---------------------- BUSCAR NOMES ----------------------
+        const beneIds = [...new Set(atendimentos.map(a => String(a.atend_beneid)))];
+        const convIds = [...new Set(atendimentos.map(a => String(a.atend_convid)))];
+        const terapiaIds = [...new Set(atendimentos.map(a => String(a.atend_terapiaid)))];
+        const terapeutaIds = [...new Set(atendimentos.filter(a => a.atend_terapeutaid !== undefined && a.atend_terapeutaid !== null).map(a => String(a.atend_terapeutaid)))];
+        const salaIds = [...new Set(atendimentos.filter(a => a.atend_salaid !== undefined && a.atend_salaid !== null).map(a => String(a.atend_salaid)))];
+
+        console.log("\n📥 Buscando dados auxiliares...");
+        const [benes, convs, terapias, terapeutas, salas] = await Promise.all([
+            Bene.find({ _id: { $in: beneIds } }, 'bene_nome').lean(),
+            Conv.find({ _id: { $in: convIds } }, 'conv_nome').lean(),
+            Terapia.find({ _id: { $in: terapiaIds } }, 'terapia_nomecid').lean(),
+            Usuario.find({ _id: { $in: terapeutaIds } }, 'usuario_nome usuario_nomecompleto').lean(),
+            Sala.find({ _id: { $in: salaIds } }, 'sala_nome').lean()
+        ]);
+
+        // Maps para substituição
+        const beneMap = Object.fromEntries(benes.map(b => [String(b._id), b.bene_nome]));
+        const convMap = Object.fromEntries(convs.map(c => [String(c._id), c.conv_nome]));
+        const terapiaMap = Object.fromEntries(terapias.map(t => [String(t._id), t.terapia_nomecid]));
+        const terapeutaMap = Object.fromEntries(terapeutas.map(t => [String(t._id), t.usuario_nomecompleto || t.usuario_nome]));
+        const salaMap = Object.fromEntries(salas.map(s => [String(s._id), s.sala_nome]));
+
+        // ---------------------- CONSTANTES DE FILTRAGEM ----------------------
+        // Nomes das salas que são consideradas "EXTERNAS" (fora da clínica)
+        const SALAS_EXTERNAS = ['Sala Escola', 'Casa', 'Sala On-line'];
+
+        // ---------------------- FUNÇÃO AUXILIAR DE AGRUPAMENTO ----------------------
+        const agruparAtendimentos = (listaAtendimentos, filtroTipo) => {
+            const mapa = {};
+
+            for (const at of listaAtendimentos) {
+                const beneId = String(at.atend_beneid);
+                const convId = String(at.atend_convid);
+                const terapiaId = String(at.atend_terapiaid);
+                const terapeutaId = String(at.atend_terapeutaid);
+                const salaId = String(at.atend_salaid);
+                const nomeSala = salaMap[salaId] || at.atend_sala || '';
+
+                // FILTRAGEM POR ESCOPO
+                if (filtroTipo === 'clinica' && SALAS_EXTERNAS.includes(nomeSala)) {
+                    continue; // Pula atendimentos de salas externas
+                }
+                if (filtroTipo === 'externos' && !SALAS_EXTERNAS.includes(nomeSala)) {
+                    continue; // Pula atendimentos que NÃO são de salas externas
+                }
+
+                if (!mapa[beneId]) {
+                    mapa[beneId] = {
+                        bene_id: beneId,
+                        bene_nome: beneMap[beneId] || "—",
+                        convenio: convMap[convId] || "—",
+                        total_registros: 0,
+                        qt_falta: 0,
+                        qt_falta_abs: 0,
+                        qt_falta_jus: 0,
+                        qt_feriado: 0,
+                        detalhes: []
+                    };
+                }
+
+                const item = mapa[beneId];
+                item.total_registros++;
+
+                switch (at.atend_categoria) {
+                    case "Falta": item.qt_falta++; break;
+                    case "Falta Absoluta": item.qt_falta_abs++; break;
+                    case "Falta Justificada": item.qt_falta_jus++; break;
+                    case "Feriado": item.qt_feriado++; break;
+                }
+
+                const dataBr = at.atend_atenddata
+                    ? new Date(at.atend_atenddata).toISOString().slice(0, 10).split("-").reverse().join("/")
+                    : "—";
+
+                item.detalhes.push({
+                    data: dataBr,
+                    hora: at.atend_atendhora || "—",
+                    sala: nomeSala || "—",
+                    terapia: terapiaMap[terapiaId] || at.atend_terapia || "—",
+                    terapeuta: terapeutaMap[terapeutaId] || "—",
+                    categoria: at.atend_categoria || "—"
+                });
+            }
+
+            return mapa;
+        };
+
+        // ---------------------- FUNÇÃO AUXILIAR DE CÁLCULO DE ÍNDICE ----------------------
+        const calcularResultados = (mapa) => {
+            let rels = Object.values(mapa).map(r => {
+                const totalFaltas = r.qt_falta + r.qt_falta_abs + r.qt_falta_jus;
+                const indice = r.total_registros > 0
+                    ? parseFloat((totalFaltas / r.total_registros).toFixed(4))
+                    : 0;
+
+                return {
+                    ...r,
+                    indice_faltas: (indice * 100).toFixed(2)
+                };
+            });
+
+            rels.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, "pt", { sensitivity: "base" }));
+
+            const totais = rels.reduce((acc, r) => {
+                acc.total_registros += r.total_registros;
+                acc.qt_falta += r.qt_falta;
+                acc.qt_falta_abs += r.qt_falta_abs;
+                acc.qt_falta_jus += r.qt_falta_jus;
+                acc.qt_feriado += r.qt_feriado;
+                return acc;
+            }, { total_registros: 0, qt_falta: 0, qt_falta_abs: 0, qt_falta_jus: 0, qt_feriado: 0 });
+
+            const totalFaltasGeral = totais.qt_falta + totais.qt_falta_abs + totais.qt_falta_jus;
+            totais.indice_faltas = totais.total_registros > 0
+                ? ((totalFaltasGeral / totais.total_registros) * 100).toFixed(2)
+                : "0.00";
+
+            return { rels, totais };
+        };
+
+        // ---------------------- CALCULAR OS 3 CONJUNTOS ----------------------
+        console.log("\n📊 AGRUPANDO registros para os 3 containers...");
+
+        // 1. GERAL (todos os atendimentos)
+        const mapaGeral = agruparAtendimentos(atendimentos, 'geral');
+        const { rels: relsGeral, totais: totaisGeral } = calcularResultados(mapaGeral);
+        console.log(`   → Geral: ${relsGeral.length} beneficiários, ${totaisGeral.total_registros} registros`);
+
+        // 2. CLÍNICA (exclui salas externas)
+        const mapaClinica = agruparAtendimentos(atendimentos, 'clinica');
+        const { rels: relsClinica, totais: totaisClinica } = calcularResultados(mapaClinica);
+        console.log(`   → Clínica: ${relsClinica.length} beneficiários, ${totaisClinica.total_registros} registros`);
+
+        // 3. EXTERNOS (só salas externas)
+        const mapaExternos = agruparAtendimentos(atendimentos, 'externos');
+        const { rels: relsExternos, totais: totaisExternos } = calcularResultados(mapaExternos);
+        console.log(`   → Externos: ${relsExternos.length} beneficiários, ${totaisExternos.total_registros} registros`);
+
+        // ------------------------ RENDER ------------------------
+        return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+            relsGeral, totaisGeral,
+            relsClinica, totaisClinica,
+            relsExternos, totaisExternos,
+            periodoDe: dataIniStr.split("-").reverse().join("/"),
+            periodoAte: dataFimStr.split("-").reverse().join("/"),
+            pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr },
+            mostrarGeral, mostrarClinica, mostrarExternos
+        });
+
+    } catch (err) {
+        console.error("💥 Erro em relfaltasbene:", err);
+        return res.status(500).send("Erro ao gerar relatório de faltas.");
+    }
+},
+    relfaltasbene: async (req, res) => {
+        try {
+            console.log("\n======================");
+            console.log("🔍 INICIANDO relfaltasbene (UPGRADE COM FILTRO DE BENEFICIÁRIO)");
+            console.log("======================");
+
+            const db = req.cookies['preferredDb'];
+            if (!db) return res.status(400).send("Banco de dados não selecionado.");
+            console.log("📌 Banco selecionado:", db);
+
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Bene  = getModel(db, 'tb_bene', beneClass.BeneSchema);
+            const Conv  = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+            const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+            const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+
+            // ------------------------ DATAS E FILTROS ------------------------
+            const dataIniStr = req.query.dataIni || req.body.dataIni;
+            const dataFimStr = req.query.dataFim || req.body.dataFim;
+            const beneIdSelecionado = req.query.beneId || ''; // NOVO: ID do beneficiário filtrado
+
+            console.log("📅 Datas recebidas:", dataIniStr, "→", dataFimStr);
+            console.log("👤 Beneficiário selecionado:", beneIdSelecionado || "Nenhum (Todos)");
+
+            const mostrarParam = req.query.mostrar || 'geral';
+            const mostrarArr = mostrarParam.split(',').map(s => s.trim());
+            const mostrarGeral = mostrarArr.includes('geral');
+            const mostrarClinica = mostrarArr.includes('clinica');
+            const mostrarExternos = mostrarArr.includes('externos');
+            const filtrarBene = beneIdSelecionado !== ''; // NOVO: Booleano para saber se o filtro está ativo
+
+            console.log("🎛️ Containers a exibir:", { mostrarGeral, mostrarClinica, mostrarExternos, filtrarBene });
+
+            // Busca TODOS os beneficiários para o Select2 (Opção B: carrega com a página)
+            console.log("\n📥 Buscando lista completa de beneficiários para o Select2...");
+            const todosBenes = await Bene.find({}, 'bene_nome').sort({ bene_nome: 1 }).lean();
+
+            if (!dataIniStr || !dataFimStr) {
+                return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                    relsGeral: [], totaisGeral: {},
+                    relsClinica: [], totaisClinica: {},
+                    relsExternos: [], totaisExternos: {},
+                    periodoDe: '', periodoAte: '',
+                    pesquisa: { dataIni: '', dataFim: '' },
+                    mostrarGeral, mostrarClinica, mostrarExternos,
+                    filtrarBene, beneIdSelecionado, todosBenes // NOVO
+                });
+            }
+
+            const dataIni = new Date(dataIniStr);
+            const dataFim = new Date(dataFimStr);
+            dataFim.setUTCHours(23, 59, 59, 999);
+
+            // ---------------------- BUSCA ATEND ----------------------
+            console.log("\n📥 Buscando atendimentos...");
+            const atendimentos = await Atend.find(
+                {
+                    atend_atenddata: { $gte: dataIni, $lte: dataFim },
+                    atend_beneid: { $ne: null },
+                    atend_convid: { $ne: null }
+                },
+                'atend_beneid atend_convid atend_categoria atend_atenddata atend_atendhora atend_terapia atend_terapeuta atend_terapiaid atend_terapeutaid atend_salaid atend_sala'
+            ).lean();
+
+            console.log("   → Encontrados:", atendimentos.length);
+
+            if (atendimentos.length === 0) {
+                return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                    relsGeral: [], totaisGeral: {},
+                    relsClinica: [], totaisClinica: {},
+                    relsExternos: [], totaisExternos: {},
+                    periodoDe: dataIniStr.split("-").reverse().join("/"),
+                    periodoAte: dataFimStr.split("-").reverse().join("/"),
+                    pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr },
+                    mostrarGeral, mostrarClinica, mostrarExternos,
+                    filtrarBene, beneIdSelecionado, todosBenes
+                });
+            }
+
+            // ---------------------- BUSCAR NOMES ----------------------
+            const beneIds = [...new Set(atendimentos.map(a => String(a.atend_beneid)))];
+            const convIds = [...new Set(atendimentos.map(a => String(a.atend_convid)))];
+            const terapiaIds = [...new Set(atendimentos.map(a => String(a.atend_terapiaid)))];
+            const terapeutaIds = [...new Set(atendimentos.filter(a => a.atend_terapeutaid !== undefined && a.atend_terapeutaid !== null).map(a => String(a.atend_terapeutaid)))];
+            const salaIds = [...new Set(atendimentos.filter(a => a.atend_salaid !== undefined && a.atend_salaid !== null).map(a => String(a.atend_salaid)))];
+
+            console.log("\n📥 Buscando dados auxiliares...");
+            const [benes, convs, terapias, terapeutas, salas] = await Promise.all([
+                Bene.find({ _id: { $in: beneIds } }, 'bene_nome').lean(),
+                Conv.find({ _id: { $in: convIds } }, 'conv_nome').lean(),
+                Terapia.find({ _id: { $in: terapiaIds } }, 'terapia_nomecid').lean(),
+                Usuario.find({ _id: { $in: terapeutaIds } }, 'usuario_nome usuario_nomecompleto').lean(),
+                Sala.find({ _id: { $in: salaIds } }, 'sala_nome').lean()
+            ]);
+
+            const beneMap = Object.fromEntries(benes.map(b => [String(b._id), b.bene_nome]));
+            const convMap = Object.fromEntries(convs.map(c => [String(c._id), c.conv_nome]));
+            const terapiaMap = Object.fromEntries(terapias.map(t => [String(t._id), t.terapia_nomecid]));
+            const terapeutaMap = Object.fromEntries(terapeutas.map(t => [String(t._id), t.usuario_nomecompleto || t.usuario_nome]));
+            const salaMap = Object.fromEntries(salas.map(s => [String(s._id), s.sala_nome]));
+
+            const SALAS_EXTERNAS = ['Sala Escola', 'Casa', 'Sala On-line'];
+
+            // ---------------------- FUNÇÃO AUXILIAR DE AGRUPAMENTO ----------------------
+            // NOVO: Adicionado parâmetro beneIdFiltro
+            const agruparAtendimentos = (listaAtendimentos, filtroTipo, beneIdFiltro = null) => {
+                const mapa = {};
+
+                for (const at of listaAtendimentos) {
+                    const beneId = String(at.atend_beneid);
+                    
+                    // NOVO: Se houver filtro de beneficiário e o ID não bater, pula este atendimento
+                    if (beneIdFiltro && beneId !== beneIdFiltro) {
+                        continue;
+                    }
+
+                    const convId = String(at.atend_convid);
+                    const terapiaId = String(at.atend_terapiaid);
+                    const terapeutaId = String(at.atend_terapeutaid);
+                    const salaId = String(at.atend_salaid);
+                    const nomeSala = salaMap[salaId] || at.atend_sala || '';
+
+                    if (filtroTipo === 'clinica' && SALAS_EXTERNAS.includes(nomeSala)) continue;
+                    if (filtroTipo === 'externos' && !SALAS_EXTERNAS.includes(nomeSala)) continue;
+
+                    if (!mapa[beneId]) {
+                        mapa[beneId] = {
+                            bene_id: beneId,
+                            bene_nome: beneMap[beneId] || "—",
+                            convenio: convMap[convId] || "—",
+                            total_registros: 0,
+                            qt_falta: 0,
+                            qt_falta_abs: 0,
+                            qt_falta_jus: 0,
+                            qt_feriado: 0,
+                            detalhes: []
+                        };
+                    }
+
+                    const item = mapa[beneId];
+                    item.total_registros++;
+
+                    switch (at.atend_categoria) {
+                        case "Falta": item.qt_falta++; break;
+                        case "Falta Absoluta": item.qt_falta_abs++; break;
+                        case "Falta Justificada": item.qt_falta_jus++; break;
+                        case "Feriado": item.qt_feriado++; break;
+                    }
+
+                    const dataBr = at.atend_atenddata
+                        ? new Date(at.atend_atenddata).toISOString().slice(0, 10).split("-").reverse().join("/")
+                        : "—";
+
+                    item.detalhes.push({
+                        data: dataBr,
+                        hora: at.atend_atendhora || "—",
+                        sala: nomeSala || "—",
+                        terapia: terapiaMap[terapiaId] || at.atend_terapia || "—",
+                        terapeuta: terapeutaMap[terapeutaId] || "—",
+                        categoria: at.atend_categoria || "—"
+                    });
+                }
+                return mapa;
+            };
+
+            const calcularResultados = (mapa) => {
+                let rels = Object.values(mapa).map(r => {
+                    const totalFaltas = r.qt_falta + r.qt_falta_abs + r.qt_falta_jus;
+                    const indice = r.total_registros > 0
+                        ? parseFloat((totalFaltas / r.total_registros).toFixed(4))
+                        : 0;
+                    return { ...r, indice_faltas: (indice * 100).toFixed(2) };
+                });
+
+                rels.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, "pt", { sensitivity: "base" }));
+
+                const totais = rels.reduce((acc, r) => {
+                    acc.total_registros += r.total_registros;
+                    acc.qt_falta += r.qt_falta;
+                    acc.qt_falta_abs += r.qt_falta_abs;
+                    acc.qt_falta_jus += r.qt_falta_jus;
+                    acc.qt_feriado += r.qt_feriado;
+                    return acc;
+                }, { total_registros: 0, qt_falta: 0, qt_falta_abs: 0, qt_falta_jus: 0, qt_feriado: 0 });
+
+                const totalFaltasGeral = totais.qt_falta + totais.qt_falta_abs + totais.qt_falta_jus;
+                totais.indice_faltas = totais.total_registros > 0
+                    ? ((totalFaltasGeral / totais.total_registros) * 100).toFixed(2)
+                    : "0.00";
+
+                return { rels, totais };
+            };
+
+            console.log("\n📊 AGRUPANDO registros para os 3 containers...");
+
+            // NOVO: Passando beneIdSelecionado como filtro transversal
+            const mapaGeral = agruparAtendimentos(atendimentos, 'geral', beneIdSelecionado);
+            const { rels: relsGeral, totais: totaisGeral } = calcularResultados(mapaGeral);
+
+            const mapaClinica = agruparAtendimentos(atendimentos, 'clinica', beneIdSelecionado);
+            const { rels: relsClinica, totais: totaisClinica } = calcularResultados(mapaClinica);
+
+            const mapaExternos = agruparAtendimentos(atendimentos, 'externos', beneIdSelecionado);
+            const { rels: relsExternos, totais: totaisExternos } = calcularResultados(mapaExternos);
+
+            return res.render("atendimento/atendreltera/gestao/relfaltasbene", {
+                relsGeral, totaisGeral,
+                relsClinica, totaisClinica,
+                relsExternos, totaisExternos,
+                periodoDe: dataIniStr.split("-").reverse().join("/"),
+                periodoAte: dataFimStr.split("-").reverse().join("/"),
+                pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr },
+                mostrarGeral, mostrarClinica, mostrarExternos,
+                filtrarBene, beneIdSelecionado, todosBenes // NOVO
             });
 
         } catch (err) {

@@ -5,8 +5,6 @@
   <meta charset="utf-8">
   <title>Relatório de Faltas por Beneficiário</title>
 
-  <!-- Certifique-se de que o CSS do Select2 está sendo carregado no seu layout principal (Ace Admin) -->
-  
   <style>
     .detalhe-linha { background-color: #fafafa; display: none; }
     .detalhe-conteudo { padding: 12px 24px; }
@@ -37,6 +35,7 @@
     
     .text-orange { color: #d15b47 !important; font-weight: bold; }
 
+    /* Checkboxes de controle */
     .checkbox-container {
       background: #f9f9f9;
       border: 1px solid #ddd;
@@ -54,6 +53,7 @@
       cursor: pointer;
     }
 
+    /* Mensagem quando nenhum checkbox está marcado */
     .mensagem-vazia {
       text-align: center;
       padding: 40px 20px;
@@ -64,12 +64,6 @@
       font-size: 48px;
       margin-bottom: 15px;
       display: block;
-    }
-
-    /* Estilo para o container do Select2 ficar alinhado */
-    #containerSelectBene {
-      margin-top: 10px;
-      padding-left: 20px;
     }
   </style>
 </head>
@@ -105,53 +99,30 @@
 
             <!-- CHECKBOXES DE CONTROLE -->
             <div class="row">
-             <div class="col-sm-12">
-              <div class="checkbox-container" style="white-space: nowrap; overflow-x: auto;">
-                <strong><i class="ace-icon fa fa-filter"></i> Exibir:</strong>&nbsp;&nbsp;
-                <label style="display: inline-block; margin-right: 15px;">
-                  <input type="checkbox" name="mostrar" value="geral" id="chkGeral" {{#if mostrarGeral}}checked{{/if}}>
-                  Geral
-                </label>
-                <label style="display: inline-block; margin-right: 15px;">
-                  <input type="checkbox" name="mostrar" value="clinica" id="chkClinica" {{#if mostrarClinica}}checked{{/if}}>
-                  Clínica
-                </label>
-                <label style="display: inline-block; margin-right: 15px;">
-                  <input type="checkbox" name="mostrar" value="externos" id="chkExternos" {{#if mostrarExternos}}checked{{/if}}>
-                  Externos
-                </label>
-                
-                <span style="border-left: 1px solid #ccc; margin: 0 15px; display: inline-block; height: 20px; vertical-align: middle;"></span>
-                
-                <label style="display: inline-block; margin-right: 15px; vertical-align: middle;">
-                  <input type="checkbox" id="chkFiltrarBene" {{#if filtrarBene}}checked{{/if}}>
-                  Filtrar por Beneficiário
-                </label>
-                
-                <!-- SELECT2 (Oculto por padrão, inline quando visível) -->
-                <div id="containerSelectBene" style="display: none; vertical-align: middle; width: 300px;">
-                  <select id="selectBene" name="beneId" class="form-control" style="width: 100%;">
-                    <option value="">Escolha um beneficiário...</option>
-                    {{#each todosBenes}}
-                      <option value="{{_id}}" {{#ifCond _id '==' ../beneIdSelecionado}}selected{{/ifCond}}>{{bene_nome}}</option>
-                    {{/each}}
-                  </select>
+              <div class="col-sm-12">
+                <div class="checkbox-container">
+                  <strong><i class="ace-icon fa fa-filter"></i> Exibir:</strong>&nbsp;&nbsp;
+                  <label>
+                    <input type="checkbox" name="mostrar" value="geral" id="chkGeral" {{#if mostrarGeral}}checked{{/if}}>
+                    Geral
+                  </label>
+                  <label>
+                    <input type="checkbox" name="mostrar" value="clinica" id="chkClinica" {{#if mostrarClinica}}checked{{/if}}>
+                    Clínica
+                  </label>
+                  <label>
+                    <input type="checkbox" name="mostrar" value="externos" id="chkExternos" {{#if mostrarExternos}}checked{{/if}}>
+                    Externos
+                  </label>
                 </div>
               </div>
             </div>
-            </div>
           </form>
 
-          <!-- MENSAGEM: Nenhum container selecionado -->
+          <!-- MENSAGEM QUANDO NENHUM CHECKBOX ESTÁ MARCADO -->
           <div id="mensagemVazia" class="mensagem-vazia" style="display: none;">
             <i class="ace-icon fa fa-info-circle blue"></i>
             Selecione ao menos um tipo de relatório acima para visualizar.
-          </div>
-
-          <!-- MENSAGEM: Filtro de beneficiário ativo, mas nenhum escolhido (Opção A) -->
-          <div id="msgEscolhaBene" class="mensagem-vazia" style="display: none;">
-            <i class="ace-icon fa fa-user blue"></i>
-            Selecione um beneficiário na lista acima para visualizar os dados.
           </div>
 
           <!-- ============================================ -->
@@ -171,6 +142,7 @@
                     <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
                   </span>
                 </div>
+
                 <div class="widget-body">
                   <div class="widget-main">
                     <div class="row">
@@ -292,6 +264,7 @@
                     <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
                   </span>
                 </div>
+
                 <div class="widget-body">
                   <div class="widget-main">
                     <div class="row">
@@ -413,6 +386,7 @@
                     <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
                   </span>
                 </div>
+
                 <div class="widget-body">
                   <div class="widget-main">
                     <div class="row">
@@ -530,69 +504,29 @@
       if (dataIni) document.getElementById('dataFilDe').value = dataIni;
       if (dataFim) document.getElementById('dataFilAte').value = dataFim;
 
-      // Inicializa o Select2 (garantindo compatibilidade com Ace Admin)
-      if (typeof $.fn.select2 !== 'undefined') {
-        $('#selectBene').select2({
-          placeholder: "Escolha um beneficiário...",
-          allowClear: true,
-          width: 'resolve'
-        });
-      }
-
-      atualizarEstadoFiltros();
+      // Controlar visibilidade dos containers baseado nos checkboxes
+      controlarVisibilidade();
     }
 
-    function atualizarEstadoFiltros() {
+    function controlarVisibilidade() {
       const chkGeral = document.getElementById('chkGeral').checked;
       const chkClinica = document.getElementById('chkClinica').checked;
       const chkExternos = document.getElementById('chkExternos').checked;
-      const chkFiltrarBene = document.getElementById('chkFiltrarBene').checked;
-      
-      const containerSelect = document.getElementById('containerSelectBene');
-      const msgEscolhaBene = document.getElementById('msgEscolhaBene');
-      const selectBene = document.getElementById('selectBene');
-      const beneSelecionado = selectBene.value;
 
-      // 1. Controla visibilidade do Select2 e da mensagem de aviso
-      if (chkFiltrarBene) {
-        containerSelect.style.display = 'block';
-        if (!beneSelecionado) {
-          msgEscolhaBene.style.display = 'block';
-          // Esconde os containers principais se o filtro estiver ativo mas sem escolha
-          document.getElementById('containerGeral').style.display = 'none';
-          document.getElementById('containerClinica').style.display = 'none';
-          document.getElementById('containerExternos').style.display = 'none';
-          document.getElementById('mensagemVazia').style.display = 'none';
-          return; // Sai da função, pois a mensagem de escolher bene tem prioridade
-        } else {
-          msgEscolhaBene.style.display = 'none';
-        }
-      } else {
-        containerSelect.style.display = 'none';
-        msgEscolhaBene.style.display = 'none';
-      }
-
-      // 2. Controla visibilidade dos containers baseada nos checkboxes de tipo
       document.getElementById('containerGeral').style.display = chkGeral ? 'block' : 'none';
       document.getElementById('containerClinica').style.display = chkClinica ? 'block' : 'none';
       document.getElementById('containerExternos').style.display = chkExternos ? 'block' : 'none';
 
-      // 3. Mensagem se nenhum tipo de relatório estiver marcado
-      const nenhumTipoMarcado = !chkGeral && !chkClinica && !chkExternos;
-      document.getElementById('mensagemVazia').style.display = nenhumTipoMarcado ? 'block' : 'none';
+      // Mostrar mensagem se nenhum checkbox estiver marcado
+      const nenhumMarcado = !chkGeral && !chkClinica && !chkExternos;
+      document.getElementById('mensagemVazia').style.display = nenhumMarcado ? 'block' : 'none';
     }
 
+    // Event listeners para os checkboxes
     document.addEventListener('DOMContentLoaded', function() {
-      // Listeners para os checkboxes de tipo
-      document.getElementById('chkGeral').addEventListener('change', atualizarEstadoFiltros);
-      document.getElementById('chkClinica').addEventListener('change', atualizarEstadoFiltros);
-      document.getElementById('chkExternos').addEventListener('change', atualizarEstadoFiltros);
-      document.getElementById('chkFiltrarBene').addEventListener('change', atualizarEstadoFiltros);
-
-      // Listener para o Select2: ao mudar, submete o formulário (Opção A: recarrega a página)
-      $('#selectBene').on('change', function() {
-        document.getElementById('formFiltro').submit();
-      });
+      document.getElementById('chkGeral').addEventListener('change', controlarVisibilidade);
+      document.getElementById('chkClinica').addEventListener('change', controlarVisibilidade);
+      document.getElementById('chkExternos').addEventListener('change', controlarVisibilidade);
 
       // Expansão das linhas de detalhes
       document.querySelectorAll('.btn-expand').forEach(btn => {
@@ -616,27 +550,19 @@
         
         checkboxes.forEach(tipo => {
           const chk = document.querySelector(`input[value="${tipo}"]`);
-          if (chk && chk.checked) selecionados.push(tipo);
+          if (chk.checked) selecionados.push(tipo);
         });
 
+        // Remover inputs antigos de 'mostrar'
         document.querySelectorAll('input[name="mostrar"]').forEach(el => el.remove());
 
+        // Adicionar novo input com os valores selecionados
         if (selecionados.length > 0) {
           const input = document.createElement('input');
           input.type = 'hidden';
           input.name = 'mostrar';
           input.value = selecionados.join(',');
           this.appendChild(input);
-        }
-
-        // Se o checkbox de filtrar beneficiário estiver DESMARCADO, limpamos o beneId da URL
-        // para evitar que ele persista indevidamente se o usuário desmarcar.
-        const chkFiltrarBene = document.getElementById('chkFiltrarBene');
-        if (!chkFiltrarBene.checked) {
-            // Opcional: remover o parâmetro beneId da URL atual antes de submeter
-            // Mas como é um GET, o próprio navegador lida com os campos do form.
-            // Apenas garantimos que o select esteja desabilitado ou vazio se não for usar.
-            document.getElementById('selectBene').disabled = true;
         }
       });
     });

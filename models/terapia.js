@@ -6,6 +6,7 @@ const TerapiaSchema = mongoose.Schema({
     terapia_nome: { type: String, unique: true, required: true },
     terapia_nomecid: { type: String, required: false },
     terapia_cid: { type: String, required: false },
+    terapia_nomesnorelatorio:{ type: String, required: false },
     terapia_descricao: { type: String, required: false },
     terapia_status :  { type: String, required: false },
     //controle CRUD
@@ -24,6 +25,7 @@ class Terapia{
         terapia_nome,
         terapia_nomecid,
         terapia_cid,
+        terapia_nomesnorelatorio,
         terapia_descricao,
         terapia_status,
         //Controle CRUD
@@ -38,6 +40,7 @@ class Terapia{
         this.terapia_nome = terapia_nome,
         this.terapia_nomecid = terapia_nomecid,
         this.terapia_cid = terapia_cid,
+        this.terapia_nomesnorelatorio = terapia_nomesnorelatorio,
         this.terapia_descricao = terapia_descricao,
         this.terapia_status = terapia_status,
         //Controle CRUD
@@ -75,6 +78,7 @@ module.exports = {
                 terapia_nome: req.body.terapiaNome,
                 terapia_nomecid: req.body.terapiaNomeCid,
                 terapia_cid: req.body.terapiaCid,
+                terapia_nomesnorelatorio: req.body.terapiaNomesnorelatorio,
                 terapia_descricao: req.body.terapiaDescricao,
                 terapia_status: req.body.terapiaStatus,
                 terapia_dataedi: dataAtual,
@@ -110,6 +114,7 @@ module.exports = {
                 terapia_nome: req.body.terapiaNome,
                 terapia_nomecid: req.body.terapiaNomeCid,
                 terapia_cid: req.body.terapiaCid,
+                terapia_nomesnorelatorio: req.body.terapiaNomesnorelatorio,
                 terapia_descricao: req.body.terapiaDescricao,
                 terapia_status: req.body.terapiaStatus,
                 terapia_datacad: dataAtual,

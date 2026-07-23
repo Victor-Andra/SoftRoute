@@ -132,6 +132,7 @@
 														<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" >Id</th>
 														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Status</th>
 														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Descrição</th>
+														<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Exibir em Relatórios</th>
 														<th>Ação</th>
 
 													</tr>
@@ -158,6 +159,7 @@
 																{{/ifEqual}}
 															</td>
 															<td>{{terapia_descricao}}</td>
+															<td>{{terapia_nomesnorelatorio}}</td>
 															<td>
 																<div class="action-buttons">
 																	<a class="green" href="/menu/ferramentas/terapia/edi/{{_id}}">
@@ -214,9 +216,9 @@
             "url": "/js/lang/datatable-pt-br.json" // Substitua pelo caminho correto
         },
 			"aaSorting": [],
-			"aoColumns": [{ "bSortable": false }, null, null,  null, null, null,{ "bSortable": false }],
+			"aoColumns": [{ "bSortable": false }, null, null, null, null, null, null,{ "bSortable": false }],
 			"responsive": true,
-			"lengthMenu": [ 200],
+			"lengthMenu": [ 200, 500, 1000],
 			"lengthChange": true,
 			"autoWidth": true,
 			"paging": true,

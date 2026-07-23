@@ -2,77 +2,100 @@
 <html lang="pt-br">
 <head>
     <title>Editar Terapia</title>
-    <!-- CSS será inserido aqui na Parte 2 -->
-	<style>
-		/* Integração Select2 com Ace Admin */
-.select2-container .select2-selection--single {
-    border: 1px solid #ced4da !important;
-    border-radius: 4px !important;
-    box-shadow: none !important;
-    background: white !important;
-    height: 30px !important;
-    line-height: 30px !important;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        /* ==========================================
+           ESTILOS SELECT2 - PADRÃO ACE ADMIN
+           (Retangular, sem sombras, borda cinza, 
+            sem hover preto, alinhado à esquerda)
+           ========================================== */
+        .select2-container .select2-selection--single {
+            border: 1px solid #ccc !important; /* Cinza ao invés de preto */
+            border-radius: 0 !important; /* Retangular, sem cantos arredondados */
+            box-shadow: none !important; /* Sem sombras */
+            background: #fff !important;
+            height: 34px !important; /* Altura padrão Ace Admin */
+            line-height: 32px !important;
+        }
 
-.select2-container .select2-selection--single .select2-selection__rendered {
-    line-height: 28px !important;
-    padding-left: 10px !important;
-    color: #333 !important;
-}
+        .select2-container .select2-selection--single .select2-selection__rendered {
+            line-height: 32px !important;
+            padding-left: 12px !important;
+            color: #333 !important;
+            text-align: left !important; /* Alinhado à esquerda */
+        }
 
-.select2-container .select2-selection--single .select2-selection__arrow {
-    height: 28px !important;
-}
+        .select2-container .select2-selection--single .select2-selection__arrow {
+            height: 32px !important;
+            right: 8px !important;
+        }
 
-.select2-container--default .select2-selection--single .select2-selection__placeholder {
-    color: #999 !important;
-}
+        .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #999 !important;
+        }
 
-.select2-container .select2-selection--single:hover,
-.select2-container--default.select2-container--open .select2-selection--single {
-    border-color: #5bc0de !important;
-}
+        /* Hover suave, sem ficar preto */
+        .select2-container .select2-selection--single:hover,
+        .select2-container--default.select2-container--open .select2-selection--single {
+            border-color: #5bc0de !important; /* Azul claro Ace Admin */
+            box-shadow: none !important;
+        }
 
-.select2-dropdown {
-    border: 1px solid #ced4da !important;
-    border-top: none !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-    border-radius: 0 0 4px 4px !important;
-}
+        .select2-dropdown {
+            border: 1px solid #ccc !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
 
-.select2-search--dropdown .select2-search__field {
-    border: 1px solid #ced4da !important;
-    border-radius: 4px !important;
-    padding: 4px 8px !important;
-}
+        .select2-search--dropdown .select2-search__field {
+            border: 1px solid #ccc !important;
+            border-radius: 0 !important;
+            padding: 4px 8px !important;
+        }
 
-.select2-results__option {
-    padding: 6px 10px !important;
-}
+        .select2-results__option {
+            padding: 6px 12px !important;
+            text-align: left !important;
+        }
 
-/* COR AZUL CLARA NO HOVER E SELEÇÃO */
-.select2-results__option--highlighted[aria-selected],
-.select2-results__option:hover {
-    background-color: #5bc0de !important;
-    color: white !important;
-}
+        /* Cor azul clara no hover e seleção */
+        .select2-results__option--highlighted[aria-selected],
+        .select2-results__option:hover {
+            background-color: #5bc0de !important;
+            color: #fff !important;
+        }
 
-.select2-results__option[aria-selected="true"] {
-    background-color: #d9edf7 !important;
-    color: #31708f !important;
-}
+        .select2-results__option[aria-selected="true"] {
+            background-color: #d9edf7 !important;
+            color: #31708f !important;
+        }
 
-.form-group .select2-container {
-    width: 100% !important;
-}
-	</style>
+        .form-group .select2-container {
+            width: 100% !important;
+        }
+
+        /* Botões do mesmo tamanho */
+        .btn-action {
+            min-width: 120px;
+        }
+
+        /* Indicador de campo obrigatório */
+        .required-field::after {
+            content: " *";
+            color: #d15b47;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
-<body onload="javascript:controlaNave();" class="no-skin">
+<body class="no-skin">
 
     <div class="main-container ace-save-state" id="main-container">
         <div class="main-content">
             <div class="main-content-inner">
+                
                 <!-- Breadcrumbs -->
                 <div class="breadcrumbs ace-save-state" id="breadcrumbs">
                     <ul class="breadcrumb">
@@ -86,119 +109,124 @@
 
                 <div class="row">
                     <div class="col-xs-12">
-						<!-- PAGE CONTENT BEGINS -->
+                        
+                        <!-- Formulário Principal (Sem aninhamento) -->
                         <form class="form-horizontal" role="form" action="/menu/ferramentas/terapia/atualizar" method="POST" id="formTerapia">
-                            <div class="col-sm-12"><!-- Widget Dados Básicos -->
-								<!-- Widget: Dados Básicos -->
-								<div class="widget-box">
-									<div class="widget-header">
-										<h4 class="widget-title">Dados Básicos</h4>
-										<span class="widget-toolbar">
-											<a href="#" data-action="collapse">
-												<i class="ace-icon fa fa-chevron-up"></i>
-											</a>
-										</span>
-									</div>
+                            
+                            <!-- Widget: Dados Básicos (Layout Linear) -->
+                            <div class="widget-box">
+                                <div class="widget-header">
+                                    <h4 class="widget-title">Dados Básicos</h4>
+                                    <span class="widget-toolbar">
+                                        <a href="#" data-action="collapse">
+                                            <i class="ace-icon fa fa-chevron-up"></i>
+                                        </a>
+                                    </span>
+                                </div>
 
-									<div class="widget-body">
-										<div class="widget-main">
-											
-											<!-- Campo: Nome da Terapia -->
-											<div class="form-group">
-												<label class="col-sm-2 control-label no-padding-right" for="terapiaNome">Terapia</label>
-												<div class="col-sm-6">
-													<input type="text" id="terapiaNome" name="terapiaNome" class="form-control" placeholder="Ex: Psicologia" value="{{terapia.terapia_nome}}" required />
-												</div>
-											</div>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        
+                                        <!-- Campo: Nome da Terapia -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right required-field" for="terapiaNome">Terapia</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" id="terapiaNome" name="terapiaNome" class="form-control" placeholder="Ex: Psicologia" value="{{terapia.terapia_nome}}" required />
+                                            </div>
+                                        </div>
 
-											<!-- Campo: Terapia Nome CID / Convênio (Select2) -->
-											<div class="form-group">
-												<label class="col-sm-2 control-label no-padding-right" for="terapiaNomeCid">Nome CID / Convênio</label>
-												<div class="col-sm-6">
-													<select name="terapiaNomeCid" id="terapiaNomeCid" class="form-control select2">
-														<option value="">Selecione...</option>
-														<option value="ARTETERAPIA">ARTETERAPIA</option>
-														<option value="ABA">ABA</option>
-														<option value="AVALIAÇÃO">AVALIAÇÃO</option>
-														<option value="FISIOTERAPIA">FISIOTERAPIA</option>
-														<option value="FONOAUDIOLOGIA">FONOAUDIOLOGIA</option>
-														<option value="JUDÔ">JUDÔ</option>
-														<option value="MUSICOTERAPIA">MUSICOTERAPIA</option>
-														<option value="NUTRIÇÃO">NUTRIÇÃO</option>
-														<option value="PSICOLOGIA">PSICOLOGIA</option>
-														<option value="PSICOMOTRICIDADE">PSICOMOTRICIDADE</option>
-														<option value="PSICOMOTRICIDADE FUNCIONAL">PSICOMOTRICIDADE FUNCIONAL</option>
-														<option value="PSICOMOTRICIDADE RELACIONAL">PSICOMOTRICIDADE RELACIONAL</option>
-														<option value="PSICOPEDAGOGIA">PSICOPEDAGOGIA</option>
-														<option value="TCC">TCC</option>
-														<option value="TERAPIA AQUATICA">TERAPIA AQUÁTICA</option>
-														<option value="TO AVD">TO AVD</option>
-														<option value="TO IS">TO IS</option>
-													</select>
-												</div>
-											</div>
+                                        <!-- Campo: Terapia Nome CID / Convênio (Select2 Obrigatório) -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right required-field" for="terapiaNomeCid">Nome CID / Convênio</label>
+                                            <div class="col-sm-6">
+                                                <select name="terapiaNomeCid" id="terapiaNomeCid" class="form-control select2" required>
+                                                    <option value="">Selecione...</option>
+                                                    <option value="ARTETERAPIA">ARTETERAPIA</option>
+                                                    <option value="ABA">ABA</option>
+                                                    <option value="AVALIAÇÃO">AVALIAÇÃO</option>
+                                                    <option value="FISIOTERAPIA">FISIOTERAPIA</option>
+                                                    <option value="FONOAUDIOLOGIA">FONOAUDIOLOGIA</option>
+                                                    <option value="JUDÔ">JUDÔ</option>
+                                                    <option value="MUSICOTERAPIA">MUSICOTERAPIA</option>
+                                                    <option value="NUTRIÇÃO">NUTRIÇÃO</option>
+                                                    <option value="PSICOLOGIA">PSICOLOGIA</option>
+                                                    <option value="PSICOMOTRICIDADE">PSICOMOTRICIDADE</option>
+                                                    <option value="PSICOMOTRICIDADE FUNCIONAL">PSICOMOTRICIDADE FUNCIONAL</option>
+                                                    <option value="PSICOMOTRICIDADE RELACIONAL">PSICOMOTRICIDADE RELACIONAL</option>
+                                                    <option value="PSICOPEDAGOGIA">PSICOPEDAGOGIA</option>
+                                                    <option value="TCC">TCC</option>
+                                                    <option value="TERAPIA AQUATICA">TERAPIA AQUÁTICA</option>
+                                                    <option value="TO AVD">TO AVD</option>
+                                                    <option value="TO IS">TO IS</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-											<!-- Campo: CID -->
-											<div class="form-group">
-												<label class="col-sm-2 control-label no-padding-right" for="terapiaCid">CID</label>
-												<div class="col-sm-3">
-													<input type="text" id="terapiaCid" name="terapiaCid" class="form-control" placeholder="Ex: F84.0" value="{{terapia.terapia_cid}}" />
-												</div>
-											</div>
-											
-											<!-- Campo: Descrição -->
-											<div class="form-group">
-												<label class="col-sm-2 control-label no-padding-right" for="terapiaDescricao">Descrição</label>
-												<div class="col-sm-10">
-													<textarea id="terapiaDescricao" name="terapiaDescricao" class="form-control" rows="3" placeholder="Descreva detalhes da terapia...">{{terapia.terapia_descricao}}</textarea>
-												</div>
-											</div>
+                                        <!-- Campo: CID -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right" for="terapiaCid">CID</label>
+                                            <div class="col-sm-3">
+                                                <input type="text" id="terapiaCid" name="terapiaCid" class="form-control" placeholder="Ex: F84.0" value="{{terapia.terapia_cid}}" />
+                                            </div>
+                                        </div>
 
-											<!-- Campo: Status (Select2) -->
-											<div class="form-group">
-												<label class="col-sm-2 control-label no-padding-right" for="terapiaStatus">Status</label>
-												<div class="col-sm-4">
-													<select name="terapiaStatus" id="terapiaStatus" class="form-control select2">
-														<option value="">Selecione...</option>
-														<option value="Ativo">Ativo</option>
-														<option value="Inativo">Inativo</option>
-													</select>
-												</div>
-											</div>
+                                        <!-- Campo: Nome para exibir em relatórios -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right" for="terapiaNomesnorelatorio">Nome em Relatórios</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" id="terapiaNomesnorelatorio" name="terapiaNomesnorelatorio" class="form-control" placeholder="Ex: Terapia Ocupacional focada em AVD" value="{{terapia.terapia_nomesnorelatorio}}" />
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Campo: Descrição -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right" for="terapiaDescricao">Descrição</label>
+                                            <div class="col-sm-10">
+                                                <textarea id="terapiaDescricao" name="terapiaDescricao" class="form-control" rows="3" placeholder="Descreva detalhes da terapia...">{{terapia.terapia_descricao}}</textarea>
+                                            </div>
+                                        </div>
 
-											<!-- Campo Oculto: ID da Terapia -->
-											<input type="hidden" name="terapiaId" value="{{terapia._id}}" />
+                                        <!-- Campo: Status (Select2) -->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label no-padding-right required-field" for="terapiaStatus">Status</label>
+                                            <div class="col-sm-4">
+                                                <select name="terapiaStatus" id="terapiaStatus" class="form-control select2" required>
+                                                    <option value="">Selecione...</option>
+                                                    <option value="Ativo">Ativo</option>
+                                                    <option value="Inativo">Inativo</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-											<!-- 
-												INPUTS HIDDEN para consumo pelo carregaValoresForm()
-												Esses campos NÃO são enviados ao backend (name vazio ou fora do form principal)
-												mas servem como "ponte" entre o Handlebars e o JavaScript
-											-->
-											<input type="hidden" id="hidTerapiaNomeCid" value="{{terapia.terapia_nomecid}}" />
-											<input type="hidden" id="hidTerapiaStatus" value="{{terapia.terapia_status}}" />
+                                        <!-- Campo Oculto: ID da Terapia -->
+                                        <input type="hidden" name="terapiaId" value="{{terapia._id}}" />
 
-										</div>
-									</div>
-								</div>
-								<!-- Fim do Widget -->
+                                        <!-- Inputs Hidden para ponte com JavaScript (não são enviados no POST pois não têm 'name' útil ou são apenas leitura) -->
+                                        <input type="hidden" id="hidTerapiaNomeCid" value="{{terapia.terapia_nomecid}}" />
+                                        <input type="hidden" id="hidTerapiaStatus" value="{{terapia.terapia_status}}" />
 
-								<div class="space-4"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Fim do Widget -->
 
-								<!-- Ações do Formulário -->
-								<div class="clearfix form-actions">
-									<div class="col-md-offset-2 col-md-9">
-										<button class="btn btn-info" name="acao" type="submit">
-											<i class="ace-icon fa fa-check bigger-110"></i>
-											Salvar
-										</button>
-										&nbsp; &nbsp; &nbsp;
-										<a class="btn btn-warning" href="/menu/ferramentas/terapia/lis">
-											<i class="ace-icon fa fa-undo bigger-110"></i>
-											Voltar
-										</a>
-									</div>
-								</div>
-							</div>	
+                            <div class="space-4"></div>
+
+                            <!-- Ações do Formulário -->
+                            <div class="clearfix form-actions">
+                                <div class="col-md-offset-2 col-md-9">
+                                    <button class="btn btn-info btn-action" name="acao" type="submit">
+                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                        Salvar
+                                    </button>
+                                    &nbsp; &nbsp;
+                                    <a class="btn btn-default btn-action" href="/menu/ferramentas/terapia/lis">
+                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                        Voltar
+                                    </a>
+                                </div>
+                            </div>
+
                         </form>
                         <!-- Fim do Formulário -->
 
@@ -208,27 +236,51 @@
         </div>
     </div>
 
-    <!-- Scripts serão inseridos aqui na Parte 3 -->
-	<script>
-    $(document).ready(function() {
-        console.log('[DEBUG] $(document).ready() executando...');
-        
-        // 1. PRIMEIRO: Inicializa o Select2
-        if ($.fn.select2) {
-            $('.select2').select2({
-                placeholder: 'Selecione...',
-                allowClear: true,
-                width: '100%'
-            });
-            console.log('[DEBUG] Select2 inicializado');
+    <!-- Scripts de Inicialização e Controle -->
+    <script>
+        $(document).ready(function() {
+            console.log('[DEBUG] Inicializando view de Edição de Terapia...');
             
-            // 2. DEPOIS: Chama a função para popular os valores
-            carregaValoresForm();
+            // 1. Inicialização do Select2 com configurações explícitas
+            if ($.fn.select2) {
+                $('.select2').select2({
+                    placeholder: 'Selecione...',
+                    allowClear: true,
+                    width: '100%'
+                });
+                console.log('[DEBUG] Select2 inicializado com sucesso.');
+                
+                // 2. Carrega os valores vindos do banco (Handlebars) para os Select2
+                carregaValoresForm();
+            } else {
+                console.error('[DEBUG] ERRO: Biblioteca Select2 não encontrada.');
+            }
+        });
+
+        /**
+         * Função para popular os campos Select2 com os dados vindos do backend.
+         * Utiliza inputs hidden como ponte para evitar lógica complexa no template.
+         */
+        function carregaValoresForm() {
+            console.log('[DEBUG] Executando carregaValoresForm()...');
             
-        } else {
-            console.error('[DEBUG] ERRO: Select2 não carregado');
+            // Recupera os valores dos campos hidden preenchidos pelo Handlebars
+            var nomeCid = $('#hidTerapiaNomeCid').val().trim();
+            var status = $('#hidTerapiaStatus').val().trim();
+            
+            console.log('[DEBUG] Valores recuperados:', { nomeCid: nomeCid, status: status });
+
+            // Aplica o valor e dispara o evento 'change' (OBRIGATÓRIO para o Select2 renderizar)
+            if (nomeCid !== "") {
+                $('#terapiaNomeCid').val(nomeCid).trigger('change');
+                console.log('[DEBUG] terapiaNomeCid definido como:', nomeCid);
+            }
+
+            if (status !== "") {
+                $('#terapiaStatus').val(status).trigger('change');
+                console.log('[DEBUG] terapiaStatus definido como:', status);
+            }
         }
-    });
-</script>
+    </script>
 </body>
 </html>
