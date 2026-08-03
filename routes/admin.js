@@ -3750,6 +3750,16 @@ router.get('/guia/lote/gestao', fncGeral.IsAuthenticated, (req, res) => {
 router.post('/guia/lote/gestaofil', fncGeral.IsAuthenticated, (req, res) => {
     fncGuialote.filtragestaoGuialote(req, res);
 })
+
+// Consolidado de Lotes - Tela inicial
+router.get('/guia/lote/consolidado', fncGeral.IsAuthenticated, (req, res) => {
+    fncGuialote.consolidadoGuialote(req, res);
+})
+
+// Consolidado de Lotes - Filtrar
+router.post('/guia/lote/consolidadofil', fncGeral.IsAuthenticated, (req, res) => {
+    fncGuialote.filtraconsolidadoGuialote(req, res);
+})
 //------------------------------------------------------------------------------------------------
 
 //Menu Minha Agenda Area Tecnicos

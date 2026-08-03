@@ -177,7 +177,11 @@
             }
             this.atualizaDadosbene();
             
-            // Garante o estado correto da exibição do carimbo ao carregar a página
+            // Carrega a preferência salva (se houver)
+            const prefCarimbo = localStorage.getItem('preferenciaCarimbo');
+            if (prefCarimbo) {
+                document.getElementById("carimboExibir").value = prefCarimbo;
+            }
             toggleCarimbo(); 
         }
     
@@ -220,6 +224,9 @@
             var trCarimbo = document.getElementById("carimboExibicao");
             
             if (selectCarimbo && trCarimbo) {
+                // Salva a preferência do usuário
+                localStorage.setItem('preferenciaCarimbo', selectCarimbo.value);
+                
                 if (selectCarimbo.value === "Não") {
                     trCarimbo.style.display = "none";
                 } else {
@@ -231,7 +238,7 @@
 </head>
 
 <!-- Removido background-image inline para evitar problemas de renderização, e adicionado onload correto -->
-<body class="no-skin" onload="carregaBody();">
+<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
     
     <!-- PÁGINA 1: CAPA / TÍTULO -->
     <!-- Corrigido: removido atributo 'class' duplicado, unificado em um só -->
@@ -512,23 +519,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr id="carimboExibicao">
+                                   <tr id="carimboExibicao">
                                         <td style="padding-top: 20px; text-align: center; vertical-align: top;">
                                             {{#verificarVazioOuIndefinido this.carimboUsuPad }}
                                             {{else}}
-                                                <img src="data:image/png;base64, {{carimboUsuPad}}" alt="Carimbo Padrão" style="max-width: 200px; max-height: 150px;">
+                                                <!-- SEM ESPAÇO após a vírgula -->
+                                                <img src="data:image/png;base64,{{carimboUsuPad}}" alt="Carimbo Padrão" style="max-width: 200px; max-height: 150px;">
                                             {{/verificarVazioOuIndefinido}}
                                         </td>
                                         <td style="padding-top: 20px; text-align: center; vertical-align: top;">
                                             {{#verificarVazioOuIndefinido this.carimboUsuIs }}
                                             {{else}}
-                                                <img src="data:image/png;base64, {{carimboUsuIs}}" alt="Carimbo IS" style="max-width: 200px; max-height: 150px;">
+                                                <img src="data:image/png;base64,{{carimboUsuIs}}" alt="Carimbo IS" style="max-width: 200px; max-height: 150px;">
                                             {{/verificarVazioOuIndefinido}}
                                         </td>
                                         <td style="padding-top: 20px; text-align: center; vertical-align: top;">
                                             {{#verificarVazioOuIndefinido this.carimboUsuAvd }}
                                             {{else}}
-                                                <img src="data:image/png;base64, {{carimboUsuAvd}}" alt="Carimbo AVD" style="max-width: 200px; max-height: 150px;">
+                                                <img src="data:image/png;base64,{{carimboUsuAvd}}" alt="Carimbo AVD" style="max-width: 200px; max-height: 150px;">
                                             {{/verificarVazioOuIndefinido}}
                                         </td>
                                     </tr>

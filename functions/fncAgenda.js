@@ -11150,7 +11150,7 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
     let dataIni = new Date(baseDate.getFullYear(), (baseDate.getUTCMonth()), 1, 0, 0, 0, 0);
     let dataFim = new Date(baseDate.getFullYear(), (baseDate.getUTCMonth()+1), 1, 23, 59, 59, 0);
     dataFim.setDate(dataFim.getDate()-1);
-    dataFim.setDate(9);
+    //dataIni.setDate(10);
     console.log("dataIni: "+dataIni);
     console.log("dataFim: "+dataFim);
     
@@ -11169,7 +11169,7 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
     var agendaFixa = await Agenda.find({
       agenda_data: { $gte: dataIni, $lte: dataFim },
       agenda_temp: false,
-      agenda_beneid: new ObjectId("69b06c2aaab4d8c76942979c"),
+      //agenda_beneid: new ObjectId("62d6f710ea444f5b7a025aab"),//62d6f710ea444f5b7a025aab
       //agenda_migrado : false, 
       $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } }]
     }).lean();
@@ -11179,7 +11179,7 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
       agenda_data: { $gte: dataIni, $lte: dataFim },
       agenda_temp: true,
       //agenda_migrado : false, 
-      agenda_beneid: new ObjectId("69b06c2aaab4d8c76942979c"),
+      //agenda_beneid: new ObjectId("62d6f710ea444f5b7a025aab"),
       $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } }]
     }).lean();
     console.log("agendaSemanal.length: "+agendaSemanal.length)

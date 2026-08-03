@@ -1138,7 +1138,7 @@ module.exports = {
             res.render('admin/erro')
         })
     },
-    async tratImp(req, res) {
+    async tratImp_OLD2_errocarimbo(req, res) {
     try {
         // 1. Variáveis de contexto
         const db = req.cookies['preferredDb'];
@@ -1191,6 +1191,120 @@ module.exports = {
         usuarios.forEach((usu) => {
             if (usu.usuario_carimbo) {
                 const carimboBase64 = Buffer.from(usu.usuario_carimbo, 'binary').toString('base64');
+                const idUsuString = String(usu._id);
+
+                if (trat.trat_planotipo === "Padrão" && String(trat.trat_terapeutaidpad) === idUsuString) {
+                    carimboUsuPad = carimboBase64;
+                } else if (trat.trat_planotipo === "Ocupacional" && String(trat.trat_terapeutaidis) === idUsuString) {
+                    carimboUsuIs = carimboBase64;
+                } else if (trat.trat_planotipo === "Ocupacional" && String(trat.trat_terapeutaidavd) === idUsuString) {
+                    carimboUsuAvd = carimboBase64;
+                } else if (idUsuString === '62e008adea444f5b7a02c04f') {
+                    carimboRoute = carimboBase64;
+                }
+            }
+        });
+
+        // 7. Renderização da View enviando o mesanoFiltro
+        res.render("area/plano/tratImp", {
+            trat,
+            laudos: laudo,
+            terapias: terapia,
+            usuarios,
+            benes: bene,
+            usuarioAtual,
+            perfilAtual,
+            tratDataCadSimpleFormat,
+            carimboRoute,
+            carimboUsuPad,
+            carimboUsuIs,
+            carimboUsuAvd,
+            mesanoFiltro // <-- NOVO: Envia o valor para a view
+        });
+
+    } catch (err) {
+        console.error("Erro em tratImp:", err);
+        req.flash("error_message", "Houve um erro ao realizar as listas!");
+        res.render('admin/erro');
+        // Ou res.redirect('/area/plano'); dependendo do seu fluxo de erro
+    }
+},
+    async tratImp(req, res) {
+    try {
+        // 1. Variáveis de contexto
+        const db = req.cookies['preferredDb'];
+        const usuarioAtual = req.cookies['idUsu'];
+        const perfilAtual = req.cookies['lvlUsu'];
+        
+        // CAPTURA O FILTRO DA URL (se existir), senão deixa vazio
+        const mesanoFiltro = req.query.mesano || ''; 
+
+        // 2. Inicialização dos Models
+        const Trat = getModel(db, 'tb_trat', tratClass.TratSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Laudo = getModel(db, 'tb_laudo', laudoClass.LaudoSchema);
+        const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
+
+        // 3. Busca principal do tratamento
+        const trat = await Trat.findOne({ _id: req.params.id });
+        if (!trat) {
+            req.flash("error_message", "Plano de tratamento não encontrado!");
+            return res.redirect('/area/plano'); // Ou a rota de lista que você usar
+        }
+
+        const tratDataCadSimpleFormat = fncGeral.getData(trat.trat_datacad);
+
+        // 4. Busca dos dados auxiliares em paralelo (muito mais rápido que um .then() dentro do outro)
+        const [terapia, usuarios, laudo, bene] = await Promise.all([
+            Terapia.find(),
+            Usuario.find(),
+            Laudo.find(),
+            Bene.find({ bene_nome: { $not: /\./ } })
+        ]);
+
+        // 5. Ordenação (mantendo sua lógica original de normalização)
+        usuarios.sort((a, b) => {
+            const nomeA = a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            const nomeB = b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            return nomeA > nomeB ? 1 : (nomeB > nomeA ? -1 : 0);
+        });
+
+        bene.sort((a, b) => {
+            const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            return nomeA > nomeB ? 1 : (nomeB > nomeA ? -1 : 0);
+        });
+
+       // 6. Processamento dos Carimbos
+        let carimboUsuPad, carimboUsuAvd, carimboUsuIs, carimboRoute;
+
+        usuarios.forEach((usu) => {
+            if (usu.usuario_carimbo) {
+                let carimboBase64 = "";
+                
+                // TRATAMENTO ROBUSTO PARA DIFERENTES TIPOS DE DADOS NO BANCO
+                if (Buffer.isBuffer(usu.usuario_carimbo)) {
+                    // Cenário A: O Mongoose retornou um Buffer nativo
+                    carimboBase64 = usu.usuario_carimbo.toString('base64');
+                } else if (typeof usu.usuario_carimbo === 'string') {
+                    // Cenário B: O banco está salvando como String Base64
+                    carimboBase64 = usu.usuario_carimbo;
+                    // Remove o prefixo "data:image/...;base64," se já existir no banco,
+                    // pois a sua view já adiciona esse prefixo no HTML.
+                    if (carimboBase64.includes('base64,')) {
+                        carimboBase64 = carimboBase64.split('base64,')[1];
+                    }
+                } else if (usu.usuario_carimbo.buffer) {
+                    // Cenário C: Veio como tipo 'Binary' do driver nativo do MongoDB
+                    carimboBase64 = usu.usuario_carimbo.buffer.toString('base64');
+                } else if (usu.usuario_carimbo.type === 'Buffer' && usu.usuario_carimbo.data) {
+                    // Cenário D: Veio como objeto JSON { type: 'Buffer', data: [...] }
+                    carimboBase64 = Buffer.from(usu.usuario_carimbo.data).toString('base64');
+                }
+
+                if (!carimboBase64) return; // Pula se não conseguiu extrair nada
+
                 const idUsuString = String(usu._id);
 
                 if (trat.trat_planotipo === "Padrão" && String(trat.trat_terapeutaidpad) === idUsuString) {

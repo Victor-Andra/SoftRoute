@@ -1136,68 +1136,7 @@
 													<div class="count-value">{{estatisticas.qtva}}</div>
 												</div>
 											</div>
-											<!-- QTGU - Guias Únicas -->
-											<div class="col-xs-6 col-sm-3">
-												<div class="count-card success" title="Quantidade de números de guia distintos (unívocos) no período">
-													<div class="count-header">
-														<i class="ace-icon fa fa-fingerprint count-icon"></i>
-														<span class="count-label">Guias Únicas</span>
-													</div>
-													<div class="count-value">{{estatisticas.qguiasUnicas}}</div>
-												</div>
-											</div>
 										</div>
-									</div>
-								</div>
-							</div>
-							<!-- ============================================
-								CONSOLIDADO POR TERAPIA (RETRÁTIL)
-								============================================ -->
-						<div class="widget-box">
-								<div class="widget-header widget-header-flat widget-header-small">
-									<h4 class="widget-title">
-										<i class="ace-icon fa fa-pie-chart"></i>
-										Consolidado de Guias por Terapia
-									</h4>
-									<div class="widget-toolbar">
-										<a href="#" data-action="collapse">
-											<i class="ace-icon fa fa-chevron-up"></i>
-										</a>
-									</div>
-								</div>
-								<div class="widget-body">
-									<div class="widget-main">
-										<table class="table table-striped table-bordered table-hover" style="font-size: 12px;">
-											<thead>
-												<tr>
-													<th>Terapia</th>
-													<th class="center">Qtd. Total de Guias</th>
-													<th class="center">Qtd. Guias Únicas</th>
-												</tr>
-											</thead>
-											<tbody>
-												{{#each consolidadoTerapias}}
-												<tr>
-													<td><strong>{{this.terapia_nome}}</strong></td>
-													<td class="center">{{this.total_guias}}</td>
-													<td class="center"><span class="badge badge-info">{{this.guias_unicas}}</span></td>
-												</tr>
-												{{else}}
-												<tr>
-													<td colspan="3" class="center text-muted">Nenhuma guia encontrada no período filtrado.</td>
-												</tr>
-												{{/each}}
-											</tbody>
-											{{#if consolidadoTerapias}}
-											<tfoot>
-												<tr style="background-color: #f5f5f5; font-weight: bold;">
-													<td class="text-right">TOTAL GERAL:</td>
-													<td class="center">{{totalGeralGuias}}</td>
-													<td class="center"><span class="badge badge-success">{{estatisticas.qguiasUnicas}}</span></td>
-												</tr>
-											</tfoot>
-											{{/if}}
-										</table>
 									</div>
 								</div>
 							</div>
@@ -1245,76 +1184,77 @@
 												</tr>
 											</thead>
 											<tbody>
-												{{#each extras}}
-													<tr role="row" class="odd">
-														<td class="center">
-															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
-																<span class="lbl"></span>
-															</label>
-														</td>
-														<td>{{agenda_data_dia}}</td>
-														<td>{{agenda_hora}}</td>
-														
-														<!-- ✅ CAMPOS ENRIQUECIDOS COM _display (acesso direto, sem loops) -->
-														<td>{{bene_nome_display}}</td>
-														<td>{{conv_nome_display}}</td>
-														<td>{{terapeuta_nome_display}}</td>
-														<td>{{terapia_nomecid_display}}</td>
-														
-														<td>{{agenda_categoria}}</td>
-														
-														<!-- Evolução: Sim / Não -->
-														<td>
-															{{#ifEqual evolucaoSimNao "Sim"}}
-																<span class="badge badge-success">Sim</span>
-															{{else}}
-																<span class="badge badge-danger">Não</span>
-															{{/ifEqual}}
-														</td>
+    {{#each extras}}
+        <tr role="row" class="odd">
+            <td class="center">
+                <label class="pos-rel">
+                    <input type="checkbox" class="ace" />
+                    <span class="lbl"></span>
+                </label>
+            </td>
+            <td>{{agenda_data_dia}}</td>
+            <td>{{agenda_hora}}</td>
+            
+            <!-- ✅ CAMPOS ENRIQUECIDOS COM _display (acesso direto, sem loops) -->
+            <td>{{bene_nome_display}}</td>
+            <td>{{conv_nome_display}}</td>
+            <td>{{terapeuta_nome_display}}</td>
+            <td>{{terapia_nomecid_display}}</td>
+            
+            <td>{{agenda_categoria}}</td>
+            
+            <!-- Evolução: Sim / Não -->
+            <td>
+                {{#ifEqual evolucaoSimNao "Sim"}}
+                    <span class="badge badge-success">Sim</span>
+                {{else}}
+                    <span class="badge badge-danger">Não</span>
+                {{/ifEqual}}
+            </td>
 
-														<!-- Guia, Senha, Data Senha como inputs -->
-														<td>
-															<input type="text" name="agendaId" value="{{_id}}" hidden />
-															<input type="text" name="guia_num{{_id}}" value="{{agenda_guia.guia_num}}" style="width:100%; padding:2px; font-size:12px;" />
-														</td>
-														<td>
-															<input type="date" name="dataguia_{{_id}}" 
-																{{#if guia_numdatacad_input}}
-																	value="{{guia_numdatacad_input}}"
-																{{/if}}
-																style="width:100%; padding:2px; font-size:12px;" />
-														</td>
-														<td>
-															<input type="text" name="senha_{{_id}}" value="{{agenda_guia.guia_senha}}" style="width:100%; padding:2px; font-size:12px;" />
-														</td>
-														<td>
-														<input type="date" name="datasenha_{{_id}}" 
-															value="{{guia_senhadatacad_input}}"
-															style="width:100%; padding:2px; font-size:12px;" />
-														</td>
+            <!-- Guia, Senha, Data Senha como inputs -->
+            <td>
+                <input type="text" name="agendaId" value="{{_id}}" hidden />
+                <input type="text" name="guia_num{{_id}}" value="{{agenda_guia.guia_num}}" style="width:100%; padding:2px; font-size:12px;" />
+            </td>
+            <td>
+                <input type="date" name="dataguia_{{_id}}" 
+                    {{#if guia_numdatacad_input}}
+                        value="{{guia_numdatacad_input}}"
+                    {{/if}}
+                    style="width:100%; padding:2px; font-size:12px;" />
+            </td>
+            <td>
+                <input type="text" name="senha_{{_id}}" value="{{agenda_guia.guia_senha}}" style="width:100%; padding:2px; font-size:12px;" />
+            </td>
+            <td>
+               <input type="date" name="datasenha_{{_id}}" 
+				value="{{guia_senhadatacad_input}}"
+				style="width:100%; padding:2px; font-size:12px;" />
+            </td>
 
-													<!-- Tooltip com dados de edição/cadastro CORRIGIDO para mostrar dados da GUIA -->
-<td>
-    <div class="action-buttons">
-        <button class="btnSalvarGuia">💾</button>
-        <a class="purple custom-tooltip" href="javascript:void(0);" title="Detalhes">
-            <i class="ace-icon fa fa-eye bigger-130"></i>
-            <span class="tooltip-text">
-                <strong style="color:#0056b3;">📅 DADOS DO AGENDAMENTO:</strong><br>
-                Criado: {{datacad}} por {{usuarioCadNome}}<br>
-                Editado: {{dataedi}} por {{usuarioEdiNome}}<br>
-                <hr style="margin: 5px 0; border: 0; border-top: 1px solid #ccc;">
-                <strong style="color:#28a745;">💰 DADOS DA GUIA/FATURAMENTO:</strong><br>
-                Inserida: {{guiaDatacad}} por {{guiaUsuarioCadNome}}<br>
-                Alt. Guia: {{guiaDataedi}} por {{guiaUsuarioEdiNome}}
-            </span>
-        </a>
-    </div>
-</td>
-													</tr>
-												{{/each}}
-											</tbody>
+            <!-- Tooltip com dados de edição/cadastro -->
+            <td>
+                <div class="action-buttons">
+                    <button class="btnSalvarGuia">💾</button>
+                    <a class="purple custom-tooltip" href="#" title="Detalhes">
+                        <i class="ace-icon fa fa-eye bigger-130"></i>
+                        <span class="tooltip-text">
+                            <strong>Cadastrado em:</strong><br>
+                            {{datacad}}<br>
+                            <strong>Por:</strong><br>
+                            {{usuarioCadNome}}<br><br>
+                            <strong>Última Edição:</strong><br>
+                            {{dataedi}}<br>
+                            <strong>Por:</strong><br>
+                            {{usuarioEdiNome}}
+                        </span>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    {{/each}}
+</tbody>
 										</table>
 									</div>
 								</div>

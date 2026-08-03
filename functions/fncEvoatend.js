@@ -3057,8 +3057,6 @@ async apagarEvolucaoIndevidaevoatend(req, res) {
             // Remove agendas temporárias e ordena
             var agendasFiltradas = agenda.sort((a, b) => (a.agenda_benenome || "").localeCompare(b.agenda_benenome || "", 'pt-BR'));
 
-            
-
             // ===== BUSCAS AUXILIARES EM PARALELO =====
             const [bene, usuario, horaage, sala, terapia, ano, conv] = await Promise.all([
                 Bene.find().lean(),

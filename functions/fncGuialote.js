@@ -1777,344 +1777,345 @@ module.exports = {FiltroEvoatend,
             res.redirect('/admin/erro');
         });
     },
-filtragestaoGuialote(req, res, resposta) {
-    let db = req.cookies['preferredDb'];
 
-    // ✅ Models locais
-    const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
-    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-    const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
-    const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+    filtragestaoGuialote(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
 
-    if (!resposta || typeof resposta !== 'object') {
-        resposta = { texto: '', sucesso: false };
-    }
-    let flash = new Resposta();
-    flash.texto = resposta.texto;
-    flash.sucesso = resposta.sucesso;
+        // ✅ Models locais
+        const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
 
-    // ✅ Capturar filtros do body
-    const tipoData = req.body.tipoData;
-    const anoAtend = req.body.anoAtend;
-    const mesAtend = req.body.mesAtend;
-    const dataFil = req.body.dataFil;
-    const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
-    const atendBeneficiario = req.body.atendBeneficiario;
-    const atendTerapeuta = req.body.atendTerapeuta || '766f69643132333435366964';
-    const atendConvenio = req.body.atendConvenio;
-
-    let dataIni, dataFim;
-
-    // ✅ Lógica de filtro de data
-    if (tipoData === "Ano/Mes") {
-        const ano = parseInt(anoAtend);
-        const mes = parseInt(mesAtend);
-        if (isNaN(ano) || isNaN(mes)) {
-            return res.render('admin/erro', { message: "Ano ou mês inválido." });
+        if (!resposta || typeof resposta !== 'object') {
+            resposta = { texto: '', sucesso: false };
         }
-        dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
-        dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
-    } else if (tipoData === "Dia") {
-        if (!dataFil) {
-            return res.render('admin/erro', { message: "Data não informada." });
+        let flash = new Resposta();
+        flash.texto = resposta.texto;
+        flash.sucesso = resposta.sucesso;
+
+        // ✅ Capturar filtros do body
+        const tipoData = req.body.tipoData;
+        const anoAtend = req.body.anoAtend;
+        const mesAtend = req.body.mesAtend;
+        const dataFil = req.body.dataFil;
+        const atendTipoPessoa = req.body.atendTipoPessoa || 'Geral';
+        const atendBeneficiario = req.body.atendBeneficiario;
+        const atendTerapeuta = req.body.atendTerapeuta || '766f69643132333435366964';
+        const atendConvenio = req.body.atendConvenio;
+
+        let dataIni, dataFim;
+
+        // ✅ Lógica de filtro de data
+        if (tipoData === "Ano/Mes") {
+            const ano = parseInt(anoAtend);
+            const mes = parseInt(mesAtend);
+            if (isNaN(ano) || isNaN(mes)) {
+                return res.render('admin/erro', { message: "Ano ou mês inválido." });
+            }
+            dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
+            dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
+        } else if (tipoData === "Dia") {
+            if (!dataFil) {
+                return res.render('admin/erro', { message: "Data não informada." });
+            }
+            const [ano, mes, dia] = dataFil.split('-').map(Number);
+            dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
+            dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
+        } else {
+            return res.render('admin/erro', { message: "Tipo de filtro inválido." });
         }
-        const [ano, mes, dia] = dataFil.split('-').map(Number);
-        dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
-        dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
-    } else {
-        return res.render('admin/erro', { message: "Tipo de filtro inválido." });
-    }
 
-    // ✅ QUERY BASE COM FILTROS (IGUAL À filtraGuialotelis)
-    let agendaQuery = {
-        agenda_data: { $gte: dataIni, $lte: dataFim },
-        agenda_categoria: { $nin: ["Extra", "Reuniao", "Pais", "Glosa"] }
-    };
+        // ✅ QUERY BASE COM FILTROS (IGUAL À filtraGuialotelis)
+        let agendaQuery = {
+            agenda_data: { $gte: dataIni, $lte: dataFim },
+            agenda_categoria: { $nin: ["Extra", "Reuniao", "Pais", "Glosa"] }
+        };
 
-    // ✅ Aplicar filtros de pessoa
-    if (atendTipoPessoa === "Beneficiario" && atendBeneficiario && atendBeneficiario !== '766f69643132333435366964') {
-        agendaQuery.agenda_beneid = atendBeneficiario;
-    } else if (atendTipoPessoa === "Terapeuta" && atendTerapeuta && atendTerapeuta !== '766f69643132333435366964') {
-        agendaQuery.agenda_usuid = atendTerapeuta;
-    } else if (atendTipoPessoa === "Convênio" && atendConvenio) {
-        agendaQuery.agenda_convid = atendConvenio;
-    }
+        // ✅ Aplicar filtros de pessoa
+        if (atendTipoPessoa === "Beneficiario" && atendBeneficiario && atendBeneficiario !== '766f69643132333435366964') {
+            agendaQuery.agenda_beneid = atendBeneficiario;
+        } else if (atendTipoPessoa === "Terapeuta" && atendTerapeuta && atendTerapeuta !== '766f69643132333435366964') {
+            agendaQuery.agenda_usuid = atendTerapeuta;
+        } else if (atendTipoPessoa === "Convênio" && atendConvenio) {
+            agendaQuery.agenda_convid = atendConvenio;
+        }
 
-    // ✅ PASSO 1: Buscar TODOS os usuários
-    Usuario.find({})
-        .then((todosUsuarios) => {
-            const usuarioMap = {};
-            todosUsuarios.forEach(u => {
-                usuarioMap[u._id.toString()] = u.usuario_nome;
-            });
-
-            console.log("📋 [MAPA DE USUÁRIOS CRIADO]");
-            console.log("→ Total de usuários carregados:", todosUsuarios.length);
-
-            // ✅ PASSO 2: Buscar agendas
-            return Agenda.find(agendaQuery)
-                .populate([
-                    {
-                        path: 'agenda_loteid',
-                        select: 'guialote_num guialote_numdatacad guialote_numprotocolo guialote_dataenvio guialote_guialotevalor guialote_status guialote_log guialote_usucad guialote_datacad guialote_usuedi guialote_dataedi guialote_qtatend guialote_agendas',
-                        strictPopulate: false,
-                        populate: [
-                            { path: 'guialote_usucad', model: Usuario, select: 'usuario_nome' },
-                            { path: 'guialote_usuedi', model: Usuario, select: 'usuario_nome' }
-                        ]
-                    }
-                ])
-                .then((agendas) => {
-                    console.log("✅ [RESULTADO DA AGENDA]");
-                    console.log("→ Total de registros encontrados:", agendas.length);
-
-                    // 🔥 REGRAS DE NEGÓCIO: FILTRAGEM
-
-                    // 1. Remover agendas temporárias
-                    let idsAgendasEx = [];
-                    agendas.forEach(e => {
-                        if (e.agenda_temp) {
-                            idsAgendasEx.push(e.agenda_tempId.toString());
-                        }
-                    });
-                    agendas = agendas.filter(a => !idsAgendasEx.includes(a._id.toString()));
-                    console.log("🗑️ [FILTRO TEMPORÁRIAS] Removidas:", idsAgendasEx.length);
-
-                    // 2. Remover cancelados (Feriado e Falta Absoluta)
-                    agendas = agendas.filter(a => {
-                        const cat = a.agenda_categoria;
-                        return cat !== "Falta Absoluta" && cat !== "Feriado";
-                    });
-                    console.log("🗑️ [FILTRO CANCELADOS] Total após filtro:", agendas.length);
-
-                    // ✅ CÁLCULO DAS ESTATÍSTICAS GLOBAIS
-                    const estatisticas = {
-                        qa: 0, qt: 0, qac: 0, qtv: 0, qtse: 0, qace: 0,
-                        atvo: 0, qtva: 0, qtvL: 0, qtvLo: 0,
-                        qtdGuias: 0
-                    };
-
-                    // ✅ Set para contar guias únicas GLOBALMENTE (APENAS COM LOTE)
-                    const guiasSetGlobal = new Set();
-
-                    // Loop 1: Estatísticas globais
-                    agendas.forEach(a => {
-                        estatisticas.qa++;
-
-                        const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
-                        const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
-                        const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
-                        const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
-                        const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
-
-                        // ✅ CORRIGIDO: Adicionar guia ao Set global APENAS SE TIVER LOTE
-                        if (temGuia && temLote) {
-                            guiasSetGlobal.add(a.agenda_guia?.guia_num?.trim());
-                        }
-
-                        if (ehCancelado) {
-                            estatisticas.qac++;
-                            if (temEvolucao) estatisticas.qace++;
-                        } else {
-                            estatisticas.qt++;
-                            if (temEvolucao) {
-                                estatisticas.qtv++;
-                                if (!temGuia || !temSenha) {
-                                    estatisticas.atvo++;
-                                } else {
-                                    estatisticas.qtva++;
-                                    if (temLote) estatisticas.qtvL++;
-                                    else estatisticas.qtvLo++;
-                                }
-                            } else {
-                                estatisticas.qtse++;
-                            }
-                        }
-                    });
-
-                    // ✅ Definir total global de guias únicas (APENAS COM LOTE)
-                    estatisticas.qtdGuias = guiasSetGlobal.size;
-
-                    console.log("📊 [ESTATÍSTICAS GLOBAIS]");
-                    console.log("→ QA (Total):", estatisticas.qa);
-                    console.log("→ QT (Válidos):", estatisticas.qt);
-                    console.log("→ QTDGUIAS (Guias Únicas COM LOTE):", estatisticas.qtdGuias);
-
-                    // ✅ PASSO 3: Buscar dados complementares
-                    return Promise.all([
-                        Bene.find().sort({ bene_nome: 1 }),
-                        Conv.find().sort({ conv_nome: 1 }),
-                        Terapia.find().sort({ terapia_nome: 1 }),
-                        Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }),
-                        Sala.find().sort({ sala_nome: 1 }),
-                        Ano.find().sort({ ano_nome: -1 })
-                    ])
-                        .then(([benes, convs, terapias, horaages, salas, anos]) => {
-
-                            const beneMap = {};
-                            const convMap = {};
-                            const terapiaMap = {};
-
-                            benes.forEach(b => { beneMap[b._id.toString()] = b.bene_nome; });
-                            convs.forEach(c => { convMap[c._id.toString()] = c.conv_nome; });
-                            terapias.forEach(t => { terapiaMap[t._id.toString()] = t.terapia_nomecid; });
-
-                            // ✅ AGRUPAR POR LOTE
-                            const lotesMap = {};
-                            const atendimentosOrfaos = [];
-
-                            // Loop 2: Agrupar por lote e contar guias por lote
-                            agendas.forEach(a => {
-                                const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
-                                const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
-                                const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
-                                const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
-                                const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
-
-                                const nomeTerapeuta = usuarioMap[a.agenda_usuid?.toString()] || 'Terapeuta não encontrado';
-                                const nomeBeneficiario = beneMap[a.agenda_beneid?.toString()] || 'Sem nome';
-                                const nomeConvenio = convMap[a.agenda_convid?.toString()] || 'Sem convênio';
-                                const nomeTerapia = terapiaMap[a.agenda_terapiaid?.toString()] || 'Sem terapia';
-
-                                const ehValidoParaLote = !ehCancelado && temEvolucao && temGuia && temSenha;
-
-                                if (ehValidoParaLote && temLote) {
-                                    const loteId = a.agenda_loteid?._id?.toString();
-                                    if (!loteId) return;
-
-                                    // Criar lote se ainda não existir
-                                    if (!lotesMap[loteId]) {
-                                        lotesMap[loteId] = {
-                                            loteId: loteId,
-                                            loteNum: a.agenda_loteid.guialote_num || '-',
-                                            loteStatus: a.agenda_loteid.guialote_status || 'Aberto',
-                                            loteValor: a.agenda_loteid.guialote_guialotevalor || 0,
-                                            loteDataCad: a.agenda_loteid.guialote_datacad,
-                                            loteUsucadNome: a.agenda_loteid.guialote_usucad?.usuario_nome || 'Desconhecido',
-                                            beneNome: nomeBeneficiario,
-                                            convNome: nomeConvenio,
-                                            qtAtendimentos: 0,
-                                            qtGuias: 0,
-                                            guiasSet: new Set(),
-                                            agendas: []
-                                        };
-                                    }
-
-                                    // ✅ Adicionar guia ao Set do lote (já está garantido que temGuia é true aqui)
-                                    lotesMap[loteId].guiasSet.add(a.agenda_guia.guia_num.trim());
-
-                                    const dataAgenda = new Date(a.agenda_data);
-                                    const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
-                                    const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
-
-                                    lotesMap[loteId].agendas.push({
-                                        _id: a._id,
-                                        data: fncGeral.getDataFMT(dataAgenda),
-                                        hora: `${hor}:${min}`,
-                                        beneNome: nomeBeneficiario,
-                                        terapeutaNome: nomeTerapeuta,
-                                        terapiaNome: nomeTerapia,
-                                        evolucao: temEvolucao ? 'Sim' : 'Não',
-                                        guia: a.agenda_guia?.guia_num || '-',
-                                        senha: a.agenda_guia?.guia_senha || '-',
-                                        categoria: a.agenda_categoria || '-'
-                                    });
-
-                                    lotesMap[loteId].qtAtendimentos++;
-
-                                } else if (ehValidoParaLote && !temLote) {
-                                    const dataAgenda = new Date(a.agenda_data);
-                                    const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
-                                    const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
-
-                                    atendimentosOrfaos.push({
-                                        _id: a._id,
-                                        data: fncGeral.getDataFMT(dataAgenda),
-                                        hora: `${hor}:${min}`,
-                                        beneNome: nomeBeneficiario,
-                                        terapeutaNome: nomeTerapeuta,
-                                        terapiaNome: nomeTerapia,
-                                        evolucao: temEvolucao ? 'Sim' : 'Não',
-                                        guia: a.agenda_guia?.guia_num || '-',
-                                        senha: a.agenda_guia?.guia_senha || '-',
-                                        categoria: a.agenda_categoria || '-'
-                                    });
-                                }
-                            });
-
-                            // ✅ Converter Set em qtGuias e limpar antes de enviar para view
-                            Object.values(lotesMap).forEach(lote => {
-                                lote.qtGuias = lote.guiasSet.size;
-                                delete lote.guiasSet;
-                            });
-
-                            const lotesConsolidados = Object.values(lotesMap).sort((a, b) => {
-                                return new Date(b.loteDataCad) - new Date(a.loteDataCad);
-                            });
-
-                            const consolidado = {
-                                qtAtendimentos: lotesConsolidados.reduce((total, lote) => total + lote.qtAtendimentos, 0),
-                                qtLotes: lotesConsolidados.length,
-                                valorTotal: lotesConsolidados.reduce((soma, l) => soma + (l.loteValor || 0), 0)
-                            };
-
-                            console.log("📤 [RENDERIZANDO VIEW DE GESTÃO DE LOTES]");
-                            console.log("→ Lotes consolidados:", lotesConsolidados.length);
-                            console.log("→ Atendimentos órfãos de lote:", atendimentosOrfaos.length);
-                            console.log("→ Consolidado:", consolidado);
-                            console.log("→ Estatísticas globais qtdGuias:", estatisticas.qtdGuias);
-
-                            // ✅ DEBUG: Mostrar qtGuias de cada lote
-                            if (lotesConsolidados.length > 0) {
-                                console.log("🔍 [DEBUG] qtGuias por lote:");
-                                lotesConsolidados.slice(0, 3).forEach(lote => {
-                                    console.log(`→ Lote ${lote.loteNum}: ${lote.qtGuias} guias`);
-                                });
-                            }
-
-                            res.render('guia/lote/guialoteGes', {
-                                lotesConsolidados: lotesConsolidados,
-                                atendimentosOrfaos: atendimentosOrfaos,
-                                benes: benes,
-                                terapeutas: todosUsuarios,
-                                horaages: horaages,
-                                salas: salas,
-                                terapias: terapias,
-                                convs: convs,
-                                anos: anos,
-                                flash,
-                                filtroTipo: tipoData,
-                                filtroAno: anoAtend,
-                                filtroMes: mesAtend,
-                                filtroData: dataFil,
-                                filtroTipoPessoa: atendTipoPessoa,
-                                filtroBeneficiario: atendBeneficiario,
-                                filtroTerapeuta: atendTerapeuta,
-                                filtroConvenio: atendConvenio,
-                                consolidado: {
-                                    qtAtendimentos: consolidado.qtAtendimentos,
-                                    qtLotes: consolidado.qtLotes,
-                                    valorTotal: fncGeral.formatarReal(Math.round(consolidado.valorTotal * 100))
-                                },
-                                estatisticas: estatisticas
-                            });
-                        });
+        // ✅ PASSO 1: Buscar TODOS os usuários
+        Usuario.find({})
+            .then((todosUsuarios) => {
+                const usuarioMap = {};
+                todosUsuarios.forEach(u => {
+                    usuarioMap[u._id.toString()] = u.usuario_nome;
                 });
-        })
-        .catch((err) => {
-            console.error("💥 ERRO EM filtragestaoGuialote:", err);
-            req.flash("error_message", "Houve um erro ao listar os lotes.");
-            res.redirect('/admin/erro');
-        });
-},
 
+                console.log("📋 [MAPA DE USUÁRIOS CRIADO]");
+                console.log("→ Total de usuários carregados:", todosUsuarios.length);
+
+                // ✅ PASSO 2: Buscar agendas
+                return Agenda.find(agendaQuery)
+                    .populate([
+                        {
+                            path: 'agenda_loteid',
+                            select: 'guialote_num guialote_numdatacad guialote_numprotocolo guialote_dataenvio guialote_guialotevalor guialote_status guialote_log guialote_usucad guialote_datacad guialote_usuedi guialote_dataedi guialote_qtatend guialote_agendas',
+                            strictPopulate: false,
+                            populate: [
+                                { path: 'guialote_usucad', model: Usuario, select: 'usuario_nome' },
+                                { path: 'guialote_usuedi', model: Usuario, select: 'usuario_nome' }
+                            ]
+                        }
+                    ])
+                    .then((agendas) => {
+                        console.log("✅ [RESULTADO DA AGENDA]");
+                        console.log("→ Total de registros encontrados:", agendas.length);
+
+                        // 🔥 REGRAS DE NEGÓCIO: FILTRAGEM
+
+                        // 1. Remover agendas temporárias
+                        let idsAgendasEx = [];
+                        agendas.forEach(e => {
+                            if (e.agenda_temp) {
+                                idsAgendasEx.push(e.agenda_tempId.toString());
+                            }
+                        });
+                        agendas = agendas.filter(a => !idsAgendasEx.includes(a._id.toString()));
+                        console.log("🗑️ [FILTRO TEMPORÁRIAS] Removidas:", idsAgendasEx.length);
+
+                        // 2. Remover cancelados (Feriado e Falta Absoluta)
+                        agendas = agendas.filter(a => {
+                            const cat = a.agenda_categoria;
+                            return cat !== "Falta Absoluta" && cat !== "Feriado";
+                        });
+                        console.log("🗑️ [FILTRO CANCELADOS] Total após filtro:", agendas.length);
+
+                        // ✅ CÁLCULO DAS ESTATÍSTICAS GLOBAIS
+                        const estatisticas = {
+                            qa: 0, qt: 0, qac: 0, qtv: 0, qtse: 0, qace: 0,
+                            atvo: 0, qtva: 0, qtvL: 0, qtvLo: 0,
+                            qtdGuias: 0
+                        };
+
+                        // ✅ Set para contar guias únicas GLOBALMENTE (APENAS COM LOTE)
+                        const guiasSetGlobal = new Set();
+
+                        // Loop 1: Estatísticas globais
+                        agendas.forEach(a => {
+                            estatisticas.qa++;
+
+                            const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
+                            const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
+                            const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
+                            const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
+                            const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
+
+                            // ✅ CORRIGIDO: Adicionar guia ao Set global APENAS SE TIVER LOTE
+                            if (temGuia && temLote) {
+                                guiasSetGlobal.add(a.agenda_guia?.guia_num?.trim());
+                            }
+
+                            if (ehCancelado) {
+                                estatisticas.qac++;
+                                if (temEvolucao) estatisticas.qace++;
+                            } else {
+                                estatisticas.qt++;
+                                if (temEvolucao) {
+                                    estatisticas.qtv++;
+                                    if (!temGuia || !temSenha) {
+                                        estatisticas.atvo++;
+                                    } else {
+                                        estatisticas.qtva++;
+                                        if (temLote) estatisticas.qtvL++;
+                                        else estatisticas.qtvLo++;
+                                    }
+                                } else {
+                                    estatisticas.qtse++;
+                                }
+                            }
+                        });
+
+                        // ✅ Definir total global de guias únicas (APENAS COM LOTE)
+                        estatisticas.qtdGuias = guiasSetGlobal.size;
+
+                        console.log("📊 [ESTATÍSTICAS GLOBAIS]");
+                        console.log("→ QA (Total):", estatisticas.qa);
+                        console.log("→ QT (Válidos):", estatisticas.qt);
+                        console.log("→ QTDGUIAS (Guias Únicas COM LOTE):", estatisticas.qtdGuias);
+
+                        // ✅ PASSO 3: Buscar dados complementares
+                        return Promise.all([
+                            Bene.find().sort({ bene_nome: 1 }),
+                            Conv.find().sort({ conv_nome: 1 }),
+                            Terapia.find().sort({ terapia_nome: 1 }),
+                            Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }),
+                            Sala.find().sort({ sala_nome: 1 }),
+                            Ano.find().sort({ ano_nome: -1 })
+                        ])
+                            .then(([benes, convs, terapias, horaages, salas, anos]) => {
+
+                                const beneMap = {};
+                                const convMap = {};
+                                const terapiaMap = {};
+
+                                benes.forEach(b => { beneMap[b._id.toString()] = b.bene_nome; });
+                                convs.forEach(c => { convMap[c._id.toString()] = c.conv_nome; });
+                                terapias.forEach(t => { terapiaMap[t._id.toString()] = t.terapia_nomecid; });
+
+                                // ✅ AGRUPAR POR LOTE
+                                const lotesMap = {};
+                                const atendimentosOrfaos = [];
+
+                                // Loop 2: Agrupar por lote e contar guias por lote
+                                agendas.forEach(a => {
+                                    const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
+                                    const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
+                                    const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
+                                    const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
+                                    const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
+
+                                    const nomeTerapeuta = usuarioMap[a.agenda_usuid?.toString()] || 'Terapeuta não encontrado';
+                                    const nomeBeneficiario = beneMap[a.agenda_beneid?.toString()] || 'Sem nome';
+                                    const nomeConvenio = convMap[a.agenda_convid?.toString()] || 'Sem convênio';
+                                    const nomeTerapia = terapiaMap[a.agenda_terapiaid?.toString()] || 'Sem terapia';
+
+                                    const ehValidoParaLote = !ehCancelado && temEvolucao && temGuia && temSenha;
+
+                                    if (ehValidoParaLote && temLote) {
+                                        const loteId = a.agenda_loteid?._id?.toString();
+                                        if (!loteId) return;
+
+                                        if (!lotesMap[loteId]) {
+                                            lotesMap[loteId] = {
+                                                loteId: loteId,
+                                                loteNum: a.agenda_loteid.guialote_num || '-',
+                                                loteNumprotocolo: a.agenda_loteid.guialote_numprotocolo || '-',  // ✅ ADICIONE
+                                                loteDataenvio: a.agenda_loteid.guialote_dataenvio || '-',         // ✅ ADICIONE
+                                                loteStatus: a.agenda_loteid.guialote_status || 'Aberto',
+                                                loteValor: a.agenda_loteid.guialote_guialotevalor || 0,
+                                                loteDataCad: a.agenda_loteid.guialote_datacad,
+                                                loteUsucadNome: a.agenda_loteid.guialote_usucad?.usuario_nome || 'Desconhecido',
+                                                beneNome: nomeBeneficiario,
+                                                convNome: nomeConvenio,
+                                                qtAtendimentos: 0,
+                                                qtGuias: 0,
+                                                guiasSet: new Set(),
+                                                agendas: []
+                                            };
+                                        }
+
+                                        // ✅ Adicionar guia ao Set do lote (já está garantido que temGuia é true aqui)
+                                        lotesMap[loteId].guiasSet.add(a.agenda_guia.guia_num.trim());
+
+                                        const dataAgenda = new Date(a.agenda_data);
+                                        const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                                        const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+
+                                        lotesMap[loteId].agendas.push({
+                                            _id: a._id,
+                                            data: fncGeral.getDataFMT(dataAgenda),
+                                            hora: `${hor}:${min}`,
+                                            beneNome: nomeBeneficiario,
+                                            terapeutaNome: nomeTerapeuta,
+                                            terapiaNome: nomeTerapia,
+                                            evolucao: temEvolucao ? 'Sim' : 'Não',
+                                            guia: a.agenda_guia?.guia_num || '-',
+                                            senha: a.agenda_guia?.guia_senha || '-',
+                                            categoria: a.agenda_categoria || '-'
+                                        });
+
+                                        lotesMap[loteId].qtAtendimentos++;
+
+                                    } else if (ehValidoParaLote && !temLote) {
+                                        const dataAgenda = new Date(a.agenda_data);
+                                        const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                                        const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+
+                                        atendimentosOrfaos.push({
+                                            _id: a._id,
+                                            data: fncGeral.getDataFMT(dataAgenda),
+                                            hora: `${hor}:${min}`,
+                                            beneNome: nomeBeneficiario,
+                                            terapeutaNome: nomeTerapeuta,
+                                            terapiaNome: nomeTerapia,
+                                            evolucao: temEvolucao ? 'Sim' : 'Não',
+                                            guia: a.agenda_guia?.guia_num || '-',
+                                            senha: a.agenda_guia?.guia_senha || '-',
+                                            categoria: a.agenda_categoria || '-'
+                                        });
+                                    }
+                                });
+
+                                // ✅ Converter Set em qtGuias e limpar antes de enviar para view
+                                Object.values(lotesMap).forEach(lote => {
+                                    lote.qtGuias = lote.guiasSet.size;
+                                    delete lote.guiasSet;
+                                });
+
+                                const lotesConsolidados = Object.values(lotesMap).sort((a, b) => {
+                                    return new Date(b.loteDataCad) - new Date(a.loteDataCad);
+                                });
+
+                                const consolidado = {
+                                    qtAtendimentos: lotesConsolidados.reduce((total, lote) => total + lote.qtAtendimentos, 0),
+                                    qtLotes: lotesConsolidados.length,
+                                    valorTotal: lotesConsolidados.reduce((soma, l) => soma + (l.loteValor || 0), 0)
+                                };
+
+                                console.log("📤 [RENDERIZANDO VIEW DE GESTÃO DE LOTES]");
+                                console.log("→ Lotes consolidados:", lotesConsolidados.length);
+                                console.log("→ Atendimentos órfãos de lote:", atendimentosOrfaos.length);
+                                console.log("→ Consolidado:", consolidado);
+                                console.log("→ Estatísticas globais qtdGuias:", estatisticas.qtdGuias);
+
+                                // ✅ DEBUG: Mostrar qtGuias de cada lote
+                                if (lotesConsolidados.length > 0) {
+                                    console.log("🔍 [DEBUG] qtGuias por lote:");
+                                    lotesConsolidados.slice(0, 3).forEach(lote => {
+                                        console.log(`→ Lote ${lote.loteNum}: ${lote.qtGuias} guias`);
+                                    });
+                                }
+
+                                res.render('guia/lote/guialoteGes', {
+                                    lotesConsolidados: lotesConsolidados,
+                                    atendimentosOrfaos: atendimentosOrfaos,
+                                    benes: benes,
+                                    terapeutas: todosUsuarios,
+                                    horaages: horaages,
+                                    salas: salas,
+                                    terapias: terapias,
+                                    convs: convs,
+                                    anos: anos,
+                                    flash,
+                                    filtroTipo: tipoData,
+                                    filtroAno: anoAtend,
+                                    filtroMes: mesAtend,
+                                    filtroData: dataFil,
+                                    filtroTipoPessoa: atendTipoPessoa,
+                                    filtroBeneficiario: atendBeneficiario,
+                                    filtroTerapeuta: atendTerapeuta,
+                                    filtroConvenio: atendConvenio,
+                                    consolidado: {
+                                        qtAtendimentos: consolidado.qtAtendimentos,
+                                        qtLotes: consolidado.qtLotes,
+                                        valorTotal: fncGeral.formatarReal(Math.round(consolidado.valorTotal * 100))
+                                    },
+                                    estatisticas: estatisticas
+                                });
+                            });
+                    });
+            })
+            .catch((err) => {
+                console.error("💥 ERRO EM filtragestaoGuialote:", err);
+                req.flash("error_message", "Houve um erro ao listar os lotes.");
+                res.redirect('/admin/erro');
+            });
+    },
     // ============================================
-    // GESTÃO DOS LOTES (SEM FILTRO)
+    // GESTÃO DOS LOTES 
     // ============================================
     gestaoGuialote(req, res, resposta) {
         let db = req.cookies['preferredDb'];
@@ -2184,11 +2185,478 @@ filtragestaoGuialote(req, res, resposta) {
             });
         })
         .catch((err) => {
+            console.error("Erro em guialoteCons:", err);
+            req.flash("error_message", "Houve um erro ao carregar o formulário.");
+            res.redirect('/admin/erro');
+        });
+    },
+
+    // ============================================
+    // CONSOLIDADO DOS LOTES
+    // ============================================
+// ============================================
+// CONSOLIDADO DOS LOTES - AGRUPADO POR CONVENIO
+// ============================================
+filtraconsolidadoGuialote(req, res, resposta) {
+    let db = req.cookies['preferredDb'];
+
+    // Models locais
+    const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
+    const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+    const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+    const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+    const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+    const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+    const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
+    const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+
+    if (!resposta || typeof resposta !== 'object') {
+        resposta = { texto: '', sucesso: false };
+    }
+    let flash = new Resposta();
+    flash.texto = resposta.texto;
+    flash.sucesso = resposta.sucesso;
+
+    // Capturar filtros do body (APENAS DATA)
+    const tipoData = req.body.tipoData;
+    const anoAtend = req.body.anoAtend;
+    const mesAtend = req.body.mesAtend;
+    const dataFil = req.body.dataFil;
+
+    let dataIni, dataFim;
+
+    // Lógica de filtro de data (com SEMANA incluída)
+    if (tipoData === "Ano/Mes") {
+        const ano = parseInt(anoAtend);
+        const mes = parseInt(mesAtend);
+        if (isNaN(ano) || isNaN(mes)) {
+            return res.render('admin/erro', { message: "Ano ou mês inválido." });
+        }
+        dataIni = new Date(Date.UTC(ano, mes, 1)).toISOString();
+        dataFim = new Date(Date.UTC(ano, mes + 1, 0, 23, 59, 59, 999)).toISOString();
+    } else if (tipoData === "Dia") {
+        if (!dataFil) {
+            return res.render('admin/erro', { message: "Data não informada." });
+        }
+        const [ano, mes, dia] = dataFil.split('-').map(Number);
+        dataIni = new Date(Date.UTC(ano, mes - 1, dia)).toISOString();
+        dataFim = new Date(Date.UTC(ano, mes - 1, dia, 23, 59, 59, 999)).toISOString();
+    } else if (tipoData === "Semana") {
+        if (!dataFil) {
+            return res.render('admin/erro', { message: "Data não informada." });
+        }
+        const [ano, mes, dia] = dataFil.split('-').map(Number);
+        const dataBase = new Date(Date.UTC(ano, mes - 1, dia));
+        const diaSemana = dataBase.getUTCDay(); // 0=Dom, 1=Seg...6=Sab
+        const diffParaSegunda = diaSemana === 0 ? -6 : 1 - diaSemana;
+        
+        const segunda = new Date(dataBase);
+        segunda.setUTCDate(dataBase.getUTCDate() + diffParaSegunda);
+        segunda.setUTCHours(0, 0, 0, 0);
+        
+        const domingo = new Date(segunda);
+        domingo.setUTCDate(segunda.getUTCDate() + 6);
+        domingo.setUTCHours(23, 59, 59, 999);
+        
+        dataIni = segunda.toISOString();
+        dataFim = domingo.toISOString();
+    } else {
+        return res.render('admin/erro', { message: "Tipo de filtro inválido." });
+    }
+
+    // QUERY BASE COM FILTROS (sem filtros de pessoa)
+    let agendaQuery = {
+        agenda_data: { $gte: dataIni, $lte: dataFim },
+        agenda_categoria: { $nin: ["Extra", "Reuniao", "Pais", "Glosa"] }
+    };
+
+    // PASSO 1: Buscar TODOS os usuários
+    Usuario.find({})
+        .then((todosUsuarios) => {
+            const usuarioMap = {};
+            todosUsuarios.forEach(u => {
+                usuarioMap[u._id.toString()] = u.usuario_nome;
+            });
+
+            console.log("[MAPA DE USUARIOS CRIADO]");
+            console.log("Total de usuários carregados:", todosUsuarios.length);
+
+            // PASSO 2: Buscar agendas
+            return Agenda.find(agendaQuery)
+                .populate([
+                    {
+                        path: 'agenda_loteid',
+                        select: 'guialote_num guialote_numdatacad guialote_numprotocolo guialote_dataenvio guialote_guialotevalor guialote_status guialote_log guialote_usucad guialote_datacad guialote_usuedi guialote_dataedi guialote_qtatend guialote_agendas',
+                        strictPopulate: false,
+                        populate: [
+                            { path: 'guialote_usucad', model: Usuario, select: 'usuario_nome' },
+                            { path: 'guialote_usuedi', model: Usuario, select: 'usuario_nome' }
+                        ]
+                    },
+                    {
+                        path: 'agenda_convid',
+                        select: 'conv_nome'
+                    }
+                ])
+                .then((agendas) => {
+                    console.log("[RESULTADO DA AGENDA]");
+                    console.log("Total de registros encontrados:", agendas.length);
+
+                    // REGRAS DE NEGOCIO: FILTRAGEM
+
+                    // 1. Remover agendas temporárias
+                    let idsAgendasEx = [];
+                    agendas.forEach(e => {
+                        if (e.agenda_temp) {
+                            idsAgendasEx.push(e.agenda_tempId.toString());
+                        }
+                    });
+                    agendas = agendas.filter(a => !idsAgendasEx.includes(a._id.toString()));
+                    console.log("[FILTRO TEMPORARIAS] Removidas:", idsAgendasEx.length);
+
+                    // 2. Remover cancelados (Feriado e Falta Absoluta)
+                    agendas = agendas.filter(a => {
+                        const cat = a.agenda_categoria;
+                        return cat !== "Falta Absoluta" && cat !== "Feriado";
+                    });
+                    console.log("[FILTRO CANCELADOS] Total após filtro:", agendas.length);
+
+                    // CALCULO DAS ESTATISTICAS GLOBAIS
+                    const estatisticas = {
+                        qa: 0, qt: 0, qac: 0, qtv: 0, qtse: 0, qace: 0,
+                        atvo: 0, qtva: 0, qtvL: 0, qtvLo: 0,
+                        qtdGuias: 0
+                    };
+
+                    // Set para contar guias únicas GLOBALMENTE (APENAS COM LOTE)
+                    const guiasSetGlobal = new Set();
+
+                    // Loop 1: Estatísticas globais
+                    agendas.forEach(a => {
+                        estatisticas.qa++;
+
+                        const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
+                        const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
+                        const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
+                        const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
+                        const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
+
+                        // Adicionar guia ao Set global APENAS SE TIVER LOTE
+                        if (temGuia && temLote) {
+                            guiasSetGlobal.add(a.agenda_guia?.guia_num?.trim());
+                        }
+
+                        if (ehCancelado) {
+                            estatisticas.qac++;
+                            if (temEvolucao) estatisticas.qace++;
+                        } else {
+                            estatisticas.qt++;
+                            if (temEvolucao) {
+                                estatisticas.qtv++;
+                                if (!temGuia || !temSenha) {
+                                    estatisticas.atvo++;
+                                } else {
+                                    estatisticas.qtva++;
+                                    if (temLote) estatisticas.qtvL++;
+                                    else estatisticas.qtvLo++;
+                                }
+                            } else {
+                                estatisticas.qtse++;
+                            }
+                        }
+                    });
+
+                    // Definir total global de guias únicas (APENAS COM LOTE)
+                    estatisticas.qtdGuias = guiasSetGlobal.size;
+
+                    console.log("[ESTATISTICAS GLOBAIS]");
+                    console.log("QA (Total):", estatisticas.qa);
+                    console.log("QT (Validos):", estatisticas.qt);
+                    console.log("QTDGUIAS (Guias Unicas COM LOTE):", estatisticas.qtdGuias);
+
+                    // PASSO 3: Buscar dados complementares
+                    return Promise.all([
+                        Bene.find().sort({ bene_nome: 1 }),
+                        Conv.find().sort({ conv_nome: 1 }),
+                        Terapia.find().sort({ terapia_nome: 1 }),
+                        Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }),
+                        Sala.find().sort({ sala_nome: 1 }),
+                        Ano.find().sort({ ano_nome: -1 })
+                    ])
+                        .then(([benes, convs, terapias, horaages, salas, anos]) => {
+
+                            const beneMap = {};
+                            const convMap = {};
+                            const terapiaMap = {};
+
+                            benes.forEach(b => { beneMap[b._id.toString()] = b.bene_nome; });
+                            convs.forEach(c => { convMap[c._id.toString()] = c.conv_nome; });
+                            terapias.forEach(t => { terapiaMap[t._id.toString()] = t.terapia_nomecid; });
+
+                            // AGRUPAR POR CONVENIO (NOVA LOGICA)
+                            const conveniosMap = {};
+                            const atendimentosOrfaosPorConvenio = {};
+
+                            // Loop 2: Agrupar por convenio
+                            agendas.forEach(a => {
+                                const ehCancelado = (a.agenda_categoria === "Feriado" || a.agenda_categoria === "Falta Absoluta");
+                                const temEvolucao = (a.agenda_evolucao && a.agenda_evolucao.trim() !== '');
+                                const temGuia = (a.agenda_guia?.guia_num?.trim() !== '');
+                                const temSenha = (a.agenda_guia?.guia_senha?.trim() !== '');
+                                const temLote = (a.agenda_loteid != null && a.agenda_loteid != undefined);
+
+                                const nomeTerapeuta = usuarioMap[a.agenda_usuid?.toString()] || 'Terapeuta não encontrado';
+                                const nomeBeneficiario = beneMap[a.agenda_beneid?.toString()] || 'Sem nome';
+                                const nomeConvenio = a.agenda_convid?.conv_nome || convMap[a.agenda_convid?.toString()] || 'Sem convenio';
+                                const nomeTerapia = terapiaMap[a.agenda_terapiaid?.toString()] || 'Sem terapia';
+                                const convId = a.agenda_convid?._id?.toString() || a.agenda_convid?.toString() || 'sem_convenio';
+
+                                const ehValidoParaLote = !ehCancelado && temEvolucao && temGuia && temSenha;
+
+                                if (ehValidoParaLote && temLote) {
+                                    const loteId = a.agenda_loteid?._id?.toString();
+                                    if (!loteId) return;
+
+                                    // Inicializar convenio se não existir
+                                    if (!conveniosMap[convId]) {
+                                        conveniosMap[convId] = {
+                                            convId: convId,
+                                            convNome: nomeConvenio,
+                                            qtLotes: 0,
+                                            qtGuias: 0,
+                                            valorTotal: 0,
+                                            todosEnviados: true,
+                                            guiasSet: new Set(),
+                                            lotesMap: {}
+                                        };
+                                    }
+
+                                    const convenio = conveniosMap[convId];
+
+                                    // Inicializar lote se não existir no convenio
+                                    if (!convenio.lotesMap[loteId]) {
+                                        convenio.lotesMap[loteId] = {
+                                            loteId: loteId,
+                                            loteNum: a.agenda_loteid.guialote_num || '-',
+                                            loteNumprotocolo: a.agenda_loteid.guialote_numprotocolo || '-',
+                                            loteDataenvio: a.agenda_loteid.guialote_dataenvio || '-',
+                                            loteStatus: a.agenda_loteid.guialote_status || 'Aberto',
+                                            loteValor: a.agenda_loteid.guialote_guialotevalor || 0,
+                                            loteDataCad: a.agenda_loteid.guialote_datacad,
+                                            loteUsucadNome: a.agenda_loteid.guialote_usucad?.usuario_nome || 'Desconhecido',
+                                            qtAtendimentos: 0,
+                                            qtGuias: 0,
+                                            guiasSet: new Set(),
+                                            agendas: []
+                                        };
+                                        convenio.qtLotes++;
+                                        convenio.valorTotal += convenio.lotesMap[loteId].loteValor || 0;
+                                    }
+
+                                    const lote = convenio.lotesMap[loteId];
+
+                                    // Adicionar guia ao Set do lote
+                                    lote.guiasSet.add(a.agenda_guia.guia_num.trim());
+                                    convenio.guiasSet.add(a.agenda_guia.guia_num.trim());
+
+                                    const dataAgenda = new Date(a.agenda_data);
+                                    const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                                    const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+
+                                    lote.agendas.push({
+                                        _id: a._id,
+                                        data: fncGeral.getDataFMT(dataAgenda),
+                                        hora: `${hor}:${min}`,
+                                        beneNome: nomeBeneficiario,
+                                        terapeutaNome: nomeTerapeuta,
+                                        terapiaNome: nomeTerapia,
+                                        evolucao: temEvolucao ? 'Sim' : 'Não',
+                                        guia: a.agenda_guia?.guia_num || '-',
+                                        senha: a.agenda_guia?.guia_senha || '-',
+                                        categoria: a.agenda_categoria || '-'
+                                    });
+
+                                    lote.qtAtendimentos++;
+
+                                } else if (ehValidoParaLote && !temLote) {
+                                    // Atendimento orfao - agrupar por convenio
+                                    if (!atendimentosOrfaosPorConvenio[convId]) {
+                                        atendimentosOrfaosPorConvenio[convId] = {
+                                            convId: convId,
+                                            convNome: nomeConvenio,
+                                            atendimentos: []
+                                        };
+                                    }
+
+                                    const dataAgenda = new Date(a.agenda_data);
+                                    const hor = dataAgenda.getUTCHours().toString().padStart(2, '0');
+                                    const min = dataAgenda.getUTCMinutes().toString().padStart(2, '0');
+
+                                    atendimentosOrfaosPorConvenio[convId].atendimentos.push({
+                                        _id: a._id,
+                                        data: fncGeral.getDataFMT(dataAgenda),
+                                        hora: `${hor}:${min}`,
+                                        beneNome: nomeBeneficiario,
+                                        terapeutaNome: nomeTerapeuta,
+                                        terapiaNome: nomeTerapia,
+                                        evolucao: temEvolucao ? 'Sim' : 'Não',
+                                        guia: a.agenda_guia?.guia_num || '-',
+                                        senha: a.agenda_guia?.guia_senha || '-',
+                                        categoria: a.agenda_categoria || '-'
+                                    });
+                                }
+                            });
+
+                            // Converter Sets em contagens e arrays, calcular todosEnviados
+                            const conveniosConsolidados = Object.values(conveniosMap).map(convenio => {
+                                // Converter lotesMap em array
+                                const lotesArray = Object.values(convenio.lotesMap).map(lote => {
+                                    lote.qtGuias = lote.guiasSet.size;
+                                    delete lote.guiasSet;
+                                    return lote;
+                                });
+
+                                // Calcular se todos os lotes estao enviados
+                                const todosEnviados = lotesArray.every(l => l.loteStatus === "Enviado");
+
+                                return {
+                                    convId: convenio.convId,
+                                    convNome: convenio.convNome,
+                                    qtLotes: convenio.qtLotes,
+                                    qtGuias: convenio.guiasSet.size,
+                                    valorTotal: convenio.valorTotal,
+                                    todosEnviados: todosEnviados,
+                                    lotes: lotesArray.sort((a, b) => new Date(b.loteDataCad) - new Date(a.loteDataCad))
+                                };
+                            }).sort((a, b) => a.convNome.localeCompare(b.convNome)); // Ordenar por nome
+
+                            // Processar atendimentos orfaos por convenio
+                            const atendimentosOrfaos = Object.values(atendimentosOrfaosPorConvenio)
+                                .sort((a, b) => a.convNome.localeCompare(b.convNome));
+
+                            const consolidado = {
+                                qtAtendimentos: conveniosConsolidados.reduce((total, conv) => 
+                                    total + conv.lotes.reduce((t, l) => t + l.qtAtendimentos, 0), 0),
+                                qtConvenios: conveniosConsolidados.length,
+                                qtLotes: conveniosConsolidados.reduce((total, conv) => total + conv.qtLotes, 0),
+                                valorTotal: conveniosConsolidados.reduce((soma, c) => soma + (c.valorTotal || 0), 0)
+                            };
+
+                            console.log("[RENDERIZANDO VIEW DE GESTAO DE LOTES POR CONVENIO]");
+                            console.log("Convenios consolidados:", conveniosConsolidados.length);
+                            console.log("Atendimentos orfaos de lote:", atendimentosOrfaos.length);
+                            console.log("Consolidado:", consolidado);
+                            console.log("Estatisticas globais qtdGuias:", estatisticas.qtdGuias);
+
+                            res.render('guia/lote/guialoteCons', {
+                                conveniosConsolidados: conveniosConsolidados,
+                                atendimentosOrfaos: atendimentosOrfaos,
+                                benes: benes,
+                                terapeutas: todosUsuarios,
+                                horaages: horaages,
+                                salas: salas,
+                                terapias: terapias,
+                                convs: convs,
+                                anos: anos,
+                                flash,
+                                filtroTipo: tipoData,
+                                filtroAno: anoAtend,
+                                filtroMes: mesAtend,
+                                filtroData: dataFil,
+                                consolidado: {
+                                    qtAtendimentos: consolidado.qtAtendimentos,
+                                    qtConvenios: consolidado.qtConvenios,
+                                    qtLotes: consolidado.qtLotes,
+                                    valorTotal: fncGeral.formatarReal(Math.round(consolidado.valorTotal * 100))
+                                },
+                                estatisticas: estatisticas
+                            });
+                        });
+                });
+        })
+        .catch((err) => {
+            console.error("ERRO EM filtragestaoGuialote:", err);
+            req.flash("error_message", "Houve um erro ao listar os lotes.");
+            res.redirect('/admin/erro');
+        });
+},
+   
+   consolidadoGuialote(req, res, resposta) {
+        let db = req.cookies['preferredDb'];
+        const Ano = getModel("PortalDoUsuario", 'tb_ano', anoClass.AnoSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+
+        let flash = new Resposta();
+        if (resposta && (resposta.sucesso === "true" || resposta.sucesso === "false")) {
+            flash.texto = resposta.texto;
+            flash.sucesso = resposta.sucesso;
+        }
+
+        // Valores padrão para os filtros na primeira abertura
+        const hoje = new Date();
+        const anoAtual = hoje.getFullYear().toString();
+        const mesAtual = hoje.getMonth().toString();
+
+        console.log("→ Carregando lista inicial de gestão de lotes (sem filtro aplicado)");
+        console.log("→ Filtro padrão: Ano =", anoAtual, ", Mês =", mesAtual);
+
+        Promise.all([
+            Usuario.find({
+                usuario_status: "Ativo",
+                $or: [
+                    { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                    { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                ]
+            }).sort({ usuario_nome: 1 }),
+            Bene.find({ bene_status: "Ativo" }).sort({ bene_nome: 1 }),
+            Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }),
+            Sala.find().sort({ sala_nome: 1 }),
+            Terapia.find().sort({ terapia_nome: 1 }),
+            Conv.find().sort({ conv_nome: 1 }),
+            Ano.find().sort({ ano_nome: -1 })
+        ])
+        .then(([terapeutas, benes, horaages, salas, terapias, convs, anos]) => {
+            // Renderiza o formulário em branco (sem lotes)
+            res.render('guia/lote/guialoteCons', {
+                lotesConsolidados: [],  // ✅ Array vazio de lotes consolidados
+                benes: benes,
+                terapeutas: terapeutas,
+                horaages: horaages,
+                salas: salas,
+                terapias: terapias,
+                convs: convs,
+                anos: anos,
+                flash,
+                filtroTipo: "Ano/Mes",
+                filtroAno: anoAtual,
+                filtroMes: mesAtual,
+                filtroData: "",
+                filtroTipoPessoa: "Geral",
+                filtroBeneficiario: "",
+                consolidado: {  // ✅ Consolidado vazio
+                    qtAtendimentos: 0,
+                    qtLotes: 0,
+                    valorTotal: "0,00"
+                },
+                estatisticas: {  // ✅ Estatísticas vazias
+                    qa: 0, qt: 0, qac: 0, qtv: 0, qtse: 0, qace: 0, atvo: 0, qtva: 0, qtvL: 0, qtvLo: 0
+                }
+            });
+        })
+        .catch((err) => {
             console.error("Erro em gestaoGuialote:", err);
             req.flash("error_message", "Houve um erro ao carregar o formulário.");
             res.redirect('/admin/erro');
         });
     },
+
+
     // ============================================
     // SALVAR GUIA INDIVIDUAL (TEMPO REAL)
     // ============================================
