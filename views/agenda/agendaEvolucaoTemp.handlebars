@@ -800,6 +800,11 @@
 						}
 					});
 				}
+
+				// ADICIONE ESTA LINHA:
+				if (typeof controlaNave === 'function') {
+					controlaNave();
+				}
 			});
 		</script>
 	</body>
