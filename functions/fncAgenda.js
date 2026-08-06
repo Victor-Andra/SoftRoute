@@ -11169,7 +11169,7 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
     var agendaFixa = await Agenda.find({
       agenda_data: { $gte: dataIni, $lte: dataFim },
       agenda_temp: false,
-      //agenda_beneid: new ObjectId("62d6f710ea444f5b7a025aab"),//62d6f710ea444f5b7a025aab
+      //agenda_beneid: new ObjectId("632c9f051a5f781525493629"),
       //agenda_migrado : false, 
       $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } }]
     }).lean();
@@ -11179,7 +11179,7 @@ carregaAgendaListaGeral(req, res, atrazo, resposta) {
       agenda_data: { $gte: dataIni, $lte: dataFim },
       agenda_temp: true,
       //agenda_migrado : false, 
-      //agenda_beneid: new ObjectId("62d6f710ea444f5b7a025aab"),
+      //agenda_beneid: new ObjectId("632c9f051a5f781525493629"),
       $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } }]
     }).lean();
     console.log("agendaSemanal.length: "+agendaSemanal.length)

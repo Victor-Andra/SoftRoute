@@ -109,73 +109,101 @@
 				font-size: 16px;
 			}
 		}
-			
+		
 
-</style>
-<style>		
-    /* Tooltip personalizado - CORRIGIDO */
-		.custom-tooltip {
-			position: relative;
-			display: inline-block;
-			cursor: pointer;
-			line-height: 1;
-		}
+	</style>
+	<style>
+		/* ============================================
+	🚀 UPGRADE B: LINHAS COM LOTE FANTASMA
+	============================================ */
+	.linha-fantasma {
+		background-color: #ffe5e5 !important;
+		border-left: 4px solid #dc3545 !important;
+		position: relative;
+	}
+	.linha-fantasma td:first-child::before {
+		content: "⚠️";
+		margin-right: 5px;
+		font-size: 14px;
+	}
+	.badge-fantasma {
+		background: #dc3545;
+		color: white;
+		padding: 2px 6px;
+		border-radius: 3px;
+		font-size: 10px;
+		margin-left: 5px;
+		animation: pulse 1.5s infinite;
+	}
+	@keyframes pulse {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0.5; }
+	}
+	</style>
+	<style>		
+		/* Tooltip personalizado - CORRIGIDO */
+			.custom-tooltip {
+				position: relative;
+				display: inline-block;
+				cursor: pointer;
+				line-height: 1;
+			}
 
-		.tooltip-text {
-			visibility: hidden;
-			width: max-content;
-			max-width: 280px;
-			background-color: #fff;
-			color: #333;
-			font-size: 10px;
-			font-weight: 500;
-			text-align: left;
-			border-radius: 6px;
-			padding: 10px 14px;
-			position: absolute;
-			z-index: 9999;
-			bottom: calc(100% + 8px); /* ✅ Aparece ACIMA */
-			left: 50%;
-			transform: translateX(-50%);
-			opacity: 0;
-			white-space: normal;
-			word-wrap: break-word;
-			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-			transition: opacity 0.2s ease, visibility 0.2s;
-			border: 1px solid #ddd;
-			line-height: 1.4;
-		}
+			.tooltip-text {
+				visibility: hidden;
+				width: max-content;
+				max-width: 280px;
+				background-color: #fff;
+				color: #333;
+				font-size: 10px;
+				font-weight: 500;
+				text-align: left;
+				border-radius: 6px;
+				padding: 10px 14px;
+				position: absolute;
+				z-index: 9999;
+				bottom: calc(100% + 8px); /* ✅ Aparece ACIMA */
+				left: 50%;
+				transform: translateX(-50%);
+				opacity: 0;
+				white-space: normal;
+				word-wrap: break-word;
+				box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+				transition: opacity 0.2s ease, visibility 0.2s;
+				border: 1px solid #ddd;
+				line-height: 1.4;
+			}
 
-		.tooltip-text::after {
-			content: "";
-			position: absolute;
-			top: 100%;
-			left: 50%;
-			transform: translateX(-50%);
-			border-width: 6px;
-			border-style: solid;
-			border-color: #fff transparent transparent transparent;
-			filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
-		}
+			.tooltip-text::after {
+				content: "";
+				position: absolute;
+				top: 100%;
+				left: 50%;
+				transform: translateX(-50%);
+				border-width: 6px;
+				border-style: solid;
+				border-color: #fff transparent transparent transparent;
+				filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+			}
 
-		.tooltip-text::before {
-			content: "";
-			position: absolute;
-			top: 100%;
-			left: 50%;
-			transform: translateX(-50%);
-			border-width: 7px;
-			border-style: solid;
-			border-color: #ddd transparent transparent transparent;
-			z-index: -1;
-		}
+			.tooltip-text::before {
+				content: "";
+				position: absolute;
+				top: 100%;
+				left: 50%;
+				transform: translateX(-50%);
+				border-width: 7px;
+				border-style: solid;
+				border-color: #ddd transparent transparent transparent;
+				z-index: -1;
+			}
 
-		.custom-tooltip:hover .tooltip-text {
-			visibility: visible;
-			opacity: 1;
-		}
-</style>
-<style>		
+			.custom-tooltip:hover .tooltip-text {
+				visibility: visible;
+				opacity: 1;
+			}
+	</style>
+	<style>		
         /* ============================================
            BARRA DE PESQUISA - CLASSE SEPARADA
            ============================================ */
@@ -911,7 +939,7 @@ SELECT2 - ESTILOS GERAIS
 
 		// Atualizar contador de selecionados
 		function atualizarContadorSelecionados() {
-			const count = document.querySelectorAll('#dynamic-table tbody input[type="checkbox"]:checked').length;
+			const count = document.querySelectorAll('#dynamic-table tbody input[name="agendaCheck"]:checked').length;
 			const contador = document.querySelector('.badge-selecionados');
 			if (contador) {
 				contador.textContent = count;
@@ -920,8 +948,8 @@ SELECT2 - ESTILOS GERAIS
 
 		// Event listener para checkboxes
 		document.addEventListener('change', (e) => {
-			if (e.target.matches('#dynamic-table tbody input[type="checkbox"]')) {
-				atualizarContadorSelecionados();
+			if (e.target.matches('#checkAll')) {
+				toggleAllCheckboxes(e.target.checked);
 			}
 		});
 
@@ -1259,7 +1287,8 @@ SELECT2 - ESTILOS GERAIS
 									</div>
 									<div class="form-group">
 										<label>Valor Total do Lote (R$)</label>
-										<input type="text" id="guialoteGuialotevalor" placeholder="0,00" />
+										<input type="text" id="guialoteGuialotevalor" placeholder="0,00" 
+											class="input-moeda" oninput="mascaraMoeda(this)" />
 									</div>
 									<div class="form-group">
 										<label>N.Protocolo / Remessa</label>
@@ -1281,6 +1310,18 @@ SELECT2 - ESTILOS GERAIS
 									<button type="button" class="btn-toolbar" onclick="criarLote()">
 										<i class="ace-icon fa fa-folder"></i>
 										Criar Lote e Vincular Agendamentos
+									</button>
+									<!-- ============================================
+										🚀 NOVOS BOTÕES DO UPGRADE (ao lado do Criar Lote)
+										============================================ -->
+									<button type="button" class="btn btn-warning btn-sm" id="btnAlterarLote" style="margin-left: 5px;">
+										<i class="ace-icon fa fa-edit"></i> Alterar Lote
+									</button>
+									<button type="button" class="btn btn-danger btn-sm" id="btnRemoverLote" style="margin-left: 5px;">
+										<i class="ace-icon fa fa-unlink"></i> Remover Lote
+									</button>
+									<button type="button" class="btn btn-info btn-sm" id="btnVerificarIntegridade" style="margin-left: 5px;">
+										<i class="ace-icon fa fa-stethoscope"></i> Verificar Integridade
 									</button>
 								</div>
 							</div>
@@ -1478,7 +1519,7 @@ SELECT2 - ESTILOS GERAIS
 												<tr role="row">
 													<th class="center">
 														<label class="pos-rel">
-															<input type="checkbox" class="ace" />
+															<input type="checkbox" class="ace" id="checkAll" />
 															<span class="lbl"></span>
 														</label>
 													</th>
@@ -1501,10 +1542,14 @@ SELECT2 - ESTILOS GERAIS
 											</thead>
 											<tbody>
 												{{#each extras}}
-													<tr role="row" class="odd">
+													<tr role="row" class="odd" 
+														data-agenda-id="{{_id}}" 
+														data-lote-id="{{#if agenda_loteid}}{{agenda_loteid._id}}{{/if}}"
+														data-lote-obj='{{json lote}}'
+													>
 														<td class="center">
 															<label class="pos-rel">
-																<input type="checkbox" class="ace" />
+																<input type="checkbox" class="ace" name="agendaCheck" value="{{_id}}" />
 																<span class="lbl"></span>
 															</label>
 														</td>
@@ -1681,99 +1726,238 @@ SELECT2 - ESTILOS GERAIS
 			</div>
 		</div>
 	</div>
-<!-- MODAL DE EDIÇÃO DE LOTE -->
-<div id="modalEditarLote" class="modal fade" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-primary">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title white">
-          <i class="ace-icon fa fa-edit"></i> Editar Lote <span id="modalLoteNum"></span>
-        </h4>
-      </div>
-      <div class="modal-body">
-        <form id="formEditarLote">
-          <input type="hidden" id="loteId" name="loteId">
-          
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Número do Lote</label>
-                <input type="text" id="guialote_num" name="guialote_num" class="form-control" placeholder="Ex: 12345678">
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Data do Lote</label>
-                <input type="date" id="guialote_numdatacad" name="guialote_numdatacad" class="form-control">
-              </div>
-            </div>
-          </div>
-          
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Número do Protocolo / Remessa</label>
-                <input type="text" id="guialote_numprotocolo" name="guialote_numprotocolo" class="form-control" placeholder="Ex: 87654321">
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Data do Envio</label>
-                <input type="date" id="guialote_dataenvio" name="guialote_dataenvio" class="form-control">
-              </div>
-            </div>
-          </div>
-          
-          <div class="row">
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Valor Total do Lote (R$)</label>
-                <input type="text" id="guialote_guialotevalor" name="guialote_guialotevalor" class="form-control" placeholder="0,00">
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="form-group">
-                <label>Status</label>
-                <select id="guialote_status" name="guialote_status" class="form-control">
-                  <option value="Aberto">Aberto</option>
-                  <option value="Enviado">Enviado</option>
-                  <option value="Fechado">Fechado</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label>Log / Observações</label>
-            <textarea id="guialote_log" name="guialote_log" class="form-control" rows="4" placeholder="Adicione observações sobre este lote..."></textarea>
-            <p class="help-block">
-              <strong>ℹ️ Dica:</strong> Use este campo para registrar eventos importantes do lote 
-            </p>
-          </div>
-          
-          <div class="alert alert-info">
-            <strong>⚠️ Atenção:</strong> Ao salvar, o sistema registrará automaticamente:
-            <ul>
-              <li><strong>Usuário:</strong> {{usuarioLogado.usuario_nome}} (ID: {{usuarioLogado._id}})</li>
-              <li><strong>Data/Hora:</strong> Registro automático no momento da edição</li>
-            </ul>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-          <i class="ace-icon fa fa-times"></i> Cancelar
-        </button>
-        <button type="button" class="btn btn-success" id="btnSalvarLote">
-          <i class="ace-icon fa fa-save"></i> Salvar Alterações
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+	<!-- MODAL DE EDIÇÃO DE LOTE -->
+	<div id="modalEditarLote" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+		<div class="modal-header bg-primary">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+			<h4 class="modal-title white">
+			<i class="ace-icon fa fa-edit"></i> Editar Lote <span id="modalLoteNum"></span>
+			</h4>
+		</div>
+		<div class="modal-body">
+			<form id="formEditarLote">
+			<input type="hidden" id="loteId" name="loteId">
+			
+			<div class="row">
+				<div class="col-sm-6">
+				<div class="form-group">
+					<label>Número do Lote</label>
+					<input type="text" id="guialote_num" name="guialote_num" class="form-control" placeholder="Ex: 12345678">
+				</div>
+				</div>
+				<div class="col-sm-6">
+				<div class="form-group">
+					<label>Data do Lote</label>
+					<input type="date" id="guialote_numdatacad" name="guialote_numdatacad" class="form-control">
+				</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-6">
+				<div class="form-group">
+					<label>Número do Protocolo / Remessa</label>
+					<input type="text" id="guialote_numprotocolo" name="guialote_numprotocolo" class="form-control" placeholder="Ex: 87654321">
+				</div>
+				</div>
+				<div class="col-sm-6">
+				<div class="form-group">
+					<label>Data do Envio</label>
+					<input type="date" id="guialote_dataenvio" name="guialote_dataenvio" class="form-control">
+				</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-6">
+				<div class="form-group">
+					<label>Valor Total do Lote (R$)</label>
+					<input type="text" id="guialote_guialotevalor" name="guialote_guialotevalor" 
+						class="form-control input-moeda" placeholder="0,00" 
+						oninput="mascaraMoeda(this)">
+				</div>
+				</div>
+				<div class="col-sm-6">
+				<div class="form-group">
+					<label>Status</label>
+					<select id="guialote_status" name="guialote_status" class="form-control">
+					<option value="Aberto">Aberto</option>
+					<option value="Enviado">Enviado</option>
+					<option value="Fechado">Fechado</option>
+					</select>
+				</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label>Log / Observações</label>
+				<textarea id="guialote_log" name="guialote_log" class="form-control" rows="4" placeholder="Adicione observações sobre este lote..."></textarea>
+				<p class="help-block">
+				<strong>ℹ️ Dica:</strong> Use este campo para registrar eventos importantes do lote 
+				</p>
+			</div>
+			
+			<div class="alert alert-info">
+				<strong>⚠️ Atenção:</strong> Ao salvar, o sistema registrará automaticamente:
+				<ul>
+				<li><strong>Usuário:</strong> {{usuarioLogado.usuario_nome}} (ID: {{usuarioLogado._id}})</li>
+				<li><strong>Data/Hora:</strong> Registro automático no momento da edição</li>
+				</ul>
+			</div>
+			</form>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">
+			<i class="ace-icon fa fa-times"></i> Cancelar
+			</button>
+			<button type="button" class="btn btn-success" id="btnSalvarLote">
+			<i class="ace-icon fa fa-save"></i> Salvar Alterações
+			</button>
+		</div>
+		</div>
+	</div>
+	</div>
+	<!-- ============================================
+		MODAL ALTERAR LOTE (UPGRADE A)
+		============================================ -->
+	<div id="modalAlterarLote" class="modal fade" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header bg-warning">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title white">
+						<i class="ace-icon fa fa-edit"></i> Alterar Lote <span id="modalAlterarLoteNum"></span>
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="alert alert-info">
+						<i class="ace-icon fa fa-info-circle"></i>
+						<strong>Atenção:</strong> Você selecionou <span id="modalQtdAgendas">0</span> agendamento(s) do mesmo lote.
+						Os dados abaixo serão atualizados em todos os agendimentos vinculados.
+					</div>
+					<form id="formAlterarLote">
+						<input type="hidden" id="alt_loteId">
+						<input type="hidden" id="alt_listaAgendaIds">
+
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label>Número do Lote</label>
+									<input type="text" id="alt_guialote_num" class="form-control">
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label>Data do Lote</label>
+									<input type="date" id="alt_guialote_numdatacad" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label>Protocolo / Remessa</label>
+									<input type="text" id="alt_guialote_numprotocolo" class="form-control">
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label>Data do Envio</label>
+									<input type="date" id="alt_guialote_dataenvio" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group">
+								<label>Valor Total (R$)</label>
+								<input type="text" id="alt_guialote_guialotevalor" 
+									class="form-control input-moeda" 
+									oninput="mascaraMoeda(this)">
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label>Status</label>
+									<select id="alt_guialote_status" class="form-control">
+										<option value="Aberto">Aberto</option>
+										<option value="Enviado">Enviado</option>
+										<option value="Fechado">Fechado</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label>Log / Observações</label>
+							<textarea id="alt_guialote_log" class="form-control" rows="3"></textarea>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-warning" id="btnSalvarAlteracao">
+						<i class="ace-icon fa fa-save"></i> Salvar Alterações
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		// ============================================
+		// 💰 MÁSCARA DE MOEDA - UTILITÁRIOS
+		// ============================================
+
+		/**
+		* Converte número do banco (6678.40) para exibição brasileira (6.678,40)
+		*/
+		function formatarMoedaBR(valor) {
+			if (valor === null || valor === undefined || valor === '') return '';
+			const num = parseFloat(valor);
+			if (isNaN(num)) return '';
+			return num.toLocaleString('pt-BR', {
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+		}
+
+		/**
+		* Converte texto brasileiro (6.678,40) para número do banco (6678.40)
+		*/
+		function converterMoedaParaNumero(texto) {
+			if (!texto) return 0;
+			// Remove tudo que não é dígito, vírgula ou ponto
+			let limpo = texto.toString().replace(/[^\d.,]/g, '');
+			// Remove pontos de milhar
+			limpo = limpo.replace(/\./g, '');
+			// Troca vírgula por ponto decimal
+			limpo = limpo.replace(',', '.');
+			const num = parseFloat(limpo);
+			return isNaN(num) ? 0 : num;
+		}
+
+		/**
+		* Aplica máscara de moeda em tempo real enquanto o usuário digita
+		* Uso: <input type="text" class="input-moeda" oninput="mascaraMoeda(this)">
+		*/
+		function mascaraMoeda(input) {
+			let valor = input.value.replace(/[^\d]/g, ''); // só dígitos
+			
+			if (!valor) {
+				input.value = '';
+				return;
+			}
+			
+			// Converte para centavos e formata
+			valor = (parseInt(valor) / 100).toLocaleString('pt-BR', {
+				minimumFractionDigits: 2,
+				maximumFractionDigits: 2
+			});
+			
+			input.value = valor;
+		}
+	</script>
 	<script type="text/javascript">
 		$(document).ready(function() {
     // 🔹 Inicializar Select2 (substituindo o Chosen)
@@ -1851,7 +2035,7 @@ function carregarLoteParaEdicao(loteId) {
                 $('#guialote_numdatacad').val(lote.guialote_numdatacad ? formatarDataISO(lote.guialote_numdatacad) : '');
                 $('#guialote_numprotocolo').val(lote.guialote_numprotocolo || '');
                 $('#guialote_dataenvio').val(lote.guialote_dataenvio ? formatarDataISO(lote.guialote_dataenvio) : '');
-                $('#guialote_guialotevalor').val(lote.guialote_guialotevalor ? formatarMoeda(lote.guialote_guialotevalor) : '');
+                $('#guialote_guialotevalor').val(formatarMoedaBR(lote.guialote_guialotevalor));
                 $('#guialote_status').val(lote.guialote_status || 'Aberto');
                 $('#guialote_log').val(lote.guialote_log || '');
                 $('#modalLoteNum').text(lote.guialote_num ? `#${lote.guialote_num}` : '(sem número)');
@@ -1902,7 +2086,7 @@ $('#btnSalvarLote').on('click', function() {
         guialote_numdatacad: $('#guialote_numdatacad').val() || null,
         guialote_numprotocolo: $('#guialote_numprotocolo').val().trim() || null,
         guialote_dataenvio: $('#guialote_dataenvio').val() || null,
-        guialote_guialotevalor: removerFormatacaoMoeda($('#guialote_guialotevalor').val()),
+        guialote_guialotevalor: converterMoedaParaNumero($('#guialote_guialotevalor').val()),
         guialote_status: $('#guialote_status').val(),
         guialote_log: $('#guialote_log').val().trim() || null
     };
@@ -1949,6 +2133,269 @@ $('#modalEditarLote').on('hidden.bs.modal', function() {
     $('#loteId').val('');
     $('#modalLoteNum').text('');
 });
+	</script>
+	<script>
+		// ============================================
+		// 🚀 UPGRADE - FUNÇÕES DOS 3 NOVOS BOTÕES
+		// ============================================
+
+		// Helper: Coletar IDs das agendas marcadas no checkbox da tela
+		function coletarIdsSelecionados() {
+			const ids = [];
+			document.querySelectorAll('input[name="agendaCheck"]:checked').forEach(cb => {
+				ids.push(cb.value);
+			});
+			// ⚠️ ADAPTE o seletor acima conforme o nome do checkbox usado na sua view guialoteLis
+			return ids;
+		}
+
+		// Helper: Pegar objeto lote da linha (assumindo que cada TR tem data-lote-obj)
+		function getLoteDaLinha(tr) {
+			try {
+				return JSON.parse(tr.dataset.loteObj || 'null');
+			} catch { return null; }
+		}
+
+		// ============================================
+		// 🚀 BOTÃO: ALTERAR LOTE (Upgrade A)
+		// ============================================
+		document.addEventListener('click', function(e) {
+			if (e.target.closest('#btnAlterarLote')) {
+				const ids = coletarIdsSelecionados();
+				if (ids.length === 0) {
+					alert('⚠️ Selecione ao menos 1 agendamento.');
+					return;
+				}
+
+				// Descobre os lotes das linhas selecionadas
+				const lotesSet = new Set();
+				let primeiroLote = null;
+				document.querySelectorAll('input[name="agendaCheck"]:checked').forEach(cb => {
+					const tr = cb.closest('tr');
+					const loteId = tr.dataset.loteId;
+					if (loteId) {
+						lotesSet.add(loteId);
+						if (!primeiroLote) primeiroLote = JSON.parse(tr.dataset.loteObj || 'null');
+					}
+				});
+
+				if (lotesSet.size === 0) {
+					alert('❌ Nenhum dos agendamentos selecionados possui lote vinculado.');
+					return;
+				}
+				if (lotesSet.size > 1) {
+					alert(`⚠️ Você selecionou agendamentos de ${lotesSet.size} lotes DIFERENTES.\n\nPor segurança, selecione apenas agendamentos do MESMO lote.`);
+					return;
+				}
+
+				// Preenche modal
+				const lote = primeiroLote;
+				document.getElementById('alt_loteId').value = [...lotesSet][0];
+				document.getElementById('alt_listaAgendaIds').value = JSON.stringify(ids);
+				document.getElementById('modalAlterarLoteNum').textContent = lote?.guialoteNum ? `#${lote.guialoteNum}` : '(sem número)';
+				document.getElementById('modalQtdAgendas').textContent = ids.length;
+				document.getElementById('alt_guialote_num').value = lote?.guialoteNum || '';
+				document.getElementById('alt_guialote_numdatacad').value = lote?.guialoteNumdatacad ? lote.guialoteNumdatacad.split('T')[0] : '';
+				document.getElementById('alt_guialote_numprotocolo').value = lote?.guialoteNumprotocolo || '';
+				document.getElementById('alt_guialote_dataenvio').value = lote?.guialoteDataenvio ? lote.guialoteDataenvio.split('T')[0] : '';
+				document.getElementById('alt_guialote_guialotevalor').value = formatarMoedaBR(lote?.guialoteGuialotevalor);
+				document.getElementById('alt_guialote_status').value = lote?.guialoteStatus || 'Aberto';
+				document.getElementById('alt_guialote_log').value = lote?.guialoteLog || '';
+
+				$('#modalAlterarLote').modal('show');
+			}
+		});
+
+		// Salvar alteração do lote
+		document.addEventListener('click', async function(e) {
+			if (e.target.closest('#btnSalvarAlteracao')) {
+				const btn = e.target.closest('#btnSalvarAlteracao');
+				btn.disabled = true;
+				btn.innerHTML = '<i class="ace-icon fa fa-spinner fa-spin"></i> Salvando...';
+
+				const dados = {
+					loteId: document.getElementById('alt_loteId').value,
+					listaAgendaIds: JSON.parse(document.getElementById('alt_listaAgendaIds').value),
+					guialote_num: document.getElementById('alt_guialote_num').value,
+					guialote_numdatacad: document.getElementById('alt_guialote_numdatacad').value,
+					guialote_numprotocolo: document.getElementById('alt_guialote_numprotocolo').value,
+					guialote_dataenvio: document.getElementById('alt_guialote_dataenvio').value,
+					guialote_guialotevalor: converterMoedaParaNumero(document.getElementById('alt_guialote_guialotevalor').value),
+					guialote_status: document.getElementById('alt_guialote_status').value,
+					guialote_log: document.getElementById('alt_guialote_log').value
+				};
+
+				try {
+					const resp = await fetch('/menu/guia/lote/alterar', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify(dados)
+					});
+					const result = await resp.json();
+					if (result.ok) {
+						alert('✅ ' + result.message);
+						$('#modalAlterarLote').modal('hide');
+						setTimeout(() => location.reload(), 500);
+					} else {
+						alert('❌ ' + result.message);
+					}
+				} catch (err) {
+					alert('❌ Erro de comunicação: ' + err.message);
+				} finally {
+					btn.disabled = false;
+					btn.innerHTML = '<i class="ace-icon fa fa-save"></i> Salvar Alterações';
+				}
+			}
+		});
+
+		// ============================================
+		// 🚀 BOTÃO: REMOVER LOTE (Upgrade C)
+		// ============================================
+		document.addEventListener('click', async function(e) {
+			if (e.target.closest('#btnRemoverLote')) {
+				const ids = coletarIdsSelecionados();
+				if (ids.length === 0) {
+					alert('⚠️ Selecione ao menos 1 agendamento.');
+					return;
+				}
+
+				if (!confirm(`⚠️ ATENÇÃO!\n\nVocê está prestes a DESVINCULAR ${ids.length} agendamento(s) de seus lotes.\n\n• Se o lote ficar VAZIO → será DELETADO do banco.\n• Se ainda houver outras agendas → o lote será ATUALIZADO.\n\nDeseja continuar?`)) {
+					return;
+				}
+
+				try {
+					const resp = await fetch('/menu/guia/lote/remover', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ listaAgendaIds: ids })
+					});
+					const result = await resp.json();
+					if (result.ok) {
+						const r = result.resumo;
+						let msg = `✅ ${result.message}\n\n`;
+						msg += `🗑️ Lotes DELETADOS: ${r.lotesDeletados.length}\n`;
+						msg += `🔄 Lotes ATUALIZADOS: ${r.lotesAtualizados.length}`;
+						alert(msg);
+						setTimeout(() => location.reload(), 500);
+					} else {
+						alert('❌ ' + result.message);
+					}
+				} catch (err) {
+					alert('❌ Erro de comunicação: ' + err.message);
+				}
+			}
+		});
+
+		// ============================================
+		// 🚀 BOTÃO: VERIFICAR INTEGRIDADE (Upgrade B)
+		// Destaca automaticamente linhas com "lote fantasma"
+		// ============================================
+		document.addEventListener('click', async function(e) {
+			if (e.target.closest('#btnVerificarIntegridade')) {
+				const btn = e.target.closest('#btnVerificarIntegridade');
+				btn.disabled = true;
+				btn.innerHTML = '<i class="ace-icon fa fa-spinner fa-spin"></i> Verificando...';
+
+				// Coleta TODAS as agendas da tabela (não só as marcadas)
+				const todasIds = [];
+				document.querySelectorAll('tr[data-agenda-id]').forEach(tr => {
+					todasIds.push(tr.dataset.agendaId);
+				});
+				// ⚠️ ADAPTE: se sua view usa outro atributo (ex: data-id), ajuste acima
+
+				if (todasIds.length === 0) {
+					alert('⚠️ Nenhuma agenda visível na tela para verificar.');
+					btn.disabled = false;
+					btn.innerHTML = '<i class="ace-icon fa fa-stethoscope"></i> Verificar Integridade';
+					return;
+				}
+
+				try {
+					const resp = await fetch('/menu/guia/lote/verificar-integridade', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ listaAgendaIds: todasIds })
+					});
+					const result = await resp.json();
+
+					if (result.ok) {
+						// Limpa marcas anteriores
+						document.querySelectorAll('.linha-fantasma').forEach(el => el.classList.remove('linha-fantasma'));
+						document.querySelectorAll('.badge-fantasma').forEach(el => el.remove());
+
+						if (result.fantasmas.length === 0) {
+							alert(`✅ Todos os ${result.totalVerificado} agendamentos estão íntegros!\nNenhum lote fantasma detectado.`);
+						} else {
+							// Destaca visualmente
+							result.fantasmas.forEach(f => {
+								const tr = document.querySelector(`tr[data-agenda-id="${f.agendaId}"]`);
+								if (tr) {
+									tr.classList.add('linha-fantasma');
+									// Adiciona badge ao lado do nome do lote
+									const tdLote = tr.querySelector('td.col-lote, td:nth-child(2)');
+									if (tdLote && !tdLote.querySelector('.badge-fantasma')) {
+										const badge = document.createElement('span');
+										badge.className = 'badge-fantasma';
+										badge.textContent = 'FANTASMA';
+										badge.title = `Lote ${f.loteIdInvalido} não existe mais no banco`;
+										tdLote.appendChild(badge);
+									}
+								}
+							});
+							alert(`⚠️ ATENÇÃO!\n\n${result.fantasmas.length} agendamento(s) com "lote fantasma" detectado(s) e destacados em VERMELHO.\n\nSelecione-os e clique em "Remover Lote" para limpar os vínculos órfãos.`);
+						}
+					} else {
+						alert('❌ ' + result.message);
+					}
+				} catch (err) {
+					alert('❌ Erro de comunicação: ' + err.message);
+				} finally {
+					btn.disabled = false;
+					btn.innerHTML = '<i class="ace-icon fa fa-stethoscope"></i> Verificar Integridade';
+				}
+			}
+		});
+
+		// ============================================
+		// 🚀 AUTO-CHECK INTEGRIDADE AO CARREGAR (Upgrade B)
+		// Roda silenciosamente ao abrir a tela
+		// ============================================
+		document.addEventListener('DOMContentLoaded', async function() {
+			const todasIds = [];
+			document.querySelectorAll('tr[data-agenda-id]').forEach(tr => {
+				todasIds.push(tr.dataset.agendaId);
+			});
+			if (todasIds.length === 0) return;
+
+			try {
+				const resp = await fetch('/menu/guia/lote/verificar-integridade', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ listaAgendaIds: todasIds })
+				});
+				const result = await resp.json();
+				if (result.ok && result.fantasmas.length > 0) {
+					result.fantasmas.forEach(f => {
+						const tr = document.querySelector(`tr[data-agenda-id="${f.agendaId}"]`);
+						if (tr) {
+							tr.classList.add('linha-fantasma');
+							const tdLote = tr.querySelector('td.col-lote, td:nth-child(2)');
+							if (tdLote && !tdLote.querySelector('.badge-fantasma')) {
+								const badge = document.createElement('span');
+								badge.className = 'badge-fantasma';
+								badge.textContent = 'FANTASMA';
+								badge.title = `Lote ${f.loteIdInvalido} não existe mais`;
+								tdLote.appendChild(badge);
+							}
+						}
+					});
+					console.warn(`⚠️ ${result.fantasmas.length} lote(s) fantasma detectado(s) automaticamente.`);
+				}
+			} catch (err) {
+				console.error('[Integridade] Falha na verificação automática:', err);
+			}
+		});
+		
 	</script>
 	
 </body>

@@ -1667,7 +1667,7 @@ module.exports = {FiltroEvoatend,
                             const nomeConvenio = convMap[a.agenda_convid?.toString()] || 'Sem convênio';
                             const nomeTerapia = terapiaMap[a.agenda_terapiaid?.toString()] || 'Sem terapia';
                             
-                            const ehValidoParaLote = !ehCancelado && temEvolucao && temGuia && temSenha;
+                            const ehValidoParaLote = !ehCancelado && temGuia && temSenha;
                             
                             if (ehValidoParaLote && temLote) {
                                 const loteId = a.agenda_loteid?._id?.toString();
@@ -1982,7 +1982,7 @@ module.exports = {FiltroEvoatend,
                                     const nomeConvenio = convMap[a.agenda_convid?.toString()] || 'Sem convênio';
                                     const nomeTerapia = terapiaMap[a.agenda_terapiaid?.toString()] || 'Sem terapia';
 
-                                    const ehValidoParaLote = !ehCancelado && temEvolucao && temGuia && temSenha;
+                                    const ehValidoParaLote = !ehCancelado && temGuia && temSenha;
 
                                     if (ehValidoParaLote && temLote) {
                                         const loteId = a.agenda_loteid?._id?.toString();
@@ -2191,9 +2191,7 @@ module.exports = {FiltroEvoatend,
         });
     },
 
-    // ============================================
-    // CONSOLIDADO DOS LOTES
-    // ============================================
+ 
 // ============================================
 // CONSOLIDADO DOS LOTES - AGRUPADO POR CONVENIO
 // ============================================
@@ -2412,7 +2410,7 @@ filtraconsolidadoGuialote(req, res, resposta) {
                                 const nomeTerapia = terapiaMap[a.agenda_terapiaid?.toString()] || 'Sem terapia';
                                 const convId = a.agenda_convid?._id?.toString() || a.agenda_convid?.toString() || 'sem_convenio';
 
-                                const ehValidoParaLote = !ehCancelado && temEvolucao && temGuia && temSenha;
+                                const ehValidoParaLote = !ehCancelado && temGuia && temSenha;
 
                                 if (ehValidoParaLote && temLote) {
                                     const loteId = a.agenda_loteid?._id?.toString();
@@ -3045,7 +3043,7 @@ filtraconsolidadoGuialote(req, res, resposta) {
                 guialote_numprotocolo: guialote_numprotocolo || null,
                 guialote_dataenvio: guialote_dataenvio ? new Date(guialote_dataenvio) : null,
                 
-                guialote_guialotevalor: guialote_valor || 0,
+                guialote_valor: converterMoedaParaNumero(guialoteGuialotevalor),
                 guialote_qtatend: idsValidos.length,
                 guialote_agendas: idsValidos,
                 guialote_usucad: idUsu,
@@ -3078,5 +3076,255 @@ filtraconsolidadoGuialote(req, res, resposta) {
             console.error("❌ [BACKEND] ERRO:", err);
             return res.status(400).json({ ok: false, message: err.message });
         }
-    }
+    },
+    // ============================================
+        // 🚀 UPGRADE A: ALTERAR LOTE EXISTENTE
+        // Só permite se TODOS os agendamentos selecionados
+        // pertencerem ao MESMO lote.
+        // ============================================
+        alterarLote: async (req, res) => {
+            console.log('[BACKEND] >>> Requisição alterarLote');
+            let db = req.cookies['preferredDb'];
+            if (!db) return res.status(400).json({ ok: false, message: "Database não identificada." });
+
+            const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+            const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
+
+            try {
+                const {
+                    loteId,
+                    listaAgendaIds,
+                    guialote_num,
+                    guialote_numdatacad,
+                    guialote_numprotocolo,
+                    guialote_dataenvio,
+                    guialote_guialotevalor,
+                    guialote_status,
+                    guialote_log
+                } = req.body;
+
+                const idUsu = req.cookies['idUsu'];
+                const agora = new Date();
+
+                if (!loteId) throw new Error("ID do lote não informado.");
+                if (!listaAgendaIds?.length) throw new Error("Nenhum agendamento selecionado.");
+
+                // 🔍 VALIDAÇÃO CRÍTICA: Todos devem pertencer AO MESMO lote
+                const agendasSelecionadas = await Agenda.find({ _id: { $in: listaAgendaIds } });
+                const lotesEncontrados = new Set();
+
+                for (const ag of agendasSelecionadas) {
+                    if (!ag.agenda_loteid) {
+                        throw new Error(`Agenda ${ag._id} NÃO possui lote vinculado.`);
+                    }
+                    lotesEncontrados.add(ag.agenda_loteid.toString());
+                }
+
+                if (lotesEncontrados.size > 1) {
+                    throw new Error(`⚠️ Você selecionou agendamentos de ${lotesEncontrados.size} lotes DIFERENTES. Selecione apenas agendamentos do MESMO lote.`);
+                }
+
+                const loteDasAgendas = [...lotesEncontrados][0];
+                if (loteDasAgendas !== loteId.toString()) {
+                    throw new Error("Inconsistência: o lote informado não corresponde ao lote dos agendamentos.");
+                }
+
+                // ✅ ATUALIZAR APENAS O LOTE (vínculos das agendas permanecem)
+                const update = {
+                    guialote_num: guialote_num || null,
+                    guialote_numdatacad: guialote_numdatacad ? new Date(guialote_numdatacad) : null,
+                    guialote_numprotocolo: guialote_numprotocolo || null,
+                    guialote_dataenvio: guialote_dataenvio ? new Date(guialote_dataenvio) : null,
+                    guialote_guialotevalor: parseFloat(guialote_guialotevalor) || 0,
+                    guialote_status: guialote_status || 'Aberto',
+                    guialote_log: guialote_log || null,
+                    guialote_usuedi: idUsu,
+                    guialote_dataedi: agora
+                };
+
+                // Remove campos undefined/vazios
+                Object.keys(update).forEach(key => {
+                    if (update[key] === undefined || update[key] === '') delete update[key];
+                });
+
+                const loteAtualizado = await Guialote.findByIdAndUpdate(
+                    loteId,
+                    { $set: update },
+                    { new: true, runValidators: true }
+                );
+
+                if (!loteAtualizado) throw new Error("Lote não encontrado no banco.");
+
+                console.log(`✅ [alterarLote] Lote ${loteId} atualizado por ${idUsu}`);
+                return res.json({
+                    ok: true,
+                    message: `Lote atualizado com sucesso! ${agendasSelecionadas.length} agendamentos permanecem vinculados.`,
+                    loteId: loteAtualizado._id,
+                    dataEdicao: agora.toLocaleString('pt-BR')
+                });
+
+            } catch (err) {
+                console.error("❌ [alterarLote] ERRO:", err.message);
+                return res.status(400).json({ ok: false, message: err.message });
+            }
+        },
+
+        // ============================================
+        // 🚀 UPGRADE B: VERIFICAR INTEGRIDADE (LOTES FANTASMAS)
+        // Detecta agendamentos cujo agenda_loteid aponta para
+        // um lote que NÃO EXISTE mais no banco.
+        // ============================================
+        verificarIntegridadeLotes: async (req, res) => {
+            console.log('[BACKEND] >>> Requisição verificarIntegridadeLotes');
+            let db = req.cookies['preferredDb'];
+            if (!db) return res.status(400).json({ ok: false, message: "Database não identificada." });
+
+            const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+            const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
+
+            try {
+                const { listaAgendaIds } = req.body;
+                if (!listaAgendaIds?.length) {
+                    return res.json({ ok: true, fantasmas: [], totalVerificado: 0 });
+                }
+
+                // 1. Buscar agendas que têm agenda_loteid preenchido
+                const agendas = await Agenda.find({
+                    _id: { $in: listaAgendaIds },
+                    agenda_loteid: { $ne: null, $exists: true }
+                }).select('_id agenda_loteid').lean();
+
+                if (agendas.length === 0) {
+                    return res.json({ ok: true, fantasmas: [], totalVerificado: listaAgendaIds.length });
+                }
+
+                // 2. Coletar IDs únicos de lote referenciados
+                const idsLoteReferenciados = [...new Set(agendas.map(a => a.agenda_loteid.toString()))];
+
+                // 3. Buscar quais desses IDs REALMENTE existem em tb_guialote
+                const lotesExistentes = await Guialote.find({
+                    _id: { $in: idsLoteReferenciados }
+                }).select('_id').lean();
+
+                const idsLoteValidos = new Set(lotesExistentes.map(l => l._id.toString()));
+
+                // 4. Identificar agendas "fantasmas" (lote não existe)
+                const fantasmas = agendas
+                    .filter(a => !idsLoteValidos.has(a.agenda_loteid.toString()))
+                    .map(a => ({
+                        agendaId: a._id.toString(),
+                        loteIdInvalido: a.agenda_loteid.toString()
+                    }));
+
+                console.log(`🔍 [Integridade] Verificadas: ${listaAgendaIds.length} | Fantasmas: ${fantasmas.length}`);
+                return res.json({
+                    ok: true,
+                    fantasmas: fantasmas,
+                    totalVerificado: listaAgendaIds.length,
+                    lotesValidos: idsLoteValidos.size
+                });
+
+            } catch (err) {
+                console.error("❌ [verificarIntegridadeLotes] ERRO:", err);
+                return res.status(500).json({ ok: false, message: err.message });
+            }
+        },
+
+        // ============================================
+        // 🚀 UPGRADE C: REMOVER LOTE (DESVINCULAR + LIMPAR)
+        // Processa cada lote separadamente:
+        // - Desvincula as agendas selecionadas
+        // - Se o lote ficar VAZIO → deleta o lote
+        // - Se ainda tiver agendas → atualiza contador
+        // ============================================
+        removerLote: async (req, res) => {
+            console.log('[BACKEND] >>> Requisição removerLote');
+            let db = req.cookies['preferredDb'];
+            if (!db) return res.status(400).json({ ok: false, message: "Database não identificada." });
+
+            const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+            const Guialote = getModel(db, 'tb_guialote', guialoteClass.GuialoteSchema);
+
+            try {
+                const { listaAgendaIds } = req.body;
+                const idUsu = req.cookies['idUsu'];
+                const agora = new Date();
+
+                if (!listaAgendaIds?.length) throw new Error("Nenhum agendamento selecionado.");
+
+                // 1. Agrupar agendas por loteId
+                const agendas = await Agenda.find({ _id: { $in: listaAgendaIds } });
+                const lotesMap = {};
+
+                for (const ag of agendas) {
+                    if (!ag.agenda_loteid) continue; // ignora quem não tem lote
+                    const loteId = ag.agenda_loteid.toString();
+                    if (!lotesMap[loteId]) lotesMap[loteId] = [];
+                    lotesMap[loteId].push(ag._id);
+                }
+
+                const lotesIds = Object.keys(lotesMap);
+                if (lotesIds.length === 0) {
+                    throw new Error("Nenhum dos agendamentos selecionados possui lote vinculado.");
+                }
+
+                const resumo = {
+                    lotesProcessados: 0,
+                    lotesDeletados: [],
+                    lotesAtualizados: [],
+                    agendasDesvinculadas: 0
+                };
+
+                // 2. Processar cada lote separadamente
+                for (const loteId of lotesIds) {
+                    const agendasDoLoteParaDesvincular = lotesMap[loteId];
+
+                    // a) Remove vínculo das agendas selecionadas
+                    await Agenda.updateMany(
+                        { _id: { $in: agendasDoLoteParaDesvincular } },
+                        {
+                            $set: {
+                                agenda_loteid: null,
+                                agenda_dataedi: agora,
+                                agenda_usuedi: idUsu
+                            }
+                        }
+                    );
+                    resumo.agendasDesvinculadas += agendasDoLoteParaDesvincular.length;
+
+                    // b) Verifica quantas agendas AINDA estão vinculadas ao lote
+                    const restantes = await Agenda.countDocuments({ agenda_loteid: loteId });
+
+                    // c) Se não tem mais nenhuma → DELETA o lote
+                    if (restantes === 0) {
+                        await Guialote.findByIdAndDelete(loteId);
+                        resumo.lotesDeletados.push(loteId);
+                        console.log(`🗑️ [removerLote] Lote ${loteId} DELETADO (ficou vazio)`);
+                    } else {
+                        // d) Se ainda tem → atualiza contador
+                        await Guialote.findByIdAndUpdate(loteId, {
+                            $set: {
+                                guialote_qtatend: restantes,
+                                guialote_usuedi: idUsu,
+                                guialote_dataedi: agora
+                            }
+                        });
+                        resumo.lotesAtualizados.push({ loteId, agendasRestantes: restantes });
+                        console.log(`🔄 [removerLote] Lote ${loteId} atualizado (${restantes} agendas restantes)`);
+                    }
+
+                    resumo.lotesProcessados++;
+                }
+
+                return res.json({
+                    ok: true,
+                    message: `✅ Processado! ${resumo.agendasDesvinculadas} agendamentos desvinculados de ${resumo.lotesProcessados} lote(s).`,
+                    resumo: resumo
+                });
+
+            } catch (err) {
+                console.error("❌ [removerLote] ERRO:", err.message);
+                return res.status(400).json({ ok: false, message: err.message });
+            }
+        }
 }

@@ -3719,6 +3719,20 @@ router.post('/guia/lote/addlote', fncGeral.IsAuthenticated, (req,res) =>{//direc
     fncGuialote.adicionarGuialote(req, res);
 })
 
+// Criado por: Wagner Cintra
+// Data: 05-02-2026
+router.post('/guia/lote/alterar', fncGeral.IsAuthenticated, (req,res) =>{
+     fncGuialote.alterarLote(req, res);
+}) 
+
+router.post('/guia/lote/remover', fncGeral.IsAuthenticated, (req,res) =>{
+     fncGuialote.removerLote(req, res);
+})
+
+router.post('/guia/lote/verificar-integridade', fncGeral.IsAuthenticated, (req,res) =>{
+    fncGuialote.verificarIntegridadeLotes(req, res);
+})
+
 // ✅ NOVA ROTA: SALVAR GUIA EM MASSA com segurança (evita sobrescrita de dados já cadastrados na base)
 // Criado por: Wagner Cintra
 // Data: 16-02-2026

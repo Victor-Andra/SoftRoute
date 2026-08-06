@@ -319,10 +319,28 @@ const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSc
                 json: function(context) {
                     return JSON.stringify(context);
                 },
-                dataISOToDate: function(date) {
+                dataISOToDateOLD: function(date) {
                     if (!date) return '';
                     const d = new Date(date);
                     return d.toISOString().slice(0, 10); // YYYY-MM-DD
+                },
+                dataISOToDate: function(date) {
+                    if (!date) return '';
+
+                    const d = new Date(date);
+
+                    // valida se é data válida
+                    if (isNaN(d.getTime())) {
+                        console.error('Data inválida recebida no helper:', date);
+                        return '';
+                    }
+
+                    // garante formato YYYY-MM-DD sem depender de slice direto
+                    const year = d.getUTCFullYear();
+                    const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+                    const day = String(d.getUTCDate()).padStart(2, '0');
+
+                    return `${year}-${month}-${day}`;
                 },
                 /**
                  * Helper Handlebars: {{formataContabil valor}}

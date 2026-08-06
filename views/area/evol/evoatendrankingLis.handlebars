@@ -4,63 +4,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta charset="utf-8">
     <title>Dashboard de Performance Semanal</title>
+    
     <style>
         /* ============================================
-           CARDS DE RESUMO
+           1. RESET E TIPOGRAFIA GERAL (10-11px)
            ============================================ */
-        .card-resumo {
-            border-radius: 12px;
-            padding: 20px;
-            color: white;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            margin-bottom: 20px;
-            transition: transform 0.3s;
-        }
-        .card-resumo:hover {
-            transform: translateY(-5px);
-        }
-        .card-resumo.atendimentos {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .card-resumo.evolucoes {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-        .card-resumo.percentual {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-        .card-resumo h3 {
-            margin: 0 0 10px 0;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.9;
-        }
-        .card-resumo h1 {
-            margin: 0;
-            font-size: 48px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        .card-resumo .icone {
-            font-size: 32px;
-            opacity: 0.3;
-            position: absolute;
-            right: 20px;
-            top: 20px;
+        #dashboard-table,
+        #dashboard-table th,
+        #dashboard-table td,
+        #dashboard-table .btn,
+        #dashboard-table .label,
+        #dashboard-table-empty,
+        #dashboard-table-empty th,
+        #dashboard-table-empty td {
+            font-size: 10px !important;
         }
 
         /* ============================================
-           BARRA DE PESQUISA
+           2. TOOLBAR DE PESQUISA (Estilo Ace Admin)
            ============================================ */
         .toolbar-pesquisa {
-            background: linear-gradient(135deg, #21e2f3 0%, #1976d2 100%);
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
             color: white;
             padding: 15px;
             border-radius: 8px;
-            margin: 0 0 20px 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             border: 1px solid #1976d2;
+        }
+        .toolbar-pesquisa h5 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .toolbar-pesquisa h5 i { font-size: 18px; }
+        .toolbar-pesquisa .form-group {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 120px;
         }
         .toolbar-pesquisa label {
             font-size: 11px;
@@ -68,7 +54,6 @@
             margin-bottom: 4px;
             color: #f8f9fa;
             white-space: nowrap;
-            display: block;
         }
         .toolbar-pesquisa input[type="date"],
         .toolbar-pesquisa select {
@@ -81,27 +66,17 @@
             background: white;
             color: #333;
             height: 30px;
-        }
-        .toolbar-pesquisa .btn-pesquisar {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 8px 24px;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        .toolbar-pesquisa .btn-pesquisar:hover {
-            background: #c82333;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        .toolbar-pesquisa input[type="date"]:focus,
+        .toolbar-pesquisa select:focus {
+            border-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.2);
+            outline: none;
         }
 
         /* ============================================
-           SELECT2
+           3. SELECT2 (Padrão da última view)
            ============================================ */
         .select2-container { min-width: 120px !important; }
         .select2-container--default .select2-selection--single {
@@ -115,122 +90,409 @@
             font-size: 12px !important;
         }
         .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 28px !important; right: 5px !important;
+            height: 28px !important;
+            right: 5px !important;
         }
         .select2-container--default .select2-selection--single .select2-selection__rendered {
-            line-height: 28px !important; padding-left: 0 !important; color: #333 !important;
+            line-height: 28px !important;
+            padding-left: 0 !important;
+            color: #333 !important;
         }
         .select2-dropdown {
             border: 1px solid #ced4da !important;
             border-radius: 4px !important;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
         }
+        .toolbar-pesquisa .select2-container { width: 100% !important; }
+        .toolbar-pesquisa .select2-selection--single { width: 100% !important; }
 
         /* ============================================
-           TABELA DO DASHBOARD
-           ============================================ */
-        .dashboard-table {
-            font-size: 12px;
-        }
-        .dashboard-table thead th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-            vertical-align: middle;
-            padding: 8px 4px;
-            border: 1px solid #5a67d8;
-            font-weight: 600;
-        }
-        .dashboard-table thead th.col-total {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border-color: #d63384;
-        }
-        .dashboard-table tbody td {
-            text-align: center;
-            vertical-align: middle;
-            padding: 6px 4px;
-        }
-        .dashboard-table tbody td.nome-terapeuta {
-            text-align: left;
-            font-weight: 600;
-            background-color: #f8f9fa;
-            position: sticky;
-            left: 0;
-            z-index: 1;
-        }
-        .dashboard-table tbody tr:hover td {
-            background-color: #e3f2fd !important;
-        }
-        .dashboard-table tbody tr:hover td.nome-terapeuta {
-            background-color: #bbdefb !important;
+        ⭐ CARDS DE RESUMO - IMPRESSÃO (EM LINHA E COMPACTOS)
+        ============================================ */
+        .cards-resumo-row {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            gap: 4px !important;
+            margin: 0 0 3mm 0 !important;
+            width: 100% !important;
         }
 
-        /* ============================================
-           BARRA DE PROGRESSO
-           ============================================ */
-        .progress-mini {
-            height: 20px;
-            border-radius: 10px;
-            background-color: #e9ecef;
-            overflow: hidden;
-            position: relative;
-            min-width: 80px;
+        .cards-resumo-row > .col-sm-4 {
+            width: 33.33% !important;
+            flex: 1 !important;
+            float: none !important;
+            padding: 0 2px !important;
+            box-sizing: border-box !important;
         }
-        .progress-mini .progress-bar {
-            height: 100%;
-            line-height: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            color: white;
-            text-align: center;
-            border-radius: 10px;
-            transition: width 0.6s ease;
+
+        .card-resumo {
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
+            box-shadow: none !important;
+            margin-bottom: 0 !important;
+            padding: 4px 8px !important;
+            border-radius: 3px !important;
+            text-align: center !important;
+            min-height: auto !important;
         }
-        .progress-bar-low {
-            background: linear-gradient(90deg, #f5576c, #ff6b6b);
+
+        .card-resumo h3 {
+            font-size: 8px !important;
+            margin: 0 0 2px 0 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.3px !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
         }
-        .progress-bar-medium {
-            background: linear-gradient(90deg, #ffa751, #ffe259);
-            color: #333 !important;
+
+        .card-resumo h1 {
+            font-size: 16px !important;
+            margin: 0 !important;
+            font-weight: 700 !important;
+            line-height: 1.1 !important;
         }
-        .progress-bar-high {
-            background: linear-gradient(90deg, #11998e, #38ef7d);
+
+        .card-resumo .icone {
+            display: none !important;
+        }
+
+        /* Remove hover na impressão */
+        .card-resumo:hover {
+            transform: none !important;
         }
 
         /* ============================================
-           PERÍODO EXIBIDO
+           5. PERÍODO EXIBIDO
            ============================================ */
         .periodo-display {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
+            background: #f5f5f5;
+            color: #333;
+            padding: 12px 20px;
+            border-radius: 6px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 4px solid #1976d2;
         }
         .periodo-display h4 {
             margin: 0;
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 600;
+            color: #555;
         }
         .periodo-display .periodo-texto {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 700;
-            margin-top: 5px;
-            color: #4facfe;
+            margin-top: 3px;
+            color: #1976d2;
         }
 
-        /* Responsividade */
+        /* ============================================
+           6. TABELA PRINCIPAL (Estilo Ace Admin)
+           ============================================ */
+        .widget-box {
+            border: 1px solid #dcdcdc;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .widget-header {
+            background: #f5f5f5 !important;
+            border-bottom: 1px solid #dcdcdc;
+            padding: 10px 15px;
+        }
+        .widget-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+        .widget-title small {
+            font-size: 11px;
+            color: #888;
+            margin-left: 8px;
+        }
+        .widget-main { padding: 10px; }
+
+        /* Cabeçalhos da tabela */
+        #dashboard-table thead th,
+        #dashboard-table-empty thead th {
+            background: #f5f5f5 !important;
+            color: #333 !important;
+            text-align: center;
+            vertical-align: middle;
+            padding: 6px 3px !important;
+            border: 1px solid #ddd !important;
+            font-weight: 600;
+            font-size: 10px !important;
+            white-space: nowrap;
+        }
+        #dashboard-table thead th.col-total,
+        #dashboard-table-empty thead th.col-total {
+            background: #e3f2fd !important;
+            color: #0d47a1 !important;
+            border-color: #90caf9 !important;
+        }
+
+        /* Células do corpo */
+        #dashboard-table tbody td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 4px 3px !important;
+            font-size: 10px !important;
+            border: 1px solid #eee !important;
+        }
+        #dashboard-table tbody td.nome-terapeuta {
+            text-align: left;
+            font-weight: 600;
+            background-color: #fafafa;
+            position: sticky;
+            left: 0;
+            z-index: 1;
+            min-width: 180px;
+            max-width: 220px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #dashboard-table tbody tr:hover td { background-color: #e3f2fd !important; }
+        #dashboard-table tbody tr:hover td.nome-terapeuta { background-color: #bbdefb !important; }
+
+        /* Valores de total em negrito */
+        #dashboard-table tbody td.total-cell {
+            font-weight: 700;
+            background-color: #f9f9f9;
+        }
+
+        /* ============================================
+           7. BARRA DE PROGRESSO (Fina: 12px)
+           ============================================ */
+        .progress-mini {
+            height: 12px;
+            border-radius: 6px;
+            background-color: #e9ecef;
+            overflow: hidden;
+            position: relative;
+            min-width: 60px;
+            max-width: 90px;
+            margin: 0 auto;
+        }
+        .progress-mini .progress-bar {
+            height: 100%;
+            line-height: 12px;
+            font-size: 9px;
+            font-weight: 600;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            transition: width 0.4s ease;
+        }
+        .progress-bar-low    { background: #f44336; }
+        .progress-bar-medium { background: #ff9800; color: #333 !important; }
+        .progress-bar-high   { background: #4caf50; }
+
+        /* ============================================
+           8. BOTÃO SCROLL UP
+           ============================================ */
+        .btn-scroll-up {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+            z-index: 999;
+        }
+        .btn-scroll-up.display { display: block; }
+
+        /* ============================================
+           9. RESPONSIVIDADE
+           ============================================ */
         .table-responsive {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        @media (max-width: 768px) {
+            .toolbar-pesquisa .select2-container { width: 100% !important; }
+            .card-resumo h1 { font-size: 24px; }
+        }
+
+        /* ============================================
+           10. ⭐ IMPRESSÃO OTIMIZADA (PAISAGEM)
+           ============================================ */
+        @page {
+            size: A4 landscape;
+            margin: 1cm 0.8cm;
+        }
+
+        @media print {
+            @page { size: A4 landscape; margin: 1cm 0.8cm; }
+            
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            body {
+                background: white !important;
+                font-size: 9px !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* ✅ OCULTA SIDEBAR E NAVBAR */
+            .sidebar,
+            .sidebar-container,
+            .navbar,
+            .navbar-container,
+            .breadcrumbs,
+            .ace-settings-container,
+            #sidebar,
+            #navbar,
+            #menu-collapse,
+            .menu-toggle,
+            .btn-scroll-up,
+            #btn-scroll-up {
+                display: none !important;
+            }
+
+            /* ✅ OCULTA ELEMENTOS INTERATIVOS */
+            .toolbar-pesquisa,
+            .dt-buttons,
+            .dt-buttons *,
+            .dataTables_filter,
+            .dataTables_length,
+            .dataTables_paginate,
+            .dataTables_info,
+            .widget-toolbar,
+            .widget-toolbar *,
+            .page-header,
+            #alertMsgFlash,
+            .alert {
+                display: none !important;
+            }
+
+            /* ✅ CORRIGE ESTRUTURA DE LAYOUT */
+            .main-container {
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+            .main-content-inner { padding: 0 !important; margin: 0 !important; }
+
+            /* ✅ ENCAPSULA CONTEÚDO NA ÁREA DE IMPRESSÃO */
+            .page-content {
+                margin: 0 !important;
+                padding: 0 5mm !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+                background: white !important;
+                border: none !important;
+            }
+
+            /* ✅ CARDS DE RESUMO */
+            .card-resumo {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                box-shadow: none !important;
+                margin-bottom: 5mm !important;
+                padding: 8px 12px !important;
+            }
+            .card-resumo h1 { font-size: 22px !important; }
+            .card-resumo h3 { font-size: 10px !important; }
+            .card-resumo .icone { display: none !important; }
+
+            /* ✅ PERÍODO DISPLAY */
+            .periodo-display {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                padding: 6px 12px !important;
+                margin-bottom: 5mm !important;
+                background: white !important;
+                border: 1px solid #ccc !important;
+                border-left: 3px solid #1976d2 !important;
+            }
+            .periodo-display h4 { font-size: 10px !important; }
+            .periodo-display .periodo-texto { font-size: 12px !important; }
+
+            /* ✅ WIDGET-BOX */
+            .widget-box {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                margin-bottom: 5mm !important;
+            }
+            .widget-header {
+                background: #f5f5f5 !important;
+                border-bottom: 1px solid #ccc !important;
+                padding: 5px 10px !important;
+            }
+            .widget-title { font-size: 12px !important; }
+            .widget-main { padding: 5px !important; }
+
+            /* ✅ TABELA COMPACTA */
+            .table-responsive {
+                overflow: visible !important;
+                border: 1px solid #999 !important;
+                break-inside: auto;
+                page-break-inside: auto;
+            }
+            #dashboard-table,
+            #dashboard-table thead th,
+            #dashboard-table tbody td,
+            #dashboard-table-empty,
+            #dashboard-table-empty thead th,
+            #dashboard-table-empty tbody td {
+                font-size: 8px !important;
+                padding: 2px !important;
+                border-color: #ccc !important;
+            }
+            #dashboard-table thead th {
+                background: #f0f0f0 !important;
+                padding: 3px 2px !important;
+            }
+            #dashboard-table tbody td.nome-terapeuta {
+                min-width: 130px !important;
+                max-width: 160px !important;
+                font-size: 8px !important;
+                background: white !important;
+                position: static !important;
+            }
+
+            /* ✅ BARRAS DE PROGRESSO */
+            .progress-mini {
+                min-width: 35px !important;
+                max-width: 50px !important;
+                height: 10px !important;
+            }
+            .progress-bar {
+                font-size: 7px !important;
+                line-height: 10px !important;
+            }
+
+            /* ✅ EVITA QUEBRAS NO MEIO DE LINHAS */
+            tr { break-inside: avoid; page-break-inside: avoid; }
+            thead { display: table-header-group; }
+            tfoot { display: table-footer-group; }
+
+            .row { margin: 0 !important; }
+            .col-xs-12, .col-sm-4 { padding: 2px !important; }
         }
     </style>
 </head>
-<body class="no-skin" onload="javascript:controlaNave();inicializarSelect2();">
+<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
     <div class="main-container ace-save-state" id="main-container">
         <div class="main-content">
             <div class="main-content-inner">
+                <div class="espace"></div>
+                
                 <div class="page-header">
                     <h1>
                         <i class="ace-icon fa fa-trophy"></i>
@@ -239,251 +501,498 @@
                     </h1>
                 </div>
 
-                {{#compareString flash.sucesso "true"}}
-                    <div id="alertMsgFlash" class="alert alert-success">
-                        <p><strong><i class="ace-icon fa fa-check"></i> {{flash.texto}}</strong>
-                        <button type="button" class="close" onclick="OcultaMsg()"><i class="ace-icon fa fa-times"></i></button></p>
+                <!-- ✅ DIV PAGE-CONTENT (ENCASULA TUDO) -->
+                <div class="page-content">
+
+                    <!-- ============================================
+                         ⭐ INPUTS HIDDEN PARA PERSISTÊNCIA DE FILTROS
+                         ============================================ -->
+                    <div class="hidden">
+                        <input id="carregaFiltro" value="{{carregaFiltro.carregaFiltro}}" />
+                        <input id="tipoDataFil" value="{{filtroTela.tipoData}}" />
+                        <input id="anoAtendFil" value="{{filtroTela.anoAtend}}" />
+                        <input id="mesAtendFil" value="{{filtroTela.mesAtend}}" />
+                        <input id="dataFinalFil" value="{{filtroTela.dataFinal}}" />
                     </div>
-                {{else}}
-                    {{#compareString flash.sucesso "false"}}
-                        <div id="alertMsgFlash" class="alert alert-danger">
-                            <p><strong><i class="ace-icon fa fa-times"></i> {{flash.texto}}</strong>
+
+                    <!-- ============================================
+                         FORMULÁRIO DE FILTRO
+                         ============================================ -->
+                    <form id="formFiltro" action="/menu/area/evol/evoatendrankingFil" method="POST">
+                        <div class="toolbar-pesquisa">
+                            <h5><i class="ace-icon fa fa-filter"></i> Filtros de Pesquisa</h5>
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label>Tipo de Período:</label>
+                                        <select name="tipoData" id="tipoData" class="select2" data-placeholder="Escolha...">
+                                            <option value="Ano/Mes">Ano/Mês</option>
+                                            <option value="Semana">Semana</option>
+                                            <option value="Dia">Dia</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div id="divAno" class="col-sm-2">
+                                    <div class="form-group">
+                                        <label>Ano:</label>
+                                        <select name="anoAtend" id="anoAtend" class="select2" data-placeholder="Selecione...">
+                                            <option value="">Selecione...</option>
+                                            {{#each anos}}
+                                                <option value="{{ano_nome}}">{{ano_nome}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div id="divMes" class="col-sm-2">
+                                    <div class="form-group">
+                                        <label>Mês:</label>
+                                        <select name="mesAtend" id="mesAtend" class="select2" data-placeholder="Selecione...">
+                                            <option value="0">Janeiro</option>
+                                            <option value="1">Fevereiro</option>
+                                            <option value="2">Março</option>
+                                            <option value="3">Abril</option>
+                                            <option value="4">Maio</option>
+                                            <option value="5">Junho</option>
+                                            <option value="6">Julho</option>
+                                            <option value="7">Agosto</option>
+                                            <option value="8">Setembro</option>
+                                            <option value="9">Outubro</option>
+                                            <option value="10">Novembro</option>
+                                            <option value="11">Dezembro</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div id="divData" class="col-sm-2 hidden-div">
+                                    <div class="form-group">
+                                        <label>Data:</label>
+                                        <input type="date" id="dataFinal" name="dataFinal" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-2" style="display: flex; align-items: flex-end; margin-top: 18px;">
+                                    <button type="submit" class="btn btn-xs btn-info">
+                                        <i class="ace-icon fa fa-search-plus"></i> Pesquisar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- ============================================
+                         MENSAGENS FLASH
+                         ============================================ -->
+                    {{#compareString flash.sucesso "true"}}
+                        <div id="alertMsgFlash" class="alert alert-success">
+                            <p><strong><i class="ace-icon fa fa-check"></i> {{flash.texto}}</strong>
                             <button type="button" class="close" onclick="OcultaMsg()"><i class="ace-icon fa fa-times"></i></button></p>
                         </div>
+                    {{else}}
+                        {{#compareString flash.sucesso "false"}}
+                            <div id="alertMsgFlash" class="alert alert-danger">
+                                <p><strong><i class="ace-icon fa fa-times"></i> {{flash.texto}}</strong>
+                                <button type="button" class="close" onclick="OcultaMsg()"><i class="ace-icon fa fa-times"></i></button></p>
+                            </div>
+                        {{/compareString}}
                     {{/compareString}}
-                {{/compareString}}
 
-                <!-- PERÍODO SELECIONADO -->
-                <div class="periodo-display">
-                    <h4><i class="ace-icon fa fa-calendar"></i> Período Analisado:</h4>
-                    <div class="periodo-texto">{{filtrosDisplay.periodo}}</div>
-                </div>
+                    <!-- ============================================
+                         PERÍODO SELECIONADO
+                         ============================================ -->
+                    <div class="periodo-display">
+                        <h4><i class="ace-icon fa fa-calendar"></i> Período Analisado:</h4>
+                        <div class="periodo-texto">{{filtrosDisplay.periodo}}</div>
+                    </div>
 
-                <!-- CARDS DE RESUMO -->
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="card-resumo atendimentos" style="position: relative;">
-                            <i class="ace-icon fa fa-calendar-check-o icone"></i>
-                            <h3>Total de Atendimentos</h3>
-                            <h1>{{totalAtendimentosGeral}}</h1>
+                    <!-- ============================================
+                        CARDS DE RESUMO (com classe para impressão)
+                        ============================================ -->
+                    <div class="row cards-resumo-row">
+                        <div class="col-sm-4">
+                            <div class="card-resumo atendimentos">
+                                <i class="ace-icon fa fa-calendar-check-o icone"></i>
+                                <h3>Total de Atendimentos</h3>
+                                <h1>{{totalAtendimentosGeral}}</h1>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card-resumo evolucoes">
+                                <i class="ace-icon fa fa-line-chart icone"></i>
+                                <h3>Total de Evoluções</h3>
+                                <h1>{{totalEvolucoesGeral}}</h1>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="card-resumo percentual">
+                                <i class="ace-icon fa fa-percent icone"></i>
+                                <h3>% Geral de Evolução</h3>
+                                <h1>{{percentualGeral}}%</h1>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <div class="card-resumo evolucoes" style="position: relative;">
-                            <i class="ace-icon fa fa-line-chart icone"></i>
-                            <h3>Total de Evoluções</h3>
-                            <h1>{{totalEvolucoesGeral}}</h1>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="card-resumo percentual" style="position: relative;">
-                            <i class="ace-icon fa fa-percent icone"></i>
-                            <h3>% Geral de Evolução</h3>
-                            <h1>{{percentualGeral}}%</h1>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- FORMULÁRIO DE FILTRO -->
-                <form id="formFiltro" action="/menu/area/evol/evoatendrankingFil" method="POST">
-                    <div class="toolbar-pesquisa">
+                    <!-- ============================================
+                         TABELA DO DASHBOARD
+                         ============================================ -->
+                    {{#if semanas.length}}
                         <div class="row">
-                            <div class="col-sm-2">
-                                <label>Tipo de Período:</label>
-                                <select name="tipoData" id="tipoData" class="select2" onchange="trocaFiltroData()">
-                                    <option value="Ano/Mes" {{#ifEqual filtroTela.tipoData "Ano/Mes"}}selected{{/ifEqual}}>Ano/Mês</option>
-                                    <option value="Semana" {{#ifEqual filtroTela.tipoData "Semana"}}selected{{/ifEqual}}>Semana</option>
-                                    <option value="Dia" {{#ifEqual filtroTela.tipoData "Dia"}}selected{{/ifEqual}}>Dia</option>
-                                </select>
-                            </div>
-
-                            <div id="divAno" class="col-sm-2">
-                                <label>Ano:</label>
-                                <select name="anoAtend" id="anoAtend" class="select2">
-                                    <option value="">Selecione...</option>
-                                    {{#each anos}}
-                                        <option value="{{ano_nome}}" {{#ifEqual ano_nome ../filtroTela.anoAtend}}selected{{/ifEqual}}>{{ano_nome}}</option>
-                                    {{/each}}
-                                </select>
-                            </div>
-
-                            <div id="divMes" class="col-sm-2">
-                                <label>Mês:</label>
-                                <select name="mesAtend" id="mesAtend" class="select2">
-                                    <option value="0" {{#ifEqual filtroTela.mesAtend "0"}}selected{{/ifEqual}}>Janeiro</option>
-                                    <option value="1" {{#ifEqual filtroTela.mesAtend "1"}}selected{{/ifEqual}}>Fevereiro</option>
-                                    <option value="2" {{#ifEqual filtroTela.mesAtend "2"}}selected{{/ifEqual}}>Março</option>
-                                    <option value="3" {{#ifEqual filtroTela.mesAtend "3"}}selected{{/ifEqual}}>Abril</option>
-                                    <option value="4" {{#ifEqual filtroTela.mesAtend "4"}}selected{{/ifEqual}}>Maio</option>
-                                    <option value="5" {{#ifEqual filtroTela.mesAtend "5"}}selected{{/ifEqual}}>Junho</option>
-                                    <option value="6" {{#ifEqual filtroTela.mesAtend "6"}}selected{{/ifEqual}}>Julho</option>
-                                    <option value="7" {{#ifEqual filtroTela.mesAtend "7"}}selected{{/ifEqual}}>Agosto</option>
-                                    <option value="8" {{#ifEqual filtroTela.mesAtend "8"}}selected{{/ifEqual}}>Setembro</option>
-                                    <option value="9" {{#ifEqual filtroTela.mesAtend "9"}}selected{{/ifEqual}}>Outubro</option>
-                                    <option value="10" {{#ifEqual filtroTela.mesAtend "10"}}selected{{/ifEqual}}>Novembro</option>
-                                    <option value="11" {{#ifEqual filtroTela.mesAtend "11"}}selected{{/ifEqual}}>Dezembro</option>
-                                </select>
-                            </div>
-
-                            <div id="divData" class="col-sm-2" style="display: none;">
-                                <label>Data:</label>
-                                <input type="date" id="dataFinal" name="dataFinal" value="{{filtroTela.dataFinal}}" />
-                            </div>
-
-                            <div class="col-sm-2" style="display: flex; align-items: flex-end;">
-                                <button type="submit" class="btn-pesquisar">
-                                    <i class="ace-icon fa fa-search"></i> Filtrar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-
-                <!-- TABELA DO DASHBOARD -->
-                {{#if semanas.length}}
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="table-responsive">
-                                <table id="dashboard-table" class="table table-striped table-bordered table-hover dashboard-table">
-                                    <thead>
-                                        <!-- Linha 1: Cabeçalhos agrupados -->
-                                        <tr>
-                                            <th rowspan="2" style="min-width: 200px;">Terapeuta</th>
-                                            {{#each semanas}}
-                                                <th colspan="4">Semana {{numero}} ({{label}})</th>
-                                            {{/each}}
-                                            <th colspan="4" class="col-total">TOTAL GERAL</th>
-                                        </tr>
-                                        <!-- Linha 2: Sub-cabeçalhos -->
-                                        <tr>
-                                            {{#each semanas}}
-                                                <th>Atend.</th>
-                                                <th>Evol.</th>
-                                                <th>%</th>
-                                                <th>Progresso</th>
-                                            {{/each}}
-                                            <th class="col-total">Atend.</th>
-                                            <th class="col-total">Evol.</th>
-                                            <th class="col-total">%</th>
-                                            <th class="col-total">Progresso</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                      {{#each terapeutas}}
-    <tr>
-        <td class="nome-terapeuta">{{nome}}</td>
-        
-        {{#each semanas}}
-            <td>{{atendimentos}}</td>
-            <td>{{evolucoes}}</td>
-            <td>{{percentual}}%</td>
-            <td>
-                <div class="progress-mini">
-                    <div class="progress-bar {{#ifCond percentual "<" 50}}progress-bar-low{{else}}{{#ifCond percentual "<" 75}}progress-bar-medium{{else}}progress-bar-high{{/ifCond}}{{/ifCond}}" 
-                         style="width: {{percentual}}%;">
-                        {{#ifCond percentual ">" 15}}{{percentual}}%{{/ifCond}}
-                    </div>
-                </div>
-            </td>
-        {{/each}}
-        
-        <td><strong>{{totalAtendimentos}}</strong></td>
-        <td><strong>{{totalEvolucoes}}</strong></td>
-        <td><strong>{{percentualTotal}}%</strong></td>
-        <td>
-            <div class="progress-mini">
-                <div class="progress-bar {{#ifCond percentualTotal "<" 50}}progress-bar-low{{else}}{{#ifCond percentualTotal "<" 75}}progress-bar-medium{{else}}progress-bar-high{{/ifCond}}{{/ifCond}}" 
-                     style="width: {{percentualTotal}}%;">
-                    {{#ifCond percentualTotal ">" 15}}{{percentualTotal}}%{{/ifCond}}
-                </div>
-            </div>
-        </td>
-    </tr>
-{{/each}}
-                                    </tbody>
-                                </table>
+                            <div class="col-xs-12">
+                                <div class="widget-box">
+                                    <div class="widget-header widget-header-flat widget-header-small">
+                                        <h4 class="widget-title">
+                                            <i class="ace-icon fa fa-bar-chart"></i> Ranking de Performance
+                                            <small class="text-muted">({{semanas.length}} semanas analisadas)</small>
+                                        </h4>
+                                        <div class="widget-toolbar">
+                                            <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <div class="tableTools-container" style="margin-bottom: 10px;"></div>
+                                            
+                                            <div class="table-responsive">
+                                                <table id="dashboard-table" class="table table-striped table-bordered table-hover dataTable no-footer">
+                                                    <thead>
+                                                        <tr>
+                                                            <th rowspan="2" style="min-width: 180px;">Terapeuta</th>
+                                                            {{#each semanas}}
+                                                                <th colspan="4">Semana {{numero}} ({{label}})</th>
+                                                            {{/each}}
+                                                            <th colspan="4" class="col-total">TOTAL GERAL</th>
+                                                        </tr>
+                                                        <tr>
+                                                            {{#each semanas}}
+                                                                <th>Atend.</th>
+                                                                <th>Evol.</th>
+                                                                <th>%</th>
+                                                                <th class="no-sort">Progresso</th>
+                                                            {{/each}}
+                                                            <th class="col-total">Atend.</th>
+                                                            <th class="col-total">Evol.</th>
+                                                            <th class="col-total">%</th>
+                                                            <th class="col-total no-sort">Progresso</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{#each terapeutas}}
+                                                            <tr>
+                                                                <td class="nome-terapeuta" title="{{nome}}">{{nome}}</td>
+                                                                
+                                                                {{#each semanas}}
+                                                                    <td>{{atendimentos}}</td>
+                                                                    <td>{{evolucoes}}</td>
+                                                                    <td>{{percentual}}%</td>
+                                                                    <td>
+                                                                        <div class="progress-mini">
+                                                                            <div class="progress-bar {{#ifCond percentual "<" 50}}progress-bar-low{{else}}{{#ifCond percentual "<" 75}}progress-bar-medium{{else}}progress-bar-high{{/ifCond}}{{/ifCond}}" 
+                                                                                 style="width: {{percentual}}%;">
+                                                                                {{#ifCond percentual ">" 15}}{{percentual}}%{{/ifCond}}
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                {{/each}}
+                                                                
+                                                                <td class="total-cell"><strong>{{totalAtendimentos}}</strong></td>
+                                                                <td class="total-cell"><strong>{{totalEvolucoes}}</strong></td>
+                                                                <td class="total-cell"><strong>{{percentualTotal}}%</strong></td>
+                                                                <td class="total-cell">
+                                                                    <div class="progress-mini">
+                                                                        <div class="progress-bar {{#ifCond percentualTotal "<" 50}}progress-bar-low{{else}}{{#ifCond percentualTotal "<" 75}}progress-bar-medium{{else}}progress-bar-high{{/ifCond}}{{/ifCond}}" 
+                                                                             style="width: {{percentualTotal}}%;">
+                                                                            {{#ifCond percentualTotal ">" 15}}{{percentualTotal}}%{{/ifCond}}
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {{else}}
-                    <div class="alert alert-info">
-                        <h4><i class="ace-icon fa fa-info-circle"></i> Selecione um período para visualizar o ranking</h4>
-                        <p>Use os filtros acima para escolher o período desejado e clique em <strong>Filtrar</strong>.</p>
-                    </div>
-                    
-                    {{!-- Tabela vazia apenas com os nomes dos terapeutas --}}
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered dashboard-table">
-                            <thead>
-                                <tr>
-                                    <th>Terapeuta</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#each terapeutas}}
-                                    <tr>
-                                        <td class="nome-terapeuta">{{nome}}</td>
-                                        <td><span class="label label-warning">Aguardando filtro</span></td>
-                                    </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
-                    </div>
-                {{/if}}
+                    {{else}}
+                        <div class="alert alert-info">
+                            <h4><i class="ace-icon fa fa-info-circle"></i> Selecione um período para visualizar o ranking</h4>
+                            <p>Use os filtros acima para escolher o período desejado e clique em <strong>Pesquisar</strong>.</p>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="widget-box">
+                                    <div class="widget-header widget-header-flat widget-header-small">
+                                        <h4 class="widget-title">
+                                            <i class="ace-icon fa fa-users"></i> Terapeutas Cadastrados
+                                        </h4>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-main">
+                                            <div class="table-responsive">
+                                                <table id="dashboard-table-empty" class="table table-striped table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 80%;">Terapeuta</th>
+                                                            <th style="width: 20%;">Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{#each terapeutas}}
+                                                            <tr>
+                                                                <td class="nome-terapeuta" style="text-align:left;">{{nome}}</td>
+                                                                <td><span class="label label-warning">Aguardando filtro</span></td>
+                                                            </tr>
+                                                        {{/each}}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {{/if}}
 
+                </div>
             </div>
         </div>
+
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse display">
+            <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+        </a>
     </div>
 
-    <!-- SCRIPTS -->
-    <script type="text/javascript">
-        if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
-    </script>
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
     <script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
-
     <script type="text/javascript">
-        function inicializarSelect2() {
-            $('.select2').select2({
-                width: '100%',
-                dropdownAutoWidth: false
-            });
+        // ============================================
+        // 1. HELPER: GET ELEMENT BY ID
+        // ============================================
+        const $id = (id) => document.getElementById(id);
+
+        // ============================================
+        // 2. ⭐ CARREGA BODY (ONLOAD) - ORDEM CORRETA!
+        // ============================================
+        function carregaBody() {
+            console.log('🔄 carregaBody() iniciado');
+            
+            // Valores padrão (caso venham vazios do backend)
+            if (!$id("tipoData").value) $id("tipoData").value = "Ano/Mes";
+            
+            // 1º: Aplica visibilidade inicial dos campos
             trocaFiltroData();
+            
+            // 2º: Carrega filtros salvos (PERSISTÊNCIA!)
+            if ($id("carregaFiltro")?.value === "true") {
+                carregarFiltros();
+            }
+            
+            // 3º: Inicializa Select2 DEPOIS de setar os valores
+            inicializarSelect2();
+            
+            // 4º: Inicializa DataTable
+            if ($('#dashboard-table').length) {
+                inicializarDataTable();
+            }
+            
+            console.log('✅ carregaBody() concluído');
         }
 
-        function trocaFiltroData() {
-            let tipo = document.getElementById("tipoData").value;
-            if (tipo === "Ano/Mes") {
-                document.getElementById("divAno").style.display = "block";
-                document.getElementById("divMes").style.display = "block";
-                document.getElementById("divData").style.display = "none";
+        // ============================================
+        // 3. ⭐ CARREGAR FILTROS SALVOS (PERSISTÊNCIA)
+        // ============================================
+        function carregarFiltros() {
+            console.log('📥 Carregando filtros salvos...');
+            
+            const tipoData = $id("tipoDataFil")?.value || "Ano/Mes";
+            const anoAtend = $id("anoAtendFil")?.value || "";
+            const mesAtend = $id("mesAtendFil")?.value || "0";
+            const dataFinal = $id("dataFinalFil")?.value || "";
+
+            console.log('Filtros encontrados:', { tipoData, anoAtend, mesAtend, dataFinal });
+
+            // Seta o tipo de data
+            $id("tipoData").value = tipoData;
+            trocaFiltroData();
+
+            // Seta os valores nos selects nativos (ANTES do Select2)
+            if (tipoData === "Ano/Mes") {
+                $id("anoAtend").value = anoAtend;
+                $id("mesAtend").value = mesAtend;
             } else {
-                document.getElementById("divAno").style.display = "none";
-                document.getElementById("divMes").style.display = "none";
-                document.getElementById("divData").style.display = "block";
+                // Para data, precisa converter se vier em formato ISO
+                if (dataFinal) {
+                    // Se vier como "2024-01-15T00:00:00.000Z", pega só a data
+                    const dataLimpa = dataFinal.split('T')[0];
+                    $id("dataFinal").value = dataLimpa;
+                }
             }
         }
 
+        // ============================================
+        // 4. INICIALIZAR SELECT2
+        // ============================================
+        function inicializarSelect2() {
+            console.log('🎨 Inicializando Select2...');
+            
+            $('.select2').each(function() {
+                // Destrói se já existir (evita duplicação)
+                if ($(this).data('select2')) {
+                    $(this).select2('destroy');
+                }
+                
+                $(this).select2({
+                    width: 'resolve',
+                    placeholder: $(this).data('placeholder') || "Selecione...",
+                    allowClear: $(this).attr('id') === 'anoAtend'
+                });
+            });
+
+            // Configura eventos de change DEPOIS da inicialização
+            $('#tipoData').on('change.select2', function() {
+                trocaFiltroData();
+            });
+        }
+
+        // ============================================
+        // 5. TROCAR CAMPOS DO FILTRO
+        // ============================================
+        function trocaFiltroData() {
+            const tipo = $('#tipoData').val() || 'Ano/Mes';
+            const isAnoMes = (tipo === 'Ano/Mes');
+            
+            $('#divAno, #divMes').toggle(isAnoMes);
+            $('#divData').toggleClass('hidden-div', isAnoMes);
+            
+            console.log('🔀 trocaFiltroData:', tipo, '| isAnoMes:', isAnoMes);
+        }
+
+        // ============================================
+        // 6. OCULTAR MENSAGEM FLASH
+        // ============================================
         function OcultaMsg() {
-            let msg = document.getElementById("alertMsgFlash");
+            const msg = $id("alertMsgFlash");
             if (msg) msg.style.display = "none";
         }
 
-        $(document).ready(function() {
-            // Inicializa DataTables
-            $("#dashboard-table").DataTable({
+        // ============================================
+        // 7. DATATABLE - CONFIGURAÇÃO DINÂMICA
+        // ============================================
+        function inicializarDataTable() {
+            console.log('📊 Inicializando DataTable...');
+            
+            const numSemanas = $('#dashboard-table thead tr:first-child th[colspan="4"]').length;
+            console.log('Número de semanas detectado:', numSemanas);
+            
+            const aoColumns = [{ "sType": "string" }]; // Terapeuta
+            
+            for (let i = 0; i < numSemanas; i++) {
+                aoColumns.push(null); // Atend.
+                aoColumns.push(null); // Evol.
+                aoColumns.push(null); // %
+                aoColumns.push({ "bSortable": false }); // Progresso
+            }
+            
+            // Total Geral
+            aoColumns.push(null);
+            aoColumns.push(null);
+            aoColumns.push(null);
+            aoColumns.push({ "bSortable": false });
+
+            window.myDashboardTable = $('#dashboard-table').DataTable({
+                bAutoWidth: false,
                 "language": { "url": "/js/lang/datatable-pt-br.json" },
-                "aaSorting": [[1, "desc"]], // Ordena pela primeira coluna numérica (atendimentos da primeira semana)
-                "pageLength": 50,
-                "lengthMenu": [25, 50, 100, 200],
+                "aoColumns": aoColumns,
                 "responsive": true,
-                "autoWidth": false,
+                "lengthMenu": [[100, 200], [100, 200]],
+                "lengthChange": true,
+                "pageLength": 100,
                 "paging": true,
                 "searching": true,
                 "ordering": true,
                 "info": true,
-                "dom": 'Bfrtip'
+                "autoWidth": false,
+                "initComplete": function(settings, json) {
+                    console.log('✅ DataTable inicializado');
+                    configurarBotoesDataTable();
+                }
             });
+        }
+
+        // ============================================
+        // 8. BOTÕES DO DATATABLE
+        // ============================================
+        function configurarBotoesDataTable() {
+            if (!window.myDashboardTable) return;
+
+            $.fn.dataTable.Buttons.defaults.dom.container.className = 'dt-buttons btn-overlap btn-group btn-overlap';
+
+            const numSemanas = $('#dashboard-table thead tr:first-child th[colspan="4"]').length;
+            const exportColumns = [0];
+            
+            for (let i = 0; i < numSemanas; i++) {
+                exportColumns.push(1 + (i * 4));
+                exportColumns.push(2 + (i * 4));
+                exportColumns.push(3 + (i * 4));
+            }
+            
+            const totalColCount = 1 + (numSemanas * 4) + 4;
+            exportColumns.push(totalColCount - 4);
+            exportColumns.push(totalColCount - 3);
+            exportColumns.push(totalColCount - 2);
+
+            new $.fn.dataTable.Buttons(window.myDashboardTable, {
+                buttons: [
+                    {
+                        "extend": "colvis",
+                        "text": "<i class='fa fa-search bigger-110 blue'></i> Colunas",
+                        "className": "btn btn-white btn-primary btn-bold btn-xs"
+                    },
+                    {
+                        "extend": "copy",
+                        "text": "<i class='fa fa-copy bigger-110 pink'></i> Copiar",
+                        "className": "btn btn-white btn-primary btn-bold btn-xs",
+                        "exportOptions": { columns: exportColumns, modifier: { page: 'all' } }
+                    },
+                    {
+                        "extend": "csv",
+                        "text": "<i class='fa fa-database bigger-110 orange'></i> CSV",
+                        "className": "btn btn-white btn-primary btn-bold btn-xs",
+                        "exportOptions": { columns: exportColumns, modifier: { page: 'all' } }
+                    },
+                    {
+                        "extend": "excel",
+                        "text": "<i class='fa fa-file-excel-o bigger-110 green'></i> Excel",
+                        "className": "btn btn-white btn-primary btn-bold btn-xs",
+                        "exportOptions": { columns: exportColumns, modifier: { page: 'all' } }
+                    },
+                    {
+                        "extend": "pdf",
+                        "text": "<i class='fa fa-file-pdf-o bigger-110 red'></i> PDF",
+                        "className": "btn btn-white btn-primary btn-bold btn-xs",
+                        "exportOptions": { columns: exportColumns, modifier: { page: 'all' } },
+                        "orientation": "landscape",
+                        "pageSize": "A4"
+                    }
+                ]
+            });
+
+            window.myDashboardTable.buttons().container().appendTo($('.tableTools-container'));
+        }
+
+        // ============================================
+        // 9. CSS AUXILIAR
+        // ============================================
+        $(document).ready(function() {
+            if (!$('#hidden-style').length) {
+                $('head').append('<style id="hidden-style">.hidden-div { display: none !important; }</style>');
+            }
         });
     </script>
 </body>
