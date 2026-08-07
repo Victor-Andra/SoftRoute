@@ -861,6 +861,7 @@ module.exports = {
     // Criado por: Wagner Cintra
     // Criado em: 2022/03/20
     // Editado em: 2025/10/03
+    // Editado em: 2026/08/07
     agendaFaltaDia: async (req, res) => {
 
         //Estrura Multiempresa
@@ -1026,6 +1027,7 @@ module.exports = {
                                 })
                             }
                         } else {
+                            let trocaUpdate = false; // ✅ ADICIONEI AQUI WAGNER 07-08-2026
                             if (a.agenda_selo != undefined && a.agenda_selo != "undefined" && a.agenda_selo != null && a.agenda_selo != "null"){
                                 if (a.agenda_selo){
                                     trocaUpdate = true;
@@ -1098,6 +1100,7 @@ module.exports = {
                                 })
                                 console.log("salvo!")
                             } else {
+                                let trocaUpdate = false; // ✅ ADICIONEI AQUI WAGNER 07-08-2026
                                 if (a.agenda_selo != undefined && a.agenda_selo != "undefined" && a.agenda_selo != null && a.agenda_selo != "null"){
                                     if (a.agenda_selo){
                                         trocaUpdate = true;
@@ -1180,6 +1183,7 @@ module.exports = {
                 return retorno;
             })
         }
+        return "true"; // ✅ ADICIONEI Essa Linha pra retornar True na view, Wagner Cintra 07-08-2026
     },
 
     // Feriado do Dia Agenda
