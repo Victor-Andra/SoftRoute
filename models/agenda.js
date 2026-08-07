@@ -348,12 +348,12 @@ module.exports = {
         let doisMesesAtras = new Date();
         doisMesesAtras.setMonth(doisMesesAtras.getMonth() - 2);
         let bloqueio = dataAgenda < doisMesesAtras;
-
+/*
         if (bloqueio) {
             console.log("🔒 Bloqueada a criação devido ao fechamento!");
             return false;
         }
-
+*/
         // 📌 PASSO 6: Preparar dados para o novo registro
         let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
