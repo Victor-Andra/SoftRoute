@@ -3043,7 +3043,7 @@ filtraconsolidadoGuialote(req, res, resposta) {
                 guialote_numprotocolo: guialote_numprotocolo || null,
                 guialote_dataenvio: guialote_dataenvio ? new Date(guialote_dataenvio) : null,
                 
-                guialote_valor: converterMoedaParaNumero(guialoteGuialotevalor),
+                guialote_guialotevalor: parseFloat(guialote_valor) || 0,
                 guialote_qtatend: idsValidos.length,
                 guialote_agendas: idsValidos,
                 guialote_usucad: idUsu,

@@ -579,525 +579,528 @@ SELECT2 - ESTILOS GERAIS
       
     </style>
 	<script type="text/javascript">
-		function ajustaData(){
-			let fullDatas = document.getElementsByName("fullData");
-			fullDatas.forEach((elementox)=>{
-				let id = "atenddata"+elementox.id;
-				let dat = new Date(elementox.value);
-				let mes = (dat.getMonth()+1).toString();
-				let dia = (dat.getUTCDate()).toString();
+    // ============================================
+    // 💰 MÁSCARA DE MOEDA - UTILITÁRIOS (NO TOPO!)
+    // ============================================
+    function formatarMoedaBR(valor) {
+        if (valor === null || valor === undefined || valor === '') return '';
+        const num = parseFloat(valor);
+        if (isNaN(num)) return '';
+        return num.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
 
-				if (mes.length == 1){
-					mes = "0"+mes;
-				}
-				if (dia.length == 1){
-					dia = "0"+dia;
-				}
 
-				let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
-			})
-		}
+    function mascaraMoeda(input) {
+        let valor = input.value.replace(/[^\d]/g, '');
+        if (!valor) {
+            input.value = '';
+            return;
+        }
+        valor = (parseInt(valor) / 100).toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        input.value = valor;
+    }
 
-		function formataData(){
-			let tipo = document.getElementById("tipoData").value;
-			if(tipo == "Ano/Mes"){
-				let ano = document.getElementById('anoAtend').value;
-				let mes = document.getElementById('mesAtend').value;
-				if (!ano || !mes) return;
-				let dat = new Date(Date.UTC(parseInt(ano), parseInt(mes), 1));
-				let mesStr = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
-				let diaStr = dat.getUTCDate().toString().padStart(2, '0');
-				let fulldate = `${dat.getUTCFullYear()}-${mesStr}-${diaStr}T00:00:00.000Z`;
-				document.getElementById('dataFinal').value = fulldate;
-			} else if (tipo == "Semana" || tipo == "Dia"){
-				let dataInput = document.getElementById('dataFil').value;
-				if (!dataInput) return;
-				let dat = new Date(dataInput);
-				let mesStr = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
-				let diaStr = dat.getUTCDate().toString().padStart(2, '0');
-				let fulldate = `${dat.getUTCFullYear()}-${mesStr}-${diaStr}`;
-				document.getElementById('dataFinal').value = fulldate;
-			}
-		}
+    // ============================================
+    // FUNÇÕES EXISTENTES
+    // ============================================
+    function ajustaData(){
+        let fullDatas = document.getElementsByName("fullData");
+        fullDatas.forEach((elementox)=>{
+            let id = "atenddata"+elementox.id;
+            let dat = new Date(elementox.value);
+            let mes = (dat.getMonth()+1).toString();
+            let dia = (dat.getUTCDate()).toString();
 
-		function trocaFiltroData() {
-			const tipo = $('#tipoData').val();
-			const isAnoMes = (tipo === 'Ano/Mes');
-			
-			// ✅ LÓGICA CORRIGIDA:
-			// Se for Ano/Mês → mostra Ano e Mês, OCULTA Data
-			// Se for Semana/Dia → oculta Ano e Mês, MOSTRA Data
-			$('#divAnoAtend').toggle(isAnoMes);
-			$('#divMesAtend').toggle(isAnoMes);
-			$('#divDataFil').toggleClass('hidden-div', isAnoMes); // ← CORREÇÃO: era !isAnoMes
-			
-			// ✅ Força Select2 recalcular após mudar visibilidade
-			setTimeout(() => {
-				if (isAnoMes) {
-					// Atualiza Ano e Mês
-					['#anoAtend', '#mesAtend'].forEach(sel => {
-						const $el = $(sel);
-						if ($el.data('select2')) {
-							$el.select2('destroy').select2({ 
-								width: 'resolve', 
-								placeholder: "Selecione...",
-								allowClear: false  // ← Remove o X
-							});
-						}
-					});
-				} else {
-					// Atualiza Data
-					const $el = $('#dataFil');
-					if ($el.data('select2')) {
-						$el.select2('destroy').select2({ 
-							width: 'resolve', 
-							placeholder: "Selecione...",
-							allowClear: false  // ← Remove o X
-						});
-					}
-				}
-			}, 50);
-			
-			console.log('[DEBUG] Tipo Data:', tipo, '| isAnoMes:', isAnoMes);
-		}
-		function trocaFilpessoa() {
-			const tipo = document.getElementById("atendTipoPessoa").value;
-			
-			// Oculta TODOS primeiro (usando a classe CSS correta)
-			document.getElementById("divAtendBeneficiario").classList.add('hidden-div');
-			document.getElementById("divAtendTerapeuta").classList.add('hidden-div');
-			document.getElementById("divAtendConvenio").classList.add('hidden-div');
-			
-			// Mostra apenas o relevante
-			if (tipo === "Beneficiario") {
-				document.getElementById("divAtendBeneficiario").classList.remove('hidden-div');
-			} else if (tipo === "Terapeuta") {
-				document.getElementById("divAtendTerapeuta").classList.remove('hidden-div');
-			} else if (tipo === "Convênio") {
-				document.getElementById("divAtendConvenio").classList.remove('hidden-div');
-			}
-			// Se for "Geral", todos permanecem ocultos
-		}
+            if (mes.length == 1){
+                mes = "0"+mes;
+            }
+            if (dia.length == 1){
+                dia = "0"+dia;
+            }
 
-		
+            let fulldate=(dia+"/"+mes+"/"+dat.getFullYear()).toString();
+        })
+    }
 
-		// ✅ Alterado: Carrega estado inicial com visibilidade correta
-		function carregaBody(){
-			// Define valores padrão
-			if (!document.getElementById("tipoData").value) {
-				document.getElementById("tipoData").value = "Ano/Mes";
-			}
-			if (!document.getElementById("atendTipoPessoa").value) {
-				document.getElementById("atendTipoPessoa").value = "Geral";
-			}
-			
-			
-			// Aplica visibilidade inicial
-			trocaFiltroData();
-			trocaFilpessoa();
-			
-			// Carrega valores do filtro se existirem
-			if (document.getElementById("carregaFiltro").value == "true"){
-				// Tipo Data
-				document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value || "Ano/Mes";
-				trocaFiltroData();
-				
-				if(document.getElementById("tipoData").value == "Ano/Mes"){
-					document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value || "";
-					document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value || "0";
-				} else if (document.getElementById("tipoData").value == "Semana" || document.getElementById("tipoData").value == "Dia"){
-					document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value.split('T')[0] || "";
-				}
+    function formataData(){
+        let tipo = document.getElementById("tipoData").value;
+        if(tipo == "Ano/Mes"){
+            let ano = document.getElementById('anoAtend').value;
+            let mes = document.getElementById('mesAtend').value;
+            if (!ano || !mes) return;
+            let dat = new Date(Date.UTC(parseInt(ano), parseInt(mes), 1));
+            let mesStr = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
+            let diaStr = dat.getUTCDate().toString().padStart(2, '0');
+            let fulldate = `${dat.getUTCFullYear()}-${mesStr}-${diaStr}T00:00:00.000Z`;
+            document.getElementById('dataFinal').value = fulldate;
+        } else if (tipo == "Semana" || tipo == "Dia"){
+            let dataInput = document.getElementById('dataFil').value;
+            if (!dataInput) return;
+            let dat = new Date(dataInput);
+            let mesStr = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
+            let diaStr = dat.getUTCDate().toString().padStart(2, '0');
+            let fulldate = `${dat.getUTCFullYear()}-${mesStr}-${diaStr}`;
+            document.getElementById('dataFinal').value = fulldate;
+        }
+    }
 
-				// ✅ Tipo Pessoa
-				document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value || "Geral";
-				trocaFilpessoa();
+    function trocaFiltroData() {
+        const tipo = $('#tipoData').val();
+        const isAnoMes = (tipo === 'Ano/Mes');
+        
+        $('#divAnoAtend').toggle(isAnoMes);
+        $('#divMesAtend').toggle(isAnoMes);
+        $('#divDataFil').toggleClass('hidden-div', isAnoMes);
+        
+        setTimeout(() => {
+            if (isAnoMes) {
+                ['#anoAtend', '#mesAtend'].forEach(sel => {
+                    const $el = $(sel);
+                    if ($el.data('select2')) {
+                        $el.select2('destroy').select2({ 
+                            width: 'resolve', 
+                            placeholder: "Selecione...",
+                            allowClear: false
+                        });
+                    }
+                });
+            } else {
+                const $el = $('#dataFil');
+                if ($el.data('select2')) {
+                    $el.select2('destroy').select2({ 
+                        width: 'resolve', 
+                        placeholder: "Selecione...",
+                        allowClear: false
+                    });
+                }
+            }
+        }, 50);
+        
+        console.log('[DEBUG] Tipo Data:', tipo, '| isAnoMes:', isAnoMes);
+    }
 
-				if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
-					document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value || "766f69643132333435366964";
-				} else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
-					document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value || "766f69643132333435366964";
-				} else if (document.getElementById("atendTipoPessoa").value == "Convênio") {  // ✅ ADICIONE ESTE BLOCO
-					document.getElementById("atendConvenio").value = document.getElementById("atendConvenioFil").value || "";
-				}
-			}
-			
-			// Carrega valores de edição se existirem
-			const tipoDataEdi = document.getElementById("tipoDataEdi").value;
-			const tipoPessoaEdi = document.getElementById("tipoPessoaEdi").value;
-			
-			if (tipoDataEdi == "Ano/Mes"){
-				document.getElementById("tipoData").value = tipoDataEdi;
-				trocaFiltroData();
-				document.getElementById("anoAtend").value = document.getElementById("anoAtendEdi").value || "";
-				document.getElementById("mesAtend").value = document.getElementById("mesAtendEdi").value || "0";
-			} else if (tipoDataEdi == "Semana" || tipoDataEdi == "Dia"){
-				document.getElementById("tipoData").value = tipoDataEdi;
-				trocaFiltroData();
-				const dataEdi = document.getElementById("dataFinalEdi").value;
-				if (dataEdi) {
-					const dat = new Date(dataEdi);
-					const mes = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
-					const dia = dat.getUTCDate().toString().padStart(2, '0');
-					document.getElementById("dataFil").value = `${dat.getUTCFullYear()}-${mes}-${dia}`;
-				}
-			}
-			
-			if (tipoPessoaEdi == "Beneficiario"){
-				document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
-				trocaFilpessoa();
-				document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioEdi").value || "766f69643132333435366964";
-			} else if (tipoPessoaEdi == "Terapeuta"){
-				document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
-				trocaFilpessoa();
-				document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaEdi").value || "766f69643132333435366964";
-			}
-			
-			// Atualiza Chosen após 100ms para garantir renderização
-			setTimeout(() => {
-				if (typeof $.fn.chosen !== 'undefined') {
-					$('.chosen-select').trigger('chosen:updated');
-				}
-			}, 100);
-		}
-		
-		// ============================================
-		// SALVAR EM MASSA - NOVA FUNCIONALIDADE
-		// ============================================
-		async function salvarEmMassa() {
-			const guiaMassa = document.getElementById('guiaMassa').value.trim();
-			const dataGuiaMassa = document.getElementById('dataGuiaMassa').value;
-			const senhaMassa = document.getElementById('senhaMassa').value.trim();
-			const dataSenhaMassa = document.getElementById('dataSenhaMassa').value;
+    function trocaFilpessoa() {
+        const tipo = document.getElementById("atendTipoPessoa").value;
+        
+        document.getElementById("divAtendBeneficiario").classList.add('hidden-div');
+        document.getElementById("divAtendTerapeuta").classList.add('hidden-div');
+        document.getElementById("divAtendConvenio").classList.add('hidden-div');
+        
+        if (tipo === "Beneficiario") {
+            document.getElementById("divAtendBeneficiario").classList.remove('hidden-div');
+        } else if (tipo === "Terapeuta") {
+            document.getElementById("divAtendTerapeuta").classList.remove('hidden-div');
+        } else if (tipo === "Convênio") {
+            document.getElementById("divAtendConvenio").classList.remove('hidden-div');
+        }
+    }
 
-			// Validar se pelo menos um campo foi preenchido
-			if (!guiaMassa && !dataGuiaMassa && !senhaMassa && !dataSenhaMassa) {
-				alert('⚠️ Preencha pelo menos um campo (Guia, Data Guia, Senha ou Data Senha) para salvar em massa.');
-				return;
-			}
+    function carregaBody(){
+        if (!document.getElementById("tipoData").value) {
+            document.getElementById("tipoData").value = "Ano/Mes";
+        }
+        if (!document.getElementById("atendTipoPessoa").value) {
+            document.getElementById("atendTipoPessoa").value = "Geral";
+        }
+        
+        trocaFiltroData();
+        trocaFilpessoa();
+        
+        if (document.getElementById("carregaFiltro").value == "true"){
+            document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value || "Ano/Mes";
+            trocaFiltroData();
+            
+            if(document.getElementById("tipoData").value == "Ano/Mes"){
+                document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value || "";
+                document.getElementById("mesAtend").value = document.getElementById("mesAtendFil").value || "0";
+            } else if (document.getElementById("tipoData").value == "Semana" || document.getElementById("tipoData").value == "Dia"){
+                document.getElementById("dataFil").value = document.getElementById("dataFinalFil").value.split('T')[0] || "";
+            }
 
-			// Obter checkboxes selecionados
-			const checkboxes = document.querySelectorAll('#dynamic-table tbody input[type="checkbox"]:checked');
-			
-			if (checkboxes.length === 0) {
-				alert('⚠️ Selecione pelo menos um registro para salvar em massa.');
-				return;
-			}
+            document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value || "Geral";
+            trocaFilpessoa();
 
-			// ✅ Substitui "localhost" por "SoftRoute" na mensagem de confirmação
-			if (!confirm(`SoftRoute\n\nDeseja salvar os dados em massa para ${checkboxes.length} registro(s) selecionado(s)?\n\n⚠️ ATENÇÃO: Registros que já possuem dados NÃO serão atualizados para evitar sobrescrita.`)) {
-				return;
-			}
+            if (document.getElementById("atendTipoPessoa").value == "Beneficiario"){
+                document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioFil").value || "766f69643132333435366964";
+            } else if (document.getElementById("atendTipoPessoa").value == "Terapeuta"){
+                document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaFil").value || "766f69643132333435366964";
+            } else if (document.getElementById("atendTipoPessoa").value == "Convênio") {
+                document.getElementById("atendConvenio").value = document.getElementById("atendConvenioFil").value || "";
+            }
+        }
+        
+        const tipoDataEdi = document.getElementById("tipoDataEdi").value;
+        const tipoPessoaEdi = document.getElementById("tipoPessoaEdi").value;
+        
+        if (tipoDataEdi == "Ano/Mes"){
+            document.getElementById("tipoData").value = tipoDataEdi;
+            trocaFiltroData();
+            document.getElementById("anoAtend").value = document.getElementById("anoAtendEdi").value || "";
+            document.getElementById("mesAtend").value = document.getElementById("mesAtendEdi").value || "0";
+        } else if (tipoDataEdi == "Semana" || tipoDataEdi == "Dia"){
+            document.getElementById("tipoData").value = tipoDataEdi;
+            trocaFiltroData();
+            const dataEdi = document.getElementById("dataFinalEdi").value;
+            if (dataEdi) {
+                const dat = new Date(dataEdi);
+                const mes = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
+                const dia = dat.getUTCDate().toString().padStart(2, '0');
+                document.getElementById("dataFil").value = `${dat.getUTCFullYear()}-${mes}-${dia}`;
+            }
+        }
+        
+        if (tipoPessoaEdi == "Beneficiario"){
+            document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
+            trocaFilpessoa();
+            document.getElementById("atendBeneficiario").value = document.getElementById("atendBeneficiarioEdi").value || "766f69643132333435366964";
+        } else if (tipoPessoaEdi == "Terapeuta"){
+            document.getElementById("atendTipoPessoa").value = tipoPessoaEdi;
+            trocaFilpessoa();
+            document.getElementById("atendTerapeuta").value = document.getElementById("atendTerapeutaEdi").value || "766f69643132333435366964";
+        }
+        
+        setTimeout(() => {
+            if (typeof $.fn.chosen !== 'undefined') {
+                $('.chosen-select').trigger('chosen:updated');
+            }
+        }, 100);
+    }
+    
+    async function salvarEmMassa() {
+        const guiaMassa = document.getElementById('guiaMassa').value.trim();
+        const dataGuiaMassa = document.getElementById('dataGuiaMassa').value;
+        const senhaMassa = document.getElementById('senhaMassa').value.trim();
+        const dataSenhaMassa = document.getElementById('dataSenhaMassa').value;
 
-			const btnSalvar = document.querySelector('.btn-toolbar');
-			btnSalvar.disabled = true;
-			btnSalvar.innerHTML = '<i class="ace-icon fa fa-spinner fa-spin"></i> Processando...';
+        if (!guiaMassa && !dataGuiaMassa && !senhaMassa && !dataSenhaMassa) {
+            alert('⚠️ Preencha pelo menos um campo (Guia, Data Guia, Senha ou Data Senha) para salvar em massa.');
+            return;
+        }
 
-			try {
-				const updates = [];
-				
-				checkboxes.forEach(checkbox => {
-					const tr = checkbox.closest('tr');
-					const agendaId = tr.querySelector(`[name="agendaId"]`)?.value;
-					
-					if (agendaId) {
-						updates.push({
-							agendaId: agendaId,
-							guia_num: guiaMassa || null,
-							guia_numdatacad: dataGuiaMassa || null,
-							guia_senha: senhaMassa || null,
-							guia_senhadatacad: dataSenhaMassa || null
-						});
-					}
-				});
+        const checkboxes = document.querySelectorAll('#dynamic-table tbody input[type="checkbox"]:checked');
+        
+        if (checkboxes.length === 0) {
+            alert('⚠️ Selecione pelo menos um registro para salvar em massa.');
+            return;
+        }
 
-				const resp = await fetch('/menu/guia/addguia/massa', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ updates })
-				});
+        if (!confirm(`SoftRoute\n\nDeseja salvar os dados em massa para ${checkboxes.length} registro(s) selecionado(s)?\n\n⚠️ ATENÇÃO: Registros que já possuem dados NÃO serão atualizados para evitar sobrescrita.`)) {
+            return;
+        }
 
-				const result = await resp.json();
+        const btnSalvar = document.querySelector('.btn-toolbar');
+        btnSalvar.disabled = true;
+        btnSalvar.innerHTML = '<i class="ace-icon fa fa-spinner fa-spin"></i> Processando...';
 
-				if (result.ok) {
-					// Atualizar visualmente os campos nas linhas ATUALIZADAS
-					if (result.atualizados && result.atualizados.length > 0) {
-						result.atualizados.forEach(atualizado => {
-							const tr = document.querySelector(`[name="agendaId"][value="${atualizado.agendaId}"]`)?.closest('tr');
-							if (tr) {
-								tr.style.backgroundColor = '#d4edda';
-								tr.style.transition = 'background-color 0.5s';
-								
-								if (guiaMassa) {
-									const inputGuia = tr.querySelector(`[name="guia_num${atualizado.agendaId}"]`);
-									if (inputGuia) inputGuia.value = guiaMassa;
-								}
-								if (dataGuiaMassa) {
-									const inputDataGuia = tr.querySelector(`[name="dataguia_${atualizado.agendaId}"]`);
-									if (inputDataGuia) inputDataGuia.value = dataGuiaMassa;
-								}
-								if (senhaMassa) {
-									const inputSenha = tr.querySelector(`[name="senha_${atualizado.agendaId}"]`);
-									if (inputSenha) inputSenha.value = senhaMassa;
-								}
-								if (dataSenhaMassa) {
-									const inputDataSenha = tr.querySelector(`[name="datasenha_${atualizado.agendaId}"]`);
-									if (inputDataSenha) inputDataSenha.value = dataSenhaMassa;
-								}
-								
-								setTimeout(() => {
-									tr.style.backgroundColor = '';
-								}, 2000);
-							}
-						});
-					}
+        try {
+            const updates = [];
+            
+            checkboxes.forEach(checkbox => {
+                const tr = checkbox.closest('tr');
+                const agendaId = tr.querySelector(`[name="agendaId"]`)?.value;
+                
+                if (agendaId) {
+                    updates.push({
+                        agendaId: agendaId,
+                        guia_num: guiaMassa || null,
+                        guia_numdatacad: dataGuiaMassa || null,
+                        guia_senha: senhaMassa || null,
+                        guia_senhadatacad: dataSenhaMassa || null
+                    });
+                }
+            });
 
-					// Destacar linhas IGNORADAS (com dados  existentes)
-					if (result.ignorados && result.ignorados.length > 0) {
-						result.ignorados.forEach(ignorado => {
-							const tr = document.querySelector(`[name="agendaId"][value="${ignorado.agendaId}"]`)?.closest('tr');
-							if (tr) {
-								tr.style.backgroundColor = '#fff3cd';
-								tr.style.transition = 'background-color 0.5s';
-								
-								const tooltipCell = tr.querySelector('td:last-child');
-								if (tooltipCell) {
-									tooltipCell.innerHTML = `
-										<div class="action-buttons">
-											<span class="label label-warning" title="Registro ignorado - já possui dados">
-												<i class="ace-icon fa fa-exclamation-triangle"></i> Ignorado
-											</span>
-											${tooltipCell.innerHTML}
-										</div>
-									`;
-								}
-								
-								setTimeout(() => {
-									tr.style.backgroundColor = '';
-								}, 3000);
-							}
-						});
-					}
+            const resp = await fetch('/menu/guia/addguia/massa', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ updates })
+            });
 
-					// Feedback visual de sucesso
-					btnSalvar.classList.add('btn-success-pulse');
-					btnSalvar.innerHTML = '<i class="ace-icon fa fa-check"></i> Concluído!';
-					
-					setTimeout(() => {
-						btnSalvar.disabled = false;
-						btnSalvar.classList.remove('btn-success-pulse');
-						btnSalvar.innerHTML = '<i class="ace-icon fa fa-save"></i> Salvar em Massa';
-						
-						// Limpar campos após salvar
-						document.getElementById('guiaMassa').value = '';
-						document.getElementById('dataGuiaMassa').value = '';
-						document.getElementById('senhaMassa').value = '';
-						document.getElementById('dataSenhaMassa').value = '';
-						
-						// Atualizar contador
-						atualizarContadorSelecionados();
-						
-						// ✅ Substitui "localhost" por "SoftRoute" no alerta
-						mostrarRelatorioMassa(result);
-						
-					}, 1500);
-				} else {
-					throw new Error(result.message || 'Erro ao salvar em massa');
-				}
-			} catch (err) {
-				console.error('[ERRO salvarEmMassa]', err);
-				// ✅ Substitui "localhost" por "SoftRoute" no erro
-				alert(`❌ SoftRoute\n\nErro ao salvar em massa: ${err.message}`);
-				btnSalvar.disabled = false;
-				btnSalvar.innerHTML = '<i class="ace-icon fa fa-save"></i> Salvar em Massa';
-			}
-		}
+            const result = await resp.json();
 
-		// Função para mostrar relatório detalhado em modal
-		function mostrarRelatorioMassa(result) {
-			const res = result.resumo;
-			
-			// ✅ Substitui "localhost" por "SoftRoute" na mensagem
-			let mensagem = `✅ SoftRoute\n\nSALVAMENTO EM MASSA CONCLUÍDO!\n\n`;
-			mensagem += `📊 Resumo:\n`;
-			mensagem += `   • Total selecionados: ${res.total}\n`;
-			mensagem += `   • Atualizados: ${res.atualizados} ✅\n`;
-			mensagem += `   • Ignorados (já possuem dados): ${res.ignorados} ⚠️\n`;
-			mensagem += `   • Erros: ${res.erros} ❌\n\n`;
-			
-			if (result.ignorados && result.ignorados.length > 0) {
-				mensagem += `⚠️ REGISTROS IGNORADOS:\n`;
-				result.ignorados.forEach((ignorado, index) => {
-					const campos = ignorado.camposComDados.join(', ');
-					mensagem += `   ${index + 1}. ID: ${ignorado.agendaId.substring(0, 8)}... - Campos com dados: ${campos}\n`;
-				});
-				mensagem += `\n💡 Dica: Para atualizar registros ignorados, edite-os individualmente.`;
-			}
-			
-			alert(mensagem);
-		}
+            if (result.ok) {
+                if (result.atualizados && result.atualizados.length > 0) {
+                    result.atualizados.forEach(atualizado => {
+                        const tr = document.querySelector(`[name="agendaId"][value="${atualizado.agendaId}"]`)?.closest('tr');
+                        if (tr) {
+                            tr.style.backgroundColor = '#d4edda';
+                            tr.style.transition = 'background-color 0.5s';
+                            
+                            if (guiaMassa) {
+                                const inputGuia = tr.querySelector(`[name="guia_num${atualizado.agendaId}"]`);
+                                if (inputGuia) inputGuia.value = guiaMassa;
+                            }
+                            if (dataGuiaMassa) {
+                                const inputDataGuia = tr.querySelector(`[name="dataguia_${atualizado.agendaId}"]`);
+                                if (inputDataGuia) inputDataGuia.value = dataGuiaMassa;
+                            }
+                            if (senhaMassa) {
+                                const inputSenha = tr.querySelector(`[name="senha_${atualizado.agendaId}"]`);
+                                if (inputSenha) inputSenha.value = senhaMassa;
+                            }
+                            if (dataSenhaMassa) {
+                                const inputDataSenha = tr.querySelector(`[name="datasenha_${atualizado.agendaId}"]`);
+                                if (inputDataSenha) inputDataSenha.value = dataSenhaMassa;
+                            }
+                            
+                            setTimeout(() => {
+                                tr.style.backgroundColor = '';
+                            }, 2000);
+                        }
+                    });
+                }
 
-		// Atualizar contador de selecionados
-		function atualizarContadorSelecionados() {
-			const count = document.querySelectorAll('#dynamic-table tbody input[name="agendaCheck"]:checked').length;
-			const contador = document.querySelector('.badge-selecionados');
-			if (contador) {
-				contador.textContent = count;
-			}
-		}
+                if (result.ignorados && result.ignorados.length > 0) {
+                    result.ignorados.forEach(ignorado => {
+                        const tr = document.querySelector(`[name="agendaId"][value="${ignorado.agendaId}"]`)?.closest('tr');
+                        if (tr) {
+                            tr.style.backgroundColor = '#fff3cd';
+                            tr.style.transition = 'background-color 0.5s';
+                            
+                            const tooltipCell = tr.querySelector('td:last-child');
+                            if (tooltipCell) {
+                                tooltipCell.innerHTML = `
+                                    <div class="action-buttons">
+                                        <span class="label label-warning" title="Registro ignorado - já possui dados">
+                                            <i class="ace-icon fa fa-exclamation-triangle"></i> Ignorado
+                                        </span>
+                                        ${tooltipCell.innerHTML}
+                                    </div>
+                                `;
+                            }
+                            
+                            setTimeout(() => {
+                                tr.style.backgroundColor = '';
+                            }, 3000);
+                        }
+                    });
+                }
 
-		// Event listener para checkboxes
-		document.addEventListener('change', (e) => {
-			if (e.target.matches('#checkAll')) {
-				toggleAllCheckboxes(e.target.checked);
-			}
-		});
+                btnSalvar.classList.add('btn-success-pulse');
+                btnSalvar.innerHTML = '<i class="ace-icon fa fa-check"></i> Concluído!';
+                
+                setTimeout(() => {
+                    btnSalvar.disabled = false;
+                    btnSalvar.classList.remove('btn-success-pulse');
+                    btnSalvar.innerHTML = '<i class="ace-icon fa fa-save"></i> Salvar em Massa';
+                    
+                    document.getElementById('guiaMassa').value = '';
+                    document.getElementById('dataGuiaMassa').value = '';
+                    document.getElementById('senhaMassa').value = '';
+                    document.getElementById('dataSenhaMassa').value = '';
+                    
+                    atualizarContadorSelecionados();
+                    
+                    mostrarRelatorioMassa(result);
+                    
+                }, 1500);
+            } else {
+                throw new Error(result.message || 'Erro ao salvar em massa');
+            }
+        } catch (err) {
+            console.error('[ERRO salvarEmMassa]', err);
+            alert(`❌ SoftRoute\n\nErro ao salvar em massa: ${err.message}`);
+            btnSalvar.disabled = false;
+            btnSalvar.innerHTML = '<i class="ace-icon fa fa-save"></i> Salvar em Massa';
+        }
+    }
 
-		// ✅ Checkbox de seleção em massa
-		function toggleAllCheckboxes(checked) {
-			const checkboxes = document.querySelectorAll('#dynamic-table tbody input[type="checkbox"]');
-			checkboxes.forEach(checkbox => {
-				checkbox.checked = checked;
-			});
-			atualizarContadorSelecionados();
-		}
+    function mostrarRelatorioMassa(result) {
+        const res = result.resumo;
+        
+        let mensagem = `✅ SoftRoute\n\nSALVAMENTO EM MASSA CONCLUÍDO!\n\n`;
+        mensagem += `📊 Resumo:\n`;
+        mensagem += `   • Total selecionados: ${res.total}\n`;
+        mensagem += `   • Atualizados: ${res.atualizados} ✅\n`;
+        mensagem += `   • Ignorados (já possuem dados): ${res.ignorados} ⚠️\n`;
+        mensagem += `   • Erros: ${res.erros} ❌\n\n`;
+        
+        if (result.ignorados && result.ignorados.length > 0) {
+            mensagem += `⚠️ REGISTROS IGNORADOS:\n`;
+            result.ignorados.forEach((ignorado, index) => {
+                const campos = ignorado.camposComDados.join(', ');
+                mensagem += `   ${index + 1}. ID: ${ignorado.agendaId.substring(0, 8)}... - Campos com dados: ${campos}\n`;
+            });
+            mensagem += `\n💡 Dica: Para atualizar registros ignorados, edite-os individualmente.`;
+        }
+        
+        alert(mensagem);
+    }
 
-		// Listener para checkbox do cabeçalho
-		document.addEventListener('change', (e) => {
-			if (e.target.matches('#dynamic-table thead input[type="checkbox"]')) {
-				toggleAllCheckboxes(e.target.checked);
-			}
-		});
+    function atualizarContadorSelecionados() {
+        const count = document.querySelectorAll('#dynamic-table tbody input[name="agendaCheck"]:checked').length;
+        const contador = document.querySelector('.badge-selecionados');
+        if (contador) {
+            contador.textContent = count;
+        }
+    }
 
-		// Listener para botão individual (mantido)
-		document.addEventListener('click', async (e) => {
-			if (!e.target.classList.contains('btnSalvarGuia')) return;
+    document.addEventListener('change', (e) => {
+        if (e.target.matches('#checkAll')) {
+            toggleAllCheckboxes(e.target.checked);
+        }
+    });
 
-			e.preventDefault();
+    function toggleAllCheckboxes(checked) {
+        const checkboxes = document.querySelectorAll('#dynamic-table tbody input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = checked;
+        });
+        atualizarContadorSelecionados();
+    }
 
-			const tr = e.target.closest('tr');
-			const agendaId = tr.querySelector(`[name="agendaId"]`)?.value;
-			const guia_num = tr.querySelector(`[name="guia_num${agendaId}"]`)?.value;
-			const guia_numdatacad = tr.querySelector(`[name="dataguia_${agendaId}"]`)?.value;
-			const guia_senha = tr.querySelector(`[name="senha_${agendaId}"]`)?.value;
-			const guia_senhadatacad = tr.querySelector(`[name="datasenha_${agendaId}"]`)?.value;
-			
-			const payload = {
-				agendaId,
-				guia_num,
-				guia_numdatacad,
-				guia_senha,
-				guia_senhadatacad
-			};
+    document.addEventListener('change', (e) => {
+        if (e.target.matches('#dynamic-table thead input[type="checkbox"]')) {
+            toggleAllCheckboxes(e.target.checked);
+        }
+    });
 
-			try {
-				const resp = await fetch('/menu/guia/addguia', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify(payload)
-				});
-				const result = await resp.json();
+    document.addEventListener('click', async (e) => {
+        if (!e.target.classList.contains('btnSalvarGuia')) return;
 
-				if (result.ok) {
-					e.target.innerText = '✔';
-					setTimeout(() => e.target.innerText = '💾', 1000);
-				} else {
-					// ✅ Substitui "localhost" por "SoftRoute" no erro
-					alert(`❌ SoftRoute\n\n${result.message || 'Erro ao salvar'}`);
-				}
-			} catch (err) {
-				console.error(err);
-				// ✅ Substitui "localhost" por "SoftRoute" no erro
-				alert(`❌ SoftRoute\n\nErro de comunicação`);
-			}
-		});
-		async function criarLote() {
-				console.log('[DEBUG] Iniciando criarLote...');
-				const guialoteNum = document.getElementById('guialoteNum').value.trim();
-				const guialoteNumprotocolo = document.getElementById('guialoteNumprotocolo').value.trim() || null;
-				const guialoteDataenvio = document.getElementById('guialoteDataenvio').value || null;
-				const guialoteGuialotevalor = document.getElementById('guialoteGuialotevalor').value;
-				
-				if (!guialoteNum) {
-					alert('⚠️ Informe o Número do Lote (Protocolo do Convênio).');
-					return;
-				}
-				
-				const checkboxes = document.querySelectorAll('#dynamic-table tbody input[type="checkbox"]:checked');
-				
-				if (checkboxes.length === 0) {
-					alert('⚠️ Selecione pelo menos um agendamento válido para criar o Lote.');
-					return;
-				}
-				
-				const listaAgendaIds = [];
-				checkboxes.forEach(checkbox => {
-					const tr = checkbox.closest('tr');
-					const agendaId = tr.querySelector('input[name="agendaId"]')?.value;
-					if (agendaId) listaAgendaIds.push(agendaId);
-				});
-				
-				if (!confirm(`SoftRoute\nDeseja criar o Lote "${guialoteNum}" com ${checkboxes.length} agendamento(s)?`)) {
-					return;
-				}
-				
-				const btnSalvar = document.querySelector('.toolbar-lote .btn-toolbar');
-				const btnOriginalText = btnSalvar.innerHTML;
-				
-				btnSalvar.disabled = true;
-				btnSalvar.innerHTML = '<i class="ace-icon fa fa-spinner fa-spin"></i> Criando Lote...';
-				
-				try {
-					const controller = new AbortController();
-					const timeoutId = setTimeout(() => controller.abort(), 30000);
-					
-					const resp = await fetch('/menu/guia/lote/criarLote', {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({
-							listaAgendaIds: listaAgendaIds,
-							guialote_num_externo: guialoteNum,
-							guialote_numprotocolo: guialoteNumprotocolo,
-							guialote_dataenvio: guialoteDataenvio,
-							guialote_valor: parseFloat(guialoteGuialotevalor.replace(/\./g, '').replace(',', '.')) || 0,  // ✅ CORRIGIDO
-							guialote_status: $('#guialoteStatus').val()
-						}),
-						signal: controller.signal
-					});
-					
-					clearTimeout(timeoutId);
-					
-					const contentType = resp.headers.get('content-type');
-					if (!contentType || !contentType.includes('application/json')) {
-						const text = await resp.text();
-						console.error('[ERRO] Resposta não é JSON:', text.substring(0, 200));
-						throw new Error('Resposta do servidor não é JSON.');
-					}
-					
-					const result = await resp.json();
-					
-					if (result.ok) {
-						btnSalvar.classList.add('btn-success-pulse');
-						btnSalvar.innerHTML = '<i class="ace-icon fa fa-check"></i> Lote Criado!';
-						alert(`✅ LOTE CRIADO COM SUCESSO!\n📦 Lote: ${guialoteNum}\n📋 Agendamentos vinculados: ${listaAgendaIds.length}`);
-						setTimeout(() => location.reload(), 2000);
-					} else {
-						throw new Error(result.message || 'Erro ao criar lote');
-					}
-				} catch (err) {
-					console.error('[ERRO CRÍTICO criarLote]', err);
-					if (err.name === 'AbortError') {
-						alert('❌ Timeout: A requisição demorou mais de 30s.');
-					} else {
-						alert(`❌ Erro ao criar Lote: ${err.message}`);
-					}
-				} finally {
-					btnSalvar.disabled = false;
-					btnSalvar.innerHTML = btnOriginalText;
-				}
-			}
-		
-		</script>
+        e.preventDefault();
+
+        const tr = e.target.closest('tr');
+        const agendaId = tr.querySelector(`[name="agendaId"]`)?.value;
+        const guia_num = tr.querySelector(`[name="guia_num${agendaId}"]`)?.value;
+        const guia_numdatacad = tr.querySelector(`[name="dataguia_${agendaId}"]`)?.value;
+        const guia_senha = tr.querySelector(`[name="senha_${agendaId}"]`)?.value;
+        const guia_senhadatacad = tr.querySelector(`[name="datasenha_${agendaId}"]`)?.value;
+        
+        const payload = {
+            agendaId,
+            guia_num,
+            guia_numdatacad,
+            guia_senha,
+            guia_senhadatacad
+        };
+
+        try {
+            const resp = await fetch('/menu/guia/addguia', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const result = await resp.json();
+
+            if (result.ok) {
+                e.target.innerText = '✔';
+                setTimeout(() => e.target.innerText = '💾', 1000);
+            } else {
+                alert(`❌ SoftRoute\n\n${result.message || 'Erro ao salvar'}`);
+            }
+        } catch (err) {
+            console.error(err);
+            alert(`❌ SoftRoute\n\nErro de comunicação`);
+        }
+    });
+
+    // ✅ FUNÇÃO criarLote COM CONVERSÃO INLINE
+    async function criarLote() {
+        console.log('[DEBUG] Iniciando criarLote...');
+        const guialoteNum = document.getElementById('guialoteNum').value.trim();
+        const guialoteNumprotocolo = document.getElementById('guialoteNumprotocolo').value.trim() || null;
+        const guialoteDataenvio = document.getElementById('guialoteDataenvio').value || null;
+        const guialoteGuialotevalorRaw = document.getElementById('guialoteGuialotevalor').value;
+        
+        // ✅ CONVERSÃO INLINE - Independente de função externa
+        let guialoteValorNumerico = 0;
+        if (guialoteGuialotevalorRaw && guialoteGuialotevalorRaw.trim() !== '') {
+            let limpo = guialoteGuialotevalorRaw.toString().replace(/[^\d.,]/g, '');
+            limpo = limpo.replace(/\./g, '');
+            limpo = limpo.replace(',', '.');
+            const num = parseFloat(limpo);
+            guialoteValorNumerico = isNaN(num) ? 0 : num;
+        }
+        
+        console.log('[DEBUG] Valor bruto:', guialoteGuialotevalorRaw);
+        console.log('[DEBUG] Valor convertido:', guialoteValorNumerico);
+        
+        if (!guialoteNum) {
+            alert('⚠️ Informe o Número do Lote (Protocolo do Convênio).');
+            return;
+        }
+        
+        const checkboxes = document.querySelectorAll('#dynamic-table tbody input[type="checkbox"]:checked');
+        
+        if (checkboxes.length === 0) {
+            alert('⚠️ Selecione pelo menos um agendamento válido para criar o Lote.');
+            return;
+        }
+        
+        const listaAgendaIds = [];
+        checkboxes.forEach(checkbox => {
+            const tr = checkbox.closest('tr');
+            const agendaId = tr.querySelector('input[name="agendaId"]')?.value;
+            if (agendaId) listaAgendaIds.push(agendaId);
+        });
+        
+        if (!confirm(`SoftRoute\nDeseja criar o Lote "${guialoteNum}" com ${checkboxes.length} agendamento(s)?\n💰 Valor: R$ ${guialoteValorNumerico.toFixed(2).replace('.', ',')}`)) {
+            return;
+        }
+        
+        const btnSalvar = document.querySelector('.toolbar-lote .btn-toolbar');
+        const btnOriginalText = btnSalvar.innerHTML;
+        
+        btnSalvar.disabled = true;
+        btnSalvar.innerHTML = '<i class="ace-icon fa fa-spinner fa-spin"></i> Criando Lote...';
+        
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
+            
+            const resp = await fetch('/menu/guia/lote/criarLote', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    listaAgendaIds: listaAgendaIds,
+                    guialote_num_externo: guialoteNum,
+                    guialote_numprotocolo: guialoteNumprotocolo,
+                    guialote_dataenvio: guialoteDataenvio,
+                    guialote_valor: guialoteValorNumerico,
+                    guialote_status: $('#guialoteStatus').val()
+                }),
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            const contentType = resp.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await resp.text();
+                console.error('[ERRO] Resposta não é JSON:', text.substring(0, 200));
+                throw new Error('Resposta do servidor não é JSON.');
+            }
+            
+            const result = await resp.json();
+            
+            if (result.ok) {
+                btnSalvar.classList.add('btn-success-pulse');
+                btnSalvar.innerHTML = '<i class="ace-icon fa fa-check"></i> Lote Criado!';
+                alert(`✅ LOTE CRIADO COM SUCESSO!\n📦 Lote: ${guialoteNum}\n📋 Agendamentos vinculados: ${listaAgendaIds.length}\n💰 Valor: R$ ${guialoteValorNumerico.toFixed(2).replace('.', ',')}`);
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                throw new Error(result.message || 'Erro ao criar lote');
+            }
+        } catch (err) {
+            console.error('[ERRO CRÍTICO criarLote]', err);
+            if (err.name === 'AbortError') {
+                alert('❌ Timeout: A requisição demorou mais de 30s.');
+            } else {
+                alert(`❌ Erro ao criar Lote: ${err.message}`);
+            }
+        } finally {
+            btnSalvar.disabled = false;
+            btnSalvar.innerHTML = btnOriginalText;
+        }
+    }
+</script>
 </head>
 <body onload="javascript:controlaNave();carregaBody();" class="no-skin">
 	<div class="main-container ace-save-state" id="main-container">
@@ -1922,20 +1925,7 @@ SELECT2 - ESTILOS GERAIS
 			});
 		}
 
-		/**
-		* Converte texto brasileiro (6.678,40) para número do banco (6678.40)
-		*/
-		function converterMoedaParaNumero(texto) {
-			if (!texto) return 0;
-			// Remove tudo que não é dígito, vírgula ou ponto
-			let limpo = texto.toString().replace(/[^\d.,]/g, '');
-			// Remove pontos de milhar
-			limpo = limpo.replace(/\./g, '');
-			// Troca vírgula por ponto decimal
-			limpo = limpo.replace(',', '.');
-			const num = parseFloat(limpo);
-			return isNaN(num) ? 0 : num;
-		}
+		
 
 		/**
 		* Aplica máscara de moeda em tempo real enquanto o usuário digita
@@ -2053,27 +2043,6 @@ function carregarLoteParaEdicao(loteId) {
     });
 }
 
-// ✅ Formatar data ISO para input date
-function formatarDataISO(data) {
-    if (!data) return '';
-    const d = new Date(data);
-    return d.toISOString().split('T')[0];
-}
-
-// ✅ Formatar moeda para exibição
-function formatarMoeda(valor) {
-    if (!valor && valor !== 0) return '';
-    return parseFloat(valor).toLocaleString('pt-BR', { 
-        minimumFractionDigits: 2, 
-        maximumFractionDigits: 2 
-    });
-}
-
-// ✅ Remover formatação para envio
-function removerFormatacaoMoeda(valor) {
-    if (!valor) return 0;
-    return parseFloat(valor.replace(/\./g, '').replace(',', '.')) || 0;
-}
 
 // ✅ Salvar alterações do lote
 $('#btnSalvarLote').on('click', function() {
@@ -2086,7 +2055,7 @@ $('#btnSalvarLote').on('click', function() {
         guialote_numdatacad: $('#guialote_numdatacad').val() || null,
         guialote_numprotocolo: $('#guialote_numprotocolo').val().trim() || null,
         guialote_dataenvio: $('#guialote_dataenvio').val() || null,
-        guialote_guialotevalor: converterMoedaParaNumero($('#guialote_guialotevalor').val()),
+        guialote_guialotevalor: parseFloat($('#guialote_guialotevalor').val().replace(/\./g, '').replace(',', '.')) || 0,
         guialote_status: $('#guialote_status').val(),
         guialote_log: $('#guialote_log').val().trim() || null
     };
@@ -2220,7 +2189,7 @@ $('#modalEditarLote').on('hidden.bs.modal', function() {
 					guialote_numdatacad: document.getElementById('alt_guialote_numdatacad').value,
 					guialote_numprotocolo: document.getElementById('alt_guialote_numprotocolo').value,
 					guialote_dataenvio: document.getElementById('alt_guialote_dataenvio').value,
-					guialote_guialotevalor: converterMoedaParaNumero(document.getElementById('alt_guialote_guialotevalor').value),
+					guialote_guialotevalor: parseFloat(document.getElementById('alt_guialote_guialotevalor').value.replace(/\./g, '').replace(',', '.')) || 0,
 					guialote_status: document.getElementById('alt_guialote_status').value,
 					guialote_log: document.getElementById('alt_guialote_log').value
 				};
