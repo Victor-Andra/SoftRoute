@@ -310,19 +310,13 @@
 
                                     <!-- Sala | Beneficiário | Convênio -->
                                     <td>
-                                        {{#each ../salas}}
-                                            {{#ifEqual this._id ../agenda_salaid}}{{sala_nome}}{{/ifEqual}}
-                                        {{/each}}
+                                        {{agenda_salaid}}
                                     </td>
                                     <td>
-                                        {{#each ../benes}}
-                                            {{#ifEqual this._id ../agenda_beneid}}{{bene_nome}}{{/ifEqual}}
-                                        {{/each}}
+                                        {{agenda_beneid}}
                                     </td>
                                     <td>
-                                        {{#each ../convs}}
-                                            {{#ifEqual this._id ../agenda_convid}}{{conv_nome}}{{/ifEqual}}
-                                        {{/each}}
+                                        {{agenda_convid}}
                                     </td>
 
                                     <!-- Origem -->
@@ -364,58 +358,30 @@
 
                                     <!-- === COLUNAS: ORIGINAL === -->
                                     <td>
-                                        {{#each ../terapias}}
-                                            {{#ifEqual this._id ../agenda_terapiaid}}{{terapia_nome}}{{/ifEqual}}
-                                        {{/each}}
+                                        {{agenda_terapiaid}}
                                     </td>
                                     <td>
-                                        {{#each ../terapeutas}}
-                                            {{#ifEqual this._id ../agenda_usuid}}{{usuario_nome}}{{/ifEqual}}
-                                        {{/each}}
+                                        {{agenda_usuid}}
                                     </td>
                                     <td>{{agenda_valorcre}}</td>
                                     <td>{{agenda_valordeb}}</td>
 
                                     <!-- === COLUNAS: SUBSTITUTO FIXO === -->
                                     <td>
-                                        {{#compareThis agenda_mergeterapiaid "766f69643132333435366964"}}
-                                            -
-                                        {{else}}
-                                            {{#each ../terapias}}
-                                                {{#ifEqual this._id ../agenda_mergeterapiaid}}{{terapia_nome}}{{/ifEqual}}
-                                            {{/each}}
-                                        {{/compareThis}}
+                                        {{agenda_mergeterapiaid}}
                                     </td>
                                     <td>
-                                        {{#compareThis agenda_mergeterapeutaid "766f69643132333435366964"}}
-                                            -
-                                        {{else}}
-                                            {{#each ../terapeutas}}
-                                                {{#ifEqual this._id ../agenda_mergeterapeutaid}}{{usuario_nome}}{{/ifEqual}}
-                                            {{/each}}
-                                        {{/compareThis}}
+                                        {{agenda_mergeterapeutaid}}
                                     </td>
                                     <td>{{agenda_mergevalorcre}}</td>
                                     <td>{{agenda_mergevalordeb}}</td>
 
                                     <!-- === COLUNAS: SUBSTITUIÇÃO === -->
                                     <td>
-                                        {{#compareThis agenda_fixoterapiaid "766f69643132333435366964"}}
-                                            -
-                                        {{else}}
-                                            {{#each ../terapias}}
-                                                {{#ifEqual this._id ../agenda_fixoterapiaid}}{{terapia_nome}}{{/ifEqual}}
-                                            {{/each}}
-                                        {{/compareThis}}
+                                        {{agenda_fixoterapiaid}}
                                     </td>
                                     <td>
-                                        {{#compareThis agenda_fixoterapeutaid "766f69643132333435366964"}}
-                                            -
-                                        {{else}}
-                                            {{#each ../terapeutas}}
-                                                {{#ifEqual this._id ../agenda_fixoterapeutaid}}{{usuario_nome}}{{/ifEqual}}
-                                            {{/each}}
-                                        {{/compareThis}}
+                                        {{agenda_fixoterapeutaid}}
                                     </td>
                                     <td>{{agenda_fixovalorcre}}</td>
                                     <td>{{agenda_fixovalordeb}}</td>
@@ -433,12 +399,12 @@
                                                 <i class="ace-icon fa fa-eye bigger-130"></i>
                                                 <span class="tooltip-text">
                                                     <strong>Agendamento:</strong><br>
-                                                    • Criado: {{#if agenda_datacad}}{{formatDate agenda_datacad}}{{else}}—{{/if}}<br>
-                                                    • Por: {{#if agenda_usucad}}{{#each ../terapeutas}}{{#ifEqual this._id ../agenda_usucad}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{else}}—{{/if}}<br>
-                                                    • Editado: {{#if agenda_dataedi}}{{formatDate agenda_dataedi}}{{else}}—{{/if}}<br>
-                                                    • Por: {{#if agenda_usuedi}}{{#each ../terapeutas}}{{#ifEqual this._id ../agenda_usuedi}}{{usuario_nome}}{{/ifEqual}}{{/each}}{{else}}—{{/if}}<br><br>
+                                                    • Criado: {{agenda_datacad}}<br>
+                                                    • Por: {{agenda_usucad}}<br>
+                                                    • Editado: {{agenda_dataedi}}<br>
+                                                    • Por: {{agenda_usuedi}}<br><br>
                                                     <strong>Categoria:</strong> {{agenda_categoria}}<br>
-                                                    <strong>Obs:</strong> {{#if agenda_obs}}{{agenda_obs}}{{else}}—{{/if}}
+                                                    <strong>Obs:</strong> {{agenda_obs}}
                                                 </span>
                                             </a>
                                         </div>

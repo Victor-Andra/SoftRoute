@@ -2594,6 +2594,22 @@ router.post('/agenda/lisGeral', fncGeral.IsAuthenticated, (req, res) => {
     fncAgenda.carregaAgendaListaGeral(req, res, false, resposta);
 });
 
+// 👉 ROTA GET: carrega lista do mês atual
+router.get('/agenda/lisGeralFixa', fncGeral.IsAuthenticated, (req, res) => {
+    let resposta = new Resposta();
+    resposta.sucesso = "";
+    resposta.texto = "";
+    fncAgenda.carregaAgendaListaGeralFixa(req, res, false, resposta);
+});
+
+// 👉 ROTA POST: filtra por mês selecionado
+router.post('/agenda/lisGeralFixa', fncGeral.IsAuthenticated, (req, res) => {
+    let resposta = new Resposta();
+    resposta.sucesso = "";
+    resposta.texto = "";
+    fncAgenda.carregaAgendaListaGeralFixa(req, res, false, resposta);
+});
+
 
 router.get('/agenda/evolucao/:id', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a edição de agenda
     let resposta = new Resposta()

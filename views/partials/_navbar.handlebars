@@ -521,13 +521,13 @@
 									</a>
 									<b class="arrow"></b>
 								</li>
-								{{!-- <li class="hover">
+								<li class="hover">
 									<a href="/menu/atendimento/relatendbeneATNovo">
-										<i class="menu-icon fa fa-child black"></i>
-										<label class="sidebar-label">Ana. Beneficiário AT Novo</label>
+										<i class="menu-icon fa fa-child orange"></i>
+										<label class="sidebar-label"><b>Ana. Bene. AT Novo</b></label>
 									</a>
 									<b class="arrow"></b>
-								</li> --}}
+								</li>
 								<li class="hover">
 									<a href="/menu/atendimento/relatendbeneassinAT">
 										<i class="menu-icon fa fa-ticket red"></i>
@@ -769,13 +769,15 @@
 									</a>
 									<b class="arrow"></b>
 								</li>
-								<li class="hover">
-									<a href="/menu/guia/lote/consolidado">
-										<i class="menu-icon fa fa-cubes red"></i>
-										<label class="sidebar-label">Consolidado</label>
-									</a>
-									<b class="arrow"></b>
-								</li>
+								{{#compareStringMore usuario._id "62d95222ea444f5b7a0276bc" "62e008adea444f5b7a02c04f" "6a0afbe52c525b54bcc77964"}}
+									<li class="hover">
+										<a href="/menu/guia/lote/consolidado">
+											<i class="menu-icon fa fa-cubes red"></i>
+											<label class="sidebar-label">Consolidado</label>
+										</a>
+										<b class="arrow"></b>
+									</li>
+								{{/compareStringMore}}
 							</ul>
 						</li>							
 						<li class="hover">
@@ -1319,14 +1321,106 @@
 						</li>
 					</ul>
 				</li>
-				<li class="hover"><!-- /Menu ABA-->
-					<a href="/menu/area/aba/prog/proglis">
+				
+				<li class="hover"> <!-- /Menu ABA -->
+					<a href="#" class="dropdown-toggle">
 						<i class="menu-icon fa fa-cube pink"></i>
-						<span class="menu-text"> 
-							<label class="sidebar-label">ABA</label>
-							</span>
+						<label class="sidebar-label">ABA</label>
+						<b class="arrow fa fa-angle-down"></b>
 					</a>
 					<b class="arrow"></b>
+					<ul class="submenu">
+						<li class="hover">
+							<a href="/menu/area/aba/prog/proglis">
+								<i class="menu-icon fa fa-child red"></i>
+									<span class="menu-text"> 
+										<label class="sidebar-label">ABA por Beneficiário</label>
+									</span>
+							</a>
+							<b class="arrow"></b>
+						</li>
+						<li class="hover" hidden>
+							<a href="">
+								<i class="menu-icon fa fa-cube blue"></i>
+									<span class="menu-text"> 
+										<label class="sidebar-label">ABA por Programa</label>
+									</span>
+							</a>
+							<b class="arrow"></b>
+						</li>
+						<li class="hover" hidden>
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-sticky-note-o orange"></i>
+								<label class="sidebar-label">Sondagem</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a href="">
+										<i class="menu-icon fa fa-list blue"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Lista</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+						<li class="hover" hidden>
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-sticky-note-o orange"></i>
+								<label class="sidebar-label">Funcional</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a href="">
+										<i class="menu-icon fa fa-list blue"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Lista</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+						<li class="hover" hidden>
+							<a href="#" class="dropdown-toggle">
+								<i class="menu-icon fa fa-sticky-note-o orange"></i>
+								<label class="sidebar-label">Preferência</label>
+								<b class="arrow fa fa fa-caret-right"></b>
+							</a>
+							<b class="arrow"></b>
+							<ul class="submenu">
+								<li class="hover">
+									<a href="">
+										<i class="menu-icon fa fa-list blue"></i>
+										<label class="sidebar-label">Novo</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+								<li class="hover">
+									<a href="">
+										<i class="menu-icon fa fa-list pink"></i>
+										<label class="sidebar-label">Lista</label>
+									</a>
+									<b class="arrow"></b>
+								</li>
+							</ul>
+						</li>
+					</ul>
 				</li>
 				<li class="hover"> <!-- /Menu AT's -->
 					<a href="#" class="dropdown-toggle">

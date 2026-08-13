@@ -4,8 +4,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta charset="utf-8">
     <title>Relatório Analítico de Atendimentos por Beneficiário</title>
-    
-    <!-- 🔹 ESTILOS DA TOOLBAR + IMPRESSÃO -->
+  
+   
+   <!-- 🔹 ESTILOS DA TOOLBAR + IMPRESSÃO -->
     <style>
       /* ============================================
          BARRA DE PESQUISA - CLASSE SEPARADA
@@ -126,63 +127,52 @@
       .grupo-horario .info-sala i {
         margin-right: 2px;
       }
-
     
-     
+      /* Estilos para tela */
+      @media screen {
+        .print-header {
+          display: none;
+        }
+      }
+
+      /* Estilos para impressão */
+      @media print {
+        .noprint {
+          display: none !important;
+        }
+
+        /* Cabeçalho fixo com paginação no topo */
+        .print-header {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          text-align: center;
+          font-size: 11px;
+          padding: 4px 0;
+          background: white;
+          z-index: 9999;
+        }
+
+        body {
+          margin: 0;
+          padding-top: 12mm;
+          padding-bottom: 10mm;
+        }
+
+        @page {
+          margin: 1cm;
+
+          @top-center {
+            content: "Página " counter(page) " de " counter(pages);
+            font-size: 11px;
+            color: black;
+          }
+
+        }
+      }
     </style>
-<style>
-			/* Estilos para tela */
-			@media screen {
-				.print-header {
-					display: none;
-				}
-			}
-
-			/* Estilos para impressão */
-			@media print {
-				.noprint {
-					display: none !important;
-				}
-
-				/* Cabeçalho fixo com paginação no topo */
-				.print-header {
-					position: fixed;
-					top: 0;
-					left: 0;
-					right: 0;
-					text-align: center;
-					font-size: 11px;
-					padding: 4px 0;
-					background: white;
-					z-index: 9999;
-					/* O content aqui não funciona diretamente em elementos reais,
-					apenas em pseudo-elementos (@page/@top-center cuidará disso) */
-				}
-
-				/* Usar padding em vez de margin evita o grande espaço na 1ª página */
-				body {
-					margin: 0;
-					padding-top: 12mm;  /* espaço para o cabeçalho fixo */
-					padding-bottom: 10mm;
-				}
-
-				/* Configuração da página (não trava a orientação do usuário) */
-				@page {
-					margin: 1cm;
-
-					@top-center {
-						content: "Página " counter(page) " de " counter(pages);
-						font-size: 11px;
-						color: black;
-					}
-
-					@bottom-center {
-						content: ""; /* remove rodapé automático */
-					}
-				}
-
-			}
-		</style>
+  
     <script>
       function carregaBody(){
         document.getElementById('dataFilDe').value = document.getElementById('dataIni').value.replace(" 00:00:00.000Z", "") || new Date().toISOString().split('T')[0];
@@ -191,294 +181,272 @@
     </script>
   </head>
 
-  <body onload="javascript:controlaNave();carregaBody();" class="no-skin">
+<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
     <div class="main-container ace-save-state" id="main-container">
       <div class="main-content">
         <div class="main-content-inner noprint">
           <ul class="breadcrumb">
-							<li>
-								<i class="ace-icon fa fa-home home-icon"></i>
-								<a href="#">Home</a>
-							</li>
-							<li class="active">Relatório de Atendimentos por Beneficiário</li>
-						</ul><!-- /.breadcrumb -->
-          <!-- 🔹 TOOLBAR DE PESQUISA (substitui breadcrumbs) -->
-        
-            <form style="font-size: 11px;" role="form" action="/menu/atendimento/relatendbenesAT" method="POST">
-              <div class="form-inline">
-                 <div class="toolbar-pesquisa">
-                    <h5>
-                      <i class="ace-icon fa fa-file-text-o"></i> 
-                      <span>Filtros do Relatório</span>
-                    </h5>
+            <li>
+              <i class="ace-icon fa fa-home home-icon"></i>
+              <a href="#">Home</a>
+            </li>
+            <li class="active">Relatório de Atendimentos por Beneficiário</li>
+          </ul>
+          
+          <form style="font-size: 11px;" role="form" action="/menu/atendimento/relatendbeneFiltroATNovo" method="POST">
+            <div class="form-inline">
+               <div class="toolbar-pesquisa">
+                  <h5>
+                    <i class="ace-icon fa fa-file-text-o"></i> 
+                    <span>Filtros do Relatório</span>
+                  </h5>
 
-                    <div class="form-inline">
-
-                      <!-- 🔵 LINHA 1 -->
-                      <div class="form-row" style="display: flex; flex-wrap: nowrap; gap: 10px; align-items: end;">
-
-                        <div class="form-group">
-                          <label>Período de:</label>
-                          <input id="dataFilDe" name="dataFilDe" type="date" onchange="atualizaDataIni()">
-                          <input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}"/>
-                        </div>
-
-                        <div class="form-group">
-                          <label>até:</label>
-                          <input id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
-                          <input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}"/>
-                        </div>
-
-                        <div class="form-group" style="min-width: 250px;">
-                          <label>Beneficiário:</label>
-                          <select name="relBeneid" id="relBeneid" class="select2">
-                            {{#each benes}}
-                              <option value="{{_id}}" {{#ifEqual ../filtro.relBeneid _id}}selected{{/ifEqual}}>
-                                {{bene_nome}}
-                              </option>
-                            {{/each}}
-                          </select>
-                        </div>
-
+                  <div class="form-inline">
+                    <!-- 🔵 LINHA 1 -->
+                    <div class="form-row" style="display: flex; flex-wrap: nowrap; gap: 10px; align-items: end;">
+                      <div class="form-group">
+                        <label>Período de:</label>
+                        <input id="dataFilDe" name="dataFilDe" type="date" onchange="atualizaDataIni()">
+                        <input class="hidden" id="dataIni" name="dataIni" value="{{filtro.dataIni}}"/>
                       </div>
 
-                      <!-- 🟠 LINHA 2 -->
-                      <div class="form-row" style="display: flex; flex-wrap: nowrap; gap: 10px; align-items: end; margin-top: 5px;">
-
-                        <!-- Exibir -->
-                        <div class="form-group">
-                          <label>Exibir:</label>
-                          <select name="porHoras" id="porHoras" class="select2">
-                            <option value="sim" {{#ifEqual filtro.porHoras "sim"}}selected{{/ifEqual}}>Horas</option>
-                            <option value="nao" {{#ifEqual filtro.porHoras "nao"}}selected{{/ifEqual}}>Resumo</option>
-                          </select>
-                        </div>
-
-                        <!-- Inativos -->
-                        <div class="form-group">
-                          <label>Inativos:</label>
-                          <select name="exibeInativos" id="exibeInativos" class="select2">
-                            <option value="nao" {{#ifEqual filtro.exibeInativos "nao"}}selected{{/ifEqual}}>Não</option>
-                            <option value="sim" {{#ifEqual filtro.exibeInativos "sim"}}selected{{/ifEqual}}>Sim</option>
-                          </select>
-                        </div>
-
-                        <!-- 🔹 Ajuste Sala Escola -->
-                        <div style="display: flex; gap: 8px; align-items: end;">
-
-                          <div class="form-group">
-                            <label>Turno:</label>
-                            <select name="turnoSet" id="turnoSet" class="select2" style="width: 100px;">
-                              <option value="">Auto</option>
-                              <option value="manha" {{#ifEqual filtro.turnoSet "manha"}}selected{{/ifEqual}}>Manhã</option>
-                              <option value="tarde" {{#ifEqual filtro.turnoSet "tarde"}}selected{{/ifEqual}}>Tarde</option>
-                              <option value="dia" {{#ifEqual filtro.turnoSet "dia"}}selected{{/ifEqual}}>Dia</option>
-                            </select>
-                          </div>
-
-                          <div class="form-group">
-                            <label>Início:</label>
-                            <input type="time" name="horaInicialSet" value="{{filtro.horaInicialSet}}">
-                          </div>
-
-                          <div class="form-group">
-                            <label>Fim:</label>
-                            <input type="time" name="horaFinalSet" value="{{filtro.horaFinalSet}}">
-                          </div>
-
-                          <div class="form-group">
-                            <label>Início D:</label>
-                            <input type="time" name="horaInicialSetD" value="{{filtro.horaInicialSetd}}">
-                          </div>
-
-                          <div class="form-group">
-                            <label>Fim D:</label>
-                            <input type="time" name="horaFinalSetD" value="{{filtro.horaFinalSetd}}">
-                          </div>
-
-                          <span class="info-sala" title="Só afeta sessões na Sala Escola (60min/sessão)">
-                            <i class="ace-icon fa fa-info-circle"></i>
-                          </span>
-
-                        </div>
-
-                        <!-- 🔘 Botão -->
-                        <button class="btn-pesquisar" name="acaoSalvar" id="acaoSalvar" type="submit">
-                          <i class="ace-icon fa fa-search"></i> Pesquisar
-                        </button>
-
+                      <div class="form-group">
+                        <label>até:</label>
+                        <input id="dataFilAte" name="dataFilAte" type="date" onchange="atualizaDataFin()">
+                        <input class="hidden" id="dataFim" name="dataFim" value="{{filtro.dataFim}}"/>
                       </div>
 
+                      <div class="form-group" style="min-width: 250px;">
+                        <label>Beneficiário:</label>
+                        <select name="relBeneid" id="relBeneid" class="select2">
+                          {{#each benes}}
+                            <option value="{{_id}}" {{#ifEqual ../filtro.relBeneid _id}}selected{{/ifEqual}}>
+                              {{bene_nome}}
+                            </option>
+                          {{/each}}
+                        </select>
+                      </div>
+                    </div>
+
+                    <!-- 🟠 LINHA 2 -->
+                    <div class="form-row" style="display: flex; flex-wrap: nowrap; gap: 10px; align-items: end; margin-top: 5px;">
+                      <div class="form-group">
+                        <label>Exibir:</label>
+                        <select name="porHoras" id="porHoras" class="select2">
+                          <option value="sim" {{#ifEqual filtro.porHoras "sim"}}selected{{/ifEqual}}>Horas</option>
+                          <option value="nao" {{#ifEqual filtro.porHoras "nao"}}selected{{/ifEqual}}>Resumo</option>
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <label>Inativos:</label>
+                        <select name="exibeInativos" id="exibeInativos" class="select2">
+                          <option value="nao" {{#ifEqual filtro.exibeInativos "nao"}}selected{{/ifEqual}}>Não</option>
+                          <option value="sim" {{#ifEqual filtro.exibeInativos "sim"}}selected{{/ifEqual}}>Sim</option>
+                        </select>
+                      </div>
+
+                      <div style="display: flex; gap: 8px; align-items: end;">
+                        <div class="form-group">
+                          <label>Turno:</label>
+                          <select name="turnoSet" id="turnoSet" class="select2" style="width: 100px;">
+                            <option value="">Auto</option>
+                            <option value="manha" {{#ifEqual filtro.turnoSet "manha"}}selected{{/ifEqual}}>Manhã</option>
+                            <option value="tarde" {{#ifEqual filtro.turnoSet "tarde"}}selected{{/ifEqual}}>Tarde</option>
+                            <option value="dia" {{#ifEqual filtro.turnoSet "dia"}}selected{{/ifEqual}}>Dia</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label>Início:</label>
+                          <input type="time" name="horaInicialSet" value="{{filtro.horaInicialSet}}">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Fim:</label>
+                          <input type="time" name="horaFinalSet" value="{{filtro.horaFinalSet}}">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Início D:</label>
+                          <input type="time" name="horaInicialSetD" value="{{filtro.horaInicialSetd}}">
+                        </div>
+
+                        <div class="form-group">
+                          <label>Fim D:</label>
+                          <input type="time" name="horaFinalSetD" value="{{filtro.horaFinalSetd}}">
+                        </div>
+
+                        <span class="info-sala" title="Só afeta sessões na Sala Escola (60min/sessão)">
+                          <i class="ace-icon fa fa-info-circle"></i>
+                        </span>
+                      </div>
+
+                      <button class="btn-pesquisar" name="acaoSalvar" id="acaoSalvar" type="submit">
+                        <i class="ace-icon fa fa-search"></i> Pesquisar
+                      </button>
                     </div>
                   </div>
+                </div>
+            </div>
+          </form>
+        </div>
 
+        <div class="row">
+          <div class="col-xs-12">
+         
+            <div class="row">
+              <div class="col-sm-10 col-sm-offset-1">
+                <div class="widget-box transparent">
+                  <div style="text-align: center;">
+                    <img width="100%"  src="/images/gallery/LogoRoute_Cabecalho.png">
+                  </div>
+
+                  <div class="widget-header widget-header-large">
+                    <h3 class="widget-title grey lighter">
+                      <i class="ace-icon fa fa-puzzle-piece green"></i>
+                      Atendimentos por Beneficiário
+                    </h3>
+                  </div>
+
+                  <div class="widget-body">
+                    <div class="widget-main padding-24">
+                      <div class="page">
+                        <table class="table table-striped table-bordered" style="font-size: 11px;">
+                          <thead>
+                            <tr>
+                              <th style="text-align: left; vertical-align: top; background-color: #f5f5f5;">
+                                <div class="label label-lg label-info arrowed-in arrowed-right" style="font-size:10px; padding:4px 8px; margin-bottom:3px; display:inline-block;">
+                                  <b>Informações do Prestador</b>
+                                </div>
+                                <ul class="list-unstyled" style="font-size:11px; margin:0; padding-left:4px;">
+                                  <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>Prestador:</b> Route Centro de Terapia</li>
+                                  <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>CNPJ:</b> 33.346.423/0001-17</li>
+                                </ul>
+                              </th>
+                              <th colspan="2" style="text-align: left; vertical-align: top; background-color: #f5f5f5;">
+                                <div class="label label-lg label-success arrowed-in arrowed-right" style="font-size:10px; padding:4px 8px; margin-bottom:3px; display:inline-block;">
+                                  <b>Informações do Relatório</b>
+                                </div>
+                                <ul class="list-unstyled" style="font-size:11px; margin:0; padding-left:4px;">
+                                  <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Período:</b> {{periodoDe}} até {{periodoAte}}</li>
+                                  <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Beneficiário:</b> {{bene_nome}}</li>
+                                  <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Convênio:</b> {{conv_nome}}</li>
+                                </ul>
+                              </th>
+                            </tr>
+                            <tr>
+                              <th colspan="3" style="text-align:center;padding:5px 8px;border:1px solid #ccc;background:#fff3cd;">
+                                <div class="label label-lg label-warning arrowed-in arrowed-right" style="font-size:10px;padding:4px 8px;display:inline-block;">
+                                  <b>Informações dos Atendimentos</b>
+                                </div>
+                              </th>
+                            </tr>
+                            <tr>
+                              <th>Data</th>
+                              <th>Especialidade</th>
+                              <th>Profissional</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {{#each rels}}
+                              <tr>
+                                <td>{{dt}}</td>
+                                {{#each ../terapias}}
+                                  {{#ifEqual this._id ../especialidade}}
+                                  <td>{{terapia_nomecid}}</td>
+                                  {{/ifEqual}}
+                                {{/each}}
+                                {{#each ../terapeutas}}
+                                  {{#ifEqual this._id ../profissional}}
+                                  <td>{{usuario_nomecompleto}}</td>
+                                  {{/ifEqual}}
+                                {{/each}}
+                              </tr>
+                            {{/each}}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </form>
-          <!-- /.toolbar-pesquisa -->
+            </div>
+          </div>
+        </div>
 
-        </div><!-- /.main-content-inner -->
-		<div class="row"><!-- /row -->
-				<div class="col-xs-12"><!-- /col-xs-12 -->
-					<!-- PAGE CONTENT BEGINS -->
-					<div class="space-6"></div>
-					<div class="row">
-						<!-- /row -->
-						<div class="col-sm-10 col-sm-offset-1">
-							<!-- /col-sm-10 col-sm-offset-1 -->
+        <div class="row">
+          <div class="col-xs-12">
+            <div style="margin-top: 32px;"></div>
+            <div class="row">
+              <div class="col-xs-4 col-sm-4 text-center">
+                <div class="hr"></div>
+                <label>Assinatura do Responsável</label>
+              </div>
+              <div class="col-xs-4 col-sm-4"></div>
+              <div class="col-xs-4 col-sm-4 text-center">
+                <div class="hr"></div>
+                <label>Assinatura da Clínica</label>
+              </div>
+            </div>
+          </div>
+        </div>
 
-							<div class="widget-box transparent">
-								<!-- /widget-box transparent -->
 
-								<div style="text-align: center;">
-									<!-- /text-align center -->
-									<img width="140" height="60" alt="150x150" src="/images/gallery/logo_route_centro.png">
-								</div>
-								<!-- /.text-align center -->
 
-								<div class="widget-header widget-header-large">
-									<!-- /widget-header -->
-									<h3 class="widget-title grey lighter">
-										<i class="ace-icon fa fa-puzzle-piece green"></i>
-										Atendimentos por Beneficiário
-									</h3>
-								</div>
-								<!-- /.widget-header -->
 
-								<div class="widget-body">
-									<!-- /widget-body -->
-									<div class="widget-main padding-24">
-										<div class="page"><!-- /page -->
-											<table class="table table-striped table-bordered" style="font-size: 11px;">
-												<thead>
-                        <tr>
-                            <th style="width: 50%; text-align: left; vertical-align: top; background-color: #f5f5f5;">
-                              <div class="label label-lg label-info arrowed-in arrowed-right" style="font-size:10px; padding:4px 8px; margin-bottom:3px; display:inline-block;">
-                                <b>Informações do Prestador</b>
-                              </div>
-                              <ul class="list-unstyled" style="font-size:11px; margin:0; padding-left:4px;">
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>Prestador:</b> Route Centro de Terapia</li>
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>CNPJ:</b> 33.346.423/0001-17</li>
-                              </ul>
-                            </th>
-                            <th colspan="2" style="width: 50%; text-align: left; vertical-align: top; background-color: #f5f5f5;">
-                              <div class="label label-lg label-success arrowed-in arrowed-right" style="font-size:10px; padding:4px 8px; margin-bottom:3px; display:inline-block;">
-                                <b>Informações do Relatório</b>
-                              </div>
-                              <ul class="list-unstyled" style="font-size:11px; margin:0; padding-left:4px;">
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Período:</b> {{periodoDe}} até {{periodoAte}}</li>
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Beneficiário:</b> {{bene_nome}}</li>
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Convênio:</b> {{conv_nome}}</li>
-                              </ul>
-                            </th>
-                          </tr>
-                           <tr>
-                            <th colspan="3" style="text-align:center;padding:5px 8px;border:1px solid #ccc;background:#fff3cd;">
-                              <div class="label label-lg label-warning arrowed-in arrowed-right" style="font-size:10px;padding:4px 8px;display:inline-block;">
-                                <b>Informações dos Atendimentos</b>
-                              </div>
-                            </th>
-                          </tr>
-												<tr>
-													<th style="width:18%">Data</th>
-                          <th style="width:32%">Especialidade</th>
-                          <th style="width:50%">Profissional</th>
-												</tr>
-												</thead>
-												<tbody>
-												{{#each rels}}
-													<tr>
-													<td>{{dt}}</td>
-													{{#each ../terapias}}
-														{{#ifEqual this._id ../especialidade}}
-														<td>{{terapia_nomecid}}</td>
-														{{/ifEqual}}
-													{{/each}}
-													{{#each ../terapeutas}}
-														{{#ifEqual this._id ../profissional}}
-														<td>{{usuario_nomecompleto}}</td>
-														{{/ifEqual}}
-													{{/each}}
-													</tr>
-												{{/each}}
-												</tbody>
-												
-											</table>
-											
-										</div><!-- /.page -->
-									
-									</div>
-									<!-- /.widget-main padding-24 -->
-								</div>
-								<!-- /.widget-body -->
-								
-							</div>
-							<!-- /.widget-box transparent -->
+   <!-- Página em branco única no final -->
+<div class="d-none d-print-block" style="page-break-before: always;">
+    <table class="table table-striped table-bordered" style="font-size: 11px;">
+        <thead>
+            <tr>
+                <th style="text-align: left; vertical-align: top; background-color: #f5f5f5;">
+                    <div class="label label-lg label-info arrowed-in arrowed-right" style="font-size:10px; padding:4px 8px; margin-bottom:3px; display:inline-block;">
+                        <b>Informações do Prestador</b>
+                    </div>
+                    <ul class="list-unstyled" style="font-size:11px; margin:0; padding-left:4px;">
+                        <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>Prestador:</b> Route Centro de Terapia</li>
+                        <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>CNPJ:</b> 33.346.423/0001-17</li>
+                    </ul>
+                </th>
+                <th colspan="2" style="text-align: left; vertical-align: top; background-color: #f5f5f5;">
+                    <div class="label label-lg label-success arrowed-in arrowed-right" style="font-size:10px; padding:4px 8px; margin-bottom:3px; display:inline-block;">
+                        <b>Informações do Relatório</b>
+                    </div>
+                    <ul class="list-unstyled" style="font-size:11px; margin:0; padding-left:4px;">
+                        <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Período:</b> {{periodoDe}} até {{periodoAte}}</li>
+                        <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Beneficiário:</b> {{bene_nome}}</li>
+                        <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Convênio:</b> {{conv_nome}}</li>
+                    </ul>
+                </th>
+            </tr>
+        </thead>
+    </table>
 
-						</div>
-						<!-- /.col-sm-10 col-sm-offset-1 -->
-					</div>
-					<!-- /.row -->
+    <!-- 🔹 BLOCO DE VALIDAÇÃO DOS PROFISSIONAIS (COMPACTO) -->
+    <div style="margin-top: 15px; padding: 10px 14px; border: 2px solid #1976d2; border-radius: 6px; background: #fff;">
+        <h4 style="text-align: center; margin: 0 0 6px 0; color: #1976d2; font-size: 13px; font-weight: 600;">
+            <i class="ace-icon fa fa-check-square-o"></i> Validação e Carimbo dos Profissionais
+        </h4>
+        <!-- Lista em 2 colunas para otimizar espaço -->
+        <div style="column-count: 2; column-gap: 20px;">
+            {{#each terapeutasParticipantes}}
+            <div style="break-inside: avoid; margin-bottom: 5px; padding: 4px 8px; border: 1px solid #e0e0e0; border-radius: 4px; background: #fcfcfc; display: flex; align-items: center; gap: 8px;">
+                <!-- Quadrado simulando checkbox para garantir que imprima corretamente -->
+              
+                <label style="margin: 0; font-size: 11px; font-weight: 500; color: #333;">
+                    {{usuario_nome}}
+                </label>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
 
-					<!-- PAGE CONTENT ENDS -->
-				</div>
-				
-				<!-- /.col-xs-12 -->
-			</div><!-- /.row -->
-      </div><!-- /.main-content -->
 
-     	<div class="row">
-			<div class="col-xs-12">
-       
-				<div style="margin-top: 32px;"></div>
-				<div class="row">
-					<div class="col-xs-4 col-sm-4 text-center">
-						<div class="hr"></div>
-						<label>Assinatura do Responsável</label>
-					</div>
-					<div class="col-xs-4 col-sm-4"></div>
-					<div class="col-xs-4 col-sm-4 text-center">
-						<div class="hr"></div>
-						<label>Assinatura da Clínica</label>
-					</div>
-				</div>
-			</div>
-		</div>
-			
-		<!-- Cabeçalho de impressão (paginação no topo) -->
-		<div class="print-header"></div>
 
-		<!-- Página em branco única no final -->
-		<div class="d-none d-print-block" style="page-break-before: always;">
-      	<table class="table table-striped table-bordered" style="font-size: 11px;">
-                       <thead>
-                        <tr>
-                            <th style="width: 50%; text-align: left; vertical-align: top; background-color: #f5f5f5;">
-                              <div class="label label-lg label-info arrowed-in arrowed-right" style="font-size:10px; padding:4px 8px; margin-bottom:3px; display:inline-block;">
-                                <b>Informações do Prestador</b>
-                              </div>
-                              <ul class="list-unstyled" style="font-size:11px; margin:0; padding-left:4px;">
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>Prestador:</b> Route Centro de Terapia</li>
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>CNPJ:</b> 33.346.423/0001-17</li>
-                              </ul>
-                            </th>
-                            <th colspan="2" style="width: 50%; text-align: left; vertical-align: top; background-color: #f5f5f5;">
-                              <div class="label label-lg label-success arrowed-in arrowed-right" style="font-size:10px; padding:4px 8px; margin-bottom:3px; display:inline-block;">
-                                <b>Informações do Relatório</b>
-                              </div>
-                              <ul class="list-unstyled" style="font-size:11px; margin:0; padding-left:4px;">
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Período:</b> {{periodoDe}} até {{periodoAte}}</li>
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Beneficiário:</b> {{bene_nome}}</li>
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Convênio:</b> {{conv_nome}}</li>
-                              </ul>
-                            </th>
-                          </tr>
-											</thead>
-                    </table>
     </div>
 
-    </div><!-- /.main-container -->
-
-    <!-- 🔹 SCRIPTS -->
     <script type="text/javascript">
       function atualizaDataIni(){
         let fulldate = (document.getElementById('dataFilDe').value+' 00:00:00.000Z').toString();
@@ -500,7 +468,6 @@
         if (filtro.horaFinalSet !== undefined) document.getElementById('horaFinalSet').value = filtro.horaFinalSet;
         if (filtro.turnoSet !== undefined) document.getElementById('turnoSet').value = filtro.turnoSet;
         
-        // Atualiza Chosen se disponível
         if (typeof $('.chosen-select').chosen === 'function') {
           $('.chosen-select').trigger('chosen:updated');
         }
@@ -510,7 +477,6 @@
         const filtro = {{#if filtro}} {{{json filtro}}} {{else}} null {{/if}};
         restaurarFiltro(filtro);
         
-        // Inicializa Chosen
         if (typeof $('.chosen-select').chosen === 'function') {
           $('.chosen-select').chosen({
             width: '100%',
