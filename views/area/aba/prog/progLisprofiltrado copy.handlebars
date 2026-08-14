@@ -790,9 +790,7 @@
 																											{{this.progset_datameta}}
 
 																										</td>
-																										<td>
-																											{{this.progset_desc}}
-																										</td>	
+																										<td>{{this.progset_desc}}</td>	
 																										<td>
 																											{{#ifEqual this.progset_qtest 1}}
 																												<span style="white-space: wrap;" class="badge badge-info">{{this.progset_esta}}</span>
@@ -867,14 +865,11 @@
 																										<td>
 																											<span class="badge badge-warning">{{this.progset_qtest}}</span>
 																										</td>	
+																										<td><span class="badge badge-success">{{this.progset_dataini}}</span><br><span class="badge badge-danger">{{this.progset_datafin}}</span></td>			
 																										<td>
-																											<span class="badge badge-success">{{this.progset_dataini}}</span>
-																											<br>
-																											<span class="badge badge-danger">{{this.progset_datafin}}</span>
-																										</td>			
-																										<td>
-																											<div class="easy-pie-chart percentage" data-start="{{this.progset_dataini}}" data-end="{{this.progset_datafin}}" data-size="46" style="height: 46px; width: 46px; line-height: 45px;">
-																												<span class="percent"></span>%
+																											 <div class="easy-pie-chart percentage" data-start="{{this.progset_dataini}}" data-end="{{this.progset_datafin}}" data-size="46" style="height: 46px; width: 46px; line-height: 45px;">
+																													<span class="percent"></span>%
+																												</div>
 																											</div>
 																										</td>
 																										<td>
@@ -894,7 +889,8 @@
 																												{{/ifEqual}}
 																											{{/ifEqual}}																											
 																										</td>
-																										<td style="vertical-align: top; text-align: left;">
+																										
+																										<td style="vertical-align: bottom; text-align: left;">
 																											<!-- Botões da Folha de Registro -->
 																											{{#each ../../../folregs}}
 																												{{#ifEqual this.folreg_setid ../_id}}

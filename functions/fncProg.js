@@ -1542,6 +1542,381 @@ console.log("res: "+res);
                 }
             })
         })
+    },
+    listaProgpro: async (req, res, resposta) => {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
+
+        let flash = new Resposta();
+        let lvlUsu = req.cookies['lvlUsu'];
+        let dataAtual = new Date();
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];
+        arrayIds.forEach((id) => {
+            if (id == lvlUsu) {
+                idUsu = id;
+            }
+        });
+        let perfilAtual = req.cookies['lvlUsu'];
+
+        try {
+            const [bene, progs, progtipos] = await Promise.all([
+                Bene.find({ bene_status: "Ativo", bene_nome: { $not: /\./ }, bene_aba: "Sim" }),
+                Prog.find(),
+                Progtipo.find()
+            ]);
+
+            // Ordena beneficiários por nome
+            bene.sort((a, b) => {
+                const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                return nomeA.localeCompare(nomeB);
+            });
+
+            // Ordena tipos por nome
+            progtipos.sort((a, b) => {
+                const nomeA = a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const nomeB = b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                return nomeA.localeCompare(nomeB);
+            });
+
+            // ✅ CONVERTER OBJECTIDS PARA STRINGS
+            const progsSerializados = progs.map(p => ({
+                _id: p._id.toString(),
+                beneId: p.prog_beneid ? p.prog_beneid.toString() : '',
+                tipoId: p.prog_tipo ? p.prog_tipo.toString() : '',
+                status: p.prog_status || ''
+            }));
+
+            const tiposSerializados = progtipos.map(t => ({
+                _id: t._id.toString(),
+                nome: t.progtipo_nome
+            }));
+
+            console.log('=== DADOS ENVIADOS PARA A VIEW ===');
+            console.log('Beneficiários:', bene.length);
+            console.log('Programas:', progsSerializados.length);
+            console.log('Tipos:', tiposSerializados.length);
+
+            res.render('area/aba/prog/progLispro', {
+                benes: bene,
+                progs: progsSerializados,
+                progtipos: tiposSerializados,
+                perfilAtual,
+                flash,
+                dataAtual,
+            });
+        } catch (err) {
+            console.log(err);
+            req.flash("error_message", "Houve um erro ao listar!");
+            res.redirect('admin/erro');
+        }
+    },
+    listaProgprofiltro: async (req, beneId, res, flash) => {
+        let db = req.cookies['preferredDb'];
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema);
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema);
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema);
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema);
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema);
+        Notasupobs = getModel(db, 'tb_notasupobs', notasupobsClass.notasupobsSchema);
+
+        flash = flash || {};
+        flash.sucesso = "true";
+
+        const perfilAtual = req.cookies['lvlUsu'];
+        const dataAtual = new Date();
+        const idBene = beneId || req.params.id;
+
+        // ✅ Recebe filtros da query string e limpa espaços
+        const progTipoId = (req.query.progTipoId || 'todos').trim();
+        const status = (req.query.status || 'Todos').trim();
+
+        console.log("=== FILTROS RECEBIDOS ===");
+        console.log("beneId:", idBene);
+        console.log("progTipoId:", progTipoId);
+        console.log("status:", status);
+
+        let dados = {};
+
+        try {
+            const bene = await Bene.findOne({ _id: idBene, bene_status: "Ativo", bene_aba: "Sim" });
+
+            if (!bene) {
+                flash.sucesso = "false";
+                flash.texto = "Beneficiário não encontrado!";
+                return;
+            }
+
+            const dn = new Date(bene.bene_datanasc);
+            bene.datanasc = fncGeral.formatarData(dn);
+            bene.idade = fncGeral.calcularIdade(dn);
+
+            // ✅ Constrói o filtro de programas dinamicamente
+            let queryFilter = { prog_beneid: bene._id };
+
+            // ✅ Filtro de Status
+            if (status !== 'Todos') {
+                if (status === 'Manutenção') {
+                    queryFilter.prog_status = "Adquirido";
+                } else {
+                    queryFilter.prog_status = status;
+                }
+            } else {
+                queryFilter.prog_status = { $ne: "Adquirido" };
+            }
+
+            // ✅ Filtro de Tipo de Programa - tenta como string primeiro
+            if (progTipoId !== 'todos') {
+                // Tenta converter para ObjectId, se falhar usa como string
+                try {
+                    queryFilter.prog_tipo = mongoose.Types.ObjectId(progTipoId);
+                } catch (e) {
+                    queryFilter.prog_tipo = progTipoId;
+                }
+            }
+
+            console.log("=== QUERY MONGODB ===");
+            console.log(JSON.stringify(queryFilter, null, 2));
+
+            const [
+                prog, notasup, progdica, progtipo,
+                prognivel, progset, folreg, usuario
+            ] = await Promise.all([
+                Prog.find(queryFilter),
+                Notasup.find({ notasup_beneid: bene._id }),
+                Progdica.find(),
+                Progtipo.find(),
+                Prognivel.find(),
+                Progset.find(),
+                Folreg.find(),
+                Usuario.find()
+            ]);
+
+            console.log("=== RESULTADO DA BUSCA ===");
+            console.log("Programas encontrados:", prog.length);
+            if (prog.length > 0) {
+                console.log("Primeiro programa encontrado:", {
+                    _id: prog[0]._id,
+                    beneId: prog[0].prog_beneid,
+                    tipo: prog[0].prog_tipo,
+                    status: prog[0].prog_status
+                });
+            }
+
+            // Ordenações
+            progdica.sort(fncGeral.ordenarPorNome('progdica_nome'));
+            progtipo.sort(fncGeral.ordenarPorNome('progtipo_nome'));
+            prognivel.sort(fncGeral.ordenarPorNome('prognivel_nome'));
+            usuario.sort(fncGeral.ordenarPorNome('usuario_nome'));
+
+            const notasupobs = await Notasupobs.find({
+                notaSupObs_notasupId: { $in: notasup.map(n => n._id) }
+            });
+
+            // Total de estímulos em cada programa
+            prog.forEach(p => {
+                p.datacad = fncGeral.formatarData(new Date(p.prog_datacad));
+                p.dataedi = fncGeral.formatarData(new Date(p.prog_dataedi));
+
+                p.prog_total_estimulos = progset
+                    .filter(ps => ps.progset_progid.toString() === p._id.toString())
+                    .reduce((acc, ps) => acc + (parseInt(ps.progset_qtest) || 0), 0);
+            });
+
+            dados = { bene, prog, notasup, notasupobs, progdica, progtipo, prognivel, progset, folreg, usuario };
+
+        } catch (err) {
+            console.error("Erro no fluxo:", err);
+            flash.sucesso = "false";
+            flash.texto = "Houve um erro ao listar!";
+        } finally {
+            if (flash.sucesso === "true") {
+                res.render('area/aba/prog/progLisprofiltrado', {
+                    progs: dados.prog,
+                    notasups: dados.notasup,
+                    notasupobss: dados.notasupobs,
+                    progsets: dados.progset,
+                    usuarios: dados.usuario,
+                    benes: [dados.bene],
+                    perfilAtual,
+                    flash,
+                    progdicas: dados.progdica,
+                    progtipos: dados.progtipo,
+                    prognivels: dados.prognivel,
+                    dataAtual,
+                    folregs: dados.folreg
+                });
+            } else {
+                // Redireciona para a view inicial em caso de erro
+                let dataAtual = new Date();
+                let perfilAtual = req.cookies['lvlUsu'];
+
+                Bene.find({ bene_status: "Ativo", bene_nome: { $not: /\./ }, bene_aba: "Sim" }).then((bene) => {
+                    bene.sort((a, b) => {
+                        const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                        const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                        return nomeA.localeCompare(nomeB);
+                    });
+
+                    res.render('area/aba/prog/progLis', {
+                        benes: bene,
+                        progs: [],
+                        progtipos: [],
+                        perfilAtual,
+                        flash,
+                        dataAtual,
+                    });
+                }).catch((err) => {
+                    console.log(err);
+                    req.flash("error_message", "Houve um erro ao listar!");
+                    res.redirect('admin/erro');
+                });
+            }
+        }
+    },
+    listaProgprofiltroPorTipo: async (req, res, flash) => {
+    let db = req.cookies['preferredDb'];
+    let Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
+    let Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+    let Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema);
+    let Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema);
+    let Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema);
+    let Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
+    let Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema);
+    let Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema);
+    let Notasupobs = getModel(db, 'tb_notasupobs', notasupobsClass.notasupobsSchema);
+    let Usuario;
+    try { Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); } catch(e) {}
+
+    flash = flash || {};
+    flash.sucesso = "true";
+
+    const perfilAtual = req.cookies['lvlUsu'];
+    const dataAtual = new Date();
+    const idTipo = req.params.id; // Agora pegamos o ID do Tipo
+
+    const status = (req.query.status || 'Todos').trim();
+
+    console.log("=== FILTROS RECEBIDOS (POR TIPO) ===");
+    console.log("Tipo ID:", idTipo);
+    console.log("status:", status);
+
+    let dados = {};
+
+    try {
+        // 1. Valida se o tipo existe
+        const tipoSelecionado = await Progtipo.findById(idTipo);
+        if (!tipoSelecionado) {
+            flash.sucesso = "false";
+            flash.texto = "Tipo de programa não encontrado!";
+            throw new Error("Tipo inválido");
+        }
+
+        // 2. Monta query para buscar PROGRAMAS pelo tipo
+        let queryFilter = {};
+        try {
+            queryFilter.prog_tipo = mongoose.Types.ObjectId(idTipo);
+        } catch (e) {
+            queryFilter.prog_tipo = idTipo;
+        }
+
+        // Filtro de Status
+        if (status === 'Manutenção') {
+            queryFilter.prog_status = "Adquirido";
+        } else if (status !== 'Todos') {
+            queryFilter.prog_status = status;
+        } else {
+            queryFilter.prog_status = { $ne: "Adquirido" };
+        }
+
+        console.log("=== QUERY MONGODB ===");
+        console.log(JSON.stringify(queryFilter, null, 2));
+
+        // 3. Busca os programas
+        const progs = await Prog.find(queryFilter).lean();
+
+        if (progs.length === 0) {
+            flash.sucesso = "false";
+            flash.texto = "Nenhum programa encontrado para este tipo!";
+        }
+
+        // 4. Extrai os IDs únicos para buscas relacionais
+        const beneIds = [...new Set(progs.map(p => p.prog_beneid.toString()))];
+        const progIds = progs.map(p => p._id.toString());
+        
+        const progsetsBusca = await Progset.find({ progset_progid: { $in: progIds } }).lean();
+        const setIds = progsetsBusca.map(s => s._id.toString());
+
+        // 5. Busca todas as tabelas de apoio em paralelo
+        const [
+            benes, progdica, progtipo, prognivel, 
+            notasup, notasupobs, folreg, usuario
+        ] = await Promise.all([
+            // ✅ CORREÇÃO AQUI: Removido o filtro bene_status: "Ativo"
+            Bene.find({ _id: { $in: beneIds } }).lean(), 
+            
+            Progdica.find().lean(),
+            Progtipo.find().lean(),
+            Prognivel.find().lean(),
+            Notasup.find({ notasup_beneid: { $in: beneIds } }).lean(),
+            Notasupobs.find({ notaSupObs_progId: { $in: progIds } }).lean(),
+            Folreg.find({ folreg_setid: { $in: setIds } }).lean(),
+            Usuario ? Usuario.find().lean() : Promise.resolve([])
+        ]);
+
+        // 6. Processamento de dados (Idades, Datas, Totais)
+        benes.forEach(b => {
+            if(b.bene_datanasc) {
+                const dn = new Date(b.bene_datanasc);
+                b.datanasc = fncGeral.formatarData(dn);
+                b.idade = fncGeral.calcularIdade(dn);
+            }
+        });
+
+        progs.forEach(p => {
+            if (p.prog_datacad) p.datacad = fncGeral.formatarData(new Date(p.prog_datacad));
+            if (p.prog_dataedi) p.dataedi = fncGeral.formatarData(new Date(p.prog_dataedi));
+            
+            p.prog_total_estimulos = progsetsBusca
+                .filter(ps => ps.progset_progid.toString() === p._id.toString())
+                .reduce((acc, ps) => acc + (parseInt(ps.progset_qtest) || 0), 0);
+        });
+
+        dados = { 
+            benes, prog: progs, notasup, notasupobs, progdica, 
+            progtipo, prognivel, progset: progsetsBusca, folreg, usuario 
+        };
+
+    } catch (err) {
+        console.error("Erro no fluxo:", err);
+        flash.sucesso = "false";
+        flash.texto = flash.texto || "Houve um erro ao listar!";
+        dados = { benes: [], prog: [], notasup: [], notasupobs: [], progdica: [], progtipo: [], prognivel: [], progset: [], folreg: [], usuario: [] };
+    } finally {
+        // Renderiza a view invertida (Foco no Programa)
+        res.render('area/aba/prog/progLisprofiltrado', {
+            progs: dados.prog,
+            notasups: dados.notasup,
+            notasupobss: dados.notasupobs,
+            progsets: dados.progset,
+            usuarios: dados.usuario,
+            benes: dados.benes, // Array com vários beneficiários
+            perfilAtual,
+            flash,
+            progdicas: dados.progdica,
+            progtipos: dados.progtipo,
+            prognivels: dados.prognivel,
+            dataAtual,
+            folregs: dados.folreg
+        });
     }
+}
+
 
 }

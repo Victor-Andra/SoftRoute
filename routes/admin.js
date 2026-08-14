@@ -4255,6 +4255,34 @@ router.get('/area/aba/prog/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//di
 router.post('/area/aba/prog/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//direciona a edição do ABA
     fncProg.atualizaProg(req, res);
 })
+
+
+//Lista Programas ABA para filtrar por Programa
+router.get('/area/aba/prog/proglispro', fncGeral.IsAuthenticated, (req,res) =>{//direciona o filtro da lista do ABA.
+    console.log("Programa ID recebido:", req.params.id);
+    let resposta = new Resposta()
+    resposta.texto = ""
+    resposta.sucesso = ""
+    fncProg.listaProgpro(req, res, resposta);
+})
+
+//Lista Programas ABA filtrado por Programa carregado com id do programas
+router.get('/area/aba/prog/proglisproF/:id', fncGeral.IsAuthenticated, (req, res) => {
+    console.log("Programa ID recebido:", req.params.id);
+    let resposta = new Resposta();
+    resposta.texto = "";
+    resposta.sucesso = "";
+    fncProg.listaProgprofiltro(req, '', res, resposta);
+});
+//Lista Programas ABA filtrado por TIPO DE PROGRAMA (NOVA ROTA)
+router.get('/area/aba/prog/proglisproTipo/:id', fncGeral.IsAuthenticated, (req, res) => {
+    console.log("Tipo de Programa ID recebido:", req.params.id);
+    let resposta = new Resposta();
+    resposta.texto = "";
+    resposta.sucesso = "";
+    // Chama a nova função que criaremos no controller
+    fncProg.listaProgprofiltroPorTipo(req, res, resposta); 
+});
 //-------------------------------------------------------------------------------------------
 
 //Menu Dicas ** Area Tecnicos e ABA 
