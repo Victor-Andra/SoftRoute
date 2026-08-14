@@ -142,19 +142,20 @@ const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSc
                  * Uso: {{#compareStringMore valor "op1" "op2" "op3"}}CONTEÚDO{{else}}DEFAULT{{/compareStringMore}}
                  */
                 compareStringMore: function (value) {
-                    // Pega todos os argumentos exceto o último (options)
-                    const args = Array.prototype.slice.call(arguments, 1, -1);
-                    const options = arguments[arguments.length - 1];
-                    
-                    // Verifica se o valor matcha com qualquer um dos casos
-                    const matched = args.some(caseValue => ("" + value) === ("" + caseValue));
-                    
-                    if (matched) {
-                        return options.fn(this);
-                    } else {
-                        return options.inverse(this);
-                    }
-                },
+                        // Pega todos os argumentos exceto o último (options)
+                        const args = Array.prototype.slice.call(arguments, 1, -1);
+                        const options = arguments[arguments.length - 1];
+                        
+                        // Verifica se o valor matcha com qualquer um dos casos
+                        const matched = args.some(caseValue => ("" + value) === ("" + caseValue));
+                        
+                        if (matched) {
+                            return options.fn(this);
+                        } else {
+                            return options.inverse(this);
+                        }
+                    },
+              
                 compareUndefined: function (v1, v2, options) {//Verifica 1 atributo vindo do banco que não seja String com uma String
                     //console.log("/"+v1+"="+v2+"/")
                     if (v1 == undefined){

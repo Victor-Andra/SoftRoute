@@ -645,7 +645,7 @@ module.exports = {
         });
     },
 
-    listaProgfiltro : async(req, beneId, res, flash) =>{
+    listaProgfiltro_FUNCIONAL : async(req, beneId, res, flash) =>{
         let db = req.cookies['preferredDb'];
         Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -764,7 +764,326 @@ console.log("res: "+res);
             }
         }
     },
+    listaProgfiltro_OLD: async (req, beneId, res, flash) => {
+        let db = req.cookies['preferredDb'];
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema);
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema);
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema);
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema);
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema);
+        Notasupobs = getModel(db, 'tb_notasupobs', notasupobsClass.notasupobsSchema);
 
+        flash = flash || {};
+        flash.sucesso = "true";
+
+        const perfilAtual = req.cookies['lvlUsu'];
+        const dataAtual = new Date();
+        const idBene = beneId || req.params.id;
+
+        // Recebe filtros da query string
+        const progTipoId = req.query.progTipoId || 'todos';
+        const status = req.query.status || 'Todos';
+
+        console.log("=== FILTROS RECEBIDOS ===");
+        console.log("beneId:", idBene);
+        console.log("progTipoId:", progTipoId);
+        console.log("status:", status);
+
+        let dados = {};
+
+        try {
+            const bene = await Bene.findOne({ _id: idBene, bene_status: "Ativo", bene_aba: "Sim" });
+
+            if (!bene) {
+                flash.sucesso = "false";
+                flash.texto = "Beneficiário não encontrado!";
+                return;
+            }
+
+            const dn = new Date(bene.bene_datanasc);
+            bene.datanasc = fncGeral.formatarData(dn);
+            bene.idade = fncGeral.calcularIdade(dn);
+
+            // Constrói o filtro de programas dinamicamente
+            let queryFilter = { prog_beneid: bene._id };
+
+            // Filtro de Status
+            if (status !== 'Todos') {
+                if (status === 'Manutenção') {
+                    queryFilter.prog_status = "Adquirido";
+                } else {
+                    queryFilter.prog_status = status;
+                }
+            } else {
+                queryFilter.prog_status = { $ne: "Adquirido" };
+            }
+
+            // Filtro de Tipo de Programa - CONVERTE PARA OBJECTID
+            if (progTipoId !== 'todos') {
+                queryFilter.prog_tipo = mongoose.Types.ObjectId(progTipoId);
+            }
+
+            console.log("=== QUERY MONGODB ===");
+            console.log(JSON.stringify(queryFilter, null, 2));
+
+            const [
+                prog, notasup, progdica, progtipo,
+                prognivel, progset, folreg, usuario
+            ] = await Promise.all([
+                Prog.find(queryFilter),
+                Notasup.find({ notasup_beneid: bene._id }),
+                Progdica.find(),
+                Progtipo.find(),
+                Prognivel.find(),
+                Progset.find(),
+                Folreg.find(),
+                Usuario.find()
+            ]);
+
+            console.log("=== RESULTADO DA BUSCA ===");
+            console.log("Programas encontrados:", prog.length);
+
+            // Ordenações
+            progdica.sort(fncGeral.ordenarPorNome('progdica_nome'));
+            progtipo.sort(fncGeral.ordenarPorNome('progtipo_nome'));
+            prognivel.sort(fncGeral.ordenarPorNome('prognivel_nome'));
+            usuario.sort(fncGeral.ordenarPorNome('usuario_nome'));
+
+            const notasupobs = await Notasupobs.find({
+                notaSupObs_notasupId: { $in: notasup.map(n => n._id) }
+            });
+
+            // Total de estímulos em cada programa
+            prog.forEach(p => {
+                p.datacad = fncGeral.formatarData(new Date(p.prog_datacad));
+                p.dataedi = fncGeral.formatarData(new Date(p.prog_dataedi));
+
+                p.prog_total_estimulos = progset
+                    .filter(ps => ps.progset_progid.toString() === p._id.toString())
+                    .reduce((acc, ps) => acc + (parseInt(ps.progset_qtest) || 0), 0);
+            });
+
+            dados = { bene, prog, notasup, notasupobs, progdica, progtipo, prognivel, progset, folreg, usuario };
+
+        } catch (err) {
+            console.error("Erro no fluxo:", err);
+            flash.sucesso = "false";
+            flash.texto = "Houve um erro ao listar!";
+        } finally {
+            if (flash.sucesso === "true") {
+                res.render('area/aba/prog/progLisfiltrado', {
+                    progs: dados.prog,
+                    notasups: dados.notasup,
+                    notasupobss: dados.notasupobs,
+                    progsets: dados.progset,
+                    usuarios: dados.usuario,
+                    benes: [dados.bene],
+                    perfilAtual,
+                    flash,
+                    progdicas: dados.progdica,
+                    progtipos: dados.progtipo,
+                    prognivels: dados.prognivel,
+                    dataAtual,
+                    folregs: dados.folreg
+                });
+            } else {
+                // Redireciona para a view inicial em caso de erro
+                let dataAtual = new Date();
+                let perfilAtual = req.cookies['lvlUsu'];
+
+                Bene.find({ bene_status: "Ativo", bene_nome: { $not: /\./ }, bene_aba: "Sim" }).then((bene) => {
+                    bene.sort((a, b) => {
+                        const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                        const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                        return nomeA.localeCompare(nomeB);
+                    });
+
+                    res.render('area/aba/prog/progLis', {
+                        benes: bene,
+                        progs: [],
+                        progtipos: [],
+                        perfilAtual,
+                        flash,
+                        dataAtual,
+                    });
+                }).catch((err) => {
+                    console.log(err);
+                    req.flash("error_message", "Houve um erro ao listar!");
+                    res.redirect('admin/erro');
+                });
+            }
+        }
+    },
+    listaProgfiltro: async (req, beneId, res, flash) => {
+        let db = req.cookies['preferredDb'];
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema);
+        Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema);
+        Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema);
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
+        Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema);
+        Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema);
+        Notasupobs = getModel(db, 'tb_notasupobs', notasupobsClass.notasupobsSchema);
+
+        flash = flash || {};
+        flash.sucesso = "true";
+
+        const perfilAtual = req.cookies['lvlUsu'];
+        const dataAtual = new Date();
+        const idBene = beneId || req.params.id;
+
+        // ✅ Recebe filtros da query string e limpa espaços
+        const progTipoId = (req.query.progTipoId || 'todos').trim();
+        const status = (req.query.status || 'Todos').trim();
+
+        console.log("=== FILTROS RECEBIDOS ===");
+        console.log("beneId:", idBene);
+        console.log("progTipoId:", progTipoId);
+        console.log("status:", status);
+
+        let dados = {};
+
+        try {
+            const bene = await Bene.findOne({ _id: idBene, bene_status: "Ativo", bene_aba: "Sim" });
+
+            if (!bene) {
+                flash.sucesso = "false";
+                flash.texto = "Beneficiário não encontrado!";
+                return;
+            }
+
+            const dn = new Date(bene.bene_datanasc);
+            bene.datanasc = fncGeral.formatarData(dn);
+            bene.idade = fncGeral.calcularIdade(dn);
+
+            // ✅ Constrói o filtro de programas dinamicamente
+            let queryFilter = { prog_beneid: bene._id };
+
+            // ✅ Filtro de Status
+            if (status !== 'Todos') {
+                if (status === 'Manutenção') {
+                    queryFilter.prog_status = "Adquirido";
+                } else {
+                    queryFilter.prog_status = status;
+                }
+            } else {
+                queryFilter.prog_status = { $ne: "Adquirido" };
+            }
+
+            // ✅ Filtro de Tipo de Programa - tenta como string primeiro
+            if (progTipoId !== 'todos') {
+                // Tenta converter para ObjectId, se falhar usa como string
+                try {
+                    queryFilter.prog_tipo = mongoose.Types.ObjectId(progTipoId);
+                } catch (e) {
+                    queryFilter.prog_tipo = progTipoId;
+                }
+            }
+
+            console.log("=== QUERY MONGODB ===");
+            console.log(JSON.stringify(queryFilter, null, 2));
+
+            const [
+                prog, notasup, progdica, progtipo,
+                prognivel, progset, folreg, usuario
+            ] = await Promise.all([
+                Prog.find(queryFilter),
+                Notasup.find({ notasup_beneid: bene._id }),
+                Progdica.find(),
+                Progtipo.find(),
+                Prognivel.find(),
+                Progset.find(),
+                Folreg.find(),
+                Usuario.find()
+            ]);
+
+            console.log("=== RESULTADO DA BUSCA ===");
+            console.log("Programas encontrados:", prog.length);
+            if (prog.length > 0) {
+                console.log("Primeiro programa encontrado:", {
+                    _id: prog[0]._id,
+                    beneId: prog[0].prog_beneid,
+                    tipo: prog[0].prog_tipo,
+                    status: prog[0].prog_status
+                });
+            }
+
+            // Ordenações
+            progdica.sort(fncGeral.ordenarPorNome('progdica_nome'));
+            progtipo.sort(fncGeral.ordenarPorNome('progtipo_nome'));
+            prognivel.sort(fncGeral.ordenarPorNome('prognivel_nome'));
+            usuario.sort(fncGeral.ordenarPorNome('usuario_nome'));
+
+            const notasupobs = await Notasupobs.find({
+                notaSupObs_notasupId: { $in: notasup.map(n => n._id) }
+            });
+
+            // Total de estímulos em cada programa
+            prog.forEach(p => {
+                p.datacad = fncGeral.formatarData(new Date(p.prog_datacad));
+                p.dataedi = fncGeral.formatarData(new Date(p.prog_dataedi));
+
+                p.prog_total_estimulos = progset
+                    .filter(ps => ps.progset_progid.toString() === p._id.toString())
+                    .reduce((acc, ps) => acc + (parseInt(ps.progset_qtest) || 0), 0);
+            });
+
+            dados = { bene, prog, notasup, notasupobs, progdica, progtipo, prognivel, progset, folreg, usuario };
+
+        } catch (err) {
+            console.error("Erro no fluxo:", err);
+            flash.sucesso = "false";
+            flash.texto = "Houve um erro ao listar!";
+        } finally {
+            if (flash.sucesso === "true") {
+                res.render('area/aba/prog/progLisfiltrado', {
+                    progs: dados.prog,
+                    notasups: dados.notasup,
+                    notasupobss: dados.notasupobs,
+                    progsets: dados.progset,
+                    usuarios: dados.usuario,
+                    benes: [dados.bene],
+                    perfilAtual,
+                    flash,
+                    progdicas: dados.progdica,
+                    progtipos: dados.progtipo,
+                    prognivels: dados.prognivel,
+                    dataAtual,
+                    folregs: dados.folreg
+                });
+            } else {
+                // Redireciona para a view inicial em caso de erro
+                let dataAtual = new Date();
+                let perfilAtual = req.cookies['lvlUsu'];
+
+                Bene.find({ bene_status: "Ativo", bene_nome: { $not: /\./ }, bene_aba: "Sim" }).then((bene) => {
+                    bene.sort((a, b) => {
+                        const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                        const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                        return nomeA.localeCompare(nomeB);
+                    });
+
+                    res.render('area/aba/prog/progLis', {
+                        benes: bene,
+                        progs: [],
+                        progtipos: [],
+                        perfilAtual,
+                        flash,
+                        dataAtual,
+                    });
+                }).catch((err) => {
+                    console.log(err);
+                    req.flash("error_message", "Houve um erro ao listar!");
+                    res.redirect('admin/erro');
+                });
+            }
+        }
+    },
+      
     listaProgfiltroManut(req, res, resposta) {//Lista ABA MANUTENÇÃO, Filtrada dos Programas por Beneficiário escolhido no form anterior 
         let db = req.cookies['preferredDb'];
         Prog = getModel(db, 'tb_prog', progClass.ProgSchema)
@@ -897,7 +1216,7 @@ console.log("res: "+res);
             });
     },
 
-    listaProg : async (req, res, resposta) => {//lista prog abrir primeiro para filtrar
+    listaProg_OLD : async (req, res, resposta) => {//lista prog abrir primeiro para filtrar
         let db = req.cookies['preferredDb'];
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
 
@@ -931,6 +1250,130 @@ console.log("res: "+res);
             req.flash("error_message", "houve um erro ao listar!");
             res.redirect('admin/erro');
         });
+    },
+    listaProg_OLD2: async (req, res, resposta) => {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
+
+        let flash = new Resposta();
+        let lvlUsu = req.cookies['lvlUsu'];
+        let dataAtual = new Date();
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];
+        arrayIds.forEach((id) => {
+            if (id == lvlUsu) {
+                idUsu = id;
+            }
+        });
+        let perfilAtual = req.cookies['lvlUsu'];
+
+        try {
+            const [bene, progs, progtipos] = await Promise.all([
+                Bene.find({ bene_status: "Ativo", bene_nome: { $not: /\./ }, bene_aba: "Sim" }),
+                Prog.find(),
+                Progtipo.find()
+            ]);
+
+            // Ordena beneficiários por nome
+            bene.sort((a, b) => {
+                const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                return nomeA.localeCompare(nomeB);
+            });
+
+            // Ordena tipos por nome
+            progtipos.sort((a, b) => {
+                const nomeA = a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const nomeB = b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                return nomeA.localeCompare(nomeB);
+            });
+
+            res.render('area/aba/prog/progLis', {
+                benes: bene,
+                progs: progs,
+                progtipos: progtipos,
+                perfilAtual,
+                flash,
+                dataAtual,
+            });
+        } catch (err) {
+            console.log(err);
+            req.flash("error_message", "Houve um erro ao listar!");
+            res.redirect('admin/erro');
+        }
+    },
+    listaProg: async (req, res, resposta) => {
+        let db = req.cookies['preferredDb'];
+        Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
+        Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
+
+        let flash = new Resposta();
+        let lvlUsu = req.cookies['lvlUsu'];
+        let dataAtual = new Date();
+        let idUsu;
+        let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];
+        arrayIds.forEach((id) => {
+            if (id == lvlUsu) {
+                idUsu = id;
+            }
+        });
+        let perfilAtual = req.cookies['lvlUsu'];
+
+        try {
+            const [bene, progs, progtipos] = await Promise.all([
+                Bene.find({ bene_status: "Ativo", bene_nome: { $not: /\./ }, bene_aba: "Sim" }),
+                Prog.find(),
+                Progtipo.find()
+            ]);
+
+            // Ordena beneficiários por nome
+            bene.sort((a, b) => {
+                const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                return nomeA.localeCompare(nomeB);
+            });
+
+            // Ordena tipos por nome
+            progtipos.sort((a, b) => {
+                const nomeA = a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const nomeB = b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                return nomeA.localeCompare(nomeB);
+            });
+
+            // ✅ CONVERTER OBJECTIDS PARA STRINGS
+            const progsSerializados = progs.map(p => ({
+                _id: p._id.toString(),
+                beneId: p.prog_beneid ? p.prog_beneid.toString() : '',
+                tipoId: p.prog_tipo ? p.prog_tipo.toString() : '',
+                status: p.prog_status || ''
+            }));
+
+            const tiposSerializados = progtipos.map(t => ({
+                _id: t._id.toString(),
+                nome: t.progtipo_nome
+            }));
+
+            console.log('=== DADOS ENVIADOS PARA A VIEW ===');
+            console.log('Beneficiários:', bene.length);
+            console.log('Programas:', progsSerializados.length);
+            console.log('Tipos:', tiposSerializados.length);
+
+            res.render('area/aba/prog/progLis', {
+                benes: bene,
+                progs: progsSerializados,
+                progtipos: tiposSerializados,
+                perfilAtual,
+                flash,
+                dataAtual,
+            });
+        } catch (err) {
+            console.log(err);
+            req.flash("error_message", "Houve um erro ao listar!");
+            res.redirect('admin/erro');
+        }
     },
 
     carregaProg(req,res){

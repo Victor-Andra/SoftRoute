@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8">
+    <title>Localizar Container ABA</title>
+    <meta name="description" content="Static &amp; Dynamic Tables">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    
+    <style>
+        /* ============================================
+          SELECT2 - ESTILOS GERAIS (Baseado na view de Atendimentos)
+          ============================================ */
+        .select2-container { 
+            min-width: 120px !important; 
+        }
+        .select2-container--default .select2-selection--single {
+            height: 30px !important; 
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important; 
+            background: white !important;
+            display: flex !important; 
+            align-items: center !important;
+            padding: 0 8px !important; 
+            font-size: 12px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 28px !important; 
+            right: 5px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 28px !important; 
+            padding-left: 0 !important; 
+            color: #333 !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #999 !important;
+        }
+        .select2-dropdown {
+            border: 1px solid #ced4da !important; 
+            border-radius: 4px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        }
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            border: 1px solid #ced4da !important; 
+            border-radius: 4px !important;
+            padding: 4px 8px !important; 
+            font-size: 12px !important; 
+            margin: 4px !important;
+        }
+        .select2-container--default .select2-results__option {
+            padding: 6px 10px !important; 
+            font-size: 12px !important;
+        }
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #2196f3 !important; 
+            color: white !important;
+        }
+        .select2-container--default.select2-container--focus .select2-selection--single {
+            border-color: #2196f3 !important;
+            box-shadow: 0 0 0 2px rgba(33,150,243,0.2) !important;
+        }
+
+        /* Largura específica para os selects */
+        #pesquisaBeneid + .select2-container,
+        #pesquisaProgTipoId + .select2-container,
+        #pesquisaStatus + .select2-container {
+            width: 100% !important;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .select2-container { 
+                width: 100% !important; 
+            }
+        }
+    </style>
+</head>
+
+<body onload="controlaNave();carregaBody();" class="no-skin">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                {{#compareString flash.sucesso "true"}}
+                    <div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
+                        <p>
+                            <strong>
+                                <i class="ace-icon fa fa-check"></i>
+                                {{flash.texto}}
+                            </strong>
+                            <button type="button" class="close" onclick="javascript:OcultaMsg()">
+                                <i class="ace-icon fa fa-times"></i>
+                            </button>
+                        </p>
+                    </div>
+                {{else}}
+                    {{#compareString flash.sucesso "false"}}
+                        <div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
+                            <p>
+                                <strong>
+                                    <i class="ace-icon fa fa-times"></i>
+                                    {{flash.texto}}
+                                </strong>
+                                <button type="button" class="close" onclick="javascript:OcultaMsg()">
+                                    <i class="ace-icon fa fa-times"></i>
+                                </button>
+                            </p>
+                        </div>
+                    {{else}}
+                        <div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-warning">
+                            <p>
+                                <strong>
+                                    <i class="ace-icon fa fa-check"></i>
+                                    {{flash.texto}}
+                                </strong>
+                                <button type="button" class="close" onclick="javascript:OcultaMsg()">
+                                    <i class="ace-icon fa fa-times"></i>
+                                </button>
+                            </p>
+                        </div>
+                    {{/compareString}}
+                {{/compareString}}
+
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li>
+                            <i class="ace-icon fa fa-home home-icon"></i>
+                            <a href="#">Home</a>
+                        </li>
+                        <li class="active">Localizar container ABA</li>
+                    </ul>
+                </div>
+
+                <div hidden id="divCarrega">
+                    {{#each usuarios}}
+                        <span id="{{_id}}_span" class="tag">{{usuario_nome}}</span>
+                    {{/each}}
+                </div>
+
+                {{#each error}}
+                <div class="alert alert-danger">{{texto}}{{error}}</div>
+                {{else}}
+                {{/each}}
+
+                <div class="page-content">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12">
+                            <form id="formEnv" action="" method="GET">
+                                <div hidden>
+                                    <input type="text" id="DataAgora" name="DataAgora" />
+                                    <input type="text" id="progsetBeneidEnv" name="progsetBeneidEnv" value="{{prog.prog_beneid}}" />
+                                    <input type="text" id="progProgidEnv" name="progProgidEnv" value="{{prog.prog_progid}}" />
+                                    <input type="text" id="progProgtipoidEnv" name="progProgtipoidEnv" value="{{prog.prog_progtipoid}}" />
+                                    <input type="text" id="progPrognivelidEnv" name="progPrognivelidEnv" value="{{prog.prog_prognivelid}}" />
+                                    <input type="text" id="progsetProgidEnv" name="progsetProgidEnv" value="{{progset._id}}" />
+                                    <input type="text" id="progsetNumEnv" name="progsetNumEnv" value="{{progset.progset_num}}" />
+                                    <input type="text" id="usuIdEnv" name="usuIdEnv" value="" />
+                                </div>
+
+                                <div class="col-xs-12">
+                                    <div class="alert alert-warning">
+                                        <strong>Localize o Container do Beneficiário</strong><br />
+                                        Escolha o Beneficiário para localizar o container para trabalhar com o ABA
+                                        <br />
+                                    </div>
+                                </div>
+
+                                <div class="row justify-content-center">
+                                    <!-- Beneficiário -->
+                                    <div class="col-xs-12 col-sm-3 mb-3 px-2">
+                                        <label for="pesquisaBeneid" class="block mb-1">Escolha o Beneficiário</label>
+                                        <select name="pesquisaBeneid" id="pesquisaBeneid" class="select2">
+                                            <option value="766f69643132333435366964">-</option>
+                                            {{#each benes}}
+                                                <option value="{{_id}}">{{bene_nome}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+
+                                    <!-- Programa (Tipo) -->
+                                    <div class="col-xs-12 col-sm-3 mb-3 px-2">
+                                        <label for="pesquisaProgTipoId" class="block mb-1">Programa</label>
+                                        <select name="pesquisaProgTipoId" id="pesquisaProgTipoId" class="select2">
+                                            <option value="todos">Todos</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Status -->
+                                    <div class="col-xs-12 col-sm-3 mb-3 px-2">
+                                        <label for="pesquisaStatus" class="block mb-1">Status</label>
+                                        <select name="pesquisaStatus" id="pesquisaStatus" class="select2">
+                                            <option value="Todos">Todos</option>
+                                            <option value="Aguardando">Aguardando</option>
+                                            <option value="Início">Início</option>
+                                            <option value="Andamento">Andamento</option>
+                                            <option value="Pausado">Pausado</option>
+                                            <option value="Manutenção">Manutenção</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Botão Pesquisar -->
+                                    <div class="col-xs-12 col-sm-3 mb-3 px-2 text-center">
+                                        <div class="mb-1">
+                                            <span class="label label-sm label-warning">ABA - Filtrar Programas</span>
+                                        </div>
+                                        <button
+                                            name="acaoPesquisarF"
+                                            id="acaoPesquisarF"
+                                            type="submit"
+                                            class="btn btn-xs btn-info btn-block"
+                                        >
+                                            <i class="ace-icon fa fa-search-plus"></i>
+                                            Localizar Container
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <hr class="mt-2 mb-3">
+                            </form>
+
+                            <!-- PAGE CONTENT BEGINS -->
+                            <table id="dynamic-table1" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Beneficiário</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label>Escolha o Beneficiário e clique no botão Localizar para buscar o container do Beneficiário.</label>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+    </script>
+
+    <script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
+
+   <script type="text/javascript">
+    $(document).ready(function() {
+        // DataTable existente
+        $("#dynamic-table1").DataTable({
+            "language": { "url": "/js/lang/datatable-pt-br.json" },
+            "aaSorting": [],
+            "aoColumns": [{ "bSortable": false }],
+            "responsive": true,
+            "lengthMenu": [ 100, 200],
+            "lengthChange": true,
+            "autoWidth": false,
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            select: { style: 'multi' }
+        });
+
+        // Inicializa select2 nos novos selects
+        $('#pesquisaBeneid').select2({
+            placeholder: "Selecione o Beneficiário",
+            allowClear: true
+        });
+
+        $('#pesquisaProgTipoId').select2({
+            placeholder: "Todos",
+            allowClear: true
+        });
+
+        $('#pesquisaStatus').select2({
+            placeholder: "Todos",
+            allowClear: true
+        });
+
+        // ✅ Dados já serializados pelo backend
+        const progsData = [
+            {{#each progs}}
+            { _id: "{{_id}}", beneId: "{{beneId}}", tipoId: "{{tipoId}}", status: "{{status}}" },
+            {{/each}}
+        ];
+
+        const tiposData = [
+            {{#each progtipos}}
+            { _id: "{{_id}}", nome: "{{nome}}" },
+            {{/each}}
+        ];
+
+        console.log('=== DADOS RECEBIDOS ===');
+        console.log('Progs carregados:', progsData.length);
+        console.log('Tipos carregados:', tiposData.length);
+        if (progsData.length > 0) {
+            console.log('Primeiro programa:', progsData[0]);
+        }
+
+        // ✅ Função para popular o select de programas
+        function popularSelectProgramas(beneId) {
+            const selectProg = $('#pesquisaProgTipoId');
+            
+            // Limpa opções atuais
+            selectProg.empty();
+            selectProg.append('<option value="todos">Todos</option>');
+
+            if (!beneId || beneId === "766f69643132333435366964") {
+                selectProg.trigger('change.select2');
+                return;
+            }
+
+            console.log('=== FILTRANDO PROGRAMAS ===');
+            console.log('Beneficiário selecionado:', beneId);
+
+            // ✅ Filtra programas do beneficiário (comparação de strings)
+            const progsDoBene = progsData.filter(p => p.beneId === beneId);
+            console.log('Programas do beneficiário:', progsDoBene.length);
+            console.log('Programas encontrados:', progsDoBene);
+
+            // ✅ Extrai tipos únicos
+            const tiposUnicos = [...new Set(progsDoBene.map(p => p.tipoId))];
+            console.log('Tipos únicos:', tiposUnicos);
+
+            // Popula o select com os tipos
+            tiposUnicos.forEach(tipoId => {
+                const tipo = tiposData.find(t => t._id === tipoId);
+                if (tipo) {
+                    console.log('Adicionando tipo:', tipo.nome, 'ID:', tipo._id);
+                    selectProg.append(new Option(tipo.nome, tipo._id, false, false));
+                }
+            });
+
+            // Atualiza o select2
+            selectProg.trigger('change.select2');
+        }
+
+        // Evento de mudança do beneficiário
+        $('#pesquisaBeneid').on('change', function() {
+            const beneId = $(this).val();
+            console.log('Beneficiário selecionado:', beneId);
+            popularSelectProgramas(beneId);
+        });
+
+        // Evento de submit do formulário
+        $('#formEnv').on('submit', function (event) {
+            const selectedBeneId = $('#pesquisaBeneid').val();
+
+            if (!selectedBeneId || selectedBeneId === "766f69643132333435366964") {
+                alert('Por favor, selecione um beneficiário válido.');
+                event.preventDefault();
+                return;
+            }
+
+            const progTipoId = $('#pesquisaProgTipoId').val() || 'todos';
+            const status = $('#pesquisaStatus').val() || 'Todos';
+
+            console.log('=== FILTROS APLICADOS ===');
+            console.log('  Beneficiário:', selectedBeneId);
+            console.log('  Tipo Programa:', progTipoId);
+            console.log('  Status:', status);
+
+            // ✅ Monta URL com query string (sem encodeURIComponent para evitar problemas)
+            const url = `/menu/area/aba/prog/proglisF/${selectedBeneId}?progTipoId=${progTipoId}&status=${status}`;
+            console.log('URL final:', url);
+            
+            this.action = url;
+        });
+    });
+</script>
+</body>
+</html>

@@ -3,257 +3,72 @@
 	<head>
 		<title>SET Cadastrar</title>
 		<style>
-			/* ============================================
-			  SELECT2 - ESTILOS GERAIS (Baseado na view de Atendimentos)
-			  ============================================ */
-			.select2-container { 
-				min-width: 120px !important; 
-			}
-			.select2-container--default .select2-selection--single {
-				height: 30px !important; 
-				border: 1px solid #ced4da !important;
-				border-radius: 4px !important; 
-				background: white !important;
-				display: flex !important; 
-				align-items: center !important;
-				padding: 0 8px !important; 
-				font-size: 12px !important;
-			}
-			.select2-container--default .select2-selection--single .select2-selection__arrow {
-				height: 28px !important; 
-				right: 5px !important;
-			}
-			.select2-container--default .select2-selection--single .select2-selection__rendered {
-				line-height: 28px !important; 
-				padding-left: 0 !important; 
-				color: #333 !important;
-			}
-			.select2-container--default .select2-selection--single .select2-selection__placeholder {
-				color: #999 !important;
-			}
-			.select2-dropdown {
-				border: 1px solid #ced4da !important; 
-				border-radius: 4px !important;
-				box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-			}
-			.select2-container--default .select2-search--dropdown .select2-search__field {
-				border: 1px solid #ced4da !important; 
-				border-radius: 4px !important;
-				padding: 4px 8px !important; 
-				font-size: 12px !important; 
-				margin: 4px !important;
-			}
-			.select2-container--default .select2-results__option {
-				padding: 6px 10px !important; 
-				font-size: 12px !important;
-			}
-			.select2-container--default .select2-results__option--highlighted[aria-selected] {
-				background-color: #2196f3 !important; 
-				color: white !important;
-			}
-			.select2-container--default.select2-container--focus .select2-selection--single {
-				border-color: #2196f3 !important;
-				box-shadow: 0 0 0 2px rgba(33,150,243,0.2) !important;
-			}
-
-			/* Largura específica para os selects desta view */
-			#progsetBeneid + .select2-container,
-			#progsetProgtipoid + .select2-container,
-			#progsetPrognivelid + .select2-container,
-			#progsetTeraid + .select2-container,
-			#progsetMetatipo + .select2-container,
-			#progsetStatus + .select2-container,
-			#progsetTiporeg + .select2-container,
-			#progsetQtest + .select2-container {
-				width: 100% !important;
-			}
-
-			/* Responsivo */
-			@media (max-width: 768px) {
-				.select2-container { 
-					width: 100% !important; 
-				}
-			}
-
-			/* 🟧 Laranja pastel para campos com erro */
-			.field-error {
-				border: 2px solid #ffb380 !important;
-				background-color: #fff5ec !important;
-				box-shadow: 0 0 5px rgba(255, 179, 128, 0.6) !important;
-			}
-			/* Para selects com Select2, destacamos o container */
-			.select2-container--default .select2-selection--single.field-error,
-			.select2-container--default .select2-selection--multiple.field-error {
-				border: 2px solid #ffb380 !important;
-				background-color: #fff5ec !important;
-			}
+			
 		</style>
 		<script>
 			function carregaBody() {
-				// ✅ Para Select2: use .trigger('change.select2')
-				var beneVal = $('#progBene').val();
-				$('#progsetBeneid').val(beneVal).trigger('change.select2');
-				
-				$('#progsetProgtipoid').val($('#progTipo').val()).trigger('change.select2');
-				$('#progsetPrognivelid').val($('#progNivel').val()).trigger('change.select2');
-				
-				// Se progStatus também for Select2:
-				$('#progStatus').val($('#progStatusEdi').val()).trigger('change.select2');
+
+			// ✅ Para Select2: use .trigger('change.select2')
+			var beneVal = $('#progBene').val();
+			$('#progsetBeneid').val(beneVal).trigger('change.select2');
+			
+			$('#progsetProgtipoid').val($('#progTipo').val()).trigger('change.select2');
+			$('#progsetPrognivelid').val($('#progNivel').val()).trigger('change.select2');
+			
+			// Se progStatus também for Select2:
+			$('#progStatus').val($('#progStatusEdi').val()).trigger('change.select2');
+
 			}
 
-			// ✅ Preenche o Técnico Aplicador com o usuário atual
+			 // ✅ Preenche o Técnico Aplicador com o usuário atual
 			var usuarioAtualId = document.getElementById("usuarioAtual")?.value;
 			if(usuarioAtualId){
 				var $select = jQuery('#folregUsuid');
 				
 				$('#folregUsuid').val(usuarioAtualId).trigger('change');
 				
+				// 2. Notifica o Select2 (se já estiver inicializado) - teoricamente a operacao acima ja faz isso.
 				if($select.data('select2')){
 					$select.val(usuarioAtualId).trigger('change.select2');
 				}
 			}
-
 			// ✅ Função para atualizar campos de estímulo (reutilizável)
 			function updateStimulusFields() {
-				const select = $('#progsetQtest');
-				const value = parseInt(select.val(), 10) || 0;
+			const select = $('#progsetQtest');
+			const value = parseInt(select.val(), 10) || 0;
 
-				// Esconde todos
-				$('.stimulus-field').hide();
+			// Esconde todos
+			$('.stimulus-field').hide();
 
-				// Mostra só os necessários (A, B, C...)
-				for (let i = 0; i < value && i < 10; i++) {
-					$('#stimulus' + String.fromCharCode(65 + i)).show();
-				}
+			// Mostra só os necessários (A, B, C...)
+			for (let i = 0; i < value && i < 10; i++) {
+				$('#stimulus' + String.fromCharCode(65 + i)).show();
+			}
 			}
 
-			// ✅ Função para mudar tipo de registro
+			// ✅ Função para mudar tipo de registro (exemplo — ajuste conforme sua lógica)
 			function mudaRegistro() {
 				const tipoReg = $('#progsetTiporeg').val();
+				// Exemplo: se for "Duplo", habilita campos extras...
 				console.log("Tipo de registro selecionado:", tipoReg);
-			}
+				// Sua lógica aqui...
+				}
 
-			// ✅ Inicializa ao carregar a página
-			$(document).ready(function() {
-				initChosen?.(); // opcional
+				// ✅ Inicializa ao carregar a página (após DOM pronto + Chosen)
+				$(document).ready(function() {
+				// Assegura que o Chosen já foi inicializado (você tem initChosen() no main)
+				initChosen(); // ← opcional, se ainda não rodou
 
+				// ✅ Conecta os eventos aos selects via jQuery (funciona com Chosen)
 				$('#progsetQtest').on('change', updateStimulusFields);
 				$('#progsetTiporeg').on('change', mudaRegistro);
 
+				// Inicializa visualmente
 				updateStimulusFields();
-			});
-
-			// =========================================================
-			// 🔒 VALIDAÇÃO DO FORMULÁRIO + MODAL + PINTURA LARANJA
-			// =========================================================
-			$(document).ready(function() {
-				// Remove destaque laranja ao digitar/selecionar
-				$('input, select, textarea').on('input change', function() {
-					$(this).removeClass('field-error');
-					// Para Select2: remove do container também
-					$(this).siblings('.select2-container').find('.select2-selection').removeClass('field-error');
-					$(this).closest('.form-group').find('.select2-selection').removeClass('field-error');
-				});
-
-				$('#formProgSet').on('submit', function(e) {
-					// Limpa erros anteriores
-					$('.field-error').removeClass('field-error');
-					$('.select2-selection').removeClass('field-error');
-
-					const erros = [];
-					const campos = [
-						{ id: 'progsetBeneid',     nome: 'Beneficiário' },
-						{ id: 'progsetProgtipoid', nome: 'Tipo do Programa' },
-						{ id: 'progsetPrognivelid',nome: 'Nível do Programa' },
-						{ id: 'progsetNum',        nome: 'Número do SET' },
-						{ id: 'progsetDataset',    nome: 'Data de criação do SET' },
-						{ id: 'progsetDesc',       nome: 'Descrição do SET' },
-						{ id: 'progsetQtest',      nome: 'Quantidade de Estímulos' },
-						{ id: 'progsetTiporeg',    nome: 'Tipo do Registro' }
-					];
-
-					campos.forEach(c => {
-						const el = $('#' + c.id);
-						const val = (el.val() || '').toString().trim();
-
-						let invalido = false;
-
-						if (c.id === 'progsetTiporeg') {
-							// Regra especial: não pode ser "Não Informado"
-							if (!val || val === 'Não Informado' || val === '-') {
-								invalido = true;
-								erros.push('Tipo do Registro não pode ser "Não Informado".');
-							}
-						} else {
-							if (!val || val === '-' || val === '766f69643132333435366964' /* valor do option placeholder */) {
-								invalido = true;
-								erros.push('Campo obrigatório: <b>' + c.nome + '</b>');
-							}
-						}
-
-						if (invalido) {
-							el.addClass('field-error');
-							// Destaca também o Select2 visível (se houver)
-							el.siblings('.select2-container')
-							  .find('.select2-selection')
-							  .addClass('field-error');
-							el.closest('.form-group')
-							  .find('.select2-selection')
-							  .addClass('field-error');
-						}
-					});
-
-					if (erros.length > 0) {
-						e.preventDefault(); // 🔒 Impede o envio
-
-						// Monta a lista HTML
-						const lista = erros.map(e => '<li>' + e + '</li>').join('');
-						$('#modalErrosBody').html(
-							'<p class="lead text-danger">Por favor, corrija os seguintes itens:</p>' +
-							'<ul>' + lista + '</ul>'
-						);
-
-						$('#modalErros').modal('show');
-
-						// Rola até o primeiro campo com erro
-						const primeiro = $('.field-error').first();
-						if (primeiro.length) {
-							$('html, body').animate({
-								scrollTop: primeiro.offset().top - 100
-							}, 400);
-						}
-						return false;
-					}
-				});
 			});
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
-		<!-- ================================ -->
-		<!-- 🟧 MODAL DE ERROS DE VALIDAÇÃO   -->
-		<!-- ================================ -->
-		<div class="modal fade" id="modalErros" tabindex="-1" role="dialog">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header bg-warning">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">
-							<i class="ace-icon fa fa-exclamation-triangle"></i>
-							Campos obrigatórios não preenchidos
-						</h4>
-					</div>
-					<div class="modal-body" id="modalErrosBody">
-						<!-- preenchido dinamicamente -->
-					</div>
-					<div class="modal-footer">
-						<button class="btn btn-warning" data-dismiss="modal">
-							<i class="ace-icon fa fa-check"></i> Entendi
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
 		<div class="main-container ace-save-state" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -263,25 +78,23 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
+
 							<li class="active">SET Cadastro</li>
-						</ul>
+						</ul><!-- /.breadcrumb -->
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
-							<!-- 🔒 Adicionei ID no form para bind do submit -->
-							<form class="form-horizontal" role="form" 
-								  action="/menu/area/aba/progset/add" 
-								  method="POST" 
-								  id="formProgSet">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/area/aba/progset/add" method="POST">
 								<div id="divCarrega" style="display: none;">
 									<input name="progsetProgid" id="progsetProgid" value="{{prog._id}}" />
 									<input name="progBene"  id="progBene" value="{{prog.prog_beneid}}" />
 									<input name="progTipo" id="progTipo" value="{{prog.prog_tipo}}" />
 									<input name="progNivel" id="progNivel" value="{{prog.prog_nivel}}" />
-									<input name="usuarioAtual" id="usuarioAtual" value="{{usuarioAtual}}" />
+									<input name="usuarioAtual" id="usuarioAtual"value="{{usuarioAtual}}" />
 									<input name="folregUsuid_sync" id="folregUsuid_sync" value="{{usuarioAtual._id}}" />
 								</div>
-								<div class="col-sm-12">
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box" id="cabecset">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -289,6 +102,7 @@
 												Cabeçalho do SET e Índices
 											</h4>
 											<span class="widget-toolbar">
+												
 												<a href="#" data-action="fullscreen" class="orange2">
 													<i class="ace-icon fa fa-expand"></i>
 												</a>
@@ -301,11 +115,11 @@
 											<div class="widget-main">
 												<div class="row">
 													<div class="col-lg-6 col-md-12">
-														<label>Beneficiário <span class="text-danger">*</span></label>
+														<label>Beneficiário</label>
 														<div class="form-group">
 															<div class="col-lg-6 col-md-12">
-																<select name="progsetBeneid" id="progsetBeneid" class="select2" required>
-																	<option value="">-</option>
+																<select name="progsetBeneid" id="progsetBeneid" class="select2" >
+																	<option value="766f69643132333435366964">-</option>
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
 																	{{/each}}
@@ -316,12 +130,13 @@
 												</div>
 												
 												<div class="row">
+													<!-- Tipo de Programa -->
 													<div class="col-lg-4 col-md-12">
-														<label>Tipo de Programa <span class="text-danger">*</span></label>
+														<label>Tipo de Programa</label>
 														<div class="form-group">
 															<div class="col-lg-12 col-md-12">
-																<select name="progsetProgtipoid" id="progsetProgtipoid" class="select2" required>
-																	<option value="">-</option>
+																<select name="progsetProgtipoid" id="progsetProgtipoid" class="select2" >
+																	<option value="766f69643132333435366964">-</option>
 																	{{#each progtipos}}
 																		<option value="{{_id}}">{{progtipo_nome}}</option>
 																	{{/each}}
@@ -330,12 +145,13 @@
 														</div>
 													</div>
 
+													<!-- Nível do Programa -->
 													<div class="col-lg-4 col-md-12">
-														<label>Nível do Programa <span class="text-danger">*</span></label>
+														<label>Nível do Programa</label>
 														<div class="form-group">
 															<div class="col-lg-12 col-md-12">
-																<select name="progsetPrognivelid" id="progsetPrognivelid" class="select2" required>
-																	<option value="">-</option>
+																<select name="progsetPrognivelid" id="progsetPrognivelid" class="select2"  >
+																	<option value="766f69643132333435366964">-</option>
 																	{{#each prognivels}}
 																		<option value="{{_id}}">{{prognivel_nome}}</option>
 																	{{/each}}
@@ -344,12 +160,13 @@
 														</div>
 													</div>
 
+													<!-- Terapeuta Responsável -->
 													<div class="col-lg-4 col-md-12">
 														<label>Terapeuta Responsável</label>
 														<div class="form-group">
 															<div class="col-lg-12 col-md-12">
 																<select name="progsetTeraid" id="progsetTeraid" class="select2">
-																	<option value="">-</option>
+																	<option value="766f69643132333435366964">-</option>
 																	{{#each usuarios}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
@@ -357,25 +174,28 @@
 															</div>
 														</div>
 													</div>
+
 												</div>
 
-												<label>Número do SET <span class="text-danger">*</span></label>
+												<label>Número do SET</label>
 												<div class="input-group">
-													<input type="text" id="progsetNum" name="progsetNum" placeholder="SET 01" required/>
+													<div class="input-group">
+														<input type="text" id="progsetNum" name="progsetNum" placeholder="SET 01"/>
+													</div>
 												</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Data da criação do SET <span class="text-danger">*</span></label>
+														<label for="id-date-picker-1"> Data da criação do SET</label>
 														<div class="row">
 															<div class="input-group">
-																<div class="col-sm-4">
-																	<input id="progsetDataset" name="progsetDataset" type="date" required>
+																<div class="col-sm-4" >
+																	<input id="progsetDataset" name="progsetDataset" type="date" >
 																</div>
 															</div>
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Data de início do SET</label>
+														<label for="id-date-picker-1"> Data de início do SET</label>
 														<div class="row">
 															<div class="input-group">
 																<div class="col-sm-4">
@@ -385,7 +205,7 @@
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Data de previsão para Meta</label>
+														<label for="id-date-picker-1"> Data de previsão para Meta</label>
 														<div class="row">
 															<div class="input-group">
 																<div class="col-sm-4">
@@ -395,7 +215,7 @@
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-2">
-														<label for="id-date-picker-1">Data da Meta</label>
+														<label for="id-date-picker-1"> Data da Meta </label>
 														<div class="row">
 															<div class="input-group">
 																<div class="col-sm-4">
@@ -407,11 +227,13 @@
 													<div class="col-xs-12 col-sm-2">
 														<label>Tipo Meta</label>
 														<div class="input-group">
-															<select name="progsetMetatipo" id="progsetMetatipo" class="select2">
-																<option value="3">3</option>
-																<option value="25">25</option>
-															</select>
-															<label>&nbsp;Vezes.</label>
+															<div class="input-group">
+																<select name="progsetMetatipo" id="progsetMetatipo" class="select2" onchange="">
+																	<option value="3">3</option>
+																	<option value="25">25</option>
+																</select>
+																<label>&nbsp;Vezes.</label>
+															</div>
 														</div>
 													</div>
 												</div>
@@ -420,7 +242,7 @@
 														<label>Status do SET</label>
 														<div class="form-group">
 															<div class="col-lg-4 col-md-12">
-																<select name="progsetStatus" id="progsetStatus" class="select2">
+																<select name="progsetStatus" id="progsetStatus" class="select2" onchange="">
 																	<option value="Agendado">Agendado</option>
 																	<option value="Andamento">Andamento</option>
 																	<option value="Pausado">Pausado</option>
@@ -431,7 +253,7 @@
 														</div>
 													</div>
 													<div class="col-lg-4 col-md-12">
-														<label>Tipo do Registro para TODO o SET <span class="text-danger">*</span></label>
+														<label>Tipo do Registro para TODO o SET</label>
 														<div class="form-group">
 															<div class="col-lg-4 col-md-12">
 																<select name="progsetTiporeg" id="progsetTiporeg" class="select2" onchange="javascript:mudaRegistro()">
@@ -447,7 +269,7 @@
 										</div>
 									</div>	
 								</div>
-								<div class="col-sm-12">
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box" id="mainset">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -470,13 +292,13 @@
 											<div class="widget-main">
 												<div class="row">
 													<div class="col-xs-12">
-														<label>Descrição <span class="text-danger">*</span></label>
+														<label> Descrição </label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<textarea name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="3" required></textarea>
+																<textarea type="text" name="progsetDesc" id="progsetDesc" placeholder="" class="form-control" rows="3"></textarea>
 															</div>
 														</div>
-														<label>Quantidade de Estímulos para esse SET <span class="text-danger">*</span></label>
+														<label> Quantidade de Estímulos para esse SET </label>
 														<div class="form-group">
 															<div class="col-sm-6">
 																<select name="progsetQtest" id="progsetQtest" class="select2" data-placeholder="Escolha..." onchange="updateStimulusFields()">
@@ -499,17 +321,18 @@
 																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
 																<span class="label label-sm label-info arrowed arrowed-righ">A</span>
 																<div class="row">
-																	<div class="col-sm-6">
-																		<input name="progsetEsta" id="progsetEsta" type="text" class="form-control" />
+																	<div class="col-sm-6" >
+																			<input name="progsetEsta" id="progsetEsta" type="text" class="form-control" />
 																	</div>
 																</div>
 															</div>
+
 															<div class="col-sm-6 stimulus-field" id="stimulusB">
 																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
 																<span class="label label-sm label-warning arrowed arrowed-righ">B</span>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<input name="progsetEstb" id="progsetEstb" type="text" class="form-control"/>
+																			<input name="progsetEstb" id="progsetEstb" type="text" class="form-control"/>
 																	</div>
 																</div>
 															</div>
@@ -520,7 +343,7 @@
 																<span class="label label-sm label-pink arrowed arrowed-righ">C</span>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<input name="progsetEstc" id="progsetEstc" type="text" class="form-control" />
+																			<input name="progsetEstc" id="progsetEstc" type="text" class="form-control" />
 																	</div>
 																</div>
 															</div>
@@ -529,27 +352,31 @@
 																<span class="label label-sm label-info arrowed arrowed-righ">D</span>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<input name="progsetEstd" id="progsetEstd" type="text" class="form-control" />
+																			<input name="progsetEstd" id="progsetEstd" type="text" class="form-control" />
 																	</div>
 																</div>
 															</div>
 														</div>
 														<div class="row">
+
 															<div class="col-sm-6 stimulus-field" id="stimulusE">
 																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
 																<span class="label label-sm label-warning arrowed arrowed-righ">E</span>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<input name="progsetEste" id="progsetEste" type="text" class="form-control"/>
+																			<input name="progsetEste" id="progsetEste" type="text" class="form-control"/>
 																	</div>
 																</div>
 															</div>
+
 															<div class="col-sm-6 stimulus-field" id="stimulusF">
 																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
 																<span class="label label-sm label-pink arrowed arrowed-righ">F</span>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<input name="progsetEstf" id="progsetEstf" type="text" class="form-control" />
+																		
+																			<input name="progsetEstf" id="progsetEstf" type="text" class="form-control" />
+																		
 																	</div>
 																</div>
 															</div>																								
@@ -560,46 +387,59 @@
 																<span class="label label-sm label-purple arrowed arrowed-righ">G</span>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<input name="progsetEstg" id="progsetEstg" type="text" class="form-control" />
+																		
+																			<input name="progsetEstg" id="progsetEstg" type="text" class="form-control" />
+																		
 																	</div>
 																</div>
 															</div>
+
 															<div class="col-sm-6 stimulus-field" id="stimulusH">
 																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
 																<span class="label label-sm label-success arrowed arrowed-righ">H</span>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<input name="progsetEsth" id="progsetEsth" type="text" class="form-control"/>
+																		
+																			<input name="progsetEsth" id="progsetEsth" type="text" class="form-control"/>
+																		
 																	</div>
 																</div>
 															</div>
 														</div>
 														<div class="row">
+
 															<div class="col-sm-6 stimulus-field" id="stimulusI">
 																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
 																<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;I</span>
 																<div class="row">
 																	<div class="col-sm-6">
-																		<input name="progsetEsti" id="progsetEsti" type="text" class="form-control" />
+																		
+																			<input name="progsetEsti" id="progsetEsti" type="text" class="form-control" />
+																		
 																	</div>
 																</div>
 															</div>
+
 															<div class="col-sm-6 stimulus-field" id="stimulusJ">
 																<span class="label label-xlg label-light arrowed-in-right">Estímulo</span>
 																<span class="label label-sm label-danger arrowed arrowed-righ">&nbsp;J</span>
 																<span class="label label-sm label-warning">&nbsp;Especial 10 tentativas</span>
+																
 																<div class="row">
 																	<div class="col-sm-6">
-																		<input name="progsetEstj" id="progsetEstj" type="text" class="form-control" />
+																		
+																			<input name="progsetEstj" id="progsetEstj" type="text" class="form-control" />
+																		
 																	</div>
 																</div>
 															</div>
+															
 														</div>
 														
-														<label>Observações</label>
+														<label> Observações</label>
 														<div class="form-group">
 															<div class="col-sm-6">
-																<textarea name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="3"></textarea>
+																<textarea type="text" name="progsetObs" id="progsetObs" placeholder="" class="form-control" rows="3" ></textarea>
 															</div>
 														</div>
 													</div>
@@ -608,7 +448,7 @@
 										</div>
 									</div>	
 								</div>
-								<div class="col-sm-12">
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box" id="grafset">
 										<div class="widget-header">
 											<h4 class="widget-title">
@@ -628,9 +468,9 @@
 											<div class="widget-main">
 												<div class="row">
 													<div class="col-xs-12">
-														<p class="alert alert-info">
-															Não há gráfico para Novos SET´s, apenas quando existirem registros para esse SET.
-														</p>
+													<p class="alert alert-info">
+														Não há gráfico para Novos SET´s, apenas quando existirem registros para esse SET.
+													</p>
 													</div>
 												</div>
 											</div>
@@ -639,36 +479,38 @@
 								</div>
 								<div>
 									<div class="col-md-offprogset-3 col-md-9">
-										<button class="btn btn-info" name="acao" type="submit">
+										<button class="btn btn-info"  name="acao" type="submit">
 											<i class="ace-icon fa fa-check bigger-110"></i>
 											Salvar
 										</button>
 										&nbsp; &nbsp; &nbsp;
-										<button class="btn btn-warning" type="button" onclick="window.location='/menu/area/aba/prog/proglis'">
+										<button class="btn btn-warning" href="/menu/area/aba/prog/proglis">
 											<i class="ace-icon fa fa-undo bigger-110"></i>
 											Voltar
 										</button>
 									</div>
 								</div>
 							</form>
-						</div>
-					</div>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
 				</div>
-			</div>
-		</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container --><!-- basic scripts -->
 		<script>
 			$(document).ready(function() {
-				if(jQuery.fn.select2){
-					jQuery('#folregUsuid').select2({
-						placeholder: "Escolha...",
-						allowClear: false,
-						width: 'resolve',
-						dropdownParent: jQuery('#folregUsuid').closest('.widget-box') || jQuery(document.body)
-					});
-					
-					setTimeout(carregaBody, 50);
-				}
-			});
+			// Inicializa Select2 para o Técnico Aplicador
+			if(jQuery.fn.select2){
+				jQuery('#folregUsuid').select2({
+					placeholder: "Escolha...",
+					allowClear: false,
+					width: 'resolve',
+					dropdownParent: jQuery('#folregUsuid').closest('.widget-box') || jQuery(document.body)
+				});
+				
+				// Só depois chama carregaBody() com delay mínimo
+				setTimeout(carregaBody, 50);
+			}
+		});
 		</script>
 	</body>
 </html>

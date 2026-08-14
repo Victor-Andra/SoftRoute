@@ -937,35 +937,79 @@
                         </div>
                     </div>
 
-                    <!-- CONSOLIDADO (abaixo das estatísticas) -->
-                    <div class="row">
-                        <div class="col-xs-3 col-sm-3">
-                            <div class="consolidado-card">
-                                <div class="consolidado-label">Qt. Total Atendimentos</div>
-                                <div class="consolidado-value">{{consolidado.qtAtendimentos}}</div>
+                    <!-- RESUMO (abaixo das estatísticas) -->
+                    
+                        <div class="widget-box">
+                            <div class="widget-header widget-header-flat">
+                                <h4 class="widget-title">
+                                    <i class="ace-icon fa fa-table"></i> 
+                                    Resumo dos Consolidados
+                                </h4>
+                            </div>
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <div class="row">
+                                        <div class="col-xs-3 col-sm-3">
+                                            <div class="consolidado-card">
+                                                <div class="consolidado-label">Qt. Total Atendimentos</div>
+                                                <div class="consolidado-value">{{consolidado.qtAtendimentos}}</div>
+                                            </div>
+                                        </div>
+                                        <!-- QTGuiasUnicas - Quantidade de Guias Unicas -->
+                                        <div class="col-xs-3 col-sm-3">
+                                            <div class="consolidado-card">
+                                                <div class="consolidado-label">Qt. Guias Unicas</div>
+                                                <div class="consolidado-value">{{estatisticas.qtdGuias}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-3 col-sm-3">
+                                            <div class="consolidado-card">
+                                                <div class="consolidado-label">Qt. Total de Lotes</div>
+                                                <div class="consolidado-value">{{consolidado.qtLotes}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-3 col-sm-3">
+                                            <div class="consolidado-card">
+                                                <div class="consolidado-label">Valor Total dos Lotes</div>
+                                                <div class="consolidado-value">R$ {{consolidado.valorTotal}}</div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <div class="row">   
+                                        <div class="col-xs-12 col-sm-12">
+                                            <table id="dynamic-table" class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Descrição</th>
+                                                        <th>Qt</th>
+                                                        <th>Valor Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Convênio</td>
+                                                        <td>0</td>
+                                                        <td>R$ 0,00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Particular</td>
+                                                        <td>0</td>
+                                                        <td>R$ 0,00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Liminar</td>
+                                                        <td>0</td>
+                                                        <td>R$ 0,00</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <!-- QTGuiasUnicas - Quantidade de Guias Unicas -->
-                         <div class="col-xs-3 col-sm-3">
-                            <div class="consolidado-card">
-                                <div class="consolidado-label">Qt. Guias Unicas</div>
-                                <div class="consolidado-value">{{estatisticas.qtdGuias}}</div>
-                            </div>
-                        </div>
-                        <div class="col-xs-3 col-sm-3">
-                            <div class="consolidado-card">
-                                <div class="consolidado-label">Qt. Total de Lotes</div>
-                                <div class="consolidado-value">{{consolidado.qtLotes}}</div>
-                            </div>
-                        </div>
-                        <div class="col-xs-3 col-sm-3">
-                            <div class="consolidado-card">
-                                <div class="consolidado-label">Valor Total dos Lotes</div>
-                                <div class="consolidado-value">R$ {{consolidado.valorTotal}}</div>
-                            </div>
-                        </div>
-                    </div>
-
+                    
                     <!-- TABELA DE LOTES (agrupada por lote) -->
                     <div class="widget-box">
                         <div class="widget-header widget-header-flat">

@@ -3,6 +3,14 @@
 	<head>
 		<title>REGISTROS: Simples ou Duplo</title>
 		<style>
+			.select2-readonly + .select2-container, .select2-readonly.select2-container {
+				pointer-events: none !important;
+				opacity: 0.85;
+				background-color: #f5f5f5 !important;
+				cursor: not-allowed !important;
+			}
+			.select2-readonly + .select2-container .select2-selection__arrow { display: none !important; } 
+
 			.table-wrapper {
 				overflow-x: auto;
 				max-width: 100%;
@@ -47,6 +55,18 @@
 				height: 100%;
 				background: transparent;
 				cursor: not-allowed;
+			}
+			select[readonly].chosen-select + .chosen-container {
+				background-color: #e9ecef !important;
+				cursor: not-allowed !important;
+				opacity: 1 !important;
+			}
+			select[readonly].chosen-select + .chosen-container .chosen-single {
+				color: #6c757d !important;
+			}
+			/* Bloqueia interação visual */
+			select[readonly].chosen-select + .chosen-container .chosen-single {
+				pointer-events: none;
 			}
 		</style>
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -468,30 +488,18 @@ function preencherCamposVisiveis(qtdEstimulos) {
 					}
 				});
 			}
-
-			function carregaBody(){
-				if (document.getElementById("tiporeg").value != null){
-					document.getElementById("folregTiporeg").value = document.getElementById("tiporeg").value;
-					mudaRegistro();
-					populateCheckboxes();
-				}
-				popularCheckboxDicaTipo();
-				updateStimulusFields();
+			function carregaBody() {
+				console.log("▶ carregaBody() iniciado");
+				
+				// ✅ 1. Mantém seus assignments originais (HIDDEN/TEXT)
 				document.getElementById("folregUsuid").value = document.getElementById("usuarioAtual").value;
 				document.getElementById("folregBeneid").value = document.getElementById("progBene").value;
-				//tipos de dicas
-				document.getElementById("folregT1tipodsimples").value = document.getElementById("progDicatipotext").value;
-				document.getElementById("folregT1tipodesqu").value = document.getElementById("progDicatipotext").value;
-				document.getElementById("folregT1tipodird").value = document.getElementById("progDicatipotext").value;
-
 				document.getElementById("folregProgtipoid").value = document.getElementById("progTipo").value;
 				document.getElementById("folregPrognivelid").value = document.getElementById("progNivel").value;
-				
 				document.getElementById("folregSetnum").value = document.getElementById("setNum").value;
 				document.getElementById("folregSetdescr").value = document.getElementById("setDescr").value;
 				document.getElementById("folregSetobs").value = document.getElementById("setObs").value;
 				document.getElementById("folregQtest").value = document.getElementById("qtEst").value;
-
 				document.getElementById("folregEsta").value = document.getElementById("folrega").value;
 				document.getElementById("folregEstb").value = document.getElementById("folregb").value;
 				document.getElementById("folregEstc").value = document.getElementById("folregc").value;
@@ -502,12 +510,72 @@ function preencherCamposVisiveis(qtdEstimulos) {
 				document.getElementById("folregEsth").value = document.getElementById("folregh").value;
 				document.getElementById("folregEsti").value = document.getElementById("folregi").value;
 				document.getElementById("folregEstj").value = document.getElementById("folregj").value;
-				//embaralharIgualmenteFolregTentativas(); //desabilitado por causa do 10tentaivas, formulario da erro e nao carrega
-				showStimulusFieldsWithValues();
-				updateStimulusFields();
-			}
 
+				const tiporegValue = document.getElementById("tiporeg")?.value || "Não Informado";
+				document.getElementById("folregTiporeg").value = tiporegValue;
+
+				// ✅ 2. CORREÇÃO: Atualiza APENAS os Select2 (Beneficiário, Tipo e Nível)
+				var selectsSelect2 = ['#folregBeneid', '#folregProgtipoid', '#folregPrognivelid'];
+				selectsSelect2.forEach(function(id) {
+					var $el = jQuery(id);
+					var valorAtual = $el.val(); // Pega o valor que acabamos de definir
+
+					// Garante que o Select2 está inicializado
+					if (!$el.data('select2')) {
+						$el.select2({
+							dropdownParent: $el.closest('.widget-box') || jQuery(document.body),
+							placeholder: "Escolha..."
+						});
+					}
+					// Força o Select2 a sincronizar a UI com o valor nativo
+					$el.val(valorAtual).trigger('change.select2');
+				});
+				$('#folregUsuid').val(document.getElementById("usuarioAtual").value).trigger('change');
+				$('#folregTiporeg').val(document.getElementById("folregTiporeg").value).trigger('change');
+
+				// ✅ 3. Mantém a atualização do Chosen (como já estava)
+				$('.chosen-select').each(function() {
+					if ($(this).data('chosen')) {
+						$(this).trigger('chosen:updated');
+					}
+				});
+
+				// ✅ 4. Lógicas restantes (mantidas do seu original)
+				mudaRegistro();
+				updateStimulusFields();
+				showStimulusFieldsWithValues();
+				popularCheckboxDicaTipo();
+				console.log("✅ carregaBody() concluído — tiporeg:", tiporegValue);
+				syncDisabledSelects();
+
+				// ✅ Sincroniza Select2 (sem criar hidden duplicado!)
+				['#folregBeneid', '#folregProgtipoid', '#folregPrognivelid', '#folregUsuid'].forEach(function(id) {
+					var $el = jQuery(id);
+					if ($el.data('select2')) {
+						$el.trigger('change.select2'); // Atualiza a UI do Select2
+					}
+				});
+			}
+			// Sincroniza valores dos selects disabled → hidden inputs
+			function syncDisabledSelects() {
+				const mappings = [
+					{ from: 'folregBeneid', to: 'folregBeneid_sync' },
+					{ from: 'folregProgtipoid', to: 'folregProgtipoid_sync' },
+					{ from: 'folregPrognivelid', to: 'folregPrognivelid_sync' },
+					{ from: 'folregTiporeg', to: 'folregTiporeg_sync' },
+					{ from: 'folregQtest', to: 'folregQtest_sync' }
+					
+				];
+				mappings.forEach(m => {
+					const from = document.getElementById(m.from);
+					const to = document.getElementById(m.to);
+					if (from && to) {
+						to.value = from.value || '';
+					}
+				});
+			}
 			function salvar() {
+				syncDisabledSelects();
 				if (document.getElementById("folregDatareg").value == '') {
 					alert("Por favor, informe a Data do Registro antes de salvar!");
 				} else if (document.getElementById("folregUsuid").value == '') {
@@ -518,6 +586,8 @@ function preencherCamposVisiveis(qtdEstimulos) {
 					form.submit();
 				}
 			}
+
+
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();mudaRegistro();carregaBody();" class="no-skin">
@@ -536,7 +606,7 @@ function preencherCamposVisiveis(qtdEstimulos) {
 						<!-- PAGE CONTENT BEGINS -->
 						<form id="formFolregPreCad" class="form-horizontal" role="form" method="POST">
 							<div class="col-xs-12">
-								<div id="divCarrega" hidden >
+								<div id="divCarrega"  hidden>
 									<!-- principais indices-->
 									Progsdicastext<input name="progDicatipotext" id="progDicatipotext" value="{{prog.prog_dicatipotext}}" />
 									beneid<input name="progBene" id="progBene" value="{{progset.progset_beneid}}" />
@@ -567,9 +637,9 @@ function preencherCamposVisiveis(qtdEstimulos) {
 									i<input name="folregi" id="folregi" value="{{progset.progset_esti}}" />
 									j<input name="folregj" id="folregj" value="{{progset.progset_estj}}" />
 
-									<input type="hidden" id="progDicatipotext1" value="{{prog.prog_dicatipotext}}" />
-									<input type="hidden" id="progDicatipotext2" value="{{prog.prog_dicatipotext}}" />
-									<input type="hidden" id="progDicatipotext3" value="{{prog.prog_dicatipotext}}" />
+									<input type="text" id="progDicatipotext1" value="{{prog.prog_dicatipotext}}" />
+									<input type="text" id="progDicatipotext2" value="{{prog.prog_dicatipotext}}" />
+									<input type="text" id="progDicatipotext3" value="{{prog.prog_dicatipotext}}" />
 
 									ras-a<input  type="text" id="folregRaTentCad1" name="folregRaTentCad1" value="" />
 									ras-b<input  type="text" id="folregRaTentCad2" name="folregRaTentCad2" value="" />
@@ -592,6 +662,8 @@ function preencherCamposVisiveis(qtdEstimulos) {
 									<input  type="text" id="folregRaTentDuplCad9" name="folregRaTentDuplCad9" value="" />
 									<input  type="text" id="folregRaTentDuplCad10" name="folregRaTentDuplCad10" value="" />
 								</div>
+								
+									
 							</div>
 							<div class="col-sm-12" name="cabec" id="cabec"><!-- .Widget Cabec-->
 								<div class="widget-box">
@@ -618,12 +690,14 @@ function preencherCamposVisiveis(qtdEstimulos) {
 												<!--OBSERVAÇÃO Não é necessário o beneficiário estar cadastrado previamente no sistema pois pode ser o primeiro contato-->
 												<br>
 											</div>
+											
+											<!-- Beneficiário -->
 											<div class="row">
 												<div class="col-lg-6 col-md-12">
-													<label>Beneficiário </label>
+													<label>Beneficiário</label>
 													<div class="form-group">
 														<div class="col-lg-6 col-md-12">
-															<select name="folregBeneid" id="folregBeneid" class="chosen-select blocked-select" >
+															<select name="folregBeneid" id="folregBeneid" class="select2 select2-readonly">
 																{{#each benes}}
 																	<option value="{{_id}}">{{bene_nome}}</option>
 																{{/each}}
@@ -632,12 +706,14 @@ function preencherCamposVisiveis(qtdEstimulos) {
 													</div>
 												</div>
 											</div>
+
+											<!-- Programa Tipo -->
 											<div class="row">
 												<div class="col-lg-6 col-md-12">
 													<label>Programa Tipo</label>
-													<div class="input-group">
+													<div class="form-group">
 														<div class="col-lg-6 col-md-12">
-															<select name="folregProgtipoid" id="folregProgtipoid" class="chosen-select blocked-select" >
+															<select name="folregProgtipoid" id="folregProgtipoid" class="select2 select2-readonly">
 																<option value="766f69643132333435366964">-</option>
 																{{#each progtipos}}
 																	<option value="{{_id}}">{{progtipo_nome}}</option>
@@ -647,37 +723,60 @@ function preencherCamposVisiveis(qtdEstimulos) {
 													</div>
 												</div>
 											</div>
+
+											<!-- Programa Nível -->
+											<div class="row">
+												<div class="col-lg-6 col-md-12">
 													<label>Programa Nível</label>
-													<div class="input-group">
-														<select name="folregPrognivelid" id="folregPrognivelid" class="chosen-select blocked-select" >
+													<div class="form-group">
+														<div class="col-lg-6 col-md-12">
+															<select name="folregPrognivelid" id="folregPrognivelid" class="select2 select2-readonly">
 																<option value="766f69643132333435366964">-</option>
 																{{#each prognivels}}
 																	<option value="{{_id}}">{{prognivel_nome}}</option>
 																{{/each}}
-														</select>
-													</div>
-													<label>Número do SET</label>
-													<div class="input-group">
-														<input name="folregSetnum" id="folregSetnum" type="text" readonly />
+															</select>
+														</div>
 													</div>
 												</div>
 											</div>
+
+											<!-- Número do SET -->
 											<div class="row">
-												<div class="col-xs-12">
-													<label>Descrição do SET</label>
+												<div class="col-lg-6 col-md-12">
+													<label>Número do SET</label>
 													<div class="form-group">
-														<div class="col-sm-12">
-															<textarea type="text" name="folregSetdescr" id="folregSetdescr" placeholder="" class="form-control" rows="3" style="font-size: 13px;"  data-iconlibrary="fa" readonly></textarea>
-														</div>
-													</div>
-													<label>Observações do SET</label>
-													<div class="form-group">
-														<div class="col-sm-12">
-															<textarea type="text" name="folregSetobs" id="folregSetobs" placeholder="" class="form-control" rows="3" style="font-size: 13px;"  data-iconlibrary="fa" readonly></textarea>
+														<div class="col-lg-6 col-md-12">
+															<input name="folregSetnum" id="folregSetnum" type="text" class="form-control" readonly/>
 														</div>
 													</div>
 												</div>
-											</div>	
+											</div>
+
+											<!-- Descrição do SET -->
+											<div class="row">
+												<div class="col-lg-6 col-md-12">
+													<label>Descrição do SET</label>
+													<div class="form-group">
+														<div class="col-lg-12">
+															<textarea name="folregSetdescr" id="folregSetdescr" class="form-control" rows="3"  style="font-size: 13px;" readonly></textarea>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<!-- Observações do SET -->
+											<div class="row">
+												<div class="col-lg-6 col-md-12">
+													<label>Observações do SET</label>
+													<div class="form-group">
+														<div class="col-lg-12">
+															<textarea name="folregSetobs" id="folregSetobs" class="form-control" rows="3" style="font-size: 13px;" readonly></textarea>
+														</div>
+													</div>
+												</div>
+											</div>
+	
 										</div>		
 									</div>
 								</div>
@@ -706,7 +805,7 @@ function preencherCamposVisiveis(qtdEstimulos) {
 													<label>Tipo do Registro</label>
 													<div class="form-group">
 														<div class="col-sm-4">
-															<select name="folregTiporeg" id="folregTiporeg" class="chosen-select blocked-select" data-placeholder="Escolha..."  onchange="javascript:mudaRegistro();populateCheckboxes();">
+															<select name="folregTiporeg" id="folregTiporeg" class="select2 select2-readonly" onchange="javascript:mudaRegistro();populateCheckboxes();">
 																<option value="Não Informado">Não Informado</option>
 																<option value="Simples">Simples</option>
 																<option value="Duplo">Duplo</option>
@@ -725,7 +824,7 @@ function preencherCamposVisiveis(qtdEstimulos) {
 													<label>Técnico Aplicador</label>
 													<div class="form-group">
 														<div class="col-sm-8">
-															<select name="folregUsuid" id="folregUsuid" class="select2" data-placeholder="Escolha..." {{#compareString usuarioAtual.usuario_perfilid "62421903a12aa557219a0fd3"}} style="pointer-events: none; touch-action: none;" {{/compareString}} >
+															<select name="folregUsuid" id="folregUsuid" class="select2 select2-readonly" data-placeholder="Escolha..." {{#compareString usuarioAtual.usuario_perfilid "62421903a12aa557219a0fd3"}} style="pointer-events: none; touch-action: none;" {{/compareString}} >
 																{{#each terapeutas}}
 																	<option value="{{_id}}">{{usuario_nome}}</option>
 																{{/each}}
@@ -751,7 +850,7 @@ function preencherCamposVisiveis(qtdEstimulos) {
 												<div class="col-xs-12 col-sm-2">
 													<label>Quantidade de Estímulos Reservados no SET</label>
 													<!--<input name="folregQtest" id="folregQtest" value="{{progset.progset_qtest}}" onchange="updateStimulusFields()" />-->
-													<select name="folregQtest" id="folregQtest" class="chosen-select blocked-select" data-placeholder="Escolha..." value="Não Informado" onchange="updateStimulusFields();embaralharIgualmenteFolregTentativas();">
+													<select name="folregQtest" id="folregQtest" class="chosen-select " data-placeholder="Escolha..." disabled onchange="updateStimulusFields();embaralharIgualmenteFolregTentativas();">
 														<option value="1">1</option>
 														<option value="2">2</option>
 														<option value="3">3</option>
@@ -2135,7 +2234,7 @@ function preencherCamposVisiveis(qtdEstimulos) {
 										Salvar
 									</button>
 									  
-									<button class="btn btn-warning" /menu/area/aba/prog/proglisF/{{progset.progset_beneid}}">
+									<button class="btn btn-warning" >
 										<i class="ace-icon fa fa-undo bigger-110"></i>
 										Voltar
 									</button>
@@ -2379,22 +2478,37 @@ function preencherCamposVisiveis(qtdEstimulos) {
 				});
 			}
 			
-			function updateStimulusFields() {
-				var select = document.getElementById('folregQtest');
-				var value = parseInt(select.value, 10);
+		function updateStimulusFields() {
+				const qtest = parseInt(document.getElementById("folregQtest").value, 10) || 1;
+				const modo = document.getElementById("folregTiporeg").value; // "Simples" ou "Duplo"
 
-				// Hide all stimulus fields
-				var fields = document.querySelectorAll('.stimulus-field');
-				fields.forEach(function(field) {
-					field.style.display = 'none';
+				// ✅ Oculta TODOS os campos primeiro
+				document.querySelectorAll('.stimulus-field, .tentativa-row').forEach(el => {
+					el.style.display = 'none';
 				});
 
-				// Show only the number of fields selected
-				for (var i = 0; i < value; i++) {
-					document.getElementById('stimulus' + String.fromCharCode(65 + i)).style.display = 'block';
+				if (modo === "Simples") {
+					// Mostra linhas de tentativa do Simples (até 10)
+					for (let i = 1; i <= Math.min(qtest, 10); i++) {
+						const row = document.querySelector(`#simples tbody tr:nth-child(${i})`);
+						if (row) row.style.display = '';
+					}
+					// Também mostra campos de estímulo (A, B, C...)
+					for (let i = 0; i < qtest && i < 10; i++) {
+						const id = 'stimulus' + String.fromCharCode(65 + i); // A, B, C...
+						const el = document.getElementById(id);
+						if (el) el.style.display = 'block';
+					}
+				} else if (modo === "Duplo") {
+					// Mostra linhas de tentativa do Duplo (até 10)
+					for (let i = 1; i <= Math.min(qtest, 10); i++) {
+						const row = document.querySelector(`#duplo tbody tr:nth-child(${i})`);
+						if (row) row.style.display = '';
+					}
 				}
 
-			};
+				console.log(`✅ updateStimulusFields() — modo: ${modo}, qtest: ${qtest}`);
+			}
 			document.addEventListener("DOMContentLoaded", function() {
             const selects = [
                 'folregBeneid',
@@ -2466,9 +2580,18 @@ function preencherCamposVisiveis(qtdEstimulos) {
 				// Sincronizar com mudaRegistro()
 				const tipoFolha = document.getElementById("folregTiporeg");
 				if (tipoFolha) {
-					tipoFolha.addEventListener("change", () => {
-						console.log("Modo alterado. Atualizando campos..." + tipoFolha);
-						preencherCamposVisiveis(qtdEstimulos);
+					tipoFolha.addEventListener("change", function() {
+						console.log("Modo alterado. Atualizando campos...", this.value);
+						// Remove temporariamente listeners recursivos antes de atualizar
+						// Ou use um _flag anti-recursão:
+						if (window._updatingFromChange) return;
+						window._updatingFromChange = true;
+
+						try {
+							preencherCamposVisiveis(qtdEstimulos);
+						} finally {
+							window._updatingFromChange = false;
+						}
 					});
 				}
 			});
