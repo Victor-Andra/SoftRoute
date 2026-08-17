@@ -3004,6 +3004,14 @@ router.post('/atendimento/tabdimConvBeneTeraAtendvalFiltro', fncGeral.IsAuthenti
     router.post('/atendimento/relatendbeneassinsAT', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoBeneassinFiltroAT(req,res);
     })
+
+    router.get('/atendimento/relatendbeneassinAT_Novo', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneassinAT_Novo(req,res);
+    })
+    router.post('/atendimento/relatendbeneassinsAT_Novo', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBeneassinFiltroAT_Novo(req,res);
+    })
+
     //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo e com sessões de terapia 05/12/2025.
     router.get('/atendimento/relatendbenesec', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoBenessec(req,res);
@@ -4282,6 +4290,15 @@ router.get('/area/aba/prog/proglisproTipo/:id', fncGeral.IsAuthenticated, (req, 
     resposta.sucesso = "";
     // Chama a nova função que criaremos no controller
     fncProg.listaProgprofiltroPorTipo(req, res, resposta); 
+});
+
+//Lista Programas ABA filtrado pelo Programa em MANUTENÇÃO
+router.get('/area/aba/prog/proglisproM/:id', fncGeral.IsAuthenticated, (req, res) => {
+    console.log("Beneficiário ID recebido:", req.params.id);
+    let resposta = new Resposta();
+    resposta.texto = "";
+    resposta.sucesso = "";
+    fncProg.listaProgprofiltroManut(req, res, resposta);
 });
 //-------------------------------------------------------------------------------------------
 

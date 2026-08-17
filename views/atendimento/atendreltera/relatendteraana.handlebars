@@ -182,11 +182,14 @@
 					document.getElementById("subtotal"+s.id).value = subTotal;
 				})*/
 
-				//Filtro persistente
-				document.getElementById("relTeraid").value  = document.getElementById("teraFiltro").value
-				document.getElementById("dataFilDe").value = document.getElementById("dataIni").value.substring(0,10);
-				document.getElementById("dataFilAte").value =  document.getElementById("dataFim").value.substring(0,10);
-			}
+				 //Filtro persistente
+					document.getElementById("relTeraid").value  = document.getElementById("teraFiltro").value;
+					document.getElementById("dataFilDe").value = document.getElementById("dataIni").value.substring(0,10);
+					document.getElementById("dataFilAte").value =  document.getElementById("dataFim").value.substring(0,10);
+					
+					// NOVO: Filtro de Turno
+					document.getElementById("turno").value = document.getElementById("turnoFiltro").value || "";
+				}
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
@@ -241,6 +244,18 @@
 											{{/each}}
 										</select>
 										<input type="hidden" id="teraFiltro" name="teraFiltro" value="{{pesquisa.terapeuta}}">
+									</div>
+									<!-- Turno -->
+									<div class="form-group" style="min-width: 140px;">
+										<label>Turno:</label>
+										<select name="turno" id="turno"
+												class="select2"
+												data-placeholder="Todos">
+											<option value="">Todos</option>
+											<option value="M">Manhã (06h - 12h)</option>
+											<option value="T">Tarde (12h - 19h)</option>
+										</select>
+										<input type="hidden" id="turnoFiltro" name="turnoFiltro" value="{{pesquisa.turno}}">
 									</div>
 
 									<!-- Botão -->

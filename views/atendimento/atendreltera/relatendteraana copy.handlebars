@@ -182,13 +182,10 @@
 					document.getElementById("subtotal"+s.id).value = subTotal;
 				})*/
 
-				 //Filtro persistente
-				document.getElementById("relTeraid").value  = document.getElementById("teraFiltro").value;
+				//Filtro persistente
+				document.getElementById("relTeraid").value  = document.getElementById("teraFiltro").value
 				document.getElementById("dataFilDe").value = document.getElementById("dataIni").value.substring(0,10);
 				document.getElementById("dataFilAte").value =  document.getElementById("dataFim").value.substring(0,10);
-				
-				// NOVO: Filtro de Turno
-				document.getElementById("turno").value = document.getElementById("turnoFiltro").value || "";
 			}
 		</script>
 	</head>
@@ -202,10 +199,10 @@
 								<i class="ace-icon fa fa-home home-icon"></i>
 								<a href="#">Home</a>
 							</li>
-							<li class="active">Relatório Analítico de Atendimento dos Terapeutas Novo</li>
+							<li class="active">Relatório Analítico de Atendimento dos Terapeutas</li>
 						</ul><!-- /.breadcrumb -->
 					</div>
-					<form style="noprint" role="form" action="/menu/atendimento/atendreltera/relatendteraanasnovo" method="POST">
+					<form style="noprint" role="form" action="/menu/atendimento/atendreltera/relatendteraanas" method="POST">
 					<div class="toolbar-pesquisa noprint">
 
 							<h5>
@@ -244,18 +241,6 @@
 											{{/each}}
 										</select>
 										<input type="hidden" id="teraFiltro" name="teraFiltro" value="{{pesquisa.terapeuta}}">
-									</div>
-									<!-- Turno -->
-									<div class="form-group" style="min-width: 140px;">
-										<label>Turno:</label>
-										<select name="turno" id="turno"
-												class="select2"
-												data-placeholder="Todos">
-											<option value="">Todos</option>
-											<option value="M">Manhã (06h - 12h)</option>
-											<option value="T">Tarde (12h - 19h)</option>
-										</select>
-										<input type="hidden" id="turnoFiltro" name="turnoFiltro" value="{{pesquisa.turno}}">
 									</div>
 
 									<!-- Botão -->
@@ -339,7 +324,6 @@
 															<th>Hora do Atendimento</th>
 															<th>Especialidade Detalhada</th>
 															<th>Especialidade</th>
-															<th>Tipo</th>
 															<th>Beneficiário</th>
 														</tr>
 													</thead>
@@ -357,21 +341,6 @@
 																{{#each ../terapias}}
 																	{{#ifEqual this._id ../especialidade}}
 																		<td>{{terapia_nomecid}}</td>
-																	{{/ifEqual}}
-																{{/each}}
-																{{#each ../benes}}
-																	{{#ifEqual this._id ../beneficiario}}
-																		 <td>
-																			{{#ifEqual this.bene_convid '62477742e416141415ff7a88'}}
-																				<span class="badge badge-purple">Particular</span>
-																			{{else}}
-																				{{#ifEqual this.bene_liminar "Sim"}}
-																				<span class="badge badge-danger">Liminar</span>
-																				{{else}}
-																				<span class="badge badge-info">Convênio</span>
-																				{{/ifEqual}}
-																			{{/ifEqual}}
-																		</td>
 																	{{/ifEqual}}
 																{{/each}}
 																{{#each ../benes}}
@@ -400,100 +369,46 @@
 							</div>
 						</div><!-- PAGE CONTENT ENDS -->
 						<!-- Resumo de Contagem por Terapia -->
-							<form role="form" style="width: 100%; margin: 0 auto; padding: 0 12px;">
-								<div class="row" style="display: flex; justify-content: center; width: 100%; margin: 0 auto;">
-									
-									<!-- Tabela 1: Resumo Simples -->
-									<div class="col-sm-6" style="display: flex; justify-content: center;">
-										<div style="width: 100%; max-width: 500px; margin-top: 20px;">
-											<div class="widget-box transparent">
-												<div class="widget-header">
-													<h5 class="widget-title grey lighter" style="text-align: center;">
-														<i class="ace-icon fa fa-bar-chart green"></i>
-														Resumo por Terapia
-													</h5>
-												</div>
-												<div class="widget-body">
-													<div class="widget-main">
-														<table class="table table-condensed table-bordered">
-															<thead>
-																<tr class="info">
-																	<th>Terapia</th>
-																	<th class="center">Total</th>
-																</tr>
-															</thead>
-															<tbody>
-																{{#each totaisTerapia}}
-																<tr>
-																	<td>{{terapiaNome}}</td>
-																	<td class="center">{{total}}</td>
-																</tr>
-																{{/each}}
-																<tr class="info">
-																	<td><b>Total Geral</b></td>
-																	<td class="center"><b>{{totalGeral}}</b></td>
-																</tr>
-															</tbody>
-														</table>
-													</div>
-												</div>
+						<form style="noprint">
+						<div class="col-sm-6" >
+							<div class="row">
+								<div class="col-xs-6" style="margin-top: 20px;">
+									<div class="widget-box transparent" style="noprint">
+										<div class="widget-header">
+											<h5 class="widget-title grey lighter" style="text-align: center;">
+												<i class="ace-icon fa fa-bar-chart green"></i>
+												Resumo por Terapia
+											</h5>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<table class="table table-condensed table-bordered">
+													<thead >
+														<tr class="info">
+															<th>Terapia</th>
+															<th class="center">Total</th>
+														</tr>
+													</thead>
+													<tbody>
+														{{#each totaisTerapia}}
+														<tr>
+															<td>{{terapiaNome}}</td>
+															<td class="center">{{total}}</td>
+														</tr>
+														{{/each}}
+														<tr class="info">
+															<td><b>Total Geral</b></td>
+															<td class="center"><b>{{totalGeral}}</b></td>
+														</tr>
+													</tbody>
+												</table>
 											</div>
 										</div>
 									</div>
-									
-									<!-- Tabela 2: Matriz por Tipo -->
-									<div class="col-sm-6" style="display: flex; justify-content: center;">
-										<div style="width: 100%; max-width: 600px; margin-top: 20px;">
-											<div class="widget-box transparent">
-												<div class="widget-header">
-													<h5 class="widget-title grey lighter" style="text-align: center;">
-														<i class="ace-icon fa fa-bar-chart green"></i>
-														Resumo por Terapia Estratificado por Tipo de Contrato
-													</h5>
-												</div>
-												<div class="widget-body">
-													<div class="widget-main">
-														<!-- [NOVA] Tabela em matriz -->
-														<table class="table table-condensed table-bordered">
-															<thead class="thead-light">
-																<tr class="warning">
-																	<th>Terapia</th>
-																	<th class="text-right">Particular</th>
-																	<th class="text-right">Liminar</th>
-																	<th class="text-right">Convênio</th>
-																	<th class="text-right">Total</th>
-																</tr>
-															</thead>
-															<tbody>
-																{{#each totaisMatriz}}
-																<tr>
-																	<td>{{terapiaNome}}</td>
-																	<td class="text-right">{{particular}}</td>
-																	<td class="text-right">{{liminar}}</td>
-																	<td class="text-right">{{convenio}}</td>
-																	<td class="text-right font-weight-bold">{{total}}</td>
-																</tr>
-																{{/each}}
-															</tbody>
-															<tfoot class="font-weight-bold">
-																<tr class="warning">
-																	<td>Total Geral</td>
-																	<td class="text-right">{{totaisColunas.particular}}</td>
-																	<td class="text-right">{{totaisColunas.liminar}}</td>
-																	<td class="text-right">{{totaisColunas.convenio}}</td>
-																	<td class="text-right">{{totaisColunas.total}}</td>
-																</tr>
-															</tfoot>
-														</table>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-									
 								</div>
-							</form>
-						<!-- FIM Resumo de Contagem por Terapia -->
+							</div>
+						</div>
+																							  </form>
 					</div><!-- /.col -->
 				</div><!-- /.row -->
 			</div><!-- /.main-content -->
