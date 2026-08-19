@@ -842,7 +842,7 @@
                         <div class="widget-body">
                             <div class="widget-main">
                                 <div class="row">
-                                    <div class="col-xs-6 col-sm-2">
+                                    <div class="col-xs-6 col-sm-3">
                                         <div class="count-card total">
                                             <div class="count-header">
                                                 <i class="ace-icon fa fa-calendar count-icon"></i> 
@@ -851,62 +851,43 @@
                                             <div class="count-value">{{estatisticas.qa}}</div>
                                         </div>
                                     </div>
-                                    <div class="col-xs-6 col-sm-2">
+                                    <div class="col-xs-6 col-sm-3">
                                         <div class="count-card convenio">
                                             <div class="count-header">
                                                 <i class="ace-icon fa fa-check-circle count-icon"></i> 
-                                                <span class="count-label">Atendimentos Realizados</span>
+                                                <span class="count-label">Atendimentos</span>
                                             </div>
                                             <div class="count-value">{{estatisticas.qt}}</div>
                                         </div>
                                     </div>
-                                     <div class="col-xs-6 col-sm-2">
+                                    <div class="col-xs-6 col-sm-3">
+                                        <div class="count-card liminar">
+                                            <div class="count-header">
+                                                <i class="ace-icon fa fa-times-circle count-icon"></i> 
+                                                <span class="count-label">Cancelados</span>
+                                            </div>
+                                            <div class="count-value">{{estatisticas.qac}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-3">
                                         <div class="count-card particular">
                                             <div class="count-header">
                                                 <i class="ace-icon fa fa-file-text count-icon"></i> 
-                                                <span class="count-label">Atendimentos COM EVOLUÇÃO</span>
+                                                <span class="count-label">Validados</span>
                                             </div>
                                             <div class="count-value">{{estatisticas.qtv}}</div>
                                         </div>
                                     </div>
-                                     <div class="col-xs-6 col-sm-2">
+                                    <div class="col-xs-6 col-sm-3">
                                         <div class="count-card warning">
                                             <div class="count-header">
                                                 <i class="ace-icon fa fa-exclamation-triangle count-icon"></i> 
-                                                <span class="count-label">Atendimentos SEM EVOLUÇÃO</span>
+                                                <span class="count-label">Sem Evolução</span>
                                             </div>
                                             <div class="count-value">{{estatisticas.qtse}}</div>
                                         </div>
                                     </div>
-                                    
-                                    <div class="col-xs-6 col-sm-2">
-                                        <div class="count-card feriado">
-                                            <div class="count-header">
-                                                <i class="ace-icon fa fa-times-circle count-icon"></i> 
-                                                <span class="count-label">Feriados</span>
-                                            </div>
-                                            <div class="count-value">{{estatisticas.qFeriado}}</div>
-                                        </div>
-                                    </div>
-                                     <div class="col-xs-6 col-sm-2">
-                                        <div class="count-card danger">
-                                            <div class="count-header">
-                                                <i class="ace-icon fa fa-times-circle count-icon"></i> 
-                                                <span class="count-label">Faltas Absolutas</span>
-                                            </div>
-                                            <div class="count-value">{{estatisticas.qFaltaAbsoluta}}</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6 col-sm-2">
-                                        <div class="count-card info">
-                                            <div class="count-header">
-                                                <i class="ace-icon fa fa-exclamation-triangle count-icon"></i> 
-                                                <span class="count-label">Atendimentos EXTERNOS AT</span>
-                                            </div>
-                                            <div class="count-value">{{estatisticas.qExternosAT}}</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6 col-sm-2">
+                                    <div class="col-xs-6 col-sm-3">
                                         <div class="count-card danger">
                                             <div class="count-header">
                                                 <i class="ace-icon fa fa-ban count-icon"></i> 
@@ -915,7 +896,7 @@
                                             <div class="count-value">{{estatisticas.qace}}</div>
                                         </div>
                                     </div>
-                                    <div class="col-xs-6 col-sm-2">
+                                    <div class="col-xs-6 col-sm-3">
                                         <div class="count-card orphan">
                                             <div class="count-header">
                                                 <i class="ace-icon fa fa-child count-icon"></i> 
@@ -924,7 +905,7 @@
                                             <div class="count-value">{{estatisticas.atvo}}</div>
                                         </div>
                                     </div>
-                                    <div class="col-xs-6 col-sm-2">
+                                    <div class="col-xs-6 col-sm-3">
                                         <div class="count-card success">
                                             <div class="count-header">
                                                 <i class="ace-icon fa fa-key count-icon"></i> 
@@ -933,7 +914,7 @@
                                             <div class="count-value">{{estatisticas.qtva}}</div>
                                         </div>
                                     </div>
-                                    <div class="col-xs-6 col-sm-2">
+                                    <div class="col-xs-6 col-sm-3">
                                         <div class="count-card lote">
                                             <div class="count-header">
                                                 <i class="ace-icon fa fa-archive count-icon"></i> 
@@ -942,7 +923,7 @@
                                             <div class="count-value">{{estatisticas.qtvL}}</div>
                                         </div>
                                     </div>
-                                    <div class="col-xs-6 col-sm-2">
+                                    <div class="col-xs-6 col-sm-3">
                                         <div class="count-card lote-orfa">
                                             <div class="count-header">
                                                 <i class="ace-icon fa fa-ghost count-icon"></i> 
@@ -1008,17 +989,17 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>Convênio</td>
-                                                        <td>{{resumoCategoria.convenio.qt}}</td>
+                                                        <td>0</td>
                                                         <td>R$ 0,00</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Particular</td>
-                                                        <td>{{resumoCategoria.particular.qt}}</td>
+                                                        <td>0</td>
                                                         <td>R$ 0,00</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Liminar</td>
-                                                        <td>{{resumoCategoria.liminar.qt}}</td>
+                                                        <td>0</td>
                                                         <td>R$ 0,00</td>
                                                     </tr>
                                                 </tbody>
