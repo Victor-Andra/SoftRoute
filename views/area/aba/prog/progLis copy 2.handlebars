@@ -9,10 +9,10 @@
     
     <style>
         /* ============================================
-          SELECT2 - ESTILOS GERAIS (Baseado na view de Atendimentos)
+          SELECT2 - ESTILOS GERAIS
           ============================================ */
         .select2-container { 
-            min-width: 120px !important; 
+            min-width: 100% !important; 
         }
         .select2-container--default .select2-selection--single {
             height: 30px !important; 
@@ -61,72 +61,45 @@
             box-shadow: 0 0 0 2px rgba(33,150,243,0.2) !important;
         }
 
-        /* Largura específica para os selects */
-        #pesquisaBeneid + .select2-container,
-        #pesquisaProgTipoId + .select2-container,
-        #pesquisaStatus + .select2-container {
-            width: 100% !important;
-        }
-
-        /* Responsivo */
-        @media (max-width: 768px) {
-            .select2-container { 
-                width: 100% !important; 
-            }
+        /* Ajuste para botões ficarem na mesma altura dos selects */
+        .btn-alinhado {
+            margin-top: 24px !important; /* Compensa a altura do label + select */
         }
     </style>
 </head>
 
-<body onload="controlaNave();carregaBody();" class="no-skin">
+<body onload="controlaNave();" class="no-skin">
     <div class="main-container ace-save-state" id="main-container">
         <div class="main-content">
             <div class="main-content-inner">
                 {{#compareString flash.sucesso "true"}}
                     <div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
                         <p>
-                            <strong>
-                                <i class="ace-icon fa fa-check"></i>
-                                {{flash.texto}}
-                            </strong>
-                            <button type="button" class="close" onclick="javascript:OcultaMsg()">
-                                <i class="ace-icon fa fa-times"></i>
-                            </button>
+                            <strong><i class="ace-icon fa fa-check"></i> {{flash.texto}}</strong>
+                            <button type="button" class="close" onclick="javascript:OcultaMsg()"><i class="ace-icon fa fa-times"></i></button>
                         </p>
                     </div>
                 {{else}}
                     {{#compareString flash.sucesso "false"}}
                         <div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
                             <p>
-                                <strong>
-                                    <i class="ace-icon fa fa-times"></i>
-                                    {{flash.texto}}
-                                </strong>
-                                <button type="button" class="close" onclick="javascript:OcultaMsg()">
-                                    <i class="ace-icon fa fa-times"></i>
-                                </button>
+                                <strong><i class="ace-icon fa fa-times"></i> {{flash.texto}}</strong>
+                                <button type="button" class="close" onclick="javascript:OcultaMsg()"><i class="ace-icon fa fa-times"></i></button>
                             </p>
                         </div>
                     {{else}}
                         <div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-warning">
                             <p>
-                                <strong>
-                                    <i class="ace-icon fa fa-check"></i>
-                                    {{flash.texto}}
-                                </strong>
-                                <button type="button" class="close" onclick="javascript:OcultaMsg()">
-                                    <i class="ace-icon fa fa-times"></i>
-                                </button>
+                                <strong><i class="ace-icon fa fa-check"></i> {{flash.texto}}</strong>
+                                <button type="button" class="close" onclick="javascript:OcultaMsg()"><i class="ace-icon fa fa-times"></i></button>
                             </p>
                         </div>
                     {{/compareString}}
                 {{/compareString}}
-
+                
                 <div class="breadcrumbs ace-save-state" id="breadcrumbs">
                     <ul class="breadcrumb">
-                        <li>
-                            <i class="ace-icon fa fa-home home-icon"></i>
-                            <a href="#">Home</a>
-                        </li>
+                        <li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
                         <li class="active">Localizar container ABA</li>
                     </ul>
                 </div>
@@ -138,8 +111,7 @@
                 </div>
 
                 {{#each error}}
-                <div class="alert alert-danger">{{texto}}{{error}}</div>
-                {{else}}
+                    <div class="alert alert-danger">{{texto}}{{error}}</div>
                 {{/each}}
 
                 <div class="page-content">
@@ -156,19 +128,19 @@
                                     <input type="text" id="progsetNumEnv" name="progsetNumEnv" value="{{progset.progset_num}}" />
                                     <input type="text" id="usuIdEnv" name="usuIdEnv" value="" />
                                 </div>
-
+                                
                                 <div class="col-xs-12">
                                     <div class="alert alert-warning">
                                         <strong>Localize o Container do Beneficiário</strong><br />
                                         Escolha o Beneficiário para localizar o container para trabalhar com o ABA
-                                        <br />
                                     </div>
                                 </div>
 
-                                <div class="row justify-content-center">
-                                    <!-- Beneficiário -->
-                                    <div class="col-xs-12 col-sm-3 mb-3 px-2">
-                                        <label for="pesquisaBeneid" class="block mb-1">Escolha o Beneficiário</label>
+                                <!-- LINHA ÚNICA DE FILTROS E BOTÕES (Soma 12 colunas no md) -->
+                                <div class="row mb-2">
+                                    <!-- 1. Filtro Beneficiário (3 colunas) -->
+                                    <div class="col-xs-12 col-sm-4 col-md-3 mb-2">
+                                        <label for="pesquisaBeneid" class="block mb-1">Beneficiário</label>
                                         <select name="pesquisaBeneid" id="pesquisaBeneid" class="select2">
                                             <option value="766f69643132333435366964">-</option>
                                             {{#each benes}}
@@ -177,45 +149,42 @@
                                         </select>
                                     </div>
 
-                                    <!-- Programa (Tipo) -->
-                                    <div class="col-xs-12 col-sm-3 mb-3 px-2">
-                                        <label for="pesquisaProgTipoId" class="block mb-1">Programa</label>
-                                        <select name="pesquisaProgTipoId" id="pesquisaProgTipoId" class="select2">
+                                    <!-- 2. Filtro Programa (3 colunas) -->
+                                    <div class="col-xs-12 col-sm-4 col-md-3 mb-2">
+                                        <label for="progTipoId" class="block mb-1">Programa</label>
+                                        <select name="progTipoId" id="progTipoId" class="select2" >
                                             <option value="todos">Todos</option>
                                         </select>
                                     </div>
 
-                                    <!-- Status -->
-                                    <div class="col-xs-12 col-sm-3 mb-3 px-2">
-                                        <label for="pesquisaStatus" class="block mb-1">Status</label>
-                                        <select name="pesquisaStatus" id="pesquisaStatus" class="select2">
-                                            <option value="Todos">Todos</option>
+                                    <!-- 3. Filtro Status (2 colunas) -->
+                                    <div class="col-xs-12 col-sm-4 col-md-2 mb-2">
+                                        <label for="status" class="block mb-1">Status</label>
+                                        <select name="status" id="status" class="select2">
+                                            <option value="todos">Todos</option>
                                             <option value="Aguardando">Aguardando</option>
-                                            <option value="Início">Início</option>
+                                            <option value="Inicio">Início</option>
                                             <option value="Andamento">Andamento</option>
                                             <option value="Pausado">Pausado</option>
-                                            <option value="Manutenção">Manutenção</option>
                                         </select>
                                     </div>
 
-                                    <!-- Botão Pesquisar -->
-                                    <div class="col-xs-12 col-sm-3 mb-3 px-2 text-center">
-                                        <div class="mb-1">
-                                            <span class="label label-sm label-warning">ABA - Filtrar Programas</span>
-                                        </div>
-                                        <button
-                                            name="acaoPesquisarF"
-                                            id="acaoPesquisarF"
-                                            type="submit"
-                                            class="btn btn-xs btn-info btn-block"
-                                        >
-                                            <i class="ace-icon fa fa-search-plus"></i>
-                                            Localizar Container
+                                    <!-- 4. Botão Pesquisar F (2 colunas) -->
+                                    <div class="col-xs-12 col-sm-6 col-md-2 mb-2">
+                                        <button name="acaoPesquisarF" id="acaoPesquisarF" type="submit" class="btn btn-info btn-block btn-alinhado">
+                                            <i class="ace-icon fa fa-search-plus"></i> Localizar
+                                        </button>
+                                    </div>
+
+                                    <!-- 5. Botão Pesquisar M (2 colunas) -->
+                                    <div class="col-xs-12 col-sm-6 col-md-2 mb-2">
+                                        <button name="acaoPesquisarM" id="acaoPesquisarM" type="button" class="btn btn-danger btn-block btn-alinhado">
+                                            <i class="ace-icon fa fa-wrench"></i> Manutenção
                                         </button>
                                     </div>
                                 </div>
 
-                                <hr class="mt-2 mb-3">
+                                <hr class="mt-1 mb-3">
                             </form>
 
                             <!-- PAGE CONTENT BEGINS -->
@@ -235,20 +204,21 @@
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                </div><!-- /.page-content -->
+            </div><!-- /.main-content-inner -->
+        </div><!-- /.main-content -->
+    </div><!-- /.main-container ace-save-state -->
 
+    <!-- basic scripts -->
+    <!--[if !IE]> -->
     <script type="text/javascript">
         if('ontouchstart' in document.documentElement) document.write("<script src='../../../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
     </script>
-
+    <!-- page specific plugin scripts -->
     <script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
-
-   <script type="text/javascript">
+    
+	<script type="text/javascript">
     $(document).ready(function() {
-        // DataTable existente
         $("#dynamic-table1").DataTable({
             "language": { "url": "/js/lang/datatable-pt-br.json" },
             "aaSorting": [],
@@ -261,114 +231,87 @@
             "searching": true,
             "ordering": true,
             "info": true,
-            select: { style: 'multi' }
+            "select": { "style": 'multi' }
         });
 
-        // Inicializa select2 nos novos selects
-        $('#pesquisaBeneid').select2({
-            placeholder: "Selecione o Beneficiário",
-            allowClear: true
-        });
+        $('#pesquisaBeneid').select2({ placeholder: "Selecione o Beneficiario" });
+        $('#progTipoId').select2({ placeholder: "Selecione o Programa" });
+        $('#status').select2({ placeholder: "Selecione o Status" });
 
-        $('#pesquisaProgTipoId').select2({
-            placeholder: "Todos",
-            allowClear: true
-        });
-
-        $('#pesquisaStatus').select2({
-            placeholder: "Todos",
-            allowClear: true
-        });
-
-        // ✅ Dados já serializados pelo backend
-        const progsData = [
-            {{#each progs}}
-            { _id: "{{_id}}", beneId: "{{beneId}}", tipoId: "{{tipoId}}", status: "{{status}}" },
-            {{/each}}
-        ];
-
-        const tiposData = [
-            {{#each progtipos}}
-            { _id: "{{_id}}", nome: "{{nome}}" },
-            {{/each}}
-        ];
-
-        console.log('=== DADOS RECEBIDOS ===');
-        console.log('Progs carregados:', progsData.length);
-        console.log('Tipos carregados:', tiposData.length);
-        if (progsData.length > 0) {
-            console.log('Primeiro programa:', progsData[0]);
-        }
-
-        // ✅ Função para popular o select de programas
-        function popularSelectProgramas(beneId) {
-            const selectProg = $('#pesquisaProgTipoId');
-            
-            // Limpa opções atuais
-            selectProg.empty();
-            selectProg.append('<option value="todos">Todos</option>');
-
-            if (!beneId || beneId === "766f69643132333435366964") {
-                selectProg.trigger('change.select2');
-                return;
-            }
-
-            console.log('=== FILTRANDO PROGRAMAS ===');
-            console.log('Beneficiário selecionado:', beneId);
-
-            // ✅ Filtra programas do beneficiário (comparação de strings)
-            const progsDoBene = progsData.filter(p => p.beneId === beneId);
-            console.log('Programas do beneficiário:', progsDoBene.length);
-            console.log('Programas encontrados:', progsDoBene);
-
-            // ✅ Extrai tipos únicos
-            const tiposUnicos = [...new Set(progsDoBene.map(p => p.tipoId))];
-            console.log('Tipos únicos:', tiposUnicos);
-
-            // Popula o select com os tipos
-            tiposUnicos.forEach(tipoId => {
-                const tipo = tiposData.find(t => t._id === tipoId);
-                if (tipo) {
-                    console.log('Adicionando tipo:', tipo.nome, 'ID:', tipo._id);
-                    selectProg.append(new Option(tipo.nome, tipo._id, false, false));
-                }
-            });
-
-            // Atualiza o select2
-            selectProg.trigger('change.select2');
-        }
-
-        // Evento de mudança do beneficiário
+        // Logica de filtro dinamico de programas (SEM DISABLED)
         $('#pesquisaBeneid').on('change', function() {
             const beneId = $(this).val();
-            console.log('Beneficiário selecionado:', beneId);
-            popularSelectProgramas(beneId);
-        });
-
-        // Evento de submit do formulário
-        $('#formEnv').on('submit', function (event) {
-            const selectedBeneId = $('#pesquisaBeneid').val();
-
-            if (!selectedBeneId || selectedBeneId === "766f69643132333435366964") {
-                alert('Por favor, selecione um beneficiário válido.');
-                event.preventDefault();
-                return;
-            }
-
-            const progTipoId = $('#pesquisaProgTipoId').val() || 'todos';
-            const status = $('#pesquisaStatus').val() || 'Todos';
-
-            console.log('=== FILTROS APLICADOS ===');
-            console.log('  Beneficiário:', selectedBeneId);
-            console.log('  Tipo Programa:', progTipoId);
-            console.log('  Status:', status);
-
-            // ✅ Monta URL com query string (sem encodeURIComponent para evitar problemas)
-            const url = `/menu/area/aba/prog/proglisF/${selectedBeneId}?progTipoId=${progTipoId}&status=${status}`;
-            console.log('URL final:', url);
+            const $progSelect = $('#progTipoId');
             
-            this.action = url;
+            // Limpa e coloca a opcao padrao
+            $progSelect.empty().append('<option value="todos">Todos</option>');
+
+            if (beneId && beneId !== "766f69643132333435366964") {
+                const progsDoBene = dadosProgramas.filter(p => String(p.beneId) === String(beneId));
+                const uniqueTipoIds = [...new Set(progsDoBene.map(p => String(p.tipoId)).filter(id => id !== "" && id !== "undefined"))];
+
+                if (uniqueTipoIds.length > 0) {
+                    const tiposDoBene = uniqueTipoIds.map(tipoIdStr => {
+                        const tipoInfo = dadosTipos.find(t => String(t._id) === String(tipoIdStr));
+                        return { 
+                            id: tipoIdStr, 
+                            nome: tipoInfo ? tipoInfo.nome : 'Nome nao encontrado' 
+                        };
+                    });
+
+                    tiposDoBene.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
+
+                    // SEM DISABLED - apenas popula as opcoes
+                    tiposDoBene.forEach(tipo => {
+                        $progSelect.append(new Option(tipo.nome, tipo.id));
+                    });
+                    $progSelect.trigger('change');
+                }
+            }
         });
+    });
+
+    // Dados injetados pelo backend
+    const dadosProgramas = {{{json progs}}};
+    const dadosTipos = {{{json progtipos}}};
+
+    // Handler do formulario principal (SIMPLIFICADO - SEM DISABLED)
+    document.getElementById('formEnv').addEventListener('submit', function (event) {
+        const selectBene = document.getElementById('pesquisaBeneid');
+        const selectedId = selectBene.value;
+        
+        // Leitura direta dos valores (sem disabled atrapalhando)
+        const progTipoId = $('#progTipoId').val() || 'todos';
+        const status = $('#status').val() || 'todos';
+
+        console.log("=== [FRONTEND] Valores que serao enviados ===");
+        console.log("Beneficiario:", selectedId);
+        console.log("Tipo Programa:", progTipoId);
+        console.log("Status:", status);
+
+        if (!selectedId || selectedId === "766f69643132333435366964") {
+            alert('Por favor, selecione um beneficiario valido.');
+            event.preventDefault();
+            return;
+        }
+
+        this.action = `/menu/area/aba/prog/proglisF/${selectedId}?progTipoId=${progTipoId}&status=${status}`;
+        console.log("URL final:", this.action);
+    });
+
+    // Handler do botao Manutencao
+    document.getElementById('acaoPesquisarM').addEventListener('click', function () {
+        const selectBene = document.getElementById('pesquisaBeneid');
+        const selectedId = selectBene.value;
+
+        if (!selectedId || selectedId === "766f69643132333435366964") {
+            alert('Por favor, selecione um beneficiario valido.');
+            return;
+        }
+
+        const form = document.getElementById('formEnv');
+        form.action = `/menu/area/aba/prog/proglisM/${selectedId}`;
+        form.submit();
     });
 </script>
 </body>

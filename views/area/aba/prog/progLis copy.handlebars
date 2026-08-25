@@ -1,20 +1,81 @@
 <!DOCTYPE html>
-<html lang="pt-br"><head>
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta charset="utf-8">
-		<title>Localizar Container ABA</title>
+<html lang="pt-br">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8">
+    <title>Localizar Container ABA</title>
+    <meta name="description" content="Static &amp; Dynamic Tables">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    
+    <style>
+        /* ============================================
+          SELECT2 - ESTILOS GERAIS (Baseado na view de Atendimentos)
+          ============================================ */
+        .select2-container { 
+            min-width: 120px !important; 
+        }
+        .select2-container--default .select2-selection--single {
+            height: 30px !important; 
+            border: 1px solid #ced4da !important;
+            border-radius: 4px !important; 
+            background: white !important;
+            display: flex !important; 
+            align-items: center !important;
+            padding: 0 8px !important; 
+            font-size: 12px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 28px !important; 
+            right: 5px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 28px !important; 
+            padding-left: 0 !important; 
+            color: #333 !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #999 !important;
+        }
+        .select2-dropdown {
+            border: 1px solid #ced4da !important; 
+            border-radius: 4px !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        }
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            border: 1px solid #ced4da !important; 
+            border-radius: 4px !important;
+            padding: 4px 8px !important; 
+            font-size: 12px !important; 
+            margin: 4px !important;
+        }
+        .select2-container--default .select2-results__option {
+            padding: 6px 10px !important; 
+            font-size: 12px !important;
+        }
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: #2196f3 !important; 
+            color: white !important;
+        }
+        .select2-container--default.select2-container--focus .select2-selection--single {
+            border-color: #2196f3 !important;
+            box-shadow: 0 0 0 2px rgba(33,150,243,0.2) !important;
+        }
 
-		<meta name="description" content="Static &amp; Dynamic Tables">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        /* Largura específica para os selects */
+        #pesquisaBeneid + .select2-container,
+        #pesquisaProgTipoId + .select2-container,
+        #pesquisaStatus + .select2-container {
+            width: 100% !important;
+        }
 
-		<script>//Filtro para localizar
-				
-				function carregaBody(){
-					
-				}
-		</script>
-		
-	</head>
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .select2-container { 
+                width: 100% !important; 
+            }
+        }
+    </style>
+</head>
 
 	<body onload="controlaNave();carregaBody();" class="no-skin" class="no-skin">
 		<div class="main-container ace-save-state" id="main-container">

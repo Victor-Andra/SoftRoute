@@ -783,6 +783,10 @@
 																												{{else}}
 																												{{#ifEqual this.progset_status "Meta"}}
 																													<span class="badge badge-danger">{{this.progset_status}}</span>
+																												{{else}}
+																												{{#ifEqual this.progset_status "Manutenção"}}
+																													<span class="badge badge-danger">{{this.progset_status}}</span>
+																												{{/ifEqual}}
 																												{{/ifEqual}}
 																												{{/ifEqual}}
 																												{{/ifEqual}}

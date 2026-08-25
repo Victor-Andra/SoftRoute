@@ -917,7 +917,7 @@ console.log("res: "+res);
             }
         }
     },
-    listaProgfiltro: async (req, beneId, res, flash) => {
+    semnovosfiltros_listaProgfiltro: async (req, beneId, res, flash) => {
         let db = req.cookies['preferredDb'];
         Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
@@ -1080,6 +1080,169 @@ console.log("res: "+res);
                     req.flash("error_message", "Houve um erro ao listar!");
                     res.redirect('admin/erro');
                 });
+            }
+        }
+    },
+
+       // Certifique-se de que o mongoose está importado no topo do seu arquivo controller:
+    // const mongoose = require('mongoose');
+
+    listaProgfiltro: async (req, beneId, res, flash) => {
+        let db = req.cookies['preferredDb'];
+        let Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
+        let Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        let Progset = getModel(db, 'tb_progset', progsetClass.ProgsetSchema);
+        let Progdica = getModel(db, 'tb_progdica', progdicaClass.ProgdicaSchema);
+        let Prognivel = getModel(db, 'tb_prognivel', prognivelClass.PrognivelSchema);
+        let Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
+        let Folreg = getModel(db, 'tb_folreg', folregClass.FolregSchema);
+        let Notasup = getModel(db, 'tb_notasup', notasupClass.NotasupSchema);
+        let Notasupobs = getModel(db, 'tb_notasupobs', notasupobsClass.notasupobsSchema);
+        let Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); 
+
+        flash = flash || {};
+        flash.sucesso = "true";
+
+        const perfilAtual = req.cookies['lvlUsu'];
+        const dataAtual = new Date();
+        const idBene = beneId || req.params.id;
+
+        // 1. Normaliza os filtros recebidos da URL
+        const progTipoId = (req.query.progTipoId || 'todos').trim().toLowerCase();
+        const status = (req.query.status || 'todos').trim().toLowerCase();
+
+        console.log("=== [FILTRO] Parâmetros recebidos ===");
+        console.log("Beneficiário ID:", idBene);
+        console.log("Tipo Programa:", progTipoId);
+        console.log("Status:", status);
+
+        let dados = {};
+
+        try {
+            const bene = await Bene.findOne({ _id: idBene, bene_status: "Ativo", bene_aba: "Sim" });
+
+            if (!bene) {
+                flash.sucesso = "false";
+                flash.texto = "Beneficiário não encontrado ou inativo!";
+                throw new Error("Beneficiário não encontrado");
+            }
+
+            const dn = new Date(bene.bene_datanasc);
+            bene.datanasc = fncGeral.formatarData(dn);
+            bene.idade = fncGeral.calcularIdade(dn);
+
+            // 2. Constrói o filtro base
+            let queryFilter = { prog_beneid: bene._id };
+
+            // 3. Aplica filtro de STATUS
+            if (status === 'todos') {
+                queryFilter.prog_status = { $nin: ["Adquirido", "Manutenção"] };
+            } else {
+                const statusFormatado = status.charAt(0).toUpperCase() + status.slice(1);
+                queryFilter.prog_status = statusFormatado;
+            }
+
+            // 4. Aplica filtro de TIPO DE PROGRAMA (Correção robusta com $in e new ObjectId)
+            if (progTipoId !== 'todos') {
+                if (mongoose.Types.ObjectId.isValid(progTipoId)) {
+                    queryFilter.prog_tipo = {
+                        $in: [
+                            new mongoose.Types.ObjectId(progTipoId),
+                            progTipoId
+                        ]
+                    };
+                    console.log("✅ Filtro de Tipo aplicado com sucesso ($in ObjectId e String):", progTipoId);
+                } else {
+                    queryFilter.prog_tipo = progTipoId;
+                    console.log("⚠️ Filtro de Tipo aplicado apenas como String:", progTipoId);
+                }
+            }
+
+            console.log("=== [FILTRO] Query final enviada ao MongoDB ===");
+            console.log(JSON.stringify(queryFilter, null, 2));
+
+            // 5. Executa as buscas em paralelo
+            const [
+                prog, notasup, progdica, progtipo,
+                prognivel, progset, folreg, usuario
+            ] = await Promise.all([
+                Prog.find(queryFilter),
+                Notasup.find({ notasup_beneid: bene._id }),
+                Progdica.find(),
+                Progtipo.find(),
+                Prognivel.find(),
+                Progset.find(),
+                Folreg.find(),
+                Usuario.find()
+            ]);
+
+            console.log("=== [FILTRO] Resultado ===");
+            console.log("Programas encontrados após filtro:", prog.length);
+
+            // 6. Ordenações
+            progdica.sort(fncGeral.ordenarPorNome('progdica_nome'));
+            progtipo.sort(fncGeral.ordenarPorNome('progtipo_nome'));
+            prognivel.sort(fncGeral.ordenarPorNome('prognivel_nome'));
+            usuario.sort(fncGeral.ordenarPorNome('usuario_nome'));
+
+            const notasupobs = await Notasupobs.find({
+                notaSupObs_notasupId: { $in: notasup.map(n => n._id) }
+            });
+
+            // 7. Calcula total de estímulos
+            prog.forEach(p => {
+                p.datacad = fncGeral.formatarData(new Date(p.prog_datacad));
+                p.dataedi = fncGeral.formatarData(new Date(p.prog_dataedi));
+
+                p.prog_total_estimulos = progset
+                    .filter(ps => String(ps.progset_progid) === String(p._id))
+                    .reduce((acc, ps) => acc + (parseInt(ps.progset_qtest) || 0), 0);
+            });
+
+            dados = { bene, prog, notasup, notasupobs, progdica, progtipo, prognivel, progset, folreg, usuario };
+
+            // 8. Renderiza a view filtrada
+            res.render('area/aba/prog/progLisfiltrado', {
+                progs: dados.prog,
+                notasups: dados.notasup,
+                notasupobss: dados.notasupobs,
+                progsets: dados.progset,
+                usuarios: dados.usuario,
+                benes: [dados.bene],
+                perfilAtual,
+                flash,
+                progdicas: dados.progdica,
+                progtipos: dados.progtipo,
+                prognivels: dados.prognivel,
+                dataAtual,
+                folregs: dados.folreg
+            });
+
+        } catch (err) {
+            console.error("❌ Erro no fluxo de filtro:", err);
+            flash.sucesso = "false";
+            flash.texto = "Houve um erro ao listar os dados!";
+            
+            // Fallback
+            try {
+                const beneLista = await Bene.find({ bene_status: "Ativo", bene_nome: { $not: /\./ }, bene_aba: "Sim" });
+                beneLista.sort((a, b) => {
+                    const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                    const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                    return nomeA.localeCompare(nomeB);
+                });
+
+                res.render('area/aba/prog/progLis', {
+                    benes: beneLista,
+                    progs: [],
+                    progtipos: [],
+                    perfilAtual: req.cookies['lvlUsu'],
+                    flash,
+                    dataAtual: new Date(),
+                });
+            } catch (fallbackErr) {
+                req.flash("error_message", "Erro crítico ao recuperar a lista!");
+                res.redirect('/admin/erro');
             }
         }
     },
@@ -1304,7 +1467,7 @@ console.log("res: "+res);
             res.redirect('admin/erro');
         }
     },
-    listaProg: async (req, res, resposta) => {
+    listaProg_SEMFILTRONOVO: async (req, res, resposta) => {
         let db = req.cookies['preferredDb'];
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
         Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
@@ -1375,7 +1538,63 @@ console.log("res: "+res);
             res.redirect('admin/erro');
         }
     },
+listaProg: async (req, res, resposta) => {
+    let db = req.cookies['preferredDb'];
+    let Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+    let Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
+    let Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
 
+    let flash = new Resposta();
+    let perfilAtual = req.cookies['lvlUsu'];
+    let dataAtual = new Date();
+
+    try {
+        const [bene, progs, progtipos] = await Promise.all([
+            Bene.find({ bene_status: "Ativo", bene_nome: { $not: /\./ }, bene_aba: "Sim" }),
+            Prog.find(),
+            Progtipo.find()
+        ]);
+
+        // Ordena beneficiários por nome
+        bene.sort((a, b) => {
+            const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            return nomeA.localeCompare(nomeB);
+        });
+
+        // Ordena tipos por nome (garante ordem alfabética base)
+        progtipos.sort((a, b) => {
+            const nomeA = a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            const nomeB = b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            return nomeA.localeCompare(nomeB);
+        });
+
+        const progsSerializados = progs.map(p => ({
+            _id: p._id.toString(),
+            beneId: p.prog_beneid ? p.prog_beneid.toString() : '',
+            tipoId: p.prog_tipo ? p.prog_tipo.toString() : '',
+            status: p.prog_status || ''
+        }));
+
+        const tiposSerializados = progtipos.map(t => ({
+            _id: t._id.toString(),
+            nome: t.progtipo_nome
+        }));
+
+        res.render('area/aba/prog/progLis', {
+            benes: bene,
+            progs: progsSerializados,
+            progtipos: tiposSerializados,
+            perfilAtual,
+            flash,
+            dataAtual,
+        });
+    } catch (err) {
+        console.log(err);
+        req.flash("error_message", "Houve um erro ao listar!");
+        res.redirect('admin/erro');
+    }
+},
     carregaProg(req,res){
         let db = req.cookies['preferredDb'];
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)

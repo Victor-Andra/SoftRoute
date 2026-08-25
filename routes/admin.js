@@ -3019,6 +3019,15 @@ router.post('/atendimento/tabdimConvBeneTeraAtendvalFiltro', fncGeral.IsAuthenti
     router.post('/atendimento/relatendbenesecs', fncGeral.IsAuthenticated,(req,res) =>{
         fncAtend.relAtendimentoBenesecFiltro(req,res);
     })
+
+    //Emite uma relação de todos os atendimentos realizados pelo beneficiário num determinado período de tempo e com sessões de terapia 05/12/2025.
+    router.get('/atendimento/relatendbenesec_novo', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBenessecNovo(req,res);
+    })
+    router.post('/atendimento/relatendbenesecs_novo', fncGeral.IsAuthenticated,(req,res) =>{
+        fncAtend.relAtendimentoBenesecFiltroNovo(req,res);
+    })
+
 //Relatório Consolidado de Atendimentos por Beneficiário.
 //Emite uma consolidado de todos os atendimentos realizados com Valores pelo beneficiário num determinado período de tempo.
     router.get('/atendimento/relatendbenecons', fncGeral.IsAuthenticated,(req,res) =>{
