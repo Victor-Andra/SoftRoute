@@ -401,7 +401,7 @@
 														</div>
 														<!-- Campo de evolução -->
 														<div id="divEvolucao">
-															<div class="col-xs-12">													
+															<div class="col-sm-6">													
 																<label>Evolução</label>
 																<div class="form-group">
 																	<div class="col-sm-12">
@@ -420,36 +420,15 @@
 																</label>
 															</div>
 														</div>
-														
 														<div class="col-xs-12">
-															<div class="alert alert-danger">
-																<button type="button" class="close" data-dismiss="alert">
-																	<i class="ace-icon fa fa-times"></i>
-																</button>
-																<strong>Observação: </strong>Foi realizado upgrade nessa tela para recuperar rascunho nos seguintes casos:<br>
-																Perda de Conexão Wireless;&nbsp;
-																Perda de Sinal 3G/4G/5G;&nbsp;
-																Instabilizade no Servidor;&nbsp;
-																Volta acidental sem salvar.&nbsp;<br>
-																Se algum desses casos ocorrer, aparecerá um novo botão de cor azul, e se clicado recupera o rascunho perdido da evolução.<br>
-																Testem e me passem o FeedBack, Atenciosamente Wagner Cintra.
-																<br>
-															</div>
 															<button class="btn btn-danger" name="acaoSalvar" id="acaoSalvar" type="submit">
 																<i class="ace-icon fa fa-check bigger-110"></i>
 																Salvar
 															</button>
 															&nbsp; &nbsp; &nbsp;
-															<!-- Botão Voltar ajustado na etapa anterior -->
-															<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="button" onclick="verificarSaida(event)">
+															<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
 																<i class="ace-icon fa fa-undo bigger-110"></i>
 																Voltar
-															</button>
-															&nbsp; &nbsp; &nbsp;
-															<!-- Botão de Recuperar (inicia oculto) -->
-															<button class="btn btn-info" id="btnRecuperarRascunho" type="button" style="display: none;" onclick="recuperarRascunho()">
-																<i class="ace-icon fa fa-undo bigger-110"></i>
-																Recuperar Rascunho
 															</button>
 														</div>
 													</div>
@@ -545,7 +524,7 @@
 																</div>
 															</div>
 														</div><!-- /.span -->
-														<div class="col-xs-12 col-sm-6">
+														<div class="col-xs-12 col-sm-2">
 															<label>Convênio</label>
 															<div class="form-group"  >
 																<div class="col-sm-6" style="width: 500px;">
@@ -563,7 +542,7 @@
 														</div><!-- /.span -->
 													</div>
 													<div class="row">
-														<div class="col-xs-12 col-sm-2">
+														<div class="col-xs-6">
 															<label>Terapeuta</label>
 															<div class="form-group">
 																<div class="col-sm-4" style="width: 500px;">
@@ -575,7 +554,7 @@
 																</div>
 															</div>												
 														</div>
-														<div class="col-xs-12 col-sm-2">													
+														<div class="col-xs-6">													
 															<label>Terapia</label>
 															<div class="form-group">
 																<div class="col-sm-4" style="width: 600px;">
@@ -589,7 +568,7 @@
 														</div>
 													</div>
 													<div class="row">
-														<div class="col-xs-12 col-sm-2">
+														<div class="col-xs-6">
 															<label>Local</label>
 															<div class="form-group">
 																<div class="col-sm-4" style="width: 300px;">
@@ -694,38 +673,6 @@
 						<button id="btnCancelarModal" class="btn btn-default btn-sm" type="button" data-dismiss="modal">
 							<i class="ace-icon fa fa-ban"></i>
 							Cancelar
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- Modal de confirmação para Saída sem Salvar -->
-		<div id="modalConfirmarSaida" class="modal fade" tabindex="-1" role="dialog">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-							<i class="ace-icon fa fa-times"></i>
-						</button>
-						<h4 class="modal-title text-left">
-							<i class="ace-icon fa fa-exclamation-triangle orange"></i>
-							Atenção
-						</h4>
-					</div>
-					<div class="modal-body text-left">
-						<p class="blue" style="text-align: left; margin: 0; padding: 5px 0;">
-							Existem alterações na evolução que ainda não foram salvas.<br>
-							<b>Deseja realmente sair e perder essas alterações?</b>
-						</p>
-					</div>
-					<div class="modal-footer text-left" style="text-align: left;">
-						<button id="btnSairSemSalvar" class="btn btn-danger btn-sm" type="button">
-							<i class="ace-icon fa fa-times"></i>
-							Sim, sair e perder alterações
-						</button>
-						<button id="btnContinuarEditando" class="btn btn-success btn-sm" type="button" data-dismiss="modal">
-							<i class="ace-icon fa fa-ban"></i>
-							Não, continuar editando
 						</button>
 					</div>
 				</div>
@@ -859,150 +806,6 @@
 					controlaNave();
 				}
 			});
-		</script>
-		
-		<script type="text/javascript">
-			// === CONTROLE DE SAÍDA SEGURA (VOLTAR) + AUTO-SAVE E RECUPERAÇÃO ===
-			(function(){
-				console.log("[Saida/AutoSave] Script carregado com sucesso");
-				function $(id){ return document.getElementById(id); }
-
-				var txtEvolucao = $('agendaEvolucao');
-				var txtOriginal = $('agendaEvolucaoEdi');
-				var btnRecuperar = $('btnRecuperarRascunho');
-				var form = document.querySelector('form[action="/menu/agenda/evolucao"]');
-				var modalSaida = $('modalConfirmarSaida');
-				var rotaBase = "/menu/agenda/lisPessoal";
-				
-				var idAgendamento = $('id') ? $('id').value : 'sem_id';
-				var storageKey = 'rascunho_evolucao_' + idAgendamento;
-
-				// --- FUNÇÕES DE AUTO-SAVE ---
-				function houveAlteracao() {
-					var atual = (txtEvolucao ? txtEvolucao.value : '').trim();
-					var original = (txtOriginal ? txtOriginal.value : '').trim();
-					return atual !== original;
-				}
-
-				function autoSalvarRascunho() {
-					if (txtEvolucao && txtEvolucao.value.trim() !== '') {
-						localStorage.setItem(storageKey, txtEvolucao.value);
-					} else {
-						localStorage.removeItem(storageKey);
-					}
-				}
-
-				window.recuperarRascunho = function() {
-					var rascunho = localStorage.getItem(storageKey);
-					if (rascunho !== null) {
-						txtEvolucao.value = rascunho;
-						btnRecuperar.style.display = 'none';
-						txtEvolucao.dispatchEvent(new Event('input')); 
-					}
-				};
-
-				function verificarRascunhoAoCarregar() {
-					var rascunho = localStorage.getItem(storageKey);
-					var valorBanco = txtOriginal ? txtOriginal.value.trim() : '';
-					var valorAtual = txtEvolucao ? txtEvolucao.value.trim() : '';
-
-					if (rascunho && rascunho !== valorBanco && rascunho !== valorAtual) {
-						btnRecuperar.style.display = 'inline-block';
-					}
-				}
-
-				function limparRascunhoNoSucesso() {
-					localStorage.removeItem(storageKey);
-				}
-
-				// --- FUNÇÕES DO MODAL DE SAÍDA ---
-				function initModalSaida(){
-					if(window.jQuery && jQuery.fn.modal && modalSaida){
-						jQuery(modalSaida).modal({show: false, backdrop: 'static', keyboard: false});
-					}
-				}
-
-				function showModalSaida(){
-					if(window.jQuery && jQuery.fn.modal && modalSaida){
-						jQuery(modalSaida).modal('show');
-					} else if (modalSaida) {
-						modalSaida.style.display = 'block';
-					}
-				}
-
-				function hideModalSaida(){
-					if(window.jQuery && jQuery.fn.modal && modalSaida){
-						jQuery(modalSaida).modal('hide');
-					} else if (modalSaida) {
-						modalSaida.style.display = 'none';
-					}
-				}
-
-				// Função global chamada pelo onclick do botão Voltar
-				window.verificarSaida = function(e){
-					console.log("[Saida] verificarSaida chamado");
-					if(e) e.preventDefault();
-					
-					if(houveAlteracao()){
-						console.log("[Saida] Mostrando modal de saída");
-						showModalSaida();
-					} else {
-						console.log("[Saida] Sem alteração, redirecionando direto");
-						executarRedirecionamento();
-					}
-				};
-
-				function executarRedirecionamento(){
-					console.log("[Saida] Redirecionando para:", rotaBase);
-					try {
-						window.location.href = rotaBase;
-					} catch(err) {
-						window.location = rotaBase;
-					}
-				}
-
-				// --- BINDING DOS EVENTOS ---
-				if (txtEvolucao) {
-					txtEvolucao.addEventListener('input', autoSalvarRascunho);
-				}
-
-				if (form) {
-					form.addEventListener('submit', function() {
-						limparRascunhoNoSucesso();
-					}, true);
-				}
-
-				// Proteção de navegação do navegador (F5, fechar aba, botão voltar do browser)
-				window.addEventListener('beforeunload', function (e) {
-					if (houveAlteracao()) {
-						e.preventDefault();
-						e.returnValue = 'Você tem alterações não salvas na evolução. Deseja realmente sair?';
-					}
-				});
-
-				// Inicialização e Bind dos botões do modal
-				document.addEventListener("DOMContentLoaded", function(){
-					verificarRascunhoAoCarregar();
-					initModalSaida();
-
-					var btnSair = $('btnSairSemSalvar');
-					var btnContinuar = $('btnContinuarEditando');
-
-					if(btnSair){
-						btnSair.addEventListener('click', function(){
-							hideModalSaida();
-							executarRedirecionamento();
-						});
-					}
-
-					if(btnContinuar){
-						btnContinuar.addEventListener('click', function(){
-							hideModalSaida();
-						});
-					}
-				});
-
-			})();
 		</script>
 	</body>
 </html>

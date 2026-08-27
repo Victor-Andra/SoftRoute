@@ -4,21 +4,77 @@
 		<title>Agendamentos</title>
 		<style>
 			/* Modal responsivo para mobile/tablet - Ace Admin */
-			@media (max-width: 767px) {
-				.modal-dialog { width: 95% !important; margin: 10px auto !important; }
-				.modal-title { font-size: 16px !important; line-height: 1.4 !important; }
-				.modal-body p { font-size: 14px !important; line-height: 1.5 !important; }
-				.modal-footer { display: flex !important; flex-direction: column !important; gap: 8px !important; padding: 10px 15px !important; }
-				.modal-footer .btn { width: 100% !important; min-height: 44px !important; font-size: 14px !important; text-align: left !important; padding: 10px 15px !important; }
-				.modal-footer .btn i { margin-right: 8px !important; width: 20px !important; text-align: center; }
-			}
-			@media (min-width: 768px) and (max-width: 991px) {
-				.modal-dialog { width: 90% !important; max-width: 600px !important; }
-				.modal-footer .btn { min-height: 38px; padding: 6px 12px; }
-			}
-			.modal-content .text-left, .modal-content p, .modal-content h4 { text-align: left !important; }
-			.modal-body { padding: 15px !important; }
-			.modal-footer { padding: 10px 15px 15px !important; border-top: 1px solid #e5e5e5; }
+@media (max-width: 767px) {
+    /* Modal ocupa quase toda a tela em mobile */
+    .modal-dialog {
+        width: 95% !important;
+        margin: 10px auto !important;
+    }
+    
+    /* Títulos e textos com tamanho legível */
+    .modal-title {
+        font-size: 16px !important;
+        line-height: 1.4 !important;
+    }
+    
+    .modal-body p {
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Botões em coluna, tamanho maior para toque */
+    .modal-footer {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        padding: 10px 15px !important;
+    }
+    
+    .modal-footer .btn {
+        width: 100% !important;
+        min-height: 44px !important; /* Área de toque mínima para mobile */
+        font-size: 14px !important;
+        text-align: left !important;
+        padding: 10px 15px !important;
+    }
+    
+    /* Ícones dos botões com espaçamento adequado */
+    .modal-footer .btn i {
+        margin-right: 8px !important;
+        width: 20px !important;
+        text-align: center;
+    }
+}
+
+/* Tablet: ajuste intermediário */
+@media (min-width: 768px) and (max-width: 991px) {
+    .modal-dialog {
+        width: 90% !important;
+        max-width: 600px !important;
+    }
+    
+    .modal-footer .btn {
+        min-height: 38px;
+        padding: 6px 12px;
+    }
+}
+
+/* Garante alinhamento à esquerda em todos os elementos do modal */
+.modal-content .text-left,
+.modal-content p,
+.modal-content h4 {
+    text-align: left !important;
+}
+
+/* Remove margens/paddings indesejados do Ace Admin no mobile */
+.modal-body {
+    padding: 15px !important;
+}
+
+.modal-footer {
+    padding: 10px 15px 15px !important;
+    border-top: 1px solid #e5e5e5;
+}
 		</style>
 		<script type="text/javascript">
 			function selectConv(){
@@ -55,6 +111,9 @@
 				if (document.getElementById("isAgendaTerapeuta").value == 'true'){
 					document.getElementById("divEvolucao").style = '';
 				}
+				document.getElementById('acaoCancelar').addEventListener('click', function() {
+					window.history.back();
+				});
 			}
 			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
@@ -102,48 +161,67 @@
 					{{#compareString flash.sucesso "true"}}
 						<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-block alert-success">
 							<p>
-								<strong><i class="ace-icon fa fa-check"></i> {{flash.texto}}</strong>
-								<button type="button" class="close" onclick="javascript:OcultaMsg()"><i class="ace-icon fa fa-times"></i></button>
+								<strong>
+									<i class="ace-icon fa fa-check"></i>
+									{{flash.texto}}
+								</strong>
+								<button type="button" class="close" onclick="javascript:OcultaMsg()">
+									<i class="ace-icon fa fa-times"></i>
+								</button>
 							</p>
 						</div>
+						<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-success">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 					{{else}}
 						{{#compareString flash.sucesso "false"}}
 							<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">
 								<p>
-									<strong><i class="ace-icon fa fa-times"></i> {{flash.texto}}</strong>
-									<button type="button" class="close" onclick="javascript:OcultaMsg()"><i class="ace-icon fa fa-times"></i></button>
+									<strong>
+										<i class="ace-icon fa fa-times"></i>
+										{{flash.texto}}
+									</strong>
+									<button type="button" class="close" onclick="javascript:OcultaMsg()">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
 								</p>
 							</div>
+							<!--<div id="alertMsgFlash" name="alertMsgFlash" class="alert alert-danger">{{flash.texto}}<button onclick="javascript:OcultaMsg()">X</button></div>-->
 						{{else}}
 						{{/compareString}}
 					{{/compareString}}
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
 						<ul class="breadcrumb">
-							<li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
 							<li class="active">Evolução do atendimento pelos supervisores.</li>
-						</ul>
+						</ul><!-- /.breadcrumb -->
 					</div>
 					<div class="row">
 						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
 							<form class="form-horizontal" role="form" action="/menu/agenda/evolucao" method="POST">
-								<div class="col-sm-12">
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
 									<div class="widget-box">
 										<div class="widget-header">
 											<h4 class="widget-title">Evolução e atendimento</h4>
 											<span class="widget-toolbar">
-												<a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
-												<a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
 											</span>
 										</div>
 										<div class="widget-body">
 											<div class="widget-main">
 												<div class="row">
 													<div id="divEvolucao">
-														<div class="col-sm-6">														
+														<div class="col-sm-6">													
 															<label> Evolução</label>
 															<div class="form-group">
 																<div class="col-sm-12">
-																	<!-- ID ÚNICO E CORRETO MANTIDO AQUI -->
 																	<input id="agendaEvolucaoEdi" name="agendaEvolucaoEdi" hidden value="{{agenda.agenda_evolucao}}" />
 																	<textarea rows="4" id="agendaEvolucao" name="agendaEvolucao" placeholder="" class="form-control">{{agenda.agenda_evolucao}}</textarea>
 																</div>
@@ -164,21 +242,21 @@
 												<div class="form-actions">
 													<div class="col-md-offset-3 col-md-9" style="align-items: center;">
 														<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
-															<i class="ace-icon fa fa-check bigger-110"></i> Salvar
+															<i class="ace-icon fa fa-check bigger-110"></i>
+															Salvar
 														</button>
 														&nbsp; &nbsp; &nbsp;
-														<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="button" onclick="verificarSaida(event)">
-															<i class="ace-icon fa fa-undo bigger-110"></i> Voltar
-														</button>
-														&nbsp; &nbsp; &nbsp;
-														<button class="btn btn-info" id="btnRecuperarRascunho" type="button" style="display: none;" onclick="recuperarRascunho()">
-															<i class="ace-icon fa fa-undo bigger-110"></i> Recuperar Rascunho
-														</button>
+														<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
+																<i class="ace-icon fa fa-undo bigger-110"></i>
+																Voltar
+															</button>
 													</div>
 												</div>
 												<hr>
 												<div class="alert alert-warning">
-													<button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>
+													<button type="button" class="close" data-dismiss="alert">
+														<i class="ace-icon fa fa-times"></i>
+													</button>
 													Informações do agendamento.<br>
 												</div>
 												<div class="row">
@@ -209,7 +287,9 @@
 													<div class="col-xs-12">
 														<label>Beneficiário</label>
 														<div class="hidden" class="col-sm-5">
-															<div class="row" aria-hidden="true">
+
+															<!--Roberta não quer que vejam isso -->
+															<div class="row"  aria-hidden="true">
 																<div class="col-xs-12 col-sm-6">
 																	<label for="id-date-picker-1">Origem Agendamento</label>
 																	<div class="row">
@@ -223,10 +303,10 @@
 																		</div>
 																	</div>
 																</div>
-																<div class="col-xs-12 col-sm-2">
+																<div class="col-xs-12 col-sm-2"  >
 																	<label for="id-date-picker-1">Categoria</label>
 																	<div class="form-group">
-																		<div class="col-sm-8">
+																		<div class="col-sm-8" >
 																			<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" id="agendaCateg" name="agendaCateg" class="select2" data-placeholder="Escolha a opção..." onload="javascript:ajustaOption()">
 																				<option id="Apoio" value="Apoio">Apoio</option>
 																				<option id="Extra" value="Extra">Extra</option>
@@ -250,9 +330,9 @@
 															{{/each}}
 															<input value="X" id="X" name="refAgendaConv" />
 														</div>
-														<div class="form-group">
+														<div class="form-group" >
 															<div class="col-sm-5">
-																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaBeneid" id="agendaBeneid" class="select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaBeneid" id="agendaBeneid" class="select" data-placeholder="Escolha..."  onchange="javascript:selectConv()">
 																	{{#each benes}}
 																		<option value="{{_id}}">{{bene_nome}}</option>
 																	{{/each}}
@@ -260,11 +340,11 @@
 															</div>
 														</div>
 													</div>
-													<div class="col-xs-12 col-sm-2 hidden">
+													<div class="col-xs-12 col-sm-2" class="hidden">
 														<label>Convênio</label>
-														<div class="form-group">
+														<div class="form-group"  >
 															<div class="col-sm-6" style="width: 500px;">
-																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid" id="agendaConvid" class="select" data-placeholder="Escolha...">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaConvid"  id="agendaConvid" class="select" data-placeholder="Escolha..." >
 																	{{#each benes}}
 																		{{#each ../convs}}
 																			{{#ifEqual ../bene_convid _id}}
@@ -282,7 +362,7 @@
 														<label>Terapeuta</label>
 														<div class="form-group">
 															<div class="col-sm-4">
-																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaUsuid" id="agendaUsuid" class="select" data-placeholder="Escolha...">
+																<select style="pointer-events: none;touch-action: none;" tabindex="-1" aria-disabled="true" name="agendaUsuid" id="agendaUsuid" class="select" data-placeholder="Escolha..." >
 																	{{#each terapeutas}}
 																		<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
@@ -292,7 +372,7 @@
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-6">														
+													<div class="col-xs-6">													
 														<label>Terapia</label>
 														<div class="form-group">
 															<div class="col-sm-6">
@@ -306,7 +386,7 @@
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-xs-6">														
+													<div class="col-xs-6">													
 														<label>Local</label>
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 300px;">
@@ -320,7 +400,7 @@
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-sm-12">														
+													<div class="col-sm-12">													
 														<label> Observação da agenda</label>
 														<div class="form-group">
 															<div class="col-sm-12">
@@ -328,13 +408,21 @@
 															</div>
 														</div>
 													</div>
+														<!--
+														<label class="pos-rel">
+															<input type="checkbox" name="agendaMigrado" id="agendaMigrado" value="{{agenda.agenda_migrado}}" onchange="javascript:alteraMigrado()" />
+															Realizado? 
+														</label>
+														-->
 												</div>
+												
 											</div>
 										</div>
 									</div>
 								</div>
 								
 								<div class="hidden">
+									<input id="agendaEvolucaoEdi" name="agendaEvolucaoEdi" value="{{agenda.agenda_evolucao}}" />
 									<input id="agendaSelamento" name="agendaSelamento" value="{{selo}}" />
 									<input id="isAgendaTerapeuta" name="isAgendaTerapeuta" value="{{isAgendaTerapeuta}}" />
 									<input id="id" name="id" value="{{agenda._id}}" />
@@ -357,50 +445,47 @@
 									<input id="atendTipoPessoa" name="atendTipoPessoa" value="{{filtroTela.tipoPessoa}}" />
 									<input id="atendBeneficiario" name="atendBeneficiario" value="{{filtroTela.atendBeneficiario}}" />
 									<input id="atendTerapeuta" name="atendTerapeuta" value="{{filtroTela.atendTerapeuta}}" />
-									<!-- REMOVIDO: Input duplicado de agendaEvolucaoEdi que estava aqui e causava o bug -->
 								</div>
+								
 								<hr>
+								
 							</form>
-						</div>
-					</div>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
 				</div>
-			</div>
-		</div>
-
-		<!-- Modal de confirmação para Evolução não finalizada -->
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+			<!-- Modal de confirmação para Evolução não finalizada -->
 		<div id="modalEvolucaoNaoFinalizada" class="modal fade" tabindex="-1" role="dialog">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><i class="ace-icon fa fa-times"></i></button>
-						<h4 class="modal-title text-left"><i class="ace-icon fa fa-exclamation-triangle orange"></i> Atenção</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+							<i class="ace-icon fa fa-times"></i>
+						</button>
+						<h4 class="modal-title text-left">
+							<i class="ace-icon fa fa-exclamation-triangle orange"></i>
+							Atenção
+						</h4>
 					</div>
 					<div class="modal-body text-left">
-						<p class="blue" style="text-align: left; margin: 0; padding: 5px 0;">Você tentou salvar a evolução sem marcar a <b>Evolução como finalizada</b>. O que deseja fazer?</p>
+						<p class="blue" style="text-align: left; margin: 0; padding: 5px 0;">
+							Você tentou salvar a evolução sem marcar a <b>Evolução como finalizada</b>. O que deseja fazer?
+						</p>
 					</div>
 					<div class="modal-footer text-left" style="text-align: left;">
-						<button id="btnMarcarSalvar" class="btn btn-success btn-sm" type="button"><i class="ace-icon fa fa-check"></i> Marcar e salvar</button>
-						<button id="btnSalvarSemMarcar" class="btn btn-danger btn-sm" type="button"><i class="ace-icon fa fa-times"></i> Não marcar, irei editar mais tarde!</button>
-						<button id="btnCancelarModal" class="btn btn-default btn-sm" type="button" data-dismiss="modal"><i class="ace-icon fa fa-ban"></i> Cancelar</button>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Modal de confirmação para Saída sem Salvar -->
-		<div id="modalConfirmarSaida" class="modal fade" tabindex="-1" role="dialog">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><i class="ace-icon fa fa-times"></i></button>
-						<h4 class="modal-title text-left"><i class="ace-icon fa fa-exclamation-triangle orange"></i> Atenção</h4>
-					</div>
-					<div class="modal-body text-left">
-						<p class="blue" style="text-align: left; margin: 0; padding: 5px 0;">Existem alterações na evolução que ainda não foram salvas.<br><b>Deseja realmente sair e perder essas alterações?</b></p>
-					</div>
-					<div class="modal-footer text-left" style="text-align: left;">
-						<button id="btnSairSemSalvar" class="btn btn-danger btn-sm" type="button"><i class="ace-icon fa fa-times"></i> Sim, sair e perder alterações</button>
-						<button id="btnContinuarEditando" class="btn btn-success btn-sm" type="button" data-dismiss="modal"><i class="ace-icon fa fa-ban"></i> Não, continuar editando</button>
+						<button id="btnMarcarSalvar" class="btn btn-success btn-sm" type="button">
+							<i class="ace-icon fa fa-check"></i>
+							Marcar e salvar
+						</button>
+						<button id="btnSalvarSemMarcar" class="btn btn-danger btn-sm" type="button">
+							<i class="ace-icon fa fa-times"></i>
+							Não marcar, irei editar mais tarde!
+						</button>
+						<button id="btnCancelarModal" class="btn btn-default btn-sm" type="button" data-dismiss="modal">
+							<i class="ace-icon fa fa-ban"></i>
+							Cancelar
+						</button>
 					</div>
 				</div>
 			</div>
@@ -408,8 +493,10 @@
 
 		<!-- Script do modal de evolução -->
 		<script type="text/javascript">
+		// === MODAL: Evolução não finalizada ===
 		(function(){
 			function $(id){ return document.getElementById(id); }
+			
 			var form = document.querySelector('form[action="/menu/agenda/evolucao"]');
 			var btnSalvar = $('acaoSalvar');
 			var modal = $('modalEvolucaoNaoFinalizada');
@@ -417,16 +504,42 @@
 			var txtOriginal = $('agendaEvolucaoEdi');
 			var chkFinalizada = $('agendaSelo');
 			var inputSelamento = $('agendaSelamento');
+			
 			var submitPending = false;
 
-			function initModal(){ if(window.jQuery && jQuery.fn.modal){ jQuery(modal).modal({show: false, backdrop: 'static', keyboard: false}); } }
-			function showModal(){ if(window.jQuery && jQuery.fn.modal){ jQuery(modal).modal('show'); } else { modal.style.display = 'block'; } }
-			function hideModal(){ if(window.jQuery && jQuery.fn.modal){ jQuery(modal).modal('hide'); } else { modal.style.display = 'none'; } }
-			function evolucaoFoiAlterada(){ return (txtEvolucao.value || '').trim() !== (txtOriginal.value || '').trim(); }
+			function initModal(){
+				if(window.jQuery && jQuery.fn.modal){
+					jQuery(modal).modal({show: false, backdrop: 'static', keyboard: false});
+				}
+			}
+
+			function showModal(){
+				if(window.jQuery && jQuery.fn.modal){
+					jQuery(modal).modal('show');
+				} else {
+					modal.style.display = 'block';
+				}
+			}
+
+			function hideModal(){
+				if(window.jQuery && jQuery.fn.modal){
+					jQuery(modal).modal('hide');
+				} else {
+					modal.style.display = 'none';
+				}
+			}
+
+			function evolucaoFoiAlterada(){
+				var atual = (txtEvolucao.value || '').trim();
+				var original = (txtOriginal.value || '').trim();
+				return atual !== original;
+			}
 
 			function prepararESubmit(marcarFinalizada){
 				if(marcarFinalizada){
-					chkFinalizada.checked = true; chkFinalizada.value = "true"; inputSelamento.value = "true";
+					chkFinalizada.checked = true;
+					chkFinalizada.value = "true";
+					inputSelamento.value = "true";
 					if(typeof selamento === 'function') selamento();
 				}
 				form.removeEventListener('submit', interceptSubmit, true);
@@ -435,211 +548,72 @@
 
 			function interceptSubmit(e){
 				if(submitPending) return true;
+
 				var divEvolucao = $('divEvolucao');
-				if(!divEvolucao || divEvolucao.offsetParent === null) return true;
+				if(!divEvolucao || divEvolucao.offsetParent === null){
+					return true;
+				}
+
 				var evolucaoPreenchida = (txtEvolucao.value || '').trim().length > 0;
 				var estaFinalizada = chkFinalizada.checked;
 
 				if(evolucaoFoiAlterada() && evolucaoPreenchida && !estaFinalizada){
-					e.preventDefault(); e.stopPropagation();
+					e.preventDefault();
+					e.stopPropagation();
+					
 					if(!btnSalvar.dataset.modalBound){
-						$('btnMarcarSalvar').addEventListener('click', function(){ hideModal(); prepararESubmit(true); });
-						$('btnSalvarSemMarcar').addEventListener('click', function(){ hideModal(); prepararESubmit(false); });
+						$('btnMarcarSalvar').addEventListener('click', function(){
+							hideModal();
+							prepararESubmit(true);
+						});
+						$('btnSalvarSemMarcar').addEventListener('click', function(){
+							hideModal();
+							prepararESubmit(false);
+						});
 						btnSalvar.dataset.modalBound = "true";
 					}
-					showModal(); return false;
+					
+					showModal();
+					return false;
 				}
 				return true;
 			}
 
 			function bindEvents(){
-				if(form) form.addEventListener('submit', interceptSubmit, true);
-				if(btnSalvar) btnSalvar.addEventListener('click', function(e){ if(!interceptSubmit(e)) e.preventDefault(); });
+				if(form){
+					form.addEventListener('submit', interceptSubmit, true);
+				}
+				if(btnSalvar){
+					btnSalvar.addEventListener('click', function(e){
+						if(!interceptSubmit(e)){
+							e.preventDefault();
+						}
+					});
+				}
 				initModal();
 			}
-			if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindEvents); else bindEvents();
 
+			if(document.readyState === 'loading'){
+				document.addEventListener('DOMContentLoaded', bindEvents);
+			} else {
+				bindEvents();
+			}
+		})();
+		// Garante que o botão Cancelar feche o modal corretamente
 			document.addEventListener("DOMContentLoaded", function(){
-				var btnCancelar = $("btnCancelarModal");
+				var btnCancelar = document.getElementById("btnCancelarModal");
+				var modal = document.getElementById("modalEvolucaoNaoFinalizada");
+				
 				if(btnCancelar && modal){
 					btnCancelar.addEventListener("click", function(){
-						if(window.jQuery && jQuery.fn.modal) jQuery(modal).modal("hide"); else modal.style.display = "none";
+						if(window.jQuery && jQuery.fn.modal){
+							jQuery(modal).modal("hide");
+						} else {
+							modal.style.display = "none";
+						}
 					});
 				}
 			});
-		})();
 		</script>	
-		
-		<!-- Script Unificado: Saída Segura + Auto-Save + Recuperação (COM LOGS DE DIAGNÓSTICO) -->
-		<!-- Script Unificado: Saída Segura + Auto-Save + Recuperação (VERSÃO INTERCEPTADORA DE JS) -->
-		<script type="text/javascript">
-		(function(){
-			console.log("=== INÍCIO DO SCRIPT DE AUTO-SAVE E SAÍDA ===");
-			try {
-				var txtEvolucao = document.getElementById('agendaEvolucao');
-				var txtOriginal = document.getElementById('agendaEvolucaoEdi');
-				var btnRecuperar = document.getElementById('btnRecuperarRascunho');
-				var idInput = document.getElementById('id');
-				var form = document.querySelector('form[action="/menu/agenda/evolucao"]');
-				var modalSaida = document.getElementById('modalConfirmarSaida');
-				var rotaBase = "/menu/agenda/lisPessoal";
-
-				if (!txtEvolucao || !txtOriginal) { 
-					console.error("❌ ERRO CRÍTICO: Campos de evolução não encontrados!"); 
-					return; 
-				}
-				
-				var idAgendamento = idInput ? idInput.value : 'sem_id';
-				var storageKey = 'rascunho_evolucao_' + idAgendamento;
-				console.log("✅ Elementos encontrados. Chave:", storageKey);
-
-				// 1. FUNÇÃO QUE SALVA O ESTADO ATUAL
-				function autoSalvarRascunho() {
-					try {
-						var valorAtual = txtEvolucao.value;
-						if (valorAtual && valorAtual.trim() !== '') {
-							localStorage.setItem(storageKey, valorAtual);
-							console.log("💾 Rascunho salvo. Trecho:", valorAtual.substring(0, 25) + "...");
-						} else {
-							// Se estiver vazio, removemos para não recuperar lixo
-							localStorage.removeItem(storageKey);
-							console.log("🗑️ Campo vazio. Rascunho removido.");
-						}
-					} catch (e) {
-						console.error("Falha ao salvar no localStorage:", e);
-					}
-				}
-
-				// 2. TRUQUE AVANÇADO: Interceptar QUALQUER alteração no 'value' do textarea
-				// Isso faz com que alterações via JavaScript (carregaBody, templates, etc) 
-				// disparem o evento 'input' automaticamente.
-				const originalSet = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
-				Object.defineProperty(txtEvolucao, 'value', {
-					set: function(newValue) {
-						originalSet.call(this, newValue);
-						this.dispatchEvent(new Event('input', { bubbles: true }));
-					}
-				});
-				console.log("✅ Interceptador de 'value' ativado. Alterações via JS serão detectadas.");
-
-				// 3. Listener normal para digitação do usuário
-				txtEvolucao.addEventListener('input', autoSalvarRascunho);
-
-				// 4. Função global caso você queira forçar o salvamento em algum outro lugar do seu código
-				window.forcarSalvamentoRascunho = function() {
-					console.log("🔄 Salvamento manual forçado.");
-					autoSalvarRascunho();
-				};
-
-				// 5. Função de recuperação
-				window.recuperarRascunho = function() {
-					try {
-						var rascunho = localStorage.getItem(storageKey);
-						if (rascunho !== null) {
-							txtEvolucao.value = rascunho;
-							btnRecuperar.style.display = 'none';
-							console.log("✅ Rascunho recuperado com sucesso!");
-						}
-					} catch (e) {
-						console.error("Falha ao recuperar rascunho:", e);
-					}
-				};
-
-				// 6. Verificação ao carregar a página
-				function verificarRascunhoAoCarregar() {
-					console.log("🔍 Verificando rascunho ao carregar...");
-					try {
-						var rascunho = localStorage.getItem(storageKey);
-						var valorBanco = txtOriginal.value.trim();
-						var valorAtual = txtEvolucao.value.trim();
-						
-						console.log("   - Rascunho:", rascunho ? "EXISTE" : "NULO");
-						console.log("   - Banco:", valorBanco.substring(0, 25) || "(vazio)");
-						console.log("   - Tela:", valorAtual.substring(0, 25) || "(vazio)");
-
-						// Só mostra o botão se o rascunho existir E for diferente do que já está salvo no banco
-						if (rascunho && rascunho !== valorBanco && rascunho !== valorAtual) {
-							console.log("🟢 CONDIÇÃO ATENDIDA! Exibindo botão de recuperar.");
-							btnRecuperar.style.display = 'inline-block';
-						} else {
-							console.log("🔴 Condição NÃO atendida. Botão permanece oculto.");
-						}
-					} catch (e) {
-						console.error("Erro ao verificar rascunho:", e);
-					}
-				}
-
-				// 7. Limpar ao salvar com sucesso
-				function limparRascunhoNoSucesso() { 
-					console.log("🧹 Formulário enviado. Limpando rascunho.");
-					localStorage.removeItem(storageKey); 
-				}
-				if (form) {
-					form.addEventListener('submit', limparRascunhoNoSucesso, true);
-				}
-
-				// 8. Proteção de saída do navegador (F5, fechar aba)
-				window.addEventListener('beforeunload', function (e) {
-					var atual = (txtEvolucao.value || '').trim();
-					var original = (txtOriginal.value || '').trim();
-					if (atual !== original) {
-						e.preventDefault();
-						e.returnValue = 'Você tem alterações não salvas na evolução. Deseja realmente sair?';
-					}
-				});
-
-				// 9. Função de saída segura (Botão Voltar)
-				window.verificarSaida = function(e){
-					if(e) e.preventDefault();
-					var atual = (txtEvolucao.value || '').trim();
-					var original = (txtOriginal.value || '').trim();
-					
-					if(atual !== original){
-						if(window.jQuery && jQuery.fn.modal && modalSaida) {
-							jQuery(modalSaida).modal('show');
-						} else if (modalSaida) {
-							modalSaida.style.display = 'block';
-						}
-					} else {
-						console.log("Redirecionando para:", rotaBase);
-						window.location.href = rotaBase;
-					}
-				};
-
-				// 10. Inicialização
-				function init() {
-					verificarRascunhoAoCarregar();
-					
-					var btnSair = document.getElementById('btnSairSemSalvar');
-					var btnContinuar = document.getElementById('btnContinuarEditando');
-					
-					if(btnSair) {
-						btnSair.addEventListener('click', function(){ 
-							if(window.jQuery && jQuery.fn.modal && modalSaida) jQuery(modalSaida).modal('hide');
-							else if (modalSaida) modalSaida.style.display = 'none';
-							window.location.href = rotaBase; 
-						});
-					}
-					if(btnContinuar) {
-						btnContinuar.addEventListener('click', function(){ 
-							if(window.jQuery && jQuery.fn.modal && modalSaida) jQuery(modalSaida).modal('hide');
-							else if (modalSaida) modalSaida.style.display = 'none';
-						});
-					}
-				}
-
-				if (document.readyState === 'loading') {
-					document.addEventListener('DOMContentLoaded', init);
-				} else {
-					init();
-				}
-				
-				console.log("=== FIM DO SCRIPT DE AUTO-SAVE (Carregado com Sucesso) ===");
-
-			} catch (erroGeral) {
-				console.error("💥 ERRO FATAL NO SCRIPT DE AUTO-SAVE:", erroGeral);
-			}
-		})();
-		</script>
 	</body>
 </html>

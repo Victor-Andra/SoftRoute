@@ -421,7 +421,7 @@
 																															<div class="infobox-chart; infobox-blue">
 																																<span class="sparkline" data-values="{{this.folreg_totalsimples_i}},{{this.folreg_totalsimples_e}},{{this.folreg_totalsimples_plusd}},{{this.folreg_totalduploesq_minusd}}" style="display: inline-block; width: 44px; height: 33px; vertical-align: top;"></span>
 																															</div>
-																															
+																															<div>
 																															{{#ifEqual this.folreg_status "1"}}
 																																<span style="white-space: wrap; font-size: 9px;">Esvanecimento</span>
 																															{{else}}
@@ -435,6 +435,41 @@
 																																	{{/ifEqual}}
 																																{{/ifEqual}}
 																															{{/ifEqual}}
+																															</div>
+																															
+																															<!-- ========================================================================= -->
+																															<!-- NOVA FUNCIONALIDADE: Resumo dos Tipos de Dica (Mapeamento Separado)       -->
+																															<!-- ========================================================================= -->
+																															<div class="resumo-tipos-dica" 
+																																data-tiporeg="{{this.folreg_tiporeg}}"
+																																data-dicas-programa="{{../../prog_dicatipotext}}"
+																																
+																																<!-- CAMPOS EXCLUSIVOS DO REGISTRO SIMPLES (Tentativas 1 a 10) -->
+																																data-t1s="{{this.folreg_t1tipodsimples}}" data-t2s="{{this.folreg_t2tipodsimples}}" 
+																																data-t3s="{{this.folreg_t3tipodsimples}}" data-t4s="{{this.folreg_t4tipodsimples}}" 
+																																data-t5s="{{this.folreg_t5tipodsimples}}" data-t6s="{{this.folreg_t6tipodsimples}}"
+																																data-t7s="{{this.folreg_t7tipodsimples}}" data-t8s="{{this.folreg_t8tipodsimples}}" 
+																																data-t9s="{{this.folreg_t9tipodsimples}}" data-t10s="{{this.folreg_t10tipodsimples}}"
+																																
+																																<!-- CAMPOS EXCLUSIVOS DO REGISTRO DUPLO - LADO ESQUERDO (Tentativas 1 a 10) -->
+																																data-t1e="{{this.folreg_t1tipodesqu}}" data-t2e="{{this.folreg_t2tipodesqu}}" 
+																																data-t3e="{{this.folreg_t3tipodesqu}}" data-t4e="{{this.folreg_t4tipodesqu}}" 
+																																data-t5e="{{this.folreg_t5tipodesqu}}" data-t6e="{{this.folreg_t6tipodesqu}}"
+																																data-t7e="{{this.folreg_t7tipodesqu}}" data-t8e="{{this.folreg_t8tipodesqu}}" 
+																																data-t9e="{{this.folreg_t9tipodesqu}}" data-t10e="{{this.folreg_t10tipodesqu}}"
+																																
+																																<!-- CAMPOS EXCLUSIVOS DO REGISTRO DUPLO - LADO DIREITO (Tentativas 1 a 10) -->
+																																data-t1d="{{this.folreg_t1tipodird}}" data-t2d="{{this.folreg_t2tipodird}}" 
+																																data-t3d="{{this.folreg_t3tipodird}}" data-t4d="{{this.folreg_t4tipodird}}" 
+																																data-t5d="{{this.folreg_t5tipodird}}" data-t6d="{{this.folreg_t6tipodird}}"
+																																data-t7d="{{this.folreg_t7tipodird}}" data-t8d="{{this.folreg_t8tipodird}}" 
+																																data-t9d="{{this.folreg_t9tipodird}}" data-t10d="{{this.folreg_t10tipodird}}">
+																																
+																																<!-- As badges serão injetadas aqui pelo JavaScript -->
+																															</div>
+																															<!-- ========================================================================= -->
+																															
+
 																														</a>
 																													{{else}}
 																														<!-- Botões da Folha de Registro Duplo -->
@@ -465,6 +500,37 @@
 																																	{{/ifEqual}}
 																																{{/ifEqual}}
 																															</div>
+																															<!-- ========================================================================= -->
+																															<!-- NOVA FUNCIONALIDADE: Resumo dos Tipos de Dica (Mapeamento Separado)       -->
+																															<!-- ========================================================================= -->
+																															<div class="resumo-tipos-dica" 
+																																data-tiporeg="{{this.folreg_tiporeg}}"
+																																data-dicas-programa="{{../../prog_dicatipotext}}"
+																																
+																																<!-- CAMPOS EXCLUSIVOS DO REGISTRO SIMPLES (Tentativas 1 a 10) -->
+																																data-t1s="{{this.folreg_t1tipodsimples}}" data-t2s="{{this.folreg_t2tipodsimples}}" 
+																																data-t3s="{{this.folreg_t3tipodsimples}}" data-t4s="{{this.folreg_t4tipodsimples}}" 
+																																data-t5s="{{this.folreg_t5tipodsimples}}" data-t6s="{{this.folreg_t6tipodsimples}}"
+																																data-t7s="{{this.folreg_t7tipodsimples}}" data-t8s="{{this.folreg_t8tipodsimples}}" 
+																																data-t9s="{{this.folreg_t9tipodsimples}}" data-t10s="{{this.folreg_t10tipodsimples}}"
+																																
+																																<!-- CAMPOS EXCLUSIVOS DO REGISTRO DUPLO - LADO ESQUERDO (Tentativas 1 a 10) -->
+																																data-t1e="{{this.folreg_t1tipodesqu}}" data-t2e="{{this.folreg_t2tipodesqu}}" 
+																																data-t3e="{{this.folreg_t3tipodesqu}}" data-t4e="{{this.folreg_t4tipodesqu}}" 
+																																data-t5e="{{this.folreg_t5tipodesqu}}" data-t6e="{{this.folreg_t6tipodesqu}}"
+																																data-t7e="{{this.folreg_t7tipodesqu}}" data-t8e="{{this.folreg_t8tipodesqu}}" 
+																																data-t9e="{{this.folreg_t9tipodesqu}}" data-t10e="{{this.folreg_t10tipodesqu}}"
+																																
+																																<!-- CAMPOS EXCLUSIVOS DO REGISTRO DUPLO - LADO DIREITO (Tentativas 1 a 10) -->
+																																data-t1d="{{this.folreg_t1tipodird}}" data-t2d="{{this.folreg_t2tipodird}}" 
+																																data-t3d="{{this.folreg_t3tipodird}}" data-t4d="{{this.folreg_t4tipodird}}" 
+																																data-t5d="{{this.folreg_t5tipodird}}" data-t6d="{{this.folreg_t6tipodird}}"
+																																data-t7d="{{this.folreg_t7tipodird}}" data-t8d="{{this.folreg_t8tipodird}}" 
+																																data-t9d="{{this.folreg_t9tipodird}}" data-t10d="{{this.folreg_t10tipodird}}">
+																																
+																																<!-- As badges serão injetadas aqui pelo JavaScript -->
+																															</div>
+																															<!-- ========================================================================= -->
 																														</a>
 																													{{/ifEqual}}
 																												{{/ifEqual}}
@@ -572,7 +638,63 @@
 					});
 				});
 			});
+
+			// =====================================================================
+			// ✅ NOVA FUNCIONALIDADE: Renderizar Badges de Tipos de Dica 
+			// (COM MAPEAMENTO SEPARADO PARA SIMPLES E DUPLO)
+			// =====================================================================
+			document.addEventListener('DOMContentLoaded', () => {
+				document.querySelectorAll('.resumo-tipos-dica').forEach(container => {
+					const tipoReg = (container.dataset.tiporeg || "").trim();
+					const dicasTexto = container.dataset.dicasPrograma || "";
+					
+					// Quebra a string "Ecóica, Visual" em array: ["Ecóica", "Visual"]
+					const dicasArray = dicasTexto.split(',').map(d => d.trim()).filter(d => d !== "");
+					let badgesHTML = '';
+
+					// -----------------------------------------------------------------
+					// CENÁRIO 1: MAPEAMENTO EXCLUSIVO PARA REGISTRO SIMPLES
+					// -----------------------------------------------------------------
+					if (tipoReg === 'Simples') {
+						for (let i = 1; i <= 10; i++) {
+							// Lê data-t1s, data-t2s, etc.
+							const valor = container.dataset[`t${i}s`]; 
+							if (valor === 'true' && dicasArray[i - 1]) {
+								// Adiciona sufixo "(Simples)" para clareza visual
+								badgesHTML += `<span class="label label-purple arrowed-right" style="font-size:10px; margin:2px; display:inline-block;">&nbsp;${dicasArray[i - 1]} (Simples)</span>`;
+							}
+						}
+					} 
+					// -----------------------------------------------------------------
+					// CENÁRIO 2: MAPEAMENTO EXCLUSIVO PARA REGISTRO DUPLO
+					// -----------------------------------------------------------------
+					else if (tipoReg === 'Duplo') {
+						
+						// 2.1: Verifica Lado ESQUERDO
+						for (let i = 1; i <= 10; i++) {
+							// Lê data-t1e, data-t2e, etc.
+							const valorEsq = container.dataset[`t${i}e`]; 
+							if (valorEsq === 'true' && dicasArray[i - 1]) {
+								badgesHTML += `<span class="label label-info arrowed-right" style="font-size:10px; margin:2px; display:inline-block;">&nbsp;${dicasArray[i - 1]} (Esq)</span>`;
+							}
+						}
+						
+						// 2.2: Verifica Lado DIREITO
+						for (let i = 1; i <= 10; i++) {
+							// Lê data-t1d, data-t2d, etc.
+							const valorDir = container.dataset[`t${i}d`]; 
+							if (valorDir === 'true' && dicasArray[i - 1]) {
+								badgesHTML += `<span class="label label-warning arrowed-right" style="font-size:10px; margin:2px; display:inline-block;">&nbsp;${dicasArray[i - 1]} (Dir)</span>`;
+							}
+						}
+					}
+
+					// Renderiza no HTML (ou mostra "Sem Dica" se nada for encontrado)
+					container.innerHTML = badgesHTML || '<span class="label label-default arrowed-right" style="font-size:10px;">&nbsp;Sem Dica</span>';
+				});
+			});
 		</script>
+		
 		
 	</body>
 </html>
