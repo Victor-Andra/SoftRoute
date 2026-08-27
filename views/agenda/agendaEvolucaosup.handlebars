@@ -408,70 +408,86 @@
 
 		<!-- Script do modal de evolução -->
 		<script type="text/javascript">
-		(function(){
-			function $(id){ return document.getElementById(id); }
-			var form = document.querySelector('form[action="/menu/agenda/evolucao"]');
-			var btnSalvar = $('acaoSalvar');
-			var modal = $('modalEvolucaoNaoFinalizada');
-			var txtEvolucao = $('agendaEvolucao');
-			var txtOriginal = $('agendaEvolucaoEdi');
-			var chkFinalizada = $('agendaSelo');
-			var inputSelamento = $('agendaSelamento');
-			var submitPending = false;
+			(function(){
+				function $(id){ return document.getElementById(id); }
+				var form = document.querySelector('form[action="/menu/agenda/evolucao"]');
+				var btnSalvar = $('acaoSalvar');
+				var modal = $('modalEvolucaoNaoFinalizada');
+				var txtEvolucao = $('agendaEvolucao');
+				var txtOriginal = $('agendaEvolucaoEdi');
+				var chkFinalizada = $('agendaSelo');
+				var inputSelamento = $('agendaSelamento');
+				var submitPending = false;
 
-			function initModal(){ if(window.jQuery && jQuery.fn.modal){ jQuery(modal).modal({show: false, backdrop: 'static', keyboard: false}); } }
-			function showModal(){ if(window.jQuery && jQuery.fn.modal){ jQuery(modal).modal('show'); } else { modal.style.display = 'block'; } }
-			function hideModal(){ if(window.jQuery && jQuery.fn.modal){ jQuery(modal).modal('hide'); } else { modal.style.display = 'none'; } }
-			function evolucaoFoiAlterada(){ return (txtEvolucao.value || '').trim() !== (txtOriginal.value || '').trim(); }
+				function initModal(){ if(window.jQuery && jQuery.fn.modal){ jQuery(modal).modal({show: false, backdrop: 'static', keyboard: false}); } }
+				function showModal(){ if(window.jQuery && jQuery.fn.modal){ jQuery(modal).modal('show'); } else { modal.style.display = 'block'; } }
+				function hideModal(){ if(window.jQuery && jQuery.fn.modal){ jQuery(modal).modal('hide'); } else { modal.style.display = 'none'; } }
+				function evolucaoFoiAlterada(){ return (txtEvolucao.value || '').trim() !== (txtOriginal.value || '').trim(); }
 
-			function prepararESubmit(marcarFinalizada){
-				if(marcarFinalizada){
-					chkFinalizada.checked = true; chkFinalizada.value = "true"; inputSelamento.value = "true";
-					if(typeof selamento === 'function') selamento();
-				}
-				form.removeEventListener('submit', interceptSubmit, true);
-				form.submit();
-			}
-
-			function interceptSubmit(e){
-				if(submitPending) return true;
-				var divEvolucao = $('divEvolucao');
-				if(!divEvolucao || divEvolucao.offsetParent === null) return true;
-				var evolucaoPreenchida = (txtEvolucao.value || '').trim().length > 0;
-				var estaFinalizada = chkFinalizada.checked;
-
-				if(evolucaoFoiAlterada() && evolucaoPreenchida && !estaFinalizada){
-					e.preventDefault(); e.stopPropagation();
-					if(!btnSalvar.dataset.modalBound){
-						$('btnMarcarSalvar').addEventListener('click', function(){ hideModal(); prepararESubmit(true); });
-						$('btnSalvarSemMarcar').addEventListener('click', function(){ hideModal(); prepararESubmit(false); });
-						btnSalvar.dataset.modalBound = "true";
+				function prepararESubmit(marcarFinalizada){
+					if(marcarFinalizada){
+						chkFinalizada.checked = true; chkFinalizada.value = "true"; inputSelamento.value = "true";
+						if(typeof selamento === 'function') selamento();
 					}
-					showModal(); return false;
-				}
-				return true;
-			}
+					
+					// 🚩 DESATIVA O AVISO NATIVO antes do submit programático
+					if (typeof window.desativarAvisoSaida === 'function') {
+						window.desativarAvisoSaida();
+					}
 
-			function bindEvents(){
-				if(form) form.addEventListener('submit', interceptSubmit, true);
-				if(btnSalvar) btnSalvar.addEventListener('click', function(e){ if(!interceptSubmit(e)) e.preventDefault(); });
-				initModal();
-			}
-			if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindEvents); else bindEvents();
-
-			document.addEventListener("DOMContentLoaded", function(){
-				var btnCancelar = $("btnCancelarModal");
-				if(btnCancelar && modal){
-					btnCancelar.addEventListener("click", function(){
-						if(window.jQuery && jQuery.fn.modal) jQuery(modal).modal("hide"); else modal.style.display = "none";
-					});
+					form.removeEventListener('submit', interceptSubmit, true);
+					form.submit();
 				}
-			});
-		})();
-		</script>	
+
+				function interceptSubmit(e){
+					if(submitPending) return true;
+					var divEvolucao = $('divEvolucao');
+					if(!divEvolucao || divEvolucao.offsetParent === null) return true;
+					
+					var evolucaoPreenchida = (txtEvolucao.value || '').trim().length > 0;
+					var estaFinalizada = chkFinalizada.checked;
+
+					if(evolucaoFoiAlterada() && evolucaoPreenchida && !estaFinalizada){
+						e.preventDefault(); e.stopPropagation();
+						if(!btnSalvar.dataset.modalBound){
+							$('btnMarcarSalvar').addEventListener('click', function(){ hideModal(); prepararESubmit(true); });
+							$('btnSalvarSemMarcar').addEventListener('click', function(){ hideModal(); prepararESubmit(false); });
+							btnSalvar.dataset.modalBound = "true";
+						}
+						showModal(); return false;
+					}
+					
+					// 🚩 Se chegou aqui, é um salvamento direto e válido. Desativa o aviso.
+					if (typeof window.desativarAvisoSaida === 'function') {
+						window.desativarAvisoSaida();
+					}
+					return true;
+				}
+
+				function bindEvents(){
+					if(form) form.addEventListener('submit', interceptSubmit, true);
+					if(btnSalvar) btnSalvar.addEventListener('click', function(e){ if(!interceptSubmit(e)) e.preventDefault(); });
+					initModal();
+				}
+				if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindEvents); else bindEvents();
+
+				document.addEventListener("DOMContentLoaded", function(){
+					var btnCancelar = $("btnCancelarModal");
+					if(btnCancelar && modal){
+						btnCancelar.addEventListener("click", function(){
+							if(window.jQuery && jQuery.fn.modal) jQuery(modal).modal("hide"); else modal.style.display = "none";
+							
+							// Se cancelou o salvamento, garantimos que a proteção continue ativa
+							if (typeof window.reativarAvisoSaida === 'function') {
+								window.reativarAvisoSaida();
+							}
+						});
+					}
+				});
+			})();
+		</script>
 		
-		<!-- Script Unificado: Saída Segura + Auto-Save + Recuperação (COM LOGS DE DIAGNÓSTICO) -->
-		<!-- Script Unificado: Saída Segura + Auto-Save + Recuperação (VERSÃO INTERCEPTADORA DE JS) -->
+			<!-- Script Unificado: Saída Segura + Auto-Save + Recuperação (COM INTERCEPTADOR E CONTROLE DE AVISO) -->
 		<script type="text/javascript">
 		(function(){
 			console.log("=== INÍCIO DO SCRIPT DE AUTO-SAVE E SAÍDA ===");
@@ -493,26 +509,24 @@
 				var storageKey = 'rascunho_evolucao_' + idAgendamento;
 				console.log("✅ Elementos encontrados. Chave:", storageKey);
 
-				// 1. FUNÇÃO QUE SALVA O ESTADO ATUAL
+				function houveAlteracao() {
+					var atual = (txtEvolucao.value || '').trim();
+					var original = (txtOriginal.value || '').trim();
+					return atual !== original;
+				}
+
 				function autoSalvarRascunho() {
 					try {
 						var valorAtual = txtEvolucao.value;
 						if (valorAtual && valorAtual.trim() !== '') {
 							localStorage.setItem(storageKey, valorAtual);
-							console.log("💾 Rascunho salvo. Trecho:", valorAtual.substring(0, 25) + "...");
 						} else {
-							// Se estiver vazio, removemos para não recuperar lixo
 							localStorage.removeItem(storageKey);
-							console.log("🗑️ Campo vazio. Rascunho removido.");
 						}
-					} catch (e) {
-						console.error("Falha ao salvar no localStorage:", e);
-					}
+					} catch (e) { console.error("Falha ao salvar no localStorage:", e); }
 				}
 
-				// 2. TRUQUE AVANÇADO: Interceptar QUALQUER alteração no 'value' do textarea
-				// Isso faz com que alterações via JavaScript (carregaBody, templates, etc) 
-				// disparem o evento 'input' automaticamente.
+				// TRUQUE AVANÇADO: Interceptar QUALQUER alteração no 'value' do textarea
 				const originalSet = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value').set;
 				Object.defineProperty(txtEvolucao, 'value', {
 					set: function(newValue) {
@@ -520,93 +534,72 @@
 						this.dispatchEvent(new Event('input', { bubbles: true }));
 					}
 				});
-				console.log("✅ Interceptador de 'value' ativado. Alterações via JS serão detectadas.");
 
-				// 3. Listener normal para digitação do usuário
 				txtEvolucao.addEventListener('input', autoSalvarRascunho);
 
-				// 4. Função global caso você queira forçar o salvamento em algum outro lugar do seu código
-				window.forcarSalvamentoRascunho = function() {
-					console.log("🔄 Salvamento manual forçado.");
-					autoSalvarRascunho();
-				};
-
-				// 5. Função de recuperação
 				window.recuperarRascunho = function() {
 					try {
 						var rascunho = localStorage.getItem(storageKey);
 						if (rascunho !== null) {
 							txtEvolucao.value = rascunho;
 							btnRecuperar.style.display = 'none';
-							console.log("✅ Rascunho recuperado com sucesso!");
 						}
-					} catch (e) {
-						console.error("Falha ao recuperar rascunho:", e);
-					}
+					} catch (e) { console.error("Falha ao recuperar rascunho:", e); }
 				};
 
-				// 6. Verificação ao carregar a página
 				function verificarRascunhoAoCarregar() {
-					console.log("🔍 Verificando rascunho ao carregar...");
 					try {
 						var rascunho = localStorage.getItem(storageKey);
 						var valorBanco = txtOriginal.value.trim();
 						var valorAtual = txtEvolucao.value.trim();
-						
-						console.log("   - Rascunho:", rascunho ? "EXISTE" : "NULO");
-						console.log("   - Banco:", valorBanco.substring(0, 25) || "(vazio)");
-						console.log("   - Tela:", valorAtual.substring(0, 25) || "(vazio)");
-
-						// Só mostra o botão se o rascunho existir E for diferente do que já está salvo no banco
 						if (rascunho && rascunho !== valorBanco && rascunho !== valorAtual) {
-							console.log("🟢 CONDIÇÃO ATENDIDA! Exibindo botão de recuperar.");
 							btnRecuperar.style.display = 'inline-block';
-						} else {
-							console.log("🔴 Condição NÃO atendida. Botão permanece oculto.");
 						}
-					} catch (e) {
-						console.error("Erro ao verificar rascunho:", e);
-					}
+					} catch (e) { console.error("Erro ao verificar rascunho:", e); }
 				}
 
-				// 7. Limpar ao salvar com sucesso
 				function limparRascunhoNoSucesso() { 
-					console.log("🧹 Formulário enviado. Limpando rascunho.");
 					localStorage.removeItem(storageKey); 
 				}
 				if (form) {
 					form.addEventListener('submit', limparRascunhoNoSucesso, true);
 				}
 
-				// 8. Proteção de saída do navegador (F5, fechar aba)
-				window.addEventListener('beforeunload', function (e) {
-					var atual = (txtEvolucao.value || '').trim();
-					var original = (txtOriginal.value || '').trim();
-					if (atual !== original) {
+				// 🚩 DEFINIMOS O LISTENER EM UMA VARIÁVEL PARA PODER REMOVÊ-LO
+				var beforeUnloadListener = function (e) {
+					if (houveAlteracao()) {
 						e.preventDefault();
 						e.returnValue = 'Você tem alterações não salvas na evolução. Deseja realmente sair?';
 					}
-				});
+				};
+				
+				// Adiciona o listener ao carregar
+				window.addEventListener('beforeunload', beforeUnloadListener);
 
-				// 9. Função de saída segura (Botão Voltar)
+				// 🚩 FUNÇÕES GLOBAIS PARA CONTROLAR O AVISO (Chamadas pelo Script 1)
+				window.desativarAvisoSaida = function() {
+					console.log("[Saida] Salvamento legítimo detectado. Desativando aviso nativo do navegador.");
+					window.removeEventListener('beforeunload', beforeUnloadListener);
+				};
+
+				window.reativarAvisoSaida = function() {
+					console.log("[Saida] Ação de salvamento cancelada. Reativando proteção.");
+					window.addEventListener('beforeunload', beforeUnloadListener);
+				};
+
 				window.verificarSaida = function(e){
 					if(e) e.preventDefault();
-					var atual = (txtEvolucao.value || '').trim();
-					var original = (txtOriginal.value || '').trim();
-					
-					if(atual !== original){
+					if(houveAlteracao()){
 						if(window.jQuery && jQuery.fn.modal && modalSaida) {
 							jQuery(modalSaida).modal('show');
 						} else if (modalSaida) {
 							modalSaida.style.display = 'block';
 						}
 					} else {
-						console.log("Redirecionando para:", rotaBase);
 						window.location.href = rotaBase;
 					}
 				};
 
-				// 10. Inicialização
 				function init() {
 					verificarRascunhoAoCarregar();
 					

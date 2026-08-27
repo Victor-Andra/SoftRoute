@@ -731,7 +731,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- Script do modal de evolução -->
+				<!-- Script do modal de evolução -->
 		<script type="text/javascript">
 		// === MODAL: Evolução não finalizada ===
 		(function(){
@@ -782,6 +782,12 @@
 					inputSelamento.value = "true";
 					if(typeof selamento === 'function') selamento();
 				}
+				
+				// 🚩 1. DESATIVA O AVISO NATIVO antes do submit programático
+				if (typeof window.desativarAvisoSaida === 'function') {
+					window.desativarAvisoSaida();
+				}
+
 				form.removeEventListener('submit', interceptSubmit, true);
 				form.submit();
 			}
@@ -816,6 +822,11 @@
 					showModal();
 					return false;
 				}
+				
+				// 🚩 2. Se chegou aqui, é um salvamento direto e válido. Desativa o aviso.
+				if (typeof window.desativarAvisoSaida === 'function') {
+					window.desativarAvisoSaida();
+				}
 				return true;
 			}
 
@@ -839,170 +850,185 @@
 				bindEvents();
 			}
 		})();
+		
 		// Garante que o botão Cancelar feche o modal corretamente
-			document.addEventListener("DOMContentLoaded", function(){
-				var btnCancelar = document.getElementById("btnCancelarModal");
-				var modal = document.getElementById("modalEvolucaoNaoFinalizada");
+		document.addEventListener("DOMContentLoaded", function(){
+			var btnCancelar = document.getElementById("btnCancelarModal");
+			var modal = document.getElementById("modalEvolucaoNaoFinalizada");
+			
+			if(btnCancelar && modal){
+				btnCancelar.addEventListener("click", function(){
+					if(window.jQuery && jQuery.fn.modal){
+						jQuery(modal).modal("hide");
+					} else {
+						modal.style.display = "none";
+					}
+					// Se cancelou o salvamento, garantimos que a proteção continue ativa
+					if (typeof window.reativarAvisoSaida === 'function') {
+						window.reativarAvisoSaida();
+					}
+				});
+			}
+
+			if (typeof controlaNave === 'function') {
+				controlaNave();
+			}
+		});
+		</script>
+		
+				<!-- Script Unificado: Saída Segura + Auto-Save + Recuperação -->
+		<script type="text/javascript">
+		(function(){
+			console.log("[Saida/AutoSave] Script carregado com sucesso");
+			function $(id){ return document.getElementById(id); }
+
+			var txtEvolucao = $('agendaEvolucao');
+			var txtOriginal = $('agendaEvolucaoEdi');
+			var btnRecuperar = $('btnRecuperarRascunho');
+			var form = document.querySelector('form[action="/menu/agenda/evolucao"]');
+			var modalSaida = $('modalConfirmarSaida');
+			var rotaBase = "/menu/agenda/lisPessoal";
+			
+			var idAgendamento = $('id') ? $('id').value : 'sem_id';
+			var storageKey = 'rascunho_evolucao_' + idAgendamento;
+
+			function houveAlteracao() {
+				var atual = (txtEvolucao ? txtEvolucao.value : '').trim();
+				var original = (txtOriginal ? txtOriginal.value : '').trim();
+				return atual !== original;
+			}
+
+			function autoSalvarRascunho() {
+				if (txtEvolucao && txtEvolucao.value.trim() !== '') {
+					localStorage.setItem(storageKey, txtEvolucao.value);
+				} else {
+					localStorage.removeItem(storageKey);
+				}
+			}
+
+			window.recuperarRascunho = function() {
+				var rascunho = localStorage.getItem(storageKey);
+				if (rascunho !== null) {
+					txtEvolucao.value = rascunho;
+					btnRecuperar.style.display = 'none';
+					txtEvolucao.dispatchEvent(new Event('input')); 
+				}
+			};
+
+			function verificarRascunhoAoCarregar() {
+				var rascunho = localStorage.getItem(storageKey);
+				var valorBanco = txtOriginal ? txtOriginal.value.trim() : '';
+				var valorAtual = txtEvolucao ? txtEvolucao.value.trim() : '';
+
+				if (rascunho && rascunho !== valorBanco && rascunho !== valorAtual) {
+					btnRecuperar.style.display = 'inline-block';
+				}
+			}
+
+			function limparRascunhoNoSucesso() {
+				localStorage.removeItem(storageKey);
+			}
+
+			function initModalSaida(){
+				if(window.jQuery && jQuery.fn.modal && modalSaida){
+					jQuery(modalSaida).modal({show: false, backdrop: 'static', keyboard: false});
+				}
+			}
+
+			function showModalSaida(){
+				if(window.jQuery && jQuery.fn.modal && modalSaida){
+					jQuery(modalSaida).modal('show');
+				} else if (modalSaida) {
+					modalSaida.style.display = 'block';
+				}
+			}
+
+			function hideModalSaida(){
+				if(window.jQuery && jQuery.fn.modal && modalSaida){
+					jQuery(modalSaida).modal('hide');
+				} else if (modalSaida) {
+					modalSaida.style.display = 'none';
+				}
+			}
+
+			window.verificarSaida = function(e){
+				console.log("[Saida] verificarSaida chamado");
+				if(e) e.preventDefault();
 				
-				if(btnCancelar && modal){
-					btnCancelar.addEventListener("click", function(){
-						if(window.jQuery && jQuery.fn.modal){
-							jQuery(modal).modal("hide");
-						} else {
-							modal.style.display = "none";
-						}
+				if(houveAlteracao()){
+					console.log("[Saida] Mostrando modal de saída");
+					showModalSaida();
+				} else {
+					console.log("[Saida] Sem alteração, redirecionando direto");
+					executarRedirecionamento();
+				}
+			};
+
+			function executarRedirecionamento(){
+				console.log("[Saida] Redirecionando para:", rotaBase);
+				try {
+					window.location.href = rotaBase;
+				} catch(err) {
+					window.location = rotaBase;
+				}
+			}
+
+			// --- BINDING DOS EVENTOS ---
+			if (txtEvolucao) {
+				txtEvolucao.addEventListener('input', autoSalvarRascunho);
+			}
+
+			if (form) {
+				form.addEventListener('submit', function() {
+					limparRascunhoNoSucesso();
+				}, true);
+			}
+
+			// 🚩 DEFINIMOS O LISTENER EM UMA VARIÁVEL PARA PODER REMOVÊ-LO
+			var beforeUnloadListener = function (e) {
+				if (houveAlteracao()) {
+					e.preventDefault();
+					e.returnValue = 'Você tem alterações não salvas na evolução. Deseja realmente sair?';
+				}
+			};
+			
+			// Adiciona o listener ao carregar
+			window.addEventListener('beforeunload', beforeUnloadListener);
+
+			// 🚩 FUNÇÕES GLOBAIS PARA CONTROLAR O AVISO
+			window.desativarAvisoSaida = function() {
+				console.log("[Saida] Salvamento legítimo detectado. Desativando aviso nativo do navegador.");
+				window.removeEventListener('beforeunload', beforeUnloadListener);
+			};
+
+			window.reativarAvisoSaida = function() {
+				console.log("[Saida] Ação de salvamento cancelada. Reativando proteção.");
+				window.addEventListener('beforeunload', beforeUnloadListener);
+			};
+
+			// Inicialização e Bind dos botões do modal
+			document.addEventListener("DOMContentLoaded", function(){
+				verificarRascunhoAoCarregar();
+				initModalSaida();
+
+				var btnSair = $('btnSairSemSalvar');
+				var btnContinuar = $('btnContinuarEditando');
+
+				if(btnSair){
+					btnSair.addEventListener('click', function(){
+						hideModalSaida();
+						executarRedirecionamento();
 					});
 				}
 
-				// ADICIONE ESTA LINHA:
-				if (typeof controlaNave === 'function') {
-					controlaNave();
+				if(btnContinuar){
+					btnContinuar.addEventListener('click', function(){
+						hideModalSaida();
+					});
 				}
 			});
-		</script>
-		
-		<script type="text/javascript">
-			// === CONTROLE DE SAÍDA SEGURA (VOLTAR) + AUTO-SAVE E RECUPERAÇÃO ===
-			(function(){
-				console.log("[Saida/AutoSave] Script carregado com sucesso");
-				function $(id){ return document.getElementById(id); }
 
-				var txtEvolucao = $('agendaEvolucao');
-				var txtOriginal = $('agendaEvolucaoEdi');
-				var btnRecuperar = $('btnRecuperarRascunho');
-				var form = document.querySelector('form[action="/menu/agenda/evolucao"]');
-				var modalSaida = $('modalConfirmarSaida');
-				var rotaBase = "/menu/agenda/lisPessoal";
-				
-				var idAgendamento = $('id') ? $('id').value : 'sem_id';
-				var storageKey = 'rascunho_evolucao_' + idAgendamento;
-
-				// --- FUNÇÕES DE AUTO-SAVE ---
-				function houveAlteracao() {
-					var atual = (txtEvolucao ? txtEvolucao.value : '').trim();
-					var original = (txtOriginal ? txtOriginal.value : '').trim();
-					return atual !== original;
-				}
-
-				function autoSalvarRascunho() {
-					if (txtEvolucao && txtEvolucao.value.trim() !== '') {
-						localStorage.setItem(storageKey, txtEvolucao.value);
-					} else {
-						localStorage.removeItem(storageKey);
-					}
-				}
-
-				window.recuperarRascunho = function() {
-					var rascunho = localStorage.getItem(storageKey);
-					if (rascunho !== null) {
-						txtEvolucao.value = rascunho;
-						btnRecuperar.style.display = 'none';
-						txtEvolucao.dispatchEvent(new Event('input')); 
-					}
-				};
-
-				function verificarRascunhoAoCarregar() {
-					var rascunho = localStorage.getItem(storageKey);
-					var valorBanco = txtOriginal ? txtOriginal.value.trim() : '';
-					var valorAtual = txtEvolucao ? txtEvolucao.value.trim() : '';
-
-					if (rascunho && rascunho !== valorBanco && rascunho !== valorAtual) {
-						btnRecuperar.style.display = 'inline-block';
-					}
-				}
-
-				function limparRascunhoNoSucesso() {
-					localStorage.removeItem(storageKey);
-				}
-
-				// --- FUNÇÕES DO MODAL DE SAÍDA ---
-				function initModalSaida(){
-					if(window.jQuery && jQuery.fn.modal && modalSaida){
-						jQuery(modalSaida).modal({show: false, backdrop: 'static', keyboard: false});
-					}
-				}
-
-				function showModalSaida(){
-					if(window.jQuery && jQuery.fn.modal && modalSaida){
-						jQuery(modalSaida).modal('show');
-					} else if (modalSaida) {
-						modalSaida.style.display = 'block';
-					}
-				}
-
-				function hideModalSaida(){
-					if(window.jQuery && jQuery.fn.modal && modalSaida){
-						jQuery(modalSaida).modal('hide');
-					} else if (modalSaida) {
-						modalSaida.style.display = 'none';
-					}
-				}
-
-				// Função global chamada pelo onclick do botão Voltar
-				window.verificarSaida = function(e){
-					console.log("[Saida] verificarSaida chamado");
-					if(e) e.preventDefault();
-					
-					if(houveAlteracao()){
-						console.log("[Saida] Mostrando modal de saída");
-						showModalSaida();
-					} else {
-						console.log("[Saida] Sem alteração, redirecionando direto");
-						executarRedirecionamento();
-					}
-				};
-
-				function executarRedirecionamento(){
-					console.log("[Saida] Redirecionando para:", rotaBase);
-					try {
-						window.location.href = rotaBase;
-					} catch(err) {
-						window.location = rotaBase;
-					}
-				}
-
-				// --- BINDING DOS EVENTOS ---
-				if (txtEvolucao) {
-					txtEvolucao.addEventListener('input', autoSalvarRascunho);
-				}
-
-				if (form) {
-					form.addEventListener('submit', function() {
-						limparRascunhoNoSucesso();
-					}, true);
-				}
-
-				// Proteção de navegação do navegador (F5, fechar aba, botão voltar do browser)
-				window.addEventListener('beforeunload', function (e) {
-					if (houveAlteracao()) {
-						e.preventDefault();
-						e.returnValue = 'Você tem alterações não salvas na evolução. Deseja realmente sair?';
-					}
-				});
-
-				// Inicialização e Bind dos botões do modal
-				document.addEventListener("DOMContentLoaded", function(){
-					verificarRascunhoAoCarregar();
-					initModalSaida();
-
-					var btnSair = $('btnSairSemSalvar');
-					var btnContinuar = $('btnContinuarEditando');
-
-					if(btnSair){
-						btnSair.addEventListener('click', function(){
-							hideModalSaida();
-							executarRedirecionamento();
-						});
-					}
-
-					if(btnContinuar){
-						btnContinuar.addEventListener('click', function(){
-							hideModalSaida();
-						});
-					}
-				});
-
-			})();
+		})();
 		</script>
 	</body>
 </html>
