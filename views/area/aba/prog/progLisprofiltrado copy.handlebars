@@ -582,7 +582,131 @@
 		</div>
 		
 		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
-		
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$("#dynamic-table1").DataTable({
+					"language": { "url": "/js/lang/datatable-pt-br.json" },
+					"aaSorting": [],
+					"aoColumns": [{ "bSortable": false }],
+					"responsive": true,
+					"paging": false,
+					"searching": false,
+					"info": false
+				});
+			});
+			
+			document.addEventListener('DOMContentLoaded', () => {
+				document.querySelectorAll('[id^="prog-dicatipo-container-"]').forEach(container => {
+					const progDicaTipoText = container.textContent.trim();
+					container.innerHTML = '';
+					const partes = progDicaTipoText.split(',').map(parte => parte.trim());
+					partes.forEach(parte => {
+						const span = document.createElement('span');
+						span.className = 'label label-danger arrowed-right';
+						span.innerHTML = `&nbsp;${parte}`;
+						container.appendChild(span);
+						container.appendChild(document.createTextNode(' '));
+					});
+				});
+			});
+
+    // DataTables init (mantido do seu código original)
+    $(document).ready(function() {
+        $("#dynamic-table1").DataTable({
+            "language": { "url": "/js/lang/datatable-pt-br.json" },
+            "aaSorting": [],
+            "aoColumns": [{ "bSortable": false }],
+            "responsive": true,
+            "paging": false,
+            "searching": false,
+            "info": false
+        });
+    });
+
+    // =====================================================================
+    // ✅ FUNÇÃO 1: Processa APENAS registros do tipo SIMPLES
+    // =====================================================================
+    function processarDicasSimples() {
+        document.querySelectorAll('.resumo-dicas-simples').forEach((container, index) => {
+            const dicasTexto = container.dataset.dicasPrograma || "";
+            const dicasArray = dicasTexto.split(',').map(d => d.trim()).filter(d => d !== "");
+            let badgesHTML = '';
+
+            // Debug: Mostra no console do navegador o que está sendo lido
+            console.log(`[DEBUG SIMPLES ${index}] Dicas Texto:`, dicasTexto, "| Dataset:", container.dataset);
+
+            for (let i = 1; i <= 10; i++) {
+                const valor = container.dataset[`t${i}s`];
+                // Compara com a string 'true' (atributos data-* sempre são strings)
+                if (valor === 'true' && dicasArray[i - 1]) {
+                    badgesHTML += `<span class="label label-purple arrowed-right" style="font-size:10px; margin:2px; display:inline-block;">&nbsp;${dicasArray[i - 1]} (Simples)</span>`;
+                }
+            }
+            container.innerHTML = badgesHTML || '<span class="label label-default arrowed-right" style="font-size:10px;">&nbsp;Sem Dica</span>';
+        });
+    }
+
+    // =====================================================================
+    // ✅ FUNÇÃO 2: Processa APENAS registros do tipo DUPLO
+    // =====================================================================
+    function processarDicasDuplo() {
+        document.querySelectorAll('.resumo-dicas-duplo').forEach((container, index) => {
+            const dicasTexto = container.dataset.dicasPrograma || "";
+            const dicasArray = dicasTexto.split(',').map(d => d.trim()).filter(d => d !== "");
+            let badgesHTML = '';
+
+            // Debug: Mostra no console do navegador o que está sendo lido
+            console.log(`[DEBUG DUPLO ${index}] Dicas Texto:`, dicasTexto, "| Dataset:", container.dataset);
+
+            // 2.1: Verifica Lado ESQUERDO
+            for (let i = 1; i <= 10; i++) {
+                const valorEsq = container.dataset[`t${i}e`];
+                if (valorEsq === 'true' && dicasArray[i - 1]) {
+                    badgesHTML += `<span class="label label-info arrowed-right" style="font-size:10px; margin:2px; display:inline-block;">&nbsp;${dicasArray[i - 1]} (Esq)</span>`;
+                }
+            }
+            
+            // 2.2: Verifica Lado DIREITO
+            for (let i = 1; i <= 10; i++) {
+                const valorDir = container.dataset[`t${i}d`];
+                if (valorDir === 'true' && dicasArray[i - 1]) {
+                    badgesHTML += `<span class="label label-warning arrowed-right" style="font-size:10px; margin:2px; display:inline-block;">&nbsp;${dicasArray[i - 1]} (Dir)</span>`;
+                }
+            }
+
+            container.innerHTML = badgesHTML || '<span class="label label-default arrowed-right" style="font-size:10px;">&nbsp;Sem Dica</span>';
+        });
+    }
+
+    // =====================================================================
+    // ✅ LISTENER ÚNICO: Reúne todas as inicializações ao carregar a página
+    // =====================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // A. Lógica original: Formata os contêineres de dica do programa (Nível Pai)
+        document.querySelectorAll('[id^="prog-dicatipo-container-"]').forEach(container => {
+            const progDicaTipoText = container.textContent.trim();
+            container.innerHTML = '';
+            const partes = progDicaTipoText.split(',').map(parte => parte.trim());
+            partes.forEach(parte => {
+                const span = document.createElement('span');
+                span.className = 'label label-danger arrowed-right';
+                span.innerHTML = `&nbsp;${parte}`;
+                container.appendChild(span);
+                container.appendChild(document.createTextNode(' '));
+            });
+        });
+
+        // B. Executa a função exclusiva para REGISTRO SIMPLES
+        processarDicasSimples();
+
+        // C. Executa a função exclusiva para REGISTRO DUPLO
+        processarDicasDuplo();
+    });
+			
+			
+			
+			</script>
 		
 		
 	</body>

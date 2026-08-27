@@ -28,75 +28,21 @@
 				justify-content: center;
 				font-size: 9px;
 			}
-		</style>
-		<style>
-			/* ========================================================================= */
-			/* AJUSTE PARA QUEBRA DE LINHA NO NOME DO TERAPEUTA (VERTICAL)               */
-			/* ========================================================================= */
-
-			/* Coluna da Esquerda: Texto Vertical + Linha Separadora */
-			.btn-coluna-esquerda {
-				display: flex !important;
-				align-items: center !important;
-				justify-content: center !important;
-				border-right: 2px solid rgba(255, 255, 255, 0.5) !important; /* Linha vertical branca */
-				padding: 0 4px !important;
-				min-width: 35px !important;
-				max-width: 40px !important; /* ✅ Limita a largura para forçar a quebra do nome longo */
-				overflow: hidden !important;
-			}
-
-			/* O Texto Vertical (De baixo para cima) */
-			.texto-vertical-registro {
-				writing-mode: vertical-rl !important;
-				transform: rotate(180deg) !important; /* Inverte para ler de baixo para cima */
-				color: white !important;
-				font-size: 10px !important; /* Levemente menor para caber melhor */
-				font-weight: bold !important;
-				letter-spacing: 0.5px !important;
-				
-				/* ✅ PROPRIEDADES QUE PERMITEM A QUEBRA DE LINHA */
-				white-space: normal !important; 
-				word-wrap: break-word !important;
-				overflow-wrap: break-word !important;
-				
-				text-align: center !important;
-				width: 100% !important;
-			}
-
-			/* Garante que o label interno também respeite a quebra */
-			.texto-vertical-registro label {
-				white-space: normal !important;
-				word-wrap: break-word !important;
-				line-height: 1.1 !important;
-				margin: 0 !important;
-				display: block !important;
-			}
-
-			/* Coluna da Direita: Conteúdo original empilhado */
-			.btn-coluna-direita {
-				display: flex !important;
-				flex-direction: column !important;
-				align-items: center !important;
-				justify-content: center !important;
-				flex: 1 !important; /* Ocupa o restante do espaço */
-				padding-left: 6px !important;
-			}
 
 			/* Largura específica para o botão SIMPLES */
 			.btn-largura-simples {
-				min-width: 130px !important;
-				max-width: 150px !important;
-				display: inline-flex !important; /* ✅ Permite ficar lado a lado */
+				min-width: 100px !important;
+				max-width: 140px !important;
+				width: 100% !important;
 			}
 
-			/* Largura específica para o botão DUPLO */
+			/* Largura específica para o botão DUPLO (mais largo) */
 			.btn-largura-duplo {
-				min-width: 160px !important;
-				max-width: 190px !important;
-				display: inline-flex !important; /* ✅ Permite ficar lado a lado */
+				min-width: 140px !important;
+				max-width: 180px !important;
+				width: 100% !important;
 			}
-		</style>
+   		 </style>
 		
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta charset="utf-8">
@@ -966,128 +912,111 @@
 																												{{/ifEqual}}
 																											{{/ifEqual}}																											
 																										</td>
-																										<td style="vertical-align: top; text-align: left; display: flex; flex-wrap: wrap; gap: 8px;">
+																										<td style="vertical-align: top; text-align: left;">
 																											<!-- Botões da Folha de Registro -->
 																											{{#each ../../../folregs}}
 																												{{#ifEqual this.folreg_setid ../_id}}
 																												<!-- Botões da Folha de Registro SImples -->
 																												{{#ifEqual this.folreg_tiporeg "Simples"}}
-																													<!-- Botões da Folha de Registro Simples -->
-<a href="/menu/area/aba/folreg/Edi/{{this._id}}/{{../../_id}}" class="btn btn-minier btn-app btn-purple btn-largura-simples btn-layout-horizontal">
-    
-    <!-- COLUNA ESQUERDA: Texto Vertical e Linha -->
-    <div class="btn-coluna-esquerda">
-        <span class="texto-vertical-registro">
-			 <label style="font-size: 10px; white-space: normal; color: white; line-height: 1.2; text-align: center; margin-bottom: 4px;">
-            {{#each ../../../../usuarios}}
-                {{#ifEqual this._id ../folreg_usuid}}
-                    {{usuario_nome}}
-                {{/ifEqual}}
-            {{/each}}
-        </label>
-		</span>
-    </div>
-    
-    <!-- COLUNA DIREITA: Data, Terapeuta, Gráfico, Status e Dicas -->
-    <div class="btn-coluna-direita">
-        <label style="font-size: 10px; white-space: normal; color: white; line-height: 1.2; text-align: center; margin-bottom: 4px;">
-            <b>{{this.folreg_datareg}}</b>
-        </label>
-        <br>
-        <div class="infobox-chart infobox-blue">
-            <span class="sparkline" data-values="{{this.folreg_totalsimples_i}},{{this.folreg_totalsimples_e}},{{this.folreg_totalsimples_plusd}},{{this.folreg_totalduploesq_minusd}}" style="display: inline-block; width: 44px; height: 33px; vertical-align: top;"></span>
-        </div>
-        
-        <div style="text-align: center; margin-bottom: 4px;">
-            {{#ifEqual this.folreg_status "1"}}
-                <span style="white-space: normal; font-size: 9px;">Esvanecimento</span>
-            {{else}}
-                {{#ifEqual this.folreg_status "2"}}
-                    <span style="white-space: normal; font-size: 9px;">Meta</span>
-                {{else}}
-                    {{#ifEqual this.folreg_status "3"}}
-                        <span style="white-space: normal; font-size: 9px;">Volta Passo</span>
-                    {{else}}
-                        <span style="white-space: normal; font-size: 9px;">Continua</span>
-                    {{/ifEqual}}
-                {{/ifEqual}}
-            {{/ifEqual}}
-        </div>
-        
-        <!-- RESUMO DE DICAS -->
-        <div class="resumo-dicas-simples" 
-             data-tiporeg="Simples"
-             data-dicas-programa="{{../../prog_dicatipotext}}"
-             data-t1s="{{this.folreg_t1tipodsimples}}" data-t2s="{{this.folreg_t2tipodsimples}}" 
-             data-t3s="{{this.folreg_t3tipodsimples}}" data-t4s="{{this.folreg_t4tipodsimples}}" 
-             data-t5s="{{this.folreg_t5tipodsimples}}" data-t6s="{{this.folreg_t6tipodsimples}}"
-             data-t7s="{{this.folreg_t7tipodsimples}}" data-t8s="{{this.folreg_t8tipodsimples}}" 
-             data-t9s="{{this.folreg_t9tipodsimples}}" data-t10s="{{this.folreg_t10tipodsimples}}">
-        </div>
-    </div>
-</a>
+																													<a href="/menu/area/aba/folreg/Edi/{{this._id}}/{{../../_id}}" class="btn btn-minier btn-app btn-purple btn-largura-simples">
+																												
+																													<label for="form-field-select-1" style="font-size: 10px; white-space: wrap; color:white">
+																														{{this.folreg_datareg}}
+																														
+																														<br>
+																														{{#each ../../../../usuarios}}<!-- Ok -->
+																															{{#ifEqual this._id ../folreg_usuid}}
+																																{{usuario_nome}}
+																															{{/ifEqual}}
+																														{{/each}}
+																													</label>
+																													<div class="infobox-chart; infobox-blue">
+																														<span class="sparkline" data-values="{{this.folreg_totalsimples_i}},{{this.folreg_totalsimples_e}},{{this.folreg_totalsimples_plusd}},{{this.folreg_totalduploesq_minusd}}"  style="display: inline-block; width: 44px; height: 33px; vertical-align: top;"></span>
+																													</div>
+																													<div style="align-items: center;">
+																													{{#ifEqual this.folreg_status "1"}}
+																														<span style="white-space: wrap; font-size: 9px;" >Esvanecimento</span>
+																														{{else}}
+																														{{#ifEqual this.folreg_status "2"}}
+																															<span  style="white-space: wrap; font-size: 9px;" >Meta</span>
+																															{{else}}
+																															{{#ifEqual this.folreg_status "3"}}
+																																<span  style="white-space: wrap; font-size: 9px;" > Volta Passo</span>
+																																{{else}}
+																																<span style="white-space: wrap; font-size: 9px;" > Continua</span>
+																															{{/ifEqual}}
+																														{{/ifEqual}}
+																													{{/ifEqual}}
+																													</div>
+																													<!-- ========================================================================= -->
+																													<!-- RESUMO DE DICAS - REGISTRO SIMPLES (EXCLUSIVO) -->
+																													<!-- ========================================================================= -->
+																													<div class="resumo-dicas-simples" 
+																														data-tiporeg="Simples"
+																														data-dicas-programa="{{../../prog_dicatipotext}}"
+																														data-t1s="{{this.folreg_t1tipodsimples}}" data-t2s="{{this.folreg_t2tipodsimples}}" 
+																														data-t3s="{{this.folreg_t3tipodsimples}}" data-t4s="{{this.folreg_t4tipodsimples}}" 
+																														data-t5s="{{this.folreg_t5tipodsimples}}" data-t6s="{{this.folreg_t6tipodsimples}}"
+																														data-t7s="{{this.folreg_t7tipodsimples}}" data-t8s="{{this.folreg_t8tipodsimples}}" 
+																														data-t9s="{{this.folreg_t9tipodsimples}}" data-t10s="{{this.folreg_t10tipodsimples}}">
+																													</div>
+																													<!-- ========================================================================= -->
+																													
+																													</a>
 																														{{else}}
 																													<!-- Botões da Folha de Registro Duplo -->
-																													<!-- Botões da Folha de Registro Duplo -->
-<a href="/menu/area/aba/folreg/Edi/{{this._id}}/{{../../_id}}" class="btn btn-minier btn-app btn-info btn-largura-duplo btn-layout-horizontal">
-    
-    <!-- COLUNA ESQUERDA: Texto Vertical e Linha -->
-    <div class="btn-coluna-esquerda">
-        <span class="texto-vertical-registro">
-			 <label style="font-size: 10px; white-space: normal; color: white; line-height: 1.2; text-align: center; margin-bottom: 4px;">
-            {{#each ../../../../usuarios}}
-                {{#ifEqual this._id ../folreg_usuid}}
-                    {{usuario_nome}}
-                {{/ifEqual}}
-            {{/each}}
-        </label>
-		</span>
-    </div>
-    
-    <!-- COLUNA DIREITA: Data, Terapeuta, Gráfico, Status e Dicas -->
-    <div class="btn-coluna-direita">
-        <label style="font-size: 10px; white-space: normal; color: white; line-height: 1.2; text-align: center; margin-bottom: 4px;">
-            <b>{{this.folreg_datareg}}</b>
-        </label>
-		<br>
-        
-        <div class="infobox-chart infobox-blue">
-            <span class="sparkline" data-values="{{this.folreg_totalduploesq_i}},{{this.folreg_totalduploesq_e}},{{this.folreg_totalduploesq_plusd}},{{this.folreg_totalduploesq_minusd}},{{this.folreg_totalduplodir_i}},{{this.folreg_totalduplodir_e}},{{this.folreg_totalduplodir_plusd}},{{this.folreg_totalduplodir_minusd}}" style="display: inline-block; width: 44px; height: 33px; vertical-align: top;"></span>
-        </div>
-        
-        <div style="text-align: center; margin-bottom: 4px;">
-            {{#ifEqual this.folreg_status "1"}}
-                <span class="statusfol" style="white-space: normal; font-size: 9px;">Esvanecimento</span>
-            {{else}}
-                {{#ifEqual this.folreg_status "2"}}
-                    <span class="statusfol" style="white-space: normal; font-size: 9px;">Meta</span>
-                {{else}}
-                    {{#ifEqual this.folreg_status "3"}}
-                        <span class="statusfol" style="white-space: normal; font-size: 9px;">Volta Passo</span>
-                    {{else}}
-                        <span class="statusfol" style="white-space: normal; font-size: 9px;">Continua</span>
-                    {{/ifEqual}}
-                {{/ifEqual}}
-            {{/ifEqual}}
-        </div>
+																													<a href="/menu/area/aba/folreg/Edi/{{this._id}}/{{../../_id}}" class="btn btn-minier btn-app btn-info btn-largura-duplo">
+																														<label for="form-field-select-1" style="font-size: 10px; white-space: wrap; color:white">
+																														{{this.folreg_datareg}}
+																														
+																														<br>
+																														{{#each ../../../../usuarios}}<!-- Ok -->
+																															{{#ifEqual this._id ../folreg_usuid}}
+																																{{usuario_nome}}
+																															{{/ifEqual}}
+																														{{/each}}
+																													</label>
+																													<div class="infobox-chart; infobox-blue">
+																														<span class="sparkline" data-values="{{this.folreg_totalduploesq_i}},{{this.folreg_totalduploesq_e}},{{this.folreg_totalduploesq_plusd}},{{this.folreg_totalduploesq_minusd}},
+																																							 {{this.folreg_totalduplodir_i}},{{this.folreg_totalduplodir_e}},{{this.folreg_totalduplodir_plusd}},{{this.folreg_totalduplodir_minusd}}"  style="display: inline-block; width: 44px; height: 33px; vertical-align: top;"></span>
+																													
+																													</div>
+																													<div style="align-items: center;">
+																													{{#ifEqual this.folreg_status "1"}}
+																														<span class="statusfol" style="white-space: wrap; font-size: 9px;" >Esvanecimento</span>
+																														{{else}}
+																														{{#ifEqual this.folreg_status "2"}}
+																															<span class="statusfol" style="white-space: wrap; font-size: 9px;" >Meta</span>
+																															{{else}}
+																															{{#ifEqual this.folreg_status "3"}}
+																																<span class="statusfol" style="white-space: wrap; font-size: 9px;" > Volta Passo</span>
+																																{{else}}
+																																<span class="statusfol" style="white-space: wrap; font-size: 9px;" > Continua</span>
+																															{{/ifEqual}}
+																														{{/ifEqual}}
+																													{{/ifEqual}}
+																													</div>
 
-        <!-- RESUMO DE DICAS -->
-        <div class="resumo-dicas-duplo" 
-             data-tiporeg="Duplo"
-             data-dicas-programa="{{../../prog_dicatipotext}}"
-             data-t1e="{{this.folreg_t1tipodesqu}}" data-t2e="{{this.folreg_t2tipodesqu}}" 
-             data-t3e="{{this.folreg_t3tipodesqu}}" data-t4e="{{this.folreg_t4tipodesqu}}" 
-             data-t5e="{{this.folreg_t5tipodesqu}}" data-t6e="{{this.folreg_t6tipodesqu}}"
-             data-t7e="{{this.folreg_t7tipodesqu}}" data-t8e="{{this.folreg_t8tipodesqu}}" 
-             data-t9e="{{this.folreg_t9tipodesqu}}" data-t10e="{{this.folreg_t10tipodesqu}}"
-             data-t1d="{{this.folreg_t1tipodird}}" data-t2d="{{this.folreg_t2tipodird}}" 
-             data-t3d="{{this.folreg_t3tipodird}}" data-t4d="{{this.folreg_t4tipodird}}" 
-             data-t5d="{{this.folreg_t5tipodird}}" data-t6d="{{this.folreg_t6tipodird}}"
-             data-t7d="{{this.folreg_t7tipodird}}" data-t8d="{{this.folreg_t8tipodird}}" 
-             data-t9d="{{this.folreg_t9tipodird}}" data-t10d="{{this.folreg_t10tipodird}}">
-        </div>
-    </div>
-</a>
+																													<!-- ========================================================================= -->
+																													<!-- RESUMO DE DICAS - REGISTRO DUPLO (EXCLUSIVO) -->
+																													<!-- ========================================================================= -->
+																													<div class="resumo-dicas-duplo" 
+																														data-tiporeg="Duplo"
+																														data-dicas-programa="{{../../prog_dicatipotext}}"
+																														data-t1e="{{this.folreg_t1tipodesqu}}" data-t2e="{{this.folreg_t2tipodesqu}}" 
+																														data-t3e="{{this.folreg_t3tipodesqu}}" data-t4e="{{this.folreg_t4tipodesqu}}" 
+																														data-t5e="{{this.folreg_t5tipodesqu}}" data-t6e="{{this.folreg_t6tipodesqu}}"
+																														data-t7e="{{this.folreg_t7tipodesqu}}" data-t8e="{{this.folreg_t8tipodesqu}}" 
+																														data-t9e="{{this.folreg_t9tipodesqu}}" data-t10e="{{this.folreg_t10tipodesqu}}"
+																														data-t1d="{{this.folreg_t1tipodird}}" data-t2d="{{this.folreg_t2tipodird}}" 
+																														data-t3d="{{this.folreg_t3tipodird}}" data-t4d="{{this.folreg_t4tipodird}}" 
+																														data-t5d="{{this.folreg_t5tipodird}}" data-t6d="{{this.folreg_t6tipodird}}"
+																														data-t7d="{{this.folreg_t7tipodird}}" data-t8d="{{this.folreg_t8tipodird}}" 
+																														data-t9d="{{this.folreg_t9tipodird}}" data-t10d="{{this.folreg_t10tipodird}}">
+																													</div>
+																													<!-- ========================================================================= -->
+
+																													</a>
 																												{{/ifEqual}}
 																												
 																													
@@ -1128,7 +1057,7 @@
 		<script type="text/javascript" charset="utf8" src="/js/jquery.dataTables.js"></script>
 		<!-- inline scripts related to this page -->
 		
-		<script type="text/javascript">
+				<script type="text/javascript">
 			// =====================================================================
 			// ✅ 1. INICIALIZAÇÃO DO DATATABLES
 			// =====================================================================
@@ -1148,8 +1077,16 @@
 					"select": { "style": 'multi' }
 				});
 			});
-		
+
+			// =====================================================================
+			// ✅ 2. FUNÇÕES DE PROCESSAMENTO DE DICAS (APENAS SPAN DANGER)
+			// =====================================================================
+			
+					// =====================================================================
+		// ✅ 2. FUNÇÕES DE PROCESSAMENTO DE DICAS (EMPILHADAS VERTICALMENTE)
 		// =====================================================================
+		
+				// =====================================================================
 		// ✅ 2. FUNÇÕES DE PROCESSAMENTO DE DICAS (COM QUEBRA DE TEXTO NO SPAN)
 		// =====================================================================
 		
@@ -1221,6 +1158,11 @@
 				processarDicasDuplo();
 			});
 		</script>
+		
+	</body>
+</html>
+	
+
 		
 	</body>
 	
