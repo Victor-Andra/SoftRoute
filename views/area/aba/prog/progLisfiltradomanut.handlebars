@@ -684,39 +684,16 @@
 																								&nbsp;
 																								{{this.prog_dataini}}
 																							</td>
-																							<td style="width:220px">
-																								{{#ifEqual this.prog_status "Aguardando"}}
-																										<a href="#" data-action="">
-																											<i class="ace-icon blue fa fa-hourglass-o bigger-130"></i>
-																										</a>
-																									{{else}}
-																										{{#ifEqual this.prog_status "Pausado"}}
-																										<a href="#" data-action="">
-																											<i class="red ace-icon fa fa-hourglass-o bigger-130"></i>
-																										</a>
-																										<span class="badge badge-danger">{{prog_status}}</span>
-																										{{else}}
-																											{{#ifEqual this.prog_status "Inicio"}}
-																											<a href="#" data-action="">
-																												<i class="orangeace-icon fa fa-sign-in bigger-130"></i>
-																											</a>
-																											<span class="badge badge-warning">{{prog_status}}</span>
-																									{{else}}
-																										{{#ifEqual this.prog_status "Andamento"}}
-																										<a href="#" data-action="">
-																											<i class="green ace-icon fa fa-send bigger-130"></i>
-																										</a>
-																										<span class="badge badge-success">{{prog_status}}</span>
-																										{{else}}
-																										<a href="#" data-action="">
-																											<i class="red ace-icon fa fa-ban bigger-130"></i>
-																										</a>
-																										<span class="badge badge-danger">{{prog_status}}</span>
-																										{{/ifEqual}}
-																									{{/ifEqual}}
-																								{{/ifEqual}}
-																							{{/ifEqual}}
-																							
+																							<td style="text-align: center;">
+																								<a class="red" href="/menu/area/aba/progset/progsetedi/{{this._id}}"><i class="ace-icon fa fa-search bigger-130"></i></a>
+																								{{this.progset_num}}
+																								{{#ifEqual this.progset_status "Agendado"}}<span class="badge badge-brown">{{this.progset_status}}</span>
+																								{{else}}{{#ifEqual this.progset_status "Andamento"}}<span class="badge badge-success">{{this.progset_status}}</span>
+																								{{else}}{{#ifEqual this.progset_status "Pausado"}}<span class="badge badge-warning">{{this.progset_status}}</span>
+																								{{else}}{{#ifEqual this.progset_status "Meta"}}<span class="badge badge-danger">{{this.progset_status}}</span>
+																								{{else}}{{#ifEqual this.progset_status "Manutenção"}}<span class="badge badge-pink">{{this.progset_status}}</span>
+																								{{/ifEqual}}{{/ifEqual}}{{/ifEqual}}{{/ifEqual}}{{/ifEqual}}<br>
+																								{{this.progset_datameta}}
 																							</td>
 																							<td>
 																								<span class="widget-toolbar">
