@@ -135,8 +135,31 @@
 				}
 
 				return true;
-				}
-			
+			}
+			function toggleIntervaloHora() {
+    var isIntervalo = $('#chkIntervaloHora').is(':checked');
+    
+    if (isIntervalo) {
+        // Oculta o select único
+        $('#divHoraSelect').hide();
+        
+        // Revela os campos de intervalo
+        $('#divHoraIntervalo').show();
+        
+        // Limpa o select para não enviar dados conflitantes
+        $('#agendaHoraSelect').val('');
+    } else {
+        // Revela o select único
+        $('#divHoraSelect').show();
+        
+        // Oculta os campos de intervalo
+        $('#divHoraIntervalo').hide();
+        
+        // Limpa os campos de intervalo
+        $('#agendaHoraIni').val('');
+        $('#agendaHoraFim').val('');
+    }
+}
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:carregaBody();controlaNave();ajustaOption();">
@@ -184,16 +207,44 @@
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-6">
-														<label for="id-date-picker-1">Hora Agendamento</label>
-														<div class="form-group">
-															<div class="col-xs-12 col-sm-10">
-																<select name="agendaHora" id="agendaHora" class="select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
-																	{{#each horaages}}
-																		<option value="{{horaage_hora}}">{{horaage_hora}}</option>
-																	{{/each}}
-																</select>
-															</div>
-														</div>
+														<label for="agendaHoraSelect">Hora Agendamento</label>
+
+<!-- CHECKBOX SEMPRE VISÍVEL -->
+<div class="checkbox" style="margin-bottom: 10px;">
+    <label>
+        <input type="checkbox" id="chkIntervaloHora" onchange="toggleIntervaloHora()"> 
+        <small>Agendar por intervalo de horas</small>
+    </label>
+</div>
+
+<div class="form-group">
+    <div class="col-xs-12 col-sm-10">
+        
+        <!-- SELECT DE HORA ÚNICA -->
+        <div id="divHoraSelect">
+            <select name="agendaHoraSelect" id="agendaHoraSelect" class="select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
+                {{#each horaages}}
+                    <option value="{{horaage_hora}}">{{horaage_hora}}</option>
+                {{/each}}
+            </select>
+        </div>
+
+        <!-- CAMPOS DE INTERVALO (OCULTOS POR PADRÃO) -->
+        <div id="divHoraIntervalo" style="display: none; margin-top: 10px;">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="agendaHoraIni">Hora Inicial</label>
+                    <input id="agendaHoraIni" name="agendaHoraIni" type="time" class="form-control" />
+                </div>
+                <div class="col-sm-6">
+                    <label for="agendaHoraFim">Hora Final</label>
+                    <input id="agendaHoraFim" name="agendaHoraFim" type="time" class="form-control" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 													</div>
 												</div>
 												<div class="row">

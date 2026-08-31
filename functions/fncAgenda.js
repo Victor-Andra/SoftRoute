@@ -968,7 +968,7 @@ module.exports = {
             } else {
                 usuObs = " - "
             }
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTeraid, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTeraid, agenda_temp: false, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -1323,9 +1323,9 @@ module.exports = {
         let busca;
         //console.log("req.body.soFixo:"+req.body.soFixo)
         if (soFixo == "true"){
-            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, "agenda_categoria": "SubstitutoFixo" };
+            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") }, "agenda_categoria": "SubstitutoFixo" };
         } else {
-            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false };
+            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } };
         }
         Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
             Agenda.find(busca).then((agenda) =>{
@@ -2651,7 +2651,7 @@ carregaAgendaMesFixo(req, res) {
         Bene.findOne({_id:req.body.agendaBeneid}).then((bene) =>{
             nomeBene = bene.bene_nome
             beneConvid = bene.bene_convid
-            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid }).sort({ agenda_data: -1 }).then((agenda) =>{
+            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).sort({ agenda_data: -1 }).then((agenda) =>{
                 //console.log("Listagem Realizada de agendamentos!")
                 //console.log("agenda.length:"+agenda.length)
                 agenda.forEach((e)=>{
@@ -3053,7 +3053,7 @@ carregaAgendaMesFixo(req, res) {
         Bene.findOne({_id:req.body.agendaBeneid}).then((bene) =>{
             nomeBene = bene.bene_nome
             beneConvid = bene.bene_convid
-            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid }).sort({ agenda_data: -1 }).then((agenda) =>{
+            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).sort({ agenda_data: -1 }).then((agenda) =>{
                 //console.log("Listagem Realizada de agendamentos!")
                 //console.log("agenda.length:"+agenda.length)
                 agenda.forEach((e)=>{
@@ -3847,7 +3847,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         //Pensar em como carregar quando for merge
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTerapeutaid }).sort({ agenda_data: -1 }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTerapeutaid, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).sort({ agenda_data: -1 }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
@@ -4772,7 +4772,7 @@ carregaAgendaFilS(req, res) {
 
     // ===== CONSULTA PRINCIPAL: AGENDA =====
     console.log('   🔍 Buscando agendamentos no período...');
-    Agenda.find({ agenda_data: { $gte: agora, $lte: depois } })
+    Agenda.find({ agenda_data: { $gte: agora, $lte: depois },agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } })
         .sort({ agenda_data: -1 })
         .then((agenda) => {
             console.log('   ✅ Agenda: Encontrados', agenda.length, 'registros');
@@ -8655,7 +8655,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false }).sort({agenda_data: -1}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).sort({agenda_data: -1}).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
@@ -13484,6 +13484,8 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                 if (a.agenda_categoria == "SubstitutoFixo"){
                     newAgenda = new Agenda({
                         agenda_data : a.agenda_data,//
+                        agenda_hora : a.agenda_hora,
+                        agenda_hora_fim : a.agenda_hora_fim,
                         agenda_beneid : a.agenda_beneid,//
                         agenda_convid : a.agenda_convid,//
                         agenda_salaid : a.agenda_salaid,//
@@ -13501,6 +13503,8 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                 } else {
                     newAgenda = new Agenda({
                         agenda_data : a.agenda_data,//
+                        agenda_hora : a.agenda_hora,
+                        agenda_hora_fim : a.agenda_hora_fim,
                         agenda_beneid : a.agenda_beneid,//
                         agenda_convid : a.agenda_convid,//
                         agenda_salaid : a.agenda_salaid,//

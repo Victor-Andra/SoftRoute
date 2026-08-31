@@ -160,6 +160,42 @@ module.exports = {
         let agendaData = new Date(agendamento.agenda_data);
         let bloqueio = agendaData < doisMesesAtras;
 
+        // 🛠️ Função auxiliar para adicionar minutos a uma string de hora (HH:MM)
+        function adicionarMinutos(horaString, minutos) {
+            if (!horaString) return null;
+            const [horas, mins] = horaString.split(':').map(Number);
+            const totalMinutos = (horas * 60) + mins + minutos;
+            
+            const novasHoras = Math.floor(totalMinutos / 60) % 24; // Garante que não estoure 24h
+            const novosMinutos = totalMinutos % 60;
+            
+            return `${String(novasHoras).padStart(2, '0')}:${String(novosMinutos).padStart(2, '0')}`;
+        }
+
+        let agenda_hora;
+        let agenda_hora_ini;
+        let agenda_hora_fim;
+        let horaInicial = req.body.agendaHoraSelect || req.body.agendaHoraIni;
+        let horaFim = req.body.agendaHoraFim;
+
+        // 🧠 Lógica de conversão para garantir os 3 campos sempre preenchidos
+        if (horaInicial && horaFim) {
+            // ✅ CASO 1: Usuário marcou o intervalo (Início e Fim preenchidos)
+            agenda_hora = horaInicial;
+            agenda_hora_ini = horaInicial;
+            agenda_hora_fim = horaFim;
+        } else if (horaUnica) {
+            // ✅ CASO 2: Usuário escolheu hora única (horaage)
+            agenda_hora = horaUnica;
+            agenda_hora_ini = horaUnica;
+            agenda_hora_fim = adicionarMinutos(horaUnica, 40);
+        } else {
+            // ⚠️ Fallback de segurança (caso nenhum campo seja enviado)
+            agenda_hora = null;
+            agenda_hora_ini = null;
+            agenda_hora_fim = null;
+        }
+
         if (bloqueio){
             console.log("Bloqueada a edição devido ao fechamento!");
             return false;
@@ -176,8 +212,8 @@ module.exports = {
                 await AgendaModel.findByIdAndUpdate(req.body.id, 
                     {$set: {
                         agenda_data : dataAgenda,
-                        agenda_hora : req.body.agendaHora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
-                        agenda_horafim : req.body.agendaHorafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                        agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                        agenda_horafim : agenda_hora_fim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
                         agenda_beneid : req.body.agendaBeneid ,
                         agenda_convid : req.body.agendaConvid ,
                         agenda_salaid : req.body.agendaSalaid ,
@@ -204,8 +240,8 @@ module.exports = {
                 await AgendaModel.findByIdAndUpdate(req.body.id, 
                     {$set: {
                         agenda_data : dataAgenda ,
-                        agenda_hora : req.body.agendaHora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
-                        agenda_horafim : req.body.agendaHorafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                        agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                        agenda_horafim : agenda_hora_fim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
                         agenda_beneid : req.body.agendaBeneid ,
                         agenda_convid : req.body.agendaConvid ,
                         agenda_salaid : req.body.agendaSalaid ,
@@ -266,6 +302,42 @@ module.exports = {
                 extra = true;
             }
 
+            // 🛠️ Função auxiliar para adicionar minutos a uma string de hora (HH:MM)
+            function adicionarMinutos(horaString, minutos) {
+                if (!horaString) return null;
+                const [horas, mins] = horaString.split(':').map(Number);
+                const totalMinutos = (horas * 60) + mins + minutos;
+                
+                const novasHoras = Math.floor(totalMinutos / 60) % 24; // Garante que não estoure 24h
+                const novosMinutos = totalMinutos % 60;
+                
+                return `${String(novasHoras).padStart(2, '0')}:${String(novosMinutos).padStart(2, '0')}`;
+            }
+
+            let agenda_hora;
+            let agenda_hora_ini;
+            let agenda_hora_fim;
+            let horaInicial = req.body.agendaHoraSelect || req.body.agendaHoraIni;
+            let horaFim = req.body.agendaHoraFim;
+
+            // 🧠 Lógica de conversão para garantir os 3 campos sempre preenchidos
+            if (horaInicial && horaFim) {
+                // ✅ CASO 1: Usuário marcou o intervalo (Início e Fim preenchidos)
+                agenda_hora = horaInicial;
+                agenda_hora_ini = horaInicial;
+                agenda_hora_fim = horaFim;
+            } else if (horaUnica) {
+                // ✅ CASO 2: Usuário escolheu hora única (horaage)
+                agenda_hora = horaUnica;
+                agenda_hora_ini = horaUnica;
+                agenda_hora_fim = adicionarMinutos(horaUnica, 40);
+            } else {
+                // ⚠️ Fallback de segurança (caso nenhum campo seja enviado)
+                agenda_hora = null;
+                agenda_hora_ini = null;
+                agenda_hora_fim = null;
+            }
+
             let data = new Date(req.body.agendaData);
             //console.log(dataAgenda);
             //console.log("data:"+data);
@@ -274,6 +346,7 @@ module.exports = {
             const newAgenda = new AgendaModel({
                 agenda_data : dataAgenda ,
                 agenda_hora : req.body.agendaHora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                agenda_hora_fim: req.body.agenda_hora_fim,
                 agenda_horafim : req.body.agendaHorafim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
                 agenda_beneid : req.body.agendaBeneid ,
                 agenda_convid : req.body.agendaConvid ,
@@ -361,13 +434,49 @@ module.exports = {
         // Normalizar campo extra (boolean ou string "true"/"false")
         let extra = (req.body.agendaExtra == true || req.body.agendaExtra == "true");
 
+        // 🛠️ Função auxiliar para adicionar minutos a uma string de hora (HH:MM)
+        function adicionarMinutos(horaString, minutos) {
+            if (!horaString) return null;
+            const [horas, mins] = horaString.split(':').map(Number);
+            const totalMinutos = (horas * 60) + mins + minutos;
+            
+            const novasHoras = Math.floor(totalMinutos / 60) % 24; // Garante que não estoure 24h
+            const novosMinutos = totalMinutos % 60;
+            
+            return `${String(novasHoras).padStart(2, '0')}:${String(novosMinutos).padStart(2, '0')}`;
+        }
+
+        let agenda_hora;
+        let agenda_hora_ini;
+        let agenda_hora_fim;
+        let horaInicial = req.body.agendaHoraSelect || req.body.agendaHoraIni;
+        let horaFim = req.body.agendaHoraFim;
+
+        // 🧠 Lógica de conversão para garantir os 3 campos sempre preenchidos
+        if (horaInicial && horaFim) {
+            // ✅ CASO 1: Usuário marcou o intervalo (Início e Fim preenchidos)
+            agenda_hora = horaInicial;
+            agenda_hora_ini = horaInicial;
+            agenda_hora_fim = horaFim;
+        } else if (horaUnica) {
+            // ✅ CASO 2: Usuário escolheu hora única (horaage)
+            agenda_hora = horaUnica;
+            agenda_hora_ini = horaUnica;
+            agenda_hora_fim = adicionarMinutos(horaUnica, 40);
+        } else {
+            // ⚠️ Fallback de segurança (caso nenhum campo seja enviado)
+            agenda_hora = null;
+            agenda_hora_ini = null;
+            agenda_hora_fim = null;
+        }
+
         // 📌 PASSO 7: Instanciar novo documento com todos os campos
         const newAgenda = new AgendaModel({
             // 📅 Dados de data/hora
             agenda_data: dataAgenda,
-            agenda_hora: agendaHora,              // 👉 String garantida (não array)
-            agenda_horafim: agendaHoraFim,        // 👉 String garantida (não array)
-            
+            agenda_hora: agenda_hora,
+            agenda_horafim: agenda_hora_fim,
+
             // 👥 Relacionamentos
             agenda_beneid: req.body.agendaBeneid,
             agenda_convid: req.body.agendaConvid,
@@ -390,8 +499,8 @@ module.exports = {
             
             // 📝 Auditoria
             agenda_log: req.body.agendaLog,
-            agenda_usucad: usuarioAtual,          // 👉 Agora com required: false corrigido
-            agenda_datacad: dataAtual.toISOString() // 👉 ISO string é mais seguro
+            agenda_usucad: usuarioAtual,
+            agenda_datacad: dataAtual.toISOString()
         });
 
         // 📌 PASSO 8: Salvar no MongoDB com tratamento de erro
@@ -423,6 +532,42 @@ module.exports = {
         doisMesesAtras.setMonth(doisMesesAtras.getMonth() - 2);
         let bloqueio = dataAgenda < doisMesesAtras;
 
+        // 🛠️ Função auxiliar para adicionar minutos a uma string de hora (HH:MM)
+        function adicionarMinutos(horaString, minutos) {
+            if (!horaString) return null;
+            const [horas, mins] = horaString.split(':').map(Number);
+            const totalMinutos = (horas * 60) + mins + minutos;
+            
+            const novasHoras = Math.floor(totalMinutos / 60) % 24; // Garante que não estoure 24h
+            const novosMinutos = totalMinutos % 60;
+            
+            return `${String(novasHoras).padStart(2, '0')}:${String(novosMinutos).padStart(2, '0')}`;
+        }
+
+        let agenda_hora;
+        let agenda_hora_ini;
+        let agenda_hora_fim;
+        let horaInicial = req.body.agendaHoraSelect || req.body.agendaHoraIni;
+        let horaFim = req.body.agendaHoraFim;
+
+        // 🧠 Lógica de conversão para garantir os 3 campos sempre preenchidos
+        if (horaInicial && horaFim) {
+            // ✅ CASO 1: Usuário marcou o intervalo (Início e Fim preenchidos)
+            agenda_hora = horaInicial;
+            agenda_hora_ini = horaInicial;
+            agenda_hora_fim = horaFim;
+        } else if (horaUnica) {
+            // ✅ CASO 2: Usuário escolheu hora única (horaage)
+            agenda_hora = horaUnica;
+            agenda_hora_ini = horaUnica;
+            agenda_hora_fim = adicionarMinutos(horaUnica, 40);
+        } else {
+            // ⚠️ Fallback de segurança (caso nenhum campo seja enviado)
+            agenda_hora = null;
+            agenda_hora_ini = null;
+            agenda_hora_fim = null;
+        }
+
         if (bloqueio){
             console.log("Bloqueada a criação devido ao fechamento!");
             return false;
@@ -438,8 +583,8 @@ module.exports = {
             //console.log("agendamodel");
             const newAgenda = new AgendaModel({
                 agenda_data : dataAgenda ,
-                agenda_hora : req.body.agendaHora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
-                agenda_horafim : req.body.agendaHoraFim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                agenda_hora : agenda_hora,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
+                agenda_horafim : agenda_hora_fim,//Novo campo Horario Livre, descontinuar tabela de horários 07-04-2026 10,45h Debora
                 agenda_beneid : req.body.agendaBeneid ,
                 agenda_convid : req.body.agendaConvid ,
                 agenda_salaid : req.body.agendaSalaid ,
@@ -524,12 +669,48 @@ module.exports = {
         // Converter agendaTempId para ObjectId do Mongoose
         let agendaTempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
 
+        // 🛠️ Função auxiliar para adicionar minutos a uma string de hora (HH:MM)
+        function adicionarMinutos(horaString, minutos) {
+            if (!horaString) return null;
+            const [horas, mins] = horaString.split(':').map(Number);
+            const totalMinutos = (horas * 60) + mins + minutos;
+            
+            const novasHoras = Math.floor(totalMinutos / 60) % 24; // Garante que não estoure 24h
+            const novosMinutos = totalMinutos % 60;
+            
+            return `${String(novasHoras).padStart(2, '0')}:${String(novosMinutos).padStart(2, '0')}`;
+        }
+
+        let agenda_hora;
+        let agenda_hora_ini;
+        let agenda_hora_fim;
+        let horaInicial = req.body.agendaHoraSelect || req.body.agendaHoraIni;
+        let horaFim = req.body.agendaHoraFim;
+
+        // 🧠 Lógica de conversão para garantir os 3 campos sempre preenchidos
+        if (horaInicial && horaFim) {
+            // ✅ CASO 1: Usuário marcou o intervalo (Início e Fim preenchidos)
+            agenda_hora = horaInicial;
+            agenda_hora_ini = horaInicial;
+            agenda_hora_fim = horaFim;
+        } else if (horaUnica) {
+            // ✅ CASO 2: Usuário escolheu hora única (horaage)
+            agenda_hora = horaUnica;
+            agenda_hora_ini = horaUnica;
+            agenda_hora_fim = adicionarMinutos(horaUnica, 40);
+        } else {
+            // ⚠️ Fallback de segurança (caso nenhum campo seja enviado)
+            agenda_hora = null;
+            agenda_hora_ini = null;
+            agenda_hora_fim = null;
+        }
+
         // 📌 PASSO 7: Instanciar novo documento TEMPORÁRIO
         const newAgenda = new AgendaModel({
             // 📅 Dados de data/hora
             agenda_data: dataAgenda,
-            agenda_hora: agendaHora,              // 👉 String garantida
-            agenda_horafim: agendaHoraFim,        // 👉 String garantida
+            agenda_hora: agenda_hora,              // 👉 String garantida
+            agenda_horafim: agenda_hora_fim,        // 👉 String garantida
             
             // 👥 Relacionamentos
             agenda_beneid: req.body.agendaBeneid,

@@ -15,6 +15,7 @@ const AtendSchema = mongoose.Schema({
     atend_usuid :{ type: String, required: true },//_id da tb_usuario
     atend_atenddata :{ type: Date, required: true },
     atend_atendhora :{ type: String, required: false },
+    atend_atendhorafim :{ type: String, required: false },
     atend_terapeutaid :{ type: ObjectId, required: true },//_id da tb_usuario, filtrado pelo campo usuario_funcaoid, valor do campo: 6241030bfbcc51f47c720a0b
     atend_terapiaid :{ type: ObjectId, required: true },//_id da tb_terapia
     atend_salaid :{ type: ObjectId, required: true },//_id da tb_sala
@@ -61,6 +62,7 @@ class Atend{
         atend_usuid,
         atend_atenddata,
         atend_atendhora,
+        atend_atendhorafim,
         atend_terapeutaid,
         atend_terapiaid,
         atend_salaid,
@@ -101,6 +103,7 @@ class Atend{
         this.atend_usuid = atend_usuid,
         this.atend_atenddata = atend_atenddata,
         this.atend_atendhora = atend_atendhora,
+        this.atend_atendhorafim = atend_atendhorafim,
         this.atend_terapeutaid = atend_terapeutaid,
         this.atend_terapiaid = atend_terapiaid,
         this.atend_salaid = atend_salaid,

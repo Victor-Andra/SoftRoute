@@ -286,6 +286,33 @@
         function atribuiConvId() {
           document.getElementById("agendaConvid").value = document.getElementById("agendaConvidVisivel").value;
         }
+
+        function toggleIntervaloHora() {
+          var isIntervalo = $('#chkIntervaloHora').is(':checked');
+          
+          if (isIntervalo) {
+              // Oculta o select único
+              $('#divHoraSelect').hide();
+              
+              // Revela os campos de intervalo
+              $('#divHoraInputIni').show();
+              $('#divHoraInputFim').show();
+              
+              // Limpa o select para não enviar dados conflitantes
+              $('#agendaHoraSelect').val('');
+          } else {
+              // Revela o select único
+              $('#divHoraSelect').show();
+              
+              // Oculta os campos de intervalo
+              $('#divHoraInputIni').hide();
+              $('#divHoraInputFim').hide();
+              
+              // Limpa os campos de intervalo
+              $('#agendaHoraInicial').val('');
+              $('#agendaHoraFim').val('');
+          }
+        }
     </script>
   </head>
   <body class="no-skin" onload="javascript:controlaNave();carregaBody();controlaCategoria();">
@@ -402,50 +429,64 @@
                       <div class="widget-main">
                         <div class="row">
                           <div class="col-xs-12 col-sm-3">
-                            <label for="id-date-picker-1">Data Agendamento</label>
+                            <label for="agendaData">Data Agendamento</label>
                             <div class="row">
-                              <div class="col-sm-4">
-                                <div class="input-group">
-                                  <input name="agendaData" id="agendaData" type="date" style="width: 200px;">
-                                  
-                                  <input class="hidden" id="agendaHoraToogle" name="agendaHoraToogle" value="true" />
+                                <div class="col-sm-12">
+                                    <div class="input-group">
+                                        <input name="agendaData" id="agendaData" type="date" class="form-control" style="width: 200px;">
+                                        <input class="hidden" id="agendaHoraToogle" name="agendaHoraToogle" value="false" />
+                                    </div>
                                 </div>
-                              </div>
                             </div>
-                          </div>
-                          <div id="divHoraSelect" class="col-xs-12 col-sm-4">
-                            <label for="id-date-picker-1">Hora Agendamento</label>
-                            <div class="form-group">
-                              <div class="col-sm-8">
-                                <select name="agendaHora" id="agendaHora" class="select" data-placeholder="Escolha...">
-                                  {{#each horaages}}
-                                    <option value="{{horaage_hora}}">{{horaage_hora}}</option>
-                                  {{/each}}
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                          <div id="divHoraInputIni" class="col-xs-12 col-sm-3" hidden>
-                            <label for="id-date-picker-1">Hora início agendamento</label>
-                            <div class="form-group">
-                              <div class="col-sm-8">
-                                <input id="agendaHora" name="agendaHora" type="text" />
-                                {{!-- <select name="agendaHoraSelect" id="agendaHoraSelect" class="select" data-placeholder="Escolha...">
-                                  {{#each horaages}}
-                                    <option value="{{horaage_hora}}">{{horaage_hora}}</option>
-                                  {{/each}}
-                                </select> --}}
-                              </div>
-                            </div>
-                          </div>
-                          <div id="divHoraInputFim" class="col-xs-12 col-sm-3" hidden>
-                            <label for="id-date-picker-1">Hora fim agendamento</label>
-                            <div class="form-group">
-                              <div class="col-sm-8">
-                                <input id="agendaHora" name="agendaHoraFim" type="text" />
-                              </div>
-                            </div>
-                          </div>
+                        </div>
+
+                        <!-- CHECKBOX SEMPRE VISÍVEL -->
+<div class="col-xs-12 col-sm-2">
+    <label>&nbsp;</label>
+    <div class="form-group">
+        <div class="checkbox" style="margin-top: 25px;">
+            <label>
+                <input type="checkbox" id="chkIntervaloHora" onchange="toggleIntervaloHora()"> 
+                <small>Intervalo</small>
+            </label>
+        </div>
+    </div>
+</div>
+
+<!-- COLUNA DA HORA ÚNICA -->
+<div id="divHoraSelect" class="col-xs-12 col-sm-4">
+    <label for="agendaHoraSelect">Hora Agendamento</label>
+    <div class="form-group">
+        <div class="col-sm-12">
+            <select name="agendaHoraSelect" id="agendaHoraSelect" class="select" data-placeholder="Escolha...">
+                {{#each horaages}}
+                    <option value="{{horaage_hora}}">{{horaage_hora}}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- COLUNA DA HORA INÍCIO -->
+<div id="divHoraInputIni" class="col-xs-12 col-sm-3" hidden>
+    <label for="agendaHoraInicial">Hora início agendamento</label>
+    <div class="form-group">
+        <div class="col-sm-12">
+            <!-- type="time" limita ao formato 00:00 -->
+            <input id="agendaHoraInicial" name="agendaHoraInicial" type="time" class="form-control" />
+        </div>
+    </div>
+</div>
+
+<!-- COLUNA DA HORA FIM -->
+<div id="divHoraInputFim" class="col-xs-12 col-sm-3" hidden>
+    <label for="agendaHoraFim">Hora fim agendamento</label>
+    <div class="form-group">
+        <div class="col-sm-12">
+            <input id="agendaHoraFim" name="agendaHoraFim" type="time" class="form-control" />
+        </div>
+    </div>
+</div>
                           <div class="col-xs-4">
                             <label style="color: crimson;">Extraordinário:</label>
                             <div class="form-group">
