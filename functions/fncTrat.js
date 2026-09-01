@@ -899,7 +899,8 @@ module.exports = {
         switch (tipoPessoa) {
             case "Geral":
                 if (isAgendaTerapeuta) {
-                    busca = { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) }, trat_terapeutaidpad: new ObjectId(idUsu) };
+                    //busca = { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) }, trat_terapeutaidpad: new ObjectId(idUsu) };
+                    busca = { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) } };
                 } else {
                     busca = { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) } };
                 }
@@ -907,7 +908,8 @@ module.exports = {
                 
             case "Beneficiario":
                 if (isAgendaTerapeuta) {
-                    busca = { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) }, trat_beneid: req.body.atendBeneficiario, trat_terapeutaidpad: new ObjectId(idUsu) }; // UNIVERSAL
+                    //busca = { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) }, trat_beneid: req.body.atendBeneficiario, trat_terapeutaidpad: new ObjectId(idUsu) }; // UNIVERSAL
+                    busca = { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) }, trat_beneid: req.body.atendBeneficiario }; // UNIVERSAL
                 } else {
                     busca = { trat_tratdata: { $gte: new Date(dataIni), $lte: new Date(dataFim) }, trat_beneid: req.body.atendBeneficiario }; // UNIVERSAL
                 }

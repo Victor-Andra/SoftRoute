@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Agenda Semanal</title>
+		<meta name="description" content="Static &amp; Dynamic Tables">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../../assets/font-awesome/4.5.0/css/font-awesome.min.css">
+		<!-- page specific plugin styles -->
+		<!-- text fonts -->
+		<link rel="stylesheet" href="../../assets/css/fonts.googleapis.com.css">
+		<!-- ace styles -->
+		<link rel="stylesheet" href="../../assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style">
+		<link rel="stylesheet" href="../../assets/css/ace-part2.min.css" class="ace-main-stylesheet">
+		<link rel="stylesheet" href="../../assets/css/ace-skins.min.css">
+		<link rel="stylesheet" href="../../assets/css/ace-rtl.min.css">
+ 	    <link rel="stylesheet" href="../../assets/css/ace-ie.min.css">
+		<!-- inline styles related to this page -->
+		<style>
+			/* Linha divisória entre dias */
+			.dia-semana {
+				border-right: 3px solid #000 !important;
+			}
+
+			/* Fundo verde claro */
+			.bg-verde-suave {
+				background-color: #e5f5e5 !important;
+			}
+
+			/* Fundo amarelo claro */
+			.bg-amarelo-suave {
+				background-color: #f3f1e0 !important;
+			}
+			
+			/* Linha divisória grossa após 11:20 */
+			.divisoria-meio-dia td {
+				border-bottom: 4px solid #999 !important; /* Borda grossa e cinza */
+			}
+		</style>
+
+		<script type="text/javascript">
+			function atualizaData(){
+				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataIso);
+				document.getElementById("agendaData").value = dataFmt;
+			}
+			function carregaBody(){
+				let dias = ["seg","ter","qua","qui","sex"];
+				let ds = [];
+				try{
+					console.log("carrega bode")
+					document.getElementsByName("sala_id").forEach((si)=>{
+						//console.log(si);
+						dias.forEach((dia)=>{
+							//console.log("dia_salaid:"+dia+"_"+si)
+							ds.push(dia+"_"+si.value);
+						})
+					})
+					ds.forEach((dia_sala)=>{
+						let dia_sala_tipo = dia_sala + "_Bene"
+						document.getElementsByName(dia_sala_tipo).forEach((e)=>{
+							let id = "hora"+e.id;//td para receber o append
+							
+							let valor = e.value;//valor para indexar no td
+							//console.log("valor:"+valor)
+							//console.log("ELEMENTO VALOR:"+document.getElementById(valor))
+							if(document.getElementById(valor) != null){
+								let color = e.id + "_" + e.value;
+								let hav = document.getElementById(color)
+								let extra = document.getElementById(color+"_extra")
+
+								if (hav != null || extra != null) {
+									let val = document.getElementById(valor).cloneNode(true);
+									val.id = val.id+"x";
+									let motivo;
+
+									if (extra != null){
+										motivo = extra.value;
+										switch (motivo) {
+											case "Falta" :
+												val.style.backgroundColor = "yellow";
+												break;
+											case "Falta Justificada":
+												val.style.backgroundColor = "orange";
+												break;
+											case "Falta Absoluta":
+												val.style.backgroundColor = "orange";
+												break;
+											case "Feriado":
+												val.style.backgroundColor = "orange";
+												break;
+											case "Glosa":
+												val.style.backgroundColor = "lightgray";
+												break;
+											case "Substituição":
+												val.style.backgroundColor = "cyan";
+												break;
+											case "Roberta Disponpivel":
+												val.style.backgroundColor = "salmon";
+												break;
+											case "Supervisor":
+												val.style.backgroundColor = "lightpink";
+												break;
+											case "Nenhuma Observação":
+												val.style.backgroundColor = "lightgreen";
+												break;
+											default :
+												val.style.backgroundColor = "Aquamarine";
+												break;
+										}
+										document.getElementById(id).append(val);
+									} else {
+										motivo = hav.value;
+										switch (motivo) {
+											case "Falta" :
+												val.style.backgroundColor = "yellow";
+												break;
+											case "Falta Justificada":
+												val.style.backgroundColor = "orange";
+												break;
+											case "Falta Absoluta":
+												val.style.backgroundColor = "orange";
+												break;
+											case "Feriado":
+												val.style.backgroundColor = "orange";
+												break;
+											case "Glosa":
+												val.style.backgroundColor = "lightgray";
+												break;
+											case "Substituição":
+												val.style.backgroundColor = "cyan";
+												break;
+											case "Roberta Disponpivel":
+												val.style.backgroundColor = "salmon";
+												break;
+											case "Supervisor":
+												val.style.backgroundColor = "lightpink";
+												break;
+											case "Nenhuma Observação":
+												val.style.backgroundColor = "lightgreen";
+												break;
+											default :
+												break;
+										}
+									}
+									document.getElementById(id).append(val);
+								} else {
+									let val = document.getElementById(valor).cloneNode(true);
+									val.id = val.id+"x";
+									document.getElementById(id).append(val);
+								}
+							}
+						})
+								
+					
+						dia_sala_tipo = dia_sala + "_Tera"
+						document.getElementsByName(dia_sala_tipo).forEach((e)=>{
+							let id = "hora"+e.id;//td para receber o append
+							
+							let valor = e.value;//valor para indexar no td
+							//console.log("valor:"+valor)
+							let color = e.id + "_" + e.value;
+							let hav = document.getElementById(color)
+							let extra = document.getElementById(color+"_extra")
+
+							if (hav != null || extra != null) {
+								let val = document.getElementById(valor).cloneNode(true);
+								val.id = val.id+"x";
+								let motivo;
+
+								if (extra != null){
+									console.log("NAO FALSO")
+									motivo = extra.value;
+									console.log(motivo);
+									switch (motivo) {
+										case "Falta" :
+											val.style.backgroundColor = "yellow";
+											break;
+										case "Falta Justificada":
+											val.style.backgroundColor = "orange";
+											break;
+										case "Falta Absoluta":
+												val.style.backgroundColor = "orange";
+												break;
+										case "Feriado":
+											val.style.backgroundColor = "orange";
+											break;
+										case "Glosa":
+											console.log("Glosa")
+											val.style.backgroundColor = "lightgray";
+											break;
+										case "Substituição":
+											val.style.backgroundColor = "cyan";
+											break;
+										case "Roberta Disponpivel":
+											val.style.backgroundColor = "salmon";
+											break;
+										case "Supervisor":
+											val.style.backgroundColor = "lightpink";
+											break;
+										case "Nenhuma Observação":
+											val.style.backgroundColor = "lightgreen";
+											break;
+										default :
+											console.log("Padrão")
+											val.style.backgroundColor = "aquamarine";
+											break;
+									}
+									console.log("Qual motivo!");
+									document.getElementById(id).append(val);
+									console.log("Append efetuado!")
+								} else {
+									motivo = hav.value;
+									switch (motivo) {
+										case "Falta" :
+											val.style.backgroundColor = "yellow";
+											break;
+										case "Falta Justificada":
+											val.style.backgroundColor = "orange";
+											break;
+										case "Falta Absoluta":
+											val.style.backgroundColor = "orange";
+											break;
+										case "Feriado":
+											val.style.backgroundColor = "orange";
+											break;
+										case "Glosa":
+											val.style.backgroundColor = "lightgray";
+											break;
+										case "Substituição":
+											val.style.backgroundColor = "cyan";
+											break;
+										case "Roberta Disponpivel":
+											val.style.backgroundColor = "salmon";
+											break;
+										case "Supervisor":
+											val.style.backgroundColor = "lightpink";
+											break;
+										case "Nenhuma Observação":
+											val.style.backgroundColor = "lightgreen";
+											break;
+										default :
+											break;
+									}
+								}
+								document.getElementById(id).append(val);
+							} else {
+								let val = document.getElementById(valor).cloneNode(true);
+								val.id = val.id+"x";
+								document.getElementById(id).append(val);
+							}
+						})
+					
+						dia_sala_tipo = dia_sala + "_Acao"
+						document.getElementsByName(dia_sala_tipo).forEach((e)=>{
+							let id = "hora"+e.id;//td para receber o append
+
+								let val = e.cloneNode(true);
+								val.id = val.id+"x";
+								document.getElementById(id).append(val);
+						})
+					})
+				} catch(err){
+					console.log("ERROR!!!!!!!");
+					console.log(err);
+				}
+				
+			}
+			function formataData(){
+				let fulldate=(document.getElementById('dataFil').value+' 00:00:00.000Z').toString();
+				document.getElementById('dataFinal').value = fulldate;
+				console.log("dataFinal:"+document.getElementById('dataFinal').value);
+			}
+			$(document).ready(function () {
+				// Executar após DataTables terminar de desenhar a tabela
+				$('#dynamic-table').on('draw.dt', function () {
+					aplicarEstiloPorHora();
+				});
+
+				// Primeira execução
+				aplicarEstiloPorHora();
+			});
+
+			function criarLinhaEspacadora(colspanTotal) {
+				return `<tr class="espacador"><td colspan="${colspanTotal}"></td></tr>`;
+			}
+			function aplicarEstiloPorHora() {
+				$('tbody tr').each(function () {
+					const $linha = $(this);
+					const $horaCell = $linha.find('td:eq(0)');
+					const horaTexto = $horaCell.text().trim(); // Ex: "11:20"
+
+					if (!horaTexto) return;
+
+					const [horaStr, minutoStr] = horaTexto.split(':');
+					const hora = parseInt(horaStr, 10);
+					const minuto = parseInt(minutoStr, 10);
+
+					// Aplica estilos de fundo
+					$linha.find('td').each(function (index) {
+						$(this).removeClass('bg-verde-suave bg-amarelo-suave');
+
+						if (hora < 12) {
+							$(this).addClass('bg-verde-suave');
+						} else {
+							$(this).addClass('bg-amarelo-suave');
+						}
+
+						if (index === 0) {
+							$(this).html('<b>' + horaTexto + '</b>');
+						}
+					});
+
+					// Aplica linha divisória se for exatamente 11:20
+					if (hora === 11 && minuto === 20) {
+						$linha.addClass('divisoria-meio-dia');
+					} else {
+						$linha.removeClass('divisoria-meio-dia');
+					}
+				});
+			}
+
+		</script>
+	</head>
+	<body class="no-skin" onload="javascript:carregaBody();controlaNave();">
+		<div class="main-container ace-save-state" id="main-container">
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="#">Home</a>
+							</li>
+							<li class="active">Agenda Semanal</li>
+						</ul><!-- /.breadcrumb -->
+					</div>
+					{{#if error}}
+						<div class="alert alert-danger">{{error}}</div>
+					{{else}}
+					{{/if}}
+					<div class="hidden" id="divCarrega" name="divCarrega">
+						<input id="766f69643132333435366964" value="&nbsp;" />
+						<i id="icone_pessoa" class="fa-solid fa-circle-user"></i>
+						{{#each agendas}}
+							<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}_Bene" value="{{agenda_beneid}}" />
+							<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}_Tera" value="{{agenda_usuid}}" />
+							{{#isTrue agenda_temp}}
+								<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}_{{agenda_beneid}}" value="{{agenda_categoria}}">
+								<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}_{{agenda_usuid}}" value="{{agenda_categoria}}">
+							{{else}}
+							{{/isTrue}}
+							{{#isTrue agenda_extra}}
+								<input id="{{agenda_data_semana}}BeneId_{{agenda_hora}}_{{agenda_salaid}}_{{agenda_beneid}}_extra" value="{{agenda_categoria}}">
+								<input id="{{agenda_data_semana}}TeraId_{{agenda_hora}}_{{agenda_salaid}}_{{agenda_usuid}}_extra" value="{{agenda_categoria}}">
+							{{else}}
+							{{/isTrue}}
+							<div style="display: block;padding-top:2px;padding-bottom:2px;" id="{{agenda_data_semana}}AcaoId_{{agenda_hora}}_{{agenda_salaid}}" name="{{agenda_data_semana}}_{{agenda_salaid}}_Acao">
+								{{#compareString agenda_obs ""}}
+								{{else}}
+								<a style="vertical-align: middle" class="pink" id="open-event" href="#" title="{{agenda_obs}}">
+									<i class="ace-icon fa fa-comment bigger-110"></i>
+									&nbsp;
+								</a>
+								{{/compareString}}
+								{{#isTrue agenda_temp}}
+								<a style="vertical-align: middle" class="blue" href="/menu/agenda/ediTemp/{{_id}}">
+									<i class="ace-icon fa fa-pencil bigger-130"></i>
+								</a>
+								<a style="vertical-align: middle" class="red" href="/menu/agenda/del/{{_id}}">
+									<i class="ace-icon fa fa-trash-o bigger-130"></i>
+								</a>
+								{{else}}
+								<a class="green" href="/menu/agenda/cadTemp/{{_id}}">
+									<i class="ace-icon fa fa-plus bigger-130"></i>
+								</a>
+								{{/isTrue}}
+								
+							</div>
+						{{/each}}
+						
+						{{#each benes}}
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{bene_apelido}}</label>
+						{{/each}}
+
+						{{#each terapeutas}}
+							<label style="width:85px;border:0px;margin-bottom: 2px;font-size:10px;" id="{{_id}}">{{usuario_nome}}</label>
+						{{/each}}
+					</div>
+					<form class="form-horizontal" role="form" action="/menu/agenda/filSAT" method="POST">
+						<div class="breadcrumbs" id="pesquisaAge">
+							<div style="text-align: center;">
+								<label>Data:</label>
+								<input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData()">
+								<input class="hidden" id="dataFinal" name="dataFinal" />
+								<button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn btn-xs btn-info" style="margin-left: 25px;">
+									<i class="ace-icon fa fa-search-plus "></i>
+								</button>
+							</div>
+						</div>
+					</form>
+						<div class="tab-content"><!-- .tab-contente -->
+							<div class="row">
+								<div class="col-xs-16 col-sm-12">
+									<div id="seg" class="tab-pane fade active in"><!-- .fade-tab-seg -->
+										{{#each salas}}
+										<input class="hidden" name="sala_id" value="{{_id}}" />
+										<table class="table table-sm table-bordered" style="font-size: 9px;"  id="dynamic-table" role="grid" aria-describedby="dynamic-table_info">
+											<thead>
+												<tr role="row">
+													<th id="{{_id}}_SALA" class="center" class="colgroup" aria-controls="dynamic-table" rowspan="1" colspan="16"><span class="badge badge-info" style="font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{sala_nome}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></th>
+												</tr>
+												<tr  role="row">
+													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" class="dia-semana" >&nbsp;</th>
+													<th style="text-align: center;" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-info">{{../segunda}}</span></th>
+													<th style="text-align: center;" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-info">{{../terca}}</span></th>
+													<th style="text-align: center;" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-info">{{../quarta}}</span></th>
+													<th style="text-align: center;" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-info">{{../quinta}}</span></th>
+													<th style="text-align: center;" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="3" class="dia-semana" ><span style="white-space: wrap;" class="badge badge-info">{{../sexta}}</span></th>
+												</tr>
+												<tr  role="row">	
+													<th style="width: 50px;" tabindex="0" rowspan="1" colspan="1" class="dia-semana" ><b>Hora</b></th>
+													<th tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+													<th tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana" >&ensp;Ação&ensp;</th>
+													<th tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+													<th tabindex="6" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana"  >&ensp;Ação&ensp;</th>
+													<th tabindex="7" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="8" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+													<th tabindex="9" aria-controls="dynamic-table" rowspan="1" colspan="1"  class="dia-semana" >&ensp;Ação&ensp;</th>
+													<th tabindex="10" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="11" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+													<th tabindex="12" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana" >&ensp;Ação&ensp;</th>
+													<th tabindex="13" aria-controls="dynamic-table" rowspan="1" colspan="1" >Terapeuta</th>
+													<th tabindex="14" aria-controls="dynamic-table" rowspan="1" colspan="1" >Bene</th>
+													<th tabindex="15" aria-controls="dynamic-table" rowspan="1" colspan="1" class="dia-semana" >&ensp;Ação&ensp;</th>
+												</tr>
+											</thead>
+											{{#each ../horaages}}
+											<tbody>
+												<tr role="row" class="odd">
+													<td style="width: 50px;" class="dia-semana" >{{horaage_hora}}</td>
+													<td id="horasegTeraId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegBeneId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasegAcaoId_{{horaage_hora}}_{{../_id}}" class="dia-semana"></td>
+													<td id="horaterTeraId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horaterBeneId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horaterAcaoId_{{horaage_hora}}_{{../_id}}" class="dia-semana"></td>
+													<td id="horaquaTeraId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horaquaBeneId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horaquaAcaoId_{{horaage_hora}}_{{../_id}}" class="dia-semana"></td>
+													<td id="horaquiTeraId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horaquiBeneId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horaquiAcaoId_{{horaage_hora}}_{{../_id}}" class="dia-semana"></td>
+													<td id="horasexTeraId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasexBeneId_{{horaage_hora}}_{{../_id}}"></td>
+													<td id="horasexAcaoId_{{horaage_hora}}_{{../_id}}" class="dia-semana"></td>										
+												</tr>
+											</tbody>
+											{{/each}}
+										</table>
+										{{/each}}
+									</div>
+								</div>
+							</div>
+						</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+		<!-- basic scripts -->
+	</body>
+</html>
