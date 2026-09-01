@@ -2237,6 +2237,10 @@ router.get("/agenda/lisS/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a
     fncAgenda.carregaAgendaS(req, res);
 })
 
+router.get("/agenda/lisSAT/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Semanal.
+    fncAgenda.carregaAgendaSAT(req, res);
+})
+
 router.get("/agenda/lisSB/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda de Beneficiario  Semanal.
     fncAgenda.carregaAgendaSB(req, res);
 })
@@ -2291,6 +2295,9 @@ router.post("/agenda/filTB", fncGeral.IsAuthenticated, (req,res) =>{//direciona 
 
 router.post("/agenda/filS/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Semanal.
     fncAgenda.carregaAgendaFilS(req, res);
+})
+router.post("/agenda/filSAT/", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Agenda Semanal.
+    fncAgenda.carregaAgendaFilSAT(req, res);
 })
 
 router.get("/agenda/lisB", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem agendamento de beneficiarios.
@@ -2366,10 +2373,17 @@ router.get("/agenda/lisF", fncGeral.IsAuthenticated, (req,res) =>{//direciona a 
     fncAgenda.carregaAgendaF(req, res);
 })
 
+router.get("/agenda/lisFAT", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de Fixa.
+    fncAgenda.carregaAgendaFAT(req, res);
+})
 
 
 router.post("/agenda/filF", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de filtro de Fixa.
     fncAgenda.carregaAgendaFilF(req, res);
+})
+
+router.post("/agenda/filFAT", fncGeral.IsAuthenticated, (req,res) =>{//direciona a listagem de filtro de Fixa.
+    fncAgenda.carregaAgendaFilFAT(req, res);
 })
 
 router.post("/agenda/filL", fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadastro de Agenda, com Ufs e Convênios.
