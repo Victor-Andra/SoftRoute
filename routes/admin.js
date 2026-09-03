@@ -2600,7 +2600,7 @@ router.get('/agenda/agendaListaGeral', fncGeral.IsAuthenticated, (req,res) =>{//
 router.get('/agenda/lisGeral', fncGeral.IsAuthenticated, (req, res) => {
     let resposta = { sucesso: "", texto: "" };
     // Passa {} como filtros para carregar o mês atual padrão
-    fncAgenda.filtraAgendaListaGeral(req, res, {}, resposta);
+    fncAgenda.carregaAgendaListaGeral(req, res);
 });
 
 // 👉 ROTA POST: filtra por mês, beneficiário ou terapeuta
