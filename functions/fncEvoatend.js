@@ -2859,7 +2859,7 @@ async apagarEvolucaoIndevidaevoatend(req, res) {
             res.redirect('/admin/erro');
         }
     },
-    async filtraEvoatendgeral(req, res) {
+    async filtraEvoatendgeral_OLD_ErrSup(req, res) {
         try {
             // ===== CONFIGURAÇÃO =====
             const db = req.cookies['preferredDb'];
@@ -3057,6 +3057,295 @@ async apagarEvolucaoIndevidaevoatend(req, res) {
             // Remove agendas temporárias e ordena
             var agendasFiltradas = agenda.sort((a, b) => (a.agenda_benenome || "").localeCompare(b.agenda_benenome || "", 'pt-BR'));
 
+            // ===== BUSCAS AUXILIARES EM PARALELO =====
+            const [bene, usuario, horaage, sala, terapia, ano, conv] = await Promise.all([
+                Bene.find().lean(),
+                Usuario.find({
+                    
+                    $or: [
+                        { usuario_funcaoid: "6241030bfbcc51f47c720a0b" },
+                        { usuario_perfilid: { $in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"] }}
+                    ]
+                }).lean(),
+                Horaage.find().sort({ horaage_turno: 1, horaage_ordem: 1 }).lean(),
+                Sala.find().lean(),
+                Terapia.find().lean(),
+                Ano.find().sort({ ano_nome: 1 }).lean(),
+                Conv.find().lean()
+            ]);
+
+            // Ordenações auxiliares
+            const sortPtBr = (a, b, field) => (a[field]||"").localeCompare(b[field]||"", 'pt-BR');
+            bene.sort((a,b) => sortPtBr(a,b,'bene_nome'));
+            usuario.sort((a,b) => sortPtBr(a,b,'usuario_nome'));
+            sala.sort((a,b) => sortPtBr(a,b,'sala_nome'));
+            conv.sort((a,b) => sortPtBr(a,b,'conv_nome'));
+
+            // ===== PREPARA FILTROS FORMATADOS PARA EXIBIÇÃO NO HEADER =====
+            const filtrosDisplay = {
+                periodo: "",
+                pessoa: "",
+                nome: ""
+            };
+            
+            if (filtroTela.tipoData === "Ano/Mes" && filtroTela.anoAtend && filtroTela.mesAtend) {
+                const meses = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+                filtrosDisplay.periodo = `${meses[filtroTela.mesAtend]}/${filtroTela.anoAtend}`;
+            } else if (filtroTela.tipoData === "Dia" && filtroTela.dataFinal) {
+                filtrosDisplay.periodo = fncGeral.getDataFMT(new Date(filtroTela.dataFinal));
+            } else if (filtroTela.tipoData === "Semana" && dataIni && dataFim) {
+                const ini = fncGeral.getDataFMT(dataIni);
+                const fim = fncGeral.getDataFMT(dataFim);
+                filtrosDisplay.periodo = `${ini} a ${fim}`;
+            }
+            
+            if (filtroTela.tipoPessoa === "Beneficiario" && filtroTela.atendBeneficiario) {
+                const beneSel = bene.find(b => String(b._id) === filtroTela.atendBeneficiario);
+                filtrosDisplay.pessoa = "Beneficiário";
+                filtrosDisplay.nome = beneSel?.bene_nome || "Selecionado";
+            } else if (filtroTela.tipoPessoa === "Terapeuta" && filtroTela.atendTerapeuta) {
+                const teraSel = usuario.find(u => String(u._id) === filtroTela.atendTerapeuta);
+                filtrosDisplay.pessoa = "Terapeuta";
+                filtrosDisplay.nome = teraSel?.usuario_nome || "Selecionado";
+            } else {
+                filtrosDisplay.pessoa = "Geral";
+                filtrosDisplay.nome = "";
+            }
+
+            // ===== RENDER COM PERSISTÊNCIA GARANTIDA =====
+            res.render('area/evol/evoatendgeralLis', {
+                agendas: agendasFiltradas,
+                anos: ano,
+                terapeutas: usuario,
+                benes: bene,
+                salas: sala,
+                terapias: terapia,
+                convs: conv,
+                horaages: horaage,
+                filtroTela: filtroTela,              // ✅ Persistência dos valores brutos
+                filtrosDisplay,          // ✅ Dados formatados pra exibir no header
+                flash,
+                carregaFiltro: { carregaFiltro: "true" }
+            });
+
+        } catch (err) {
+            console.error('❌ Erro CRÍTICO em filtraEvoatendgeral:', err);
+            req.flash("error_message", "Houve um erro ao listar as evoluções: " + err.message);
+            res.redirect('/admin/erro');
+        }
+    },
+  async filtraEvoatendgeral(req, res) {
+        try {
+            // ===== CONFIGURAÇÃO =====
+            const db = req.cookies['preferredDb'];
+            const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+            const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+            const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+            const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+            const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+
+        // Na captura dos filtros:
+            const filtroTela = {
+                tipoData: req.body.tipoData || "Ano/Mes",
+                // ✅ Corrige a prioridade dos campos de data
+                dataFinal: req.body.dataFinal || "",
+                dataFil: req.body.dataFil || "",
+                anoAtend: req.body.anoAtend || "",
+                mesAtend: req.body.mesAtend || "",
+                tipoPessoa: req.body.atendTipoPessoa || "Geral",
+                atendTerapeuta: req.body.atendTerapeuta || "",
+                atendBeneficiario: req.body.atendBeneficiario || "",
+                // ✅ Verifica se o campo existe na view antes de usar
+                atendConcluido: req.body.AtendConcluido || "Todos", 
+                atendSelo: req.body.atendSelo || "Todos"
+            };
+
+            // console.log('🔍 [DEBUG] Filtros recebidos:', JSON.stringify(filtroTela, null, 2));
+
+            let dataIni = null;
+            let dataFim = null;
+            let seg;
+            let sex;
+            let anoAtend;
+            let mes;
+            let dia;
+            const flash = new Resposta();
+
+            switch (filtroTela.tipoData){
+                case "Ano/Mes":
+                    ({ dataIni, dataFim } = fncGeral.obterPeriodoMes(req.body.anoAtend, req.body.mesAtend));
+
+                    break;
+                case "Semana":
+                    ({ dataIni, dataFim } = fncGeral.obterSemanaUtil(new Date(req.body.dataFinal)));
+                    
+                    break;
+                case "Dia":
+                    ({ dataIni, dataFim } = fncGeral.obterPeriodoDia(req.body.dataFinal));
+
+                    break;
+                default:
+                    ({ dataIni, dataFim } = fncGeral.obterPeriodoDia('2000-01-01'));
+                    break;
+            }
+
+            const busca = {};
+
+            // Filtro de data (só aplica se as datas forem válidas)
+            if (dataIni && dataFim && !isNaN(dataIni.getTime()) && !isNaN(dataFim.getTime())) {
+                busca.agenda_data = { $gte: dataIni, $lte: dataFim };
+            } else {
+                console.warn('⚠️ Datas inválidas - query sem filtro de data!');
+            }
+
+            // Filtro por tipo de pessoa
+            if (filtroTela.tipoPessoa === "Beneficiario" && filtroTela.atendBeneficiario) {
+                busca.agenda_beneid = filtroTela.atendBeneficiario;
+            } else if (filtroTela.tipoPessoa === "Terapeuta" && filtroTela.atendTerapeuta) {
+                busca.agenda_usuid = filtroTela.atendTerapeuta;
+            }
+
+            // Filtro "Concluído" (legacy - mantido por compatibilidade)
+            if (filtroTela.atendConcluido === "Sim") {
+                busca.agenda_selo = { $in: [true, "true", 1, "1"] };
+            } else if (filtroTela.atendConcluido === "Não") {
+                busca.agenda_selo = { $in: [false, "false", 0, "0", null, undefined] };
+            }
+
+            busca.agenda_temp = false;
+
+            // Filtro atendSelo (sobrescreve o Concluído se estiver ativo)
+            if (filtroTela.atendSelo && filtroTela.atendSelo !== "Todos") {
+                busca.agenda_selo = (filtroTela.atendSelo === "Sim");
+                console.log(`🏷️ Filtro Selo aplicado: ${filtroTela.atendSelo}`);
+            }
+
+            console.log('🔎 [DEBUG] Query MongoDB:', JSON.stringify(busca, null, 2));
+
+            // ===== CONSULTA PRINCIPAL (com timeout pra evitar travamento) =====
+            let agenda = [];
+            try {
+                agenda = await Agenda.find(busca)
+                    .lean()
+                    .maxTimeMS(60000); // Timeout de 60 segundos
+                console.log(`✅ Encontrados ${agenda.length} registros`);
+            } catch (queryErr) {
+                console.error('❌ Erro na query do Agenda:', queryErr);
+                throw new Error('Erro ao buscar agendamentos. Verifique os filtros ou contate o suporte.');
+            }
+
+            let agendaTempIds = [];
+            agenda.forEach(e => {
+                agendaTempIds.push(e._id);
+            })
+
+            const buscaS = {};
+
+            // Filtro de data (só aplica se as datas forem válidas)
+            if (dataIni && dataFim && !isNaN(dataIni.getTime()) && !isNaN(dataFim.getTime())) {
+                buscaS.agenda_data = { $gte: dataIni, $lte: dataFim };
+            } else {
+                console.warn('⚠️ Datas inválidas - query sem filtro de data!');
+            }
+
+            // Filtro por tipo de pessoa
+            if (filtroTela.tipoPessoa === "Beneficiario" && filtroTela.atendBeneficiario) {
+                buscaS.agenda_beneid = filtroTela.atendBeneficiario;
+            } else if (filtroTela.tipoPessoa === "Terapeuta" && filtroTela.atendTerapeuta) {
+                buscaS.agenda_usuid = filtroTela.atendTerapeuta;
+            }
+
+            // Filtro "Concluído" (legacy - mantido por compatibilidade)
+            if (filtroTela.atendConcluido === "Sim") {
+                buscaS.agenda_selo = { $in: [true, "true", 1, "1"] };
+            } else if (filtroTela.atendConcluido === "Não") {
+                buscaS.agenda_selo = { $in: [false, "false", 0, "0", null, undefined] };
+            }
+
+            buscaS.agenda_temp = true;
+
+            // Filtro atendSelo (sobrescreve o Concluído se estiver ativo)
+            if (filtroTela.atendSelo && filtroTela.atendSelo !== "Todos") {
+                buscaS.agenda_selo = (filtroTela.atendSelo === "Sim");
+                console.log(`🏷️ Filtro Selo aplicado: ${filtroTela.atendSelo}`);
+            }
+
+            let agendaS = [];
+            agendaTempIds.forEach((sss)=>{
+                console.log("9ds? "+sss)
+            })
+            try {
+                agendaS = await Agenda.find({
+                    $or: [
+                        {
+                            ...buscaS,
+                            agenda_tempId: {
+                                $nin: agendaTempIds
+                            }
+                        },
+                        {
+                            agenda_tempId: {
+                                $in: agendaTempIds
+                            }
+                        }
+                    ]
+                }).lean().maxTimeMS(60000);
+                console.log(`✅ Encontrados ${agendaS.length} registros`);
+            } catch (queryErr) {
+                console.error('❌ Erro na query do AgendaS:', queryErr);
+                throw new Error('Erro ao buscar agendamentos. Verifique os filtros ou contate o suporte.');
+            }
+            agenda.forEach(eee => {
+                console.log("agenda? "+eee)
+            })
+            agendaS.forEach(aaa => {
+                console.log("agendaS? "+aaa)
+            })
+
+            // ===== PROCESSAMENTO DOS DADOS =====
+            
+            // 1. Mapeia os IDs dos registros originais que já passaram pelos filtros do MongoDB
+            const idsOriginaisNaTela = new Set(agenda.map(a => String(a._id)));
+
+            // 2. Lógica de Filtragem da Supervisão (agendaS) baseada no tipo de pessoa selecionada
+            if (filtroTela.tipoPessoa === "Beneficiario" && filtroTela.atendBeneficiario) {
+                // CENÁRIO 1: Filtro por Beneficiário (ex: Ricardo)
+                // Mostra a supervisão APENAS se o registro original dela já estiver na tela
+                agendaS = agendaS.filter(temp => 
+                    temp.agenda_tempId && idsOriginaisNaTela.has(String(temp.agenda_tempId))
+                );
+            } else if (filtroTela.tipoPessoa === "Terapeuta" && filtroTela.atendTerapeuta) {
+                // CENÁRIO 2 e 3: Filtro por Terapeuta (ex: Adriana ou Hérica)
+                // Mostra APENAS os registros cujo usuid bata exatamente com o terapeuta filtrado
+                agendaS = agendaS.filter(temp => 
+                    String(temp.agenda_usuid) === String(filtroTela.atendTerapeuta)
+                );
+            } else {
+                // CENÁRIO 4: Visão Geral (sem filtro de pessoa)
+                // Oculta supervisões/rascunhos para não poluir a visão macro
+                agendaS = [];
+            }
+
+            // 3. Une as listas (Originais + Supervisões que passaram na regra acima)
+            agenda.push(...agendaS);
+
+            // 4. Processamento de datas e ordenação (mantido igual ao seu original)
+            agenda.forEach(e => {
+                try {
+                    const dat = new Date(e.agenda_data);
+                    if (!isNaN(dat.getTime())) {
+                        e.agenda_data_dia = fncGeral.getDataFMT(dat);
+                        e.agenda_hora = `${String(dat.getUTCHours()).padStart(2,'0')}:${String(dat.getMinutes()).padStart(2,'0')}`;
+                        e.agenda_data_semana = ["dom","seg","ter","qua","qui","sex","sab"][dat.getUTCDay()] || "";
+                    }
+                } catch (procErr) {
+                    console.warn('⚠️ Erro ao processar registro:', e._id, procErr.message);
+                }
+            });
+
+            var agendasFiltradas = agenda.sort((a, b) => (a.agenda_benenome || "").localeCompare(b.agenda_benenome || "", 'pt-BR'));
             // ===== BUSCAS AUXILIARES EM PARALELO =====
             const [bene, usuario, horaage, sala, terapia, ano, conv] = await Promise.all([
                 Bene.find().lean(),

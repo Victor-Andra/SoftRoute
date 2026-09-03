@@ -2592,20 +2592,22 @@ router.get('/agenda/agendaListaGeral', fncGeral.IsAuthenticated, (req,res) =>{//
     fncAgenda.carregaAgendaListaGeral(req, res);
 })
 
-// 👉 ROTA GET: carrega lista do mês atual
+// ========================================================================
+// 📋 ROTAS DA AGENDA LISTA GERAL
+// ========================================================================
+
+// 👉 ROTA GET: carrega a lista do mês atual (sem filtros específicos)
 router.get('/agenda/lisGeral', fncGeral.IsAuthenticated, (req, res) => {
-    let resposta = new Resposta();
-    resposta.sucesso = "";
-    resposta.texto = "";
-    fncAgenda.carregaAgendaListaGeral(req, res, false, resposta);
+    let resposta = { sucesso: "", texto: "" };
+    // Passa {} como filtros para carregar o mês atual padrão
+    fncAgenda.filtraAgendaListaGeral(req, res, {}, resposta);
 });
 
-// 👉 ROTA POST: filtra por mês selecionado
-router.post('/agenda/lisGeral', fncGeral.IsAuthenticated, (req, res) => {
-    let resposta = new Resposta();
-    resposta.sucesso = "";
-    resposta.texto = "";
-    fncAgenda.carregaAgendaListaGeral(req, res, false, resposta);
+// 👉 ROTA POST: filtra por mês, beneficiário ou terapeuta
+router.post('/agenda/lisFiltraGeral', fncGeral.IsAuthenticated, (req, res) => {
+    let resposta = { sucesso: "", texto: "" };
+    // Passa req.body contendo dataFinal, tipoFiltro, filtroBeneficiario, etc.
+    fncAgenda.filtraAgendaListaGeral(req, res, req.body, resposta);
 });
 
 // 👉 ROTA GET: carrega lista do mês atual
@@ -3720,6 +3722,7 @@ router.get('/area/evol/evoatendgeralLis', fncGeral.IsAuthenticated, (req,res) =>
 router.post('/area/evol/evoatendgeralFil', fncGeral.IsAuthenticated, (req,res) =>{//direciona para o filtro da Lista de evoluções.
     fncEvoatend.filtraEvoatendgeral(req, res);
 })
+
 //Lista de Ranking
 router.get('/area/evol/evoatendrankingLis', fncGeral.IsAuthenticated, (req,res) =>{//direciona para a Lista Ranking de evoluções
     fncEvoatend.listaEvoatendranking(req, res);
