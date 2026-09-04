@@ -703,7 +703,7 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-     filtraAtend(req, res){
+     filtraAtend_OLD(req, res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
         Atend = getModel(db, 'tb_atend', atendClass.AtendSchema)
@@ -882,6 +882,156 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
+    async filtraAtend(req, res) {
+    try {
+        let db = req.cookies['preferredDb'];
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema); // Assumindo o modelo correto
+
+        // 1. CORREÇÃO: Interrompe a execução se for apenas para atualizar valores
+        if (req.body.atualizaValores === "true") {
+            fncAgenda.atualizaValores(req, res);
+            return; // Impede que o código continue e cause erros de header ou race conditions
+        }
+
+        const tipoPessoa = req.body.atendTipoPessoa || "Geral";
+        const filtroTela = {
+            tipoData: req.body.tipoData || "Ano/Mes",
+            dataFinal: req.body.dataFinal || "",
+            dataFil: req.body.dataFil || "",
+            anoAtend: req.body.anoAtend || "",
+            mesAtend: req.body.mesAtend || "",
+            tipoPessoa: tipoPessoa,
+            atendTerapeuta: req.body.atendTerapeuta || "",
+            atendBeneficiario: req.body.atendBeneficiario || "",
+            atendConcluido: req.body.AtendConcluido || "Todos", 
+            atendSelo: req.body.atendSelo || "Todos"
+        };
+
+        let dataIni, dataFim;
+
+        // 2. Definição do período
+        switch (filtroTela.tipoData) {
+            case "Ano/Mes":
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoMes(filtroTela.anoAtend, filtroTela.mesAtend));
+                break;
+            case "Semana":
+                ({ dataIni, dataFim } = fncGeral.obterSemanaUtil(filtroTela.dataFinal));
+                break;
+            case "Dia":
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia(filtroTela.dataFinal));
+                break;
+            default:
+                ({ dataIni, dataFim } = fncGeral.obterPeriodoDia('2000-01-01'));
+                break;
+        }
+
+        // 3. CORREÇÃO CRÍTICA: Padronização absoluta de Datas para o MongoDB
+        // Garantimos que o fim do dia seja incluído para não perder atendimentos das 18h, 19h, etc.
+        const dataIniObj = new Date(dataIni);
+        const dataFimObj = new Date(dataFim);
+        dataFimObj.setHours(23, 59, 59, 999); 
+
+        // 4. Construção da Busca (Lógica segura para Supervisão)
+        let busca = {
+            atend_atenddata: { $gte: dataIniObj, $lte: dataFimObj }
+        };
+
+        if (tipoPessoa === "Beneficiario") {
+            busca.atend_beneid = req.body.atendBeneficiario;
+        } else if (tipoPessoa === "Terapeuta") {
+            busca.$or = [
+                { atend_terapeutaid: req.body.atendTerapeuta },
+                { atend_mergeterapeutaid: req.body.atendTerapeuta }
+            ];
+        } else if (tipoPessoa === "Convenio") {
+            busca.atend_convid = req.body.atendConv;
+        }
+        // Nota: Se for "Geral", a busca mantém apenas o filtro de data, 
+        // o que é PERFEITO para capturar Supervisões que não têm bene/convênio.
+
+        // 5. Execução da busca principal (usando .lean() para performance e manipulação segura)
+        const atend = await Atend.find(busca).lean();
+
+        // 6. Formatação dos dados de atendimento
+        atend.forEach((b) => {
+            if (b.atend_atenddata) {
+                const data = new Date(b.atend_atenddata);
+                const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+                const dia = data.getUTCDate().toString().padStart(2, '0');
+                const hora = data.getHours().toString().padStart(2, '0');
+                const minuto = data.getMinutes().toString().padStart(2, '0');
+
+                b.data = `${data.getFullYear()}-${mes}-${dia}`;
+                b.hora = `${hora}:${minuto}`;
+            } else {
+                // CORREÇÃO: Em vez de assumir "hoje" silenciosamente, marcamos como indisponível
+                // para não bagunçar a ordenação visual do mês filtrado.
+                b.data = "Data Indisponível";
+                b.hora = "--:--";
+            }
+
+            if (b.atend_org === "Administrativo") {
+                b.atend_org = "ADM";
+            }
+        });
+
+        // 7. CORREÇÃO DE PERFORMANCE: Busca paralela de todos os dados de apoio
+        const [benes, convs, terapeutas, terapias, anos, salas, usuarios] = await Promise.all([
+            Bene.find().lean(),
+            Conv.find().lean(),
+            Usuario.find({ usuario_funcaoid: "6241030bfbcc51f47c720a0b" }).lean(),
+            Terapia.find().lean(),
+            Ano.find().sort({ ano_nome: 1 }).lean(),
+            Sala.find().lean(),
+            Usuario.find().lean()
+        ]);
+
+        // Função auxiliar para ordenação alfabética segura (acentos)
+        const sortByName = (arr, field) => {
+            return arr.sort((a, b) => {
+                const nameA = a[field] ? a[field].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+                const nameB = b[field] ? b[field].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+                return nameA.localeCompare(nameB);
+            });
+        };
+
+        // 8. Renderização
+        res.render("atendimento/atendLis", {
+            atends: atend,
+            benes: sortByName(benes, 'bene_nome'),
+            convs: sortByName(convs, 'conv_nome'),
+            terapeutas: sortByName(terapeutas, 'usuario_nome'),
+            terapias: sortByName(terapias, 'terapia_nome'),
+            salas: sortByName(salas, 'sala_nome'),
+            anos: anos,
+            usuarios: usuarios,
+            qtdAtends: { qtd: atend.length },
+            carregaFiltro: "true",
+            tipoData: filtroTela.tipoData,
+            tipoPessoa: tipoPessoa,
+            dataIni,
+            dataFim,
+            dataFinal: filtroTela.dataFinal,
+            mesAtend: filtroTela.mesAtend,
+            anoAtend: filtroTela.anoAtend,
+            atendTerapeuta: filtroTela.atendTerapeuta,
+            atendBeneficiario: filtroTela.atendBeneficiario,
+            atendConv: filtroTela.atendConv,
+            filtroTela
+        });
+
+    } catch (err) {
+        console.error("ERRO CRÍTICO em filtraAtend:", err);
+        req.flash("error_message", "Houve um erro ao realizar as listas!");
+        res.redirect('admin/erro');
+    }
+},
 
     carregaAtendIndBene(req, res){
         let db = req.cookies['preferredDb'];
@@ -7313,6 +7463,7 @@ if (ehSalaEscola) {
         res.status(500).send("Erro ao gerar relatório.");
     });
 },
+
     
     relAtendimentoBeneassinAT(req,res){
         let db = req.cookies['preferredDb'];
