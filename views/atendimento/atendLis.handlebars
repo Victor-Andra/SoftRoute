@@ -176,22 +176,33 @@
       
       const $id = (id) => document.getElementById(id);
 
-      function formataData(){
+    function formataData() {
         let tipo = $id("tipoData").value;
-        if(tipo == "Ano/Mes"){
-          let dat = new Date($id('anoAtend').value+"-"+$id('mesAtend').value+"-01 00:00:00.000Z");
-          let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
-          let dia = (dat.getUTCDate()).toString().padStart(2,'0');
-          let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
-          $id('dataFinal').value = fulldate;
+        
+        if (tipo === "Ano/Mes") {
+            let ano = $id('anoAtend').value;
+            let mes = $id('mesAtend').value;
+            if (!ano || !mes) return; // Sai da função se não tiver ano/mês, evita erro
+            
+            let dat = new Date(ano + "-" + mes + "-01T00:00:00.000Z");
+            let mesFmt = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
+            let diaFmt = (dat.getUTCDate()).toString().padStart(2, '0');
+            let fulldate = `${dat.getFullYear()}-${mesFmt}-${diaFmt}T00:00:00.000Z`;
+            $id('dataFinal').value = fulldate;
+            
         } else {
-          let dat = new Date($id('dataFil').value);
-          let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
-          let dia = (dat.getUTCDate()).toString().padStart(2,'0');
-          let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
-          $id('dataFinal').value = fulldate;
+            // Para "Dia" ou "Semana"
+            let dataFilValue = $id('dataFil').value;
+            if (!dataFilValue) return; // Sai da função se o usuário não escolheu uma data
+            
+            // Força o formato ISO correto para evitar problemas de fuso horário
+            let dat = new Date(dataFilValue + "T00:00:00.000Z");
+            let mesFmt = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
+            let diaFmt = (dat.getUTCDate()).toString().padStart(2, '0');
+            let fulldate = `${dat.getFullYear()}-${mesFmt}-${diaFmt}T00:00:00.000Z`;
+            $id('dataFinal').value = fulldate;
         }
-      }
+    }
 
       function trocaFiltroData() {
         const tipo = $('#tipoData').val();
@@ -487,7 +498,7 @@
                     <div class="form-group">
                       <label>Data:&nbsp;</label>
                       <input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-                      <input class="hidden" id="dataFinal" name="dataFinal" value="{{filtroTela.tipoData}}" />
+                      <input class="hidden" id="dataFinal" name="dataFinal" value="{{dataFinal}}" />
                     </div>
                   </div>
 

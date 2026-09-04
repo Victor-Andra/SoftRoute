@@ -882,7 +882,7 @@ module.exports = {
             res.redirect('admin/erro')
         })
     },
-    async filtraAtend(req, res) {
+    async filtraAtend_OLD2(req, res) {
     try {
         let db = req.cookies['preferredDb'];
         const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
@@ -1032,6 +1032,177 @@ module.exports = {
         res.redirect('admin/erro');
     }
 },
+    async filtraAtend(req, res) {
+        try {
+            let db = req.cookies['preferredDb'];
+            const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+            const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+            const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+            const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+            const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+            const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+            const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+
+            // 1. Interrompe a execução se for apenas para atualizar valores
+            if (req.body.atualizaValores === "true") {
+                fncAgenda.atualizaValores(req, res);
+                return; 
+            }
+
+            const tipoPessoa = req.body.atendTipoPessoa || "Geral";
+            const filtroTela = {
+                tipoData: req.body.tipoData || "Ano/Mes",
+                dataFinal: req.body.dataFinal || "",
+                dataFil: req.body.dataFil || "",
+                anoAtend: req.body.anoAtend || "",
+                mesAtend: req.body.mesAtend || "",
+                tipoPessoa: tipoPessoa,
+                atendTerapeuta: req.body.atendTerapeuta || "",
+                atendBeneficiario: req.body.atendBeneficiario || "",
+                atendConcluido: req.body.AtendConcluido || "Todos", 
+                atendSelo: req.body.atendSelo || "Todos"
+            };
+
+            let dataIni, dataFim;
+
+            let dataIniStr = "";
+            let dataFimStr = "";
+
+        // 2. Definição do período de forma direta e segura
+        if (filtroTela.tipoData === "Ano/Mes") {
+            const periodo = fncGeral.obterPeriodoMes(filtroTela.anoAtend, filtroTela.mesAtend);
+            dataIniStr = periodo.dataIni;
+            dataFimStr = periodo.dataFim;
+            
+        } else if (filtroTela.tipoData === "Dia") {
+            // Pega a data direta do input type="date" (formato YYYY-MM-DD)
+            const dataEscolhida = req.body.dataFil; 
+            if (dataEscolhida) {
+                dataIniStr = `${dataEscolhida}T00:00:00.000Z`;
+                dataFimStr = `${dataEscolhida}T23:59:59.999Z`;
+            }
+            
+        } else if (filtroTela.tipoData === "Semana") {
+            const dataBase = req.body.dataFil || req.body.dataFinal;
+            if (dataBase) {
+                const periodo = fncGeral.obterSemanaUtil(dataBase);
+                dataIniStr = periodo.dataIni;
+                dataFimStr = periodo.dataFim;
+            }
+        }
+
+        // 3. VALIDAÇÃO FINAL ANTES DO MONGOOSE (Com log de debug)
+        const dataIniObj = new Date(dataIniStr);
+        const dataFimObj = new Date(dataFimStr);
+
+        if (isNaN(dataIniObj.getTime()) || isNaN(dataFimObj.getTime())) {
+            console.error("❌ [ERRO DE DATA] O frontend enviou dados inválidos:", { 
+                tipoData: filtroTela.tipoData, 
+                dataFil: req.body.dataFil, 
+                dataFinal: req.body.dataFinal,
+                dataIniStr, 
+                dataFimStr 
+            });
+            
+            // Fallback seguro: Mês atual
+            const hoje = new Date();
+            dataIniObj.setTime(new Date(hoje.getFullYear(), hoje.getMonth(), 1).getTime());
+            dataFimObj.setTime(new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0, 23, 59, 59, 999).getTime());
+        } else {
+            // Garante que o fim do dia esteja incluso
+            dataFimObj.setHours(23, 59, 59, 999); 
+        }
+
+            // 4. Construção da Busca (Lógica segura para Supervisão)
+            let busca = {
+                atend_atenddata: { $gte: dataIniObj, $lte: dataFimObj }
+            };
+
+            if (tipoPessoa === "Beneficiario") {
+                busca.atend_beneid = req.body.atendBeneficiario;
+            } else if (tipoPessoa === "Terapeuta") {
+                busca.$or = [
+                    { atend_terapeutaid: req.body.atendTerapeuta },
+                    { atend_mergeterapeutaid: req.body.atendTerapeuta }
+                ];
+            } else if (tipoPessoa === "Convenio") {
+                busca.atend_convid = req.body.atendConv;
+            }
+
+            // 5. Execução da busca principal
+            const atend = await Atend.find(busca).lean();
+
+            // 6. Formatação dos dados de atendimento
+            atend.forEach((b) => {
+                if (b.atend_atenddata && !isNaN(new Date(b.atend_atenddata).getTime())) {
+                    const data = new Date(b.atend_atenddata);
+                    const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+                    const dia = data.getUTCDate().toString().padStart(2, '0');
+                    const hora = data.getHours().toString().padStart(2, '0');
+                    const minuto = data.getMinutes().toString().padStart(2, '0');
+
+                    b.data = `${data.getFullYear()}-${mes}-${dia}`;
+                    b.hora = `${hora}:${minuto}`;
+                } else {
+                    b.data = "Data Indisponível";
+                    b.hora = "--:--";
+                }
+
+                if (b.atend_org === "Administrativo") {
+                    b.atend_org = "ADM";
+                }
+            });
+
+            // 7. Busca paralela de todos os dados de apoio
+            const [benes, convs, terapeutas, terapias, anos, salas, usuarios] = await Promise.all([
+                Bene.find().lean(),
+                Conv.find().lean(),
+                Usuario.find({ usuario_funcaoid: "6241030bfbcc51f47c720a0b" }).lean(),
+                Terapia.find().lean(),
+                Ano.find().sort({ ano_nome: 1 }).lean(),
+                Sala.find().lean(),
+                Usuario.find().lean()
+            ]);
+
+            const sortByName = (arr, field) => {
+                return arr.sort((a, b) => {
+                    const nameA = a[field] ? a[field].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+                    const nameB = b[field] ? b[field].normalize('NFD').replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+                    return nameA.localeCompare(nameB);
+                });
+            };
+
+            // 8. Renderização
+            res.render("atendimento/atendLis", {
+                atends: atend,
+                benes: sortByName(benes, 'bene_nome'),
+                convs: sortByName(convs, 'conv_nome'),
+                terapeutas: sortByName(terapeutas, 'usuario_nome'),
+                terapias: sortByName(terapias, 'terapia_nome'),
+                salas: sortByName(salas, 'sala_nome'),
+                anos: anos,
+                usuarios: usuarios,
+                qtdAtends: { qtd: atend.length },
+                carregaFiltro: "true",
+                tipoData: filtroTela.tipoData,
+                tipoPessoa: tipoPessoa,
+                dataIni,
+                dataFim,
+                dataFinal: filtroTela.dataFinal,
+                mesAtend: filtroTela.mesAtend,
+                anoAtend: filtroTela.anoAtend,
+                atendTerapeuta: filtroTela.atendTerapeuta,
+                atendBeneficiario: filtroTela.atendBeneficiario,
+                atendConv: filtroTela.atendConv,
+                filtroTela
+            });
+
+        } catch (err) {
+            console.error("ERRO CRÍTICO em filtraAtend:", err);
+            req.flash("error_message", "Houve um erro ao realizar as listas!");
+            res.redirect('admin/erro');
+        }
+    },
 
     carregaAtendIndBene(req, res){
         let db = req.cookies['preferredDb'];
@@ -10153,8 +10324,36 @@ if (ehSalaEscola) {
                                             //console.log("r.valor: " + r.valor)
                                         })
                                         total = {"sessoes": sessaoTot, "valor": valTot, "total": valTot};
+                                        
+                                            // ============================================================
+                                            // BLOCO - Duplica a seção "Resumo do Consolidado" para a NF
+                                            // Mantém os mesmos nomes de campos populados
+                                            // ============================================================
+                                            let resumoNF = [];
 
-                                        res.render("atendimento/relatendvalnf", {terapias: terapia, anos: ano, convimps: convimp, benes: bene, rels: rel, total, periodoDe, periodoAte, bene_nome, bene_retem, bene_doc, bene_tomador, conv_nome, filtro})
+                                            rel.forEach((r) => {
+                                                // Busca a terapia correspondente (mesma lógica da primeira seção)
+                                                let t = terapia.find((ter) => ("" + ter._id) === ("" + r.nomecid));
+                                                
+                                                resumoNF.push({
+                                                    terapia_nomecid: t ? t.terapia_nomecid : "NÃO IDENTIFICADA",
+                                                    sessoes: r.sessoes,
+                                                    valor: r.valor,
+                                                    total: r.total
+                                                });
+                                            });
+
+                                            // Ordena alfabeticamente pelo nome da terapia (mesmo padrão usado no bene)
+                                            resumoNF.sort((a, b) => {
+                                                let nomeA = (a.terapia_nomecid || "").normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
+                                                let nomeB = (b.terapia_nomecid || "").normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
+                                                if (nomeA < nomeB) return -1;
+                                                if (nomeA > nomeB) return 1;
+                                                return 0;
+                                            });
+                                            // ============================================================
+
+                                        res.render("atendimento/relatendvalnf", {terapias: terapia, anos: ano, convimps: convimp, benes: bene, rels: rel, total, periodoDe, periodoAte, bene_nome, bene_retem, bene_doc, bene_tomador, conv_nome, filtro, resumoNF})
                                     })
                                 })
                             })
