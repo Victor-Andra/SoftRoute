@@ -968,7 +968,7 @@ module.exports = {
             } else {
                 usuObs = " - "
             }
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTeraid, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTeraid, agenda_temp: false, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -1323,9 +1323,9 @@ module.exports = {
         let busca;
         //console.log("req.body.soFixo:"+req.body.soFixo)
         if (soFixo == "true"){
-            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, "agenda_categoria": "SubstitutoFixo" };
+            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") }, "agenda_categoria": "SubstitutoFixo" };
         } else {
-            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false };
+            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } };
         }
         Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
             Agenda.find(busca).then((agenda) =>{
@@ -2651,7 +2651,7 @@ carregaAgendaMesFixo(req, res) {
         Bene.findOne({_id:req.body.agendaBeneid}).then((bene) =>{
             nomeBene = bene.bene_nome
             beneConvid = bene.bene_convid
-            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid }).sort({ agenda_data: -1 }).then((agenda) =>{
+            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).sort({ agenda_data: -1 }).then((agenda) =>{
                 //console.log("Listagem Realizada de agendamentos!")
                 //console.log("agenda.length:"+agenda.length)
                 agenda.forEach((e)=>{
@@ -3053,7 +3053,7 @@ carregaAgendaMesFixo(req, res) {
         Bene.findOne({_id:req.body.agendaBeneid}).then((bene) =>{
             nomeBene = bene.bene_nome
             beneConvid = bene.bene_convid
-            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid }).sort({ agenda_data: -1 }).then((agenda) =>{
+            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).sort({ agenda_data: -1 }).then((agenda) =>{
                 //console.log("Listagem Realizada de agendamentos!")
                 //console.log("agenda.length:"+agenda.length)
                 agenda.forEach((e)=>{
@@ -3847,7 +3847,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         //Pensar em como carregar quando for merge
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTerapeutaid }).sort({ agenda_data: -1 }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTerapeutaid, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).sort({ agenda_data: -1 }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
@@ -4946,7 +4946,7 @@ carregaAgendaMesFixo(req, res) {
 
         // ===== CONSULTA PRINCIPAL: AGENDA =====
         console.log('   🔍 Buscando agendamentos no período...');
-        Agenda.find({ agenda_data: { $gte: agora, $lte: depois } })
+        Agenda.find({ agenda_data: { $gte: agora, $lte: depois }, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } })
             .sort({ agenda_data: -1 })
             .then((agenda) => {
                 console.log('   ✅ Agenda: Encontrados', agenda.length, 'registros');
@@ -5084,7 +5084,7 @@ carregaAgendaMesFixo(req, res) {
                 res.redirect('/admin/erro');
             });
     },
-    carregaAgendaFilSAT(req, res) {
+    carregaAgendaFilSAT_OLD(req, res) {
         let db = req.cookies['preferredDb'];
         const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
         const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
@@ -5183,7 +5183,7 @@ carregaAgendaMesFixo(req, res) {
 
         // ===== CONSULTA PRINCIPAL: AGENDA =====
         console.log('   🔍 Buscando agendamentos no período...');
-        Agenda.find({ agenda_data: { $gte: agora, $lte: depois } })
+        Agenda.find({ agenda_data: { $gte: agora, $lte: depois }, agenda_sala: ObjectId("6368fe35c2cdb92ac6d914be") })
             .sort({ agenda_data: -1 })
             .then((agenda) => {
                 console.log('   ✅ Agenda: Encontrados', agenda.length, 'registros');
@@ -5321,7 +5321,134 @@ carregaAgendaMesFixo(req, res) {
                 res.redirect('/admin/erro');
             });
     },
+    carregaAgendaFilSAT(req, res) {
+        let db = req.cookies['preferredDb'];
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        // (Usuario já está sendo usado no seu código original, mantido aqui)
 
+        // 1. APENAS AS DUAS SALAS PRIORITÁRIAS (Adicione mais aqui no futuro se precisar)
+        const salasPrioritarias = [
+            "64653fedfef321e0b32d2b5f",
+            "6368fe35c2cdb92ac6d914be"
+        ];
+
+        let idsAgendasEx = [];
+        let segunda, terca, quarta, quinta, sexta;
+        
+        // 2. Lógica de Data (Mantida intacta apenas para a view não quebrar)
+        let dtFill = new Date(req.body.dataFinal);
+        let seg = new Date(req.body.dataFinal);
+        let sex = new Date(req.body.dataFinal);
+        
+        seg.setHours(0); seg.setMinutes(0); seg.setSeconds(0);
+        sex.setHours(23); sex.setMinutes(59); sex.setSeconds(59);
+
+        switch (seg.getUTCDay()){
+            case 0: seg.setUTCDate(seg.getUTCDate() + 1); dtFill = {dia: "seg"}; sex.setUTCDate(sex.getUTCDate() + 5); break;
+            case 1: dtFill = {dia: "seg"}; sex.setUTCDate(sex.getUTCDate() + 4); break;
+            case 2: dtFill = {dia: this.getDiaSemana(seg)}; seg.setUTCDate(seg.getUTCDate() - 1); sex.setUTCDate(sex.getUTCDate() + 3); break;
+            case 3: dtFill = {dia: this.getDiaSemana(seg)}; seg.setUTCDate(seg.getUTCDate() - 2); sex.setUTCDate(sex.getUTCDate() + 2); break;
+            case 4: dtFill = {dia: this.getDiaSemana(seg)}; seg.setUTCDate(seg.getUTCDate() - 3); sex.setUTCDate(sex.getUTCDate() + 1); break;
+            case 5: dtFill = {dia: this.getDiaSemana(seg)}; seg.setUTCDate(seg.getUTCDate() - 4); break;
+            case 6: seg.setUTCDate(seg.getUTCDate() - 5); dtFill = {dia: "seg"}; sex.setUTCDate(sex.getUTCDate() - 1); break;
+            default: seg.setUTCDate(seg.getUTCDate() + 1); dtFill = {dia: "seg"}; sex.setUTCDate(sex.getUTCDate() + 5); break;
+        }
+
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+
+        let diaSemana = new Date(seg);
+        let semana = [
+            {dia: "seg", data: this.getData(diaSemana)},
+            {dia: "ter", data: this.getData(new Date(diaSemana).setUTCDate(new Date(diaSemana).getUTCDate()+1))},
+            {dia: "qua", data: this.getData(new Date(diaSemana).setUTCDate(new Date(diaSemana).getUTCDate()+1))},
+            {dia: "qui", data: this.getData(new Date(diaSemana).setUTCDate(new Date(diaSemana).getUTCDate()+1))},
+            {dia: "sex", data: this.getData(new Date(diaSemana).setUTCDate(new Date(diaSemana).getUTCDate()+1))}
+        ];
+        
+        let baseDate = new Date(seg);
+        segunda = this.getDataDiaMes(new Date(baseDate));
+        terca = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
+        quarta = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
+        quinta = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
+        sexta = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
+
+        // 3. CONSULTAS SIMPLIFICADAS COM Promise.all (Adeus Callback Hell aninhado)
+        Promise.all([
+            // A) Busca APENAS as 2 salas específicas
+            Sala.find({ _id: { $in: salasPrioritarias } }).sort({sala_nome: 1}),
+            
+            // B) Busca horários
+            Horaage.find().sort({horaage_turno: 1, horaage_ordem: 1}),
+            
+            // C) Busca beneficiários
+            Bene.find().sort({bene_nome: 1}),
+            
+            // D) Busca terapeutas
+            Usuario.find().sort({usuario_nome: 1}),
+            
+            // E) Busca agendas do período
+            Agenda.find({ agenda_data: { $gte: agora, $lte: depois } })
+        ])
+        .then(([salas, horaages, benes, terapeutas, agendaBruta]) => {
+            
+            console.log(`✅ Buscas concluídas. Salas encontradas: ${salas.length} (Deveria ser exatamente 2)`);
+
+            // 4. FILTRO RÍGIDO EM MEMÓRIA (Garantia absoluta de que só passam as 2 salas, ignorando qualquer bug de schema)
+            const agendasFiltradas = agendaBruta.filter(item => {
+                const idSala = String(item.agenda_salaid || item.agenda_sala || '');
+                return salasPrioritarias.includes(idSala);
+            });
+
+            console.log(`🚪 Agendas após filtro rígido de sala: ${agendasFiltradas.length}`);
+
+            // 5. Processamento mínimo dos agendamentos para a view funcionar
+            let aux = 1;
+            agendasFiltradas.forEach(e => {
+                let dat = new Date(e.agenda_data);
+                e.agenda_data_dia = this.getDataFMT ? this.getDataFMT(dat) : dat.toISOString().split('T')[0];
+                
+                let hora = String(dat.getUTCHours()).padStart(2,'0');
+                let min = String(dat.getMinutes()).padStart(2,'0');
+                e.agenda_hora = hora + ":" + min;
+                e.agenda_aux = aux++;
+
+                const dias = ['dom','seg','ter','qua','qui','sex','sab'];
+                e.agenda_data_semana = dias[dat.getUTCDay()] || 'unk';
+
+                if (e.agenda_temp) {
+                    idsAgendasEx.push(String(e.agenda_tempId));
+                }
+            });
+
+            // Remove agendas temporárias
+            const agendaFinal = agendasFiltradas.filter(a => !idsAgendasEx.includes(String(a._id)));
+
+            // 6. RENDERIZAÇÃO DA VIEW (Simples e direta)
+            res.render("agenda/agendaSemanalAT", {
+                salas: salas,               // Virão APENAS as 2 salas
+                horaages: horaages,
+                agendas: agendaFinal,       // Virão APENAS agendamentos dessas 2 salas (ou vazio se não houver)
+                benes: benes,
+                terapeutas: terapeutas,
+                semanas: semana,
+                dtFill: dtFill,
+                segunda: segunda,
+                terca: terca,
+                quarta: quarta,
+                quinta: quinta,
+                sexta: sexta
+            });
+        })
+        .catch((err) => {
+            console.error('❌ ERRO na consulta simplificada:', err);
+            req.flash("error_message", "Houve um erro ao carregar a agenda!");
+            res.redirect('/admin/erro');
+        });
+    },
 
     //carrega Agenda Semanal com Fixos
     carregaAgendaSFixo(req,res){
@@ -9138,7 +9265,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false }).sort({agenda_data: -1}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).sort({agenda_data: -1}).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
@@ -9226,7 +9353,7 @@ carregaAgendaPessoalquasela(req, res) {
             res.redirect('admin/erro')
         })
     },
-    carregaAgendaFilFAT(req,res){
+    carregaAgendaFilFATOLD2(req,res){
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -9304,7 +9431,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false }).sort({agenda_data: -1}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false, agenda_sala:ObjectId("6368fe35c2cdb92ac6d914be") }).sort({agenda_data: -1}).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
@@ -9391,6 +9518,151 @@ carregaAgendaPessoalquasela(req, res) {
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
         })
+    },
+    carregaAgendaFilFAT(req, res) {
+        let db = req.cookies['preferredDb'];
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+
+        // 1. APENAS AS DUAS SALAS PRIORITÁRIAS
+        const salasPrioritarias = [
+            "64653fedfef321e0b32d2b5f",
+            "6368fe35c2cdb92ac6d914be"
+        ];
+
+        let aux = 1;
+        let segunda, terca, quarta, quinta, sexta;
+        let dtFill;
+        
+        console.log("req.body.dataFinal: " + req.body.dataFinal);
+        let seg = new Date(req.body.dataFinal);
+        let sex = new Date(req.body.dataFinal);
+        
+        seg.setHours(0); seg.setMinutes(0); seg.setSeconds(0);
+        sex.setHours(23); sex.setMinutes(59); sex.setSeconds(59);
+
+        switch (seg.getUTCDay()){
+            case 0: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
+            case 1: sex.setUTCDate(sex.getUTCDate() + 4); break;
+            case 2: seg.setUTCDate(seg.getUTCDate() - 1); sex.setUTCDate(sex.getUTCDate() + 3); break;
+            case 3: seg.setUTCDate(seg.getUTCDate() - 2); sex.setUTCDate(sex.getUTCDate() + 2); break;
+            case 4: seg.setUTCDate(seg.getUTCDate() - 3); sex.setUTCDate(sex.getUTCDate() + 1); break;
+            case 5: seg.setUTCDate(seg.getUTCDate() - 4); break;
+            case 6: seg.setUTCDate(seg.getUTCDate() - 5); sex.setUTCDate(sex.getUTCDate() - 1); break;
+            default: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
+        }
+
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        dtFill = seg.toISOString();
+
+        let diaSemana = new Date(seg);
+        let semana = [
+            {dia: "seg", data: this.getData(diaSemana)},
+            {dia: "ter", data: this.getData(new Date(diaSemana).setUTCDate(diaSemana.getUTCDate()+1))},
+            {dia: "qua", data: this.getData(new Date(diaSemana).setUTCDate(diaSemana.getUTCDate()+1))},
+            {dia: "qui", data: this.getData(new Date(diaSemana).setUTCDate(diaSemana.getUTCDate()+1))},
+            {dia: "sex", data: this.getData(new Date(diaSemana).setUTCDate(diaSemana.getUTCDate()+1))}
+        ];
+        
+        let baseDate = new Date(seg);
+        segunda = this.getDataDiaMes(new Date(baseDate));
+        terca = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
+        quarta = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
+        quinta = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
+        sexta = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
+
+        // 3. CONSULTAS SIMPLIFICADAS COM Promise.all
+        Promise.all([
+            // A) Busca APENAS as 2 salas específicas (CORRIGIDO: antes estava buscando todas)
+            Sala.find({ _id: { $in: salasPrioritarias } }).sort({sala_nome: 1}),
+            
+            // B) Busca horários
+            Horaage.find().sort({horaage_turno: 1, horaage_ordem: 1}),
+            
+            // C) Busca beneficiários
+            Bene.find().sort({bene_nome: 1}),
+            
+            // D) Busca terapeutas
+            Usuario.find().sort({usuario_nome: 1}),
+            
+            // E) Busca agendas do período (Regras específicas da FAT)
+            Agenda.find({ 
+                agenda_data: { $gte: agora, $lte: depois }, 
+                agenda_temp: false, 
+                agenda_extra: false 
+            })
+        ])
+        .then(([salas, horaages, benes, terapeutas, agendaBruta]) => {
+            
+            console.log(`✅ Buscas concluídas. Salas encontradas: ${salas.length} (Deveria ser exatamente 2)`);
+
+            // 4. FILTRO RÍGIDO EM MEMÓRIA (Garantia absoluta)
+            const agendasFiltradas = agendaBruta.filter(item => {
+                const idSala = String(item.agenda_salaid || item.agenda_sala || '');
+                return salasPrioritarias.includes(idSala);
+            });
+
+            console.log(`🚪 Agendas FAT após filtro rígido de sala: ${agendasFiltradas.length}`);
+
+            // 5. Processamento dos agendamentos filtrados
+            agendasFiltradas.forEach((e) => {
+                let dat = new Date(e.agenda_data);
+                e.agenda_data_dia = this.getDataFMT ? this.getDataFMT(dat) : dat.toISOString().split('T')[0];
+                
+                let hora = String(dat.getUTCHours()).padStart(2, '0');
+                let min = String(dat.getMinutes()).padStart(2, '0');
+                e.agenda_hora = hora + ":" + min;
+                e.agenda_aux = aux++;
+
+                const dias = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+                e.agenda_data_semana = dias[dat.getUTCDay()] || 'unk';
+            });
+
+            // 6. Lógica temDia e Ordenação por Hora
+            let segASex = ["seg", "ter", "qua", "qui", "sex"];
+            segASex.forEach((diaDaSemana) => {
+                let haddia = agendasFiltradas.some(a => a.agenda_data_semana === diaDaSemana);
+                this.temDia(haddia, horaages, agendasFiltradas, semana, diaDaSemana);
+            });
+
+            agendasFiltradas.sort(function(a, b) {
+                let h1 = a.agenda_hora.substring(0, 2);
+                let m1 = a.agenda_hora.substring(3, 5);
+                let h2 = b.agenda_hora.substring(0, 2);
+                let m2 = b.agenda_hora.substring(3, 5);
+                if (h1 == h2) {
+                    return m1 < m2 ? -1 : 1; // Corrigido para retornar número, não booleano
+                } else {
+                    return h1 < h2 ? -1 : 1;
+                }
+            });
+
+            // 7. RENDERIZAÇÃO DA VIEW
+            res.render("agenda/agendaFixaAT", {
+                salas: salas,               // Virão APENAS as 2 salas
+                horaages: horaages,
+                agendas: agendasFiltradas,  // Virão APENAS agendamentos dessas 2 salas
+                benes: benes,
+                terapeutas: terapeutas,
+                semanas: semana,
+                dtFill: dtFill,
+                segunda: segunda,
+                terca: terca,
+                quarta: quarta,
+                quinta: quinta,
+                sexta: sexta
+            });
+        })
+        .catch((err) => {
+            console.error('❌ ERRO na consulta simplificada FAT:', err);
+            req.flash("error_message", "Houve um erro ao carregar a agenda!");
+            res.redirect('/admin/erro');
+        });
     },
     carregaAgendaSala(req,res){
         let db = req.cookies['preferredDb'];
@@ -11044,649 +11316,209 @@ async carregaAgendaEdiTemp(req, res) { // Carrega Edição Agenda
     },
 // ========================================================================
 // 📋 Agenda Lista Geral - LISTA MENSAL (VERSÃO CORRIGIDA)
-// Criado por: Wagner Cintra | Editado em: 2026/04/24
+// Criado por: Wagner Cintra | Editado em: 2026/04/24, 2026/09/02
 // ========================================================================
+
 carregaAgendaListaGeral(req, res, carregar, atrazo, resposta) {
-
-    let dataBase = req.body.dataFinal
-        ? new Date(req.body.dataFinal)
-        : new Date();
-
-    // Domingo = 0, Segunda = 1, ..., Sábado = 6
-    const diaSemana = dataBase.getDay();
-
-    // Quantos dias voltar para chegar na segunda-feira
-    const diasAteSegunda = diaSemana === 0
-        ? 6
-        : diaSemana - 1;
-
-    // Segunda-feira
-    const dataIniObj = new Date(dataBase);
-    dataIniObj.setDate(dataBase.getDate() - diasAteSegunda);
-    dataIniObj.setHours(0, 0, 0, 0);
-
-    // Domingo
-    const dataFimObj = new Date(dataIniObj);
-    dataFimObj.setDate(dataIniObj.getDate() + 6);
-    dataFimObj.setHours(23, 59, 59, 999);
-
-    const dataIni = dataIniObj.toISOString();
-    const dataFim = dataFimObj.toISOString();
-
-    console.log("📅 Semana selecionada:");
-    console.log("   Data base:", dataBase);
-    console.log("   Data inicial:", dataIni);
-    console.log("   Data final:", dataFim);
-
-    this.filtraAgendaListaGeral(
-        req,
-        res,
-        dataIni,
-        dataFim,
-        atrazo,
-        resposta
-    );
-},
-filtraAgendaListaGeral(req, res, dataIni, dataFim, atrazo, resposta) {
-
-    console.log("=".repeat(80));
-    console.log("📋 [carregaAgendaListaGeral] INÍCIO");
-    console.log("=".repeat(80));
-
-    // ============================================================
-    // 📌 PASSO 1: CONFIGURAÇÃO
-    // ============================================================
+    // Para GET, usamos req.query. Se não houver, usa o mês atual (YYYY-MM)
+    let dataStr = req.query.dataFinal || new Date().toISOString().slice(0, 7); 
+    
+    const [ano, mes] = dataStr.split('-').map(Number);
+    const dataIniObj = new Date(ano, mes - 1, 1, 0, 0, 0, 0);
+    const dataFimObj = new Date(ano, mes, 0, 23, 59, 59, 999);
 
     let db = req.cookies['preferredDb'];
-
-    Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
-    Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-    Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
-    Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
-    Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
-    Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
-
-    let idTerapeuta = req.cookies['idUsu'];
-
-    console.log(`👤 Terapeuta logado (cookie): ${idTerapeuta}`);
-    console.log(`🔍 Período: ${dataIni} até ${dataFim}`);
-
-    let aux = 1;
-
-    // ============================================================
-    // 📌 PASSO 2: BUSCAR AGENDAMENTOS ORIGINAIS
-    //
-    // Data dentro do período
-    // agenda_temp = false
-    // ============================================================
-
-    Agenda.find({
-        agenda_data: {
-            $gte: dataIni,
-            $lte: dataFim
-        },
-        agenda_temp: false
-    })
-    .lean()
-    .then(async (agendaFixa) => {
-
-        console.log(
-            `📦 Agendamentos originais encontrados: ${agendaFixa.length}`
-        );
-
-        // ========================================================
-        // 📌 PASSO 3: PEGAR IDs DAS AGENDAS ORIGINAIS
-        // ========================================================
-
-        const idsAgendaFixa = agendaFixa.map(a => a._id);
-
-        // ========================================================
-        // 📌 PASSO 4: BUSCAR AGENDAMENTOS TEMPORÁRIOS
-        //
-        // 1. agenda_tempId pertence às agendas originais
-        //
-        // OU
-        //
-        // 2. agenda_temp = true E está dentro do período
-        // ========================================================
-
-        const agendaAlteracoes = await Agenda.find({
-            $or: [
-                {
-                    agenda_tempId: {
-                        $in: idsAgendaFixa
-                    }
-                },
-                {
-                    agenda_data: {
-                        $gte: dataIni,
-                        $lte: dataFim
-                    },
-                    agenda_temp: true
-                }
-            ]
-        })
-        .lean();
-
-        console.log(
-            `📦 Agendamentos temporários encontrados: ${agendaAlteracoes.length}`
-        );
-
-        // ========================================================
-        // 📌 PASSO 5: IDENTIFICAR ORIGINAIS SUBSTITUÍDOS
-        // ========================================================
-
-        const idsSubstituidos = new Set(
-            agendaAlteracoes
-                .map(a => a.agenda_tempId)
-                .filter(Boolean)
-                .map(id => String(id))
-        );
-
-        // ========================================================
-        // 📌 PASSO 6: MANTER SOMENTE ORIGINAIS NÃO SUBSTITUÍDOS
-        // ========================================================
-
-        const agendaOriginalRestante = agendaFixa.filter(
-            a => !idsSubstituidos.has(String(a._id))
-        );
-
-        console.log(
-            `📋 Originais: ${agendaFixa.length}`
-        );
-
-        console.log(
-            `🔄 Substituídos: ${
-                agendaFixa.length -
-                agendaOriginalRestante.length
-            }`
-        );
-
-        console.log(
-            `📋 Originais restantes: ${
-                agendaOriginalRestante.length
-            }`
-        );
-
-        // ========================================================
-        // 📌 PASSO 7: AGENDA FINAL
-        // ========================================================
-
-        let agenda = [
-            ...agendaOriginalRestante,
-            ...agendaAlteracoes
-        ];
-
-        // Remove feriados
-        agenda = agenda.filter(
-            a => String(a.agenda_categoria) !== "Feriado"
-        );
-
-        console.log(
-            `📋 Total agenda final: ${agenda.length}`
-        );
-
-        // ========================================================
-        // 📌 PASSO 8: CARREGAR DADOS AUXILIARES
-        // ========================================================
-
-        const [
-            benes,
-            terapeutas,
-            horaage,
-            salas,
-            terapias,
-            convs
-        ] = await Promise.all([
-
-            Bene.find().lean(),
-
-            Usuario.find({
-                usuario_funcaoid: "6241030bfbcc51f47c720a0b",
-                usuario_status: "Ativo"
-            }).lean(),
-
-            Horaage.find()
-                .sort({
-                    horaage_turno: 1,
-                    horaage_ordem: 1
-                })
-                .lean(),
-
-            Sala.find().lean(),
-
-            Terapia.find({
-                terapia_status: "Ativo",
-                terapia_lixo: {
-                    $ne: "true"
-                }
-            }).lean(),
-
-            Conv.find().lean()
-        ]);
-
-        // ========================================================
-        // 📌 PASSO 9: CRIAR MAPAS
-        //
-        // Isso substitui TODOS os #each do Handlebars.
-        // ========================================================
-
-        const mapaBene = new Map();
-
-        benes.forEach(b => {
-            mapaBene.set(
-                String(b._id),
-                b.bene_nome || ""
-            );
-        });
-
-
-        const mapaTerapeuta = new Map();
-
-        terapeutas.forEach(t => {
-            mapaTerapeuta.set(
-                String(t._id),
-                t.usuario_nome || ""
-            );
-        });
-
-
-        const mapaSala = new Map();
-
-        salas.forEach(s => {
-            mapaSala.set(
-                String(s._id),
-                s.sala_nome || ""
-            );
-        });
-
-
-        const mapaTerapia = new Map();
-
-        terapias.forEach(t => {
-            mapaTerapia.set(
-                String(t._id),
-                t.terapia_nome || ""
-            );
-        });
-
-
-        const mapaConv = new Map();
-
-        convs.forEach(c => {
-            mapaConv.set(
-                String(c._id),
-                c.conv_nome || ""
-            );
-        });
-
-        // ========================================================
-        // 📌 FUNÇÕES AUXILIARES
-        // ========================================================
-
-        const nomePorId = (mapa, id, padrao = "") => {
-
-            if (
-                id === null ||
-                id === undefined ||
-                id === ""
-            ) {
-                return padrao;
-            }
-
-            return mapa.get(String(id)) || padrao;
-        };
-
-
-        // ID especial utilizado pelo sistema para indicar
-        // que não existe substituição.
-        const ID_SEM_SUBSTITUTO =
-            "766f69643132333435366964";
-
-
-        const nomeTerapiaOuTraco = (id) => {
-
-            if (
-                !id ||
-                String(id) === ID_SEM_SUBSTITUTO
-            ) {
-                return "-";
-            }
-
-            return nomePorId(
-                mapaTerapia,
-                id,
-                "-"
-            );
-        };
-
-
-        const nomeTerapeutaOuTraco = (id) => {
-
-            if (
-                !id ||
-                String(id) === ID_SEM_SUBSTITUTO
-            ) {
-                return "-";
-            }
-
-            return nomePorId(
-                mapaTerapeuta,
-                id,
-                "-"
-            );
-        };
-
-
-        // ========================================================
-        // 📌 FORMATA DATA DO TOOLTIP
-        // ========================================================
-
-        const formatarData = (valor) => {
-
-            if (!valor) {
-                return "";
-            }
-
-            const data = new Date(valor);
-
-            if (isNaN(data.getTime())) {
-                return "";
-            }
-
-            return fncGeral.getDataFMT(data);
-        };
-
-
-        // ========================================================
-        // 📌 PASSO 10: TRANSFORMAR AGENDA
-        //
-        // Mantemos o objeto completo.
-        //
-        // Apenas substituímos os IDs de relacionamento pelos
-        // respectivos valores em texto.
-        //
-        // _id permanece porque a tela utiliza para editar/excluir.
-        // ========================================================
-
-        const agendasView = agenda.map((e) => {
-
-            const dat = new Date(e.agenda_data);
-
-            const agendaFormatada = {
-                ...e
-            };
-
-            // ----------------------------------------------------
-            // Data / hora
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_data_dia =
-                fncGeral.getDataFMT(dat);
-
-            agendaFormatada.agenda_hora =
-                `${String(dat.getUTCHours()).padStart(2, '0')}:` +
-                `${String(dat.getUTCMinutes()).padStart(2, '0')}`;
-
-            agendaFormatada.agenda_aux = aux++;
-
-            agendaFormatada.agenda_data_semana =
-                ["dom", "seg", "ter", "qua", "qui", "sex", "sab"][
-                    dat.getUTCDay()
-                ];
-
-
-            // ----------------------------------------------------
-            // Sala
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_salaid =
-                nomePorId(
-                    mapaSala,
-                    e.agenda_salaid,
-                    ""
-                );
-
-
-            // ----------------------------------------------------
-            // Beneficiário
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_beneid =
-                nomePorId(
-                    mapaBene,
-                    e.agenda_beneid,
-                    ""
-                );
-
-
-            // ----------------------------------------------------
-            // Convênio
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_convid =
-                nomePorId(
-                    mapaConv,
-                    e.agenda_convid,
-                    ""
-                );
-
-
-            // ----------------------------------------------------
-            // Terapia original
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_terapiaid =
-                nomePorId(
-                    mapaTerapia,
-                    e.agenda_terapiaid,
-                    ""
-                );
-
-
-            // ----------------------------------------------------
-            // Terapeuta original
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_usuid =
-                nomePorId(
-                    mapaTerapeuta,
-                    e.agenda_usuid,
-                    ""
-                );
-
-
-            // ----------------------------------------------------
-            // Substituto fixo - terapia
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_mergeterapiaid =
-                nomeTerapiaOuTraco(
-                    e.agenda_mergeterapiaid
-                );
-
-
-            // ----------------------------------------------------
-            // Substituto fixo - terapeuta
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_mergeterapeutaid =
-                nomeTerapeutaOuTraco(
-                    e.agenda_mergeterapeutaid
-                );
-
-
-            // ----------------------------------------------------
-            // Substituição - terapia
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_fixoterapiaid =
-                nomeTerapiaOuTraco(
-                    e.agenda_fixoterapiaid
-                );
-
-
-            // ----------------------------------------------------
-            // Substituição - terapeuta
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_fixoterapeutaid =
-                nomeTerapeutaOuTraco(
-                    e.agenda_fixoterapeutaid
-                );
-
-
-            // ----------------------------------------------------
-            // Usuário que criou
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_usucad =
-                nomePorId(
-                    mapaTerapeuta,
-                    e.agenda_usucad,
-                    ""
-                );
-
-
-            // ----------------------------------------------------
-            // Usuário que editou
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_usuedi =
-                nomePorId(
-                    mapaTerapeuta,
-                    e.agenda_usuedi,
-                    ""
-                );
-
-
-            // ----------------------------------------------------
-            // Datas do tooltip já formatadas
-            // ----------------------------------------------------
-
-            agendaFormatada.agenda_datacad =
-                formatarData(e.agenda_datacad);
-
-            agendaFormatada.agenda_dataedi =
-                formatarData(e.agenda_dataedi);
-
-
-            return agendaFormatada;
-        });
-
-
-        // ========================================================
-        // 📌 PASSO 11: ORDENAR AGENDA
-        // ========================================================
-
-        agendasView.sort((a, b) => {
-
-            const dataA = new Date(a.agenda_data);
-            const dataB = new Date(b.agenda_data);
-
-            return dataA - dataB ||
-                String(a.agenda_hora)
-                    .localeCompare(
-                        String(b.agenda_hora)
-                    );
-        });
-
-
-        // ========================================================
-        // 📌 PASSO 12: DEBUG
-        // ========================================================
-
-        const debugSample = agendasView
-            .slice(0, 3)
-            .map(reg => ({
-
-                _id: reg._id,
-
-                data: reg.agenda_data_dia,
-
-                hora: reg.agenda_hora,
-
-                beneficiario:
-                    reg.agenda_beneid,
-
-                sala:
-                    reg.agenda_salaid,
-
-                terapia:
-                    reg.agenda_terapiaid,
-
-                terapeuta:
-                    reg.agenda_usuid,
-
-                convenio:
-                    reg.agenda_convid,
-
-                categoria:
-                    reg.agenda_categoria
-            }));
-
-
-        // ========================================================
-        // 📌 PASSO 13: RENDER
-        // ========================================================
-
-        console.log(
-            "\n✅ Agenda formatada no backend."
-        );
-
-        console.log(
-            `📦 Registros enviados ao Handlebars: ${agendasView.length}`
-        );
-
-        console.log(
-            "🚀 Não serão enviados arrays de beneficiários, " +
-            "terapeutas, salas, terapias ou convênios."
-        );
-
-        console.log("=".repeat(80));
-
-
+    const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+    const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+
+    Promise.all([
+        Bene.find({ bene_status: "Ativo" }).sort({ bene_nome: 1 }).lean(),
+        Usuario.find({ 
+            usuario_funcaoid: "6241030bfbcc51f47c720a0b", // ID da função terapeuta
+            usuario_status: "Ativo" 
+        }).sort({ usuario_nome: 1 }).lean()
+    ])
+    .then(([listaBenes, listaTerapeutas]) => {
         res.render("agenda/agendaListaGeral", {
-
-            // SOMENTE a agenda já resolvida
-            agendas: agendasView,
-
-            dataFiltro:
-                req.body.dataFinal ||
-                new Date().toISOString().slice(0, 10),
-
-            debugSample,
-
-            debugInfo: {
-
-                totalAgendas:
-                    agendasView.length,
-
-                periodo:
-                    `${new Date(dataIni).toLocaleString('pt-BR')} a ` +
-                    `${new Date(dataFim).toLocaleString('pt-BR')}`,
-
-                idTerapeuta
-            },
-
+            benes: listaBenes,
+            terapeutas: listaTerapeutas,
+            dataFiltro: dataStr,
+            tipoFiltro: 'todos', // Sempre inicia como 'todos' na carga GET
+            filtroBeneficiario: '',
+            filtroTerapeuta: '',
+            agendas: [], // Inicia vazio ou com dados do mês, conforme sua regra
             flash: resposta
         });
-
     })
     .catch((err) => {
-
-        console.error(
-            "❌ [ERRO] carregaAgendaListaGeral:",
-            err
-        );
-
-        req.flash(
-            "error_message",
-            "Erro ao carregar lista de agendamentos"
-        );
-
-        res.redirect('/admin/erro');
+        console.error("❌ [ERRO] carregaAgendaListaGeral:", err);
+        req.flash("error_message", "Erro ao carregar dados iniciais da agenda");
+        res.redirect('/menu/agenda/lisGeral'); // Redireciona para si mesmo, não para /admin/erro
     });
+},
+
+async filtraAgendaListaGeral(req, res, filtros, resposta) {
+    try {
+        console.log("📥 DADOS RECEBIDOS DO FORMULÁRIO:", filtros);
+
+        let db = req.cookies['preferredDb'];
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+
+        // 1️⃣ CALCULAR DATAS DO MÊS INTEIRO
+        let dataStr = filtros.dataFinal || new Date().toISOString().slice(0, 7);
+        const [ano, mes] = dataStr.split('-').map(Number);
+        
+        const dataIni = new Date(ano, mes - 1, 1, 0, 0, 0, 0).toISOString();
+        const dataFim = new Date(ano, mes, 0, 23, 59, 59, 999).toISOString();
+
+        // 2️⃣ MONTAR QUERY BASE (Semelhante à função de referência, já com o filtro de pessoa)
+        let query = {
+            agenda_data: { $gte: dataIni, $lte: dataFim }
+        };
+
+        if (filtros.tipoFiltro === 'beneficiario' && filtros.filtroBeneficiario) {
+            query.agenda_beneid = filtros.filtroBeneficiario;
+            console.log("✅ FILTRO APLICADO: Beneficiário ID =", filtros.filtroBeneficiario);
+        } else if (filtros.tipoFiltro === 'terapeuta' && filtros.filtroTerapeuta) {
+            query.agenda_usuid = filtros.filtroTerapeuta;
+            console.log("✅ FILTRO APLICADO: Terapeuta ID =", filtros.filtroTerapeuta);
+        } else {
+            console.log("ℹ️ FILTRO APLICADO: Todos (sem restrição de pessoa)");
+        }
+
+        // 3️⃣ BUSCAR TODOS OS AGENDAMENTOS QUE ATENDEM AO FILTRO (Originais e Temporários)
+        const todasAgendas = await Agenda.find(query).sort({ agenda_data: 1 }).lean();
+        console.log(`📦 Total de agendamentos brutos encontrados no banco: ${todasAgendas.length}`);
+
+        // 4️⃣ LÓGICA DE SUBSTITUIÇÃO (PAI E FILHO) - EM MEMÓRIA (Baseada na sua função de referência)
+        // Passo A: Identificar IDs dos agendamentos originais que foram substituídos
+        const idsSubstituidos = new Set(
+            todasAgendas
+                .filter(a => a.agenda_temp === true && a.agenda_tempId)
+                .map(a => String(a.agenda_tempId))
+        );
+
+        // Passo B: Filtrar a lista final
+        let agendaFinal = todasAgendas.filter(a => {
+            // Se for feriado, remove (conforme sua regra)
+            if (String(a.agenda_categoria) === "Feriado") return false;
+
+            // Se for um agendamento original que JÁ FOI substituído, remove
+            if (idsSubstituidos.has(String(a._id))) return false;
+
+            // Caso contrário, mantém (seja ele original não substituído, ou o próprio temporário)
+            return true;
+        });
+
+        console.log(`📦 Agendamentos finais após lógica de substituição: ${agendaFinal.length}`);
+
+        // 5️⃣ BUSCAR DADOS AUXILIARES PARA MAPEAMENTO (Paralelo para performance)
+        const [listaBenes, listaTerapeutas, listaSalas, listaTerapias, listaConvs] = await Promise.all([
+            Bene.find({ bene_status: "Ativo" }).sort({ bene_nome: 1 }).lean(),
+            Usuario.find({ usuario_funcaoid: "6241030bfbcc51f47c720a0b", usuario_status: "Ativo" }).sort({ usuario_nome: 1 }).lean(),
+            Sala.find().sort({ sala_nome: 1 }).lean(),
+            Terapia.find({ terapia_status: "Ativo", terapia_lixo: { $ne: "true" } }).sort({ terapia_nome: 1 }).lean(),
+            Conv.find().sort({ conv_nome: 1 }).lean()
+        ]);
+
+        // 6️⃣ CRIAR MAPAS PARA SUBSTITUIR ID POR NOME
+        const mapBene = new Map(listaBenes.map(b => [String(b._id), b.bene_nome]));
+        const mapTera = new Map(listaTerapeutas.map(t => [String(t._id), t.usuario_nome]));
+        const mapSala = new Map(listaSalas.map(s => [String(s._id), s.sala_nome]));
+        const mapTerapia = new Map(listaTerapias.map(t => [String(t._id), t.terapia_nome]));
+        const mapConv = new Map(listaConvs.map(c => [String(c._id), c.conv_nome]));
+
+        const getNome = (map, id) => map.get(String(id)) || "Não informado";
+
+        // 7️⃣ FORMATAR E MAPEAR A AGENDA FINAL (Mantendo todos os campos da sua view)
+        let aux = 1;
+        const agendasView = agendaFinal.map((e) => {
+            const dat = new Date(e.agenda_data);
+            const diasSemana = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"];
+            
+            return {
+                ...e,
+                _id: e._id,
+                agenda_aux: aux++,
+                agenda_data_dia: fncGeral.getDataFMT(dat),
+                agenda_hora: `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getUTCMinutes()).padStart(2, '0')}`,
+                agenda_data_semana: diasSemana[dat.getUTCDay()],
+                
+                // Mapeamento de Nomes
+                agenda_beneid: getNome(mapBene, e.agenda_beneid),
+                agenda_usuid: getNome(mapTera, e.agenda_usuid),
+                agenda_salaid: getNome(mapSala, e.agenda_salaid),
+                agenda_terapiaid: getNome(mapTerapia, e.agenda_terapiaid),
+                agenda_convid: getNome(mapConv, e.agenda_convid),
+                
+                // Mapeamento de Substitutos
+                agenda_mergeterapeutaid: getNome(mapTera, e.agenda_mergeterapeutaid),
+                agenda_mergeterapiaid: getNome(mapTerapia, e.agenda_mergeterapiaid),
+                agenda_fixoterapeutaid: getNome(mapTera, e.agenda_fixoterapeutaid),
+                agenda_fixoterapiaid: getNome(mapTerapia, e.agenda_fixoterapiaid),
+            };
+        });
+
+        // Ordenação final por Data e depois por Hora (Lista linear, não por dia da semana)
+        agendasView.sort((a, b) => {
+            const dateA = new Date(a.agenda_data);
+            const dateB = new Date(b.agenda_data);
+            if (dateA.getTime() !== dateB.getTime()) {
+                return dateA - dateB;
+            }
+            return a.agenda_hora.localeCompare(b.agenda_hora);
+        });
+
+        // 8️⃣ CALCULAR MÉTRICAS CONSOLIDADAS
+        const terapeutasUnicos = new Set(agendasView.map(a => a.agenda_usuid).filter(n => n && n !== "Não informado")).size;
+        const salasUnicas = new Set(agendasView.map(a => a.agenda_salaid).filter(n => n && n !== "Não informado")).size;
+        const terapiasUnicas = new Set(agendasView.map(a => a.agenda_terapiaid).filter(n => n && n !== "Não informado")).size;
+
+        let nomeBeneficiarioFiltro = "Todos";
+        if (filtros.tipoFiltro === 'beneficiario' && filtros.filtroBeneficiario) {
+            const bene = listaBenes.find(b => String(b._id) === String(filtros.filtroBeneficiario));
+            nomeBeneficiarioFiltro = bene ? bene.bene_nome : "Não identificado";
+        }
+
+        // 9️⃣ RENDERIZAR A VIEW
+        res.render("agenda/agendaListaGeral", {
+            agendas: agendasView,
+            benes: listaBenes,
+            terapeutas: listaTerapeutas,
+            salas: listaSalas,
+            terapias: listaTerapias,
+            convs: listaConvs,
+            dataFiltro: dataStr,
+            tipoFiltro: filtros.tipoFiltro || 'todos',
+            filtroBeneficiario: filtros.filtroBeneficiario || '',
+            filtroTerapeuta: filtros.filtroTerapeuta || '',
+            flash: resposta,
+            debugInfo: {
+                totalAgendas: agendasView.length,
+                periodo: `${new Date(dataIni).toLocaleDateString('pt-BR')} a ${new Date(dataFim).toLocaleDateString('pt-BR')}`,
+                qtTerapeutasUnicos: terapeutasUnicos,
+                qtSalasUnicas: salasUnicas,
+                qtTerapiasUnicas: terapiasUnicas,
+                nomeBeneficiarioFiltro: nomeBeneficiarioFiltro,
+                nomeConvenioFiltro: "Todos",
+                totalBenes: listaBenes.length,
+                totalTerapeutas: listaTerapeutas.length,
+                totalSalas: listaSalas.length,
+                totalTerapias: listaTerapias.length,
+                totalConvs: listaConvs.length
+            }
+        });
+
+    } catch (err) {
+        console.error("❌ [ERRO] filtraAgendaListaGeral:", err);
+        req.flash("error_message", "Erro ao processar agenda: " + err.message);
+        res.redirect('/menu/agenda/lisGeral');
+    }
 },
 carregaAgendaListaGeralFixa(req, res, carregar, atrazo, resposta) {
 
@@ -12854,7 +12686,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
     var agendaFixa = await Agenda.find({
       agenda_data: { $gte: dataIni, $lte: dataFim },
       agenda_temp: false,
-      agenda_beneid: new ObjectId("62dac872ea444f5b7a028e38"),//69bb0f0b3cb9384fd0e2afa0//632c9f051a5f781525493629
+      //agenda_beneid: new ObjectId("62dac872ea444f5b7a028e38"),//69bb0f0b3cb9384fd0e2afa0//632c9f051a5f781525493629
       //agenda_migrado : false, 
       $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } }]
     }).lean();
@@ -12864,7 +12696,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
       agenda_data: { $gte: dataIni, $lte: dataFim },
       agenda_temp: true,
       //agenda_migrado : false, 
-      agenda_beneid: new ObjectId("62dac872ea444f5b7a028e38"),//69bb0f0b3cb9384fd0e2afa0//632c9f051a5f781525493629
+      //agenda_beneid: new ObjectId("62dac872ea444f5b7a028e38"),//69bb0f0b3cb9384fd0e2afa0//632c9f051a5f781525493629
       $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } }]
     }).lean();
     console.log("agendaSemanal.length: "+agendaSemanal.length)
@@ -14078,6 +13910,8 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                 a.agenda_data = dataaux.toISOString();
                 const newAgenda = new Agenda({
                     agenda_data : a.agenda_data,//
+                    agenda_hora : a.agenda_hora,
+                    agenda_hora_fim : a.agenda_hora_fim,
                     agenda_beneid : a.agenda_beneid,//
                     agenda_convid : a.agenda_convid,//
                     agenda_salaid : a.agenda_salaid,//
@@ -14133,6 +13967,8 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                 if (a.agenda_categoria == "SubstitutoFixo"){
                     newAgenda = new Agenda({
                         agenda_data : a.agenda_data,//
+                        agenda_hora : a.agenda_hora,
+                        agenda_hora_fim : a.agenda_hora_fim,
                         agenda_beneid : a.agenda_beneid,//
                         agenda_convid : a.agenda_convid,//
                         agenda_salaid : a.agenda_salaid,//
@@ -14150,6 +13986,8 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                 } else {
                     newAgenda = new Agenda({
                         agenda_data : a.agenda_data,//
+                        agenda_hora : a.agenda_hora,
+                        agenda_hora_fim : a.agenda_hora_fim,
                         agenda_beneid : a.agenda_beneid,//
                         agenda_convid : a.agenda_convid,//
                         agenda_salaid : a.agenda_salaid,//

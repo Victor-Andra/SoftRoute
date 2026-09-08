@@ -251,116 +251,63 @@
 															</li>
 														</ul>
 													</div>
-													
+													<div class="row">
+														<div class="col-xs-12 label label-lg label-warning arrowed-in arrowed-right">
+															<b>Informações dos Atendimentos</b>
+														</div>
+													</div>
 											</div><!-- /.row -->
 											<div class="page"><!-- /page -->
 												<div class="col-xs-12">
-																						
-													<!-- ============================================================ -->
-															<!-- NOVA SEÇÃO: Descrição da Emissão da Nota Fiscal (cor danger) -->
-															<!-- ============================================================ -->
-															<div class="row" style="margin-top: 20px;">
-																<div class="col-xs-12 label label-lg label-danger arrowed-in arrowed-right">
-																	<b>Descrição da Emissão da Nota Fiscal</b>
-																</div>
-															</div>
-															<div class="row">
-																<label>REFERENTE AO TRATAMENTO MULTIDISCIPLINAR DO BENEFICIÁRIO:</label>
-																<label> {{bene_nome}}</label>
-															</div>
-															<div class="row">
-																<label>DATA DE REFERÊNCIA DOS ATENDIMENTOS: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}</label>
-															</div>
-															<div class="row">
-																<label>SESSÕES REALIZADAS NAS DATAS DE REFERÊNCIA.</label>
-															</div>		
-															<div style="padding: 15px; border: 1px solid #ebccd1; border-radius: 4px; margin-top: 10px;">
-																
-																<div id="descricao-nf-container">
-																	{{#each resumoNF}}
-																		<div class="row descricao-nf-item">
-																			<div class="col-xs-12">
-																				{{terapia_nomecid}} : {{sessoes}} SESSÃO(ÕES) * R$ {{valor}} CADA = R$ {{total}}
-																			</div>
-																		</div>
-																	{{/each}}
-																</div>
-
-																<hr>
-
-																<!-- TOTAL GERAL (soma de todas as terapias) -->
-																<div class="row" style="margin-top: 10px; margin-bottom: 15px;">
-																	<div class="col-xs-12">
-																		<b style="font-size: 14px;">VALOR TOTAL DAS SESSÕES: R$ {{total.total}}</b>
-																	</div>
-																</div>
-
-																<hr>
-
-																<!-- Informações financeiras (movidas para dentro desta seção) -->
-																<label>INFORMAÇÕES FINANCEIRAS</label>	
-																<div class="row">
-																	<b>BRADESCO </b>
-																</div>					
-																<div class="row">
-																	<b>AGÊNCIA: 3453 </b>
-																</div>
-																<div class="row">
-																	<b>CONTA CORRENTE: 50.715-6 </b>
-																</div>					
-																<div class="row">
-																	<b>ROUTE CENTRO DE TERAPIA E APOIO INFANTIL LTDA </b>
-																</div>
-																<div class="row">
-																	<b>CNPJ: 33.346.423/0001-17 </b>
-																</div>
-																<div class="row">
-																	<b>CONTATO: DÉBORA CLARO +55 (81) 9 9299 9989 </b>
-																</div>
-															</div>
-															<hr>
+													<div class="row">
+														<label>REFERENTE AO TRATAMENTO MULTIDISCIPLINAR DO BENEFICIÁRIO:</label>
+														<label> {{bene_nome}}</label>
+													</div>
+													<div class="row">
+														<label>DATA DE REFERÊNCIA DOS ATENDIMENTOS: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}</label>
+													</div>
+													<div class="row">
+														<label>SESSÕES REALIZADAS NAS DATAS DE REFERÊNCIA.</label>
+													</div>											
 													
+													{{#each rels}}
+														<div class="row">
+															{{#each ../terapias}}
+																{{#ifEqual this._id ../nomecid}}
+																	{{terapia_nomecid}} : 
+																{{/ifEqual}}
+															{{/each}}
+															{{sessoes}} SESSÃO(ÕES) * 
+															R$ {{valor}} CADA = 		
+															R$ {{total}}
+														</div>				
+													{{/each}}
 		
 													<footer>
 														<div class="row">
-															<div class="col-xs-12 label label-lg label-warning arrowed-in arrowed-right">
-																<b>Resumo do Consolidado</b>
-															</div>
+															<b>VALOR TOTAL DAS SESSÕES: </b>
+															<b>{{total.total}}</b>
 														</div>
-														<div class="row" style="margin-top: 20px;">
-															
-															
-															<div class="row">
-																<label>REFERENTE AO TRATAMENTO MULTIDISCIPLINAR DO BENEFICIÁRIO:</label>
-																<label> {{bene_nome}}</label>
-															</div>
-															<div class="row">
-																<label>DATA DE REFERÊNCIA DOS ATENDIMENTOS: </b>{{periodoDe}}<b> até: </b>{{periodoAte}}</label>
-															</div>
-															<div class="row">
-																<label>SESSÕES REALIZADAS NAS DATAS DE REFERÊNCIA.</label>
-															</div>	
-														<div style="padding: 15px; border: 1px solid #ebccd1; border-radius: 4px; margin-top: 10px;">	
-															{{#each rels}}
-																<div class="row">
-																	{{#each ../terapias}}
-																		{{#ifEqual this._id ../nomecid}}
-																			{{terapia_nomecid}} : 
-																		{{/ifEqual}}
-																	{{/each}}
-																	{{sessoes}} SESSÃO(ÕES) * 
-																	R$ {{valor}} CADA = 		
-																	R$ {{total}}
-																</div>				
-															{{/each}}
-																<div class="row">
-																	<b>VALOR TOTAL DAS SESSÕES: </b>
-																	<b>{{total.total}}</b>
-																</div>
+													<label>INFORMAÇÕES FINANCEIRAS</label>	
+														<div class="row">
+															<b>BRADESCO </b>
+														</div>					
+														<div class="row">
+															<b>AGÊNCIA: 3453 </b>
 														</div>
-
-															
-														</footer>
+														<div class="row">
+															<b>CONTA CORRENTE: 50.715-6 </b>
+														</div>					
+														<div class="row">
+															<b>ROUTE CENTRO DE TERAPIA E APOIO INFANTIL LTDA </b>
+														</div>
+														<div class="row">
+															<b>CNPJ: 33.346.423/0001-17 </b>
+														</div>
+														<div class="row">
+															<b>CONTATO: DÉBORA CLARO +55 (81) 9 9299 9989 </b>
+														</div>														
+													</footer>
 													</table>
 												</div>
 											</div><!-- /.page -->
@@ -406,82 +353,4 @@
 		<!-- Página em branco única no final -->
 		<div style="page-break-before: always;"></div>
 	</body>
-<script>
-    // Função para consolidar a seção "Descrição da Emissão da Nota Fiscal"
-    function consolidarSessaoNF() {
-        // Seleciona todos os itens da seção
-        let itens = [];
-        let mapaConsolidado = {};
-        
-        // Percorre cada linha da seção
-        $('.descricao-nf-item').each(function() {
-            let texto = $(this).text().trim();
-            
-            // Extrai os dados usando regex
-            // Formato esperado: "NOME : X SESSÃO(ÕES) * R$ Y CADA = R$ Z"
-            let match = texto.match(/^(.+?)\s*:\s*(\d+)\s*SESSÃO\(ÕES\)\s*\*\s*R\$\s*([\d.,]+)\s*CADA\s*=\s*R\$\s*([\d.,]+)$/);
-            
-            if (match) {
-                let nomeTerapia = match[1].trim();
-                let sessoes = parseInt(match[2]);
-                let valorUnitario = match[3];
-                let total = match[4];
-                
-                // Converte total para número (remove formatação)
-                let totalNum = parseFloat(total.replace(/\./g, '').replace(',', '.'));
-                
-                // Agrupa por nome de terapia
-                if (!mapaConsolidado[nomeTerapia]) {
-                    mapaConsolidado[nomeTerapia] = {
-                        nome: nomeTerapia,
-                        sessoes: 0,
-                        totalNum: 0
-                    };
-                }
-                
-                mapaConsolidado[nomeTerapia].sessoes += sessoes;
-                mapaConsolidado[nomeTerapia].totalNum += totalNum;
-            }
-        });
-        
-        // Converte mapa em array e ordena alfabeticamente
-        let arrayConsolidado = Object.values(mapaConsolidado);
-        arrayConsolidado.sort((a, b) => {
-            let nomeA = a.nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
-            let nomeB = b.nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
-            if (nomeA < nomeB) return -1;
-            if (nomeA > nomeB) return 1;
-            return 0;
-        });
-        
-        // Limpa o conteúdo atual da seção
-        $('#descricao-nf-container').empty();
-        
-        // Reescreve com os dados consolidados
-        arrayConsolidado.forEach(item => {
-            // Formata o total de volta para moeda
-            let totalFormatado = item.totalNum.toFixed(2).replace('.', ',');
-            // Aplica máscara de milhar (simples)
-            let partes = totalFormatado.split(',');
-            let inteiro = partes[0];
-            let decimal = partes[1];
-            inteiro = inteiro.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-            totalFormatado = inteiro + ',' + decimal;
-            
-            let html = `
-                <div class="row descricao-nf-item-consolidado">
-                    <div class="col-xs-12">
-                        <b>${item.nome}:</b> ${item.sessoes} SESSÃO(ÕES) | Total: R$ ${totalFormatado}
-                    </div>
-                </div>
-            `;
-            $('#descricao-nf-container').append(html);
-        });
-    }
-    
-    // Chama a função após o carregamento da página
-    $(document).ready(function() {
-        consolidarSessaoNF();
-    });
-</script>
 </html>

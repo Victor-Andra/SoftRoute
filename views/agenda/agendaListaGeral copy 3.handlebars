@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <title>Agenda - Lista Mensal</title>
+    
+    <!-- Estilos Ace Admin + Custom -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/ace.min.css">
+    <link rel="stylesheet" href="/assets/css/ace-part2.min.css">
+    <link rel="stylesheet" href="/assets/css/ace-skins.min.css">
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
+    
+    <!-- Chosen para selects -->
+    <link rel="stylesheet" href="/js/chosen/chosen.min.css">
+    
+    <style>
+        /* ============================================
+           BARRA DE PESQUISA - SIMPLIFICADA
+           ============================================ */
+        .toolbar-pesquisa {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .toolbar-pesquisa .form-inline {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+        .toolbar-pesquisa .form-group {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .toolbar-pesquisa label {
+            font-size: 11px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #f8f9fa;
+        }
+        .toolbar-pesquisa input[type="date"],
+        .toolbar-pesquisa input[type="month"] {
+            padding: 6px 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 12px;
+            width: 180px;
+            background: white;
+        }
+        .toolbar-pesquisa .btn-pesquisar {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.3s;
+        }
+        .toolbar-pesquisa .btn-pesquisar:hover {
+            background: #c82333;
+        }
+
+        /* Tabela compacta */
+        #dynamicTable, #dynamicTable th, #dynamicTable td {
+            font-size: 10px !important;
+            padding: 4px 6px !important;
+            vertical-align: middle !important;
+        }
+        #dynamicTable th {
+            background: #f5f5f5 !important;
+            font-weight: 600 !important;
+        }
+        
+        /* Labels de categoria */
+        .label-categoria { font-size: 9px !important; padding: 3px 6px !important; }
+        .label-feriado { background: #ffc107 !important; color: #212529 !important; }
+        .label-extra { background: #6f42c1 !important; }
+        .label-substituicao { background: #e83e8c !important; }
+        .label-falta { background: #ffc107 !important; color: #212529 !important; }
+        .label-padrao { background: #28a745 !important; }
+        .label-falta-absoluta { background: #fd7e14 !important; }
+
+        /* Tooltip */
+        .custom-tooltip { position: relative; display: inline-block; cursor: pointer; }
+        .tooltip-text {
+            visibility: hidden;
+            width: max-content;
+            max-width: 300px;
+            background: #f3dfdf;
+            color: #c00;
+            font-size: 9px !important;
+            text-align: left;
+            border-radius: 4px;
+            padding: 8px 10px;
+            position: absolute;
+            z-index: 10000 !important;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            white-space: normal;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border: 1px solid #e0b0b0;
+            transition: opacity 0.2s;
+            line-height: 1.4;
+            pointer-events: none !important;
+        }
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #f3dfdf transparent transparent transparent;
+        }
+        .custom-tooltip:hover .tooltip-text {
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+    </style>
+
+    <script type="text/javascript">
+        // 👉 FUNÇÃO: Confirma exclusão
+        function confirmeDeletar(id){
+            if(confirm("Tem certeza que deseja excluir este agendamento?")){
+                window.location.href = "/menu/agenda/del/" + id;
+            }
+        }
+
+        // 👉 FUNÇÃO: Oculta mensagens flash
+        function OcultaMsg(){
+            var el = document.getElementById("alertMsgFlash");
+            if(el) el.hidden = true;
+        }
+
+        // 👉 FUNÇÃO: Lógica de ocultar/revelar (COPIADA E ADAPTADA DA VIEW DE REFERÊNCIA)
+    function trocaFiltroPessoa() {
+
+            const tipo = $('#tipoFiltro').val();
+
+            // Esconde os dois campos
+            $('#divFiltroBeneficiario').hide();
+            $('#divFiltroTerapeuta').hide();
+
+            // Mostra somente o campo correspondente
+            if (tipo === 'beneficiario') {
+
+                $('#divFiltroBeneficiario').show();
+
+            } else if (tipo === 'terapeuta') {
+
+                $('#divFiltroTerapeuta').show();
+
+            } else {
+
+                // Limpa os filtros quando selecionar Todos
+                $('#filtroBeneficiario').val('');
+                $('#filtroTerapeuta').val('');
+            }
+
+            // Atualiza o Chosen
+            $('#filtroBeneficiario').trigger('chosen:updated');
+            $('#filtroTerapeuta').trigger('chosen:updated');
+        }
+    </script>
+</head>
+
+<body class="no-skin" onload="javascript:controlaNave();">
+    <div class="main-container ace-save-state" id="main-container">
+        <div class="main-content">
+            <div class="main-content-inner">
+                
+                <!-- Breadcrumbs -->
+                <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li><i class="ace-icon fa fa-home home-icon"></i><a href="#">Home</a></li>
+                        <li class="active">Agenda - Lista Mensal</li>
+                    </ul>
+                </div>
+
+                <!-- Mensagens Flash -->
+                {{#compareString flash.sucesso "true"}}
+                    <div id="alertMsgFlash" class="alert alert-success">
+                        <button type="button" class="close" onclick="OcultaMsg()"><i class="ace-icon fa fa-times"></i></button>
+                        <strong><i class="ace-icon fa fa-check"></i> {{flash.texto}}</strong>
+                    </div>
+                {{else}}
+                    {{#compareString flash.sucesso "false"}}
+                        <div id="alertMsgFlash" class="alert alert-danger">
+                            <button type="button" class="close" onclick="OcultaMsg()"><i class="ace-icon fa fa-times"></i></button>
+                            <strong><i class="ace-icon fa fa-times"></i> {{flash.texto}}</strong>
+                        </div>
+                    {{/compareString}}
+                {{/compareString}}
+
+                <!-- 🔍 BARRA DE PESQUISA SIMPLIFICADA -->
+                <div class="toolbar-pesquisa">
+                    <form id="formFiltroAgenda" role="form" action="/menu/agenda/lisFiltraGeral" method="POST">
+                        <div class="row">
+                            
+                            <!-- 1. Filtro de Data (Mês e Ano) -->
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="dataFinal"><i class="ace-icon fa fa-calendar"></i> Mês/Ano:</label>
+                                    <input type="month" id="dataFinal" name="dataFinal" class="form-control input-sm" value="{{dataFiltro}}" required>
+                                </div>
+                            </div>
+
+                            <!-- 2. Tipo de Filtro -->
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="tipoFiltro"><i class="ace-icon fa fa-filter"></i> Filtrar por:</label>
+                                    <select id="tipoFiltro" name="tipoFiltro" class="form-control input-sm chosen-select">
+                                        <option value="todos" {{#ifEqual tipoFiltro "todos"}}selected{{/ifEqual}}>Todos</option>
+                                        <option value="beneficiario" {{#ifEqual tipoFiltro "beneficiario"}}selected{{/ifEqual}}>Beneficiário</option>
+                                        <option value="terapeuta" {{#ifEqual tipoFiltro "terapeuta"}}selected{{/ifEqual}}>Terapeuta</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 3. Campo Beneficiário (Oculto por padrão via style inline) -->
+                            <div class="col-sm-3" id="divFiltroBeneficiario" >
+                                <div class="form-group">
+                                    <label for="filtroBeneficiario">Selecione o Beneficiário:</label>
+                                    <select id="filtroBeneficiario" name="filtroBeneficiario" class="form-control input-sm chosen-select" data-placeholder="Escolha um beneficiário...">
+                                        <option value=""></option>
+                                        {{#each benes}}
+                                            <option value="{{_id}}" {{#ifEqual ../filtroBeneficiario _id}}selected{{/ifEqual}}>{{bene_nome}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 4. Campo Terapeuta (Oculto por padrão via style inline) -->
+                            <div class="col-sm-3" id="divFiltroTerapeuta" >
+                                <div class="form-group">
+                                    <label for="filtroTerapeuta">Selecione o Terapeuta:</label>
+                                    <select id="filtroTerapeuta" name="filtroTerapeuta" class="form-control input-sm chosen-select" data-placeholder="Escolha um terapeuta...">
+                                        <option value=""></option>
+                                        {{#each terapeutas}}
+                                            <option value="{{_id}}" {{#ifEqual ../filtroTerapeuta _id}}selected{{/ifEqual}}>{{usuario_nome}}</option>
+                                        {{/each}}
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn-pesquisar">
+                                    <i class="ace-icon fa fa-search"></i> Pesquisar
+                                </button>
+                                <a href="/menu/agenda/lisGeral" class="btn btn-sm btn-default" style="margin-left: 10px; color: #333;">
+                                    <i class="ace-icon fa fa-eraser"></i> Limpar
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 📋 TABELA DE AGENDAMENTOS -->
+                <div class="row">
+                    <div class="col-xs-12">
+
+                        <!-- 🔍 PAINEL DE DEBUG -->
+                        <div class="alert alert-info" style="font-size: 9px; margin-bottom: 15px; display: {{#if debugInfo}}block{{else}}none{{/if}};">
+                            <strong>🔧 DEBUG - Dados recebidos:</strong><br><br>
+                            <strong>📊 Contagens:</strong><br>
+                            • Agendas: {{debugInfo.totalAgendas}} | Benes: {{debugInfo.totalBenes}} | Terapeutas: {{debugInfo.totalTerapeutas}}<br>
+                            • Salas: {{debugInfo.totalSalas}} | Terapias: {{debugInfo.totalTerapias}} | Convs: {{debugInfo.totalConvs}}<br>
+                            • Período: {{debugInfo.periodo}} | ID Terapeuta: {{debugInfo.idTerapeuta}}<br><br>
+                            
+                            {{#if debugSample.length}}
+                            <strong>📋 Amostra (primeiros 3):</strong><br>
+                            <table style="width:100%; border-collapse: collapse; font-size: 8px;">
+                                <thead>
+                                    <tr style="background:#e2e8f0;">
+                                        <th style="border:1px solid #ccc; padding:2px;">Data</th>
+                                        <th style="border:1px solid #ccc; padding:2px;">Hora</th>
+                                        <th style="border:1px solid #ccc; padding:2px;">BeneID</th>
+                                        <th style="border:1px solid #ccc; padding:2px;">SalaID</th>
+                                        <th style="border:1px solid #ccc; padding:2px;">TerapeutaID</th>
+                                        <th style="border:1px solid #ccc; padding:2px;">Cat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each debugSample}}
+                                    <tr>
+                                        <td style="border:1px solid #ccc; padding:2px;">{{data}}</td>
+                                        <td style="border:1px solid #ccc; padding:2px;">{{hora}}</td>
+                                        <td style="border:1px solid #ccc; padding:2px; font-family:monospace; max-width:100px; overflow:hidden;">{{beneId}}</td>
+                                        <td style="border:1px solid #ccc; padding:2px; font-family:monospace; max-width:100px; overflow:hidden;">{{salaId}}</td>
+                                        <td style="border:1px solid #ccc; padding:2px; font-family:monospace; max-width:100px; overflow:hidden;">{{terapeutaId}}</td>
+                                        <td style="border:1px solid #ccc; padding:2px;">{{categoria}}</td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                            {{else}}
+                            <em>⚠️ Nenhum agendamento na amostra.</em>
+                            {{/if}}
+                        </div>
+
+                        <div class="alert alert-warning" style="font-size: 9px; margin-bottom: 15px;">
+                            <strong>📦 Dados brutos:</strong>
+                            Agendas: {{agendas.length}} | Benes: {{benes.length}} | Terapeutas: {{terapeutas.length}} | 
+                            Salas: {{salas.length}} | Terapias: {{terapias.length}} | Convs: {{convs.length}}
+                        </div>
+
+                        <table id="dynamicTable" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid">
+                            <thead>
+                                <tr>
+                                    <th colspan="6">Atendimento</th>
+                                    <th colspan="5"><span class="label label-sm label-success">Original</span></th>
+                                    
+                                    <th>&nbsp;</th>
+                                </tr>
+                                <tr role="row">
+                                    <th class="center" style="width: 30px;">✓</th>
+                                    <th style="width: 100px;">Data</th>
+                                    <th style="width: 50px;">Hora</th>
+                                    <th style="width: 50px;">Sala</th>
+                                    <th>Beneficiário</th>
+                                    <th>Convênio</th>
+                                    <th>Origem</th>
+                                    <th>Categoria</th>
+                                    <th>Evento</th>
+                                    <th>Terapia</th>
+                                    <th>Terapeuta</th>
+                                    <th style="width: 100px;">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each agendas}}
+                                <tr role="row" class="odd">
+                                    <td class="center">
+                                        <label class="pos-rel">
+                                            <input type="checkbox" class="ace" name="chekId" value="{{_id}}" />
+                                            <span class="lbl"></span>
+                                        </label>
+                                    </td>
+                                    <td>{{agenda_data_dia}}</td>
+                                    <td>{{agenda_hora}}</td>
+                                    <td>{{agenda_salaid}}</td>
+                                    <td>{{agenda_beneid}}</td>
+                                    <td>{{agenda_convid}}</td>
+                                    <td>
+                                        {{#ifEqual agenda_org "Administrativo"}}
+                                            <span class="label label-sm label-warning">ADM</span>
+                                        {{else}}
+                                            <span class="label label-sm label-success">Padrão</span>
+                                        {{/ifEqual}}
+                                    </td>
+                                    <td>
+                                        {{#ifEqual agenda_categoria "SubstitutoFixo"}}
+                                            <span class="label label-sm label-danger">Subst. Fixo</span>
+                                        {{else}}
+                                            <span class="label label-sm label-success">Padrão</span>
+                                        {{/ifEqual}}
+                                    </td>
+                                    <td>
+                                        {{#ifEqual agenda_categoria "Feriado"}}
+                                            <span class="label-categoria label-feriado">Feriado</span>
+                                        {{else ifEqual agenda_categoria "Extra"}}
+                                            <span class="label-categoria label-extra">Extra</span>
+                                        {{else ifEqual agenda_categoria "Substituição"}}
+                                            <span class="label-categoria label-substituicao">Substituição</span>
+                                        {{else ifEqual agenda_categoria "Falta"}}
+                                            <span class="label-categoria label-falta">Falta</span>
+                                        {{else ifEqual agenda_categoria "Falta Absoluta"}}
+                                            <span class="label-categoria label-falta-absoluta">Falta Abs.</span>
+                                        {{else ifEqual agenda_categoria "Falta Justificada"}}
+                                            <span class="label-categoria label-falta-absoluta">Falta Just.</span>
+                                        {{else}}
+                                            <span class="label-categoria label-padrao">Sem Evento</span>
+                                        {{/ifEqual}}
+                                    </td>
+                                    <td>{{agenda_terapiaid}}</td>
+                                    <td>{{agenda_usuid}}</td>
+
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a class="green" href="/menu/agenda/edi/{{_id}}">
+                                                <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                            </a>
+                                            <a class="red" onclick="confirmeDeletar('{{_id}}')">
+                                                <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                            </a>
+                                            <a class="blue custom-tooltip">
+                                                <i class="ace-icon fa fa-eye bigger-130"></i>
+                                                <span class="tooltip-text">
+                                                    <strong>Agendamento:</strong><br>
+                                                    • Criado: {{agenda_datacad}}<br>
+                                                    • Por: {{agenda_usucad}}<br>
+                                                    • Editado: {{agenda_dataedi}}<br>
+                                                    • Por: {{agenda_usuedi}}<br><br>
+                                                    <strong>Categoria:</strong> {{agenda_categoria}}<br>
+                                                    <strong>Obs:</strong> {{agenda_obs}}
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {{else}}
+                                <tr>
+                                    <td colspan="22" class="text-center text-muted">
+                                        <i class="ace-icon fa fa-info-circle"></i> 
+                                        Nenhum agendamento encontrado para o período selecionado.
+                                    </td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts básicos -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/chosen/chosen.jquery.min.js"></script>
+    <script src="/js/ace.min.js"></script>
+    
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // 1️⃣ Inicializa o Chosen em todos os selects da classe
+            $('.chosen-select').chosen({
+                width: '100%',
+                allow_single_deselect: true,
+                no_results_text: 'Nenhum resultado encontrado',
+                placeholder_text_single: 'Escolha...'
+            });
+
+            // 2️⃣ Aplica visibilidade inicial (chama a função que funciona na view de referência)
+            trocaFiltroPessoa();
+
+            // 3️⃣ Executa a função sempre que o usuário mudar o "Filtrar por"
+            $('#tipoFiltro').on('change', function() {
+                trocaFiltroPessoa();
+            });
+
+            // 4️⃣ Tooltip para mobile
+            if ('ontouchstart' in document.documentElement) {
+                $('.custom-tooltip').on('click', function(e) {
+                    e.preventDefault();
+                    $(this).find('.tooltip-text').toggle();
+                });
+            }
+        });
+        // ============================================
+        // ✅ PASSO 3: INICIALIZAÇÃO DO DATATABLE (ESTILO ACE ADMIN)
+        // ============================================
+		var myTable = $('#dynamicTable').DataTable({
+        bAutoWidth: false,
+        "language": { "url": "/js/lang/datatable-pt-br.json" },
+        "aoColumns": [
+        { "bSortable": false }, // 0 - Checkbox
+        null,                   // 1 - Data (Agora usa ordenação nativa)
+        null,                   // 2 - Hora
+        null,                   // 3 - Sala
+        null,                   // 4 - Beneficiário
+        null,                   // 5 - Convênio
+        null,                   // 6 - Origem
+        null,                   // 7 - Categoria
+        null,                   // 8 - Evento
+        null,                   // 9 - Terapia Original
+        null,                   // 10 - Terapeuta Original
+
+        { "bSortable": false }  // 11 - Ação
+    ],
+    // ❌ Removido aaSorting para não forçar ordem inicial
+    
+    "responsive": true,
+    "lengthMenu": [[ 500, 1000, 2000, 5000], [500, 1000, 2000, 5000]],
+    "lengthChange": true,
+    "autoWidth": false,
+    "paging": true,
+    "searching": true,
+    "ordering": true,
+    "info": true,
+    select: {
+        style: 'multi'
+    },
+    "initComplete": function(settings, json) {
+        console.log('✅ DataTable inicializado com sucesso');
+    }
+    // ❌ Removido todo o bloco drawCallback que manipulava o data-order
+});
+    </script>
+</body>
+</html>

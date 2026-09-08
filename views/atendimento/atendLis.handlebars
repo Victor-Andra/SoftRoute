@@ -176,22 +176,33 @@
       
       const $id = (id) => document.getElementById(id);
 
-      function formataData(){
+    function formataData() {
         let tipo = $id("tipoData").value;
-        if(tipo == "Ano/Mes"){
-          let dat = new Date($id('anoAtend').value+"-"+$id('mesAtend').value+"-01 00:00:00.000Z");
-          let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
-          let dia = (dat.getUTCDate()).toString().padStart(2,'0');
-          let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
-          $id('dataFinal').value = fulldate;
+        
+        if (tipo === "Ano/Mes") {
+            let ano = $id('anoAtend').value;
+            let mes = $id('mesAtend').value;
+            if (!ano || !mes) return; // Sai da função se não tiver ano/mês, evita erro
+            
+            let dat = new Date(ano + "-" + mes + "-01T00:00:00.000Z");
+            let mesFmt = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
+            let diaFmt = (dat.getUTCDate()).toString().padStart(2, '0');
+            let fulldate = `${dat.getFullYear()}-${mesFmt}-${diaFmt}T00:00:00.000Z`;
+            $id('dataFinal').value = fulldate;
+            
         } else {
-          let dat = new Date($id('dataFil').value);
-          let mes = (dat.getUTCMonth()+1).toString().padStart(2,'0');
-          let dia = (dat.getUTCDate()).toString().padStart(2,'0');
-          let fulldate = `${dat.getFullYear()}-${mes}-${dia} 00:00:00.000Z`;
-          $id('dataFinal').value = fulldate;
+            // Para "Dia" ou "Semana"
+            let dataFilValue = $id('dataFil').value;
+            if (!dataFilValue) return; // Sai da função se o usuário não escolheu uma data
+            
+            // Força o formato ISO correto para evitar problemas de fuso horário
+            let dat = new Date(dataFilValue + "T00:00:00.000Z");
+            let mesFmt = (dat.getUTCMonth() + 1).toString().padStart(2, '0');
+            let diaFmt = (dat.getUTCDate()).toString().padStart(2, '0');
+            let fulldate = `${dat.getFullYear()}-${mesFmt}-${diaFmt}T00:00:00.000Z`;
+            $id('dataFinal').value = fulldate;
         }
-      }
+    }
 
       function trocaFiltroData() {
         const tipo = $('#tipoData').val();
@@ -353,30 +364,51 @@
         }
       }
       function filtrarPorCategoria() {
-        // Coleta todas as categorias ativas (marcadas)
-        let categoriasVisiveis = [];
-        $('.filtro-tipo:checked').each(function() {
-          let filtro = $(this).attr('data-filtro');
-          if (filtro) {
-            filtro.split(',').forEach(function(cat) {
-              categoriasVisiveis.push(cat.trim());
-            });
-          }
-        });
+          let todasCategorias = [];
+          let categoriasVisiveis = [];
 
-        // Filtra cada linha da tabela
-        $('#dynamic-table tbody tr').each(function() {
-          let catLinha = $(this).attr('data-categoria') || '';
-          
-          // Verifica se a categoria da linha está entre as visíveis
-          if (categoriasVisiveis.indexOf(catLinha) !== -1) {
-            $(this).show();
-          } else {
-            $(this).hide();
-          }
-        });
+          // 1. Mapeia TODAS as categorias que existem nos checkboxes (marcadas ou não)
+          $('.filtro-tipo').each(function() {
+              let filtro = $(this).attr('data-filtro');
+              if (filtro) {
+                  filtro.split(',').forEach(function(cat) {
+                      let c = cat.trim();
+                      if (c !== "" && c !== "null") todasCategorias.push(c);
+                  });
+              }
+          });
 
-       
+          // 2. Mapeia apenas as categorias marcadas (visíveis)
+          $('.filtro-tipo:checked').each(function() {
+              let filtro = $(this).attr('data-filtro');
+              if (filtro) {
+                  filtro.split(',').forEach(function(cat) {
+                      let c = cat.trim();
+                      if (c !== "" && c !== "null") categoriasVisiveis.push(c);
+                  });
+              }
+          });
+
+          // 3. Aplica o filtro nas linhas da tabela
+          $('#dynamic-table tbody tr').each(function() {
+              let catLinha = $(this).attr('data-categoria') || '';
+              
+              // ✅ REGRA DA EXCEÇÃO: 
+              // Se a categoria da linha NÃO existe em NENHUM checkbox conhecido, 
+              // ela é tratada como exceção e SEMPRE será exibida.
+              let ehExcecao = (catLinha !== "" && todasCategorias.indexOf(catLinha) === -1);
+              
+              if (ehExcecao) {
+                  $(this).show();
+              } else {
+                  // Regra normal: só exibe se estiver na lista das marcadas
+                  if (categoriasVisiveis.indexOf(catLinha) !== -1 || catLinha === "" || catLinha === "null") {
+                      $(this).show();
+                  } else {
+                      $(this).hide();
+                  }
+              }
+          });
       }
 
     </script>
@@ -466,7 +498,7 @@
                     <div class="form-group">
                       <label>Data:&nbsp;</label>
                       <input style="height: 30px;" id="dataFil" name="dataFil" type="date" onchange="javascript:formataData();">
-                      <input class="hidden" id="dataFinal" name="dataFinal" value="{{filtroTela.tipoData}}" />
+                      <input class="hidden" id="dataFinal" name="dataFinal" value="{{dataFinal}}" />
                     </div>
                   </div>
 
@@ -564,6 +596,18 @@
                     <label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
                       <input name="filtroTipo" value="Extra" type="checkbox" class="ace filtro-tipo input-lg" checked data-filtro="Extra">
                       <span class="lbl bigger-120"> Extra</span>
+                    </label>
+
+                    <!-- ✅ NOVO: CHECKBOX DE SUPERVISÃO -->
+                    <label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+                      <input name="filtroTipo" value="Supervisão" type="checkbox" class="ace filtro-tipo input-lg" checked data-filtro="Supervisão">
+                      <span class="lbl bigger-120"> Supervisão</span>
+                    </label>
+
+                    <!-- ✅ NOVO: CHECKBOX ADMINISTRATIVO -->
+                    <label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+                      <input name="filtroTipo" value="Administrativo" type="checkbox" class="ace filtro-tipo input-lg" checked data-filtro="Administrativo,ADM">
+                      <span class="lbl bigger-120"> Administrativo</span>
                     </label>
 
                   </div>
@@ -713,10 +757,12 @@
                                 {{else ifEqual this.atend_categoria "Substituto"}}<span class="label label-sm label-pink">Substituição</span>
                                 {{else ifEqual this.atend_categoria "Substituição"}}<span class="label label-sm label-pink">Substituição</span>
                                 {{else ifEqual this.atend_categoria "Falta"}}<span class="label label-sm label-yellow">Falta</span>
+                                {{else ifEqual this.atend_categoria "Falta Justificada"}}<span class="label label-sm label-yellow">Falta Justificada</span>
                                 {{else ifEqual this.atend_categoria "Padrão"}}<span class="label label-sm label-success">Sem Evento</span>
                                 {{else ifEqual this.atend_categoria "SubstitutoFixo"}}<span class="label label-sm label-success">Sem Evento</span>
-                                {{else ifEqual this.atend_categoria "Falta Absoluta"}}<span class="label label-sm label-warning">Falta Absoluta</span>
-                                {{else ifEqual this.atend_categoria "Falta Justificada"}}<span class="label label-sm label-warning">Falta Justificada</span>
+                                {{else ifEqual this.atend_categoria "Falta Absoluta"}}<span class="label label-sm label-danger">Falta Absoluta</span>
+                                {{else ifEqual this.atend_categoria "Supervisão"}}<span class="label label-sm label-info">Supervisão</span>
+                                {{else ifEqual this.atend_categoria "Administrativo"}}<span class="label label-sm label-default">Administrativo</span>
                                 {{/ifEqual}}
                               </td>
 
