@@ -9353,7 +9353,7 @@ carregaAgendaPessoalquasela(req, res) {
             res.redirect('admin/erro')
         })
     },
-    carregaAgendaFilFAT(req,res){
+    carregaAgendaFilFATOLD2(req,res){
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
@@ -9518,6 +9518,151 @@ carregaAgendaPessoalquasela(req, res) {
             req.flash("error_message", "houve um erro ao Realizar as listas!")
             res.redirect('admin/erro')
         })
+    },
+    carregaAgendaFilFAT(req, res) {
+        let db = req.cookies['preferredDb'];
+        const Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Horaage = getModel(db, 'tb_horaage', horaageClass.HoraageSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+
+        // 1. APENAS AS DUAS SALAS PRIORITÁRIAS
+        const salasPrioritarias = [
+            "64653fedfef321e0b32d2b5f",
+            "6368fe35c2cdb92ac6d914be"
+        ];
+
+        let aux = 1;
+        let segunda, terca, quarta, quinta, sexta;
+        let dtFill;
+        
+        console.log("req.body.dataFinal: " + req.body.dataFinal);
+        let seg = new Date(req.body.dataFinal);
+        let sex = new Date(req.body.dataFinal);
+        
+        seg.setHours(0); seg.setMinutes(0); seg.setSeconds(0);
+        sex.setHours(23); sex.setMinutes(59); sex.setSeconds(59);
+
+        switch (seg.getUTCDay()){
+            case 0: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
+            case 1: sex.setUTCDate(sex.getUTCDate() + 4); break;
+            case 2: seg.setUTCDate(seg.getUTCDate() - 1); sex.setUTCDate(sex.getUTCDate() + 3); break;
+            case 3: seg.setUTCDate(seg.getUTCDate() - 2); sex.setUTCDate(sex.getUTCDate() + 2); break;
+            case 4: seg.setUTCDate(seg.getUTCDate() - 3); sex.setUTCDate(sex.getUTCDate() + 1); break;
+            case 5: seg.setUTCDate(seg.getUTCDate() - 4); break;
+            case 6: seg.setUTCDate(seg.getUTCDate() - 5); sex.setUTCDate(sex.getUTCDate() - 1); break;
+            default: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
+        }
+
+        let agora = seg.toISOString();
+        let depois = sex.toISOString();
+        dtFill = seg.toISOString();
+
+        let diaSemana = new Date(seg);
+        let semana = [
+            {dia: "seg", data: this.getData(diaSemana)},
+            {dia: "ter", data: this.getData(new Date(diaSemana).setUTCDate(diaSemana.getUTCDate()+1))},
+            {dia: "qua", data: this.getData(new Date(diaSemana).setUTCDate(diaSemana.getUTCDate()+1))},
+            {dia: "qui", data: this.getData(new Date(diaSemana).setUTCDate(diaSemana.getUTCDate()+1))},
+            {dia: "sex", data: this.getData(new Date(diaSemana).setUTCDate(diaSemana.getUTCDate()+1))}
+        ];
+        
+        let baseDate = new Date(seg);
+        segunda = this.getDataDiaMes(new Date(baseDate));
+        terca = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
+        quarta = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
+        quinta = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
+        sexta = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
+
+        // 3. CONSULTAS SIMPLIFICADAS COM Promise.all
+        Promise.all([
+            // A) Busca APENAS as 2 salas específicas (CORRIGIDO: antes estava buscando todas)
+            Sala.find({ _id: { $in: salasPrioritarias } }).sort({sala_nome: 1}),
+            
+            // B) Busca horários
+            Horaage.find().sort({horaage_turno: 1, horaage_ordem: 1}),
+            
+            // C) Busca beneficiários
+            Bene.find().sort({bene_nome: 1}),
+            
+            // D) Busca terapeutas
+            Usuario.find().sort({usuario_nome: 1}),
+            
+            // E) Busca agendas do período (Regras específicas da FAT)
+            Agenda.find({ 
+                agenda_data: { $gte: agora, $lte: depois }, 
+                agenda_temp: false, 
+                agenda_extra: false 
+            })
+        ])
+        .then(([salas, horaages, benes, terapeutas, agendaBruta]) => {
+            
+            console.log(`✅ Buscas concluídas. Salas encontradas: ${salas.length} (Deveria ser exatamente 2)`);
+
+            // 4. FILTRO RÍGIDO EM MEMÓRIA (Garantia absoluta)
+            const agendasFiltradas = agendaBruta.filter(item => {
+                const idSala = String(item.agenda_salaid || item.agenda_sala || '');
+                return salasPrioritarias.includes(idSala);
+            });
+
+            console.log(`🚪 Agendas FAT após filtro rígido de sala: ${agendasFiltradas.length}`);
+
+            // 5. Processamento dos agendamentos filtrados
+            agendasFiltradas.forEach((e) => {
+                let dat = new Date(e.agenda_data);
+                e.agenda_data_dia = this.getDataFMT ? this.getDataFMT(dat) : dat.toISOString().split('T')[0];
+                
+                let hora = String(dat.getUTCHours()).padStart(2, '0');
+                let min = String(dat.getMinutes()).padStart(2, '0');
+                e.agenda_hora = hora + ":" + min;
+                e.agenda_aux = aux++;
+
+                const dias = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+                e.agenda_data_semana = dias[dat.getUTCDay()] || 'unk';
+            });
+
+            // 6. Lógica temDia e Ordenação por Hora
+            let segASex = ["seg", "ter", "qua", "qui", "sex"];
+            segASex.forEach((diaDaSemana) => {
+                let haddia = agendasFiltradas.some(a => a.agenda_data_semana === diaDaSemana);
+                this.temDia(haddia, horaages, agendasFiltradas, semana, diaDaSemana);
+            });
+
+            agendasFiltradas.sort(function(a, b) {
+                let h1 = a.agenda_hora.substring(0, 2);
+                let m1 = a.agenda_hora.substring(3, 5);
+                let h2 = b.agenda_hora.substring(0, 2);
+                let m2 = b.agenda_hora.substring(3, 5);
+                if (h1 == h2) {
+                    return m1 < m2 ? -1 : 1; // Corrigido para retornar número, não booleano
+                } else {
+                    return h1 < h2 ? -1 : 1;
+                }
+            });
+
+            // 7. RENDERIZAÇÃO DA VIEW
+            res.render("agenda/agendaFixaAT", {
+                salas: salas,               // Virão APENAS as 2 salas
+                horaages: horaages,
+                agendas: agendasFiltradas,  // Virão APENAS agendamentos dessas 2 salas
+                benes: benes,
+                terapeutas: terapeutas,
+                semanas: semana,
+                dtFill: dtFill,
+                segunda: segunda,
+                terca: terca,
+                quarta: quarta,
+                quinta: quinta,
+                sexta: sexta
+            });
+        })
+        .catch((err) => {
+            console.error('❌ ERRO na consulta simplificada FAT:', err);
+            req.flash("error_message", "Houve um erro ao carregar a agenda!");
+            res.redirect('/admin/erro');
+        });
     },
     carregaAgendaSala(req,res){
         let db = req.cookies['preferredDb'];
