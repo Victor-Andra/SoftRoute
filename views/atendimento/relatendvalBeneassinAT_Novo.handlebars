@@ -427,51 +427,59 @@
           </div>
         </div>
 
-        <!-- Página em branco única no final -->
-        <div class="d-none d-print-block" style="page-break-before: always;">
-            <table class="table table-striped table-bordered" style="font-size: 11px;">
-                <thead>
-                    <tr>
-                        <th colspan="2" style="text-align: left; vertical-align: top; background-color: #f5f5f5;">
-                            <div class="label label-lg label-info arrowed-in arrowed-right" style="font-size:10px; padding:4px 8px; margin-bottom:3px; display:inline-block;">
-                                <b>Informações do Prestador</b>
-                            </div>
-                            <ul class="list-unstyled" style="font-size:11px; margin:0; padding-left:4px;">
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>Prestador:</b> Route Centro de Terapia e Apoio Infantil - Ltda</li>
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>CNPJ:</b> 33.346.423/0001-17</li>
-                            </ul>
-                        </th>
-                        <th colspan="4" style="text-align: left; vertical-align: top; background-color: #f5f5f5;">
-                            <div class="label label-lg label-success arrowed-in arrowed-right" style="font-size:10px; padding:4px 8px; margin-bottom:3px; display:inline-block;">
-                                <b>Informações do Relatório</b>
-                            </div>
-                            <ul class="list-unstyled" style="font-size:11px; margin:0; padding-left:4px;">
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Período:</b> {{periodoDe}} até {{periodoAte}}</li>
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Beneficiário:</b> {{bene_nome}}</li>
-                                <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Convênio:</b> {{conv_nome}}</li>
-                            </ul>
-                        </th>
-                    </tr>
-                </thead>
-            </table>
 
-            <!-- 🔹 BLOCO DE VALIDAÇÃO DOS PROFISSIONAIS (COMPACTO) -->
-            <div style="margin-top: 15px; padding: 10px 14px; border: 2px solid #1976d2; border-radius: 6px; background: #fff;">
-                <h4 style="text-align: center; margin: 0 0 6px 0; color: #1976d2; font-size: 13px; font-weight: 600;">
-                    <i class="ace-icon fa fa-check-square-o"></i> Validação e Carimbo dos Profissionais
-                </h4>
-                <!-- Lista em 2 colunas para otimizar espaço -->
-                <div style="column-count: 2; column-gap: 20px;">
-                    {{#each terapeutasParticipantes}}
-                    <div style="break-inside: avoid; margin-bottom: 5px; padding: 4px 8px; border: 1px solid #e0e0e0; border-radius: 4px; background: #fcfcfc; display: flex; align-items: center; gap: 8px;">
-                        <label style="margin: 0; font-size: 11px; font-weight: 500; color: #333;">
-                            {{usuario_nome}}
-                        </label>
+<!-- Página em Lista Terapeutas participantes univovos no final -->
+<div class="d-print-block" style="page-break-before: always; padding: 20px;">
+    <table class="table table-striped table-bordered" style="font-size: 11px;">
+        <thead>
+            <tr>
+                <th style="text-align: left; vertical-align: top; background-color: #f5f5f5;">
+                    <div class="label label-lg label-info arrowed-in arrowed-right" style="font-size:10px; padding:4px 8px; margin-bottom:3px; display:inline-block;">
+                        <b>Informações do Prestador</b>
                     </div>
-                    {{/each}}
-                </div>
+                    <ul class="list-unstyled" style="font-size:11px; margin:0; padding-left:4px;">
+                        <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>Prestador:</b> Route Centro de Terapia</li>
+                        <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right blue"></i> <b>CNPJ:</b> 33.346.423/0001-17</li>
+                    </ul>
+                </th>
+                <th colspan="2" style="text-align: left; vertical-align: top; background-color: #f5f5f5;">
+                    <div class="label label-lg label-success arrowed-in arrowed-right" style="font-size:10px; padding:4px 8px; margin-bottom:3px; display:inline-block;">
+                        <b>Informações do Relatório</b>
+                    </div>
+                    <ul class="list-unstyled" style="font-size:11px; margin:0; padding-left:4px;">
+                        <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Período:</b> {{periodoDe}} até {{periodoAte}}</li>
+                        <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Beneficiário:</b> {{bene_nome}}</li>
+                        <li style="line-height:1.3;"><i class="ace-icon fa fa-caret-right green"></i> <b>Convênio:</b> {{conv_nome}}</li>
+                    </ul>
+                </th>
+            </tr>
+        </thead>
+    </table>
+
+    <!-- 🔹 BLOCO DE VALIDAÇÃO DOS PROFISSIONAIS (COMPACTO) -->
+    <div style="margin-top: 15px; padding: 10px 14px; border: 2px solid #1976d2; border-radius: 6px; background: #fff;">
+        <h4 style="text-align: center; margin: 0 0 6px 0; color: #1976d2; font-size: 13px; font-weight: 600;">
+            <i class="ace-icon fa fa-check-square-o"></i> Validação e Carimbo dos Profissionais
+        </h4>
+        
+        {{#if terapeutasParticipantes}}
+        <!-- Lista em 2 colunas para otimizar espaço -->
+        <div style="column-count: 2; column-gap: 20px;">
+            {{#each terapeutasParticipantes}}
+            <div style="break-inside: avoid; margin-bottom: 5px; padding: 4px 8px; border: 1px solid #e0e0e0; border-radius: 4px; background: #fcfcfc; display: flex; align-items: center; gap: 8px;">
+                <label style="margin: 0; font-size: 11px; font-weight: 500; color: #333;">
+                    {{usuario_nomecompleto}}
+                </label>
             </div>
+            {{/each}}
         </div>
+        {{else}}
+        <p style="text-align: center; color: #999; font-size: 11px; margin: 10px 0;">
+            Nenhum terapeuta participante encontrado
+        </p>
+        {{/if}}
+    </div>
+</div>
 
     </div>
 
