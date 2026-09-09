@@ -190,30 +190,58 @@ function carregaBody() {
 
 				return true;
 				}
-			function toggleIntervaloHora() {
-    var isIntervalo = $('#chkIntervaloHora').is(':checked');
-    
-    if (isIntervalo) {
-        // Oculta o select único
-        $('#divHoraSelect').hide();
-        
-        // Revela os campos de intervalo
-        $('#divHoraIntervalo').show();
-        
-        // Limpa o select para não enviar dados conflitantes
-        $('#agendaHoraSelect').val('');
-    } else {
-        // Revela o select único
-        $('#divHoraSelect').show();
-        
-        // Oculta os campos de intervalo
-        $('#divHoraIntervalo').hide();
-        
-        // Limpa os campos de intervalo
-        $('#agendaHoraIni').val('');
-        $('#agendaHoraFim').val('');
-    }
-}
+			// 1. Declare esta variável logo ACIMA da função toggleIntervaloHora
+		let valorHoraSalvo = null;
+
+		// 2. Substitua sua função atual por esta:
+		function toggleIntervaloHora() {
+			var isIntervalo = $('#chkIntervaloHora').is(':checked');
+			
+			if (isIntervalo) {
+				// Salva o valor atual do select na variável ANTES de limpar
+				valorHoraSalvo = $('#agendaHoraSelect').val();
+				
+				// Oculta o select único
+				$('#divHoraSelect').hide();
+				
+				// Revela os campos de intervalo
+				$('#divHoraIntervalo').show();
+				
+				// Limpa o select para não enviar dados conflitantes para o banco
+				$('#agendaHoraSelect').val('');
+				
+				// Atualiza a interface visual (caso use Select2 ou Chosen)
+				if (typeof jQuery !== 'undefined') {
+					$('#agendaHoraSelect').trigger('change');
+					$('#agendaHoraSelect').trigger('chosen:updated');
+				}
+				
+			} else {
+				// Revela o select único
+				$('#divHoraSelect').show();
+				
+				// Oculta os campos de intervalo
+				$('#divHoraIntervalo').hide();
+				
+				// Restaura o valor anterior do select que ficou salvo na memória
+				if (valorHoraSalvo) {
+					$('#agendaHoraSelect').val(valorHoraSalvo);
+				} else {
+					// Se o usuário nunca tinha selecionado nada antes, apenas deixa vazio
+					$('#agendaHoraSelect').val('');
+				}
+				
+				// Atualiza a interface visual (Select2/Chosen) para mostrar o valor restaurado
+				if (typeof jQuery !== 'undefined') {
+					$('#agendaHoraSelect').trigger('change');
+					$('#agendaHoraSelect').trigger('chosen:updated');
+				}
+				
+				// Limpa os campos de intervalo
+				$('#agendaHoraIni').val('');
+				$('#agendaHoraFim').val('');
+			}
+		}
 		</script>
 	</head>
 	<body class="no-skin" onload="javascript:controlaNave();carregaBody();">
@@ -806,9 +834,11 @@ function carregaBody() {
 														<label>Local</label>
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 300px;">
-																<select name="agendaSalaid" id="agendaSalaid" class="select" data-placeholder="Escolha...">
+																<select name="agendaSalaid" id="agendaSalaid" class="form-control select" data-placeholder="Escolha...">
 																	{{#each salas}}
-																		<option value="{{_id}}">{{sala_nome}}</option>
+																		<option value="{{_id}}" {{#ifEqual this._id @root.agenda.agenda_salaid}}selected{{/ifEqual}}>
+																			{{sala_nome}}
+																		</option>
 																	{{/each}}
 																</select>
 															</div>

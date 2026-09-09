@@ -519,7 +519,7 @@ module.exports = {
     // Criado por: Wagner Cintra
     // Criado em: 2022/03/20
     // Editado em: 2025/10/03
-    agendaAdicionarTemp: async (req,res) => {
+    agendaAdicionarTempOLD3_Erro_data: async (req,res) => { // 🛠️ Função nao previa intervalo de data
 
         //Estrura Multiempresa
         let db = req.cookies['preferredDb'];
@@ -618,6 +618,104 @@ module.exports = {
             });
         }
     },
+    agendaAdicionarTemp: async (req, res) => {
+    try {
+        // 1. Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        let AgendaModel = getModel(db, 'tb_agenda', AgendaSchema);
+
+        // 2. Captura segura dos dados de hora do frontend (com fallback para o nome antigo)
+        const horaSelect = req.body.agendaHoraSelect || req.body.agendaHora; 
+        const horaIni = req.body.agendaHoraIni;
+        const horaFim = req.body.agendaHoraFim;
+
+        // 3. 🛠️ Função auxiliar para adicionar minutos a uma string de hora (HH:MM)
+        function adicionarMinutos(horaString, minutos) {
+            if (!horaString) return null;
+            const [horas, mins] = horaString.split(':').map(Number);
+            const totalMinutos = (horas * 60) + mins + minutos;
+            
+            const novasHoras = Math.floor(totalMinutos / 60) % 24; 
+            const novosMinutos = totalMinutos % 60;
+            
+            return `${String(novasHoras).padStart(2, '0')}:${String(novosMinutos).padStart(2, '0')}`;
+        }
+
+        // 4. 🧠 Lógica de conversão para garantir os 3 campos sempre preenchidos corretamente
+        let agenda_hora, agenda_hora_ini, agenda_hora_fim;
+
+        if (horaIni && horaFim) {
+            // ✅ CASO 1: Usuário marcou o intervalo (Início e Fim preenchidos)
+            agenda_hora = horaIni;
+            agenda_hora_ini = horaIni;
+            agenda_hora_fim = horaFim;
+        } else if (horaSelect) {
+            // ✅ CASO 2: Usuário escolheu hora única (Correção do erro "horaUnica is not defined")
+            agenda_hora = horaSelect;
+            agenda_hora_ini = horaSelect;
+            agenda_hora_fim = adicionarMinutos(horaSelect, 40); // Padrão de 40 minutos
+        } else {
+            // ⚠️ Fallback de segurança
+            agenda_hora = "00:00";
+            agenda_hora_ini = "00:00";
+            agenda_hora_fim = "00:00";
+        }
+
+        // 5. Montagem da Data (AGORA, após resolver a hora, para evitar "undefined" na string)
+        let [ano, mes, dia] = req.body.dataAg.split('-').map(Number);
+        let dataBase = new Date(ano, mes - 1, dia);
+        let dataAgenda = new Date(dataBase.getFullYear() + '-' + (dataBase.getMonth() + 1) + '-' + dataBase.getDate() + ' ' + agenda_hora + ':00.000Z');
+        
+        // 6. Verificação de Bloqueio (2 meses)
+        let doisMesesAtras = new Date();
+        doisMesesAtras.setMonth(doisMesesAtras.getMonth() - 2);
+        let bloqueio = dataAgenda < doisMesesAtras;
+
+        if (bloqueio) {
+            console.log("Bloqueada a criação devido ao fechamento!");
+            return false;
+        }
+
+        // 7. Preparação dos dados para o Banco
+        let usuarioAtual = req.cookies['idUsu'];
+        let dataAtual = new Date();
+        let agendaTempId = new mongoose.mongo.ObjectId(req.body.agendaIdTemp);
+
+        const newAgenda = new AgendaModel({
+            agenda_data: dataAgenda,
+            agenda_hora: agenda_hora,
+            agenda_horafim: agenda_hora_fim,
+            agenda_beneid: req.body.agendaBeneid,
+            agenda_convid: req.body.agendaConvid,
+            agenda_salaid: req.body.agendaSalaid,
+            agenda_terapiaid: req.body.agendaTerapiaid,
+            agenda_usuid: req.body.agendaUsuid,
+            agenda_mergeterapeutaid: req.body.agendaMergeterapeutaid,
+            agenda_mergeterapiaid: req.body.agendaMergeterapiaid,
+            agenda_migrado: false,
+            agenda_categoria: req.body.agendaCateg,
+            agenda_org: req.body.agendaOrg,
+            agenda_obs: req.body.agendaObs,
+            agenda_temp: true,
+            agenda_tempId: agendaTempId,
+            agenda_tempmotivo: req.body.agendaTempMotivo,
+            agenda_selo: false,
+            agenda_copia: false,
+            agenda_turnoFalta: req.body.agendaTurnoFalta,
+            agenda_log: req.body.agendaLog,
+            agenda_usucad: usuarioAtual,
+            agenda_datacad: dataAtual,
+        });
+
+        // 8. Salvamento
+        await newAgenda.save();
+        return true;
+
+    } catch (err) {
+        console.error("Erro em agendaAdicionarTemp:", err);
+        throw err; // Lança o erro para o catch do cadastraAgendaTemp lidar com o flash
+    }
+},
 
     // ========================================================================
     // ➕ Add Temp Agenda - CADASTRAR AGENDAMENTO TEMPORÁRIO (SUBSTITUIÇÃO)
