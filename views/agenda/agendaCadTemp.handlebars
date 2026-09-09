@@ -38,7 +38,7 @@
 				document.getElementById("agendaData").value = dataFmt;
 				console.log(dataFmt);
 			}
-			function carregaBody(){
+			function carregaBody_ERR(){
 				document.getElementById("dataAg").value = document.getElementById("agendaDataEdi").value;
 				document.getElementById("agendaHora").value = document.getElementById("agendaHoraEdi").value;
 				document.getElementById("agendaBeneid").value = document.getElementById("agendaBeneidEdi").value;
@@ -52,6 +52,45 @@
 				document.getElementById("divFalta").style.display = "none";
 				atualizaData();
 			}
+function carregaBody() {
+    try {
+        // 1. Pega os valores dos campos ocultos
+        const beneEdi = document.getElementById("agendaBeneidEdi")?.value || "";
+        const convEdi = document.getElementById("agendaConvidEdi")?.value || "";
+        const dataEdi = document.getElementById("agendaDataEdi")?.value || "";
+        const horaEdi = document.getElementById("agendaHoraEdi")?.value || "";
+
+        // 2. Popula apenas o que é essencial e existe na tela
+        if (beneEdi) document.getElementById("agendaBeneid").value = beneEdi;
+        if (convEdi) document.getElementById("agendaConvid").value = convEdi;
+        if (dataEdi) document.getElementById("dataAg").value = dataEdi;
+        if (horaEdi && document.getElementById("agendaHoraSelect")) {
+            document.getElementById("agendaHoraSelect").value = horaEdi;
+        }
+
+        // 3. Aciona as funções dependentes do beneficiário
+        if (beneEdi) {
+            if (typeof selectConv === 'function') selectConv();
+            if (typeof selectSessao === 'function') selectSessao();
+        }
+
+        // 4. Atualiza o Select2 visualmente (agora com segurança, verificando se o jQuery carregou)
+        if (typeof jQuery !== 'undefined') {
+            jQuery('#agendaBeneid').trigger('change.select2');
+            // Terapia e Terapeuta já vêm com 'selected' do Handlebars, 
+            // mas forçamos a atualização visual por garantia:
+            jQuery('#agendaTerapiaid').trigger('change.select2');
+            jQuery('#agendaUsuid').trigger('change.select2');
+        }
+
+        // 5. Finaliza
+        if (typeof atualizaData === 'function') atualizaData();
+        if (typeof ocultaDivFaltas === 'function') ocultaDivFaltas();
+
+    } catch (erro) {
+        console.error("Erro ao carregar corpo do formulário:", erro);
+    }
+}
 			function CarregaIdFalta(){
 				let alvo = document.getElementById("agendaAlvoFalta").value;
 				if (alvo == "Terapeuta"){
@@ -607,57 +646,57 @@
 										<div class="widget-body">
 											<div class="widget-main">
 												<div class="row">
-    <div class="col-xs-12 col-sm-8">
-        <label for="id-date-picker-1">Data Agendamento</label>
-        <div class="row">
-            <div class="col-sm-4">
-                <div class="input-group">
-                    <input name="dataAg" id="dataAg" type="date" style="width: 200px;" onchange="javascript:atualizaData()">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-6">
-        <label for="agendaHoraSelect">Hora Agendamento</label>
-        
-        <!-- CHECKBOX SEMPRE VISÍVEL -->
-        <div class="checkbox" style="margin-bottom: 10px;">
-            <label>
-                <input type="checkbox" id="chkIntervaloHora" onchange="toggleIntervaloHora()"> 
-                <small>Agendar por intervalo de horas</small>
-            </label>
-        </div>
-        
-        <div class="form-group">
-            <div class="col-sm-8">
-                
-                <!-- SELECT DE HORA ÚNICA -->
-                <div id="divHoraSelect">
-                    <select name="agendaHoraSelect" id="agendaHoraSelect" class="select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
-                        {{#each horaages}}
-                            <option value="{{horaage_hora}}">{{horaage_hora}}</option>
-                        {{/each}}
-                    </select>
-                </div>
+														<div class="col-xs-12 col-sm-8">
+															<label for="id-date-picker-1">Data Agendamento</label>
+															<div class="row">
+																<div class="col-sm-4">
+																	<div class="input-group">
+																		<input name="dataAg" id="dataAg" type="date" style="width: 200px;" onchange="javascript:atualizaData()">
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-xs-12 col-sm-6">
+															<label for="agendaHoraSelect">Hora Agendamento</label>
+															
+															<!-- CHECKBOX SEMPRE VISÍVEL -->
+															<div class="checkbox" style="margin-bottom: 10px;">
+																<label>
+																	<input type="checkbox" id="chkIntervaloHora" onchange="toggleIntervaloHora()"> 
+																	<small>Agendar por intervalo de horas</small>
+																</label>
+															</div>
+															
+															<div class="form-group">
+																<div class="col-sm-8">
+																	
+																	<!-- SELECT DE HORA ÚNICA -->
+																	<div id="divHoraSelect">
+																		<select name="agendaHoraSelect" id="agendaHoraSelect" class="select" data-placeholder="Escolha..." onchange="javascript:atualizaData()">
+																			{{#each horaages}}
+																				<option value="{{horaage_hora}}">{{horaage_hora}}</option>
+																			{{/each}}
+																		</select>
+																	</div>
 
-                <!-- CAMPOS DE INTERVALO (OCULTOS POR PADRÃO) -->
-                <div id="divHoraIntervalo" style="display: none; margin-top: 10px;">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <label for="agendaHoraIni">Hora Inicial</label>
-                            <input id="agendaHoraIni" name="agendaHoraIni" type="time" class="form-control" />
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="agendaHoraFim">Hora Final</label>
-                            <input id="agendaHoraFim" name="agendaHoraFim" type="time" class="form-control" />
-                        </div>
-                    </div>
-                </div>
+																	<!-- CAMPOS DE INTERVALO (OCULTOS POR PADRÃO) -->
+																	<div id="divHoraIntervalo" style="display: none; margin-top: 10px;">
+																		<div class="row">
+																			<div class="col-sm-6">
+																				<label for="agendaHoraIni">Hora Inicial</label>
+																				<input id="agendaHoraIni" name="agendaHoraIni" type="time" class="form-control" />
+																			</div>
+																			<div class="col-sm-6">
+																				<label for="agendaHoraFim">Hora Final</label>
+																				<input id="agendaHoraFim" name="agendaHoraFim" type="time" class="form-control" />
+																			</div>
+																		</div>
+																	</div>
 
-            </div>
-        </div>
-    </div>
-</div>
+																</div>
+															</div>
+														</div>
+													</div>
 												<div class="row">
 													<div class="col-xs-12 col-sm-6">
 														<label>Origem Agendamento</label>
@@ -729,25 +768,33 @@
 													</div><!-- /.span -->
 												</div>
 												<div class="row">
+													<!-- TERAPEUTA -->
 													<div class="col-xs-6">
 														<label>Terapeuta</label>
 														<div class="form-group">
 															<div class="col-sm-4" style="width: 500px;">
-																<select name="agendaUsuid" id="agendaUsuid" class="select" data-placeholder="Escolha..." >
+																<select name="agendaUsuid" id="agendaUsuid" class="form-control select2" data-placeholder="Escolha...">
 																	{{#each terapeutas}}
-																	<option value="{{_id}}">{{usuario_nome}}</option>
+																		<!-- O ifEqual compara o ID do terapeuta atual com o ID salvo no agendamento -->
+																		<option value="{{_id}}" {{#ifEqual this._id @root.agenda.agenda_usuid}}selected{{/ifEqual}}>
+																			{{usuario_nome}}
+																		</option>
 																	{{/each}}
 																</select>
 															</div>
-														</div>												
+														</div>                                                
 													</div>
-													<div class="col-xs-6">													
+
+													<!-- TERAPIA -->
+													<div class="col-xs-6">                                                    
 														<label>Terapia</label>
 														<div class="form-group">
-															<div class="col-sm-4" >
-																<select name="agendaTerapiaid" id="agendaTerapiaid" class="select" data-placeholder="Escolha..." style="width: 200px;" onchange="javascript:carregaValores()">
+															<div class="col-sm-4">
+																<select name="agendaTerapiaid" id="agendaTerapiaid" class="form-control select2" data-placeholder="Escolha..." style="width: 200px;" onchange="javascript:carregaValores()">
 																	{{#each terapias}}
-																		<option value="{{_id}}">{{terapia_nome}}</option>
+																		<option value="{{_id}}" {{#ifEqual this._id @root.agenda.agenda_terapiaid}}selected{{/ifEqual}}>
+																			{{terapia_nome}}
+																		</option>
 																	{{/each}}
 																</select>
 															</div>
@@ -819,17 +866,19 @@
 												</div>
 											</div>
 										</div>
-										<div class="hidden">
-											<input id="agendaIdTemp" name="agendaIdTemp" value="{{agenda_tempId}}" />
-											<!--<input id="agendaTempMotivoEdi" name="agendaTempMotivoEdi" value="{{agenda_tempmotivo}}" />-->
-											<input id="agendaData" name="agendaData" /><!-- permanesce vazio para receber a data antes de salvar -->
-											<input id="agendaDataEdi" name="agendaDataEdi" value="{{agenda.agenda_data_dia}}" />
-											<input id="agendaHoraEdi" name="agendaHoraEdi" value="{{agenda.agenda_hora}}" />
-											<input id="agendaBeneidEdi" name="agendaBeneidEdi" value="{{agenda.agenda_beneid}}" />
-											<input id="agendaConvidEdi" name="agendaConvidEdi" value="{{agenda.agenda_convid}}" />
-											<input id="agendaSalaidEdi" name="agendaSalaidEdi" value="{{agenda.agenda_salaid}}" />
-											<input id="agendaTerapiaidEdi" name="agendaTerapiaidEdi" value="{{agenda.agenda_terapiaid}}" />
-											<input id="agendaUsuidEdi" name="agendaUsuidEdi" value="{{agenda.agenda_usuid}}" />
+										<div class="">
+										<!-- CAMPOS OCULTOS DE EDIÇÃO (Lógica idêntica à do beneficiário) -->
+										<input type="hidden" id="agendaIdTemp" name="agendaIdTemp" value="{{agenda_tempId}}" />
+										<input type="hidden" id="agendaDataEdi" name="agendaDataEdi" value="{{agenda.agenda_data_dia}}" />
+										<input type="hidden" id="agendaHoraEdi" name="agendaHoraEdi" value="{{agenda.agenda_hora}}" />
+										<input type="hidden" id="agendaBeneidEdi" name="agendaBeneidEdi" value="{{agenda.agenda_beneid}}" />
+										<input type="hidden" id="agendaConvidEdi" name="agendaConvidEdi" value="{{agenda.agenda_convid}}" />
+										<input type="hidden" id="agendaTerapiaidEdi" name="agendaTerapiaidEdi" value="{{agenda.agenda_terapiaid}}" />
+										<input type="hidden" id="agendaUsuidEdi" name="agendaUsuidEdi" value="{{agenda.agenda_usuid}}" />
+										<input type="hidden" id="agendaSalaidEdi" name="agendaSalaidEdi" value="{{agenda.agenda_salaid}}" />
+
+										<!-- Campo que recebe a data formatada para o envio -->
+										<input type="hidden" id="agendaData" name="agendaData" />
 										</div>
 										<div class="space-4"></div>							
 										<div class="space-4"></div>
@@ -841,35 +890,14 @@
 												</button>
 												&nbsp; &nbsp; &nbsp;
 												<button class="btn btn-warning" name="acaoCancelar" id="acaoCancelar" type="reset">
-																<i class="ace-icon fa fa-undo bigger-110"></i>
-																Voltar
-															</button>
+													<i class="ace-icon fa fa-undo bigger-110"></i>
+													Voltar
+												</button>
 											</div>
 										</div>
 									</div>
 								</div>
 								
-								<div class="col-xs-12 col-sm-4"><!-- Widget Quadro de sessões -->
-									<div class="widget-box">
-										<div class="widget-header">
-											<h4 class="widget-title">Quadro de sessões</h4>
-											<span class="widget-toolbar">
-												<a href="#" data-action="reload">
-													<i class="ace-icon fa fa-refresh"></i>
-												</a>
-												<a href="#" data-action="collapse">
-													<i class="ace-icon fa fa-chevron-up"></i>
-												</a>
-											</span>
-										</div>
-										<div class="widget-body">
-											<div class="widget-main">
-													<div id="blocoSessoes" name="nameless"><!-- Div que recebe a tabela pronta, escolhida pelo usuário, na hora do input do beneficiário -->
-													</div>
-											</div>
-										</div>
-									</div>
-								</div>
 							</form>
 						</div><!-- /.col -->
 					</div><!-- /.row -->
