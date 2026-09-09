@@ -1538,63 +1538,63 @@ console.log("res: "+res);
             res.redirect('admin/erro');
         }
     },
-listaProg: async (req, res, resposta) => {
-    let db = req.cookies['preferredDb'];
-    let Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-    let Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
-    let Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
+    listaProg: async (req, res, resposta) => {
+        let db = req.cookies['preferredDb'];
+        let Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        let Prog = getModel(db, 'tb_prog', progClass.ProgSchema);
+        let Progtipo = getModel(db, 'tb_progtipo', progtipoClass.ProgtipoSchema);
 
-    let flash = new Resposta();
-    let perfilAtual = req.cookies['lvlUsu'];
-    let dataAtual = new Date();
+        let flash = new Resposta();
+        let perfilAtual = req.cookies['lvlUsu'];
+        let dataAtual = new Date();
 
-    try {
-        const [bene, progs, progtipos] = await Promise.all([
-            Bene.find({ bene_status: "Ativo", bene_nome: { $not: /\./ }, bene_aba: "Sim" }),
-            Prog.find(),
-            Progtipo.find()
-        ]);
+        try {
+            const [bene, progs, progtipos] = await Promise.all([
+                Bene.find({ bene_status: "Ativo", bene_nome: { $not: /\./ }, bene_aba: "Sim" }),
+                Prog.find(),
+                Progtipo.find()
+            ]);
 
-        // Ordena beneficiários por nome
-        bene.sort((a, b) => {
-            const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-            const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-            return nomeA.localeCompare(nomeB);
-        });
+            // Ordena beneficiários por nome
+            bene.sort((a, b) => {
+                const nomeA = a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const nomeB = b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                return nomeA.localeCompare(nomeB);
+            });
 
-        // Ordena tipos por nome (garante ordem alfabética base)
-        progtipos.sort((a, b) => {
-            const nomeA = a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-            const nomeB = b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-            return nomeA.localeCompare(nomeB);
-        });
+            // Ordena tipos por nome (garante ordem alfabética base)
+            progtipos.sort((a, b) => {
+                const nomeA = a.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                const nomeB = b.progtipo_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                return nomeA.localeCompare(nomeB);
+            });
 
-        const progsSerializados = progs.map(p => ({
-            _id: p._id.toString(),
-            beneId: p.prog_beneid ? p.prog_beneid.toString() : '',
-            tipoId: p.prog_tipo ? p.prog_tipo.toString() : '',
-            status: p.prog_status || ''
-        }));
+            const progsSerializados = progs.map(p => ({
+                _id: p._id.toString(),
+                beneId: p.prog_beneid ? p.prog_beneid.toString() : '',
+                tipoId: p.prog_tipo ? p.prog_tipo.toString() : '',
+                status: p.prog_status || ''
+            }));
 
-        const tiposSerializados = progtipos.map(t => ({
-            _id: t._id.toString(),
-            nome: t.progtipo_nome
-        }));
+            const tiposSerializados = progtipos.map(t => ({
+                _id: t._id.toString(),
+                nome: t.progtipo_nome
+            }));
 
-        res.render('area/aba/prog/progLis', {
-            benes: bene,
-            progs: progsSerializados,
-            progtipos: tiposSerializados,
-            perfilAtual,
-            flash,
-            dataAtual,
-        });
-    } catch (err) {
-        console.log(err);
-        req.flash("error_message", "Houve um erro ao listar!");
-        res.redirect('admin/erro');
-    }
-},
+            res.render('area/aba/prog/progLis', {
+                benes: bene,
+                progs: progsSerializados,
+                progtipos: tiposSerializados,
+                perfilAtual,
+                flash,
+                dataAtual,
+            });
+        } catch (err) {
+            console.log(err);
+            req.flash("error_message", "Houve um erro ao listar!");
+            res.redirect('admin/erro');
+        }
+    },
     carregaProg(req,res){
         let db = req.cookies['preferredDb'];
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
