@@ -968,7 +968,7 @@ module.exports = {
             } else {
                 usuObs = " - "
             }
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTeraid, agenda_temp: false, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTeraid, agenda_temp: false, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -1323,9 +1323,9 @@ module.exports = {
         let busca;
         //console.log("req.body.soFixo:"+req.body.soFixo)
         if (soFixo == "true"){
-            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") }, "agenda_categoria": "SubstitutoFixo" };
+            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]}, "agenda_categoria": "SubstitutoFixo" };
         } else {
-            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } };
+            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} };
         }
         Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
             Agenda.find(busca).then((agenda) =>{
@@ -2651,7 +2651,7 @@ carregaAgendaMesFixo(req, res) {
         Bene.findOne({_id:req.body.agendaBeneid}).then((bene) =>{
             nomeBene = bene.bene_nome
             beneConvid = bene.bene_convid
-            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).sort({ agenda_data: -1 }).then((agenda) =>{
+            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} }).sort({ agenda_data: -1 }).then((agenda) =>{
                 //console.log("Listagem Realizada de agendamentos!")
                 //console.log("agenda.length:"+agenda.length)
                 agenda.forEach((e)=>{
@@ -3053,7 +3053,7 @@ carregaAgendaMesFixo(req, res) {
         Bene.findOne({_id:req.body.agendaBeneid}).then((bene) =>{
             nomeBene = bene.bene_nome
             beneConvid = bene.bene_convid
-            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).sort({ agenda_data: -1 }).then((agenda) =>{
+            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} }).sort({ agenda_data: -1 }).then((agenda) =>{
                 //console.log("Listagem Realizada de agendamentos!")
                 //console.log("agenda.length:"+agenda.length)
                 agenda.forEach((e)=>{
@@ -3847,7 +3847,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         //Pensar em como carregar quando for merge
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTerapeutaid, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).sort({ agenda_data: -1 }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTerapeutaid, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} }).sort({ agenda_data: -1 }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
@@ -4946,7 +4946,7 @@ carregaAgendaMesFixo(req, res) {
 
         // ===== CONSULTA PRINCIPAL: AGENDA =====
         console.log('   🔍 Buscando agendamentos no período...');
-        Agenda.find({ agenda_data: { $gte: agora, $lte: depois }, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } })
+        Agenda.find({ agenda_data: { $gte: agora, $lte: depois }, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} })
             .sort({ agenda_data: -1 })
             .then((agenda) => {
                 console.log('   ✅ Agenda: Encontrados', agenda.length, 'registros');
@@ -5183,7 +5183,7 @@ carregaAgendaMesFixo(req, res) {
 
         // ===== CONSULTA PRINCIPAL: AGENDA =====
         console.log('   🔍 Buscando agendamentos no período...');
-        Agenda.find({ agenda_data: { $gte: agora, $lte: depois }, agenda_sala: ObjectId("6368fe35c2cdb92ac6d914be") })
+        Agenda.find({ agenda_data: { $gte: agora, $lte: depois }, agenda_sala: { $in: [ObjectId("6368fe35c2cdb92ac6d914be"), ObjectId("64653fedfef321e0b32d2b5f")] }})
             .sort({ agenda_data: -1 })
             .then((agenda) => {
                 console.log('   ✅ Agenda: Encontrados', agenda.length, 'registros');
@@ -9265,7 +9265,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false, agenda_sala: { $ne: ObjectId("6368fe35c2cdb92ac6d914be") } }).sort({agenda_data: -1}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} }).sort({agenda_data: -1}).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
@@ -9431,7 +9431,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false, agenda_sala:ObjectId("6368fe35c2cdb92ac6d914be") }).sort({agenda_data: -1}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false, agenda_sala: { $in: [ObjectId("6368fe35c2cdb92ac6d914be"), ObjectId("64653fedfef321e0b32d2b5f")] } }).sort({agenda_data: -1}).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
@@ -11011,7 +11011,7 @@ async carregaAgendaEdiTemp(req, res) { // Carrega Edição Agenda
             }
         })
     },
-    atualizaAgenda(req, res){//EditaAgenda
+    atualizaAgendaOLD3(req, res){//EditaAgenda
         let flash = new Resposta()
         let resultado;
         try{
@@ -11042,6 +11042,26 @@ async carregaAgendaEdiTemp(req, res) { // Carrega Edição Agenda
         } catch(err1){
             //console.log(err1)
         }
+    },
+    atualizaAgenda(req, res) { // EditaAgenda
+        let flash = new Resposta();
+        
+        agendaClass.agendaEditar(req, res)
+            .then((resultado) => {
+                // Se chegou aqui, foi sucesso
+                flash.texto = "Agenda atualizada com sucesso!";
+                flash.sucesso = "true";
+                this.carregaAgendaEdi(req, res, flash);
+            })
+            .catch((err) => {
+                // Se caiu aqui, houve erro
+                console.error("Erro ao editar agenda:", err);
+                flash.texto = "Erro ao editar agenda! Verifique os dados e tente novamente.";
+                flash.sucesso = "false";
+                
+                // Redireciona de volta para a tela de edição com a mensagem de erro
+                this.carregaAgendaCadastro(req, res, flash); 
+            });
     },
     carregaEvolucao(req, res, atrazo, resposta){
         let db = req.cookies['preferredDb'];
@@ -15689,7 +15709,144 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                 })
             })
         })
+    },
+    async atualizaValores_OLD_Err_Loop_Infinito(req, res) {
+        const db = req.cookies['preferredDb'];
+        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+
+        let flash = new Resposta();
+        flash.texto = resposta.texto;
+        flash.sucesso = resposta.sucesso;
+        try {
+            console.log("🔄 Iniciando atualização de valores...");
+
+            const tipoPessoa = req.body.atendTipoPessoa || "Geral";
+            const tipoData = req.body.tipoData || "Ano/Mes";
             
+            let dataIni = new Date();
+            let dataFim = new Date();
+
+            // 1. Definição segura do período (Unificada e corrigida)
+            if (tipoData === "Ano/Mes") {
+                const anoIni = parseInt(req.body.anoAtend) || new Date().getFullYear();
+                const mesIni = parseInt(req.body.mesAtend) || 0;
+                
+                dataIni = new Date(anoIni, mesIni, 1, 0, 0, 0, 0);
+                dataFim = new Date(anoIni, mesIni + 1, 0, 23, 59, 59, 999);
+                
+            } else if (tipoData === "Semana" || tipoData === "Dia") {
+                const dataStr = req.body.dataFinal || req.body.dataFil;
+                if (dataStr) {
+                    const [ano, mes, dia] = dataStr.split('-').map(Number);
+                    dataIni = new Date(ano, mes - 1, dia, 0, 0, 0, 0);
+                    dataFim = new Date(ano, mes - 1, dia, 23, 59, 59, 999);
+                    
+                    if (tipoData === "Semana") {
+                        const dayOfWeek = dataIni.getDay();
+                        const diffToMonday = dataIni.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+                        dataIni.setDate(diffToMonday);
+                        dataFim.setDate(dataIni.getDate() + 4); // Segunda a Sexta
+                        dataFim.setHours(23, 59, 59, 999);
+                    }
+                }
+            }
+
+            let busca = { 
+                atend_atenddata: { $gte: dataIni, $lte: dataFim } 
+            };
+
+            if (tipoPessoa === "Beneficiario" && req.body.atendBeneficiario) {
+                busca.atend_beneid = req.body.atendBeneficiario;
+            } else if (tipoPessoa === "Terapeuta" && req.body.atendTerapeuta) {
+                busca.$or = [
+                    { atend_terapeutaid: req.body.atendTerapeuta },
+                    { atend_mergeterapeutaid: req.body.atendTerapeuta }
+                ];
+            }
+
+            const [atendimentos, convcreList, convdebList] = await Promise.all([
+                Atend.find(busca).lean(),
+                // Assumindo que essas funções retornam Promise. Se não, ajuste para await.
+                Promise.resolve(convcreClass.convcreCarregarTodos(req, res)),
+                Promise.resolve(convdebClass.convdebCarregarTodos(req, res))
+            ]);
+
+            console.log(`📊 Encontrados: ${atendimentos.length} atendimentos para atualizar.`);
+
+            const mapCre = new Map();
+            convcreList.forEach(c => {
+                const key = `${c.convcre_convid}_${c.convcre_terapiaid}`;
+                mapCre.set(key, c.convcre_valor || "0,00");
+            });
+
+            const mapDeb = new Map();
+            convdebList.forEach(d => {
+                const key = `${d.convdeb_convid}_${d.convdeb_terapiaid}`;
+                mapDeb.set(key, d.convdeb_valor || "0,00");
+            });
+
+            const updatesPromise = atendimentos.map(async (a) => {
+                // ⚠️ CRUCIAL: Variáveis declaradas DENTRO do loop para evitar vazamento de dados do registro anterior
+                let valCre = "0,00";
+                let valDeb = "0,00";
+                let valCreSub = "-";
+                let valDebSub = "-";
+                let valCreFixo = "-";
+                let valDebFixo = "-";
+
+                // Busca Otimizada (sem loop forEach aninhado)
+                const keyPadrao = `${a.atend_convid}_${a.atend_terapiaid}`;
+                valCre = mapCre.get(keyPadrao) || "0,00";
+                valDeb = mapDeb.get(keyPadrao) || "0,00";
+
+                if (a.atend_mergeterapiaid) {
+                    const keySub = `${a.atend_convid}_${a.atend_mergeterapiaid}`;
+                    valCreSub = mapCre.get(keySub) || "-";
+                    valDebSub = mapDeb.get(keySub) || "-";
+                }
+
+                if (a.atend_fixo === "true" && a.atend_fixoterapiaid) {
+                    const keyFixo = `${a.atend_convid}_${a.atend_fixoterapiaid}`;
+                    valCreFixo = mapCre.get(keyFixo) || "-";
+                    valDebFixo = mapDeb.get(keyFixo) || "-";
+                }
+
+                // Montagem do objeto de atualização dinâmico
+                const updateData = {
+                    atend_valorcre: valCre,
+                    atend_valordeb: valDeb
+                };
+
+                if (a.atend_mergeterapiaid) {
+                    updateData.atend_mergevalorcre = valCreSub;
+                    updateData.atend_mergevalordeb = valDebSub;
+                }
+
+                if (a.atend_fixo === "true") {
+                    updateData.atend_fixovalorcre = valCreFixo;
+                    updateData.atend_fixovalordeb = valDebFixo;
+                }
+
+                // Executa a atualização
+                return Atend.findByIdAndUpdate(a._id, { $set: updateData });
+            });
+
+            await Promise.all(updatesPromise);
+
+            console.log("✅ Atualização de valores concluída com sucesso!");
+
+            flash.texto = "Valores atualizados com sucesso!"
+            flash.sucesso = "true"
+            res.render("atendimento/atendLis")
+
+        } catch (err) {
+            console.error("❌ ERRO CRÍTICO em atualizaValores:", err);
+            req.flash("error_message", "Erro ao atualizar valores. Verifique o console.");
+            flash.texto = ("Erro ao atualizar valores. "+err)
+            flash.sucesso = "false"
+            res.render("atendimento/atendLis")
+        }
     },
     // ========================================================================
     // 🧹 APAGAR EVOLUÇÃO INDEVIDA (Falta Absoluta com evolução)

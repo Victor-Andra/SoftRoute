@@ -358,6 +358,7 @@
       function callAtualizarValores(){
         if(confirm("Quer mesmo atualizar todos os atendimentos encontrados com essa pesquisa?") && confirm("Tem certeza? Esta ação é irreversível!")){
           let form = document.getElementById("divFormPesquisa");
+          form.method = "POST";
           document.getElementById("atualizaValores").value = "true";
           form.action = "/menu/atendimento/lisF/";
           form.submit();
