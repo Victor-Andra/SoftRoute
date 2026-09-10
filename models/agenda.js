@@ -144,7 +144,7 @@ module.exports = {
     AgendaModel,
     AgendaSchema,
 
-    agendaEditar: async (req, res) => {
+    agendaEditarOLD2: async (req, res) => {
         let db = req.cookies['preferredDb'];
         AgendaModel = getModel(db, 'tb_agenda', AgendaSchema)
 
@@ -272,7 +272,96 @@ module.exports = {
         }
         
     },
+agendaEditar: async (req, res) => {
+    try {
+        // 1. Estrutura Multiempresa
+        let db = req.cookies['preferredDb'];
+        let AgendaModel = getModel(db, 'tb_agenda', AgendaSchema);
 
+        // 2. Captura segura dos dados de hora do frontend (com fallback)
+        const horaSelect = req.body.agendaHoraSelect || req.body.agendaHora; 
+        const horaIni = req.body.agendaHoraIni;
+        const horaFim = req.body.agendaHoraFim;
+
+        // 3. Função auxiliar para adicionar minutos (mantendo seu padrão de 40min)
+        function adicionarMinutos(horaString, minutos) {
+            if (!horaString) return null;
+            const [horas, mins] = horaString.split(':').map(Number);
+            const totalMinutos = (horas * 60) + mins + minutos;
+            const novasHoras = Math.floor(totalMinutos / 60) % 24; 
+            const novosMinutos = totalMinutos % 60;
+            return `${String(novasHoras).padStart(2, '0')}:${String(novosMinutos).padStart(2, '0')}`;
+        }
+
+        // 4. Lógica de conversão para garantir os campos sempre preenchidos
+        let agenda_hora, agenda_hora_ini, agenda_hora_fim;
+
+        if (horaIni && horaFim) {
+            // ✅ CASO 1: Usuário marcou o intervalo
+            agenda_hora = horaIni;
+            agenda_hora_ini = horaIni;
+            agenda_hora_fim = horaFim;
+        } else if (horaSelect) {
+            // ✅ CASO 2: Usuário escolheu hora única (Correção do erro "horaUnica is not defined")
+            agenda_hora = horaSelect;
+            agenda_hora_ini = horaSelect;
+            agenda_hora_fim = adicionarMinutos(horaSelect, 40);
+        } else {
+            // ⚠️ Fallback de segurança
+            agenda_hora = "00:00";
+            agenda_hora_ini = "00:00";
+            agenda_hora_fim = "00:00";
+        }
+
+        // 5. Montagem da Data (APÓS resolver a hora, para evitar "Invalid Date")
+        let [ano, mes, dia] = req.body.dataAg.split('-').map(Number);
+        let dataBase = new Date(ano, mes - 1, dia);
+        let dataAgenda = new Date(dataBase.getFullYear() + '-' + (dataBase.getMonth() + 1) + '-' + dataBase.getDate() + ' ' + agenda_hora + ':00.000Z');
+
+        // 6. Identificação do registro e dados do usuário
+        let usuarioAtual = req.cookies['idUsu'];
+        let dataAtual = new Date();
+        // O campo hidden no seu form é 'id' ou 'agendaId', usamos fallback
+        let agendaId = req.body.id || req.body.agendaId; 
+
+        // 7. Atualização no Banco de Dados (Mongoose findByIdAndUpdate)
+        const agendaAtualizada = await AgendaModel.findByIdAndUpdate(
+            agendaId,
+            {
+                agenda_data: dataAgenda,
+                agenda_hora: agenda_hora,
+                agenda_horafim: agenda_hora_fim,
+                agenda_horaini: agenda_hora_ini, // Adicione se seu schema tiver este campo
+                agenda_beneid: req.body.agendaBeneid,
+                agenda_convid: req.body.agendaConvid,
+                agenda_salaid: req.body.agendaSalaid,
+                agenda_terapiaid: req.body.agendaTerapiaid,
+                agenda_usuid: req.body.agendaUsuid,
+                agenda_mergeterapeutaid: req.body.agendaMergeterapeutaid,
+                agenda_mergeterapiaid: req.body.agendaMergeterapiaid,
+                agenda_categoria: req.body.agendaCateg,
+                agenda_org: req.body.agendaOrg,
+                agenda_obs: req.body.agendaObs,
+                agenda_selo: req.body.agendaSelo === 'on' || req.body.agendaSelo === 'true',
+                agenda_evolucao: req.body.agendaEvolucao,
+                agenda_log: req.body.agendaLog,
+                agenda_usualt: usuarioAtual,
+                agenda_dataalt: dataAtual,
+            },
+            { new: true } // Retorna o documento atualizado
+        );
+
+        if (!agendaAtualizada) {
+            throw new Error("Agendamento não encontrado para atualização.");
+        }
+
+        return true; // Sucesso
+
+    } catch (err) {
+        console.error("Erro em agendaEditar:", err);
+        throw err; // Lança o erro para o controller tratar
+    }
+},
     // Add Agenda
     // Criado por: Wagner Cintra
     // Criado em: 2022/03/20
