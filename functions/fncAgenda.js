@@ -1252,8 +1252,8 @@ module.exports = {
         let benenomeconv;
         let soFixo = req.body.soFixo;
         let dtFill = new Date(req.body.dataFinal);
-        let seg = new Date(req.body.dataFinal);
-        let sex = new Date(req.body.dataFinal);
+        let seg = new Date(2026, 8, 16, 0,0,0,0);
+        let sex = new Date(2026, 8, 18, 23,59,59,0);
         seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -9269,6 +9269,7 @@ carregaAgendaPessoalquasela(req, res) {
             //console.log("Listagem Realizada de agendamentos!")
             //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
+                //console.log(e)
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
                 let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada

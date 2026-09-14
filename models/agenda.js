@@ -472,7 +472,7 @@ agendaEditar: async (req, res) => {
     // ➕ Add Agenda - CADASTRAR NOVO AGENDAMENTO
     // Criado por: Wagner Cintra | Editado em: 2025/10/03
     // ========================================================================
-    agendaAdicionar: async (req, res) => {
+    agendaAdicionarOld: async (req, res) => {
 
         // 📌 PASSO 1: Configurar estrutura multiempresa
         let db = req.cookies['preferredDb'];
@@ -492,13 +492,18 @@ agendaEditar: async (req, res) => {
             : req.body.agendaHoraFim;
 
         // 📌 PASSO 3: Construir dataAgenda em formato ISO seguro (evita "Invalid Date")
-        let dataAgenda = new Date(
-            `${data.getFullYear()}-${String(data.getMonth()+1).padStart(2,'0')}-${String(data.getDate()).padStart(2,'0')}T${agendaHora}:00.000Z`
-        );
+        // let dataAgenda = new Date(
+        //     `${data.getFullYear()}-${String(data.getMonth()+1).padStart(2,'0')}-${String(data.getDate()).padStart(2,'0')}T${agendaHora}:00.000Z`
+        // );
+        console.log("agendaHora2222???? "+req.body.agendaHoraSelect)
+        
+        const [hora, minuto] = req.body.agendaHoraSelect.split(':');
+        let dataAgenda = new Date(data);
+        dataAgenda.setHours(Number(hora), Number(minuto), 0, 0);
 
         // 📌 PASSO 4: Validação de segurança - rejeita se data for inválida
         if (isNaN(dataAgenda.getTime())) {
-            console.error("❌ [agendaAdicionar] Data inválida:", { 
+            console.error("❌ [agendaAdicionar] Data inválida:", {
                 reqBody: req.body.agendaData, 
                 dataParsed: data, 
                 dataAgenda 
@@ -547,11 +552,147 @@ agendaEditar: async (req, res) => {
             agenda_hora = horaInicial;
             agenda_hora_ini = horaInicial;
             agenda_hora_fim = horaFim;
-        } else if (horaUnica) {
+        } else if (!req.body.agendaHoraFim) {
             // ✅ CASO 2: Usuário escolheu hora única (horaage)
-            agenda_hora = horaUnica;
-            agenda_hora_ini = horaUnica;
-            agenda_hora_fim = adicionarMinutos(horaUnica, 40);
+            agenda_hora = req.body.agendaHoraSelect;
+            agenda_hora_ini = req.body.agendaHoraSelect;
+            agenda_hora_fim = adicionarMinutos(req.body.agendaHoraSelect, 40);
+        } else {
+            // ⚠️ Fallback de segurança (caso nenhum campo seja enviado)
+            agenda_hora = null;
+            agenda_hora_ini = null;
+            agenda_hora_fim = null;
+        }
+
+        // 📌 PASSO 7: Instanciar novo documento com todos os campos
+        const newAgenda = new AgendaModel({
+            // 📅 Dados de data/hora
+            agenda_data: dataAgenda,
+            agenda_hora: agenda_hora,
+            agenda_horafim: agenda_hora_fim,
+
+            // 👥 Relacionamentos
+            agenda_beneid: req.body.agendaBeneid,
+            agenda_convid: req.body.agendaConvid,
+            agenda_salaid: req.body.agendaSalaid,
+            agenda_terapiaid: req.body.agendaTerapiaid,
+            agenda_usuid: req.body.agendaUsuid,
+            agenda_mergeterapeutaid: req.body.agendaMergeterapeutaid,
+            agenda_mergeterapiaid: req.body.agendaMergeterapiaid,
+            
+            // 📊 Metadados
+            agenda_migrado: false,
+            agenda_categoria: req.body.agendaCateg,
+            agenda_org: req.body.agendaOrg,
+            agenda_obs: req.body.agendaObs,
+            agenda_temp: false,
+            agenda_extra: extra,
+            agenda_cobrarextra: req.body.agendaCobrarextra,
+            agenda_selo: false,
+            agenda_copia: false,
+            
+            // 📝 Auditoria
+            agenda_log: req.body.agendaLog,
+            agenda_usucad: usuarioAtual,
+            agenda_datacad: dataAtual.toISOString()
+        });
+
+        // 📌 PASSO 8: Salvar no MongoDB com tratamento de erro
+        return await newAgenda.save()
+            .then(() => { 
+                console.log("✅ [SUCESSO] Agendamento cadastrado!"); 
+                return true; 
+            })
+            .catch((err) => { 
+                console.error("❌ [ERRO] Falha ao salvar agendamento:", err); 
+                return err; 
+            });
+    },
+    agendaAdicionar: async (req, res) => {
+
+        // 📌 PASSO 1: Configurar estrutura multiempresa
+        let db = req.cookies['preferredDb'];
+        AgendaModel = getModel(db, 'tb_agenda', AgendaSchema);
+
+        // 📌 PASSO 2: Definir variáveis de data e hora (ORDEM CORRETA!)
+        // 👉 IMPORTANTE: 'data' deve ser definida ANTES de ser usada em dataAgenda
+        let data = new Date(req.body.agendaData);
+        
+        // 👉 CORREÇÃO: Chosen pode enviar array ['08:00'], garantir que é string
+        let agendaHora = Array.isArray(req.body.agendaHora) 
+            ? req.body.agendaHora[0] 
+            : req.body.agendaHora;
+        
+        let agendaHoraFim = Array.isArray(req.body.agendaHoraFim) 
+            ? req.body.agendaHoraFim[0] 
+            : req.body.agendaHoraFim;
+
+        // 📌 PASSO 3: Construir dataAgenda em formato ISO seguro (evita "Invalid Date")
+        // let dataAgenda = new Date(
+        //     `${data.getFullYear()}-${String(data.getMonth()+1).padStart(2,'0')}-${String(data.getDate()).padStart(2,'0')}T${agendaHora}:00.000Z`
+        // );
+        console.log("agendaHora2222???? "+req.body.agendaHoraSelect)
+        
+        const [hora, minuto] = req.body.agendaHoraSelect.split(':');
+        let dataAgenda = new Date(data);
+        dataAgenda.setHours(Number(hora)-3, Number(minuto), 0, 0);
+
+        // 📌 PASSO 4: Validação de segurança - rejeita se data for inválida
+        if (isNaN(dataAgenda.getTime())) {
+            console.error("❌ [agendaAdicionar] Data inválida:", {
+                reqBody: req.body.agendaData, 
+                dataParsed: data, 
+                dataAgenda 
+            });
+            return false;
+        }
+
+        // 📌 PASSO 5: Verificar bloqueio por fechamento (2 meses atrás)
+        let doisMesesAtras = new Date();
+        doisMesesAtras.setMonth(doisMesesAtras.getMonth() - 2);
+        let bloqueio = dataAgenda < doisMesesAtras;
+/*
+        if (bloqueio) {
+            console.log("🔒 Bloqueada a criação devido ao fechamento!");
+            return false;
+        }
+*/
+        // 📌 PASSO 6: Preparar dados para o novo registro
+        let usuarioAtual = req.cookies['idUsu'];
+        let dataAtual = new Date();
+        
+        // Normalizar campo extra (boolean ou string "true"/"false")
+        let extra = (req.body.agendaExtra == true || req.body.agendaExtra == "true");
+
+        // 🛠️ Função auxiliar para adicionar minutos a uma string de hora (HH:MM)
+        function adicionarMinutos(horaString, minutos) {
+            if (!horaString) return null;
+            const [horas, mins] = horaString.split(':').map(Number);
+            const totalMinutos = (horas * 60) + mins + minutos;
+            
+            const novasHoras = Math.floor(totalMinutos / 60) % 24; // Garante que não estoure 24h
+            const novosMinutos = totalMinutos % 60;
+            
+            return `${String(novasHoras).padStart(2, '0')}:${String(novosMinutos).padStart(2, '0')}`;
+        }
+
+        let agenda_hora;
+        let agenda_hora_ini;
+        let agenda_hora_fim;
+        let horaInicial = req.body.agendaHoraSelect || req.body.agendaHoraIni;
+        let horaFim = req.body.agendaHoraFim;
+
+        // 🧠 Lógica de conversão para garantir os 3 campos sempre preenchidos
+        if (horaInicial && horaFim) {
+            // ✅ CASO 1: Usuário marcou o intervalo (Início e Fim preenchidos)
+            agenda_hora = horaInicial;
+            agenda_hora_ini = horaInicial;
+            agenda_hora_fim = horaFim;
+        } else if (!req.body.agendaHoraFim) {
+            // ✅ CASO 2: Usuário escolheu hora única (horaage)
+            agenda_hora = req.body.agendaHoraSelect;
+            agenda_hora_ini = req.body.agendaHoraSelect;
+            agenda_hora_fim = adicionarMinutos(req.body.agendaHoraSelect, 40);
         } else {
             // ⚠️ Fallback de segurança (caso nenhum campo seja enviado)
             agenda_hora = null;
