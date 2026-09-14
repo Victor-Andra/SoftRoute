@@ -250,6 +250,7 @@ module.exports = {
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -259,7 +260,9 @@ module.exports = {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
 
                 switch (dat.getUTCDay()){
                     case 0:
@@ -300,7 +303,7 @@ module.exports = {
                         //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                            
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
                                     //console.log("Listagem Realizada de Terapia")
@@ -378,6 +381,7 @@ module.exports = {
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             agenda.forEach((e)=>{
@@ -387,7 +391,9 @@ module.exports = {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 //console.log("aux:"+aux)
                 e.agenda_aux = aux;
                 aux++;
@@ -429,7 +435,6 @@ module.exports = {
                         //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -532,6 +537,7 @@ module.exports = {
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             agenda.forEach((e)=>{
@@ -541,7 +547,9 @@ module.exports = {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 //console.log("aux:"+aux)
                 e.agenda_aux = aux;
                 aux++;
@@ -602,7 +610,6 @@ module.exports = {
                         //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 let haddia;//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
 
@@ -746,6 +753,7 @@ module.exports = {
             } else {
                 usuObs = " - "
             }
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: usu._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -756,7 +764,9 @@ module.exports = {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -799,7 +809,6 @@ module.exports = {
                         //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -968,6 +977,7 @@ module.exports = {
             } else {
                 usuObs = " - "
             }
+            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTeraid, agenda_temp: { $ne: true }, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -978,7 +988,9 @@ module.exports = {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -1020,7 +1032,6 @@ module.exports = {
                     Terapia.find().then((terapia)=>{
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                         //console.log("Listagem Realizada de Terapia")
-                        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                             let haddia;//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                             let segASex = ["seg","ter","qua","qui","sex"];
 
@@ -1307,6 +1318,7 @@ module.exports = {
                 break;
         }
         let agora = seg.toISOString();
+        sex.setHours(10);
         let depois = sex.toISOString();
         //console.log("AGORA:"+agora);
         //console.log("depois:"+depois);
@@ -1322,26 +1334,31 @@ module.exports = {
 
         let busca;
         //console.log("req.body.soFixo:"+req.body.soFixo)
+        console.log(agora)
+        console.log(depois)
         if (soFixo == "true"){
-            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]}, "agenda_categoria": "SubstitutoFixo" };
+            busca = { agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_temp: { $ne: true }, agenda_extra: { $ne: true }, "agenda_categoria": "SubstitutoFixo" };//, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]}//temporariamente comentado
         } else {
-            busca = { "agenda_data": { $gte : agora, $lte:  depois }, "agenda_beneid": req.body.agendaBeneid, "agenda_temp": false, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} };
+            busca = { agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_temp: { $ne: true }, agenda_extra: { $ne: true }};//, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} //temporariamente comentado
         }
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
             Agenda.find(busca).then((agenda) =>{
-            //console.log("Listagem Realizada de agendamentos!")
+            console.log("Listagem Realizada de agendamentos!"+agenda.length)
             
             agenda.forEach((e)=>{
-                console.log("dataagenda: "+e.agenda_data+" - "+e.agenda_hora)
+                //console.log("dataagenda: "+e.agenda_data+" - "+e.agenda_hora)
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
                 let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                if (!e.agenda_hora){
+
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
                     e.agenda_hora = hora+":"+min;
                 }
+                console.log(e.agenda_hora+" = "+e._id)
                 e.agenda_aux = aux;
                 aux++;
 
@@ -1394,7 +1411,7 @@ module.exports = {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                            
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -1487,7 +1504,7 @@ carregaTabdimAgendaMes(req, res) {
     // 🔍 Query base: só agendamentos "PAI" (não temporários)
     let busca = { 
         "agenda_data": { $gte: agora, $lte: depois }, 
-        "agenda_temp": false 
+        "agenda_temp": { $ne: true } 
     };
     
     // Filtro por beneficiário
@@ -1644,7 +1661,7 @@ carregaAgendaMesFixo(req, res) {
     // 🔍 Query base: SÓ Substitutos Fixos (filtro fixo, sem opção de mudar)
     let busca = { 
         "agenda_data": { $gte: agora, $lte: depois }, 
-        "agenda_temp": false,
+        "agenda_temp": { $ne: true },
         "agenda_categoria": "SubstitutoFixo"  // 👈 FIXO: só SubFix
     };
     
@@ -1853,7 +1870,8 @@ carregaAgendaMesFixo(req, res) {
         quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
-
+        
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
@@ -1865,7 +1883,9 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -1918,7 +1938,6 @@ carregaAgendaMesFixo(req, res) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 let haddia;//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
 
@@ -2039,7 +2058,8 @@ carregaAgendaMesFixo(req, res) {
         quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
-
+    
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
             b.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
             Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_temp: { $ne: true } }).then((agenda) =>{
@@ -2052,7 +2072,9 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -2106,7 +2128,6 @@ carregaAgendaMesFixo(req, res) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 let haddia;//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
 
@@ -2276,6 +2297,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -2286,7 +2308,9 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -2325,7 +2349,6 @@ carregaAgendaMesFixo(req, res) {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
@@ -2456,7 +2479,8 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-         Bene.findOne().then((b) =>{
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+        Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).sort({ agenda_data: -1 }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -2467,7 +2491,9 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -2520,7 +2546,6 @@ carregaAgendaMesFixo(req, res) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -2651,6 +2676,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.findOne({_id:req.body.agendaBeneid}).then((bene) =>{
             nomeBene = bene.bene_nome
             beneConvid = bene.bene_convid
@@ -2664,7 +2690,9 @@ carregaAgendaMesFixo(req, res) {
                     let min = ""+dat.getMinutes();
                     if (hora.length == 1){hora = "0" + hora + "";}
                     if (min.length == 1){min = "0" + min + "";}
-                    e.agenda_hora = hora+":"+min;
+                    if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                        e.agenda_hora = hora+":"+min;
+                    }
                     e.agenda_aux = aux;
                     aux++;
 
@@ -2724,7 +2752,6 @@ carregaAgendaMesFixo(req, res) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -2858,7 +2885,8 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-         Bene.findOne().then((b) =>{
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+        Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).sort({ agenda_data: -1 }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -2869,7 +2897,9 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -2922,7 +2952,6 @@ carregaAgendaMesFixo(req, res) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -3053,6 +3082,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.findOne({_id:req.body.agendaBeneid}).then((bene) =>{
             nomeBene = bene.bene_nome
             beneConvid = bene.bene_convid
@@ -3066,7 +3096,9 @@ carregaAgendaMesFixo(req, res) {
                     let min = ""+dat.getMinutes();
                     if (hora.length == 1){hora = "0" + hora + "";}
                     if (min.length == 1){min = "0" + min + "";}
-                    e.agenda_hora = hora+":"+min;
+                    if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                        e.agenda_hora = hora+":"+min;
+                    }
                     e.agenda_aux = aux;
                     aux++;
 
@@ -3126,7 +3158,6 @@ carregaAgendaMesFixo(req, res) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -3260,6 +3291,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id}).then((agenda) =>{
             agenda = agenda.filter(a => (""+a.atend_categoria) !== "Feriado");
@@ -3272,7 +3304,9 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -3325,7 +3359,6 @@ carregaAgendaMesFixo(req, res) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -3456,6 +3489,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.findOne({_id:req.body.agendaBeneid}).then((bene) =>{
             nomeBene = bene.bene_nome
             beneConvid = bene.bene_convid
@@ -3469,7 +3503,9 @@ carregaAgendaMesFixo(req, res) {
                     let min = ""+dat.getMinutes();
                     if (hora.length == 1){hora = "0" + hora + "";}
                     if (min.length == 1){min = "0" + min + "";}
-                    e.agenda_hora = hora+":"+min;
+                    if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                        e.agenda_hora = hora+":"+min;
+                    }
                     e.agenda_aux = aux;
                     aux++;
 
@@ -3529,7 +3565,6 @@ carregaAgendaMesFixo(req, res) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -3663,6 +3698,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Usuario.findOne({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((t) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: t._id}).sort({ agenda_data: -1 }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
@@ -3674,7 +3710,9 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -3722,7 +3760,6 @@ carregaAgendaMesFixo(req, res) {
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
                             Sala.find().then((sala)=>{
-                                Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                     //console.log("Listagem Realizada de Horario")
                                     let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                     let segASex = ["seg","ter","qua","qui","sex"];
@@ -3850,6 +3887,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         //Pensar em como carregar quando for merge
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTerapeutaid, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} }).sort({ agenda_data: -1 }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log("agenda.length:"+agenda.length)
@@ -3860,7 +3898,9 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -3920,7 +3960,6 @@ carregaAgendaMesFixo(req, res) {
                     Terapia.find().then((terapia)=>{
                         terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                         //console.log("Listagem Realizada de Terapia")
-                        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                             //console.log("Listagem Realizada de Horario")
                             let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                             let segASex = ["seg","ter","qua","qui","sex"];
@@ -4209,6 +4248,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.find({_id:req.body.agendaBeneid}).then((bene) =>{
             bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
                 bene.forEach(e => {
@@ -4226,7 +4266,9 @@ carregaAgendaMesFixo(req, res) {
                     let min = ""+dat.getMinutes();
                     if (hora.length == 1){hora = "0" + hora + "";}
                     if (min.length == 1){min = "0" + min + "";}
-                    e.agenda_hora = hora+":"+min;
+                    if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                        e.agenda_hora = hora+":"+min;
+                    }
                     e.agenda_aux = aux;
                     aux++;
 
@@ -4275,7 +4317,6 @@ carregaAgendaMesFixo(req, res) {
                                 Terapia.find().then((terapia)=>{
                                     terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                                     //console.log("Listagem Realizada de Terapia")
-                                    Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                         //console.log("Listagem Realizada de Horario")
                                         let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                         let segASex = ["seg","ter","qua","qui","sex"];
@@ -4402,6 +4443,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         let agenda = [];
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         //Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -4412,7 +4454,9 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -4451,7 +4495,6 @@ carregaAgendaMesFixo(req, res) {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
@@ -4576,6 +4619,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         let agenda = [];
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         //Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -4586,7 +4630,9 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -4625,7 +4671,6 @@ carregaAgendaMesFixo(req, res) {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
@@ -4751,6 +4796,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois } }).sort({ agenda_data: -1 }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -4761,7 +4807,9 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+"_"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+"_"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -4809,7 +4857,6 @@ carregaAgendaMesFixo(req, res) {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -4949,6 +4996,7 @@ carregaAgendaMesFixo(req, res) {
 
         // ===== CONSULTA PRINCIPAL: AGENDA =====
         console.log('   🔍 Buscando agendamentos no período...');
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte: agora, $lte: depois }, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} })
             .sort({ agenda_data: -1 })
             .then((agenda) => {
@@ -4971,7 +5019,9 @@ carregaAgendaMesFixo(req, res) {
                     
                     let hora = String(dat.getUTCHours()).padStart(2,'0');
                     let min = String(dat.getMinutes()).padStart(2,'0');
-                    e.agenda_hora = hora + ":" + min; // Mantém seu formato original com underscore e tem que ser ← Dois pontos, igual ao horaage_hora do banco
+                    if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                        e.agenda_hora = hora + ":" + min; // Mantém seu formato original com underscore e tem que ser ← Dois pontos, igual ao horaage_hora do banco
+                    }
                     e.agenda_aux = aux++;
 
                     const dias = ['dom','seg','ter','qua','qui','sex','sab'];
@@ -5010,7 +5060,6 @@ carregaAgendaMesFixo(req, res) {
 
                         // ===== CONSULTA: HORÁRIOS =====
                         console.log('   ⏰ Buscando horários...');
-                        Horaage.find().sort({horaage_turno: 1, horaage_ordem: 1}).then((horaage) => {
                             console.log('   ✅ Horaage: Encontrados', horaage.length, 'registros');
                             
                             // Lógica temDia (mantida conforme original)
@@ -5186,6 +5235,7 @@ carregaAgendaMesFixo(req, res) {
 
         // ===== CONSULTA PRINCIPAL: AGENDA =====
         console.log('   🔍 Buscando agendamentos no período...');
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte: agora, $lte: depois }, agenda_sala: { $in: [ObjectId("6368fe35c2cdb92ac6d914be"), ObjectId("64653fedfef321e0b32d2b5f")] }})
             .sort({ agenda_data: -1 })
             .then((agenda) => {
@@ -5208,7 +5258,9 @@ carregaAgendaMesFixo(req, res) {
                     
                     let hora = String(dat.getUTCHours()).padStart(2,'0');
                     let min = String(dat.getMinutes()).padStart(2,'0');
-                    e.agenda_hora = hora + ":" + min; // Mantém seu formato original com underscore e tem que ser ← Dois pontos, igual ao horaage_hora do banco
+                    if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                        e.agenda_hora = hora + ":" + min; // Mantém seu formato original com underscore e tem que ser ← Dois pontos, igual ao horaage_hora do banco
+                    }
                     e.agenda_aux = aux++;
 
                     const dias = ['dom','seg','ter','qua','qui','sex','sab'];
@@ -5247,7 +5299,6 @@ carregaAgendaMesFixo(req, res) {
 
                         // ===== CONSULTA: HORÁRIOS =====
                         console.log('   ⏰ Buscando horários...');
-                        Horaage.find().sort({horaage_turno: 1, horaage_ordem: 1}).then((horaage) => {
                             console.log('   ✅ Horaage: Encontrados', horaage.length, 'registros');
                             
                             // Lógica temDia (mantida conforme original)
@@ -5394,9 +5445,11 @@ carregaAgendaMesFixo(req, res) {
             Usuario.find().sort({usuario_nome: 1}),
             
             // E) Busca agendas do período
-            Agenda.find({ agenda_data: { $gte: agora, $lte: depois } })
+            Agenda.find({ agenda_data: { $gte: agora, $lte: depois } }),
+
+            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1})
         ])
-        .then(([salas, horaages, benes, terapeutas, agendaBruta]) => {
+        .then(([salas, horaages, benes, terapeutas, agendaBruta, horaage]) => {
             
             console.log(`✅ Buscas concluídas. Salas encontradas: ${salas.length} (Deveria ser exatamente 2)`);
 
@@ -5416,7 +5469,9 @@ carregaAgendaMesFixo(req, res) {
                 
                 let hora = String(dat.getUTCHours()).padStart(2,'0');
                 let min = String(dat.getMinutes()).padStart(2,'0');
-                e.agenda_hora = hora + ":" + min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora + ":" + min;
+                }
                 e.agenda_aux = aux++;
 
                 const dias = ['dom','seg','ter','qua','qui','sex','sab'];
@@ -5596,7 +5651,8 @@ carregaAgendaMesFixo(req, res) {
         quarta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
-
+        
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois } }).sort({ agenda_data: -1 }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -5607,7 +5663,9 @@ carregaAgendaMesFixo(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -5655,7 +5713,6 @@ carregaAgendaMesFixo(req, res) {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -5774,6 +5831,7 @@ carregaAgendaFilSFixo(req,res){
     sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
     // Buscar TODAS as agendas (sem filtro de SubstitutoFixo)
+    Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
     Agenda.find({ agenda_data: { $gte : agora, $lte:  depois } }).sort({ agenda_data: -1 }).then((agenda) =>{
         agenda.forEach((e)=>{
             let dat = new Date(e.agenda_data);
@@ -5782,7 +5840,11 @@ carregaAgendaFilSFixo(req,res){
             let min = ""+dat.getMinutes();
             if (hora.length == 1){hora = "0" + hora + "";}
             if (min.length == 1){min = "0" + min + "";}
-            e.agenda_hora = hora+"_"+min;
+            if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                e.agenda_hora = hora+"_"+min;
+            } else {
+                e.agenda_hora = e.agenda_hora.replace(":","_");
+            }
             e.agenda_aux = aux;
             aux++;
 
@@ -5888,6 +5950,7 @@ carregaAgendaFilSFixo(req,res){
                 sexta
             });
         });
+        });
     }).catch((err) =>{
         console.log(err);
         req.flash("error_message", "houve um erro ao Realizar as listas!");
@@ -5971,6 +6034,7 @@ carregaAgendaFilSFixo(req,res){
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -5981,7 +6045,9 @@ carregaAgendaFilSFixo(req,res){
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -6020,7 +6086,6 @@ carregaAgendaFilSFixo(req,res){
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 let haddia;//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
 
@@ -6136,6 +6201,7 @@ carregaAgendaFilSFixo(req,res){
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -6146,7 +6212,9 @@ carregaAgendaFilSFixo(req,res){
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -6185,7 +6253,6 @@ carregaAgendaFilSFixo(req,res){
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 let haddia;//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
 
@@ -6313,6 +6380,7 @@ carregaAgendaFilSFixo(req,res){
         sexta = this.getDataDiaMes(diaDeHoje.setDate(diaDeHoje.getDate()+1));
         let idFiltro = mongoose.Types.ObjectId(idTerapeuta);
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : fncGeral.getDateToIsostring(seg), $lte:  fncGeral.getDateToIsostring(sex) }, agenda_usuid : idFiltro }).then((agenda) =>{
             agenda = agenda.filter(a => (""+a.atend_categoria) !== "Feriado");
             //console.log("Listagem Realizada de agendamentos!")
@@ -6325,7 +6393,9 @@ carregaAgendaFilSFixo(req,res){
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -6382,7 +6452,6 @@ carregaAgendaFilSFixo(req,res){
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -6484,6 +6553,7 @@ carregaAgendaFilSFixo(req,res){
         console.log("=".repeat(80));
 
         // 🔹 FASE 1: Buscar registros do terapeuta (HOJE) e ORDENAR POR HORA
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({
             agenda_data: { $gte: dataIsoSeg, $lte: dataIsoSex },
             agenda_usuid: idFiltro
@@ -6543,7 +6613,9 @@ carregaAgendaFilSFixo(req,res){
                 e.agenda_data_dia = this.getDataFMT(dat);
                 let h = String(dat.getUTCHours()).padStart(2, '0');
                 let m = String(dat.getMinutes()).padStart(2, '0');
-                e.agenda_hora = `${h}:${m}`;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = `${h}:${m}`;
+                }
                 e.agenda_aux = aux++;
                 const dias = ["dom","seg","ter","qua","qui","sex","sab"];
                 e.agenda_data_semana = dias[dat.getUTCDay()];
@@ -6622,6 +6694,7 @@ carregaAgendaFilSFixo(req,res){
                     });
                 });
             });
+            });
         }).catch((err) => {
             console.log("❌ [ERRO] carregaAgendaPessoal:", err);
             req.flash("error_message", "Erro ao carregar agenda");
@@ -6688,6 +6761,7 @@ carregaAgendaFilSFixo(req,res){
         console.log("📅 Data:", dataIsoSeg);
         console.log("=".repeat(80));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         // 🔹 FASE 1: Buscar registros do terapeuta (HOJE) e ORDENAR POR HORA
         return Agenda.find({
             agenda_data: { $gte: dataIsoSeg, $lte: dataIsoSex },
@@ -6743,7 +6817,9 @@ carregaAgendaFilSFixo(req,res){
                 e.agenda_data_dia = this.getDataFMT(dat);
                 let h = String(dat.getUTCHours()).padStart(2, '0');
                 let m = String(dat.getMinutes()).padStart(2, '0');
-                e.agenda_hora = `${h}:${m}`;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = `${h}:${m}`;
+                }
                 e.agenda_aux = aux++;
                 const dias = ["dom","seg","ter","qua","qui","sex","sab"];
                 e.agenda_data_semana = dias[dat.getUTCDay()];
@@ -6968,6 +7044,7 @@ carregaAgendaFilSFixo(req,res){
                     });
                 });
             });
+        });
         }).catch((err) => {
             console.log("❌ [ERRO] carregaAgendaPessoal:", err);
             req.flash("error_message", "Erro ao carregar agenda");
@@ -7041,6 +7118,7 @@ carregaAgendaFilSFixo(req,res){
         console.log(`   📆 Período: ${seg.toISOString()} até ${sex.toISOString()}`);
         console.log(`   📍 Dia de hoje na semana: ${hoje}`);
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         // ========================================================================
         // 🔍 FASE 2: Buscar Registros do Terapeuta Logado (Query Otimizada)
         // ========================================================================
@@ -7071,7 +7149,9 @@ carregaAgendaFilSFixo(req,res){
                 
                 let h = String(dat.getUTCHours()).padStart(2, '0');
                 let m = String(dat.getMinutes()).padStart(2, '0');
-                e.agenda_hora = `${h}:${m}`;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = `${h}:${m}`;
+                }
                 
                 e.agenda_aux = aux++;
                 
@@ -7367,6 +7447,7 @@ carregaAgendaFilSFixo(req,res){
                     });
                 });
             });
+            });
         }).catch((err) => {
             console.log("❌ [ERRO CRÍTICO] carregaAgendaPessoal:", err);
             req.flash("error_message", "Erro ao carregar agenda pessoal");
@@ -7423,6 +7504,7 @@ carregaAgendaPessoalquasela(req, res) {
     const dataIsoSeg = fncGeral.getDateToIsostring(seg);
     const dataIsoSex = fncGeral.getDateToIsostring(sex);
 
+    Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
     // ========================================================================
     // 🔍 FASE 2: Buscar Registros
     // ========================================================================
@@ -7440,7 +7522,9 @@ carregaAgendaPessoalquasela(req, res) {
         agendaObj.forEach((e) => {
             const dat = new Date(e.agenda_data);
             e.agenda_data_dia = fncGeral.getDataFMT(dat);
-            e.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getMinutes()).padStart(2, '0')}`;
+            if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                e.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getMinutes()).padStart(2, '0')}`;
+            }
             e.agenda_aux = aux++;
             e.agenda_data_semana = ["dom","seg","ter","qua","qui","sex","sab"][dat.getUTCDay()];
         });
@@ -7664,6 +7748,7 @@ carregaAgendaPessoalquasela(req, res) {
             });
         });
     })
+    })
     .catch((err) => {
         console.error("❌ [ERRO] carregaAgendaPessoal:", err);
         req.flash("error_message", "Erro ao carregar agenda pessoal");
@@ -7718,6 +7803,7 @@ carregaAgendaPessoalquasela(req, res) {
         const dataIsoSeg = fncGeral.getDateToIsostring(seg);
         const dataIsoSex = fncGeral.getDateToIsostring(sex);
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         // ========================================================================
         // 🔍 FASE 2: Buscar Registros
         // ========================================================================
@@ -7735,7 +7821,9 @@ carregaAgendaPessoalquasela(req, res) {
             agendaObj.forEach((e) => {
                 const dat = new Date(e.agenda_data);
                 e.agenda_data_dia = fncGeral.getDataFMT(dat);
-                e.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getMinutes()).padStart(2, '0')}`;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getMinutes()).padStart(2, '0')}`;
+                }
                 e.agenda_aux = aux++;
                 e.agenda_data_semana = ["dom","seg","ter","qua","qui","sex","sab"][dat.getUTCDay()];
             });
@@ -8006,6 +8094,7 @@ carregaAgendaPessoalquasela(req, res) {
                 });
             });
         })
+        })
         .catch((err) => {
             console.error("❌ [ERRO] carregaAgendaPessoal:", err);
             req.flash("error_message", "Erro ao carregar agenda pessoal");
@@ -8072,7 +8161,7 @@ carregaAgendaPessoalquasela(req, res) {
         const idFiltro = mongoose.Types.ObjectId(idTerapeuta);
         const dataIsoInicio = fncGeral.getDateToIsostring(inicioDia);
         const dataIsoFim = fncGeral.getDateToIsostring(fimDia);
-
+Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({
             agenda_data: { $gte: dataIsoInicio, $lte: dataIsoFim },
             agenda_usuid: idFiltro
@@ -8087,7 +8176,9 @@ carregaAgendaPessoalquasela(req, res) {
             agendaObj.forEach((e) => {
                 const dat = new Date(e.agenda_data);
                 e.agenda_data_dia = fncGeral.getDataFMT(dat);
-                e.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getMinutes()).padStart(2, '0')}`;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = `${String(dat.getUTCHours()).padStart(2, '0')}:${String(dat.getMinutes()).padStart(2, '0')}`;
+                }
                 e.agenda_aux = aux++;
                 e.agenda_data_semana = diasSemana[dat.getUTCDay()];
             });
@@ -8381,6 +8472,7 @@ carregaAgendaPessoalquasela(req, res) {
                 });
             });
         })
+        })
         .catch((err) => {
             console.error("❌ [ERRO] filtraAgendaPessoalDia:", err);
             req.flash("error_message", "Erro ao filtrar agenda pessoal");
@@ -8561,6 +8653,7 @@ carregaAgendaPessoalquasela(req, res) {
         
         let idFiltro = mongoose.Types.ObjectId(idTerapeuta);
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         return Agenda.find({
             agenda_data: { $gte: agora, $lte: depois },
             agenda_usuid: idFiltro
@@ -8732,6 +8825,7 @@ carregaAgendaPessoalquasela(req, res) {
                     });
                 });
             });
+            });
         }).catch((err) => {
             console.log("❌ [ERRO] carregaAgendaPessoalSemanal:", err);
             req.flash("error_message", "Erro ao carregar agenda semanal");
@@ -8835,6 +8929,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid : idTerapeuta }).then((agenda) =>{
             agenda = agenda.filter(a => (""+a.atend_categoria) !== "Feriado");
             //console.log("Listagem Realizada de agendamentos!")
@@ -8846,7 +8941,9 @@ carregaAgendaPessoalquasela(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -8892,7 +8989,6 @@ carregaAgendaPessoalquasela(req, res) {
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
@@ -9273,7 +9369,7 @@ carregaAgendaPessoalquasela(req, res) {
         Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true }, agenda_extra: { $ne: true }}).sort({agenda_data: -1}).then((agenda) =>{//, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")] } // temporariamente comentado
             //console.log("Listagem Realizada de agendamentos!")
-            console.log("agenda.length:"+agenda.length)
+            //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
                 //console.log(e)
                 let dat = new Date(e.agenda_data);
@@ -9283,12 +9379,10 @@ carregaAgendaPessoalquasela(req, res) {
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
                 if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
-                    console.log("vai alterar "+e.agenda_hora+" por "+hora+":"+min)
                     e.agenda_hora = hora+":"+min;
                 }
                 e.agenda_aux = aux;
                 aux++;
-                console.log("agenda hora? "+e.agenda_hora)
 
                 switch (dat.getUTCDay()){
                     case 0:
@@ -9442,6 +9536,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true }, agenda_extra: { $ne: true }, agenda_sala: { $in: [ObjectId("6368fe35c2cdb92ac6d914be"), ObjectId("64653fedfef321e0b32d2b5f")] } }).sort({agenda_data: -1}).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log("agenda.length:"+agenda.length)
@@ -9452,7 +9547,9 @@ carregaAgendaPessoalquasela(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -9491,7 +9588,6 @@ carregaAgendaPessoalquasela(req, res) {
                     Usuario.find().then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 let haddia;//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
 
@@ -9587,6 +9683,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
         sexta = this.getDataDiaMes(new Date(baseDate.setUTCDate(baseDate.getUTCDate()+1)));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         // 3. CONSULTAS SIMPLIFICADAS COM Promise.all
         Promise.all([
             // A) Busca APENAS as 2 salas específicas (CORRIGIDO: antes estava buscando todas)
@@ -9627,7 +9724,9 @@ carregaAgendaPessoalquasela(req, res) {
                 
                 let hora = String(dat.getUTCHours()).padStart(2, '0');
                 let min = String(dat.getMinutes()).padStart(2, '0');
-                e.agenda_hora = hora + ":" + min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora + ":" + min;
+                }
                 e.agenda_aux = aux++;
 
                 const dias = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
@@ -9668,6 +9767,7 @@ carregaAgendaPessoalquasela(req, res) {
                 quinta: quinta,
                 sexta: sexta
             });
+        })
         })
         .catch((err) => {
             console.error('❌ ERRO na consulta simplificada FAT:', err);
@@ -9752,6 +9852,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -9762,7 +9863,9 @@ carregaAgendaPessoalquasela(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -9800,7 +9903,6 @@ carregaAgendaPessoalquasela(req, res) {
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 let haddia;//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
 
@@ -9916,6 +10018,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -9926,7 +10029,9 @@ carregaAgendaPessoalquasela(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -9964,7 +10069,6 @@ carregaAgendaPessoalquasela(req, res) {
                 //console.log("Listagem Realizada de Beneficiários!")
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 let haddia;//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
 
@@ -10072,6 +10176,7 @@ carregaAgendaPessoalquasela(req, res) {
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
@@ -10082,7 +10187,9 @@ carregaAgendaPessoalquasela(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
 
                 switch (dat.getUTCDay()){
                     case 0:
@@ -10124,7 +10231,6 @@ carregaAgendaPessoalquasela(req, res) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
@@ -10219,6 +10325,7 @@ carregaAgendaPessoalquasela(req, res) {
                 filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_usuid: req.body.agendaTerapeutaid, agenda_temp: { $ne: true } }
                 break;
         }
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find(filtro).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             agenda.forEach((e)=>{
@@ -10227,7 +10334,9 @@ carregaAgendaPessoalquasela(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
 
                 switch (dat.getUTCDay()){
                     case 0:
@@ -10269,7 +10378,6 @@ carregaAgendaPessoalquasela(req, res) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
@@ -10344,6 +10452,7 @@ carregaAgendaPessoalquasela(req, res) {
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
@@ -10354,7 +10463,9 @@ carregaAgendaPessoalquasela(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
 
                 switch (dat.getUTCDay()){
                     case 0:
@@ -10396,7 +10507,6 @@ carregaAgendaPessoalquasela(req, res) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
@@ -10491,6 +10601,7 @@ carregaAgendaPessoalquasela(req, res) {
                 filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_usuid: req.body.agendaTerapeutaid, agenda_temp: { $ne: true } }
                 break;
         }
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find(filtro).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             agenda.forEach((e)=>{
@@ -10499,7 +10610,9 @@ carregaAgendaPessoalquasela(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
 
                 switch (dat.getUTCDay()){
                     case 0:
@@ -10541,7 +10654,6 @@ carregaAgendaPessoalquasela(req, res) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Terapia")
                                 Sala.find().then((sala)=>{
                                     sala.sort((a,b) => (a.sala_nome > b.sala_nome) ? 1 : ((b.sala_nome > a.sala_nome) ? -1 : 0));//Ordena as salas
@@ -10662,13 +10774,16 @@ carregaAgendaPessoalquasela(req, res) {
         Sessao = getModel(db, 'tb_sessao', sessaoClass.SessaoSchema)
 
         let agenda_tempId = req.params.id;
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.findById(req.params.id).then((agenda) =>{
             let dat = new Date(agenda.agenda_data);
             let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
             let min = ""+dat.getMinutes();
             if (hora.length == 1){hora = "0" + hora + "";}
             if (min.length == 1){min = "0" + min + "";}
-            agenda.agenda_hora = hora+":"+min;
+            if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                agenda.agenda_hora = hora+":"+min;
+            }
             agenda.agenda_data_dia = this.getDataFMT(dat);
             Bene.find().then((bene) =>{
                 bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome
@@ -10684,7 +10799,6 @@ carregaAgendaPessoalquasela(req, res) {
                             Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
                                 terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome
                                 console.log("Listagem terapeutas!")
-                                Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                     console.log("Abre Edição Agenda Semanal")
                                     //Sessao.find().then((sessao)=>{
                                         //Excecao.find().then((excecao)=>{
@@ -11233,6 +11347,7 @@ async carregaAgendaEdiTemp(req, res) { // Carrega Edição Agenda
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid : idTerapeuta }).then((agenda) =>{
             agenda = agenda.filter(a => (""+a.atend_categoria) !== "Feriado");
             //console.log("Listagem Realizada de agendamentos!")
@@ -11245,7 +11360,9 @@ async carregaAgendaEdiTemp(req, res) { // Carrega Edição Agenda
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -11302,7 +11419,6 @@ async carregaAgendaEdiTemp(req, res) { // Carrega Edição Agenda
                     Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 //Caso o horaage se desconfigure efetuar sort
                                 //horaage.sort(horaage.horaage_hora); //sujeito a mudanças
@@ -12316,7 +12432,8 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
             id = req.body.id
         }
         Agenda.findById(id).then((agenda) =>{
-            let selo = agenda.agenda_selo;
+            console.log("agenda? "+agenda)
+            let selo = agenda.agenda_selo || false;
             let dat = new Date(agenda.agenda_data);
             let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada
             let min = ""+dat.getMinutes();
@@ -12565,6 +12682,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
             } else {
                 usuObs = " - "
             }
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: usu._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
@@ -12575,7 +12693,9 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -12618,7 +12738,6 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                         //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 let haddia;//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
 
@@ -14229,6 +14348,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
@@ -14240,7 +14360,9 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -14293,7 +14415,6 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
@@ -14520,7 +14641,9 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                              let min = ""+dat.getMinutes();
                              if (hora.length == 1){hora = "0" + hora + "";}
                              if (min.length == 1){min = "0" + min + "";}
-                             e.agenda_hora = hora+":"+min;
+                             if (!horaages.some(h => h.horaage_hora === e.agenda_hora)) {
+                                e.agenda_hora = hora+":"+min;
+                             }
                              e.agenda_aux = aux;
                              aux++;
 
@@ -15073,6 +15196,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         Bene.findOne().then((b) =>{
         Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
@@ -15084,7 +15208,9 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
 
@@ -15137,7 +15263,6 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                         Terapia.find().then((terapia)=>{
                             terapia.sort((a,b) => (a.terapia_nome > b.terapia_nome) ? 1 : ((b.terapia_nome > a.terapia_nome) ? -1 : 0));//Ordena a terapia por nome 
                             //console.log("Listagem Realizada de Terapia")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
                                 //console.log("Listagem Realizada de Horario")
                                 let haddia//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
