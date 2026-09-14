@@ -12432,7 +12432,6 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
             id = req.body.id
         }
         Agenda.findById(id).then((agenda) =>{
-            console.log("agenda? "+agenda)
             let selo = agenda.agenda_selo || false;
             let dat = new Date(agenda.agenda_data);
             let hora = ""+dat.getUTCHours();//UTC é necessário senão a hora fica desconfigurada

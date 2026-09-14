@@ -77,51 +77,126 @@
 				document.getElementById("agendaData").value = dataFmt;
 			}
 			function carregaBody(){
-				let dias = ["seg","ter","qua","qui","sex"];
-				try{
-					dias.forEach((dia)=>{
-						console.log("dia:"+dia)
-						document.getElementsByName(dia).forEach((e)=>{
-							let id = "hora"+e.id;
-							let valor = e.value;
-							console.log("valor")
-							console.log(valor)
-							//console.log("id")
-							//console.log(id)
-							if(valor != "766f69643132333435366964"){
-								if(e.id.indexOf("TerapiaId_") != -1){
-									let val = document.getElementById(valor).cloneNode(true);
-									val.id = val.id+"x";
-									//console.log("val")
-									//console.log(val)
-									document.getElementById(id).append(val);
-								} else if(e.id.indexOf("TeraId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
-									console.log("valor: "+valor)
-									console.log(document.getElementById(valor));
-									let val = document.getElementById(valor).cloneNode(true);
-									val.id = val.id+"x";
-									//console.log("val")
-									//console.log(val)
-									document.getElementById(id).append(val);
-								}
-							}
-						})
-						document.getElementsByName(dia).forEach((e)=>{
-							if(e.id.indexOf("AcaoId_") != -1){//se for a ação vai retornar a posição da string e caso não -1
-								let id = "hora"+e.id;//td para receber o append
-								console.log("id:"+id)
-								let el = document.getElementById(e.id);//elemento da acao
-								console.log("el:"+el)
-								document.getElementById(id).append(el);
-								//elemento td recebendo acao
-							}
-						})
-					})
-					//horasegTerapiaId_
-				} catch(err){
-					console.log(err)
-				}
-			}
+
+    let dias = ["seg","ter","qua","qui","sex"];
+
+    try{
+
+        dias.forEach((dia)=>{
+
+            console.log("dia:"+dia)
+
+            document.getElementsByName(dia).forEach((e)=>{
+
+                let id = "hora"+e.id;
+                let valor = e.value;
+
+                console.log("valor")
+                console.log(valor)
+
+                if(valor != "766f69643132333435366964"){
+
+                    if(e.id.indexOf("TerapiaId_") != -1){
+
+                        // Não possui valor
+                        if(!valor){
+                            console.log("Terapia sem valor:", e.id);
+                            return;
+                        }
+
+                        let elemento = document.getElementById(valor);
+
+                        // Elemento não encontrado
+                        if(elemento == null){
+                            console.log("Terapia não encontrada:", valor);
+                            return;
+                        }
+
+                        let destino = document.getElementById(id);
+
+                        // Destino não encontrado
+                        if(destino == null){
+                            console.log("Destino não encontrado:", id);
+                            return;
+                        }
+
+                        let val = elemento.cloneNode(true);
+                        val.id = val.id+"x";
+
+                        destino.append(val);
+
+                    } else if(e.id.indexOf("TeraId_") != -1){
+
+                        console.log("valor: "+valor);
+
+                        // Não possui valor
+                        if(!valor){
+                            console.log("Terapeuta sem valor:", e.id);
+                            return;
+                        }
+
+                        let elemento = document.getElementById(valor);
+
+                        console.log(elemento);
+
+                        // Elemento não encontrado
+                        if(elemento == null){
+                            console.log("Terapeuta não encontrado:", valor);
+                            return;
+                        }
+
+                        let destino = document.getElementById(id);
+
+                        // Destino não encontrado
+                        if(destino == null){
+                            console.log("Destino não encontrado:", id);
+                            return;
+                        }
+
+                        let val = elemento.cloneNode(true);
+                        val.id = val.id+"x";
+
+                        destino.append(val);
+                    }
+                }
+            })
+
+
+            document.getElementsByName(dia).forEach((e)=>{
+
+                if(e.id.indexOf("AcaoId_") != -1){
+
+                    let id = "hora"+e.id;
+
+                    console.log("id:"+id)
+
+                    let el = document.getElementById(e.id);
+
+                    console.log("el:"+el)
+
+                    // Elemento da ação não existe
+                    if(el == null){
+                        console.log("Ação não encontrada:", e.id);
+                        return;
+                    }
+
+                    let destino = document.getElementById(id);
+
+                    // TD de destino não existe
+                    if(destino == null){
+                        console.log("Destino da ação não encontrado:", id);
+                        return;
+                    }
+
+                    destino.append(el);
+                }
+            })
+        })
+
+    } catch(err){
+        console.log(err)
+    }
+}
 			function formataData(){
 				let dt = document.getElementById('dataFil').value;
 				let dia = dt.substring(8,10);
