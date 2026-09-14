@@ -1279,26 +1279,26 @@ module.exports = {
             case 0://DOM
                 seg.setUTCDate(seg.getUTCDate() + 1);
                 dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() + 5);
+                sex.setUTCDate(sex.getUTCDate() + 6);
                 break;
             case 1://SEG
                 dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() + 4);
+                sex.setUTCDate(sex.getUTCDate() + 5);
                 break;
             case 2://TER
                 dtFill = {dia: this.getDiaSemana(seg)};
                 seg.setUTCDate(seg.getUTCDate() - 1);
-                sex.setUTCDate(sex.getUTCDate() + 3);
+                sex.setUTCDate(sex.getUTCDate() + 4);
                 break;
             case 3://QUA
                 dtFill = {dia: this.getDiaSemana(seg)};
                 seg.setUTCDate(seg.getUTCDate() - 2);
-                sex.setUTCDate(sex.getUTCDate() + 2);
+                sex.setUTCDate(sex.getUTCDate() + 3);
                 break;
             case 4://QUI
                 dtFill = {dia: this.getDiaSemana(seg)};
                 seg.setUTCDate(seg.getUTCDate() - 3);
-                sex.setUTCDate(sex.getUTCDate() + 1);
+                sex.setUTCDate(sex.getUTCDate() + 2);
                 //console.log("seg:"+seg);
                 //console.log("sex:"+sex);
                 break;
@@ -1309,16 +1309,15 @@ module.exports = {
             case 6://SAB
                 seg.setUTCDate(seg.getUTCDate() - 5);
                 dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() - 1);
+                sex.setUTCDate(sex.getUTCDate());
                 break;
             default:
                 seg.setUTCDate(seg.getUTCDate() + 1);
                 dtFill = {dia: "seg"};
-                sex.setUTCDate(sex.getUTCDate() + 5);
+                sex.setUTCDate(sex.getUTCDate() + 6);
                 break;
         }
         let agora = seg.toISOString();
-        sex.setHours(10);
         let depois = sex.toISOString();
         //console.log("AGORA:"+agora);
         //console.log("depois:"+depois);
