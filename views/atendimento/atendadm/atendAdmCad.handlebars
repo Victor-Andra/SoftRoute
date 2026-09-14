@@ -122,6 +122,23 @@
 			function carregaBody(){
 				this.carregaValores();
 			}
+
+			function toggleIntervaloHoraAtend() {
+	const checkbox = document.getElementById('chkIntervaloHoraAtend');
+	const divHoraUnica = document.getElementById('divHoraAtendUnica');
+	const divIntervalo = document.getElementById('divIntervaloHoraAtend');
+
+	if (checkbox.checked) {
+		divHoraUnica.style.display = 'none';
+		divIntervalo.style.display = 'block';
+	} else {
+		divHoraUnica.style.display = 'block';
+		divIntervalo.style.display = 'none';
+
+		document.getElementById('atendHoraInicial').value = '';
+		document.getElementById('atendHoraFinal').value = '';
+	}
+}
 		</script>
 	</head>
 	<body onload="javascript:controlaNave();carregaBody();" class="no-skin">
@@ -174,16 +191,61 @@
 														</div>
 													</div>
 												</div>
-												<label for="id-date-picker-1">Hora atendimento</label>
-												<div class="row">
-													<div class="col-sm-8">
-														<select name="atendHora" id="atendHora" class="chosen-select" data-placeholder="Escolha..." >
-															{{#each horaages}}
-																<option value="{{horaage_hora}}">{{horaage_hora}}</option>
-															{{/each}}
-														</select>
-													</div>
-												</div>
+		<label for="id-date-picker-1">Hora Atendimento</label>
+		<div class="form-group">
+			<div class="col-sm-8">
+
+				<!-- CHECKBOX SEMPRE VISÍVEL -->
+				<div class="checkbox" style="margin-bottom: 10px;">
+					<label>
+						<input type="checkbox"
+							   id="chkIntervaloHoraAtend"
+							   onchange="toggleIntervaloHoraAtend()">
+						Atender por intervalo de horas (Início e Fim)
+					</label>
+				</div>
+
+				<!-- DIV DO ATENDIMENTO ÚNICO -->
+				<div id="divHoraAtendUnica">
+					<select name="atendHora"
+							id="atendHora"
+							class="select2 form-control"
+							data-placeholder="Escolha...">
+						{{#each horaages}}
+							<option value="{{horaage_hora}}">
+								{{horaage_hora}}
+							</option>
+						{{/each}}
+					</select>
+				</div>
+
+				<!-- DIV DO ATENDIMENTO POR INTERVALO -->
+				<div id="divIntervaloHoraAtend"
+					 style="display: none; margin-top: 10px;">
+
+					<div class="row">
+
+						<div class="col-sm-6">
+							<label>Hora Inicial</label>
+							<input type="time"
+								   name="atendHoraInicial"
+								   id="atendHoraInicial"
+								   class="form-control">
+						</div>
+
+						<div class="col-sm-6">
+							<label>Hora Final</label>
+							<input type="time"
+								   name="atendHoraFinal"
+								   id="atendHoraFinal"
+								   class="form-control">
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
 												<label>Origem atendimento</label>
 												<div class="form-group">
 													<div class="col-sm-9">

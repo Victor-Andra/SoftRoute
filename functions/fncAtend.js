@@ -1043,10 +1043,8 @@ module.exports = {
             const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
             const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
 
-            // 1. Interrompe a execução se for apenas para atualizar valores
             if (req.body.atualizaValores === "true") {
                 fncAgenda.atualizaValores(req, res);
-                return; 
             }
 
             const tipoPessoa = req.body.atendTipoPessoa || "Geral";

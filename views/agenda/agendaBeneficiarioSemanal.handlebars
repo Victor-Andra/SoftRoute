@@ -81,117 +81,163 @@
 				});
 			}
 			function carregaBody(){
-				let dias = ["seg","ter","qua","qui","sex"];
-				try{
-					dias.forEach((dia)=>{
-						console.log("dia:"+dia)
-						document.getElementsByName(dia).forEach((e)=>{
-							let id = "hora"+e.id;
-							let valor = e.value;
-							console.log("valor")
-							console.log(valor)
-							//console.log("id")
-							//console.log(id)
-							if(valor != "766f69643132333435366964"){
-								if(e.id.indexOf("TerapiaId_") != -1){
-									console.log("CKLOINE: " +valor)
-									let val = document.getElementById(valor).cloneNode(true);
-									val.id = val.id+"x";
-									document.getElementById(id).append(val);
-									let color = e.id + "_" + e.value;
-								let hav = document.getElementById(color)
-								let extra = document.getElementsByName(color+"_extra")
-								if (hav != null){
-									let motivo = hav.value;
-									console.log("motivo:"+motivo)
-									switch (motivo) {
-										case "Falta" :
-											val.style.backgroundColor = "yellow";
-											break;
-										case "Falta Justificada":
-											val.style.backgroundColor = "orange";
-											break;
-										case "Falta Absoluta":
-											val.style.backgroundColor = "orange";
-											break;
-										case "Substituição":
-											val.style.backgroundColor = "cyan";
-											break;
-										case "Roberta Disponpivel":
-											val.style.backgroundColor = "salmon";
-											break;
-										case "Supervisor":
-											val.style.backgroundColor = "lightpink";
-											break;
-										case "Ordinario":
-											val.style.backgroundColor = "aquamarine";
-											break;
-										case "Nenhuma Observação":
-											val.style.backgroundColor = "lightgreen";
-											break;
-										default :
-											break;
-									}
-								}
-								} else if(e.id.indexOf("TeraId_") != -1){//caso não seja ação precisa obter o nome do bene/tera pelos outros registros através do atributo valor q armazena o ID do mesmo
-								console.log("clone: "+valor)
-									let val = document.getElementById(valor).cloneNode(true);
-									val.id = val.id+"x";
-									document.getElementById(id).append(val);
-									let color = e.id + "_" + e.value;
-								let hav = document.getElementById(color)
-								let extra = document.getElementsByName(color+"_extra")
-								if (hav != null){
-									let motivo = hav.value;
-									console.log("motivo:"+motivo)
-									switch (motivo) {
-										case "Falta" :
-											val.style.backgroundColor = "yellow";
-											break;
-										case "Falta Justificada":
-											val.style.backgroundColor = "orange";
-											break;
-										case "Falta Absoluta":
-											val.style.backgroundColor = "orange";
-											break;
-										case "Substituição":
-											val.style.backgroundColor = "cyan";
-											break;
-										case "Roberta Disponpivel":
-											val.style.backgroundColor = "salmon";
-											break;
-										case "Supervisor":
-											val.style.backgroundColor = "lightpink";
-											break;
-										case "Ordinario":
-											val.style.backgroundColor = "aquamarine";
-											break;
-										case "Nenhuma Observação":
-											val.style.backgroundColor = "lightgreen";
-											break;
-										default :
-											break;
-									}
-								}
-								}
+	let dias = ["seg","ter","qua","qui","sex"];
+
+	try{
+		dias.forEach((dia)=>{
+			console.log("dia:"+dia)
+
+			document.getElementsByName(dia).forEach((e)=>{
+				let id = "hora"+e.id;
+				let valor = e.value;
+
+				console.log("valor");
+				console.log(valor);
+
+				if(valor != "766f69643132333435366964" && valor){
+					
+					if(e.id.indexOf("TerapiaId_") != -1){
+
+						console.log("CKLOINE: " +valor);
+
+						let elemento = document.getElementById(valor);
+						let destino = document.getElementById(id);
+
+						// Se não encontrou o elemento ou o destino, ignora
+						if(elemento == null || destino == null){
+							return;
+						}
+
+						let val = elemento.cloneNode(true);
+						val.id = val.id+"x";
+
+						destino.append(val);
+
+						let color = e.id + "_" + e.value;
+						let hav = document.getElementById(color);
+						let extra = document.getElementsByName(color+"_extra");
+
+						if(hav != null){
+							let motivo = hav.value;
+
+							console.log("motivo:"+motivo);
+
+							switch (motivo) {
+								case "Falta":
+									val.style.backgroundColor = "yellow";
+									break;
+								case "Falta Justificada":
+									val.style.backgroundColor = "orange";
+									break;
+								case "Falta Absoluta":
+									val.style.backgroundColor = "orange";
+									break;
+								case "Substituição":
+									val.style.backgroundColor = "cyan";
+									break;
+								case "Roberta Disponpivel":
+									val.style.backgroundColor = "salmon";
+									break;
+								case "Supervisor":
+									val.style.backgroundColor = "lightpink";
+									break;
+								case "Ordinario":
+									val.style.backgroundColor = "aquamarine";
+									break;
+								case "Nenhuma Observação":
+									val.style.backgroundColor = "lightgreen";
+									break;
+								default:
+									break;
 							}
-						})
-						document.getElementsByName(dia).forEach((e)=>{
-							if(e.id.indexOf("AcaoId_") != -1){//se for a ação vai retornar a posição da string e caso não -1
-								let id = "hora"+e.id;//td para receber o append
-								console.log("id:"+id)
-								let el = document.getElementById(e.id);//elemento da acao
-								console.log("el:"+el)
-								document.getElementById(id).append(el);
-								//elemento td recebendo acao
+						}
+
+					} else if(e.id.indexOf("TeraId_") != -1){
+
+						console.log("clone: "+valor);
+
+						let elemento = document.getElementById(valor);
+						let destino = document.getElementById(id);
+
+						// Se não encontrou o elemento ou o destino, ignora
+						if(elemento == null || destino == null){
+							return;
+						}
+
+						let val = elemento.cloneNode(true);
+						val.id = val.id+"x";
+
+						destino.append(val);
+
+						let color = e.id + "_" + e.value;
+						let hav = document.getElementById(color);
+						let extra = document.getElementsByName(color+"_extra");
+
+						if(hav != null){
+							let motivo = hav.value;
+
+							console.log("motivo:"+motivo);
+
+							switch (motivo) {
+								case "Falta":
+									val.style.backgroundColor = "yellow";
+									break;
+								case "Falta Justificada":
+									val.style.backgroundColor = "orange";
+									break;
+								case "Falta Absoluta":
+									val.style.backgroundColor = "orange";
+									break;
+								case "Substituição":
+									val.style.backgroundColor = "cyan";
+									break;
+								case "Roberta Disponpivel":
+									val.style.backgroundColor = "salmon";
+									break;
+								case "Supervisor":
+									val.style.backgroundColor = "lightpink";
+									break;
+								case "Ordinario":
+									val.style.backgroundColor = "aquamarine";
+									break;
+								case "Nenhuma Observação":
+									val.style.backgroundColor = "lightgreen";
+									break;
+								default:
+									break;
 							}
-						})
-					})
-					//horasegTerapiaId_
-				} catch(err){
-					console.log(err)
+						}
+					}
 				}
-			}
+			})
+
+			document.getElementsByName(dia).forEach((e)=>{
+				if(e.id.indexOf("AcaoId_") != -1){
+
+					let id = "hora"+e.id;
+
+					console.log("id:"+id);
+
+					let el = document.getElementById(e.id);
+
+					console.log("el:"+el);
+
+					let destino = document.getElementById(id);
+
+					// Se não encontrou a ação ou o destino, ignora
+					if(el == null || destino == null){
+						return;
+					}
+
+					destino.append(el);
+				}
+			})
+		})
+
+	} catch(err){
+		console.log(err)
+	}
+}
 			function formataData(){
 				let dt = document.getElementById('dataFil').value;
 				let dia = dt.substring(8,10);

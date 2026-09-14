@@ -238,12 +238,12 @@
         $('#progTipoId').select2({ placeholder: "Selecione o Programa" });
         $('#status').select2({ placeholder: "Selecione o Status" });
 
-        // Logica de filtro dinamico de programas (SEM DISABLED)
+        // Lógica de filtro dinâmico de programas
         $('#pesquisaBeneid').on('change', function() {
             const beneId = $(this).val();
             const $progSelect = $('#progTipoId');
             
-            // Limpa e coloca a opcao padrao
+            // Limpa e coloca a opção padrão
             $progSelect.empty().append('<option value="todos">Todos</option>');
 
             if (beneId && beneId !== "766f69643132333435366964") {
@@ -255,13 +255,12 @@
                         const tipoInfo = dadosTipos.find(t => String(t._id) === String(tipoIdStr));
                         return { 
                             id: tipoIdStr, 
-                            nome: tipoInfo ? tipoInfo.nome : 'Nome nao encontrado' 
+                            nome: tipoInfo ? tipoInfo.nome : 'Nome não encontrado' 
                         };
                     });
 
                     tiposDoBene.sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
 
-                    // SEM DISABLED - apenas popula as opcoes
                     tiposDoBene.forEach(tipo => {
                         $progSelect.append(new Option(tipo.nome, tipo.id));
                     });
@@ -275,43 +274,53 @@
     const dadosProgramas = {{{json progs}}};
     const dadosTipos = {{{json progtipos}}};
 
-    // Handler do formulario principal (SIMPLIFICADO - SEM DISABLED)
+    // =====================================================================
+    // 1. Handler do formulário principal (Exclusivo para o botão "Localizar")
+    // =====================================================================
     document.getElementById('formEnv').addEventListener('submit', function (event) {
         const selectBene = document.getElementById('pesquisaBeneid');
         const selectedId = selectBene.value;
         
-        // Leitura direta dos valores (sem disabled atrapalhando)
         const progTipoId = $('#progTipoId').val() || 'todos';
         const status = $('#status').val() || 'todos';
 
-        console.log("=== [FRONTEND] Valores que serao enviados ===");
-        console.log("Beneficiario:", selectedId);
+        console.log("=== [FRONTEND] Valores que serão enviados (Localizar) ===");
+        console.log("Beneficiário:", selectedId);
         console.log("Tipo Programa:", progTipoId);
         console.log("Status:", status);
 
         if (!selectedId || selectedId === "766f69643132333435366964") {
-            alert('Por favor, selecione um beneficiario valido.');
+            alert('Por favor, selecione um beneficiário válido.');
             event.preventDefault();
             return;
         }
 
+        // Define a ação do formulário para a rota de listagem comum (proglisF)
         this.action = `/menu/area/aba/prog/proglisF/${selectedId}?progTipoId=${progTipoId}&status=${status}`;
         console.log("URL final:", this.action);
     });
 
-   document.getElementById('formEnv').addEventListener('submit', function (event) {
-    const selectBene = document.getElementById('pesquisaBeneid');
-    const selectedId = selectBene.value;
+    // =====================================================================
+    // 2. Handler específico para o botão "Manutenção" (proglisM)
+    // =====================================================================
+    document.getElementById('acaoPesquisarM').addEventListener('click', function (event) {
+        const selectBene = document.getElementById('pesquisaBeneid');
+        const selectedId = selectBene.value;
 
-    if (!selectedId || selectedId === "766f69643132333435366964") {
-        alert('Por favor, selecione um beneficiario valido.');
-        event.preventDefault();
-        return;
-    }
+        console.log("=== [FRONTEND] Botão Manutenção clicado ===");
+        console.log("Beneficiário selecionado:", selectedId);
 
-    // ✅ Apenas o caminho base. O method="GET" anexa ?progTipoId=X&status=Y automaticamente
-    this.action = `/menu/area/aba/prog/proglisF/${selectedId}`;
-});
-</script>
+        if (!selectedId || selectedId === "766f69643132333435366964") {
+            alert('Por favor, selecione um beneficiário válido antes de acessar a manutenção.');
+            event.preventDefault();
+            return;
+        }
+
+        // Redireciona diretamente para a rota de manutenção (proglisM)
+        // Observação: Mantive o prefixo "/menu" para seguir o mesmo padrão da sua rota "proglisF". 
+        // Se no seu backend a rota for exatamente "/area/aba/...", basta remover o "/menu" da string abaixo.
+        window.location.href = `/menu/area/aba/prog/proglisM/${selectedId}`;
+    });
+    </script>
 </body>
 </html>

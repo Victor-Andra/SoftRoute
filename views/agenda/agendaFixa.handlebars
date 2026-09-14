@@ -35,62 +35,184 @@
 				document.getElementById("agendaData").value = dataFmt;
 			}
 			function carregaBody(){
-				let dias = ["seg","ter","qua","qui","sex"];
-				let ds = [];
-				try{
-					console.log("carrega bode")
-					document.getElementsByName("sala_id").forEach((si)=>{
-						//console.log(si);
-						dias.forEach((dia)=>{
-							//console.log("dia_salaid:"+dia+"_"+si)
-							ds.push(dia+"_"+si.value);
-						})
-					})
-					console.log("pos foreche")
-					
-					ds.forEach((dia_sala)=>{
-						let dia_sala_tipo = dia_sala + "_Bene"
-						document.getElementsByName(dia_sala_tipo).forEach((e)=>{
-							let id = "hora"+e.id;//td para receber o append
-							
-								let valor = e.value;//valor para indexar no td
-								//console.log("valor:"+valor)
-								//console.log("ELEMENTO VALOR:"+document.getElementById(valor))
-								if(document.getElementById(valor) != null){
-									let val = document.getElementById(valor).cloneNode(true);
-									val.id = val.id+"x";
-									document.getElementById(id).append(val);
-									let br = document.getElementById("quebraLinhas").cloneNode(true)
-									document.getElementById(id).append(br);
-								}
-						})
-								
-					
-						dia_sala_tipo = dia_sala + "_Tera"
-						document.getElementsByName(dia_sala_tipo).forEach((e)=>{
-							let id = "hora"+e.id;//td para receber o append
-							
-								let valor = e.value;//valor para indexar no td
-								//console.log("valor:"+valor)
-								let val = document.getElementById(valor).cloneNode(true);
-								val.id = val.id+"x";
-								document.getElementById(id).append(val);
-								let br = document.getElementById("quebraLinhas").cloneNode(true)
-								document.getElementById(id).append(br);
-						})
-					
-						dia_sala_tipo = dia_sala + "_Acao"
-						document.getElementsByName(dia_sala_tipo).forEach((e)=>{
-							let id = "hora"+e.id;//td para receber o append
-								let val = e.cloneNode(true);
-								val.id = val.id+"x";
-								document.getElementById(id).append(val);
-						})
-					})
-				} catch(err){
-					console.log(err)
+	let dias = ["seg","ter","qua","qui","sex"];
+	let ds = [];
+
+	try{
+		console.log("carrega body");
+
+		document.getElementsByName("sala_id").forEach((si)=>{
+			dias.forEach((dia)=>{
+				ds.push(dia+"_"+si.value);
+			});
+		});
+
+		console.log("pos foreach");
+
+		ds.forEach((dia_sala)=>{
+
+			// =========================
+			// BENEFICIÁRIO
+			// =========================
+			let dia_sala_tipo = dia_sala + "_Bene";
+
+			document.getElementsByName(dia_sala_tipo).forEach((e)=>{
+				let id = "hora"+e.id;
+				let valor = e.value;
+
+				try {
+					console.log("BENE - dia_sala:", dia_sala,
+						"e.id:", e.id,
+						"valor:", valor,
+						"destino:", id);
+
+					let elemento = document.getElementById(valor);
+					let destino = document.getElementById(id);
+
+					if(valor && elemento != null && destino != null){
+						let val = elemento.cloneNode(true);
+						val.id = val.id+"x";
+
+						destino.append(val);
+
+						let quebra = document.getElementById("quebraLinhas");
+
+						if(quebra != null){
+							let br = quebra.cloneNode(true);
+							destino.append(br);
+						}
+					} else {
+						console.warn("BENE - elemento não encontrado:", {
+							dia_sala: dia_sala,
+							elemento_id: e.id,
+							valor: valor,
+							destino_id: id,
+							elemento_encontrado: elemento != null,
+							destino_encontrado: destino != null
+						});
+					}
+
+				} catch(err) {
+					console.error("ERRO AO CARREGAR BENE:", {
+						dia_sala: dia_sala,
+						tipo: "Bene",
+						elemento_id: e.id,
+						valor: e.value,
+						destino_id: id,
+						erro: err
+					});
+
+					throw err;
 				}
-			}
+			});
+
+
+			// =========================
+			// TERAPEUTA
+			// =========================
+			dia_sala_tipo = dia_sala + "_Tera";
+
+			document.getElementsByName(dia_sala_tipo).forEach((e)=>{
+				let id = "hora"+e.id;
+				let valor = e.value;
+
+				try {
+					console.log("TERA - dia_sala:", dia_sala,
+						"e.id:", e.id,
+						"valor:", valor,
+						"destino:", id);
+
+					let elemento = document.getElementById(valor);
+					let destino = document.getElementById(id);
+
+					if(valor && elemento != null && destino != null){
+						let val = elemento.cloneNode(true);
+						val.id = val.id+"x";
+
+						destino.append(val);
+
+						let quebra = document.getElementById("quebraLinhas");
+
+						if(quebra != null){
+							let br = quebra.cloneNode(true);
+							destino.append(br);
+						}
+					} else {
+						console.warn("TERA - elemento não encontrado:", {
+							dia_sala: dia_sala,
+							elemento_id: e.id,
+							valor: valor,
+							destino_id: id,
+							elemento_encontrado: elemento != null,
+							destino_encontrado: destino != null
+						});
+					}
+
+				} catch(err) {
+					console.error("ERRO AO CARREGAR TERA:", {
+						dia_sala: dia_sala,
+						tipo: "Tera",
+						elemento_id: e.id,
+						valor: e.value,
+						destino_id: id,
+						erro: err
+					});
+
+					throw err;
+				}
+			});
+
+
+			// =========================
+			// AÇÃO
+			// =========================
+			dia_sala_tipo = dia_sala + "_Acao";
+
+			document.getElementsByName(dia_sala_tipo).forEach((e)=>{
+				let id = "hora"+e.id;
+
+				try {
+					console.log("ACAO - dia_sala:", dia_sala,
+						"e.id:", e.id,
+						"destino:", id);
+
+					let destino = document.getElementById(id);
+
+					if(destino != null){
+						let val = e.cloneNode(true);
+						val.id = val.id+"x";
+
+						destino.append(val);
+					} else {
+						console.warn("ACAO - destino não encontrado:", {
+							dia_sala: dia_sala,
+							elemento_id: e.id,
+							destino_id: id
+						});
+					}
+
+				} catch(err) {
+					console.error("ERRO AO CARREGAR ACAO:", {
+						dia_sala: dia_sala,
+						tipo: "Acao",
+						elemento_id: e.id,
+						valor: e.value,
+						destino_id: id,
+						erro: err
+					});
+
+					throw err;
+				}
+			});
+		});
+
+	} catch(err){
+		console.error("======================================");
+		console.error("ERRO GERAL AO CARREGAR AGENDA");
+		console.error("======================================");
+		console.error(err);
+	}
+}
 			function formataData(){
 				let fulldate=(document.getElementById('dataFil').value+' 00:00:00.000Z').toString();
 				document.getElementById('dataFinal').value = fulldate;

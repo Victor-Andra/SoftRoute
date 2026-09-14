@@ -2,123 +2,92 @@
 <html lang="pt-br">
 	<head>
 		<title>Agendamentos</title>
-	<script>
-		// Variável global para salvar o valor da hora única quando o intervalo for ativado
-			let valorHoraSalvo = null;
-
-			function mudamuda(cor) {
+		<script type="text/javascript">
+			/*function ajustaOption(){
+				let valor;
+				let categ = document.getElementById("agendaTempMotivo").value;
+				console.log("categ: "+categ)
+				if (categ == "Falta") {
+					document.getElementById("agendaTempMotivo").style.backgroundColor = "yellow";
+				} else if (categ == "Falta Justificada") {
+					document.getElementById("agendaTempMotivo").style.backgroundColor = "orange";
+				} else if (categ == "Substituição") {
+					document.getElementById("agendaTempMotivo").style.backgroundColor = "cyan";
+				} else if (categ == "Roberta Disponpivel") {
+					document.getElementById("agendaTempMotivo").style.backgroundColor = "salmon";
+				}
+			}*/
+			function mudamuda(cor){
 				document.getElementById(cor).style.backgroundColor = cor;
 			}
-
-			function selectConv() {
-				var beneId = document.getElementById("agendaBeneid").value;
-				var refInput = document.getElementById(beneId);
-				if (refInput) {
-					document.getElementById("agendaConvid").value = refInput.value.toString();
-					jQuery('#agendaConvid').trigger('chosen:updated');
-				}
+			function selectConv(){
+				var v1 = document.getElementById(document.getElementById("agendaBeneid").value).value.toString();
+				console.log(v1)
+				document.getElementById("agendaConvid").value = v1;
 			}
-
 			function carregaValores() {
 				const v1 = document.getElementById("novaAgendaTerapiaid").value;
 				console.log("novaAgendaTerapiaid selecionado:", v1);
-				// Se precisar sincronizar com outro campo, descomente abaixo:
-				// document.getElementById("agendaTerapiaidEdi").value = v1;
-				jQuery("#novaAgendaTerapiaid").trigger("chosen:updated");
+
+				// Atualiza o valor do campo de edição e do select bloqueado
+				//document.getElementById("agendaTerapiaid").value = v1;
+				//document.getElementById("agendaTerapiaidEdi").value = v1;
+
+				// Força o Chosen a atualizar o select desativado
+				$("#agendaTerapiaid").trigger("chosen:updated");
 			}
-
-			function atualizaData() {
-				let horaParaSalvar = "";
-				
-				// Verifica se o intervalo está marcado para decidir qual hora usar
-				if ($('#chkIntervaloHora').is(':checked')) {
-					let ini = $('#agendaHoraIni').val();
-					// Se tiver hora inicial, usa ela como base (ajuste conforme sua regra de backend)
-					if (ini) horaParaSalvar = ini; 
-				} else {
-					horaParaSalvar = $('#agendaHoraSelect').val();
-				}
-
-				let dataStr = document.getElementById("dataAg").value;
-				if (dataStr && horaParaSalvar) {
-					let dataIso = dataStr + "T" + horaParaSalvar + ":00.000Z";
-					let dataFmt = new Date(dataIso);
-					document.getElementById("agendaData").value = dataFmt;
-				}
+			function atualizaConvId(){
+				let convId = document.getElementById("agendaConvid").value;
+				console.log(convId)
 			}
-
-			function carregaBody() {
-				// 1. Popula os campos com os valores dos inputs ocultos
-				document.getElementById("dataAg").value = document.getElementById("agendaDataEdi").value || "";
-				document.getElementById("agendaOrg").value = document.getElementById("agendaOrgEdi").value || "Padrão";
-				document.getElementById("agendaCateg").value = document.getElementById("agendaCategEdi").value || "Padrão";
-				document.getElementById("agendaBeneid").value = document.getElementById("agendaBeneidEdi").value || "";
-				document.getElementById("agendaConvid").value = document.getElementById("agendaConvidEdi").value || "";
-				document.getElementById("agendaTerapiaid").value = document.getElementById("agendaTerapiaidEdi").value || "";
-				document.getElementById("novaAgendaTerapiaid").value = document.getElementById("agendaTerapiaidEdi").value || "";
-				document.getElementById("agendaUsuid").value = document.getElementById("agendaUsuidEdi").value || "";
-				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value || "";
-
-				// 2. Lógica do Checkbox de Intervalo ao carregar (se houver hora ini/fim salva, ativa o modo intervalo)
-				let horaIniEdi = document.getElementById("agendaHoraIniEdi")?.value;
-				let horaFimEdi = document.getElementById("agendaHoraFimEdi")?.value;
-				
-				if (horaIniEdi && horaFimEdi && horaIniEdi !== horaFimEdi) {
-					$('#chkIntervaloHora').prop('checked', true);
-					$('#divHoraSelect').hide();
-					$('#divHoraIntervalo').show();
-					$('#agendaHoraIni').val(horaIniEdi);
-					$('#agendaHoraFim').val(horaFimEdi);
-				} else {
-					// Modo hora única
-					$('#chkIntervaloHora').prop('checked', false);
-					$('#divHoraSelect').show();
-					$('#divHoraIntervalo').hide();
-					let horaEdi = document.getElementById("agendaHoraEdi").value;
-					if (horaEdi) {
-						$('#agendaHoraSelect').val(horaEdi);
-						valorHoraSalvo = horaEdi; // Já salva na variável global
-					}
-				}
-
-				// 3. Força a atualização visual de TODOS os selects (Chosen)
-				if (typeof jQuery !== 'undefined') {
-					const selectsChosen = ['agendaBeneid', 'agendaConvid', 'agendaOrg', 'agendaCateg', 'agendaUsuid', 'agendaTerapiaid', 'novaAgendaTerapiaid', 'agendaSalaid', 'agendaHoraSelect'];
-					selectsChosen.forEach(id => {
-						if (document.getElementById(id)) {
-							jQuery(`#${id}`).trigger('chosen:updated');
-						}
-					});
-				}
-
-				// 4. Configurações de UI (Selo, Evolução, Botão Voltar)
-				if (document.getElementById("agendaSelo").value === 'false') {
+			function atualizaData(){
+				var dataIso = document.getElementById("dataAg").value+"T"+document.getElementById("agendaHora").value+":00.000Z";
+				var dataFmt = new Date(dataIso);
+				console.log(dataIso);
+				document.getElementById("agendaData").value = dataFmt;
+			}
+			function carregaBody(){
+				document.getElementById("dataAg").value = document.getElementById("agendaDataEdi").value;
+				document.getElementById("agendaHora").value = document.getElementById("agendaHoraEdi").value;
+				document.getElementById("agendaOrg").value = document.getElementById("agendaOrgEdi").value;
+				document.getElementById("agendaCateg").value = document.getElementById("agendaCategEdi").value;
+				document.getElementById("agendaBeneid").value = document.getElementById("agendaBeneidEdi").value;
+				document.getElementById("agendaConvid").value = document.getElementById("agendaConvidEdi").value;
+				document.getElementById("agendaTerapiaid").value = document.getElementById("agendaTerapiaidEdi").value;
+				document.getElementById("novaAgendaTerapiaid").value = document.getElementById("agendaTerapiaidEdi").value;
+				document.getElementById("agendaUsuid").value = document.getElementById("agendaUsuidEdi").value;
+				document.getElementById("agendaSalaid").value = document.getElementById("agendaSalaidEdi").value;
+				//document.getElementById("agendaTempMotivo").value = document.getElementById("agendaTempMotivoEdi").value;
+				atualizaData();
+				if (document.getElementById("agendaSelo").value == 'false'){
 					document.getElementById("agendaSelo").checked = false;
+					document.getElementById("agendaSelo").style = '';
 				}
-				if (document.getElementById("isAgendaTerapeuta").value === 'true') {
-					document.getElementById("divEvolucao").style.display = "";
-					document.getElementById("divEvolucao").removeAttribute("hidden");
+				if (document.getElementById("isAgendaTerapeuta").value == 'true'){
+					document.getElementById("divEvolucao").style = '';
 				}
-				
 				document.getElementById('acaoCancelar').addEventListener('click', function() {
 					window.history.back();
 				});
-
-				// 5. Finaliza montando a data oculta para o form
-				atualizaData();
 			}
-
-			function alteraMigrado() {
+			function alteraMigrado(){
 				let chck = document.getElementById("agendaMigrado");
-				chck.value = chck.checked ? "true" : "false";
+				if(chck.checked){
+					chck.value="true";
+					console.log(chck.value);
+				} else {
+					chck.value="false";
+					console.log(chck.value);
+				}
 			}
-
 			function validarCamposObrigatorios(e) {
+				// Campos obrigatórios + nomes amigáveis
 				const campos = [
 					{ id: 'agendaBeneid', nome: 'Beneficiário' },
 					{ id: 'agendaUsuid', nome: 'Terapeuta' },
 					{ id: 'novaAgendaTerapiaid', nome: 'Terapia (substituição)' },
 					{ id: 'agendaSalaid', nome: 'Local' },
+					{ id: 'agendaHora', nome: 'Hora Agendamento' },
 					{ id: 'dataAg', nome: 'Data Agendamento' },
 					{ id: 'agendaCateg', nome: 'Categoria' },
 					{ id: 'agendaOrg', nome: 'Origem Agendamento' }
@@ -131,66 +100,67 @@
 					if (!el) return;
 
 					const val = el.value?.trim();
+					
+					// Verifica vazio, placeholder ou "-"
 					if (!val || val === '766f69643132333435366964' || val === '-') {
-						camposComErro.push(c.nome);
-						if (typeof jQuery !== 'undefined' && jQuery('#' + c.id).data('chosen')) {
-							jQuery('#' + c.id).closest('.chosen-container').addClass('chosen-error');
-							jQuery('#' + c.id).trigger('chosen:updated');
-						} else if (el.tagName === 'SELECT') {
-							el.style.borderColor = '#f00';
-						}
+					camposComErro.push(c.nome);
+					
+					// Destaque no Chosen
+					if (typeof jQuery !== 'undefined' && jQuery('#' + c.id).data('chosen')) {
+						jQuery('#' + c.id).closest('.chosen-container').addClass('chosen-error');
+						jQuery('#' + c.id).trigger('chosen:updated');
+					} else if (el.tagName === 'SELECT') {
+						el.style.borderColor = '#f00';
+					}
 					} else {
-						if (typeof jQuery !== 'undefined' && jQuery('#' + c.id).data('chosen')) {
-							jQuery('#' + c.id).closest('.chosen-container').removeClass('chosen-error');
-						} else if (el.tagName === 'SELECT') {
-							el.style.borderColor = '';
-						}
+					// Remove destaque se válido
+					if (typeof jQuery !== 'undefined' && jQuery('#' + c.id).data('chosen')) {
+						jQuery('#' + c.id).closest('.chosen-container').removeClass('chosen-error');
+					} else if (el.tagName === 'SELECT') {
+						el.style.borderColor = '';
+					}
 					}
 				});
 
+				// Bloqueia e mostra mensagem se houver erro
 				if (camposComErro.length > 0) {
 					e.preventDefault();
-					alert('⚠️ Campos obrigatórios não preenchidos:\n\n• ' + camposComErro.join('\n• ') + '\n\nPor favor, selecione uma opção válida para continuar.');
+					
+					const mensagem = '⚠️ Campos obrigatórios não preenchidos:\n\n• ' + 
+									camposComErro.join('\n• ') + 
+									'\n\nPor favor, selecione uma opção válida para continuar.';
+					
+					alert(mensagem);
 					return false;
 				}
+
 				return true;
 			}
-
-			// FUNÇÃO CORRIGIDA COM VARIÁVEL GLOBAL
 			function toggleIntervaloHora() {
-				var isIntervalo = $('#chkIntervaloHora').is(':checked');
-				
-				if (isIntervalo) {
-					// 1. SALVA o valor atual na variável global ANTES de limpar
-					valorHoraSalvo = $('#agendaHoraSelect').val();
-					
-					// 2. Alterna a visibilidade
-					$('#divHoraSelect').hide();
-					$('#divHoraIntervalo').show();
-					
-					// 3. Limpa o select único para não enviar dado conflitante
-					$('#agendaHoraSelect').val('');
-					$('#agendaHoraSelect').trigger('chosen:updated');
-				} else {
-					// 1. Alterna a visibilidade de volta
-					$('#divHoraSelect').show();
-					$('#divHoraIntervalo').hide();
-					
-					// 2. Limpa os campos de intervalo
-					$('#agendaHoraIni').val('');
-					$('#agendaHoraFim').val('');
-					
-					// 3. RESTAURA o valor que estava salvo na variável global
-					if (valorHoraSalvo) {
-						$('#agendaHoraSelect').val(valorHoraSalvo);
-					}
-					$('#agendaHoraSelect').trigger('chosen:updated');
-				}
-				
-				// Atualiza a data oculta sempre que o estado mudar
-				atualizaData();
-			}
-	</script>
+    var isIntervalo = $('#chkIntervaloHora').is(':checked');
+    
+    if (isIntervalo) {
+        // Oculta o select único
+        $('#divHoraSelect').hide();
+        
+        // Revela os campos de intervalo
+        $('#divHoraIntervalo').show();
+        
+        // Limpa o select para não enviar dados conflitantes
+        $('#agendaHoraSelect').val('');
+    } else {
+        // Revela o select único
+        $('#divHoraSelect').show();
+        
+        // Oculta os campos de intervalo
+        $('#divHoraIntervalo').hide();
+        
+        // Limpa os campos de intervalo
+        $('#agendaHoraIni').val('');
+        $('#agendaHoraFim').val('');
+    }
+}
+		</script>
 	</head>
 	<body class="no-skin" onload="javascript:carregaBody();controlaNave();ajustaOption();">
 		<div class="main-container ace-save-state" id="main-container">
@@ -326,9 +296,7 @@
 															<div class="col-xs-12 col-sm-10">
 																<select name="agendaBeneid" id="agendaBeneid" class="select" data-placeholder="Escolha..." onchange="javascript:selectConv()">
 																	{{#each benes}}
-																		<option value="{{_id}}" {{#ifEqual this._id @root.agenda.agenda_beneid}}selected{{/ifEqual}}>
-																			{{bene_nome}}
-																		</option>
+																		<option value="{{_id}}">{{bene_nome}}</option>
 																	{{/each}}
 																</select>
 															</div>
@@ -356,11 +324,9 @@
 														<label>Terapeuta</label>
 														<div class="form-group">
 															<div class="col-xs-12 col-sm-10">
-																<select name="agendaUsuid" id="agendaUsuid" class="form-control select2" data-placeholder="Escolha...">
+																<select name="agendaUsuid" id="agendaUsuid" class="select" data-placeholder="Escolha...">
 																	{{#each terapeutas}}
-																		<option value="{{_id}}" {{#ifEqual this._id @root.agenda.agenda_usuid}}selected{{/ifEqual}}>
-																			{{usuario_nome}}
-																		</option>
+																	<option value="{{_id}}">{{usuario_nome}}</option>
 																	{{/each}}
 																</select>
 															</div>
@@ -371,11 +337,9 @@
 															<label style="color: red; font-weight: bold;">Terapia Atual</label>
 															<div class="form-group">
 																<div class="col-xs-12">
-																	<select name="agendaTerapiaid" id="agendaTerapiaid" class="form-control select2" disabled>
+																	<select name="agendaTerapiaid" id="agendaTerapiaid" class="select" disabled>
 																		{{#each terapias}}
-																			<option value="{{_id}}" {{#ifEqual this._id @root.agenda.agenda_terapiaid}}selected{{/ifEqual}}>
-																				{{terapia_nome}}
-																			</option>
+																			<option value="{{_id}}">{{terapia_nome}}</option>
 																		{{/each}}
 																	</select>
 																	<br>
@@ -396,11 +360,9 @@
 														<label>Local</label>
 														<div class="form-group">
 															<div class="col-xs-12 col-sm-10">
-																<select name="agendaSalaid" id="agendaSalaid" class="form-control select2" data-placeholder="Escolha...">
+																<select name="agendaSalaid" id="agendaSalaid" class="select" data-placeholder="Escolha...">
 																	{{#each salas}}
-																		<option value="{{_id}}" {{#ifEqual this._id @root.agenda.agenda_salaid}}selected{{/ifEqual}}>
-																			{{sala_nome}}
-																		</option>
+																		<option value="{{_id}}">{{sala_nome}}</option>
 																	{{/each}}
 																</select>
 															</div>
@@ -417,7 +379,7 @@
 														</div>
 													</div>
 												</div>
-												<div id="divEvolucao" style="display: none;" class="hidden" >
+												<div id="divEvolucao" style="display: none;" class="row" hidden>
 													<div class="col-xs-12 col-sm-6">
 														<label>Evolução</label>
 														<div class="form-group">
@@ -458,9 +420,6 @@
 										<input id="agendaTerapiaidEdi" name="agendaTerapiaidEdi" value="{{agenda.agenda_terapiaid}}" />
 										<!--<input id="agendaTempMotivoEdi" name="agendaTempMotivoEdi" value="{{agenda.agenda_tempmotivo}}" />-->
 										<input id="agendaUsuidEdi" name="agendaUsuidEdi" value="{{agenda.agenda_usuid}}" />
-										<!-- Adicione estes dois campos na div class="hidden" junto com os outros -->
-										<input id="agendaHoraIniEdi" name="agendaHoraIniEdi" value="{{agenda.agenda_horaini}}" />
-										<input id="agendaHoraFimEdi" name="agendaHoraFimEdi" value="{{agenda.agenda_horafim}}" />
 									</div>
 									<div class="space-4"></div>
 									<div class="space-4"></div>
