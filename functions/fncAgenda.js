@@ -250,7 +250,7 @@ module.exports = {
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -379,7 +379,7 @@ module.exports = {
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -533,7 +533,7 @@ module.exports = {
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             agenda.forEach((e)=>{
                 let dat = new Date(e.agenda_data);
                 e.agenda_data_dia = this.getDataFMT(dat);
@@ -746,7 +746,7 @@ module.exports = {
             } else {
                 usuObs = " - "
             }
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: usu._id, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: usu._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -968,7 +968,7 @@ module.exports = {
             } else {
                 usuObs = " - "
             }
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTeraid, agenda_temp: false, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: req.body.agendaTeraid, agenda_temp: { $ne: true }, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -1855,7 +1855,7 @@ carregaAgendaMesFixo(req, res) {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -2042,7 +2042,7 @@ carregaAgendaMesFixo(req, res) {
 
         Bene.find({_id:req.body.agendaBeneid}).then((b) =>{
             b.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena por ordem alfabética 
-            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_temp: false }).then((agenda) =>{
+            Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: req.body.agendaBeneid, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -2276,7 +2276,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -4402,7 +4402,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         let agenda = [];
-        //Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
+        //Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -4576,7 +4576,7 @@ carregaAgendaMesFixo(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         let agenda = [];
-        //Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
+        //Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -5971,7 +5971,7 @@ carregaAgendaFilSFixo(req,res){
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -6136,7 +6136,7 @@ carregaAgendaFilSFixo(req,res){
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -9211,7 +9211,7 @@ carregaAgendaPessoalquasela(req, res) {
         let sex = new Date(req.body.dataFinal);
         console.log("req.body.dataFinal: "+req.body.dataFinal)
         console.log("seg dtf: "+seg);
-        //console.log("sex dtf: "+sex);
+        console.log("sex dtf: "+sex);
         seg.setHours(0);
         seg.setMinutes(0);
         seg.setSeconds(0);
@@ -9257,6 +9257,8 @@ carregaAgendaPessoalquasela(req, res) {
         }
         let agora = seg.toISOString();
         let depois = sex.toISOString();
+        console.log("agora dtf: "+agora);
+        console.log("depois dtf: "+depois);
         dtFill = seg.toISOString();
         let diaSemana = seg;
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
@@ -9268,9 +9270,10 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")]} }).sort({agenda_data: -1}).then((agenda) =>{
+        Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true }, agenda_extra: { $ne: true }}).sort({agenda_data: -1}).then((agenda) =>{//, agenda_sala: {$nin: [ObjectId("6368fe35c2cdb92ac6d914be"),ObjectId("64653fedfef321e0b32d2b5f")] } // temporariamente comentado
             //console.log("Listagem Realizada de agendamentos!")
-            //console.log("agenda.length:"+agenda.length)
+            console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
                 //console.log(e)
                 let dat = new Date(e.agenda_data);
@@ -9279,9 +9282,13 @@ carregaAgendaPessoalquasela(req, res) {
                 let min = ""+dat.getMinutes();
                 if (hora.length == 1){hora = "0" + hora + "";}
                 if (min.length == 1){min = "0" + min + "";}
-                e.agenda_hora = hora+":"+min;
+                if (!horaage.some(h => h.horaage_hora === e.agenda_hora)) {
+                    console.log("vai alterar "+e.agenda_hora+" por "+hora+":"+min)
+                    e.agenda_hora = hora+":"+min;
+                }
                 e.agenda_aux = aux;
                 aux++;
+                console.log("agenda hora? "+e.agenda_hora)
 
                 switch (dat.getUTCDay()){
                     case 0:
@@ -9318,7 +9325,7 @@ carregaAgendaPessoalquasela(req, res) {
                     Usuario.find().then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena o terapeuta por nome 
                         //console.log("Listagem Realizada de Usuário")
-                            Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
+                            
                                 let haddia;//haddia foi criado para verificar se na agenda possui algum registro no dia da semana em questão
                                 let segASex = ["seg","ter","qua","qui","sex"];
 
@@ -9435,7 +9442,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false, agenda_extra: false, agenda_sala: { $in: [ObjectId("6368fe35c2cdb92ac6d914be"), ObjectId("64653fedfef321e0b32d2b5f")] } }).sort({agenda_data: -1}).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true }, agenda_extra: { $ne: true }, agenda_sala: { $in: [ObjectId("6368fe35c2cdb92ac6d914be"), ObjectId("64653fedfef321e0b32d2b5f")] } }).sort({agenda_data: -1}).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log("agenda.length:"+agenda.length)
             agenda.forEach((e)=>{
@@ -9597,8 +9604,8 @@ carregaAgendaPessoalquasela(req, res) {
             // E) Busca agendas do período (Regras específicas da FAT)
             Agenda.find({ 
                 agenda_data: { $gte: agora, $lte: depois }, 
-                agenda_temp: false, 
-                agenda_extra: false 
+                agenda_temp: { $ne: true }, 
+                agenda_extra: { $ne: true } 
             })
         ])
         .then(([salas, horaages, benes, terapeutas, agendaBruta]) => {
@@ -9745,7 +9752,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -9909,7 +9916,7 @@ carregaAgendaPessoalquasela(req, res) {
         quinta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -10066,7 +10073,7 @@ carregaAgendaPessoalquasela(req, res) {
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -10203,13 +10210,13 @@ carregaAgendaPessoalquasela(req, res) {
         let filtro;
         switch (req.body.tipoFil){
             case "bene":
-                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_beneid: req.body.agendaBeneid, agenda_temp: false }
+                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_beneid: req.body.agendaBeneid, agenda_temp: { $ne: true } }
                 break;
             case "sala":
-                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_salaid: req.body.agendaSalaid, agenda_temp: false }
+                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_salaid: req.body.agendaSalaid, agenda_temp: { $ne: true } }
                 break;
             case "tera":
-                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_usuid: req.body.agendaTerapeutaid, agenda_temp: false }
+                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_usuid: req.body.agendaTerapeutaid, agenda_temp: { $ne: true } }
                 break;
         }
         Agenda.find(filtro).then((agenda) =>{
@@ -10338,7 +10345,7 @@ carregaAgendaPessoalquasela(req, res) {
         let semana = [{dia: "seg", data: this.getData(diaSemana)},{dia: "ter", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},
         {dia: "qua", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "qui", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))},{dia: "sex", data: this.getData(diaSemana.setDate(diaSemana.getDate()+1))}];
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -10475,13 +10482,13 @@ carregaAgendaPessoalquasela(req, res) {
         let filtro;
         switch (req.body.tipoFil){
             case "bene":
-                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_beneid: req.body.agendaBeneid, agenda_temp: false }
+                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_beneid: req.body.agendaBeneid, agenda_temp: { $ne: true } }
                 break;
             case "sala":
-                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_salaid: req.body.agendaSalaid, agenda_temp: false }
+                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_salaid: req.body.agendaSalaid, agenda_temp: { $ne: true } }
                 break;
             case "tera":
-                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_usuid: req.body.agendaTerapeutaid, agenda_temp: false }
+                filtro = {agenda_data: { $gte : agora, $lte:  depois },agenda_usuid: req.body.agendaTerapeutaid, agenda_temp: { $ne: true } }
                 break;
         }
         Agenda.find(filtro).then((agenda) =>{
@@ -11623,7 +11630,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
             $gte: dataIni,
             $lte: dataFim
         },
-        agenda_temp: false
+        agenda_temp: { $ne: true }
     })
     .lean()
     .then(async (agendaFixa) => {
@@ -12558,7 +12565,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
             } else {
                 usuObs = " - "
             }
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: usu._id, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_usuid: usu._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -12709,10 +12716,10 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
     // carrega agendas fixa e semanal no período
     var agendaFixa = await Agenda.find({
       agenda_data: { $gte: dataIni, $lte: dataFim },
-      agenda_temp: false,
+      agenda_temp: { $ne: true },
       //agenda_beneid: new ObjectId("62dac872ea444f5b7a028e38"),//69bb0f0b3cb9384fd0e2afa0//632c9f051a5f781525493629
       //agenda_migrado : false, 
-      $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } }]
+      $or: [{ agenda_extra: { $ne: true } }, { agenda_extra: { $exists: false } }]
     }).lean();
     console.log("agendaFixa.length: "+agendaFixa.length)
 
@@ -12721,7 +12728,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
       agenda_temp: true,
       //agenda_migrado : false, 
       //agenda_beneid: new ObjectId("62dac872ea444f5b7a028e38"),//69bb0f0b3cb9384fd0e2afa0//632c9f051a5f781525493629
-      $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } }]
+      $or: [{ agenda_extra: { $ne: true } }, { agenda_extra: { $exists: false } }]
     }).lean();
     console.log("agendaSemanal.length: "+agendaSemanal.length)
 
@@ -13002,7 +13009,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                     })
                 })
                 //console.log(convdeb)
-                Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, agenda_extra: true}).then((agendaFixa)=>{
+                Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: { $ne: true }, agenda_extra: true}).then((agendaFixa)=>{
                     Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true, agenda_extra: true}).then((agendaSemanal)=>{
                     //-------------------------
                     //console.log(agenda)
@@ -13925,7 +13932,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
         let nextNum;
         //console.log("dataIni"+dataIni);
         //console.log("dataFim"+dataFim);
-        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false }).then((agenda)=>{
+        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: { $ne: true } }).then((agenda)=>{
             agenda.forEach((a)=>{
                 dataaux = new Date(a.agenda_data);
                 dataaux.setUTCDate(dataaux.getUTCDate()+7);
@@ -13981,7 +13988,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
         let idsDeletar = [];
         console.log("dataIni"+dataIni);
         console.log("dataFim"+dataFim);
-        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, agenda_extra: false}).then((agenda)=>{
+        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: { $ne: true }, agenda_extra: { $ne: true }}).then((agenda)=>{
             //console.log("agenda:"+agenda.length)
             agenda.forEach((a)=>{
                 dataaux = new Date(a.agenda_data);
@@ -14223,7 +14230,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -14483,7 +14490,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
                     // --- 7. Buscar Agendas ---
                     let queryAgenda = {
                         agenda_data: { $gte: agoraISO, $lte: depoisISO },
-                        agenda_temp: false
+                        agenda_temp: { $ne: true }
                         // agenda_beneid será adicionado condicionalmente
                     };
 
@@ -14650,7 +14657,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
         let filtroAgenda = {
             agenda_data: { $gte: inicioSemana, $lte: fimSemana },
             agenda_categoria: "SubstitutoFixo", // Filtro fixo conforme solicitado
-            agenda_temp: false // Assumindo que você não quer agendas temporárias
+            agenda_temp: { $ne: true } // Assumindo que você não quer agendas temporárias
         };
 
         // Aplicar filtro condicional por Beneficiário ou Terapeuta
@@ -14817,7 +14824,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
         let filtroAgenda = {
             agenda_data: { $gte: inicioSemana, $lte: fimSemana },
             agenda_categoria: "SubstitutoFixo",
-            agenda_temp: false
+            agenda_temp: { $ne: true }
         };
 
         // Aplicar filtro condicional por Beneficiário ou Terapeuta
@@ -15067,7 +15074,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
         sexta = this.getDataDiaMes(diaSemana.setDate(diaSemana.getDate()+1));
 
         Bene.findOne().then((b) =>{
-        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: false }).then((agenda) =>{
+        Agenda.find({ agenda_data: { $gte : agora, $lte:  depois }, agenda_beneid: b._id, agenda_temp: { $ne: true } }).then((agenda) =>{
             //console.log("Listagem Realizada de agendamentos!")
             //console.log(agenda)
             agenda.forEach((e)=>{
@@ -16904,8 +16911,8 @@ converteAgendaEmAtend2(req,res){//Converte a Agenda em Atendimento
                     })
                 })
                 //console.log(convdeb)
-        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } } ]}).then((agendaFixa)=>{
-            Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true, $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } } ]}).then((agendaSemanal)=>{
+        Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: { $ne: true }, $or: [{ agenda_extra: { $ne: true } }, { agenda_extra: { $exists: false } } ]}).then((agendaFixa)=>{
+            Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true, $or: [{ agenda_extra: { $ne: true } }, { agenda_extra: { $exists: false } } ]}).then((agendaSemanal)=>{
             //-------------------------
             console.log("agendaSemanal.length: "+agendaSemanal.length);
             Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{
@@ -19155,8 +19162,8 @@ totalRemovidos += resultado.deletedCount;
                     })
                 })
                 //console.log(convdeb)
-                Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: false, $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } } ]}).then((agendaFixa)=>{
-                    Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true, $or: [{ agenda_extra: false }, { agenda_extra: { $exists: false } } ]}).then((agendaSemanal)=>{
+                Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: { $ne: true }, $or: [{ agenda_extra: { $ne: true } }, { agenda_extra: { $exists: false } } ]}).then((agendaFixa)=>{
+                    Agenda.find({agenda_data: { $gte: dataIni, $lte: dataFim}, agenda_temp: true, $or: [{ agenda_extra: { $ne: true } }, { agenda_extra: { $exists: false } } ]}).then((agendaSemanal)=>{
                     //-------------------------
                     console.log("agendaSemanal.length: "+agendaSemanal.length);
                     Atend.find().sort({atend_num : -1}).limit(1).then((atendimento) =>{

@@ -112,6 +112,7 @@
         if (mes.length == 1){ mes = "0"+mes; }
         if (dia.length == 1){ dia = "0"+dia; }
         let fulldate=(data.getFullYear()+"-"+mes+"-"+dia).toString();
+        document.getElementById("dataAg").value = fulldate;
         document.getElementById("agendaData").value = fulldate;
         document.getElementById("agendaExtra").value = "false";
         document.getElementById("agendaExtra").checked = false;
@@ -182,6 +183,7 @@
         });
         document.getElementById("divHoraInputIni").style.display = 'none';
         document.getElementById("divHoraInputFim").style.display = 'none';
+        atualizaData();
       }
 
       var toogle = false;
@@ -313,6 +315,22 @@
               $('#agendaHoraFim').val('');
           }
         }
+        function atualizaData() {
+          // Corrige o erro de buscar "agendaHora" que não existe mais
+          let horaParaSalvar = "";
+          if ($('#chkIntervaloHora').is(':checked')) {
+            horaParaSalvar = $('#agendaHoraIni').val(); // Usa hora inicial se for intervalo
+          } else {
+            horaParaSalvar = $('#agendaHoraSelect').val();
+          }
+
+          let dataStr = document.getElementById("dataAg").value;
+          if (dataStr && horaParaSalvar) {
+            let dataIso = dataStr + "T" + horaParaSalvar + ":00.000Z";
+            let dataFmt = new Date(dataIso);
+            document.getElementById("agendaData").value = dataFmt;
+          }
+        }
     </script>
   </head>
   <body class="no-skin" onload="javascript:controlaNave();carregaBody();controlaCategoria();">
@@ -433,7 +451,8 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="input-group">
-                                        <input name="agendaData" id="agendaData" type="date" class="form-control" style="width: 200px;">
+                                        <input name="dataAg" id="dataAg" type="date" class="form-control" style="width: 200px;" onchange="javascript:atualizaData()">
+                                        <input name="agendaData" id="agendaData" hidden >
                                         <input class="hidden" id="agendaHoraToogle" name="agendaHoraToogle" value="false" />
                                     </div>
                                 </div>
