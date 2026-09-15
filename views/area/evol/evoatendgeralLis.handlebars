@@ -888,6 +888,11 @@
 											</label>
 
 											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+												<input name="filtroTipo" value="Falta Justificada" type="checkbox" class="ace filtro-tipo input-lg" checked>
+												<span class="lbl bigger-120"> Falta Justificada</span>
+											</label>
+
+											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
 												<input name="filtroTipo" value="Feriado" type="checkbox" class="ace filtro-tipo input-lg" checked>
 												<span class="lbl bigger-120"> Feriado</span>
 											</label>
@@ -895,6 +900,16 @@
 											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
 												<input name="filtroTipo" value="Glosa" type="checkbox" class="ace filtro-tipo input-lg" checked>
 												<span class="lbl bigger-120"> Glosa</span>
+											</label>
+
+											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+												<input name="filtroTipo" value="Supervisao" type="checkbox" class="ace filtro-tipo input-lg" checked>
+												<span class="lbl bigger-120"> Supervisão</span>
+											</label>
+
+											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+												<input name="filtroTipo" value="Supervisor" type="checkbox" class="ace filtro-tipo input-lg" checked>
+												<span class="lbl bigger-120"> Supervisor</span>
 											</label>
 											
 										</div>
@@ -1034,7 +1049,17 @@
 																											<span name="ageCateg" id="ageCateg" class="label label-success arrowed">Atendido</span>
 																										
 																										{{else}}
-																											<span name="verselo" id="verselo" class="label label-info arrowed-in">{{agenda_categoria}}</span>
+																											{{#compareThis agenda_categoria "Supervisão"}}
+																												<span name="ageCateg" id="ageCateg" class="label label-pink arrowed">{{agenda_categoria}}</span>
+																											
+																											{{else}}
+																												{{#compareThis agenda_categoria "Supervisor"}}
+																													<span name="ageCateg" id="ageCateg" class="label label-pink arrowed">{{agenda_categoria}}</span>
+																												
+																												{{else}}
+																													<span name="verselo" id="verselo" class="label label-info arrowed-in">{{agenda_categoria}}</span>
+																												{{/compareThis}}
+																											{{/compareThis}}
 																										{{/compareThis}}
 																									{{/compareThis}}
 																								{{/compareThis}}
@@ -1171,12 +1196,21 @@ $(document).ready(function() {
             if (textoCategoria.includes('falta absoluta')) {
                 categorias.push('Falta Absoluta');
             }
+			if (textoCategoria.includes('falta justificada')) {
+                categorias.push('Falta Fustificada');
+            }
             if (textoCategoria.includes('feriado')) {
                 categorias.push('Feriado');
             }
             if (textoCategoria.includes('glosa')) {
                 categorias.push('Glosa');
             }
+			if (textoCategoria.includes('supervisao')) {
+				categorias.push('Supervisão');
+			}
+			if (textoCategoria.includes('supervisor')) {
+				categorias.push('Supervisor');
+			}
 
             $tr.attr('data-categorias', categorias.join(','));
 
@@ -1332,7 +1366,7 @@ $(document).ready(function() {
 						"initComplete": function(settings, json) {
 							console.log('✅ DataTable inicializado com sucesso');
 							preencherNumeracao();
-							controlarColunaEvolucao();
+							
 						},
 						"drawCallback": function(settings) {
 							preencherNumeracao();
@@ -1434,7 +1468,7 @@ $(document).ready(function() {
 				// ============================================
 				$('#ExibeEvolicao').on('change', function() {
 					console.log('🔄 Exibir Evolução mudou para:', $(this).val());
-					controlarColunaEvolucao();
+					
 				});
 
 				// ============================================

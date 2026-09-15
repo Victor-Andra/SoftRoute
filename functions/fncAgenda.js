@@ -52,8 +52,8 @@ var Evolucaoconf = getModel("SoftRoute", 'tb_evolucaoconf', evolucaoconfClass.Ev
 //const terapia = require("../models/terapia")
 const ObjectId = require('mongodb').ObjectId;
 //Gambiarras
-const AgendaArquivoClass = require("../models/agendaArquivo")
-var AgendaArquivo = getModel("SoftRoute", 'tb_agendaArquivo', AgendaArquivoClass)
+const AgendaClass = require("../models/agenda")
+var AgendaArquivo = getModel("SoftRoute", 'tb_agendaArquivo', AgendaClass.AgendaSchema)
 const fncGeral = require("./fncGeral")
 const Resposta = fncGeral.Resposta;
 
@@ -11087,7 +11087,7 @@ async carregaAgendaEdiTemp(req, res) { // Carrega Edição Agenda
             //console.log(err1)
         }
     },
-    deletaAgenda(req, res){
+    deletaAgendaOld(req, res){
         let db = req.cookies['preferredDb'];
         Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
 
@@ -11135,6 +11135,78 @@ async carregaAgendaEdiTemp(req, res) { // Carrega Edição Agenda
             }
         })
     },
+    deletaAgenda(req, res){
+    let db = req.cookies['preferredDb'];
+
+    Agenda = getModel(
+        db,
+        'tb_agenda',
+        agendaClass.AgendaSchema
+    );
+
+    AgendaArquivo = getModel(
+        db,
+        'tb_agendaArquivo',
+        agendaClass.AgendaSchema
+    );
+
+    let flash = new Resposta();
+
+    Agenda.find({_id: req.params.id})
+        .then((agenda) => {
+
+            // Não encontrou pelo _id, procura pelas agendas semanais
+            if (agenda.length === 0) {
+                return Agenda.find({
+                    agenda_tempId: req.params.id
+                });
+            }
+
+            return agenda;
+        })
+        .then((agenda) => {
+
+            if (agenda.length === 0) {
+                flash.sucesso = "false";
+                flash.texto = "A agenda não foi encontrada!";
+
+                return res.render("admin/branco", {flash});
+            }
+
+            // Arquiva todas as agendas encontradas
+            return AgendaArquivo.insertMany(
+                agenda.map((a) => a.toObject())
+            )
+            .then(() => {
+
+                // Depois de arquivar com sucesso, remove da agenda
+                let ids = agenda.map((a) => a._id);
+
+                return Agenda.deleteMany({
+                    _id: {$in: ids}
+                });
+            })
+            .then((resultado) => {
+
+                flash.sucesso = "true";
+                flash.texto = "Agenda deletada! " +
+                    agenda.length +
+                    " registro(s) arquivado(s) e removido(s) com sucesso.";
+
+                return res.render("admin/branco", {flash});
+            });
+        })
+        .catch((err) => {
+
+            console.log(err);
+
+            flash.sucesso = "false";
+            flash.texto = "Houve um erro ao arquivar/deletar a Agenda Semanal: " +
+                (err.message || err);
+
+            return res.render("admin/branco", {flash});
+        });
+},
     atualizaAgendaOLD3(req, res){//EditaAgenda
         let flash = new Resposta()
         let resultado;

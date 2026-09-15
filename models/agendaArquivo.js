@@ -2,49 +2,13 @@ const mongoose = require('mongoose')
 const fncGeral = require('../functions/fncGeral')
 const ObjectId = mongoose.Types.ObjectId
 const { getModel } = require('../functions/fncGeral');
+const agendaClass = require("../models/agenda")
 
 // Esquema Agenda Arquivo
 // Criado por: Wagner Cintra
 // Criado em: 2022/03/20
 // Editado em: 2025/10/03
-const AgendaArquivoSchema = mongoose.Schema({
-    agenda_data :{ type: Date, required: false },
-    agenda_hora :{ type: String, required: false },
-    agenda_data_semana :{ type: String, required: false },
-    agenda_data_dia :{ type: String, required: false },
-    agenda_beneid :{ type: ObjectId, required: false },
-    agenda_convid :{ type: ObjectId, required: false },
-    agenda_salaid :{ type: ObjectId, required: false },
-    agenda_terapiaid :{ type: ObjectId, required: false },
-    agenda_usuid :{ type: ObjectId, required: false }, //Id do terapeuta
-    agenda_mergeterapeutaid :{type: ObjectId, required: false }, 
-    agenda_mergeterapiaid :{type: ObjectId, required: false }, 
-    agenda_migrado :{ type: Boolean, required: false }, //Status se o agendamento gerou agendamento
-    agenda_datacad :{ type: String, required: false },
-    agenda_dataedi :{ type: String, required: false },
-    agenda_categoria :{ type: String, required: false },
-    agenda_org :{ type: String, required: false },
-    agenda_obs :{ type: String, required: false },
-    agenda_aux :{ type: String, required: false },
-    agenda_temp :{ type: Boolean, required: false },
-    agenda_tempId :{ type: ObjectId, required: false },
-    agenda_tempmotivo :{ type: String, required: false },
-    agenda_extra :{ type: Boolean, required: false},
-    agenda_cobrarextra :{ type: Boolean, required: false},
-    agenda_evolucao :{ type: String, require: false },
-    agenda_copia :{ type: Boolean, require: false }, //Status de copia, para cria gerenciamento anti-copia duplicada
-    agenda_selo :{ type: Boolean, require: false },
-    agenda_dataSelo :{ type: String, require: false },
-    agenda_atrazo :{ type: Boolean, require: false },
-    agenda_rel :{ type: String, require: false }, //{'-':'todos', 'Beneficiario':'apenas_beneficiario', 'Terapeuta':'apenas_Terapeuta', 'Nenhum':'nenhum'}
-    agenda_turnoFalta :{ type: String, require: false },
-    agenda_faltaId :{ type: ObjectId, require: false },
-    agenda_falta :{ type: String, require: false },
-    agenda_usuedi :{ type: String, require: false }, //Usuário adm que alterou
-    agenda_log :{ type: String, require: false }, //Log das alterações
-    agenda_usucad :{ type: String, require: false }
-    
-})
+const AgendaArquivoSchema = agendaClass.AgendaSchema;
 
 // Construtor Agenda Arquivo
 // Criado por: Wagner Cintra

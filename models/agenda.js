@@ -141,8 +141,10 @@ class Agenda{
 
 AgendaSchema.loadClass(Agenda)
 var AgendaModel = getModel("softroute", 'tb_agenda', AgendaSchema)
+var AgendaArquivoModel = getModel("softroute", 'tb_agendaArquivo', AgendaSchema)
 module.exports = {
     AgendaModel,
+    AgendaArquivoModel,
     AgendaSchema,
 
     agendaEditarOLD2: async (req, res) => {
