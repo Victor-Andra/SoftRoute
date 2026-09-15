@@ -968,6 +968,7 @@
 																<th class="sorting" tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1" width="100px;">Data</th>
 																<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Hora</th>
 																<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Tipo</th>
+																<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia Plano</th>
 																<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia</th>
 																<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapeuta</th>
 																<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Beneficiário</th>
@@ -1043,6 +1044,13 @@
 																				{{/compareThis}}
 																			{{/compareThis}}
 																		{{/compareThis}}
+																	</td>
+																	<td class="col-nome-terapiaplano">
+																	{{#each ../terapias}}<!-- Ok -->
+																		{{#ifEqual this._id ../agenda_terapiaid}}
+																			{{terapia_cid}}
+																		{{/ifEqual}}
+																	{{/each}}
 																	</td>
 																	<td class="col-nome-terapia">
 																	{{#each ../terapias}}<!-- Ok -->
@@ -1300,13 +1308,14 @@ $(document).ready(function() {
 							null,                   // 2 - Data
 							null,                   // 3 - Hora
 							null,                   // 4 - Tipo
-							null,                   // 5 - Terapia
-							null,                   // 6 - Terapeuta
-							null,                   // 7 - Beneficiário
-							null,                   // 8 - Evolução
-							null,                   // 9 - Concluiu
-							null,                   // 10 - No Prazo?
-							{ "bSortable": false }  // 11 - Ação
+							null,                   // 6 - Terapiaplano
+							null,                   // 7 - Terapia
+							null,                   // 8 - Terapeuta
+							null,                   // 9 - Beneficiário
+							null,                   // 10 - Evolução
+							null,                   // 11 - Concluiu
+							null,                   // 12 - No Prazo?
+							{ "bSortable": false }  // 13 - Ação
 						],
 						"aaSorting": [],
 						"responsive": true,

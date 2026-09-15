@@ -4,6 +4,7 @@ const ObjectId = mongoose.Types.ObjectId
 const { getModel } = require('../functions/fncGeral');
 const { GuiaSchema } = require('../models/guia');//Isto é um objeto de Guia
 const { GuialoteSchema } = require('../models/guialote');//Isto é um objeto de Guia
+const extra = require('./extra');
 
 // Esquema Agenda
 // Criado por: Wagner Cintra
@@ -277,7 +278,7 @@ agendaEditar: async (req, res) => {
         // 1. Estrutura Multiempresa
         let db = req.cookies['preferredDb'];
         let AgendaModel = getModel(db, 'tb_agenda', AgendaSchema);
-
+        let extra = false;
         // 2. Captura segura dos dados de hora do frontend (com fallback)
         const horaSelect = req.body.agendaHoraSelect || req.body.agendaHora; 
         const horaIni = req.body.agendaHoraIni;
@@ -323,6 +324,9 @@ agendaEditar: async (req, res) => {
         let dataAtual = new Date();
         // O campo hidden no seu form é 'id' ou 'agendaId', usamos fallback
         let agendaId = req.body.id || req.body.agendaId; 
+        if (req.body.agendaExtra == true || req.body.agendaExtra == "true"){
+            extra = true;
+        }
 
         // 7. Atualização no Banco de Dados (Mongoose findByIdAndUpdate)
         const agendaAtualizada = await AgendaModel.findByIdAndUpdate(
@@ -346,6 +350,7 @@ agendaEditar: async (req, res) => {
                 agenda_evolucao: req.body.agendaEvolucao,
                 agenda_log: req.body.agendaLog,
                 agenda_temp : false ,
+                agenda_extra: extra,
                 agenda_usualt: usuarioAtual,
                 agenda_dataalt: dataAtual,
             },
@@ -616,6 +621,7 @@ agendaEditar: async (req, res) => {
         const horaSelect = req.body.agendaHoraSelect || req.body.agendaHora;
         const horaIni = req.body.agendaHoraIni;
         const horaFim = req.body.agendaHoraFim;
+        let extra = false;
 
         // 3. Função auxiliar para adicionar minutos (mantendo seu padrão de 40min)
         function adicionarMinutos(horaString, minutos) {
@@ -676,6 +682,10 @@ agendaEditar: async (req, res) => {
         let usuarioAtual = req.cookies['idUsu'];
         let dataAtual = new Date();
 
+        if (req.body.agendaExtra == true || req.body.agendaExtra == "true"){
+            extra = true;
+        }
+
         // 7. Cadastro do novo registro
         const novaAgenda = new AgendaModel({
             agenda_data: dataAgenda2,
@@ -694,6 +704,8 @@ agendaEditar: async (req, res) => {
             agenda_org: req.body.agendaOrg,
             agenda_obs: req.body.agendaObs,
             agenda_selo: req.body.agendaSelo === 'on' || req.body.agendaSelo === 'true',
+            agenda_extra: extra,
+            agenda_copia: false ,
             agenda_evolucao: req.body.agendaEvolucao,
             agenda_log: req.body.agendaLog,
             agenda_temp : false ,

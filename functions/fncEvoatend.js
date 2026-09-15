@@ -2859,7 +2859,7 @@ async apagarEvolucaoIndevidaevoatend(req, res) {
             res.redirect('/admin/erro');
         }
     },
-    async filtraEvoatendgeral_OLD_ErrSup(req, res) {
+    async filtraEvoatendgeral(req, res) {
         try {
             // ===== CONFIGURAÇÃO =====
             const db = req.cookies['preferredDb'];
@@ -3134,7 +3134,7 @@ async apagarEvolucaoIndevidaevoatend(req, res) {
             res.redirect('/admin/erro');
         }
     },
-  async filtraEvoatendgeral(req, res) {
+    async filtraEvoatendgeral_com_sup(req, res) {
         try {
             // ===== CONFIGURAÇÃO =====
             const db = req.cookies['preferredDb'];
