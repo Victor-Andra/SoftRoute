@@ -984,7 +984,7 @@
 																<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Hora</th>
 																<th class="sorting" tabindex="1" aria-controls="dynamic-table" rowspan="1" colspan="1" width="60px;">Tipo</th>
 																<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia Plano</th>
-																<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia</th>
+																<!--<th class="sorting" tabindex="2" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapia</th>-->
 																<th class="sorting" tabindex="4" aria-controls="dynamic-table" rowspan="1" colspan="1">Terapeuta</th>
 																<th class="sorting" tabindex="3" aria-controls="dynamic-table" rowspan="1" colspan="1">Beneficiário</th>
 																<th class="sorting" tabindex="5" aria-controls="dynamic-table" rowspan="1" colspan="1">Evolução</th>
@@ -1071,19 +1071,21 @@
 																		{{/compareThis}}
 																	</td>
 																	<td class="col-nome-terapiaplano">
-																	{{#each ../terapias}}<!-- Ok -->
+																	{{#each ../terapias}}
 																		{{#ifEqual this._id ../agenda_terapiaid}}
 																			{{terapia_cid}}
 																		{{/ifEqual}}
 																	{{/each}}
 																	</td>
+																	<!--
 																	<td class="col-nome-terapia">
-																	{{#each ../terapias}}<!-- Ok -->
+																	{{#each ../terapias}}
 																		{{#ifEqual this._id ../agenda_terapiaid}}
 																			{{terapia_nome}}
 																		{{/ifEqual}}
 																	{{/each}}
 																	</td>
+																	-->
 																	<td>
 																		{{#each ../terapeutas}}
 																			{{#ifEqual this._id ../agenda_usuid}}
