@@ -9031,6 +9031,7 @@ Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         })
     },
     carregaAgendaF(req,res){
+       
         //this.atualizaValores(req,res);
         let aux = 1;
         let is = false;

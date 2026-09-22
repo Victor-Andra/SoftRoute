@@ -774,7 +774,7 @@ module.exports = {
             res.redirect('/admin/erro');
         });
     },
-        filtraTrat(req, res, resposta) {
+    filtraTrat_ERR(req, res, resposta) {
         let db = req.cookies['preferredDb'];
         let Trat = getModel(db, 'tb_trat', tratClass.TratSchema);
         let Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
@@ -1043,6 +1043,169 @@ module.exports = {
             res.redirect('/admin/erro');
         });
     },
+    filtraTrat(req, res) {
+    let db = req.cookies['preferredDb'];
+    let Trat = getModel(db, 'tb_trat', tratClass.TratSchema);
+    let Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+    const mongoose = require('mongoose'); // Garante que temos acesso ao ObjectId
+
+    let flash = { texto: "", sucesso: "true" };
+    
+    // === 1. CAPTURA DOS PARÂMETROS ===
+    let tipoPessoa = req.body.atendTipoPessoa || "Geral"; 
+    let tipoData = req.body.tipoData || "Ano/Mes";
+    let exibirExcluidos = req.body.exibirExcluidos || "nao";
+    
+    let dataIni = new Date();
+    let dataFim = new Date();
+    
+    let idUsu = req.cookies['idUsu'];
+    let lvlUsu = req.cookies['lvlUsu'];
+    let perfilAtual = req.cookies['lvlUsu'];
+    
+    const perfisAdmin = ['62421801a12aa557219a0fb9', '62421857a12aa557219a0fc1'];
+    const podeVerLixeira = perfisAdmin.includes(perfilAtual);
+    const isAgendaTerapeuta = ['62421903a12aa557219a0fd3', '6242191fa12aa557219a0fd9', '6242190fa12aa557219a0fd6', '624218f5a12aa557219a0fd0'].includes(lvlUsu);
+
+    // === 2. DEFINIÇÃO ROBUSTA DO PERÍODO (Com fallbacks) ===
+    switch (tipoData) {
+        case "Ano":
+            const anoY = parseInt(req.body.anoAtend) || new Date().getFullYear();
+            dataIni.setUTCFullYear(anoY - 1, 0, 1); dataIni.setUTCHours(0,0,0,0);
+            dataFim.setUTCFullYear(anoY + 1, 11, 31); dataFim.setUTCHours(23,59,59,999);
+            break;
+        case "Ano/Mes":
+            const anoM = parseInt(req.body.anoAtend) || new Date().getFullYear();
+            const mesM = parseInt(req.body.mesAtend) || 0;
+            dataIni.setUTCFullYear(anoM, mesM, 1); dataIni.setUTCHours(0,0,0,0);
+            dataFim.setUTCFullYear(anoM, mesM + 1, 0); dataFim.setUTCHours(23,59,59,999);
+            break;
+        case "Semana":
+            const dataS = req.body.dataFinal || new Date().toISOString().split('T')[0];
+            const dS = new Date(dataS + "T00:00:00Z");
+            const dayS = dS.getUTCDay();
+            const diffS = dS.getUTCDate() - dayS + (dayS === 0 ? -6 : 1);
+            dataIni = new Date(dS.setUTCDate(diffS));
+            dataIni.setUTCHours(0,0,0,0);
+            dataFim = new Date(dataIni);
+            dataFim.setUTCDate(dataIni.getUTCDate() + 6);
+            dataFim.setUTCHours(23,59,59,999);
+            break;
+        case "Dia":
+            const dataD = req.body.dataFinal || new Date().toISOString().split('T')[0];
+            dataIni = new Date(dataD + "T00:00:00Z");
+            dataFim = new Date(dataD + "T23:59:59Z");
+            break;
+    }
+
+    // === 3. CONSTRUÇÃO DA QUERY DE FORMA SEGURA (Array de Condições) ===
+    let condicoes = [];
+
+    // Regra 1: Data (Obrigatória para todos)
+    condicoes.push({ trat_tratdata: { $gte: dataIni, $lte: dataFim } });
+
+    // Regra 2: Tipo de Pessoa
+    if (tipoPessoa === "Beneficiario") {
+        condicoes.push({ trat_beneid: req.body.atendBeneficiario });
+        if (isAgendaTerapeuta) {
+            condicoes.push({ trat_terapeutaidpad: new mongoose.Types.ObjectId(idUsu) });
+        }
+    } 
+    else if (tipoPessoa === "Terapeuta") {
+        // ✅ CORREÇÃO PRINCIPAL: Busca explícita e segura nos 3 campos
+        const idTerapeutaFiltro = req.body.atendTerapeuta;
+        condicoes.push({
+            $or: [
+                { trat_terapeutaidpad: idTerapeutaFiltro },
+                { trat_terapeutaidis: idTerapeutaFiltro },
+                { trat_terapeutaidavd: idTerapeutaFiltro }
+            ]
+        });
+    } 
+    else {
+        // Caso "Geral"
+        if (isAgendaTerapeuta) {
+            condicoes.push({ trat_terapeutaidpad: new mongoose.Types.ObjectId(idUsu) });
+        }
+    }
+
+    // Regra 3: Lixeira (Exibir ou Ocultar)
+    if (podeVerLixeira && exibirExcluidos === "sim") {
+        condicoes.push({ trat_lixo: "true" }); // Mostra APENAS os excluídos
+    } else {
+        condicoes.push({ trat_lixo: { $ne: "true" } }); // Oculta excluídos (padrão)
+    }
+
+    // Monta o objeto final de busca do MongoDB
+    let busca = { $and: condicoes };
+
+    // === 4. EXECUTA A BUSCA ===
+    Trat.find(busca).then((trat) => {
+        // Formatação segura das datas de retorno
+        trat.forEach((b) => {
+            const fmtDate = (d) => {
+                if (!d) return "";
+                const date = new Date(d);
+                if (isNaN(date.getTime())) return "Data Inválida";
+                const mes = (date.getMonth() + 1).toString().padStart(2, '0');
+                const dia = date.getUTCDate().toString().padStart(2, '0');
+                return `${date.getFullYear()}-${mes}-${dia}`;
+            };
+            b.datacad = fmtDate(b.trat_datacad);
+            b.tratdata = fmtDate(b.trat_tratdata);
+            b.dataedi = fmtDate(b.trat_dataedi);
+        });
+
+        // Buscas auxiliares em paralelo (mais rápido)
+        Promise.all([
+            Bene.find({ bene_nome: { $not: /\./ } }).sort({ bene_nome: 1 }),
+            Ano.find().sort({ ano_nome: 1 }),
+            Usuario.find({
+                "usuario_status": { $in: ["Ativo", "Inativo"] },
+                $or: [
+                    { "usuario_funcaoid": "6241030bfbcc51f47c720a0b" },
+                    { "usuario_perfilid": { $in: ["6578ab5248bfdf9fe1b2c8d8", "62421903a12aa557219a0fd3"] } }
+                ]
+            }).sort({ usuario_nome: 1 }),
+            Usuario.find().sort({ usuario_nome: 1 })
+        ]).then(([bene, ano, terapeuta, usuarios]) => {
+            
+            const usuarioLogado = usuarios.find(u => u._id.toString() === idUsu);
+            const usuarioNomeLogado = usuarioLogado ? (usuarioLogado.usuario_nomecompleto || usuarioLogado.usuario_nome || 'Usuário') : 'Usuário';
+
+            res.render('area/plano/tratLis', {
+                anos: ano, 
+                trats: trat, 
+                usuarios: usuarios,
+                terapeutas: terapeuta, 
+                benes: bene,
+                perfilAtual: perfilAtual, 
+                flash: flash,
+                usuarioNomeLogado: usuarioNomeLogado,
+                podeVerLixeira: podeVerLixeira,
+                
+                // Persistência dos filtros
+                carregaFiltro: "true",
+                filtroTipo: req.body.tipoData,
+                filtroAno: req.body.anoAtend,
+                filtroMes: req.body.mesAtend,
+                filtroData: req.body.dataFinal ? req.body.dataFinal.split('T')[0] : "",
+                filtroTipoPessoa: req.body.atendTipoPessoa,
+                filtroBeneficiario: req.body.atendBeneficiario,
+                filtroTerapeuta: req.body.atendTerapeuta,
+                filtroExibirExcluidos: exibirExcluidos
+            });
+        }).catch(err => { 
+            console.log("Erro ao buscar dados auxiliares:", err); 
+            req.flash("error_message", "Erro ao carregar dados auxiliares");
+            res.redirect('/admin/erro'); 
+        });
+    }).catch((err) => {
+        console.log('❌ [filtraTrat] ERRO na busca principal:', err);
+        req.flash("error_message", "Houve um erro ao listar os planos!");
+        res.redirect('/admin/erro');
+    });
+},
     carregaTrat(req,res){
         let db = req.cookies['preferredDb'];
         Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)

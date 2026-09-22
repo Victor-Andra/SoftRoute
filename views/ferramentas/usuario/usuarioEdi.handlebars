@@ -8,15 +8,13 @@
 			box-sizing: border-box;
 			font-size: 12px;
 		}
-		/* Quebra de lçinha e palavras quando esta dentro do span */
-		/* Substitua o seletor global por uma classe específica */
-			span.quebra-texto {
-				word-wrap: break-word;
-				word-break: break-word;
-				white-space: normal;
-				display: inline-block;
-				overflow-wrap: break-word;
-			}
+		span.quebra-texto {
+			word-wrap: break-word;
+			word-break: break-word;
+			white-space: normal;
+			display: inline-block;
+			overflow-wrap: break-word;
+		}
 		/* Ajustes do Select2 para combinar com Ace Admin */
 		.select2-container .select2-selection--single {
 			border-color: #ccc !important;
@@ -44,9 +42,8 @@
 		}
 		</style>
 		<script>
-			function carregaBody(){
-    
-				// 🔧 Helper interna: atualiza um campo e, se for select com Chosen, dispara a atualização da UI
+			function carregaBody() {
+				// 🔧 Helper interna: atualiza um campo e, se for select, dispara a atualização da UI
 				function atualizaCampo(idDestino, idOrigem) {
 					const origem = document.getElementById(idOrigem);
 					const destino = document.getElementById(idDestino);
@@ -58,7 +55,6 @@
 					
 					destino.value = origem.value;
 					
-					// ✅ Select2: dispara 'change' para atualizar a UI
 					if (typeof $ !== 'undefined' && $(destino).hasClass('select2')) {
 						setTimeout(() => {
 							$(destino).trigger('change');
@@ -80,48 +76,101 @@
 					const valorFinal = valorBruto ? valorBruto.split(separador)[indice] : '';
 					destino.value = valorFinal;
 					
-					// ✅ Select2: dispara 'change'
 					if (typeof $ !== 'undefined' && $(destino).hasClass('select2')) {
 						setTimeout(() => {
 							$(destino).trigger('change');
 						}, 50);
 					}
 				}
-				
+
 				// 📋 Dados básicos (campos de texto simples)
 				atualizaCampo('usuarioFilhosQt', 'usuFilhosQt');
 				
-				// 📋 Selects simples (com Chosen)
-				atualizaCampo('usuarioFilhos', 'usuFilhos', true);
-				atualizaCampo('usuarioPerfilid', 'usuPerfilId', true);
-				atualizaCampo('usuarioContaTipo', 'usuContaTipo', true);
-				atualizaCampo('usuarioTipoPix', 'usuTipoPix', true);
-				atualizaCampo('usuarioContrato', 'usuContrato', true);
-				atualizaCampo('usuarioEscolaridade', 'usuEscolaridade', true);
-				atualizaCampo('usuarioAba', 'usuAba', true);
-				
-				// 📋 Função (select com Chosen + largura customizada)
-				atualizaCampo('usuarioFuncaoid', 'usuFuncaoId', true);
-				
-				// 📋 Empresa (precisa de split, pois pode vir como lista)
-				atualizaCampoComSplit('usuarioEmpresaid', 'usuempresaids', ',', 0, true);
-				
-				// 📋 UF (select de estados)
-				atualizaCampo('usuarioEnduf', 'usuUFId', true);
-				
-				// 📋 Campos de texto/textarea da escolaridade
+				// 📋 Selects simples
+				atualizaCampo('usuarioFilhos', 'usuFilhos');
+				atualizaCampo('usuarioPerfilid', 'usuPerfilId');
+				atualizaCampo('usuarioContaTipo', 'usuContaTipo');
+				atualizaCampo('usuarioTipoPix', 'usuTipoPix');
+				atualizaCampo('usuarioContrato', 'usuContrato');
+				atualizaCampo('usuarioEscolaridade', 'usuEscolaridade');
+				atualizaCampo('usuarioAba', 'usuAba');
+				atualizaCampo('usuarioFuncaoid', 'usuFuncaoId');
+				atualizaCampo('usuarioEnduf', 'usuUFId');
 				atualizaCampo('usuarioEscolaridadeobs', 'usuEscolaridadeobs');
 				
-				// 📋 Campos hidden que armazenam valores dos checkboxes (graduacao, especializacao, etc)
-				// Estes NÃO são selects, então não precisam de Chosen
+				// 📋 Empresa (precisa de split)
+				atualizaCampoComSplit('usuarioEmpresaid', 'usuempresaids', ',', 0);
+				
+				// 📋 Campos hidden que armazenam valores dos checkboxes
 				atualizaCampo('usuarioGraduacao', 'usuGraduacao');
 				atualizaCampo('usuarioEspecializacao', 'usuEspecializacao');
 				atualizaCampo('usuarioMetodo', 'usuMetodo');
 				atualizaCampo('usuarioMetout', 'usuMetout');
+
+			
 				
-				// ✅ Log de conclusão (útil para debug)
 				console.log('✅ carregaBody: campos populados com sucesso');
 			}
+
+			
+function carregarNomesEspecialidadesNoNovo() {
+
+    const textareaNovo = document.getElementById('NOVO');
+
+    if (!textareaNovo) {
+        console.warn('Campo NOVO não encontrado.');
+        return;
+    }
+
+    const nomes = [];
+
+    // Todos os grupos de checkboxes que possuem nomes para o NOVO
+    const grupos = [
+        'usuarioGraduacaoOp',
+        'usuarioEspecializacaoOp',
+        'usuarioMetodoOp',
+        'usuarioMetoutOp'
+    ];
+
+    grupos.forEach(function(nomeGrupo) {
+
+        const checkboxes = document.querySelectorAll(
+            'input[name="' + nomeGrupo + '"]'
+        );
+
+        checkboxes.forEach(function(checkbox) {
+
+            // IMPORTANTE: somente os marcados
+            if (!checkbox.checked) {
+                return;
+            }
+
+            // O <span class="lbl"> está logo depois do checkbox
+            const spanTexto = checkbox.nextElementSibling;
+
+            if (spanTexto && spanTexto.classList.contains('lbl')) {
+
+                let nome = spanTexto.textContent
+                    .replace(/\u00a0/g, '')
+                    .trim();
+
+                if (nome) {
+                    nomes.push(nome);
+                }
+            }
+        });
+    });
+
+    // Remove nomes duplicados, caso existam
+    const nomesUnicos = [...new Set(nomes)];
+
+    // Preenche o NOVO
+    textareaNovo.value = nomesUnicos.join(';');
+
+    console.log('NOVO preenchido com:', textareaNovo.value);
+}
+
+
 			
 			function carregarImagem() {
 				var preview = document.getElementById('previewImage');
@@ -129,17 +178,14 @@
 
 				if (fileInput.files && fileInput.files[0]) {
 					var reader = new FileReader();
-
 					reader.onload = function (e) {
 						preview.src = e.target.result;
-						document.getElementById('previewCarimbo').style.display = 'block'; // Exibe a div
+						document.getElementById('previewCarimbo').style.display = 'block';
 					};
-
 					reader.readAsDataURL(fileInput.files[0]);
 				}
 			}
 			
-			// Função para preencher os checkboxes ao carregar a página
 			function preencherCheckboxes() {
 				preencherCheckbox('usuarioGraduacaoOp', 'usuarioGraduacao');
 				preencherCheckbox('usuarioEspecializacaoOp', 'usuarioEspecializacao');
@@ -161,32 +207,23 @@
 				});
 			}
 
-			// Adiciona eventos change aos checkboxes
 			function adicionarEventosChange(nomeCheckbox, nomeCampoTexto) {
 				var checkboxes = document.getElementsByName(nomeCheckbox);
-
 				checkboxes.forEach(function(checkbox) {
-				checkbox.addEventListener('change', function() {
-					atualizarCampoTexto(nomeCheckbox, nomeCampoTexto);
-				});
+					checkbox.addEventListener('change', function() {
+						atualizarCampoTexto(nomeCheckbox, nomeCampoTexto);
+					});
 				});
 			}
 
-			// Função para atualizar o valor do input text com base nas seleções
 			function atualizarCampoTexto(nomeCheckbox, nomeCampoTexto) {
 				var checkboxes = document.getElementsByName(nomeCheckbox);
-
-				// Obtém todos os checkboxes marcados
 				var selectedCheckboxes = Array.from(checkboxes).filter(function(checkbox) {
-				return checkbox.checked;
+					return checkbox.checked;
 				});
-
-				// Obtém os valores dos checkboxes marcados
 				var selectedValues = selectedCheckboxes.map(function(checkbox) {
-				return checkbox.value;
+					return checkbox.value;
 				});
-
-				// Atualiza o valor do input text com os valores separados por ';'
 				document.getElementById(nomeCampoTexto).value = selectedValues.join(';');
 			}
 
@@ -199,27 +236,15 @@
 			// Chama a função para preencher os checkboxes ao carregar a página
 			preencherCheckboxes();
 
-			
-
-			function atualizarCamposTexto(nomeCheckbox, nomeCampoTexto) {
-				var checkboxes = document.getElementsByName(nomeCheckbox);
-				var selectedCheckboxes = Array.from(checkboxes).filter(function (checkbox) {
-					return checkbox.checked;
-				});
-				var selectedValues = selectedCheckboxes.map(function (checkbox) {
-					return checkbox.value;
-				});
-				document.getElementById(nomeCampoTexto).value = selectedValues.join(';');
-			}
-
 			function validarFormulario() {
 				var usuarioCarimboInput = document.getElementById("usuarioCarimbo");
 				if (usuarioCarimboInput.files.length === 0) {
 					alert("Selecione uma imagem para o carimbo!");
-					return false; // Impede o envio do formulário
+					return false;
 				}
-				return true; // Permite o envio do formulário
+				return true;
 			}
+
 			function submeterFormulario(){
 				document.getElementById("previewImage").remove();
 				let form = document.getElementById("formUsuarioAdd");
@@ -227,7 +252,7 @@
 			}
 		</script>
 	</head>
-	<body class="no-skin" onload="javascript:controlaNave();carregaBody();preencherCheckboxes();">
+	<body class="no-skin" onload="javascript:controlaNave();carregaBody();preencherCheckboxes();carregarNomesEspecialidadesNoNovo();">
 		<div class="main-container" id="main-container">
 			<div class="main-content">
 				<div class="main-content-inner">
@@ -521,6 +546,7 @@
 																			</div>
 																			{{else}}
 																			{{/each}}
+
 																		</td>
 																	</tr>
 																	<tr hidden>
@@ -533,7 +559,11 @@
 																		<td colspan="4"><label>Outras informações</label></td>
 																	</tr>
 																	<tr>
-																		<td colspan="4"><textarea type="text" name="usuarioEscolaridadeobs" id="usuarioEscolaridadeobs" placeholder="" class="form-control; textarea" style="overflow-wrap: break-word;"></textarea></td>
+																		<td colspan="4">
+																			<textarea type="text" name="usuarioEscolaridadeobs" id="usuarioEscolaridadeobs" placeholder="" class="form-control; textarea" style="overflow-wrap: break-word;"></textarea>
+																			<textarea type="text" name="NOVO" id="NOVO" placeholder="" class="form-control; textarea" style="overflow-wrap: break-word;"></textarea>
+																		</td>
+																		
 																	</tr>
 																	<tr>
 																		<td colspan="4"><label>Terapeuta ABA</label></td>
@@ -1051,8 +1081,7 @@
 				</div>
 			</div><!-- /.main-content -->
 		</div><!-- /.main-container --><!-- basic scripts -->
-		<script>
-		// Aplicar permissão para todos os selecionados
+	<script>
 		function aplicarParaTodos(tipo) {
 			const checkboxes = document.querySelectorAll('.perm-checkbox:checked');
 			if (checkboxes.length === 0) {
@@ -1066,7 +1095,6 @@
 			});
 		}
 
-		// Marcar/desmarcar todos POR EMPRESA
 		document.addEventListener('change', function(e) {
 			if (e.target.classList.contains('check-all')) {
 				const empId = e.target.dataset.empresaId;
@@ -1075,39 +1103,32 @@
 			}
 		});	
 		
-			
-			// Antes: document.querySelector('#permiss form')
-			// Depois:
-			document.getElementById('formPermissoes').addEventListener('submit', function(e) {
-				const selects = this.querySelectorAll('select[name^="permissoes"]');
-				selects.forEach(select => {
-					const name = select.name;
-					const value = select.value;
-					let hidden = this.querySelector(`input[name="${name}"]`);
-					if (!hidden) {
-						hidden = document.createElement('input');
-						hidden.type = 'hidden';
-						hidden.name = name;
-						this.appendChild(hidden);
-					}
-					hidden.value = value;
-				});
-			});
-			$(document).ready(function() {
-				// Função auxiliar para inicializar Select2 sem duplicar
-				
-				// Inicializa na tab ativa ao carregar
-				const activeTab = $('#myTab li.active a').attr('href');
-				if (activeTab) {
-					initSelect2(activeTab + ' .select2');
+		document.getElementById('formPermissoes').addEventListener('submit', function(e) {
+			const selects = this.querySelectorAll('select[name^="permissoes"]');
+			selects.forEach(select => {
+				const name = select.name;
+				const value = select.value;
+				let hidden = this.querySelector(`input[name="${name}"]`);
+				if (!hidden) {
+					hidden = document.createElement('input');
+					hidden.type = 'hidden';
+					hidden.name = name;
+					this.appendChild(hidden);
 				}
-
-				// Ao trocar de tab, inicializa nos novos selects
-				$('#myTab a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-					const targetTab = $(e.target).attr('href');
-					initSelect2(targetTab + ' .select2');
-				});
+				hidden.value = value;
 			});
-			</script>
+		});
+
+		$(document).ready(function() {
+			const activeTab = $('#myTab li.active a').attr('href');
+			if (activeTab) {
+				initSelect2(activeTab + ' .select2');
+			}
+			$('#myTab a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+				const targetTab = $(e.target).attr('href');
+				initSelect2(targetTab + ' .select2');
+			});
+		});
+		</script>
 	</body>
 </html>

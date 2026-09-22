@@ -432,10 +432,15 @@ function trocaFilpessoa() {
 }
 
 function carregaBody() {
-    // ETAPA 1: Definir os valores crus nos inputs (Baseado no filtro salvo ou no padrão)
+    // ETAPA 1: Definir os valores crus nos inputs
     if (document.getElementById("carregaFiltro").value == "true") {
         document.getElementById("tipoData").value = document.getElementById("tipoDataFil").value || "Ano/Mes";
         document.getElementById("atendTipoPessoa").value = document.getElementById("tipoPessoaFil").value || "Geral";
+
+        // NOVO: Carregar valor do filtro de excluídos
+        if (document.getElementById("exibirExcluidos")) {
+            document.getElementById("exibirExcluidos").value = document.getElementById("exibirExcluidosFil").value || "nao";
+        }
 
         if (document.getElementById("tipoData").value == "Ano/Mes") {
             document.getElementById("anoAtend").value = document.getElementById("anoAtendFil").value || "";
@@ -454,15 +459,17 @@ function carregaBody() {
         // Padrão universal na primeira carga
         document.getElementById("tipoData").value = "Ano/Mes";
         document.getElementById("atendTipoPessoa").value = "Geral";
+        if (document.getElementById("exibirExcluidos")) {
+            document.getElementById("exibirExcluidos").value = "nao";
+        }
     }
 
-    // ETAPA 2: Aplicar a lógica de mostrar/ocultar DIVs baseado nos valores definidos acima
+    // ETAPA 2: Aplicar a lógica de mostrar/ocultar DIVs
     trocaFiltroData();
     trocaFilpessoa();
     formataData();
 
-    // ETAPA 3: INICIALIZAR O SELECT2 *DEPOIS* de tudo estar definido.
-    // Isso faz o Select2 ler o atributo 'selected' correto do HTML e desenhar a UI certa.
+    // ETAPA 3: INICIALIZAR O SELECT2 *DEPOIS* de tudo estar definido
     if (typeof $.fn.select2 === 'function') {
         $('.select, .select2').select2({
             placeholder: "Escolha...",
@@ -470,18 +477,10 @@ function carregaBody() {
             width: 'resolve'
         });
 
-        // ETAPA 4: Vincular os eventos de change do Select2 para garantir reatividade
-        $('#tipoData').on('change', function() {
-            trocaFiltroData();
-            formataData();
-        });
-
-        $('#atendTipoPessoa').on('change', function() {
-            trocaFilpessoa();
-        });
+        $('#tipoData').on('change', function() { trocaFiltroData(); formataData(); });
+        $('#atendTipoPessoa').on('change', function() { trocaFilpessoa(); });
     }
 
-    // Função de permissão original
     ocultaDelete(); 
 }
 
@@ -571,6 +570,7 @@ function carregaBody() {
 						<input id="tipoPessoaFil" value="{{filtroTipoPessoa}}" />
 						<input id="atendBeneficiarioFil" value="{{filtroBeneficiario}}" />
 						<input id="atendTerapeutaFil" value="{{filtroTerapeuta}}" />
+						  <input id="exibirExcluidosFil" value="{{filtroExibirExcluidos}}" />
 					</div>
 					
 					{{#compareString flash.sucesso "true"}}
@@ -679,6 +679,16 @@ function carregaBody() {
                 {{/each}}
             </select>
         </div>
+         <!-- === NOVO: EXIBIR EXCLUÍDOS (Só aparece para perfis autorizados) === -->
+        {{#if podeVerLixeira}}
+        <div class="form-group">
+            <label>Exibir Excluídos</label>
+            <select name="exibirExcluidos" id="exibirExcluidos" class="form-control select" data-placeholder="Não">
+                <option value="nao" {{#ifEqual filtroExibirExcluidos "nao"}}selected{{/ifEqual}}>Não</option>
+                <option value="sim" {{#ifEqual filtroExibirExcluidos "sim"}}selected{{/ifEqual}}>Sim</option>
+            </select>
+        </div>
+        {{/if}}
         
         <!-- Botão Pesquisar -->
         <button name="acaoPesquisar" id="acaoPesquisar" type="submit" class="btn-pesquisar">

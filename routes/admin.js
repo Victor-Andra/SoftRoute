@@ -3136,6 +3136,10 @@ router.get('/atendimento/atendreltera/gestao/relterapiaconvfecdet', fncGeral.IsA
 router.get('/atendimento/atendreltera/gestao/relfaltasbene', fncGeral.IsAuthenticated, (req, res) => {
     fncAtend.relfaltasbene(req, res)
 });
+//Gestão - Relatório de Faltas Por Beneficiário e Indice de Prejuízo no Tratamento
+router.get('/atendimento/atendreltera/gestao/relfaltasbenecval', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.relfaltasbenecval(req, res)
+});
 
 //Relatório Calendario Fixo para Auxilio de Fechamento
 router.get('/agenda/calendar/listaCalendarioMensal', fncGeral.IsAuthenticated,(req,res) =>{

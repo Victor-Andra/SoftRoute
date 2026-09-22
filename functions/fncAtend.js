@@ -19473,6 +19473,383 @@ console.log("\n📊 CONSOLIDADO GERAL:", totais);
             return res.status(500).send("Erro ao gerar relatório de faltas.");
         }
     },
+   
+    relfaltasbenecval: async (req, res) => {
+    try {
+        console.log("\n======================");
+        console.log("🔍 INICIANDO relfaltasbene (UPGRADE COM VALORES FINANCEIROS)");
+        console.log("======================");
+
+        const db = req.cookies['preferredDb'];
+        if (!db) return res.status(400).send("Banco de dados não selecionado.");
+        console.log("📌 Banco selecionado:", db);
+
+        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+        const Bene  = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Conv  = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Sala = getModel(db, 'tb_sala', salaClass.SalaSchema);
+        const Usuario = getModel(db, 'tb_usuario', usuarioClass.UsuarioSchema);
+
+        // ------------------------ DATAS E FILTROS ------------------------
+        const dataIniStr = req.query.dataIni || req.body.dataIni;
+        const dataFimStr = req.query.dataFim || req.body.dataFim;
+        const beneIdSelecionado = req.query.beneId || '';
+
+        console.log("📅 Datas recebidas:", dataIniStr, "→", dataFimStr);
+        console.log("👤 Beneficiário selecionado:", beneIdSelecionado || "Nenhum (Todos)");
+
+        const mostrarParam = req.query.mostrar || 'geral';
+        const mostrarArr = mostrarParam.split(',').map(s => s.trim());
+        const mostrarGeral = mostrarArr.includes('geral');
+        const mostrarClinica = mostrarArr.includes('clinica');
+        const mostrarExternos = mostrarArr.includes('externos');
+        const filtrarBene = beneIdSelecionado !== '';
+
+        console.log("🎛️ Containers a exibir:", { mostrarGeral, mostrarClinica, mostrarExternos, filtrarBene });
+
+        const todosBenes = await Bene.find({}, 'bene_nome').sort({ bene_nome: 1 }).lean();
+
+        if (!dataIniStr || !dataFimStr) {
+            return res.render("atendimento/atendreltera/gestao/relfaltasbenecval", {
+                relsGeral: [], totaisGeral: {},
+                relsClinica: [], totaisClinica: {},
+                relsExternos: [], totaisExternos: {},
+                periodoDe: '', periodoAte: '',
+                pesquisa: { dataIni: '', dataFim: '' },
+                mostrarGeral, mostrarClinica, mostrarExternos,
+                filtrarBene, beneIdSelecionado, todosBenes
+            });
+        }
+
+        const dataIni = new Date(dataIniStr);
+        const dataFim = new Date(dataFimStr);
+        dataFim.setUTCHours(23, 59, 59, 999);
+
+        // ---------------------- BUSCA ATEND ----------------------
+        console.log("\n📥 Buscando atendimentos...");
+        const atendimentos = await Atend.find(
+            {
+                atend_atenddata: { $gte: dataIni, $lte: dataFim },
+                atend_beneid: { $ne: null },
+                atend_convid: { $ne: null }
+            },
+            'atend_beneid atend_convid atend_categoria atend_atenddata atend_atendhora atend_terapia atend_terapeuta atend_terapiaid atend_terapeutaid atend_salaid atend_sala atend_valorcre atend_valordeb atend_fixovalorcre atend_fixovalordeb atend_mergevalorcre atend_mergevalordeb atend_org atend_fixo'
+        ).lean();
+
+        console.log("   → Encontrados:", atendimentos.length);
+
+        if (atendimentos.length === 0) {
+            return res.render("atendimento/atendreltera/gestao/relfaltasbenecval", {
+                relsGeral: [], totaisGeral: {},
+                relsClinica: [], totaisClinica: {},
+                relsExternos: [], totaisExternos: {},
+                periodoDe: dataIniStr.split("-").reverse().join("/"),
+                periodoAte: dataFimStr.split("-").reverse().join("/"),
+                pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr },
+                mostrarGeral, mostrarClinica, mostrarExternos,
+                filtrarBene, beneIdSelecionado, todosBenes
+            });
+        }
+
+        // ---------------------- BUSCAR NOMES ----------------------
+        const beneIds = [...new Set(atendimentos.map(a => String(a.atend_beneid)))];
+        const convIds = [...new Set(atendimentos.map(a => String(a.atend_convid)))];
+        const terapiaIds = [...new Set(atendimentos.map(a => String(a.atend_terapiaid)))];
+        const terapeutaIds = [...new Set(atendimentos.filter(a => a.atend_terapeutaid !== undefined && a.atend_terapeutaid !== null).map(a => String(a.atend_terapeutaid)))];
+        const salaIds = [...new Set(atendimentos.filter(a => a.atend_salaid !== undefined && a.atend_salaid !== null).map(a => String(a.atend_salaid)))];
+
+        console.log("\n📥 Buscando dados auxiliares...");
+        const [benes, convs, terapias, terapeutas, salas] = await Promise.all([
+            Bene.find({ _id: { $in: beneIds } }, 'bene_nome').lean(),
+            Conv.find({ _id: { $in: convIds } }, 'conv_nome').lean(),
+            Terapia.find({ _id: { $in: terapiaIds } }, 'terapia_nomecid').lean(),
+            Usuario.find({ _id: { $in: terapeutaIds } }, 'usuario_nome usuario_nomecompleto').lean(),
+            Sala.find({ _id: { $in: salaIds } }, 'sala_nome').lean()
+        ]);
+
+        const beneMap = Object.fromEntries(benes.map(b => [String(b._id), b.bene_nome]));
+        const convMap = Object.fromEntries(convs.map(c => [String(c._id), c.conv_nome]));
+        const terapiaMap = Object.fromEntries(terapias.map(t => [String(t._id), t.terapia_nomecid]));
+        const terapeutaMap = Object.fromEntries(terapeutas.map(t => [String(t._id), t.usuario_nomecompleto || t.usuario_nome]));
+        const salaMap = Object.fromEntries(salas.map(s => [String(s._id), s.sala_nome]));
+
+        const SALAS_EXTERNAS = ['Sala Escola', 'Casa', 'Sala On-line'];
+
+        // ---------------------- FUNÇÕES AUXILIARES ----------------------
+        
+        // ✅ Converte valor monetário de forma segura com log de erro
+        const parseValorSeguro = (valor, atendId) => {
+            if (valor === null || valor === undefined || valor === '') return 0;
+            
+            try {
+                // Remove pontos de milhar, troca vírgula por ponto
+                const limpo = String(valor).replace(/\./g, '').replace(',', '.').trim();
+                const num = parseFloat(limpo);
+                
+                if (isNaN(num)) {
+                    console.warn(`⚠️ Erro de conversão de valor. Attend ID: ${atendId}, Valor bruto: "${valor}"`);
+                    return 0;
+                }
+                
+                return num;
+            } catch (err) {
+                console.warn(`⚠️ Erro de conversão de valor. Attend ID: ${atendId}, Valor bruto: "${valor}", Erro: ${err.message}`);
+                return 0;
+            }
+        };
+
+        // ✅ Formata número para string monetária brasileira
+        const formatarValor = (num) => {
+            return num.toLocaleString('pt-BR', { 
+                minimumFractionDigits: 2, 
+                maximumFractionDigits: 2 
+            });
+        };
+
+        // ✅ Determina quais valores usar baseado em atend_org (lógica dos 4 cenários)
+        const getValoresAtendimento = (at) => {
+            const origem = (at.atend_org || '').trim();
+            const ehSubstitutoFixo = 
+                (at.atend_fixo === "true") || 
+                (at.atend_categoria === "SubstitutoFixo");
+            const categoria = at.atend_categoria;
+
+            if (origem === "Padrão") {
+                return {
+                    cred: at.atend_valorcre || "0,00",
+                    deb: at.atend_valordeb || "0,00"
+                };
+            } else if (origem === "Administrativo") {
+                if (ehSubstitutoFixo) {
+                    return {
+                        cred: at.atend_fixovalorcre || "0,00",
+                        deb: at.atend_valordeb || "0,00"
+                    };
+                } else if (categoria === "Substituição") {
+                    return {
+                        cred: at.atend_mergevalorcre || "0,00",
+                        deb: at.atend_mergevalordeb || "0,00"
+                    };
+                } else {
+                    return {
+                        cred: at.atend_valorcre || "0,00",
+                        deb: at.atend_valordeb || "0,00"
+                    };
+                }
+            } else {
+                return {
+                    cred: at.atend_valorcre || "0,00",
+                    deb: at.atend_valordeb || "0,00"
+                };
+            }
+        };
+
+        // ---------------------- FUNÇÃO AUXILIAR DE AGRUPAMENTO ----------------------
+        const agruparAtendimentos = (listaAtendimentos, filtroTipo, beneIdFiltro = null) => {
+            const mapa = {};
+
+            for (const at of listaAtendimentos) {
+                const beneId = String(at.atend_beneid);
+                
+                if (beneIdFiltro && beneId !== beneIdFiltro) {
+                    continue;
+                }
+
+                const convId = String(at.atend_convid);
+                const terapiaId = String(at.atend_terapiaid);
+                const terapeutaId = String(at.atend_terapeutaid);
+                const salaId = String(at.atend_salaid);
+                const nomeSala = salaMap[salaId] || at.atend_sala || '';
+
+                if (filtroTipo === 'clinica' && SALAS_EXTERNAS.includes(nomeSala)) continue;
+                if (filtroTipo === 'externos' && !SALAS_EXTERNAS.includes(nomeSala)) continue;
+
+                if (!mapa[beneId]) {
+                    mapa[beneId] = {
+                        bene_id: beneId,
+                        bene_nome: beneMap[beneId] || "—",
+                        convenio: convMap[convId] || "—",
+                        // Quantidades
+                        total_registros: 0,
+                        qt_falta: 0,
+                        qt_falta_abs: 0,
+                        qt_falta_jus: 0,
+                        qt_feriado: 0,
+                        // Valores (em centavos para precisão)
+                        vlr_registros_cred: 0,
+                        vlr_registros_deb: 0,
+                        vlr_falta_cred: 0,
+                        vlr_falta_deb: 0,
+                        vlr_falta_jus_cred: 0,
+                        vlr_falta_jus_deb: 0,
+                        vlr_falta_abs_cred: 0,
+                        vlr_falta_abs_deb: 0,
+                        vlr_feriado_cred: 0,
+                        vlr_feriado_deb: 0,
+                        detalhes: []
+                    };
+                }
+
+                const item = mapa[beneId];
+                item.total_registros++;
+
+                // ✅ Pega os valores corretos baseado no cenário
+                const valores = getValoresAtendimento(at);
+                const vCred = parseValorSeguro(valores.cred, at._id);
+                const vDeb = parseValorSeguro(valores.deb, at._id);
+
+                // ✅ Trata categoria nula/vazia como "Sem Evento" (Memória 5)
+                const categoriaRaw = at.atend_categoria || "Sem Evento";
+                const categoriaFormatada = categoriaRaw.trim() === "" ? "Sem Evento" : categoriaRaw;
+
+                // Acumula valores e quantidades por categoria
+                item.vlr_registros_cred += vCred;
+                item.vlr_registros_deb += vDeb;
+
+                switch (categoriaFormatada) {
+                    case "Falta": 
+                        item.qt_falta++; 
+                        item.vlr_falta_cred += vCred;
+                        item.vlr_falta_deb += vDeb;
+                        break;
+                    case "Falta Absoluta": 
+                        item.qt_falta_abs++; 
+                        item.vlr_falta_abs_cred += vCred;
+                        item.vlr_falta_abs_deb += vDeb;
+                        break;
+                    case "Falta Justificada": 
+                        item.qt_falta_jus++; 
+                        item.vlr_falta_jus_cred += vCred;
+                        item.vlr_falta_jus_deb += vDeb;
+                        break;
+                    case "Feriado": 
+                        item.qt_feriado++; 
+                        item.vlr_feriado_cred += vCred;
+                        item.vlr_feriado_deb += vDeb;
+                        break;
+                }
+
+                const dataBr = at.atend_atenddata
+                    ? new Date(at.atend_atenddata).toISOString().slice(0, 10).split("-").reverse().join("/")
+                    : "—";
+
+                item.detalhes.push({
+                    data: dataBr,
+                    hora: at.atend_atendhora || "—",
+                    sala: nomeSala || "—",
+                    terapia: terapiaMap[terapiaId] || at.atend_terapia || "—",
+                    terapeuta: terapeutaMap[terapeutaId] || "—",
+                    categoria: categoriaFormatada,
+                    valorcred: formatarValor(vCred),
+                    valordeb: formatarValor(vDeb)
+                });
+            }
+            return mapa;
+        };
+
+        const calcularResultados = (mapa) => {
+            let rels = Object.values(mapa).map(r => {
+                const totalFaltas = r.qt_falta + r.qt_falta_abs + r.qt_falta_jus;
+                const indice = r.total_registros > 0
+                    ? parseFloat((totalFaltas / r.total_registros).toFixed(4))
+                    : 0;
+
+                return { 
+                    ...r, 
+                    indice_faltas: (indice * 100).toFixed(2),
+                    // Formata todos os valores para string monetária
+                    vlr_registros_cred: formatarValor(r.vlr_registros_cred),
+                    vlr_registros_deb: formatarValor(r.vlr_registros_deb),
+                    vlr_falta_cred: formatarValor(r.vlr_falta_cred),
+                    vlr_falta_deb: formatarValor(r.vlr_falta_deb),
+                    vlr_falta_jus_cred: formatarValor(r.vlr_falta_jus_cred),
+                    vlr_falta_jus_deb: formatarValor(r.vlr_falta_jus_deb),
+                    vlr_falta_abs_cred: formatarValor(r.vlr_falta_abs_cred),
+                    vlr_falta_abs_deb: formatarValor(r.vlr_falta_abs_deb),
+                    vlr_feriado_cred: formatarValor(r.vlr_feriado_cred),
+                    vlr_feriado_deb: formatarValor(r.vlr_feriado_deb)
+                };
+            });
+
+            rels.sort((a, b) => a.bene_nome.localeCompare(b.bene_nome, "pt", { sensitivity: "base" }));
+
+            const totais = rels.reduce((acc, r) => {
+                acc.total_registros += r.total_registros;
+                acc.qt_falta += r.qt_falta;
+                acc.qt_falta_abs += r.qt_falta_abs;
+                acc.qt_falta_jus += r.qt_falta_jus;
+                acc.qt_feriado += r.qt_feriado;
+                
+                // Soma os valores (já estão em float, não em string)
+                acc.vlr_registros_cred += parseFloat(r.vlr_registros_cred.replace(',', '.'));
+                acc.vlr_registros_deb += parseFloat(r.vlr_registros_deb.replace(',', '.'));
+                acc.vlr_falta_cred += parseFloat(r.vlr_falta_cred.replace(',', '.'));
+                acc.vlr_falta_deb += parseFloat(r.vlr_falta_deb.replace(',', '.'));
+                acc.vlr_falta_jus_cred += parseFloat(r.vlr_falta_jus_cred.replace(',', '.'));
+                acc.vlr_falta_jus_deb += parseFloat(r.vlr_falta_jus_deb.replace(',', '.'));
+                acc.vlr_falta_abs_cred += parseFloat(r.vlr_falta_abs_cred.replace(',', '.'));
+                acc.vlr_falta_abs_deb += parseFloat(r.vlr_falta_abs_deb.replace(',', '.'));
+                acc.vlr_feriado_cred += parseFloat(r.vlr_feriado_cred.replace(',', '.'));
+                acc.vlr_feriado_deb += parseFloat(r.vlr_feriado_deb.replace(',', '.'));
+                
+                return acc;
+            }, { 
+                total_registros: 0, qt_falta: 0, qt_falta_abs: 0, qt_falta_jus: 0, qt_feriado: 0,
+                vlr_registros_cred: 0, vlr_registros_deb: 0,
+                vlr_falta_cred: 0, vlr_falta_deb: 0,
+                vlr_falta_jus_cred: 0, vlr_falta_jus_deb: 0,
+                vlr_falta_abs_cred: 0, vlr_falta_abs_deb: 0,
+                vlr_feriado_cred: 0, vlr_feriado_deb: 0
+            });
+
+            const totalFaltasGeral = totais.qt_falta + totais.qt_falta_abs + totais.qt_falta_jus;
+            totais.indice_faltas = totais.total_registros > 0
+                ? ((totalFaltasGeral / totais.total_registros) * 100).toFixed(2)
+                : "0.00";
+
+            // Formata os totais para string monetária
+            totais.vlr_registros_cred = formatarValor(totais.vlr_registros_cred);
+            totais.vlr_registros_deb = formatarValor(totais.vlr_registros_deb);
+            totais.vlr_falta_cred = formatarValor(totais.vlr_falta_cred);
+            totais.vlr_falta_deb = formatarValor(totais.vlr_falta_deb);
+            totais.vlr_falta_jus_cred = formatarValor(totais.vlr_falta_jus_cred);
+            totais.vlr_falta_jus_deb = formatarValor(totais.vlr_falta_jus_deb);
+            totais.vlr_falta_abs_cred = formatarValor(totais.vlr_falta_abs_cred);
+            totais.vlr_falta_abs_deb = formatarValor(totais.vlr_falta_abs_deb);
+            totais.vlr_feriado_cred = formatarValor(totais.vlr_feriado_cred);
+            totais.vlr_feriado_deb = formatarValor(totais.vlr_feriado_deb);
+
+            return { rels, totais };
+        };
+
+        console.log("\n📊 AGRUPANDO registros para os 3 containers...");
+
+        const mapaGeral = agruparAtendimentos(atendimentos, 'geral', beneIdSelecionado);
+        const { rels: relsGeral, totais: totaisGeral } = calcularResultados(mapaGeral);
+
+        const mapaClinica = agruparAtendimentos(atendimentos, 'clinica', beneIdSelecionado);
+        const { rels: relsClinica, totais: totaisClinica } = calcularResultados(mapaClinica);
+
+        const mapaExternos = agruparAtendimentos(atendimentos, 'externos', beneIdSelecionado);
+        const { rels: relsExternos, totais: totaisExternos } = calcularResultados(mapaExternos);
+
+        return res.render("atendimento/atendreltera/gestao/relfaltasbenecval", {
+            relsGeral, totaisGeral,
+            relsClinica, totaisClinica,
+            relsExternos, totaisExternos,
+            periodoDe: dataIniStr.split("-").reverse().join("/"),
+            periodoAte: dataFimStr.split("-").reverse().join("/"),
+            pesquisa: { dataIni: dataIniStr, dataFim: dataFimStr },
+            mostrarGeral, mostrarClinica, mostrarExternos,
+            filtrarBene, beneIdSelecionado, todosBenes
+        });
+
+    } catch (err) {
+        console.error("💥 Erro em relfaltasbenecval:", err);
+        return res.status(500).send("Erro ao gerar relatório de faltas.");
+    }
+},
     relAtendteraconsFiltro_FuncOLD(req,res){
         let db = req.cookies['preferredDb'];
         Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
