@@ -1155,7 +1155,7 @@ module.exports = {
             const [benes, convs, terapeutas, terapias, anos, salas, usuarios] = await Promise.all([
                 Bene.find().lean(),
                 Conv.find().lean(),
-                Usuario.find({ usuario_funcaoid: "6241030bfbcc51f47c720a0b" }).lean(),
+                Usuario.find().lean(),
                 Terapia.find().lean(),
                 Ano.find().sort({ ano_nome: 1 }).lean(),
                 Sala.find().lean(),

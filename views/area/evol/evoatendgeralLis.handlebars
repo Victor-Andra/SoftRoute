@@ -903,6 +903,15 @@
 											</label>
 
 											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+												<input name="filtroTipo" value="Extra" type="checkbox" class="ace filtro-tipo input-lg" checked>
+												<span class="lbl bigger-120"> Extra</span>
+											</label>
+											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+												<input name="filtroTipo" value="Apoio" type="checkbox" class="ace filtro-tipo input-lg" checked>
+												<span class="lbl bigger-120"> Apoio</span>
+											</label>
+
+											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
 												<input name="filtroTipo" value="Supervisao" type="checkbox" class="ace filtro-tipo input-lg" checked>
 												<span class="lbl bigger-120"> Supervisão</span>
 											</label>
@@ -1042,22 +1051,25 @@
 																								
 																								{{else}}
 																									{{#compareThis agenda_categoria "Extra"}}
-																										<span name="ageCateg" id="ageCateg" class="label label-green arrowed">Extra</span>
-																									
+																										<span name="ageCateg" id="ageCateg" class="label label-purple arrowed">Extra</span>
 																									{{else}}
-																										{{#compareThis agenda_categoria "Nenhuma Observação"}}
-																											<span name="ageCateg" id="ageCateg" class="label label-success arrowed">Atendido</span>
-																										
+																										{{#compareThis agenda_categoria "Extra"}}
+																											<span name="ageCateg" id="ageCateg" class="label label-purple arrowed">Extra</span>
 																										{{else}}
-																											{{#compareThis agenda_categoria "Supervisão"}}
-																												<span name="ageCateg" id="ageCateg" class="label label-pink arrowed">{{agenda_categoria}}</span>
+																											{{#compareThis agenda_categoria "Nenhuma Observação"}}
+																												<span name="ageCateg" id="ageCateg" class="label label-success arrowed">Atendido</span>
 																											
 																											{{else}}
-																												{{#compareThis agenda_categoria "Supervisor"}}
+																												{{#compareThis agenda_categoria "Supervisão"}}
 																													<span name="ageCateg" id="ageCateg" class="label label-pink arrowed">{{agenda_categoria}}</span>
 																												
 																												{{else}}
-																													<span name="verselo" id="verselo" class="label label-info arrowed-in">{{agenda_categoria}}</span>
+																													{{#compareThis agenda_categoria "Supervisor"}}
+																														<span name="ageCateg" id="ageCateg" class="label label-pink arrowed">{{agenda_categoria}}</span>
+																													
+																													{{else}}
+																														<span name="verselo" id="verselo" class="label label-info arrowed-in">{{agenda_categoria}}</span>
+																													{{/compareThis}}
 																												{{/compareThis}}
 																											{{/compareThis}}
 																										{{/compareThis}}
@@ -1206,6 +1218,14 @@ $(document).ready(function() {
             }
             if (textoCategoria.includes('glosa')) {
                 categorias.push('Glosa');
+            }
+			// ✅ ADICIONE ESTAS 3 LINHAS AQUI:
+            if (textoCategoria.includes('extra')) {
+                categorias.push('Extra');
+            }
+			// ✅ ADICIONE ESTAS 3 LINHAS AQUI:
+            if (textoCategoria.includes('apoio')) {
+                categorias.push('Apoio');
             }
 			if (textoCategoria.includes('supervisao')) {
 				categorias.push('Supervisão');

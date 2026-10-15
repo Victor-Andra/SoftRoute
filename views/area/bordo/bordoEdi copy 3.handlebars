@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>Visualizar Diário de Bordo</title>
+		<style>
+			 /* ============================================
+      SELECT2 - ESTILOS GERAIS
+      ============================================ */
+    .select2-container { min-width: 120px !important; }
+    .select2-container--default .select2-selection--single {
+      height: 30px !important; border: 1px solid #ced4da !important;
+      border-radius: 4px !important; background: white !important;
+      display: flex !important; align-items: center !important;
+      padding: 0 8px !important; font-size: 12px !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+      height: 28px !important; right: 5px !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+      line-height: 28px !important; padding-left: 0 !important; color: #333 !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__placeholder {
+      color: #999 !important;
+    }
+    .select2-dropdown {
+      border: 1px solid #ced4da !important; border-radius: 4px !important;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+    }
+    .select2-container--default .select2-search--dropdown .select2-search__field {
+      border: 1px solid #ced4da !important; border-radius: 4px !important;
+      padding: 4px 8px !important; font-size: 12px !important; margin: 4px !important;
+    }
+    .select2-container--default .select2-results__option {
+      padding: 6px 10px !important; font-size: 12px !important;
+    }
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+      background-color: #2196f3 !important; color: white !important;
+    }
+    .select2-container--default.select2-container--focus .select2-selection--single {
+      border-color: #2196f3 !important;
+      box-shadow: 0 0 0 2px rgba(33,150,243,0.2) !important;
+    }
+
+    /* ============================================
+      SELECT2 NA BARRA DE PESQUISA
+      ============================================ */
+    .toolbar-pesquisa .select2-container { width: 140px !important; }
+    .toolbar-pesquisa .select2-container .select2-selection--single {
+      width: 138px !important;
+    }
+    .toolbar-pesquisa .select2-dropdown { min-width: 140px !important; }
+
+    /* ============================================
+      SELECT2 BENEFICIÁRIO, TERAPEUTA E CONVÊNIO - LARGURA MAIOR
+      ============================================ */
+    #divAtendBeneficiario .select2-container,
+    #divAtendTerapeuta .select2-container,
+    #divAtendConv .select2-container {
+      width: 280px !important;
+    }
+    #divAtendBeneficiario .select2-selection--single,
+    #divAtendTerapeuta .select2-selection--single,
+    #divAtendConv .select2-selection--single {
+      width: 278px !important;
+    }
+    #divAtendBeneficiario .select2-dropdown,
+    #divAtendTerapeuta .select2-dropdown,
+    #divAtendConv .select2-dropdown {
+      min-width: 280px !important;
+    }
+		</style>
+<script>
+    // Função à prova de falhas: manipula a string diretamente, ignorando fuso horário e objeto Date
+    function formataDataSegura(valorData) {
+        if (!valorData) return "";
+        
+        // 1. Se já estiver no formato brasileiro (DD/MM/YYYY), mantém
+        if (valorData.includes('/')) {
+            return valorData;
+        }
+        
+        // 2. Se for formato ISO (ex: 2026-09-01T00:00:00.000Z) ou Date (2026-09-01)
+        // Pegamos apenas a parte antes do "T" (ou a string inteira se não tiver "T")
+        const parteData = valorData.split('T')[0]; 
+        
+        // Separamos por hífen: ["2026", "09", "01"]
+        const partes = parteData.split('-'); 
+        
+        if (partes.length === 3) {
+            const ano = partes[0];
+            const mes = partes[1];
+            const dia = partes[2];
+            
+            // Retorna no formato brasileiro DD/MM/YYYY
+            return `${dia}/${mes}/${ano}`;
+        }
+        
+        return valorData; // Fallback caso o formato seja desconhecido
+    }
+
+    function atualizaData() {
+        const dataInput = document.getElementById("bordoDataativ").value;
+        if (!dataInput) return;
+        
+        // Se precisar converter de volta para YYYY-MM-DD para o backend, fazemos via string
+        const partes = dataInput.split('/');
+        if (partes.length === 3) {
+            const dia = partes[0];
+            const mes = partes[1];
+            const ano = partes[2];
+            const dataISO = `${ano}-${mes}-${dia}T00:00:00.000Z`;
+            console.log("Data convertida para envio (ISO):", dataISO);
+        }
+    }
+
+    function carregaBody() {
+        // 1️⃣ TRATATIVA DA DATA (Manipulação pura de string, sem fuso horário)
+        const dataEdi = document.getElementById("bordoDataativEdi")?.value;
+        
+        // DEBUG: Descomente a linha abaixo e aperte F12 no navegador para ver exatamente o que o banco está enviando
+        // console.log("Valor cru vindo do banco para a data:", dataEdi);
+        
+        if (dataEdi) {
+            const dataFormatada = formataDataSegura(dataEdi);
+            if (dataFormatada) {
+                document.getElementById("bordoDataativ").value = dataFormatada;
+            }
+        }
+
+        // 2️⃣ Mapeamento de campos (MANTIDO INTACTO)
+        const mapaCampos = [
+            ["bordoBeneid", "bordoBeneidEdi"], ["bordoAtendem", "bordoAtendemEdi"],
+            ["bordoOndefoi", "bordoOndefoiEdi"], ["bordoEscolaid", "bordoEscolaidEdi"],
+            ["bordoEscolanome", "bordoEscolanomeEdi"], ["bordoFrequencia", "bordofrequenciaEdi"],
+            ["bordoSeguerotina", "bordoSeguerotinaEdi"], ["bordoEstereotipas", "bordoEstereotipasEdi"],
+            ["bordoFoco", "bordoFocoEdi"], ["bordoAutocuidado", "bordoAutocuidadoEdi"],
+            ["bordoAliindepende", "bordoAliindependeEdi"], ["bordoEscolalia", "bordoEscolaliaEdi"],
+            ["bordoParticipa", "bordoParticipaEdi"], ["bordoSegue", "bordoSegueEdi"],
+            ["bordoRepertorio", "bordoRepertorioEdi"], ["bordoDesorganiza", "bordoDesorganizaEdi"],
+            ["bordoDesorganizadesc", "bordoDesorganizadescEdi"], ["bordoAutoagressao", "bordoAutoagressaoEdi"],
+            ["bordoAgrideadulto", "bordoAgrideadultoEdi"], ["bordoAgridepares", "bordoAgrideparesEdi"],
+            ["bordoDestruir", "bordoDestruirEdi"], ["bordoGritos", "bordoGritosEdi"],
+            ["bordoChoros", "bordoChorosEdi"], ["bordoBirras", "bordoBirrasEdi"],
+            ["bordoBirrasdesc", "bordoBirrasdescEdi"], ["bordoMandosadulto", "bordoMandosadultoEdi"],
+            ["bordoMandospares", "bordoMandosparesEdi"], ["bordoPergunta", "bordoPerguntaEdi"],
+            ["bordoResponde", "bordoRespondeEdi"], ["bordoImita", "bordoImitaEdi"],
+            ["bordoInteracaoverbal", "bordoInteracaoverbalEdi"], ["bordoVerbaldesc", "bordoVerbaldescEdi"],
+            ["bordoColabtodotempo", "bordoColabtodotempoEdi"], ["bordoColabmaiortempo", "bordoColabmaiortempoEdi"],
+            ["bordoColabmetadetempo", "bordoColabmetadetempoEdi"], ["bordoColabmenosmetadetempo", "bordoColabmenosmetadetempoEdi"],
+            ["bordoColabnao", "bordoColabnaoEdi"], ["bordoColabnaodesc", "bordoColabnaodescEdi"],
+            ["bordoAtivsucedido", "bordoAtivsucedidoEdi"], ["bordoAtivnaosucedido", "bordoAtivnaosucedidoEdi"],
+            ["bordoAdequadodificil", "bordoAdequadodificilEdi"], ["bordoAdequadodifacil", "bordoAdequadodifacilEdi"],
+            ["bordoSemativ", "bordoSemativEdi"], ["bordoMediacao", "bordoMediacaoEdi"],
+            ["bordoAdaptacao", "bordoAdaptacaoEdi"], ["bordoAtivsaladesc", "bordoAtivsaladescEdi"],
+            ["bordoBrincousolonge", "bordoBrincousolongeEdi"], ["bordoBrincousoperto", "bordoBrincousopertoEdi"],
+            ["bordoTentoubrincar", "bordoTentoubrincarEdi"], ["bordoBrincouparesindep", "bordoBrincouparesindepEdi"],
+            ["bordoBrincouparesterapeuta", "bordoBrincouparesterapeutaEdi"], ["bordoNaobrincar", "bordoNaobrincarEdi"],
+            ["bordoBrincardesc", "bordoBrincardescEdi"], ["bordoLerso", "bordoLersoEdi"],
+            ["bordoLerajuda", "bordoLerajudaEdi"], ["bordoFazsoma", "bordoFazsomaEdi"],
+            ["bordoFazsomaqtnum", "bordoFazsomaqtnumEdi"], ["bordoSubtrai", "bordoSubtraiEdi"],
+            ["bordoSubtraiqtnum", "bordoSubtraiqtnumEdi"], ["bordoDividir", "bordoDividirEdi"],
+            ["bordoMultiplicar", "bordoMultiplicarEdi"], ["bordoEscolardesc", "bordoEscolardescEdi"],
+            ["bordoForanormal", "bordoForanormalEdi"], ["bordoHabilnova", "bordoHabilnovaEdi"],
+            ["bordoIncidente", "bordoIncidenteEdi"], ["bordoLercompreende", "bordoLercompreendeEdi"],
+            ["bordoObs", "bordoObsEdi"]
+        ];
+
+        // 3️⃣ Popula campos com verificação de segurança
+        mapaCampos.forEach(([dest, orig]) => {
+            const elOrig = document.getElementById(orig);
+            const elDest = document.getElementById(dest);
+            
+            if (!elOrig || !elDest) return;
+            
+            const valor = elOrig.value;
+            
+            if (elDest.tagName === "SELECT") {
+                $(elDest).val(valor).trigger('change');
+            } else {
+                elDest.value = valor;
+            }
+        });
+
+        // 4️⃣ Configuração do Terapeuta
+        const terapeutaEdi = document.getElementById("bordoTerapeutaidEdi")?.value;
+        if (terapeutaEdi && terapeutaEdi !== "-" && terapeutaEdi !== "766f69643132333435366964") {
+            const $select = $("#bordoTerapeutaid");
+            
+            setTimeout(() => {
+                $select.val(terapeutaEdi).trigger('change');
+                
+                const nomeTerapeuta = document.getElementById(terapeutaEdi)?.value;
+                const campoUsuario = document.getElementById("usuarioAtual");
+                if (campoUsuario && nomeTerapeuta) {
+                    campoUsuario.value = nomeTerapeuta;
+                }
+            }, 100);
+        }
+
+        // 5️⃣ Formata data final (se houver campo oculto para envio)
+        atualizaData();
+    }
+</script>
+	</head>
+
+	<body class="no-skin" onload="javascript:controlaNave();carregaBody();" >
+
+
+		<div class="main-container ace-save-state" id="main-container">
+
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="espace">
+					</div>
+					<div class="page-header">
+						<h1>
+							Visualizar Diário de Bordo
+							
+						</h1>
+						<!-- Dados carregar -->
+						<div id="divCarrega" name="divCarrega" class="hidden">
+							<input id="bordoBeneidEdi" name="bordoBeneidEdi" value="{{bordo.bordo_beneid}}"/>
+							<input id="bordoEscolaidEdi" name="bordoEscolaidEdi" value="{{bordo.bordo_escolaid}}"/>
+							<input id="bordoEscolanomeEdi" name="bordoEscolanomeEdi" value="{{bordo.bordo_escolanome}}"/>
+							<input id="bordoAtendemEdi" name="bordoAtendemEdi" value="{{bordo.bordo_atendem}}"/>
+							<input id="bordoOndefoiEdi" name="bordoOndefoiEdi" value="{{bordo.bordo_ondefoi}}"/>
+							<input id="bordoTerapeutaidEdi" name="bordoTerapeutaidEdi" value="{{bordo.bordo_terapeutaid}}" />
+							<input id="bordoDatacadEdi" name="bordoDatacadEdi" value="{{bordo.bordo_datacad}}"/>
+							<input id="bordofrequenciaEdi" name="bordofrequenciaEdi" value="{{bordo.bordo_frequencia}}"/>
+							<input id="bordoSeguerotinaEdi" name="bordoSeguerotinaEdi" value="{{bordo.bordo_seguerotina}}"/>
+							<input id="bordoSeguerotinadescEdi" name="bordoSeguerotinadescEdi" value="{{bordo.bordo_seguerotinadesc}}"/>
+							<input id="bordoEstereotipasEdi" name="bordoEstereotipasEdi" value="{{bordo.bordo_estereotipas}}"/>
+							<input id="bordoEstereotipasdescEdi" name="bordoEstereotipasdescEdi" value="{{bordo.bordo_estereotipasdesc}}"/>
+							<input id="bordoFocoEdi" name="bordoFocoEdi" value="{{bordo.bordo_foco}}"/>
+							<input id="bordoFocodescEdi" name="bordoFocodescEdi" value="{{bordo.bordo_focodesc}}"/>
+							<input id="bordoAutocuidadoEdi" name="bordoAutocuidadoEdi" value="{{bordo.bordo_autocuidado}}"/>
+							<input id="bordoAutocuidadodescEdi" name="bordoAutocuidadodescEdi" value="{{bordo.bordo_autocuidadodesc}}"/>
+							<input id="bordoAliindependeEdi" name="bordoAliindependeEdi" value="{{bordo.bordo_aliindepende}}"/>
+							<input id="bordoEscolaliaEdi" name="bordoEscolaliaEdi" value="{{bordo.bordo_escolalia}}"/>
+							<input id="bordoEscolaliadescEdi" name="bordoEscolaliadescEdi" value="{{bordo.bordo_escolaliadesc}}"/>
+							<input id="bordoParticipaEdi" name="bordoParticipaEdi" value="{{bordo.bordo_participa}}"/>
+							<input id="bordoParticipadescEdi" name="bordoParticipadescEdi" value="{{bordo.bordo_participadesc}}"/>
+							<input id="bordoSegueEdi" name="bordoSegueEdi" value="{{bordo.bordo_segue}}"/>
+							<input id="bordoSeguedescEdi" name="bordoSeguedescEdi" value="{{bordo.bordo_seguedesc}}"/>
+							<input id="bordoRepertorioEdi" name="bordoRepertorioEdi" value="{{bordo.bordo_repertorio}}"/>
+							<input id="bordoRepertoriodescEdi" name="bordoRepertoriodescEdi" value="{{bordo.bordo_repertoriodesc}}"/>
+							<input id="bordoDesorganizaEdi" name="bordoDesorganizaEdi" value="{{bordo.bordo_desorganiza}}"/>
+							<input id="bordoDesorganizadescEdi" name="bordoDesorganizadescEdi" value="{{bordo.bordo_desorganizadesc}}"/>
+							<input id="bordoAutoagressaoEdi" name="bordoAutoagressaoEdi" value="{{bordo.bordo_autoagressao}}"/>
+							<input id="bordoAutoagressaodescEdi" name="bordoAutoagressaodescEdi" value="{{bordo.bordo_autoagressaodesc}}"/>
+							<input id="bordoAgrideadultoEdi" name="bordoAgrideadultoEdi" value="{{bordo.bordo_agrideadulto}}"/>
+							<input id="bordoAgrideadultodescEdi" name="bordoAgrideadultodescEdi" value="{{bordo.bordo_agrideadultodesc}}"/>
+							<input id="bordoAgrideparesEdi" name="bordoAgrideparesEdi" value="{{bordo.bordo_agridepares}}"/>
+							<input id="bordoAgrideparesdescEdi" name="bordoAgrideparesdescEdi" value="{{bordo.bordo_agrideparesdesc}}"/>
+							<input id="bordoDestruirEdi" name="bordoDestruirEdi" value="{{bordo.bordo_destruir}}"/>
+							<input id="bordoDestruirdescEdi" name="bordoDestruirdescEdi" value="{{bordo.bordo_destruirdesc}}"/>
+							<input id="bordoGritosEdi" name="bordoGritosEdi" value="{{bordo.bordo_gritos}}"/>
+							<input id="bordoGritosdescEdi" name="bordoGritosdescEdi" value="{{bordo.bordo_gritosdesc}}"/>
+							<input id="bordoChorosEdi" name="bordoChorosEdi" value="{{bordo.bordo_choros}}"/>
+							<input id="bordoChorosdescEdi" name="bordoChorosdescEdi" value="{{bordo.bordo_chorosdesc}}"/>
+							<input id="bordoBirrasEdi" name="bordoBirrasEdi" value="{{bordo.bordo_birras}}"/>
+							<input id="bordoBirrasdescEdi" name="bordoBirrasdescEdi" value="{{bordo.bordo_birrasdesc}}"/>
+							<input id="bordoMandosadultoEdi" name="bordoMandosadultoEdi" value="{{bordo.bordo_mandosadulto}}"/>
+							<input id="bordoMandosparesEdi" name="bordoMandosparesEdi" value="{{bordo.bordo_mandospares}}"/>
+							<input id="bordoPerguntaEdi" name="bordoPerguntaEdi" value="{{bordo.bordo_pergunta}}"/>
+							<input id="bordoRespondeEdi" name="bordoRespondeEdi" value="{{bordo.bordo_responde}}"/>
+							<input id="bordoImitaEdi" name="bordoImitaEdi" value="{{bordo.bordo_imita}}"/>
+							<input id="bordoInteracaoverbalEdi" name="bordoInteracaoverbalEdi" value="{{bordo.bordo_interacaoverbal}}"/>
+							<input id="bordoVerbaldescEdi" name="bordoVerbaldescEdi" value="{{bordo.bordo_verbaldesc}}"/>
+							<input id="bordoColabdescEdi" name="bordoColabdescEdi" value="{{bordo.bordo_colabdesc}}"/>
+							<input id="bordoColabtodotempoEdi" name="bordoColabtodotempoEdi" value="{{bordo.bordo_colabtodotempo}}"/>
+							<input id="bordoColabtodotempodescEdi" name="bordoColabtodotempodescEdi" value="{{bordo.bordo_colabtodotempodesc}}"/>
+							<input id="bordoColabmaiortempoEdi" name="bordoColabmaiortempoEdi" value="{{bordo.bordo_colabmaiortempo}}"/>
+							<input id="bordoColabmaiortempodescEdi" name="bordoColabmaiortempodescEdi" value="{{bordo.bordo_colabmaiortempodesc}}"/>
+							<input id="bordoColabmetadetempoEdi" name="bordoColabmetadetempoEdi" value="{{bordo.bordo_colabmetadetempo}}"/>
+							<input id="bordoColabmetadetempodescEdi" name="bordoColabmetadetempodescEdi" value="{{bordo.bordo_colabmetadetempodesc}}"/>
+							<input id="bordoColabmenosmetadetempoEdi" name="bordoColabmenosmetadetempoEdi" value="{{bordo.bordo_colabmenosmetadetempo}}"/>
+							<input id="bordoColabmenosmetadetempodescEdi" name="bordoColabmenosmetadetempodescEdi" value="{{bordo.bordo_colabmenosmetadetempodesc}}"/>
+							<input id="bordoColabnaoEdi" name="bordoColabnaoEdi" value="{{bordo.bordo_colabnao}}"/>
+							<input id="bordoColabnaodescEdi" name="bordoColabnaodescEdi" value="{{bordo.bordo_colabnaodesc}}"/>
+							<input id="bordoAtivsucedidoEdi" name="bordoAtivsucedidoEdi" value="{{bordo.bordo_ativsucedido}}"/>
+							<input id="bordoAtivnaosucedidoEdi" name="bordoAtivnaosucedidoEdi" value="{{bordo.bordo_ativnaosucedido}}"/>
+							<input id="bordoAdequadodificilEdi" name="bordoAdequadodificilEdi" value="{{bordo.bordo_adequadodificil}}"/>
+							<input id="bordoAdequadodifacilEdi" name="bordoAdequadodifacilEdi" value="{{bordo.bordo_adequadodifacil}}"/>
+							<input id="bordoSemativEdi" name="bordoSemativEdi" value="{{bordo.bordo_semativ}}"/>
+							<input id="bordoMediacaoEdi" name="bordoMediacaoEdi" value="{{bordo.bordo_mediacao}}"/>
+							<input id="bordoAdaptacaoEdi" name="bordoAdaptacaoEdi" value="{{bordo.bordo_adaptacao}}"/>
+							<input id="bordoAtivsaladescEdi" name="bordoAtivsaladescEdi" value="{{bordo.bordo_ativsaladesc}}"/>
+							<input id="bordoBrincousolongeEdi" name="bordoBrincousolongeEdi" value="{{bordo.bordo_brincousolonge}}"/>
+							<input id="bordoBrincousopertoEdi" name="bordoBrincousopertoEdi" value="{{bordo.bordo_brincousoperto}}"/>
+							<input id="bordoTentoubrincarEdi" name="bordoTentoubrincarEdi" value="{{bordo.bordo_tentoubrincar}}"/>
+							<input id="bordoBrincouparesindepEdi" name="bordoBrincouparesindepEdi" value="{{bordo.bordo_brincouparesindep}}"/>
+							<input id="bordoBrincouparesterapeutaEdi" name="bordoBrincouparesterapeutaEdi" value="{{bordo.bordo_brincouparesterapeuta}}"/>
+							<input id="bordoNaobrincarEdi" name="bordoNaobrincarEdi" value="{{bordo.bordo_naobrincar}}"/>
+							<input id="bordoBrincardescEdi" name="bordoBrincardescEdi" value="{{bordo.bordo_brincardesc}}"/>
+							<input id="bordoLersoEdi" name="bordoLersoEdi" value="{{bordo.bordo_lerso}}"/>
+							<input id="bordoLerajudaEdi" name="bordoLerajudaEdi" value="{{bordo.bordo_lerajuda}}"/>
+							<input id="bordoFazsomaEdi" name="bordoFazsomaEdi" value="{{bordo.bordo_fazsoma}}"/>
+							<input id="bordoFazsomaqtnumEdi" name="bordoFazsomaqtnumEdi" value="{{bordo.bordo_fazsomaqtnum}}"/>
+							<input id="bordoSubtraiEdi" name="bordoSubtraiEdi" value="{{bordo.bordo_subtrai}}"/>
+							<input id="bordoSubtraiqtnumEdi" name="bordoSubtraiqtnumEdi" value="{{bordo.bordo_subtraiqtnum}}"/>
+							<input id="bordoDividirEdi" name="bordoDividirEdi" value="{{bordo.bordo_dividir}}"/>
+							<input id="bordoMultiplicarEdi" name="bordoMultiplicarEdi" value="{{bordo.bordo_multiplicar}}"/>
+							<input id="bordoEscolardescEdi" name="bordoEscolardescEdi" value="{{bordo.bordo_escolardesc}}"/>
+							<input id="bordoForanormalEdi" name="bordoForanormalEdi" value="{{bordo.bordo_foranormal}}"/>
+							<input id="bordoHabilnovaEdi" name="bordoHabilnovaEdi" value="{{bordo.bordo_habilnova}}"/>
+							<input id="bordoIncidenteEdi" name="bordoIncidenteEdi" value="{{bordo.bordo_incidente}}"/>
+							<input id="bordoLercompreendeEdi" name="bordoLercompreendeEdi" value="{{bordo.bordo_lercompreende}}"/>
+							<input id="bordoObsEdi" name="bordoObsEdi" value="{{bordo.bordo_obs}}"/>
+							<input id="bordoSeloEdi" name="bordoSeloEdi" value="{{bordo.bordo_selo}}"/>
+							<input id="bordoUsuidcadEdi" name="bordoUsuidcadEdi" value="{{bordo.bordo_usuidcad}}"/>
+							<input id="bordoUsuidediEdi" name="bordoUsuidediEdi" value="{{bordo.bordo_usuidedi}}"/>
+							 <input id="bordoDataativEdi" name="bordoDataativEdi" value="{{bordo.bordo_dataativ}}"/>
+							{{#each terapeutas}}
+								<input id="{{_id}}" value="{{usuario_nomecompleto}}" />
+							{{/each}}
+						</div>
+					</div><!-- /.page-header -->
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" action="/menu/area/bordo/atualizar" method="POST">
+								<input class="hidden" id="bordoId" name="bordoId" value="{{bordo._id}}" />
+								<div class="col-sm-12"><!-- Widget Dados Básicos -->
+									<div class="widget-box" id="cabecalho" name="cabecalho">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="ace-icon fa fa-bookmark-o"></i>
+												Cabeçalho do Diário de Bordo
+											</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<label> Terapeuta</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<select name="bordoTerapeutaid" id="bordoTerapeutaid" class="select2"  >
+															<option value="766f69643132333435366964">-</option>
+															{{#each terapeutas}}
+																<option value="{{_id}}">{{usuario_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label> Beneficiário</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<select name="bordoBeneid" id="bordoBeneid" class="select2"  >
+															<option value="766f69643132333435366964">-</option>
+															{{#each benes}}
+																<option value="{{_id}}">{{bene_nome}}</option>
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label> Atendimento realizado em:</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<select name="bordoAtendem" id="bordoAtendem" class="select" >
+															<option value="-">-</option>
+															<option value="Escola">Escola</option>
+															<option value="Casa">Casa</option>
+															<option value="Externo">Externo</option>
+															<option value="Online">Online</option>
+														</select>
+													</div>
+												</div>
+												<label>Em caso de atendimento externo, onde foi realizado?</label>
+												<div class="row">
+													<div class="input-group">
+														<div class="col-sm-4">
+															<input id="bordoOndefoi" name="bordoOndefoi" type="text" style="width: 400px;">
+														</div>
+													</div>
+												</div>
+												<label> Escola</label>
+												<div class="form-group">
+													<div class="col-sm-6">
+														<select name="bordoEscolanome" id="bordoEscolanome" class="select2">
+															<option value="-">-</option>
+															{{#each colegios}}
+																{{#each this.colegio}}
+																<option value="{{this}}">{{this}}</option>
+																{{/each}}
+															{{/each}}
+														</select>
+													</div>
+												</div>
+												<label for="id-date-picker-1">Data atividade</label><!--Data atividade-->
+												<div class="form-group">
+													<div class="col-sm-6">
+														<input id="bordoDataativEdi" name="bordoDataativEdi" value="{{bordo.bordo_dataativ_exibicao}}"/>
+													</div>
+												</div>
+												
+												<div class="form-group" hidden>
+													<div class="col-sm-6">
+														<select name="bordoFrequencia" id="bordoFrequencia" class="select" >
+															<option value="-">-</option>
+															<option value="Ausente">Ausente</option>
+															<option value="Presente">Presente</option>
+															<option value="Presente chegou com atraso">Presente chegou com atraso</option>
+															<option value="Presente saiu mais cedo">Presente saiu mais cedo</option>
+														</select>
+													</div>
+												</div>
+
+											</div>
+										</div>
+									</div>	
+									<div class="widget-box" id="parte01" name="parte01">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="ace-icon fa fa-bookmark-o"></i>
+												Parte 01
+											</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="row">											
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table1" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Rotina do dia</th>
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Pontuação</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">1. Segue rotina</td>
+																	<td name="Pontua">
+																		<select name="bordoSeguerotina" id="bordoSeguerotina" class="select" >
+																			<option value="-">-</option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">2. Apresentou extereotipias</td>
+																	<td name="Pontua">
+																		<select name="bordoEstereotipas" id="bordoEstereotipas" class="select" >
+																			<option value="-">-</option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																		</select>
+																	</td>
+																</tr>																		
+															
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">3. Foco atencional</td>
+																	<td name="Pontua">
+																		<select name="bordoFoco" id="bordoFoco" class="select" >
+																			<option value="-">-</option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">4. Necessita de auto cuidado</td>
+																	<td name="Pontua">
+																		<select name="bordoAutocuidado" id="bordoAutocuidado" class="select" >
+																			<option value="-">-</option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">5. Se alimenta com independência</td>
+																	<td name="Pontua">
+																		<select name="bordoAliindepende" id="bordoAliindepende" class="select" >
+																			<option value="-">-</option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																		</select>
+																	</td>
+																</tr>																
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">6. Ecolalia</td>
+																	<td name="Pontua">
+																		<select name="bordoEscolalia" id="bordoEscolalia" class="select" >
+																			<option value="-">-</option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																		</select>
+																	</td>
+																</tr>	
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">7. Participação no grupo</td>
+																	<td name="Pontua">
+																		<select name="bordoParticipa" id="bordoParticipa" class="select" >
+																			<option value="-">-</option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">8. Segue instruções do professor</td>
+																	<td name="Pontua">
+																		<select name="bordoSegue" id="bordoSegue" class="select" >
+																			<option value="-">-</option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">9. Repertório de comunicação social</td>
+																	<td name="Pontua">
+																		<select name="bordoRepertorio" id="bordoRepertorio" class="select" >
+																			<option value="-">-</option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																		</select>
+																	</td>
+																	<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;"> 10. Se desorganiza ao trocar de atividade ou de ambiente</td>
+																	<td name="Pontua">
+																		<select name="bordoDesorganiza" id="bordoDesorganiza" class="select" >
+																			<option value="-">-</option>
+																			<option value="00">00</option>
+																			<option value="01">01</option>
+																			<option value="02">02</option>
+																			<option value="03">03</option>
+																			<option value="04">04</option>
+																			<option value="05">05</option>
+																			<option value="06">06</option>
+																			<option value="07">07</option>
+																			<option value="08">08</option>
+																			<option value="09">09</option>
+																			<option value="10">10</option>
+																		</select>
+																	</td>
+																</tr>																
+															</tbody>
+														</table>
+													
+													</div>
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table2" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Anotações</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" >
+																		<div class="col-sm-12" >
+																			<textarea type="text" data-placeholder="-" name="bordoDesorganizadesc" id="bordoDesorganizadesc" placeholder="-" class="form-control" rows="2"></textarea>
+																		</div>
+																	</td>
+																	
+																</tr>
+																			
+																
+															</tbody>
+														</table>
+													
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="widget-box" id="parte02" name="parte02">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="ace-icon fa fa-bookmark-o"></i>
+												Parte 02
+											</h4>
+
+											<span class="widget-toolbar">
+
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="row">											
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table3" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Problemas de comportamento</th>
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Pontuação</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">1. Autoagressão (bater em si mesmo)</td>
+																	<td name="Pontua">
+																		<select name="bordoAutoagressao" id="bordoAutoagressao" class="select" >
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">2. Agride adultos</td>
+																	<td name="Pontua">
+																		<select name="bordoAgrideadulto" id="bordoAgrideadulto" class="select" >
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																		</select>
+																	</td>
+																</tr>																		
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">3. Agride pares</td>
+																	<td name="Pontua">
+																		<select name="bordoAgridepares" id="bordoAgridepares" class="select" >
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																		</select>
+																	</td>
+																</tr>	
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">4. Destruição de objetos</td>
+																	<td name="Pontua">
+																		<select name="bordoDestruir" id="bordoDestruir" class="select" >
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">5. Gritos</td>
+																	<td name="Pontua">
+																		<select name="bordoGritos" id="bordoGritos" class="select" >
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																		</select>
+																	</td>
+																</tr>																
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">6. Choros</td>
+																	<td name="Pontua">
+																		<select name="bordoChoros" id="bordoChoros" class="select" >
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																		</select>
+																	</td>
+																</tr>	
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">7. Birras</td>
+																	<td name="Pontua">
+																		<select name="bordoBirras" id="bordoBirras" class="select" >
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																
+																															
+															</tbody>
+														</table>
+													
+													</div>
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table4" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Anotações</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" >
+																		<div class="col-sm-12" >
+																			<textarea type="text" data-placeholder="-" name="bordoBirrasdesc" id="bordoBirrasdesc" placeholder="-" class="form-control" rows="2"  ></textarea>
+																		</div>
+																	</td>
+																	
+																</tr>
+																			
+																
+															</tbody>
+														</table>
+													
+													</div>
+												</div>					
+
+												<hr>
+										
+												<div class="row">											
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table5" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Comportamento verbal</th>
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Sinalização</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">1. O beneficiário emitiu mandos para os adultos?</td>
+																	<td name="Pontua">
+																		<select name="bordoMandosadulto" id="bordoMandosadulto" class="select" >
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="A">A</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">2. O beneficiário emitiu mandos para os pares?</td>
+																	<td name="Pontua">
+																		<select name="bordoMandospares" id="bordoMandospares" class="select" >
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="A">A</option>
+																		</select>
+																	</td>
+																</tr>																		
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">3. O beneficiário fez perguntas?</td>
+																	<td name="Pontua">
+																		<select name="bordoPergunta" id="bordoPergunta" class="select" >
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="A">A</option>
+																		</select>
+																	</td>
+																</tr>	
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">4. O beneficiário respondeu perguntas?</td>
+																	<td name="Pontua">
+																		<select name="bordoResponde" id="bordoResponde" class="select" >
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="A">A</option>
+																		</select>
+																	</td>
+																</tr>																	
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">5. O beneficiário imitou os colegas?</td>
+																	<td name="Pontua">
+																		<select name="bordoImita" id="bordoImita" class="select" >
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="A">A</option>
+																		</select>
+																	</td>
+																</tr>	
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">6. O beneficiário iniciou interações verbais?</td>
+																	<td name="Pontua">
+																		<select name="bordoInteracaoverbal" id="bordoInteracaoverbal" class="select" >
+																			<option value="-">-</option>
+																			<option value="I">I</option>
+																			<option value="A">A</option>
+																		</select>
+																	</td>
+																</tr>			
+																
+															</tbody>
+														</table>
+													
+													</div>
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table6" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Anotações</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" >
+																		<div class="col-sm-12">
+																			<textarea type="text" data-placeholder="-" name="bordoVerbaldesc" id="bordoVerbaldesc" placeholder="-" class="form-control" rows="2" ></textarea>
+																		</div>
+																	</td>
+																	
+																</tr>
+																			
+																
+															</tbody>
+														</table>
+													
+													</div>
+												</div>
+												<hr>
+												
+												<div class="row">											
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table7" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Execução das atividades</th>
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Pontuação</th>
+																</tr>
+															</thead>
+															<tbody>
+																
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">1. O beneficiário foi colaborativo todo o tempo?</td>
+																	<td name="Pontua">
+																		<select name="bordoColabtodotempo" id="bordoColabtodotempo" class="select" >
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																		</select>
+																	</td>
+																</tr>																		
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">2. O beneficiário foi colaborativo maior parte do tempo?</td>
+																	<td name="Pontua">
+																		<select name="bordoColabmaiortempo" id="bordoColabmaiortempo" class="select" >
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																		</select>
+																	</td>
+																</tr>	
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">3. O beneficiário foi colaborativo metade do tempo?</td>
+																	<td name="Pontua">
+																		<select name="bordoColabmetadetempo" id="bordoColabmetadetempo" class="select" >
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">4. O beneficiário foi colaborativo menos da metade do tempo?</td>
+																	<td name="Pontua">
+																		<select name="bordoColabmenosmetadetempo" id="bordoColabmenosmetadetempo" class="select" >
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																		</select>
+																	</td>
+																</tr>																
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">5. O beneficiário não colaborou em nenhum momento?</td>
+																	<td name="Pontua">
+																		<select name="bordoColabnao" id="bordoColabnao" class="select" >
+																			<option value="-">-</option>
+																			<option value="Sim">Sim</option>
+																			<option value="Não">Não</option>
+																		</select>
+																	</td>
+																</tr>	
+																															
+															</tbody>
+														</table>
+													
+													</div>
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table8" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Anotações</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" >
+																		<div class="col-sm-12" >
+																			<textarea type="text" data-placeholder="-" name="bordoColabnaodesc" id="bordoColabnaodesc" placeholder="-" class="form-control" rows="2"  ></textarea>
+																		</div>
+																	</td>
+																	
+																</tr>
+																			
+																
+															</tbody>
+														</table>
+													
+													</div>
+												</div>
+												
+												<hr>
+												
+												<div class="row">											
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table9" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th  tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Atividades realizadas</th>
+																	<th  tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Sinalização</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">1. Mesmas atividades que a turma e foi bem sucedida.</td>
+																	<td name="Pontua">
+																		<select name="bordoAtivsucedido" id="bordoAtivsucedido" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">2. Mesma atividade que a turma e não conseguiu realizar.</td>
+																	<td name="Pontua">
+																		<select name="bordoAtivnaosucedido" id="bordoAtivnaosucedido" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																			
+																		</select>
+																	</td>
+																</tr>																		
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">3. A professora passou atividade adaptada, mas era muito difícil.</td>
+																	<td name="Pontua">
+																		<select name="bordoAdequadodificil" id="bordoAdequadodificil" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>	
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">4. A professora passou atividade adaptada, mas era muito fácil.</td>
+																	<td name="Pontua">
+																		<select name="bordoAdequadodifacil" id="bordoAdequadodifacil" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>																	
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">5. A professora não passou nenhuma atividade para o beneficiário.</td>
+																	<td name="Pontua">
+																		<select name="bordoSemativ" id="bordoSemativ" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>	
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">6. Com mediação da terapeuta para realizar a atividade.</td>
+																	<td name="Pontua">
+																		<select name="bordoMediacao" id="bordoMediacao" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>			
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">7. Com adaptação de material da terapeuta para realizar.</td>
+																	<td name="Pontua">
+																		<select name="bordoAdaptacao" id="bordoAdaptacao" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>																	
+																																
+															</tbody>
+														</table>
+													
+													</div>
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table10" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Anotações</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" >
+																		<div class="col-sm-12">
+																			<textarea type="text" data-placeholder="-" name="bordoAtivsaladesc" id="bordoAtivsaladesc" placeholder="-" class="form-control" rows="2" ></textarea>
+																		</div>
+																	</td>
+																	
+																</tr>
+																			
+																
+															</tbody>
+														</table>
+													
+													</div>
+												</div>
+												<hr>
+												
+												<div class="row">											
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table11" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Recreio ou brincar livre</th>
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Pontuação</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">1. Brincou sozinho e longe dos pares.</td>
+																	<td name="Pontua">
+																		<select name="bordoBrincousolonge" id="bordoBrincousolonge" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">2. Brincou sozinho, mas perto dos pares.</td>
+																	<td name="Pontua">
+																		<select name="bordoBrincousoperto" id="bordoBrincousoperto" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>																		
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">3. Tentou brincar com os pares.</td>
+																	<td name="Pontua">
+																		<select name="bordoTentoubrincar" id="bordoTentoubrincar" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>	
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">4. Brincou com os pares de forma independente.</td>
+																	<td name="Pontua">
+																		<select name="bordoBrincouparesindep" id="bordoBrincouparesindep" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">5. Iniciou brincadeira com ajuda do terapeuta.</td>
+																	<td name="Pontua">
+																		<select name="bordoBrincouparesterapeuta" id="bordoBrincouparesterapeuta" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>																
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">6. Não quer brincar.</td>
+																	<td name="Pontua">
+																		<select name="bordoNaobrincar" id="bordoNaobrincar" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>	
+																															
+															</tbody>
+														</table>
+													
+													</div>
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table12" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Anotações</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" >
+																		<div class="col-sm-12" >
+																			<textarea type="text" data-placeholder="-" name="bordoBrincardesc" id="bordoBrincardesc" placeholder="-" class="form-control" rows="2"  ></textarea>
+																		</div>
+																	</td>
+																	
+																</tr>
+																			
+																
+															</tbody>
+														</table>
+													
+													</div>
+												</div>
+												<hr>
+												
+												<div class="row">											
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table13" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Atividades escolares</th>
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Pontuação</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">1. O beneficiário consegue ler texto sozinho?</td>
+																	<td name="Pontua">
+																		<select name="bordoLerso" id="bordoLerso" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">2. O beneficiário precisa de ajuda na leitura?</td>
+																	<td name="Pontua">
+																		<select name="bordoLerajuda" id="bordoLerajuda" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">3. O beneficiário compreende a leitura?</td>
+																	<td name="Pontua">
+																		<select name="bordoLercompreende" id="bordoLercompreende" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">4. O beneficiário consegue fazer contas de somar?</td>
+																	<td name="Pontua">
+																		<select name="bordoFazsoma" id="bordoFazsoma" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">5. Quantos números?</td>
+																	<td name="Pontua">
+																		<input type="text" name="bordoFazsomaqtnum" id="bordoFazsomaqtnum" class="form-control" />
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">6. O beneficiário consegue fazer conta de subtração?</td>
+																	<td name="Pontua">
+																		<select name="bordoSubtrai" id="bordoSubtrai" class="select" >
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">7. Quantos números?</td>
+																	<td name="Pontua">
+																		<input type="text" name="bordoSubtraiqtnum" id="bordoSubtraiqtnum" class="form-control" />
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">8. O beneficiário consegue fazer conta de dividir?</td>
+																	<td name="Pontua">
+																		<select name="bordoDividir" id="bordoDividir" class="select" placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" style="width: 400px;">9. O beneficiário consegue fazer conta de multiplicar?</td>
+																	<td name="Pontua">
+																		<select name="bordoMultiplicar" id="bordoMultiplicar" class="select" placeholder="Escolha...">
+																			<option value="-">-</option>
+																			<option value="01">Sim</option>
+																			<option value="02">Não</option>
+																		</select>
+																	</td>
+																</tr>														
+															</tbody>
+														</table>
+													</div>
+													<div class="col-xs-12 col-sm-6">
+														<table id="dynamic-table14" class="table table-striped table-bordered table-hover dataTable no-footer" role="grid" aria-describedby="dynamic-table_info">
+															<thead>
+																<tr role="row">
+																	<th tabindex="0" aria-controls="dynamic-table" rowspan="1" colspan="1">Anotações</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr role="row" class="odd">
+																	<td name="Desc" rowspan="1" >
+																		<div class="col-sm-12">
+																			<textarea type="text" name="bordoEscolardesc" id="bordoEscolardesc" style="font-size: 12px" placeholder="-" class="form-control" rows="2"></textarea>
+																		</div>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</div>
+												</div>
+												<hr>
+											</div>
+										</div>
+									</div>										
+									<div class="widget-box" id="parte03" name="parte03">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="ace-icon fa fa-bookmark-o"></i>
+												Parte 03
+											</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+											<div class="row">
+													<div class="col-sm-12">
+														<div class="col-sm-12">
+															<div class="row">
+																<label>O beneficiário apresentou algum comportamento incomum ou atípico (positivo ou negativo)? Descreva.</label>
+															</div>
+															<div class="row">
+																<textarea type="text" data-placeholder="-" name="bordoForanormal" id="bordoForanormal" style="font-size: 12px" placeholder="-" class="form-control" ></textarea>
+															</div>
+														</div>
+														<div class="col-xs-12">
+															<div class="row">
+																<label>O beneficiário demonstrou alguma habilidade nova? Quais? Descreva.</label>
+															</div>
+															<div class="row" >
+																<textarea type="text" data-placeholder="-" name="bordoHabilnova" id="bordoHabilnova" style="font-size: 12px" placeholder="-" class="form-control"></textarea>
+															</div>
+														</div>
+														<div class="col-xs-12">
+															<div class="row">
+																<label>Ocorreu ou aconteceu algum incidente (machucados, brigas, dores, etc.) que precisou ser relatado aos pais? Especifique.</label>
+															</div>
+															<div class="row">
+																<textarea type="text" data-placeholder="-" name="bordoIncidente" id="bordoIncidente" style="font-size: 12px" placeholder="-" class="form-control" ></textarea>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="widget-box" id="obser" name="parte03">
+										<div class="widget-header">
+											<h4 class="widget-title">
+												<i class="ace-icon fa fa-info-circle big"></i>
+												Mais observações
+											</h4>
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+											<div class="row">
+													<div class="col-sm-12">
+														<div class="col-xs-12" >
+															<div class="row">
+																<textarea type="text"name="bordoObs" id="bordoObs" style="font-size: 12px" data-placeholder="-" placeholder="-" class="form-control" ></textarea>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="widget-box" id="final" name="final">
+										<div class="widget-header">
+											<!--
+											<h4 class="widget-title">
+												<i class="ace-icon green fa fa-check"></i>
+												Finalização
+											</h4>
+											-->
+											<span class="widget-toolbar">
+												<a href="#" data-action="reload">
+													<i class="ace-icon fa fa-refresh"></i>
+												</a>
+												<a href="#" data-action="fullscreen" class="orange2">
+													<i class="ace-icon fa fa-expand"></i>
+												</a>
+												<a href="#" data-action="collapse">
+													<i class="ace-icon fa fa-chevron-up"></i>
+												</a>
+											</span>
+										</div>
+										<div class="widget-body">
+											<div class="widget-main">
+												<div class="form-actions">
+													<div class="col-xs-12" style="text-align: center;" >
+														<button class="btn btn-info" name="acaoSalvar" id="acaoSalvar" type="submit">
+															<i class="ace-icon fa fa-check bigger-110"></i>
+															Salvar
+														</button>
+														<button class="btn btn-warning"  type="reset">
+															<i class="ace-icon fa fa-undo bigger-110"></i>
+															voltar
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>	
+								</div>
+							</form>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div>
+			</div><!-- /.main-content -->
+		</div><!-- /.main-container -->
+		<script>
+			$(document).ready(function() {
+				// ✅ Inicializa Select2 em todos os selects com class="select2"
+				if (typeof $.fn.select2 === 'function') {
+					$('.select2').select2({
+						width: '100%',
+						placeholder: 'Escolha...',
+						allowClear: true,
+						dropdownParent: $(this).closest('.widget-box') // Evita problemas com modais/overlays
+					});
+				}
+				
+				// ✅ Só popula os valores DEPOIS que o Select2 estiver pronto
+				setTimeout(function() {
+					if (typeof carregaBody === 'function') {
+						carregaBody();
+					}
+				}, 150); // Delay um pouco maior para garantir
+			});
+		</script>
+	</body>
+</html>
