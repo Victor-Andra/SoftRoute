@@ -19,6 +19,15 @@
       body { margin-top: 12mm; margin-bottom: 10mm; }
       @page { margin: 1cm; }
       table { page-break-inside: avoid; }
+
+      /* ── Na impressão: mostra todas as 4 abas (ignora display:none) ── */
+      .painel-aba { display: block !important; }
+      /* Separa cada painel na impressão */
+      .painel-aba + .painel-aba { page-break-before: always; }
+      /* Expande todos os detalhes expandíveis */
+      .detalhe-linha { display: table-row !important; }
+      /* Esconde os toggles de expand/collapse */
+      .btn-expand { display: none !important; }
     }
 
     /* ── Toolbar de pesquisa ──────────────────────────────────── */
@@ -74,9 +83,10 @@
       padding: 1px 7px; border-radius: 10px; font-size: 11px;
       font-weight: 700; color: white;
     }
-    .badge-geral  { background: #1976d2; }
-    .badge-comevo { background: #28a745; }
-    .badge-semevo { background: #dc3545; }
+    .badge-geral         { background: #1976d2; }
+    .badge-comevo        { background: #28a745; }
+    .badge-semevo-at     { background: #dc3545; }
+    .badge-semevo-outros { background: #e67e22; }
 
     /* ── Painel de cada aba ───────────────────────────────────── */
     .painel-aba { display: none; padding: 16px 12px; }
@@ -89,14 +99,44 @@
     .text-center { text-align: center; }
     .text-right  { text-align: right; }
 
-    /* ── Caixa de evolução ────────────────────────────────────── */
-    .evo-box {
-      background: #f0f9ff; border-left: 3px solid #1976d2;
-      padding: 6px 10px; font-size: 11px; color: #333;
-      border-radius: 0 4px 4px 0; max-width: 340px;
-      white-space: pre-wrap; word-break: break-word;
-    }
+    /* ── Caixa de evolução (tooltip) ─────────────────────────── */
+    .evo-box { display: none; } /* não usado mais */
     .evo-vazia { color: #aaa; font-style: italic; }
+
+    /* Label com tooltip de evolução */
+    .evo-label-wrap {
+      position: relative; display: inline-block;
+    }
+    .evo-label-wrap .evo-tooltip {
+      visibility: hidden; opacity: 0;
+      background: #333; color: #fff;
+      font-size: 11px; line-height: 1.4;
+      border-radius: 4px; padding: 6px 10px;
+      white-space: pre-wrap; word-break: break-word;
+      max-width: 320px; min-width: 140px;
+      position: absolute; z-index: 9999;
+      bottom: calc(100% + 6px); left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 3px 10px rgba(0,0,0,.35);
+      transition: opacity .15s ease;
+      pointer-events: none;
+    }
+    /* Seta do tooltip */
+    .evo-label-wrap .evo-tooltip::after {
+      content: '';
+      position: absolute; top: 100%; left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #333;
+    }
+    .evo-label-wrap:hover .evo-tooltip {
+      visibility: visible; opacity: 1;
+    }
+
+    @media print {
+      /* Na impressão: esconde o tooltip, mostra só o label */
+      .evo-label-wrap .evo-tooltip { display: none !important; }
+    }
 
     /* ── Chosen ───────────────────────────────────────────────── */
     .chosen-container .chosen-single {
@@ -164,6 +204,12 @@
               Pesquisar
             </button>
 
+            <button type="button" onclick="window.print();"
+                    style="background:#6c757d; color:white; border:none; padding:8px 18px; border-radius:4px; font-weight:600; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:6px; box-shadow:0 2px 4px rgba(0,0,0,.2);">
+              <i class="ace-icon fa fa-print"></i>
+              Imprimir (4 abas)
+            </button>
+
           </div>
         </div>
       </div>
@@ -181,10 +227,15 @@
         Com Evolução
         <span class="badge-sessoes badge-comevo">{{totalComEvo.sessoes}}</span>
       </button>
-      <button class="aba-btn" onclick="trocarAba('semevo', this)">
+      <button class="aba-btn" onclick="trocarAba('semevo-at', this)">
         <i class="ace-icon fa fa-times-circle red"></i>
-        Sem Evolução
-        <span class="badge-sessoes badge-semevo">{{totalSemEvo.sessoes}}</span>
+        Sem Evo AT
+        <span class="badge-sessoes badge-semevo-at">{{totalSemEvoAT.sessoes}}</span>
+      </button>
+      <button class="aba-btn" onclick="trocarAba('semevo-outros', this)">
+        <i class="ace-icon fa fa-times-circle orange"></i>
+        Sem Evo (Outros)
+        <span class="badge-sessoes badge-semevo-outros">{{totalSemEvoNaoAT.sessoes}}</span>
       </button>
     </div>
 
@@ -298,14 +349,14 @@
                               <td>{{{debSubst}}}</td>
                               <td class="text-center">{{{credUsado}}}</td>
                               <td class="text-center">{{{debUsado}}}</td>
-                              <td>
+                              <td class="text-center">
                                 {{#if evolucaoTexto}}
-                                  <div class="evo-box">
+                                  <span class="evo-label-wrap">
                                     {{{seloLabel}}}
-                                    <div style="margin-top:4px;">{{evolucaoTexto}}</div>
-                                  </div>
+                                    <span class="evo-tooltip">{{evolucaoTexto}}</span>
+                                  </span>
                                 {{else}}
-                                  <span class="evo-vazia">—</span>
+                                  {{{seloLabel}}}
                                 {{/if}}
                               </td>
                               <td class="text-center">
@@ -455,14 +506,14 @@
                               <td>{{{debSubst}}}</td>
                               <td class="text-center">{{{credUsado}}}</td>
                               <td class="text-center">{{{debUsado}}}</td>
-                              <td>
+                              <td class="text-center">
                                 {{#if evolucaoTexto}}
-                                  <div class="evo-box">
+                                  <span class="evo-label-wrap">
                                     {{{seloLabel}}}
-                                    <div style="margin-top:4px;">{{evolucaoTexto}}</div>
-                                  </div>
+                                    <span class="evo-tooltip">{{evolucaoTexto}}</span>
+                                  </span>
                                 {{else}}
-                                  <span class="evo-vazia">—</span>
+                                  {{{seloLabel}}}
                                 {{/if}}
                               </td>
                               <td class="text-center">
@@ -508,16 +559,16 @@
     </div><!-- /painel-comevo -->
 
     <!-- ══════════════════════════════════════════════════════════════
-         ABA 3 — SEM EVOLUÇÃO
+         ABA 3 — SEM EVOLUÇÃO — AT
     ══════════════════════════════════════════════════════════════════ -->
-    <div id="painel-semevo" class="painel-aba">
+    <div id="painel-semevo-at" class="painel-aba">
       <div class="row">
         <div class="col-sm-12">
           <div class="widget-box">
             <div class="widget-header" style="background:#f8d7da; border-color:#dc3545;">
               <h4 class="widget-title">
                 <i class="ace-icon fa fa-times-circle red"></i>
-                Sem Evolução Selada — {{conv_nome}}
+                Sem Evolução Selada — AT — {{conv_nome}}
                 <small class="text-muted">({{periodoDe}} a {{periodoAte}})</small>
               </h4>
               <span class="widget-toolbar">
@@ -527,9 +578,9 @@
             </div>
             <div class="widget-body">
               <div class="widget-main">
-                {{#if relsSemEvo}}
+                {{#if relsSemEvoAT}}
                 <div class="row"><div class="col-xs-12">
-                  <table id="tabela-semevo" class="table table-striped table-bordered table-hover">
+                  <table id="tabela-semevo-at" class="table table-striped table-bordered table-hover">
                     <thead>
                       <tr>
                         <th style="width:30px;"></th>
@@ -543,7 +594,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                    {{#each relsSemEvo}}
+                    {{#each relsSemEvoAT}}
                     <tr data-bene-id="{{beneId}}">
                       <td class="text-center">
                         <i class="btn-expand ace-icon fa fa-plus-circle bigger-140"></i>
@@ -562,7 +613,7 @@
                         <div class="detalhe-conteudo">
                           <h5>
                             <i class="ace-icon fa fa-times-circle red"></i>
-                            Detalhes de "{{beneNome}}" — Sem Evolução ({{sessoes}} sessões)
+                            Detalhes de "{{beneNome}}" — Sem Evolução AT ({{sessoes}} sessões)
                           </h5>
                           <table class="table table-condensed table-bordered" style="font-size:11px;">
                             <thead>
@@ -635,12 +686,12 @@
                     </tbody>
                     <tfoot>
                       <tr>
-                        <td colspan="2" class="text-right"><b>Total Sem Evolução:</b></td>
-                        <td class="text-right"><b>{{totalSemEvo.sessoes}}</b></td>
+                        <td colspan="2" class="text-right"><b>Total Sem Evolução AT:</b></td>
+                        <td class="text-right"><b>{{totalSemEvoAT.sessoes}}</b></td>
                         <td class="text-right">-</td>
-                        <td class="text-right"><b>{{totalSemEvo.totalCred}}</b></td>
+                        <td class="text-right"><b>{{totalSemEvoAT.totalCred}}</b></td>
                         <td class="text-right">-</td>
-                        <td class="text-right"><b>{{totalSemEvo.totalDeb}}</b></td>
+                        <td class="text-right"><b>{{totalSemEvoAT.totalDeb}}</b></td>
                         <td></td>
                       </tr>
                     </tfoot>
@@ -649,7 +700,7 @@
                 {{else}}
                   <div class="alert alert-success" style="margin:16px;">
                     <i class="ace-icon fa fa-check"></i>
-                    Todos os atendimentos do período possuem evolução selada.
+                    Todos os atendimentos AT do período possuem evolução selada.
                   </div>
                 {{/if}}
               </div>
@@ -657,7 +708,159 @@
           </div>
         </div>
       </div>
-    </div><!-- /painel-semevo -->
+    </div><!-- /painel-semevo-at -->
+
+    <!-- ══════════════════════════════════════════════════════════════
+         ABA 4 — SEM EVOLUÇÃO — OUTROS (Não-AT)
+    ══════════════════════════════════════════════════════════════════ -->
+    <div id="painel-semevo-outros" class="painel-aba">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="widget-box">
+            <div class="widget-header" style="background:#fdebd0; border-color:#e67e22;">
+              <h4 class="widget-title">
+                <i class="ace-icon fa fa-times-circle orange"></i>
+                Sem Evolução Selada — Outros — {{conv_nome}}
+                <small class="text-muted">({{periodoDe}} a {{periodoAte}})</small>
+              </h4>
+              <span class="widget-toolbar">
+                <a href="#" data-action="reload"><i class="ace-icon fa fa-refresh"></i></a>
+                <a href="#" data-action="collapse"><i class="ace-icon fa fa-chevron-up"></i></a>
+              </span>
+            </div>
+            <div class="widget-body">
+              <div class="widget-main">
+                {{#if relsSemEvoNaoAT}}
+                <div class="row"><div class="col-xs-12">
+                  <table id="tabela-semevo-outros" class="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th style="width:30px;"></th>
+                        <th>Beneficiário</th>
+                        <th class="text-right">Sessões</th>
+                        <th class="text-right">Vlr Unit Créd</th>
+                        <th class="text-right">Vlr Total Créd</th>
+                        <th class="text-right">Vlr Unit Déb</th>
+                        <th class="text-right">Vlr Total Déb</th>
+                        <th>Ação</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {{#each relsSemEvoNaoAT}}
+                    <tr data-bene-id="{{beneId}}">
+                      <td class="text-center">
+                        <i class="btn-expand ace-icon fa fa-plus-circle bigger-140"></i>
+                      </td>
+                      <td>{{beneNome}}</td>
+                      <td class="text-right">{{sessoes}}</td>
+                      <td class="text-right">{{valorUnitarioCred}}</td>
+                      <td class="text-right">{{valorTotalCred}}</td>
+                      <td class="text-right">{{valorUnitarioDeb}}</td>
+                      <td class="text-right">{{valorTotalDeb}}</td>
+                      <td></td>
+                    </tr>
+
+                    <tr class="detalhe-linha">
+                      <td colspan="8">
+                        <div class="detalhe-conteudo">
+                          <h5>
+                            <i class="ace-icon fa fa-times-circle orange"></i>
+                            Detalhes de "{{beneNome}}" — Sem Evolução Outros ({{sessoes}} sessões)
+                          </h5>
+                          <table class="table table-condensed table-bordered" style="font-size:11px;">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>Data</th>
+                                <th>Hora</th>
+                                <th>Beneficiário</th>
+                                <th>Convênio</th>
+                                <th>Origem</th>
+                                <th>Categoria</th>
+                                <th>Evento</th>
+                                <th>Terapia</th>
+                                <th>Terapeuta</th>
+                                <th>Cred</th>
+                                <th>Deb</th>
+                                <th>Terapia</th>
+                                <th>Terapeuta</th>
+                                <th>Cred</th>
+                                <th>Deb</th>
+                                <th>Terapia</th>
+                                <th>Terapeuta</th>
+                                <th>Cred</th>
+                                <th>Deb</th>
+                                <th class="text-center">Cred Usado</th>
+                                <th class="text-center">Deb Usado</th>
+                                <th class="text-center">Ação</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            {{#each atendimentos}}
+                            <tr>
+                              <td class="text-center">{{ordem}}</td>
+                              <td style="white-space:nowrap;min-width:75px;">{{data}}</td>
+                              <td>{{hora}}</td>
+                              <td>{{beneNome}}</td>
+                              <td>{{convNome}}</td>
+                              <td>{{{origemLabel}}}</td>
+                              <td>{{{categoriaLabel}}}</td>
+                              <td>{{{eventoLabel}}}</td>
+                              <td>{{terapiaOrig}}</td>
+                              <td>{{terapeutaOrig}}</td>
+                              <td>{{{credOrig}}}</td>
+                              <td>{{{debOrig}}}</td>
+                              <td>{{terapiaFixa}}</td>
+                              <td>{{terapeutaFixo}}</td>
+                              <td>{{{credFixo}}}</td>
+                              <td>{{{debFixo}}}</td>
+                              <td>{{terapiaSubst}}</td>
+                              <td>{{terapeutaSubst}}</td>
+                              <td>{{{credSubst}}}</td>
+                              <td>{{{debSubst}}}</td>
+                              <td class="text-center">{{{credUsado}}}</td>
+                              <td class="text-center">{{{debUsado}}}</td>
+                              <td class="text-center">
+                                {{#if permiteEdicao}}
+                                <a class="green" href="/menu/atendimento/atendadm/edi/{{_id}}">
+                                  <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                </a>
+                                {{/if}}
+                              </td>
+                            </tr>
+                            {{/each}}
+                            </tbody>
+                          </table>
+                        </div>
+                      </td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="2" class="text-right"><b>Total Sem Evolução (Outros):</b></td>
+                        <td class="text-right"><b>{{totalSemEvoNaoAT.sessoes}}</b></td>
+                        <td class="text-right">-</td>
+                        <td class="text-right"><b>{{totalSemEvoNaoAT.totalCred}}</b></td>
+                        <td class="text-right">-</td>
+                        <td class="text-right"><b>{{totalSemEvoNaoAT.totalDeb}}</b></td>
+                        <td></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div></div>
+                {{else}}
+                  <div class="alert alert-success" style="margin:16px;">
+                    <i class="ace-icon fa fa-check"></i>
+                    Todos os atendimentos (não-AT) do período possuem evolução selada.
+                  </div>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /painel-semevo-outros -->
 
   </div><!-- /page-content -->
 </div>

@@ -3719,6 +3719,14 @@ console.log("ASDASDASDASD sessaoTot? "+sessaoTot)
                 return evolucaoPreenchida && seloAtivo;
             };
 
+            // ── Determina se o atendimento é de AT (Análise do Comportamento) ─
+            // Verifica pelo nome da terapia utilizada: contém " AT " ou " AT(" ou termina em " AT"
+            const isAtTerapia = (at) => {
+                const terapiaNome = lookupTerapia[at.atend_terapiaid] || '';
+                const upper = (' ' + terapiaNome.toUpperCase() + ' ');
+                return upper.includes(' AT ') || upper.includes(' AT(');
+            };
+
             const conv_nome = lookupConv[rawConv] || "(nenhum)";
 
             // ── Ordenação global dos atendimentos ─────────────────────────────
@@ -3883,23 +3891,29 @@ console.log("ASDASDASDASD sessaoTot? "+sessaoTot)
                 };
             };
 
-            // ── Monta as 3 tabelas ────────────────────────────────────────────
-            const tabGeral    = montarGruposBene(() => true);
-            const tabComEvo   = montarGruposBene((at) => temEvolucaoSelada(at));
-            const tabSemEvo   = montarGruposBene((at) => !temEvolucaoSelada(at));
+            // ── Monta as 5 tabelas ────────────────────────────────────────────
+            const tabGeral       = montarGruposBene(() => true);
+            const tabComEvo      = montarGruposBene((at) => temEvolucaoSelada(at));
+            const tabSemEvo      = montarGruposBene((at) => !temEvolucaoSelada(at));
+            const tabSemEvoAT    = montarGruposBene((at) => !temEvolucaoSelada(at) && isAtTerapia(at));
+            const tabSemEvoNaoAT = montarGruposBene((at) => !temEvolucaoSelada(at) && !isAtTerapia(at));
 
-            console.log('[DEBUG EVO] Geral:', tabGeral.total.sessoes, '| Com Evo:', tabComEvo.total.sessoes, '| Sem Evo:', tabSemEvo.total.sessoes);
+            console.log('[DEBUG EVO] Geral:', tabGeral.total.sessoes, '| Com Evo:', tabComEvo.total.sessoes, '| Sem Evo:', tabSemEvo.total.sessoes, '| Sem Evo AT:', tabSemEvoAT.total.sessoes, '| Sem Evo Outros:', tabSemEvoNaoAT.total.sessoes);
 
             res.render("atendimento/tabdimatendconvbeneval_evo", {
                 convs,
                 anos,
                 terapias,
-                relsGeral:  tabGeral.rels,
-                relsComEvo: tabComEvo.rels,
-                relsSemEvo: tabSemEvo.rels,
-                totalGeral:  tabGeral.total,
-                totalComEvo: tabComEvo.total,
-                totalSemEvo: tabSemEvo.total,
+                relsGeral:        tabGeral.rels,
+                relsComEvo:       tabComEvo.rels,
+                relsSemEvo:       tabSemEvo.rels,
+                relsSemEvoAT:     tabSemEvoAT.rels,
+                relsSemEvoNaoAT:  tabSemEvoNaoAT.rels,
+                totalGeral:       tabGeral.total,
+                totalComEvo:      tabComEvo.total,
+                totalSemEvo:      tabSemEvo.total,
+                totalSemEvoAT:    tabSemEvoAT.total,
+                totalSemEvoNaoAT: tabSemEvoNaoAT.total,
                 periodoDe,
                 periodoAte,
                 conv_nome,
