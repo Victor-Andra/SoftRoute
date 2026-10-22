@@ -2949,6 +2949,18 @@ router.post('/atendimento/tabdimConvBeneAtendvalFiltro', fncGeral.IsAuthenticate
 });
 
 // ============================================
+// 4b. Convênio e Beneficiário — por Distinção de Evolução
+// Relatório Detalhado por Convênio e Beneficiário por Distinção de Evolução
+// ============================================
+router.get('/atendimento/tabdimConvBeneAtendvalEvo', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.tabdimConvBeneAtendvalEvo(req, res);
+});
+
+router.post('/atendimento/tabdimConvBeneAtendvalFiltroEvo', fncGeral.IsAuthenticated, (req, res) => {
+    fncAtend.tabdimConvBeneAtendvalFiltroEvo(req, res);
+});
+
+// ============================================
 // 4. Beneficiário e Terapia (semelhante ao Ana. Benefinciario)
 // ============================================
 router.get('/atendimento/tabdimBeneVal', fncGeral.IsAuthenticated, (req, res) => {
@@ -5737,6 +5749,14 @@ router.post('/financeiro/corrente/atualizar', fncGeral.IsAuthenticated, (req,res
 
 
  
+
+// ============================================================
+// UTILITÁRIO — Localizar agendas/atendimentos Wesley + Leo Alves em 05/09
+// ⚠️  Rota de uso único — revisar log antes de descomentar o delete
+// ============================================================
+router.get('/agenda/util/localizar-wesley-leo', fncGeral.IsAuthenticated, (req, res) => {
+    fncAgenda.localizarAtendimentosWesleyLeo(req, res);
+});
 
 module.exports = router
 

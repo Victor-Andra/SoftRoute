@@ -9031,36 +9031,6 @@ Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         })
     },
     carregaAgendaF(req,res){
-       let db = req.cookies['preferredDb'];
-    let Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
-    let Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
-
-    const filtro = {
-        atend_beneid: new mongoose.Types.ObjectId("6a9839be371338d7b2eb6ef2"),
-        atend_atenddata: {
-            $gte: new Date("2026-09-01T00:00:00.000Z"),
-            $lt: new Date("2026-10-01T00:00:00.000Z")
-        }
-    };
-
-    Atend.countDocuments(filtro)
-        .then(quantidade => {
-            console.log("Quantidade de atendimentos encontrados:", quantidade);
-
-            return Atend.updateMany(
-                filtro,
-                {
-                    $set: {
-                        atend_beneid: new mongoose.Types.ObjectId("66d5f22d07ce336c803db528")
-                    }
-                }
-            ).then(resultado => {
-                console.log("Atendimentos alterados:", resultado.modifiedCount);
-            });
-        })
-        .catch(err => {
-            console.error("Erro ao consultar atendimentos:", err);
-        });
         //this.atualizaValores(req,res);
         let aux = 1;
         let is = false;
@@ -13050,6 +13020,8 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
               atend_mergeterapiaid: s.agenda_terapiaid,
               atend_mergevalorcre: convcrevalSub,
               atend_mergevalordeb: convdebvalSub,
+              // evolucao: semanal tem precedência, fallback para fixa
+              atend_evolucao: s.agenda_evolucao || fixa.agenda_evolucao || "",
               // origem tracking
               atend_agenda_f_id_orig: fixa._id,
               atend_agenda_s_id_orig: s._id,
@@ -13101,6 +13073,7 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
             atend_salaid: fixa.agenda_salaid,
             atend_valorcre: convcreval,
             atend_valordeb: convdebval,
+            atend_evolucao: fixa.agenda_evolucao || "",
             atend_agenda_f_id_orig: fixa._id,
             atend_agenda_s_id_orig: new mongoose.mongo.ObjectId('766f69643132333435366964'),
             atend_fixo: "false",

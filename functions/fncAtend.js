@@ -3170,6 +3170,38 @@ console.log("ASDASDASDASD sessaoTot? "+sessaoTot)
             console.log(err)
         })
     },
+    // GET para o relatório por Distinção de Evolução — renderiza a página inicial com formulário vazio
+    tabdimConvBeneAtendvalEvo(req, res) {
+        const db = req.cookies['preferredDb'];
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+
+        Conv.find().then((convs) => {
+            convs.sort((a, b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));
+            Terapia.find().then((terapias) => {
+                Ano.find().sort({ ano_nome: 1 }).then((anos) => {
+                    res.render("atendimento/tabdimatendconvbeneval_evo", {
+                        terapias,
+                        convs,
+                        anos,
+                        relsGeral:  [],
+                        relsComEvo: [],
+                        relsSemEvo: [],
+                        totalGeral:  { sessoes: 0, totalCred: '0,00', totalDeb: '0,00' },
+                        totalComEvo: { sessoes: 0, totalCred: '0,00', totalDeb: '0,00' },
+                        totalSemEvo: { sessoes: 0, totalCred: '0,00', totalDeb: '0,00' },
+                        periodoDe: '',
+                        periodoAte: '',
+                        conv_nome: '',
+                        filtro: { dataIni: '', dataFim: '', convid: '766f69643132333435366964' }
+                    });
+                });
+            });
+        }).catch((err) => {
+            console.log(err);
+        });
+    },
     tabdimConvBeneAtendvalFiltro(req, res) {
         const db = req.cookies['preferredDb'];
         const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
@@ -3548,6 +3580,334 @@ console.log("ASDASDASDASD sessaoTot? "+sessaoTot)
         })
         .catch(err => {
             console.error('[ERRO tabdimAtendimentoConvBeneValFiltro]', err);
+            res.status(500).send(`
+                <script>
+                    alert("Erro ao carregar relatório. Tente novamente.");
+                    history.back();
+                </script>
+            `);
+        });
+    },
+
+    // ============================================
+    // 4b. Convênio e Beneficiário — por Distinção de Evolução
+    // Relatório Detalhado por Convênio e Beneficiário por Distinção de Evolução
+    // Criado por: Wagner Cintra / Kiro — 20/10/2026
+    // Gera 3 tabelas:
+    //   1. Geral    → todos os atendimentos (igual ao original)
+    //   2. Com Evo  → atend_evolucao preenchido E atend_selo = true
+    //   3. Sem Evo  → atend_evolucao vazio OU atend_selo = false/null
+    // Na tabela de detalhes de cada beneficiário, inclui coluna "Evolução"
+    // ============================================
+    tabdimConvBeneAtendvalFiltroEvo(req, res) {
+        const db = req.cookies['preferredDb'];
+        const Ano = getModel(db, 'tb_ano', anoClass.AnoSchema);
+        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+        const Conv = getModel(db, 'tb_conv', convClass.ConvSchema);
+        const Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema);
+        const Bene = getModel(db, 'tb_bene', beneClass.BeneSchema);
+        const Usuario = getModel("PortalDoUsuario", 'tb_usuario', usuarioClass.UsuarioSchema);
+
+        const rawIni = req.body.dataIni;
+        const rawFim = req.body.dataFim;
+        const rawConv = req.body.relConvid;
+
+        const hojeStr = new Date().toISOString().replace('T', ' ').substring(0, 23) + 'Z';
+        const safeDataIni = (typeof rawIni === 'string' && rawIni.trim() !== '') ? rawIni : hojeStr;
+        const safeDataFim = (typeof rawFim === 'string' && rawFim.trim() !== '') ? rawFim : hojeStr;
+
+        let seg, sex;
+        try {
+            seg = fncGeral.getDateFromString(safeDataIni, "ini");
+            sex = fncGeral.getDateFromString(safeDataFim, "fim");
+            if (!seg || isNaN(seg.getTime())) throw new Error('Data inicial inválida');
+            if (!sex || isNaN(sex.getTime())) throw new Error('Data final inválida');
+        } catch (err) {
+            console.error('[ERRO data tabdimConvBeneAtendvalFiltroEvo]', { rawIni, rawFim, error: err.message });
+            return res.status(400).send(`
+                <script>
+                    alert("Erro nas datas. Verifique o período selecionado.");
+                    history.back();
+                </script>
+            `);
+        }
+
+        const filtro = {
+            dataIni: safeDataIni,
+            dataFim: safeDataFim,
+            convid: rawConv || '766f69643132333435366964'
+        };
+
+        const periodoDe = fncGeral.getDataInvert(safeDataIni.split(' ')[0]);
+        const periodoAte = fncGeral.getDataInvert(safeDataFim.split(' ')[0]);
+
+        Promise.all([
+            Atend.find({
+                atend_atenddata: { $gte: seg, $lte: sex },
+                atend_categoria: {
+                    $nin: ["Feriado", "Falta Absoluta"]
+                }
+            }).exec(),
+            Conv.find().exec(),
+            Conv.findById(rawConv).exec(),
+            Terapia.find().exec(),
+            Ano.find().exec(),
+            Usuario.find({ usuario_funcaoid: "6241030bfbcc51f47c720a0b" }).exec(),
+            Bene.find().exec()
+        ])
+        .then(([atRaw, convs, convSelecionado, terapias, anos, terapeutas, benes]) => {
+
+            // ── Ordenações ────────────────────────────────────────────────────
+            const normNome = (str) => (str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+            convs.sort((a, b) => normNome(a.conv_nome) < normNome(b.conv_nome) ? -1 : normNome(a.conv_nome) > normNome(b.conv_nome) ? 1 : 0);
+            benes.sort((a, b) => normNome(a.bene_nome) < normNome(b.bene_nome) ? -1 : normNome(a.bene_nome) > normNome(b.bene_nome) ? 1 : 0);
+            terapias.sort((a, b) => normNome(a.terapia_nome) < normNome(b.terapia_nome) ? -1 : normNome(a.terapia_nome) > normNome(b.terapia_nome) ? 1 : 0);
+            terapeutas.sort((a, b) => normNome(a.usuario_nome) < normNome(b.usuario_nome) ? -1 : normNome(a.usuario_nome) > normNome(b.usuario_nome) ? 1 : 0);
+
+            console.log('[DEBUG EVO] rawConv:', rawConv, '| Total atend:', atRaw.length, '| Total benes:', benes.length);
+
+            // ── Lookups ──────────────────────────────────────────────────────
+            const lookupTerapia = {};
+            terapias.forEach(t => { lookupTerapia[t._id] = t.terapia_nome; });
+
+            const lookupUsuario = {};
+            terapeutas.forEach(u => { lookupUsuario[u._id] = u.usuario_nome; });
+
+            const lookupBene = {};
+            benes.forEach(b => { lookupBene[b._id] = b.bene_nome || 'Sem Nome'; });
+
+            const lookupConv = {};
+            convs.forEach(c => { lookupConv[c._id] = c.conv_nome; });
+
+            // ── Helpers ───────────────────────────────────────────────────────
+            const toCentavos = (str) => {
+                if (!str || typeof str !== 'string') return 0;
+                const clean = str.replace(/\D/g, '');
+                return clean.length >= 2
+                    ? parseInt(clean.slice(0, -2) + clean.slice(-2), 10)
+                    : parseInt(clean.padStart(2, '0'), 10);
+            };
+
+            const getValoresAtendimento = (at) => {
+                const origem = (at.atend_org || '').trim();
+                const fixo = at.atend_fixo === "true";
+                const categoria = at.atend_categoria;
+
+                if (origem === "Padrão") {
+                    return { cred: at.atend_valorcre || "0,00", deb: at.atend_valordeb || "0,00", tipo: "Padrão" };
+                } else if (origem === "Administrativo") {
+                    if (fixo) {
+                        return { cred: at.atend_fixovalorcre || "0,00", deb: at.atend_fixovalordeb || "0,00", tipo: "Fixo" };
+                    } else if (categoria === "Substituição") {
+                        return { cred: at.atend_mergevalorcre || "0,00", deb: at.atend_mergevalordeb || "0,00", tipo: "Substituição" };
+                    } else {
+                        return { cred: at.atend_valorcre || "0,00", deb: at.atend_valordeb || "0,00", tipo: "Administrativo" };
+                    }
+                } else {
+                    return { cred: at.atend_valorcre || "0,00", deb: at.atend_valordeb || "0,00", tipo: "Outro" };
+                }
+            };
+
+            const formatValor = (v) => (!v || v.trim() === '' || v === '0,00') ? '-' : v;
+
+            // ── Determina se atendimento tem evolução selada ──────────────────
+            const temEvolucaoSelada = (at) => {
+                const evo = at.atend_evolucao;
+                const evolucaoPreenchida = evo && typeof evo === 'string' && evo.trim() !== '';
+                const seloAtivo = at.atend_selo === true || at.atend_selo === "true";
+                return evolucaoPreenchida && seloAtivo;
+            };
+
+            const conv_nome = lookupConv[rawConv] || "(nenhum)";
+
+            // ── Ordenação global dos atendimentos ─────────────────────────────
+            const atOrdenado = atRaw
+                .filter(a => a.atend_atenddata)
+                .sort((a, b) => {
+                    const d1 = new Date(a.atend_atenddata).getTime();
+                    const d2 = new Date(b.atend_atenddata).getTime();
+                    if (d1 !== d2) return d1 - d2;
+                    return (a.atend_atendhora || '').localeCompare(b.atend_atendhora || '');
+                });
+
+            // ── Função para montar array de grupos por beneficiário ───────────
+            // filtroFn: função que recebe (at) e retorna true se o atendimento deve entrar nesta tabela
+            const montarGruposBene = (filtroAtend) => {
+                const rel = [];
+                let sessaoTot = 0;
+                let valTotCredCentavos = 0;
+                let valTotDebCentavos = 0;
+
+                benes.forEach(b => {
+                    const detalhes = [];
+                    let somaCredIndividual = 0;
+                    let somaDebIndividual = 0;
+
+                    atOrdenado.forEach(at => {
+                        const idIgual = (x, y) => ("" + (x || '')).trim() === ("" + (y || '')).trim();
+
+                        // Filtra por convênio e beneficiário
+                        if (!idIgual(at.atend_convid, rawConv)) return;
+                        if (!idIgual(at.atend_beneid, b._id)) return;
+
+                        // Aplica filtro específico da tabela (geral / com evo / sem evo)
+                        if (!filtroAtend(at)) return;
+
+                        const valores = getValoresAtendimento(at);
+                        const vCredCent = toCentavos(valores.cred);
+                        const vDebCent = toCentavos(valores.deb);
+
+                        somaCredIndividual += vCredCent;
+                        somaDebIndividual += vDebCent;
+
+                        let dataFmt = '-';
+                        if (at.atend_atenddata) {
+                            try {
+                                const d = new Date(at.atend_atenddata);
+                                if (!isNaN(d.getTime())) {
+                                    dataFmt = fncGeral.getDataInvert(d.toISOString().split('T')[0]);
+                                }
+                            } catch (e) { dataFmt = '-'; }
+                        }
+
+                        const origemLabel = (() => {
+                            const valor = (at.atend_org || '').trim();
+                            if (valor === "Administrativo") return '<span class="label label-sm label-warning">ADM</span>';
+                            if (valor === "Padrão") return '<span class="label label-sm label-info">PAD</span>';
+                            return '<span class="label label-sm label-default">-</span>';
+                        })();
+
+                        const categoriaLabel = (() => {
+                            const c = at.atend_categoria;
+                            if (c === "Nenhuma Observação") return '<span class="label label-sm label-warning">Sem Evento</span>';
+                            if (c === "Substituição" || c === "Substituto") return '<span class="label label-sm label-pink">Substituição</span>';
+                            if (c === "Extra") return '<span class="label label-sm label-purple">Extra</span>';
+                            if (c === "Falta") return '<span class="label label-sm label-yellow">Falta</span>';
+                            if (c === "Padrão" || c === "SubstitutoFixo") return '<span class="label label-sm label-success">Sem Evento</span>';
+                            return c || '-';
+                        })();
+
+                        const eventoLabel = at.atend_fixo === "true"
+                            ? '<span class="label label-sm label-danger">Substituto Fixo</span>'
+                            : '<span class="label label-sm label-success">Padrão</span>';
+
+                        const seloLabel = (at.atend_selo === true || at.atend_selo === "true")
+                            ? '<span class="label label-sm label-success"><i class="ace-icon fa fa-check"></i> Selada</span>'
+                            : '<span class="label label-sm label-default">Não selada</span>';
+
+                        const evolucaoTexto = (at.atend_evolucao && at.atend_evolucao.trim() !== '')
+                            ? at.atend_evolucao
+                            : null;
+
+                        const beneNome = lookupBene[at.atend_beneid] || '-';
+                        const convNome = lookupConv[at.atend_convid] || '-';
+                        const terapiaOrig = lookupTerapia[at.atend_terapiaid] || '-';
+                        const terapeutaOrig = lookupUsuario[at.atend_terapeutaid] || '-';
+
+                        const terapiaFixa = at.atend_fixoterapiaid && at.atend_fixoterapiaid !== '766f69643132333435366964'
+                            ? lookupTerapia[at.atend_fixoterapiaid] || '-' : '-';
+                        const terapeutaFixo = at.atend_fixoterapeutaid && at.atend_fixoterapeutaid !== '766f69643132333435366964'
+                            ? lookupUsuario[at.atend_fixoterapeutaid] || '-' : '-';
+                        const terapiaSubst = at.atend_mergeterapiaid && at.atend_mergeterapiaid !== '766f69643132333435366964'
+                            ? lookupTerapia[at.atend_mergeterapiaid] || '-' : '-';
+                        const terapeutaSubst = at.atend_mergeterapeutaid && at.atend_mergeterapeutaid !== '766f69643132333435366964'
+                            ? lookupUsuario[at.atend_mergeterapeutaid] || '-' : '-';
+
+                        detalhes.push({
+                            ordem: (detalhes.length + 1).toString(),
+                            _id: at._id,
+                            data: dataFmt,
+                            hora: at.atend_atendhora || '-',
+                            beneNome,
+                            convNome,
+                            origemLabel,
+                            categoriaLabel,
+                            eventoLabel,
+                            terapiaOrig,
+                            terapeutaOrig,
+                            credOrig: formatValor(at.atend_valorcre || "0,00"),
+                            debOrig: formatValor(at.atend_valordeb || "0,00"),
+                            terapiaFixa,
+                            terapeutaFixo,
+                            credFixo: at.atend_fixovalorcre ? formatValor(at.atend_fixovalorcre) : '-',
+                            debFixo: at.atend_fixovalordeb ? formatValor(at.atend_fixovalordeb) : '-',
+                            terapiaSubst,
+                            terapeutaSubst,
+                            credSubst: at.atend_mergevalorcre ? formatValor(at.atend_mergevalorcre) : '-',
+                            debSubst: at.atend_mergevalordeb ? formatValor(at.atend_mergevalordeb) : '-',
+                            credUsado: formatValor(valores.cred),
+                            debUsado: formatValor(valores.deb),
+                            tipoCalculo: valores.tipo,
+                            evolucaoTexto,
+                            seloLabel,
+                            permiteEdicao: true
+                        });
+                    });
+
+                    if (detalhes.length === 0) return;
+
+                    let valorUnitarioCredCentavos = 0;
+                    let valorUnitarioDebCentavos = 0;
+                    if (detalhes.length > 0) {
+                        valorUnitarioCredCentavos = Math.round(somaCredIndividual / detalhes.length);
+                        valorUnitarioDebCentavos = Math.round(somaDebIndividual / detalhes.length);
+                    }
+
+                    rel.push({
+                        beneId: b._id,
+                        beneNome: b.bene_nome || 'Sem Nome',
+                        sessoes: detalhes.length,
+                        valorUnitarioCred: fncGeral.formatarReal(valorUnitarioCredCentavos),
+                        valorUnitarioDeb: fncGeral.formatarReal(valorUnitarioDebCentavos),
+                        valorTotalCred: fncGeral.formatarReal(somaCredIndividual),
+                        valorTotalDeb: fncGeral.formatarReal(somaDebIndividual),
+                        atendimentos: detalhes
+                    });
+
+                    sessaoTot += detalhes.length;
+                    valTotCredCentavos += somaCredIndividual;
+                    valTotDebCentavos += somaDebIndividual;
+                });
+
+                // Ordena resultado por nome do beneficiário
+                rel.sort((a, b) => normNome(a.beneNome) < normNome(b.beneNome) ? -1 : normNome(a.beneNome) > normNome(b.beneNome) ? 1 : 0);
+
+                return {
+                    rels: rel,
+                    total: {
+                        sessoes: sessaoTot,
+                        totalCred: fncGeral.formatarReal(valTotCredCentavos),
+                        totalDeb: fncGeral.formatarReal(valTotDebCentavos)
+                    }
+                };
+            };
+
+            // ── Monta as 3 tabelas ────────────────────────────────────────────
+            const tabGeral    = montarGruposBene(() => true);
+            const tabComEvo   = montarGruposBene((at) => temEvolucaoSelada(at));
+            const tabSemEvo   = montarGruposBene((at) => !temEvolucaoSelada(at));
+
+            console.log('[DEBUG EVO] Geral:', tabGeral.total.sessoes, '| Com Evo:', tabComEvo.total.sessoes, '| Sem Evo:', tabSemEvo.total.sessoes);
+
+            res.render("atendimento/tabdimatendconvbeneval_evo", {
+                convs,
+                anos,
+                terapias,
+                relsGeral:  tabGeral.rels,
+                relsComEvo: tabComEvo.rels,
+                relsSemEvo: tabSemEvo.rels,
+                totalGeral:  tabGeral.total,
+                totalComEvo: tabComEvo.total,
+                totalSemEvo: tabSemEvo.total,
+                periodoDe,
+                periodoAte,
+                conv_nome,
+                filtro
+            });
+        })
+        .catch(err => {
+            console.error('[ERRO tabdimConvBeneAtendvalFiltroEvo]', err);
             res.status(500).send(`
                 <script>
                     alert("Erro ao carregar relatório. Tente novamente.");
@@ -20713,6 +21073,7 @@ relAtendteraconsFiltro: function (req, res) {
                                 // 🔍 7️ ANALÍTICO: monta registro com dados + alertas visuais
                                 let dataFmt = fncGeral.getDataInvert(fncGeral.getDataFMT(atend.atend_atenddata));
                                 let horaFmt = "--";
+                                console.log("atend.atend_atenddata> "+atend.atend_atenddata)
                                 if (atend.atend_atenddata) {
                                     let d = new Date(atend.atend_atenddata);
                                     if (!isNaN(d.getTime())) {

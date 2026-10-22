@@ -4,6 +4,7 @@ const { getModel } = require('../functions/fncGeral');
 //Houve alteração na Estrutura e Banco da evolução de atendimentos, eles agora são vinculados à Agenda e Não ao Atendimento.
 //Classes Extrangeiras
 const evoatendClass = require("../models/agenda")
+const atendClass = require("../models/atend")
 
 //As classe tem que ser declaradas antes das tabelas
 //Classes Extrangeiras
@@ -4269,12 +4270,50 @@ async apagarEvolucaoIndevidaevoatend(req, res) {
         let resultado;
         let atrazo = req.body.agendaAtrazo;
         try{
-            agendaClass.evolucao(req,res).then((res)=>{
+            agendaClass.evolucao(req,res).then(async (res)=>{
                 //console.log("Atualização Realizada!")
                 //console.log("res")
                 console.log("res:"+res)
                 resultado = res;
                 console.log("resultado:"+resultado)
+
+                // ── Sincronizar atend_evolucao se houver atendimento vinculado ──
+                if (resultado === true && req.body.id) {
+                    try {
+                        const db = req.cookies['preferredDb'];
+                        const Atend = getModel(db, 'tb_atend', atendClass.AtendSchema);
+                        const agendaId = req.body.id;
+                        const novaEvolucao = req.body.agendaEvolucao || "";
+                        const isSemanal = req.body.agendaTemp === "true";
+
+                        // Determina o valor do selo a partir do request (agenda_selo → atend_selo)
+                        const novoSelo = (req.body.agendaSelo === 'on' || req.body.agendaSelo === 'true') ? true : false;
+
+                        // Se for semanal: busca atendimento pelo id da agenda semanal (s_id_orig)
+                        // Se for fixa sem semanal: busca pelo id da agenda fixa (f_id_orig)
+                        // Regra: nunca alterar agenda fixa quando vier de semanal — apenas o atendimento
+                        const query = isSemanal
+                            ? { atend_agenda_s_id_orig: agendaId }
+                            : { atend_agenda_f_id_orig: agendaId };
+
+                        const atendVinculado = await Atend.findOne(query).lean();
+
+                        if (atendVinculado) {
+                            await Atend.findByIdAndUpdate(
+                                atendVinculado._id,
+                                { $set: { atend_evolucao: novaEvolucao, atend_selo: novoSelo } }
+                            );
+                            console.log(`✅ atend_evolucao + atend_selo sincronizados | Atend: ${atendVinculado._id} | Agenda: ${agendaId} | Semanal: ${isSemanal} | Selo: ${novoSelo}`);
+                        } else {
+                            console.log(`ℹ️ Nenhum atendimento vinculado à agenda ${agendaId} — evolução salva apenas na agenda.`);
+                        }
+                    } catch (syncErr) {
+                        // Falha na sync não deve impedir o fluxo normal
+                        console.error("⚠️ Erro ao sincronizar atend_evolucao/atend_selo:", syncErr);
+                    }
+                }
+                // ──────────────────────────────────────────────────────────────
+
             }).catch((err) =>{
                 console.log("error")
                 console.log(err)

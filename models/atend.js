@@ -31,6 +31,7 @@ const AtendSchema = mongoose.Schema({
     atend_fixovalorcre :{ type: String, required: false },
     atend_fixovalordeb :{ type: String, required: false },
     atend_evolucao :{ type: String, required: false },
+    atend_selo :{ type: Boolean, required: false },// Indica se a evolução foi concluída/selada (true = selado, false = não selado). Copiado de agenda_selo ao sincronizar evolução. Wagner Cintra, 20/10/2026
     atend_obs :{ type: String, required: false },
     //Informações Validadas pelo fechamento
     atend_terapiaidval :{ type: ObjectId, required: false },//_id da tb_terapia Validada, Wagner Cintra, 27/10/2025
@@ -40,7 +41,6 @@ const AtendSchema = mongoose.Schema({
     atend_usuarioval: { type: ObjectId, required: false },//_id de Quem validou e fez o fechamento da tb_usuario, Wagner Cintra, 27/10/2025
     atend_dataval :{ type: Date, required: false },//Data do fechamento desse atendimento, Wagner Cintra, 27/10/2025
     atend_valbloqueio :{ type: String, required: false },//false ou true para bloquear edição deletar pois esse atendimento foi validado e pertence ao fechamento, Wagner Cintra, 27/10/2025
-
     atend_num :{ type: Number, required: true },
     atend_rel :{ type: String, required: false },
     atend_agenda_f_id_orig :{ type: ObjectId, required: false, unique: true },
@@ -78,6 +78,7 @@ class Atend{
         atend_fixovalorcre,
         atend_fixovalordeb,
         atend_evolucao,
+        atend_selo,
         atend_obs,
         //Informações Validadas pelo fechamento
         atend_terapiaidval,
@@ -124,6 +125,7 @@ class Atend{
         this.atend_dataval = atend_dataval,
         this.atend_valbloqueio = atend_valbloqueio,
         this.atend_evolucao = atend_evolucao,
+        this.atend_selo = atend_selo,
         this.atend_obs = atend_obs,
         this.atend_valorcreval = atend_valorcreval,
         this.atend_valordebval = atend_valordebval,
@@ -853,6 +855,124 @@ module.exports = {
             })
         } else {
             return "true";
+        }
+    },
+
+    // ============================================================
+    // SINCRONIZAÇÃO RETROATIVA DE EVOLUÇÕES AGENDA → ATENDIMENTO
+    // Criado por: Kiro / Wagner Cintra
+    // Criado em: 2026/10/19
+    //
+    // Percorre todos os atendimentos que possuam vínculo com uma
+    // agenda (via atend_agenda_s_id_orig para semanais, ou
+    // atend_agenda_f_id_orig para fixas) e copia o campo
+    // agenda_evolucao para atend_evolucao, desde que a agenda
+    // possua evolução preenchida.
+    //
+    // Regras:
+    //   - Semanal tem precedência: se o atendimento tem
+    //     atend_agenda_s_id_orig válido (diferente do sentinel),
+    //     usa a evolução da agenda semanal.
+    //   - Caso contrário usa a da agenda fixa.
+    //   - Atendimentos sem nenhum vínculo de agenda são ignorados.
+    //   - O campo atend_evolucao só é atualizado se a agenda de
+    //     origem tiver agenda_evolucao preenchido (não vazio/null).
+    // ============================================================
+    //await module.exports.sincronizaEvolucaoRetroativa(req, res).catch((err) => {
+    //    console.error('[sincronizaEvolucaoRetroativa] erro ao executar durante edição:', err);
+    //});
+    sincronizaEvolucaoRetroativa: async (req, res) => {
+        console.log("lets get started")
+        const db = req.cookies['preferredDb'];
+        const AtendModel = getModel(db, 'tb_atend', AtendSchema);
+        const agendaClass = require('../models/agenda');
+        const AgendaModel = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+
+        // ID sentinel usado em atend_agenda_s_id_orig quando não há semanal
+        const SENTINEL_ID = '766f69643132333435366964';
+
+        let totalProcessados = 0;
+        let totalAtualizados = 0;
+        let totalSemEvolucao = 0;
+        let totalSemAgenda = 0;
+        let erros = [];
+
+        try {
+            // Busca todos os atendimentos que possuem pelo menos um vínculo de agenda
+            const atendimentos = await AtendModel.find({
+                $or: [
+                    { atend_agenda_s_id_orig: { $exists: true, $ne: null } },
+                    { atend_agenda_f_id_orig: { $exists: true, $ne: null } }
+                ]
+            }).lean();
+
+            console.log(`🔄 [sincronizaEvolucaoRetroativa] Total de atendimentos a processar: ${atendimentos.length}`);
+
+            for (const atend of atendimentos) {
+                totalProcessados++;
+                try {
+                    const temSemanal =
+                        atend.atend_agenda_s_id_orig &&
+                        atend.atend_agenda_s_id_orig.toString() !== SENTINEL_ID;
+
+                    // Decide qual agenda consultar: semanal tem precedência
+                    const agendaId = temSemanal
+                        ? atend.atend_agenda_s_id_orig
+                        : atend.atend_agenda_f_id_orig;
+
+                    if (!agendaId) {
+                        totalSemAgenda++;
+                        continue;
+                    }
+
+                    const agenda = await AgendaModel.findById(agendaId).lean();
+
+                    if (!agenda) {
+                        totalSemAgenda++;
+                        console.warn(`⚠️ Agenda ${agendaId} não encontrada para atend ${atend._id}`);
+                        continue;
+                    }
+
+                    const evolucao = agenda.agenda_evolucao;
+
+                    // Só atualiza se a agenda tiver evolução preenchida
+                    if (!evolucao || evolucao.toString().trim() === '') {
+                        totalSemEvolucao++;
+                        continue;
+                    }
+
+                    // Copia agenda_selo para atend_selo (identifica se evolução foi concluída/selada)
+                    const seloValue = (agenda.agenda_selo === true || agenda.agenda_selo === "true") ? true : false;
+
+                    await AtendModel.findByIdAndUpdate(
+                        atend._id,
+                        { $set: { atend_evolucao: evolucao, atend_selo: seloValue } }
+                    );
+
+                    totalAtualizados++;
+                    console.log(`✅ Atend ${atend._id} → evolucao copiada da agenda ${agendaId} (${temSemanal ? 'semanal' : 'fixa'})`);
+
+                } catch (errInner) {
+                    erros.push({ atend: atend._id, error: String(errInner) });
+                    console.error(`❌ Erro ao processar atend ${atend._id}:`, errInner);
+                }
+            }
+
+            const resumo = {
+                totalProcessados,
+                totalAtualizados,
+                totalSemEvolucao,
+                totalSemAgenda,
+                totalErros: erros.length,
+                erros
+            };
+
+            console.log('📊 [sincronizaEvolucaoRetroativa] Resumo:', resumo);
+            return resumo;
+
+        } catch (err) {
+            console.error('❌ [sincronizaEvolucaoRetroativa] Erro crítico:', err);
+            throw err;
         }
     }
 };
