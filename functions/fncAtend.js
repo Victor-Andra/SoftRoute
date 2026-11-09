@@ -461,7 +461,7 @@ module.exports = {
             Conv.find().then((conv)=>{
                 conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
                 //console.log("Listagem Realizada de Convenios")
-                Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{//Usuário c/ filtro de função = Terapeutas
+                Usuario.find().then((terapeuta)=>{//Todos os usuários podem ser terapeutas
                     terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Usuário")
                         Terapia.find().then((terapia)=>{
@@ -685,7 +685,7 @@ module.exports = {
                 Conv.find().then((conv)=>{
                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Convenios")
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                    Usuario.find().then((terapeuta)=>{//Todos os usuários podem ser terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Usuário")
                             Terapia.find().then((terapia)=>{
@@ -838,7 +838,7 @@ module.exports = {
                 Conv.find().then((conv)=>{
                     conv.sort((a,b) => (a.conv_nome > b.conv_nome) ? 1 : ((b.conv_nome > a.conv_nome) ? -1 : 0));//Ordena por ordem alfabética 
                     //console.log("Listagem Realizada de Convenios")
-                    Usuario.find({usuario_funcaoid:"6241030bfbcc51f47c720a0b"}).then((terapeuta)=>{
+                    Usuario.find().then((terapeuta)=>{//Todos os usuários podem ser terapeutas
                         terapeuta.sort((a,b) => ((a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.usuario_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));//Ordena o bene por nome//Ordena por ordem alfabética 
                         //console.log("Listagem Realizada de Usuário")
                             Terapia.find().then((terapia)=>{
@@ -985,7 +985,7 @@ module.exports = {
         const [benes, convs, terapeutas, terapias, anos, salas, usuarios] = await Promise.all([
             Bene.find().lean(),
             Conv.find().lean(),
-            Usuario.find({ usuario_funcaoid: "6241030bfbcc51f47c720a0b" }).lean(),
+            Usuario.find().lean(),
             Terapia.find().lean(),
             Ano.find().sort({ ano_nome: 1 }).lean(),
             Sala.find().lean(),

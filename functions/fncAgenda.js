@@ -8659,7 +8659,7 @@ Horaage.find().sort({horaage_turno: 1,horaage_ordem: 1}).then((horaage)=>{
         }, 'agenda_data agenda_usuid agenda_categoria agenda_temp agenda_tempId agenda_salaid agenda_beneid agenda_obs agenda_terapiaid').then((agenda) => {
             
             console.log(`📦 Registros brutos: ${agenda.length}`);
-            agenda = agenda.filter(a => (""+a.agenda_categoria) !== "Feriado");
+            // ✅ Feriados mantidos para exibição em laranja na view
             agenda.sort((a, b) => new Date(a.agenda_data) - new Date(b.agenda_data));
 
             // ========================================================================
@@ -16204,6 +16204,109 @@ filtraAgendaListaGeralFixa(req, res, dataIni, dataFim, atrazo, resposta) {
             console.error("❌ Erro ao arquivar agendas:", err);
         }
     }
+    
+,
+fazBackupemJson: async (req, res) => {
+    const fs = require('fs');
+    const path = require('path');
+
+    try {
+        // Identifica o banco selecionado
+        const nomeBanco = req.cookies['preferredDb'];
+
+        if (!nomeBanco) {
+            return res.status(400).json({
+                sucesso: false,
+                erro: 'Banco de dados não identificado.'
+            });
+        }
+
+        // Obtém a conexão através do getModel
+        const AgendaModel = getModel(
+            nomeBanco,
+            'tb_agenda',
+            agendaClass.AgendaSchema
+        );
+
+        // Aguarda a conexão
+        await AgendaModel.db.asPromise();
+
+        const db = AgendaModel.db.db;
+
+        if (!db) {
+            throw new Error('Conexão com o banco não está disponível.');
+        }
+
+        // Diretório principal do backup
+        const pastaBackup = path.join(
+            'C:\\Users\\cintr\\Desktop\\RouteBackup',
+            nomeBanco
+        );
+
+        fs.mkdirSync(pastaBackup, { recursive: true });
+
+        // Lista todas as collections
+        const collections = await db.listCollections().toArray();
+
+        let totalRegistros = 0;
+        let totalCollections = 0;
+
+        for (const collection of collections) {
+
+            const nome = collection.name;
+
+            console.log(`Exportando ${nome}...`);
+
+            // Busca todos os registros
+            const registros = await db
+                .collection(nome)
+                .find({})
+                .toArray();
+
+            // Cria pasta da collection
+            const pasta = path.join(pastaBackup, nome);
+
+            fs.mkdirSync(pasta, { recursive: true });
+
+            // Gera arquivo JSON
+            fs.writeFileSync(
+                path.join(pasta, 'registros.json'),
+                JSON.stringify(registros, null, 2),
+                'utf8'
+            );
+
+            totalRegistros += registros.length;
+            totalCollections++;
+
+            console.log(
+                `${nome}: ${registros.length} registros exportados.`
+            );
+        }
+
+        console.log('Backup concluído!');
+
+        return res.json({
+            sucesso: true,
+            banco: nomeBanco,
+            collections: totalCollections,
+            registros: totalRegistros,
+            pasta: pastaBackup
+        });
+
+    } catch (erro) {
+
+        console.error('Erro no backup:', erro);
+
+        if (!res.headersSent) {
+            return res.status(500).json({
+                sucesso: false,
+                erro: erro.message
+            });
+        }
+    }
+}
+
+
 }
 /*
 let atualizar = agendaClass.agendaAddNovosCampos(req,res);
