@@ -28,6 +28,25 @@
     .custom-tooltip:hover .tooltip-text { visibility: visible; }
 
     /* ============================================
+      TOOLTIP EVOLUÇÃO - VERDE
+      ============================================ */
+    .evo-tooltip { position: relative; display: inline-block; cursor: pointer; }
+    .evo-tooltip-text {
+      visibility: hidden; width: max-content; background-color: #d4edda; color: #155724;
+      font-size: 9px; text-align: left; border-radius: 4px; padding: 8px 12px;
+      position: absolute; z-index: 9999; bottom: 125%; left: 50%;
+      transform: translateX(-50%); opacity: 0.97; white-space: pre-wrap;
+      min-width: 150px; max-width: 320px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: opacity 0.3s; border: 1px solid #c3e6cb;
+    }
+    .evo-tooltip-text::after {
+      content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+      border-width: 5px; border-style: solid;
+      border-color: #d4edda transparent transparent transparent;
+    }
+    .evo-tooltip:hover .evo-tooltip-text { visibility: visible; }
+
+    /* ============================================
       BARRA DE PESQUISA - CLASSE SEPARADA
       ============================================ */
     .toolbar-pesquisa {
@@ -799,6 +818,38 @@
                                   <a class="green" href="/menu/atendimento/atendadm/edi/{{_id}}"><i class="ace-icon fa fa-pencil bigger-130"></i></a>
                                   <a class="red" onclick="javascript:confirmeDeletar('{{_id}}');"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>
                                   <a class="blue" onclick="javascript:mostraDivCopia('{{_id}}');"><i class="ace-icon fa fa-clone bigger-130"></i></a>
+
+                                  {{!-- Ícone de Evolução --}}
+                                  {{#compareStringMore atend_categoria "Feriado" "Falta Absoluta"}}
+                                    {{!-- Feriado ou Falta Absoluta: só mostra ban se NÃO tem evolução --}}
+                                    {{#if atend_evolucao}}
+                                      {{!-- Tem evolução mesmo sendo Feriado/Falta Absoluta → fa-tag verde com tooltip --}}
+                                      <a class="green evo-tooltip">
+                                        <i class="ace-icon fa fa-tag bigger-130"></i>
+                                        <span class="evo-tooltip-text"><strong>Evolução:</strong><br>{{atend_evolucao}}</span>
+                                      </a>
+                                    {{else}}
+                                      {{!-- Feriado/Falta Absoluta sem evolução → fa-ban --}}
+                                      <a class="grey" title="Feriado/Falta Absoluta — Sem Evolução">
+                                        <i class="ace-icon fa fa-ban bigger-130" style="color:#aaa;"></i>
+                                      </a>
+                                    {{/if}}
+                                  {{else}}
+                                    {{!-- Demais categorias --}}
+                                    {{#if atend_evolucao}}
+                                      {{!-- Com evolução → fa-tag verde com tooltip --}}
+                                      <a class="green evo-tooltip">
+                                        <i class="ace-icon fa fa-tag bigger-130"></i>
+                                        <span class="evo-tooltip-text"><strong>Evolução:</strong><br>{{atend_evolucao}}</span>
+                                      </a>
+                                    {{else}}
+                                      {{!-- Sem evolução (deveria ter) → fa-exclamation-triangle amarelo --}}
+                                      <a class="orange" title="Sem Evolução — Pendente">
+                                        <i class="ace-icon fa fa-exclamation-triangle bigger-130" style="color:#e8a000;"></i>
+                                      </a>
+                                    {{/if}}
+                                  {{/compareStringMore}}
+
                                   <a class="orange custom-tooltip"><i class="ace-icon fa fa-eye bigger-130"></i>
                                     <span class="tooltip-text">
                                       <strong>Atendimento:</strong><br>
