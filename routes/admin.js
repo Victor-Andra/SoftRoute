@@ -3868,12 +3868,12 @@ router.get('/area/anamn/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona
     fncAnamn.carregaAnamn(req, res);
 })
 //Adiciona Registro de Anamnese
-router.post('/area/anamn/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Anamnese
+router.post('/area/anamn/add', fncGeral.IsAuthenticated, fncGeral.IsRoot, (req,res) =>{//adiciona Anamnese
     console.log("post")
     fncAnamn.cadastraAnamn(req, res); 
 })
 //Atualiza registro de Anamnese Selecionada
-router.post('/area/anamn/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o cadastro da Beneimento
+router.post('/area/anamn/atualizar', fncGeral.IsAuthenticated, fncGeral.IsRoot, (req,res) =>{//atualiza o cadastro da Beneimento
     fncAnamn.atualizaAnamn(req, res);
 })
 //Carrega Editar Anamnese Selecionada
@@ -3941,7 +3941,7 @@ router.post('/area/plano/lisF', fncGeral.IsAuthenticated, (req,res) =>{//direcio
 })
 //Carrega Cadastro de Plano de Tratamento
 router.get('/area/plano/cad', fncGeral.IsAuthenticated, (req,res) =>{//direciona o cadstro de Plano de Tratamentos, com Ufs e Convênios.
-    fncTrat.carregaTrat(req,res);
+    //fncTrat.carregaTrat(req,res);
 })
 //Carrega Editar de Plano de Tratamento Selecionado
 router.get('/area/plano/edi/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona Plano de Tratamentos Padrao
@@ -3953,7 +3953,7 @@ router.post('/area/plano/add', fncGeral.IsAuthenticated, (req,res) =>{//adiciona
 })
 //Atualiza Regitros de Plano de Tratamento 
 router.post('/area/plano/atualizar', fncGeral.IsAuthenticated, (req,res) =>{//atualiza o Plano de Tratamentos Padrao
-    fncTrat.atualizaTrat(req , res);
+    //fncTrat.atualizaTrat(req , res);
 })
 //Imprime plano tratamento trat
 router.get('/area/plano/imp/:id', fncGeral.IsAuthenticated, (req,res) =>{//adiciona plano de tratamento

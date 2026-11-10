@@ -57,6 +57,23 @@ module.exports = {Filtros, Resposta,
             res.render('ferramentas/usuario/login',{flash});
         }
     },
+    IsRoot(req, res, next){
+        // Verifica se o usuário autenticado possui perfil root/master via cookie lvlUsu
+        const PERFIS_ROOT = [
+            "62421801a12aa557219a0fb9", // root 1
+            "62421857a12aa557219a0fc1", // root 2
+            "624218f5a12aa557219a0fd0"  // root 3
+        ];
+        const lvlUsu = req.cookies && req.cookies['lvlUsu'];
+        if(req.isAuthenticated() && PERFIS_ROOT.includes(lvlUsu)){
+            next();
+        } else {
+            let flash = new Resposta();
+            flash.texto = "Acesso negado! Apenas administradores root podem realizar esta operação.";
+            flash.sucesso = "false";
+            res.status(403).render('admin/erro', flash);
+        }
+    },
     verificarExistencia(arrayString, val){//verifica a existencia de uma string em um arraystring;
         let boo = false;
         arrayString.some((v) => {
