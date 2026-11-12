@@ -1069,307 +1069,209 @@ module.exports = {FiltroEvoatend,
             res.redirect('admin/erro')
         })
     },
-    filtraEvoatend(req, res){
+    async filtraEvoatend(req, res){
+    try {
     let db = req.cookies['preferredDb'];
-    Agenda = getModel(db, 'tb_agenda', agendaClass.AgendaSchema)
-    Ano = getModel(db, 'tb_ano', anoClass.AnoSchema)
-    Bene = getModel(db, 'tb_bene', beneClass.BeneSchema)
-    Terapia = getModel(db, 'tb_terapia', terapiaClass.TerapiaSchema)
+    const AgendaM = getModel(db, 'tb_agenda', agendaClass.AgendaSchema);
+    const AnoM    = getModel(db, 'tb_ano',    anoClass.AnoSchema);
+    const BeneM   = getModel(db, 'tb_bene',   beneClass.BeneSchema);
+    const TerapiaM= getModel(db, 'tb_terapia',terapiaClass.TerapiaSchema);
 
-    let filtros = new fncGeral.Filtros();
-    let lvlUsu = req.cookies['lvlUsu'];
-    let arrayIds = ['62421801a12aa557219a0fb9','62421903a12aa557219a0fd3'];
-    arrayIds.forEach((id)=>{
-        if(id == lvlUsu){
-            isAgendaTerapeuta = true;
+    const idTerapeuta = req.cookies['idUsu'];
+    const flash = new Resposta();
+    const tipoPessoa = req.body.atendTipoPessoa || "Geral";
+
+    // ── Idêntico ao filtroTela do filtraAtend ────────────────────────────────
+    const filtroTela = {
+        tipoData:          req.body.tipoData        || "Ano/Mes",
+        dataFinal:         req.body.dataFinal        || "",
+        dataFil:           req.body.dataFil          || "",
+        anoAtend:          req.body.anoAtend          || "",
+        mesAtend:          req.body.mesAtend          || "",
+        tipoPessoa:        tipoPessoa,
+        atendTerapeuta:    req.body.atendTerapeuta    || idTerapeuta,
+        atendBeneficiario: req.body.atendBeneficiario || "",
+    };
+
+    // ── Cálculo de período (igual ao filtraAtend) ────────────────────────────
+    let dataIniStr = "";
+    let dataFimStr = "";
+
+    if (filtroTela.tipoData === "Ano/Mes") {
+        const periodo = fncGeral.obterPeriodoMes(filtroTela.anoAtend, filtroTela.mesAtend);
+        dataIniStr = periodo.dataIni;
+        dataFimStr = periodo.dataFim;
+    } else if (filtroTela.tipoData === "Dia") {
+        const dataEscolhida = req.body.dataFil || req.body.dataFinal;
+        if (dataEscolhida) {
+            dataIniStr = `${dataEscolhida}T00:00:00.000Z`;
+            dataFimStr = `${dataEscolhida}T23:59:59.999Z`;
         }
-    })
-    let idTerapeuta = req.cookies['idUsu'];
-    let flash = new Resposta();
-    let seg = new Date(req.body.dataFinal);
-    let sex = new Date(req.body.dataFinal);
-    seg.setHours(0);
-    seg.setMinutes(0);
-    seg.setSeconds(0);
-    sex.setHours(23);
-    sex.setMinutes(59);
-    sex.setSeconds(59);
-    let tipoPessoa = req.body.atendTipoPessoa;
-    let tipoData = req.body.tipoData;
-
-    switch (tipoData){
-        case "Ano/Mes":
-            dataIni = new Date();
-            let mesIni = parseInt(req.body.mesAtend);
-            let anoIni = parseInt(req.body.anoAtend);
-            
-            dataIni.setDate(01);
-            dataIni.setFullYear(anoIni);
-            dataIni.setUTCMonth(mesIni);
-            dataIni.setSeconds(00);
-            dataIni.setMinutes(00);
-            dataIni.setHours(00);
-            
-            dataFim = new Date();
-            dataFim.setFullYear(anoIni);
-            dataFim.setUTCMonth(mesIni+1);
-            dataFim.setDate(01);
-            dataFim.setDate(dataFim.getDate()-1);
-            dataFim.setHours(23);
-            dataFim.setMinutes(59);
-            dataFim.setSeconds(59);
-            break;
-        case "Semana":
-            data = req.body.dataFinal;
-            ano = data.substring(0,4);
-            mes = data.substring(5,7);
-            dia = data.substring(8,10);
-
-            seg = new Date();
-            seg.setFullYear(ano);
-            seg.setUTCMonth(mes);
-            seg.setUTCDate(dia);
-            seg.setHours(0);
-            seg.setMinutes(0);
-            seg.setSeconds(0);
-
-            sex = new Date();
-            sex.setFullYear(ano);
-            sex.setUTCMonth(mes);
-            sex.setUTCDate(dia);
-            sex.setHours(23);
-            sex.setMinutes(59);
-            sex.setSeconds(59);
-
-            switch (seg.getUTCDay()){
-                case 0: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
-                case 1: sex.setUTCDate(sex.getUTCDate() + 4); break;
-                case 2: seg.setUTCDate(seg.getUTCDate() - 1); sex.setUTCDate(sex.getUTCDate() + 3); break;
-                case 3: seg.setUTCDate(seg.getUTCDate() - 2); sex.setUTCDate(sex.getUTCDate() + 2); break;
-                case 4: seg.setUTCDate(seg.getUTCDate() - 3); sex.setUTCDate(sex.getUTCDate() + 1); break;
-                case 5: seg.setUTCDate(seg.getUTCDate() - 4); break;
-                case 6: seg.setUTCDate(seg.getUTCDate() - 5); sex.setUTCDate(sex.getUTCDate() - 1); break;
-                default: seg.setUTCDate(seg.getUTCDate() + 1); sex.setUTCDate(sex.getUTCDate() + 5); break;
-            }
-            dataIni = seg.toISOString();
-            dataFim = sex.toISOString();
-            break;
-        case "Dia":
-            data = req.body.dataFinal;
-            ano = data.substring(0,4);
-            mes = data.substring(5,7);
-            dia = data.substring(8,10);
-
-            dataIni = new Date();
-            dataIni.setFullYear(ano);
-            dataIni.setUTCMonth(mes);
-            dataIni.setUTCDate(dia);
-            dataIni.setHours(0);
-            dataIni.setMinutes(0);
-            dataIni.setSeconds(0);
-
-            dataFim = new Date();
-            dataFim.setFullYear(ano);
-            dataFim.setUTCMonth(mes);
-            dataFim.setUTCDate(dia);
-            dataFim.setHours(23);
-            dataFim.setMinutes(59);
-            dataFim.setSeconds(59);
-            break;
-        default:
-            data = req.body.dataFinal;
-            ano = data.substring(0,4);
-            mes = data.substring(5,7);
-            dia = data.substring(8,10);
-
-            dataIni = new Date();
-            dataIni.setFullYear(ano);
-            dataIni.setUTCMonth(mes);
-            dataIni.setUTCDate(dia);
-            dataIni.setHours(0);
-            dataIni.setMinutes(0);
-            dataIni.setSeconds(0);
-
-            dataFim = new Date();
-            dataFim.setFullYear(ano);
-            dataFim.setUTCMonth(mes);
-            dataFim.setUTCDate(dia);
-            dataFim.setHours(23);
-            dataFim.setMinutes(59);
-            dataFim.setSeconds(59);
-            break;
+    } else if (filtroTela.tipoData === "Semana") {
+        const dataBase = req.body.dataFil || req.body.dataFinal;
+        if (dataBase) {
+            const periodo = fncGeral.obterSemanaUtil(dataBase);
+            dataIniStr = periodo.dataIni;
+            dataFimStr = periodo.dataFim;
+        }
     }
 
-    switch (tipoPessoa){
-        case "Geral":
-            busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: idTerapeuta, agenda_temp: false }
-            break;
-        case "Beneficiario":
-            busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: idTerapeuta, agenda_temp: false, agenda_beneid: req.body.atendBeneficiario };
-            break;
-        default:
-            busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: idTerapeuta, agenda_temp: false }
-            break;
+    const dataIniObj = new Date(dataIniStr);
+    const dataFimObj = new Date(dataFimStr);
+
+    if (isNaN(dataIniObj.getTime()) || isNaN(dataFimObj.getTime())) {
+        console.error("❌ [filtraEvoatend] Data inválida:", { filtroTela, dataIniStr, dataFimStr });
+        const hoje = new Date();
+        dataIniObj.setTime(new Date(Date.UTC(hoje.getFullYear(), hoje.getUTCMonth(), 1)).getTime());
+        dataFimObj.setTime(new Date(Date.UTC(hoje.getFullYear(), hoje.getUTCMonth() + 1, 0, 23, 59, 59, 999)).getTime());
+    } else {
+        dataFimObj.setHours(23, 59, 59, 999);
     }
 
-    Agenda.find(busca).then((agenda) =>{
-        let agendaTempIds = [];
-        let agendaFinal = [];
-        agenda.forEach((as)=>{
-            agendaTempIds.push(as._id);
-        })
+    // ── Filtro de terapeuta: usa o idUsu do cookie (igual ao comportamento anterior)
+    // mas permite sobrescrever via atendTerapeuta se o perfil for gestor
+    const terapeutaFiltro = filtroTela.atendTerapeuta || idTerapeuta;
 
-        Agenda.find({ agenda_tempId: {$in: agendaTempIds} }).then((agendaS)=>{
-            let arrayExclusao = [];
-            agendaS.forEach((as)=>{
-                arrayExclusao.push(as._id);
-            })
-            switch (tipoPessoa){
-                case "Geral":
-                    busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: idTerapeuta, agenda_temp: true, _id: { $nin: arrayExclusao } }
-                    break;
-                case "Beneficiario":
-                    busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: idTerapeuta, agenda_temp: true, _id: { $nin: arrayExclusao } };
-                    break;
-                default:
-                    busca = { agenda_data: { $gte : new Date(dataIni), $lte:  new Date(dataFim) }, agenda_usuid: idTerapeuta, agenda_temp: true, _id: { $nin: arrayExclusao } }
-                    break;
-            }
-            Agenda.find(busca).then((agendaFixa)=>{
+    const tipoData = filtroTela.tipoData;
 
-                agenda.forEach((a)=>{
-                    let ok = "true";
-                    agendaS.forEach((s)=>{
-                        if (("-"+s.agenda_tempId+"-") == ("-"+a._id+"-")) {
-                            ok = "false";
-                        }
-                    })
-                    if (ok == "true"){
-                        agendaFinal.push(a);
-                    }
-                })
+    // ── Busca das agendas FIXAS (agenda_temp: false) ─────────────────────────
+    // A regra: fixas são a base; quando existe uma semanal (agenda_temp: true)
+    // com agenda_tempId apontando para uma fixa, a fixa é excluída do resultado
+    // e a semanal fica em seu lugar (separada, com detalhes de evolução).
+    let buscaFixa = {
+        agenda_data: { $gte: dataIniObj, $lte: dataFimObj },
+        agenda_usuid: terapeutaFiltro,
+        agenda_temp: false
+    };
 
-                agendaS.forEach((s)=>{
-                    if (!(s.agenda_categoria == "Falta Absoluta")){
-                        if (!(s.agenda_categoria == "Falta Justificada")){
-                            if (!(s.agenda_categoria == "Feriado")){
-                                if ((""+s.agenda_usuid+"") == (""+idTerapeuta+"")){
-                                    agendaFinal.push(s);
-                                }
-                            }
-                        }
-                    }
-                });
+    if (tipoPessoa === "Beneficiario") {
+        buscaFixa.agenda_beneid = req.body.atendBeneficiario;
+    }
 
-                agendaFixa.forEach((s)=>{
-                    if (!(s.agenda_categoria == "Falta Absoluta")){
-                        if (!(s.agenda_categoria == "Falta Justificada")){
-                            if (!(s.agenda_categoria == "Feriado")){
-                                agendaFinal.push(s);
-                            }
-                        }
-                    }
-                });
+    // Passo 1: buscar agendas fixas do período
+    const agendaFixa = await AgendaM.find(buscaFixa).lean();
+    const idsFixas = agendaFixa.map(a => a._id);
 
-                // ========================================================================
-                // 🎨 NOVO: Formatação + Detecção de Evolução Indevida
-                // ========================================================================
-                function getBadgeStyle(cat) {
-                    const map = {
-                        "Falta": "yellow",
-                        "Falta Justificada": "orange",
-                        "Falta Absoluta": "orange",
-                        "Substituição": "cyan",
-                        "SubstitutoFixo": "transparent",
-                        "Feriado": "orange",
-                        "default": "transparent"
-                    };
-                    const bg = map[cat] || map.default;
-                    return `background-color: ${bg} !important; border: 1px solid transparent; color: #212529; display: inline-block; padding: 2px 6px; font-size: 9px; font-weight: 500; border-radius: 3px; white-space: nowrap; line-height: 1.3;`;
-                }
+    // Passo 2: buscar semanais que substituem alguma fixa do período
+    let buscaSemanal = { agenda_tempId: { $in: idsFixas } };
+    if (tipoPessoa === "Beneficiario") {
+        buscaSemanal.agenda_beneid = req.body.atendBeneficiario;
+    }
+    const agendaSemanal = await AgendaM.find(buscaSemanal).lean();
 
-                agendaFinal.forEach((e)=>{
-                    let dat = new Date(e.agenda_data);
-                    e.agenda_data_dia = fncGeral.getDataFMT(dat);
-                    let hora = ""+dat.getUTCHours();
-                    let min = ""+dat.getMinutes();
-                    if (hora.length == 1){hora = "0" + hora + "";}
-                    if (min.length == 1){min = "0" + min + "";}
-                    e.agenda_hora = hora+":"+min;
-                    
-                    switch (dat.getUTCDay()){
-                        case 0: e.agenda_data_semana = "dom"; break;
-                        case 1: e.agenda_data_semana = "seg"; break;
-                        case 2: e.agenda_data_semana = "ter"; break;
-                        case 3: e.agenda_data_semana = "qua"; break;
-                        case 4: e.agenda_data_semana = "qui"; break;
-                        case 5: e.agenda_data_semana = "sex"; break;
-                        case 6: e.agenda_data_semana = "sab"; break;
-                        default: e.agenda_data_semana = "dom"; break;
-                    }
+    // IDs das fixas que possuem semanal correspondente → devem ser removidas
+    const idsFixasSubstituidas = new Set(
+        agendaSemanal.map(s => String(s.agenda_tempId))
+    );
 
-                    // 🎨 BADGE STYLE baseado na categoria
-                    const cat = e.agenda_categoria || "";
-                    e.badgeStyle = getBadgeStyle(cat);
+    // Passo 3: fixas que NÃO foram substituídas por semanal
+    const agendasFixasFinal = agendaFixa.filter(
+        a => !idsFixasSubstituidas.has(String(a._id))
+    );
 
-                    // 🚨 DETECÇÃO DE EVOLUÇÃO INDEVIDA (Falta Absoluta + evolução preenchida)
-                    e.temEvolucaoIndevida = false;
-                    if (cat === "Falta Absoluta" && 
-                        e.agenda_evolucao && 
-                        e.agenda_evolucao.toString().trim() !== "") {
-                        
-                        e.temEvolucaoIndevida = true;
-                        e.simboloAlerta = "⚠️";
-                        e.tooltipAlerta = "O atendimento virou Falta Absoluta. Você deve limpar a evolução clicando no ícone da borracha.";
-                        
-                        // Sobrescrever badgeStyle para laranja forte
-                        e.badgeStyle = `
-                            background-color: orange !important;
-                            color: #212529 !important;
-                            border: 1px solid transparent;
-                            display: inline-block;
-                            padding: 2px 6px;
-                            font-size: 9px;
-                            font-weight: 500;
-                            border-radius: 3px;
-                            white-space: nowrap;
-                            line-height: 1.3;
-                        `;
-                    } else {
-                        e.simboloAlerta = "";
-                        e.tooltipAlerta = "";
-                    }
-                })
+    // Passo 4: semanais válidas (não são faltas/feriados e são do terapeuta)
+    const CATS_EXCLUIR = new Set(["Falta Absoluta", "Falta Justificada", "Feriado"]);
+    const agendasSemanalFinal = agendaSemanal.filter(
+        s => !CATS_EXCLUIR.has(s.agenda_categoria) &&
+             String(s.agenda_usuid) === String(terapeutaFiltro)
+    );
 
-                agendaFinal.sort((a,b) => (a.agenda_benenome > b.agenda_benenome) ? 1 : ((b.agenda_benenome > a.agenda_benenome) ? -1 : 0));
-                
-                Terapia.find().then((terapia)=>{
-                    console.log("Listagem Realizada de terapias")
-                    Ano.find().sort({ ano_nome: 1 }).then((ano)=>{
-                        Bene.find().then((bene)=>{
-                            bene.sort((a,b) => ((a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? 1 : (((b.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) > (a.bene_nome.normalize('NFD').replace(/[\u0300-\u036f]/g, ""))) ? -1 : 0));
-                            bene.forEach((b)=>{b.bene_nome = b.bene_nome.replace(".","")});
-                            Usuario.find({"usuario_status":"Ativo", $or: [{"usuario_funcaoid":"6241030bfbcc51f47c720a0b"},{"usuario_perfilid":{$in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"]}}]}).then((usuario)=>{
-                                res.render("area/evol/evoatendLis", {
-                                    agendas: agendaFinal, 
-                                    anos: ano, 
-                                    terapias: terapia,
-                                    usuarios: usuario, 
-                                    benes: bene, 
-                                    flash, 
-                                    filtros
-                                })
-                            })
-                        })
-                    })
-                })
-            })
-        })
-    }).catch((err) =>{
-        console.log(err)
-        req.flash("error_message", "houve um erro ao Realizar as listas!")
-        res.redirect('admin/erro')
-    })
+    // ── Função auxiliar de formatação ────────────────────────────────────────
+    function formatarAgenda(e) {
+        const dat = new Date(e.agenda_data);
+        e.agenda_data_dia = fncGeral.getDataFMT(dat);
+        e.agenda_hora     = String(dat.getUTCHours()).padStart(2,'0') + ":" +
+                            String(dat.getMinutes()).padStart(2,'0');
+        e.agenda_data_semana = ["dom","seg","ter","qua","qui","sex","sab"][dat.getUTCDay()] || "dom";
+
+        // badge de categoria
+        const badgeMap = {
+            "Falta":          "yellow",
+            "Falta Justificada": "orange",
+            "Falta Absoluta": "orange",
+            "Substituição":   "cyan",
+            "SubstitutoFixo": "transparent",
+            "Feriado":        "orange"
+        };
+        const bg = badgeMap[e.agenda_categoria] || "transparent";
+        e.badgeStyle = `background-color: ${bg} !important; border: 1px solid transparent; color: #212529; display: inline-block; padding: 2px 6px; font-size: 9px; font-weight: 500; border-radius: 3px; white-space: nowrap; line-height: 1.3;`;
+
+        // detecção de evolução indevida
+        e.temEvolucaoIndevida = false;
+        e.simboloAlerta = "";
+        e.tooltipAlerta = "";
+        if (e.agenda_categoria === "Falta Absoluta" &&
+            e.agenda_evolucao &&
+            e.agenda_evolucao.toString().trim() !== "") {
+            e.temEvolucaoIndevida = true;
+            e.simboloAlerta = "⚠️";
+            e.tooltipAlerta = "O atendimento virou Falta Absoluta. Você deve limpar a evolução clicando no ícone da borracha.";
+            e.badgeStyle = `background-color: orange !important; color: #212529 !important; border: 1px solid transparent; display: inline-block; padding: 2px 6px; font-size: 9px; font-weight: 500; border-radius: 3px; white-space: nowrap; line-height: 1.3;`;
+        }
+        return e;
+    }
+
+    agendasFixasFinal.forEach(formatarAgenda);
+    agendasSemanalFinal.forEach(formatarAgenda);
+
+    // agendaFinal = fixas sobreviventes + semanais válidas (para a view unificada)
+    const agendaFinal = [...agendasFixasFinal, ...agendasSemanalFinal];
+    agendaFinal.sort((a, b) => new Date(a.agenda_data) - new Date(b.agenda_data));
+
+    // ── Busca paralela dos dados de apoio (igual ao filtraAtend) ─────────────
+    const sortByName = (arr, field) => arr.sort((a, b) => {
+        const nA = a[field] ? a[field].normalize('NFD').replace(/[\u0300-\u036f]/g,"").toLowerCase() : "";
+        const nB = b[field] ? b[field].normalize('NFD').replace(/[\u0300-\u036f]/g,"").toLowerCase() : "";
+        return nA.localeCompare(nB);
+    });
+
+    const [terapias, anos, benes, usuarios] = await Promise.all([
+        TerapiaM.find().lean(),
+        AnoM.find().sort({ ano_nome: 1 }).lean(),
+        BeneM.find().lean(),
+        Usuario.find({
+            "usuario_status": "Ativo",
+            $or: [
+                { "usuario_funcaoid": "6241030bfbcc51f47c720a0b" },
+                { "usuario_perfilid": { $in: ["6578ab5248bfdf9fe1b2c8d8","62421903a12aa557219a0fd3"] } }
+            ]
+        }).lean()
+    ]);
+
+    benes.forEach(b => { b.bene_nome = b.bene_nome?.replace(".","") });
+
+    // ── Renderização (mesma estrutura do filtraAtend) ─────────────────────────
+    res.render("area/evol/evoatendLis", {
+        // dados principais – separados E unificados para a view poder usar os dois
+        agendas:          agendaFinal,          // lista unificada (fixas sobreviventes + semanais)
+        agendasFixas:     agendasFixasFinal,     // apenas fixas que não foram substituídas
+        agendasSemanais:  agendasSemanalFinal,   // apenas semanais válidas
+        // dados de apoio
+        terapias:         sortByName(terapias,  'terapia_nome'),
+        anos:             anos,
+        benes:            sortByName(benes,     'bene_nome'),
+        usuarios:         sortByName(usuarios,  'usuario_nome'),
+        // estado do filtro (espelho do filtroTela do filtraAtend)
+        flash,
+        filtroTela,
+        tipoData,
+        tipoPessoa,
+        dataIni:          dataIniObj,
+        dataFim:          dataFimObj,
+        dataFinal:        filtroTela.dataFinal,
+        mesAtend:         filtroTela.mesAtend,
+        anoAtend:         filtroTela.anoAtend,
+        atendTerapeuta:   filtroTela.atendTerapeuta,
+        atendBeneficiario:filtroTela.atendBeneficiario,
+        carregaFiltro:    "true",
+        qtdAgendas:       { qtd: agendaFinal.length }
+    });
+
+    } catch (err) {
+        console.error("❌ [filtraEvoatend] ERRO CRÍTICO:", err);
+        req.flash("error_message", "Houve um erro ao realizar as listas!");
+        res.redirect('admin/erro');
+    }
 },
 // ========================================================================
 // 🧹 APAGAR EVOLUÇÃO INDEVIDA - VIEW EVOATEND

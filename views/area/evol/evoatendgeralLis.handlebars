@@ -907,7 +907,7 @@
 												<span class="lbl bigger-120"> Extra</span>
 											</label>
 											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
-												<input name="filtroTipo" value="Apoio" type="checkbox" class="ace filtro-tipo input-lg" checked>
+												<input name="filtroTipo" value="Apoio" type="checkbox" class="ace filtro-tipo input-lg">
 												<span class="lbl bigger-120"> Apoio</span>
 											</label>
 
@@ -919,6 +919,11 @@
 											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
 												<input name="filtroTipo" value="Supervisor" type="checkbox" class="ace filtro-tipo input-lg" checked>
 												<span class="lbl bigger-120"> Supervisor</span>
+											</label>
+
+											<label style="display: inline-flex; align-items: center; cursor: pointer; white-space: nowrap;">
+												<input name="filtroTipo" value="Nenhuma Observação" type="checkbox" class="ace filtro-tipo input-lg">
+												<span class="lbl bigger-120"> Nenhuma Observação</span>
 											</label>
 											
 										</div>
@@ -1053,11 +1058,11 @@
 																									{{#compareThis agenda_categoria "Extra"}}
 																										<span name="ageCateg" id="ageCateg" class="label label-purple arrowed">Extra</span>
 																									{{else}}
-																										{{#compareThis agenda_categoria "Extra"}}
-																											<span name="ageCateg" id="ageCateg" class="label label-purple arrowed">Extra</span>
+																										{{#compareThis agenda_categoria "Apoio"}}
+																											<span name="ageCateg" id="ageCateg" class="label label-warning arrowed">Apoio</span>
 																										{{else}}
 																											{{#compareThis agenda_categoria "Nenhuma Observação"}}
-																												<span name="ageCateg" id="ageCateg" class="label label-success arrowed">Atendido</span>
+																												<span name="ageCateg" id="ageCateg" class="label label-default arrowed">Nenhuma Observação</span>
 																											
 																											{{else}}
 																												{{#compareThis agenda_categoria "Supervisão"}}
@@ -1232,6 +1237,9 @@ $(document).ready(function() {
 			}
 			if (textoCategoria.includes('supervisor')) {
 				categorias.push('Supervisor');
+			}
+			if (textoCategoria.includes('nenhuma observa')) {
+				categorias.push('Nenhuma Observação');
 			}
 
             $tr.attr('data-categorias', categorias.join(','));
