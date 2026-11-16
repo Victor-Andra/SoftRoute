@@ -8,6 +8,7 @@ const bordoClass = require("../models/bordo")
 
 //Classes Extrangeiras
 const anoClass = require("../models/ano")
+const estadoClass = require("../models/estado")
 const atendClass = require("../models/atend")
 const beneClass = require("../models/bene")
 const convClass = require("../models/conv")
@@ -36,7 +37,7 @@ module.exports = {
     //Função que Carrega view para cadastro novo
     carregaConv(req,res){
         let db = req.cookies['preferredDb'];
-        Estado = getModel(db, 'tb_estado', estadoClass.EstadoSchema)
+        let Estado = getModel(db, 'tb_estado', estadoClass.EstadoSchema)
         
         
 
